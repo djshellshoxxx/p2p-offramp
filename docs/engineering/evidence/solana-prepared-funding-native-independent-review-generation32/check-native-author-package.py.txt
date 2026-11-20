@@ -1,0 +1,141 @@
+import gzip
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+REPO = Path('/workspace/scratch/dcf03ef9bee8/p2p-solana-prepared-funding-review-g32')
+SOURCE = 'e214f70f8bcbb9eb962fc147f2d318081daca2ce'
+BASE = '252dd1603f12eab69313ef25b538be1b040bc508'
+AUTHOR = 'fcd74b9d577a59af55d942d85d472de9cebe2228'
+PREFIX = 'docs/execution/solana-prepared-funding-native-generation32-20261120/'
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+def digest(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def read(name):
+    path = name if name.startswith('docs/') else PREFIX + name
+    return git('show', AUTHOR + ':' + path)
+
+
+def entries(ref):
+    return {row.split(b'\t', 1)[1].decode(): row.split(b'\t', 1)[0].decode()
+            for row in git('ls-tree', '-r', '-z', ref).split(b'\0') if row}
+
+
+def verify(item):
+    path = item.get('path', item.get('file'))
+    packed = read(path)
+    if path.endswith('.gz'):
+        raw = gzip.decompress(packed)
+        assert int.from_bytes(packed[4:8], 'little') == item['gzipMtime'] == 0
+        assert len(raw) == item['rawBytes'] and digest(raw) == item['rawSha256']
+        assert len(packed) == item.get('gzipBytes', item.get('bytes'))
+        assert digest(packed) == item.get('gzipSha256', item.get('sha256'))
+    else:
+        raw = packed
+        assert len(raw) == item['bytes'] and digest(raw) == item['sha256']
+    if item.get('origin', '').startswith('/'):
+        assert Path(item['origin']).read_bytes() == packed
+    return raw
+
+
+assert git('show', '-s', '--format=%P', AUTHOR).decode().strip() == SOURCE
+source_entries, evidence_entries = entries(SOURCE), entries(AUTHOR)
+changed = sorted(p for p in source_entries.keys() | evidence_entries.keys()
+                 if source_entries.get(p) != evidence_entries.get(p))
+assert len(changed) == 31 and all(p.startswith('docs/') and p not in source_entries for p in changed)
+non_docs = {p: v for p, v in source_entries.items() if not p.startswith('docs/')}
+assert len(non_docs) == 1030 and non_docs == {
+    p: v for p, v in evidence_entries.items() if not p.startswith('docs/')}
+manifest_raw = read('receipt.json')
+manifest = json.loads(manifest_raw)
+assert manifest['source'] == SOURCE and manifest['base'] == BASE
+assert manifest['sourceTree'] == git('rev-parse', SOURCE + '^{tree}').decode().strip()
+assert manifest['baseTree'] == git('rev-parse', BASE + '^{tree}').decode().strip()
+assert len(manifest['artifacts']) == 17
+for item in manifest['artifacts']:
+    verify(item)
+assert json.loads(read('non-docs-source-tree.json')) == non_docs
+assert read('frozen-driver.mjs') == git('show', SOURCE + ':contracts/solana/localnet/client-run.mjs')
+assert gzip.decompress(read('00-original-driver.mjs.gz')) == git(
+    'show', BASE + ':contracts/solana/localnet/client-run.mjs')
+assert gzip.decompress(read('01-source.patch.gz')) == git('diff', '--binary', BASE, SOURCE)
+for item in manifest['commands']:
+    verify(item)
+    assert item['startedAt'] < item['completedAt']
+assert manifest['commands'][2] == json.loads(read('04-build-only.json'))
+assert manifest['commands'][3] == json.loads(read('05-build-only.json'))
+assert manifest['commands'][2]['exitCode'] == 1 and manifest['commands'][3]['exitCode'] == 0
+failure = gzip.decompress(read('04-build-only.log.gz')).decode()
+assert "Cannot find package 'esbuild'" in failure and 'ERR_MODULE_NOT_FOUND' in failure
+build = json.loads(gzip.decompress(read('05-build-only.log.gz')))
+assert build['inputCount'] == len(build['inputs']) == 42 and build['warnings'] == []
+assert not build['nativeValidatorExecuted'] and not build['compiledOutputExecuted']
+for item in build['inputs']:
+    assert digest(git('show', SOURCE + ':' + item['path'])) == item['sha256']
+assert len(build['outputs']) == 1 and build['outputs'] == manifest['buildOnlyResult']['outputs']
+for item in build['outputs']:
+    verify(item)
+assert build['outputs'][0]['rawBytes'] == 194659
+assert build['outputs'][0]['rawSha256'] == '4bf495a5bbe5b4b931472967a216bdfe15b1e38bfb4c39a1a64f1953a9f7b3e6'
+preservation = json.loads(verify(json.loads(read('06-source-preservation.json'))))
+assert preservation['protectedRegions'] == manifest['composition']['protectedRegions']
+assert len(preservation['protectedRegions']) == 6
+original, candidate = (git('show', ref + ':contracts/solana/localnet/client-run.mjs') for ref in [BASE, SOURCE])
+for item in preservation['protectedRegions']:
+    spans = []
+    for data, name in [(original, 'beforeSha256'), (candidate, 'afterSha256')]:
+        starts = [0] + [i + 1 for i, byte in enumerate(data) if byte == 10]
+        matches = [data[i:i + item['bytes']] for i in starts
+                   if digest(data[i:i + item['bytes']]) == item[name]]
+        assert len(matches) == 1
+        spans.append(matches[0])
+    assert spans[0] == spans[1] and item['exactBytesEqual']
+supplements = []
+for name in ['07-evidence-integrity.json', '08-source-and-evidence-whitespace.json',
+             '10-git-entry-type-check.json', '11-final-whitespace.json']:
+    item = json.loads(read(name))
+    assert item['source'] == SOURCE and item['exitCode'] == 0
+    assert item['startedAt'] < item['completedAt']
+    raw = verify(item)
+    if name.startswith('07'):
+        integrity = json.loads(raw)
+        assert integrity['receiptSha256'] == digest(manifest_raw)
+        assert integrity['retainedArtifactsVerified'] == 17 and integrity['compiledSourceInputsVerified'] == 42
+    if name.startswith('08') or name.startswith('11'):
+        assert raw == b''
+    if name.startswith('10'):
+        types = json.loads(raw)
+        assert types['workingBlobContentsVerified'] == sum(' blob ' in v for v in non_docs.values()) == 1028
+        pointers = types['trackedGitlinkPointersVerified']
+        assert len(pointers) == 2 and types['nonDocsSourceEntriesVerified'] == 1030
+        for pointer in pointers:
+            assert non_docs[pointer['path']] == pointer['mode'] + ' commit ' + pointer['oid']
+    supplements.append(name)
+recovery = json.loads(read('09-packaging-recovery.json'))
+assert recovery['source'] == SOURCE and recovery['exitCode'] == 1 and recovery['noSourceOrAssertionChanges']
+for item in recovery['artifacts']:
+    verify(item)
+assert b'IsADirectoryError' in gzip.decompress(read('09-packager-error-recovered.log.gz'))
+assert all(value is False for key, value in manifest['executionLimits'].items() if key.endswith('Executed'))
+assert git('diff', '--check', '8e836baa877b676a863c877003e277b638fc5061..' + AUTHOR) == b''
+print(json.dumps({
+    'authorEvidenceCommit': AUTHOR, 'authorEvidenceTree': git('rev-parse', AUTHOR + '^{tree}').decode().strip(),
+    'source': SOURCE, 'sourceTree': manifest['sourceTree'], 'docsOnlyPaths': len(changed),
+    'nonDocumentationEntriesPreserved': len(non_docs), 'indexedArtifactsVerified': 17,
+    'compiledSourceInputsVerified': len(build['inputs']), 'compiledOutputsVerified': len(build['outputs']),
+    'compiledOutput': build['outputs'][0], 'protectedRegionsVerified': 6,
+    'supplementalReceiptsVerified': supplements, 'recoveryArtifactsVerified': len(recovery['artifacts']),
+    'initialBuildDependencyFailurePreserved': True, 'packagingGitlinkFailurePreserved': True,
+    'gzipMtimeZero': True, 'allEvidenceFileHashes': [
+        {'path': p, 'gitEntry': evidence_entries[p], 'bytes': len(read(p)), 'sha256': digest(read(p))}
+        for p in changed],
+    'nativeDriverEntryExecuted': False, 'compiledOutputExecuted': False,
+}, indent=2))

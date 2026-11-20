@@ -1,0 +1,117 @@
+import datetime
+import gzip
+import hashlib
+import json
+import re
+import subprocess
+from pathlib import Path
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8')
+REPO = ROOT / 'p2p-solana-prepared-funding-review-g32'
+RAW = Path(__file__).resolve().parent
+PARENT = 'fadd204e3616f7d262add42a7f72a55d27079158'
+SOURCE = 'e214f70f8bcbb9eb962fc147f2d318081daca2ce'
+CLIENT = '252dd1603f12eab69313ef25b538be1b040bc508'
+AUTHOR = 'fcd74b9d577a59af55d942d85d472de9cebe2228'
+PREFIX = Path('docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32')
+REPORT = Path('docs/engineering/INDEPENDENT_SOLANA_PREPARED_FUNDING_NATIVE_REVIEW_GENERATION32_20261120.md')
+RECEIPT = Path('docs/engineering/solana-prepared-funding-native-independent-review-generation32.json')
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+def digest(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def entries(ref):
+    return {row.split(b'\t', 1)[1].decode(): row.split(b'\t', 1)[0].decode()
+            for row in git('ls-tree', '-r', '-z', ref).split(b'\0') if row}
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == PARENT and not git('status', '--porcelain').strip()
+assert {p: v for p, v in entries(PARENT).items() if not p.startswith('docs/')} == {
+    p: v for p, v in entries(CLIENT).items() if not p.startswith('docs/')}
+assert not (REPO / PREFIX).exists() and not (REPO / REPORT).exists() and not (REPO / RECEIPT).exists()
+(REPO / PREFIX).mkdir(parents=True)
+artifacts = []
+
+
+def retain(name, raw, origin, kind, compressed=False):
+    path = PREFIX / (name + ('.gz' if compressed else ''))
+    target = REPO / path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    value = gzip.compress(raw, mtime=0) if compressed else raw
+    target.write_bytes(value)
+    item = {'path': str(path), 'origin': origin, 'kind': kind}
+    if compressed:
+        assert int.from_bytes(value[4:8], 'little') == 0 and gzip.decompress(value) == raw
+        item.update(rawBytes=len(raw), rawSha256=digest(raw), gzipBytes=len(value),
+                    gzipSha256=digest(value), gzipMtime=0)
+    else:
+        item.update(bytes=len(value), sha256=digest(value))
+    artifacts.append(item)
+    return str(path)
+
+
+commands = []
+for label in ['native-driver-source', 'native-helper-probes', 'native-author-package']:
+    receipt_file, log_file = RAW / (label + '.json'), RAW / (label + '.log')
+    raw_receipt, raw_log = receipt_file.read_bytes(), log_file.read_bytes()
+    receipt = json.loads(raw_receipt)
+    assert receipt['source'] == receipt['finalSource'] == PARENT and receipt['cleanTrackedWorktree']
+    assert receipt['tree'] == git('rev-parse', PARENT + '^{tree}').decode().strip()
+    assert receipt['exitCode'] == 0 and receipt['startedAt'] < receipt['completedAt']
+    assert receipt['bytes'] == len(raw_log) and receipt['sha256'] == digest(raw_log)
+    commands.append({**receipt,
+        'receipt': retain(label + '.json', raw_receipt, str(receipt_file), 'original command receipt'),
+        'output': retain(label + '.log', raw_log, str(log_file), 'complete original command output', True)})
+for name in ['check-native-driver-source.py', 'check-native-author-package.py',
+             'independent-native-helper-probes.mjs', 'package-native-review.py']:
+    retain(name + '.txt', (RAW / name).read_bytes(), str(RAW / name), 'original independent reviewer source')
+retain('source/driver.patch', git('diff', '--binary', CLIENT, SOURCE),
+       f'git diff --binary {CLIENT} {SOURCE}', 'exact reviewed driver delta', True)
+source_check = json.loads((RAW / 'native-driver-source.log').read_text())
+author_check = json.loads((RAW / 'native-author-package.log').read_text())
+assert source_check['source'] == SOURCE and source_check['exactBaselineReconstruction']
+assert author_check['authorEvidenceCommit'] == AUTHOR and author_check['indexedArtifactsVerified'] == 17
+report = (RAW / 'native-review-report.md').read_text()
+(REPO / REPORT).write_text(report)
+receipt = {
+    'schema': 'p2p-offramp-independent-review/v1', 'generation': 32,
+    'reviewKind': 'native prepared-funding acceptance-driver source and controlled helper compatibility',
+    'reviewedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'reviewCheckout': PARENT, 'reviewCheckoutTree': git('rev-parse', PARENT + '^{tree}').decode().strip(),
+    'source': SOURCE, 'sourceTree': git('rev-parse', SOURCE + '^{tree}').decode().strip(),
+    'sourceParent': CLIENT, 'sourcePath': 'contracts/solana/localnet/client-run.mjs',
+    'clientSource': CLIENT, 'clientSourceReview': PARENT,
+    'authorEvidenceCommit': AUTHOR,
+    'authorEvidenceTree': git('rev-parse', AUTHOR + '^{tree}').decode().strip(),
+    'report': str(REPORT), 'findings': [],
+    'controlledHelperProbes': {'tests': 2, 'pass': 2, 'fail': 0, 'cancelled': 0, 'skipped': 0, 'todo': 0,
+        'helperAssertionsPerCase': 13, 'actualClient': True, 'extractedHelperSource': SOURCE,
+        'injectedActBoundary': 'Actual confirm and sent journal record; replaces finalized polling.'},
+    'sourceIdentity': source_check,
+    'authorEvidenceVerification': {k: v for k, v in author_check.items() if k != 'allEvidenceFileHashes'},
+    'commands': commands, 'artifacts': artifacts,
+    'limits': ['The driver entry point, compiled output, validator, browser and native financial flow were not run.',
+        'No finalized/native acceptance is claimed by the controlled helper probes.',
+        'Client-source 98-case selection and helper 2-case selection are separate commands.',
+        'Root combined-source qualification and provenance remain separate.',
+        'Tier C actual source/target gates and owner authorization remain required.'],
+}
+(REPO / RECEIPT).write_text(json.dumps(receipt, indent=2) + '\n')
+for link in re.findall(r'\]\(([^)]+)\)', report):
+    assert not link.startswith('http') and (REPO / REPORT.parent / link).exists(), link
+for item in artifacts:
+    value = (REPO / item['path']).read_bytes()
+    if item['path'].endswith('.gz'):
+        assert len(value) == item['gzipBytes'] and digest(value) == item['gzipSha256']
+        raw = gzip.decompress(value)
+        assert len(raw) == item['rawBytes'] and digest(raw) == item['rawSha256']
+    else:
+        assert len(value) == item['bytes'] and digest(value) == item['sha256']
+print(json.dumps({'source': SOURCE, 'parent': PARENT, 'report': str(REPORT), 'receipt': str(RECEIPT),
+                  'artifacts': len(artifacts), 'documents': len(artifacts) + 2, 'commands': len(commands)}))

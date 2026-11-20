@@ -1,0 +1,267 @@
+{
+  "schema": "p2p-offramp-independent-review/v1",
+  "generation": 32,
+  "reviewKind": "native prepared-funding acceptance-driver source and controlled helper compatibility",
+  "reviewedAt": "2026-11-20T19:34:59.013631+00:00",
+  "reviewCheckout": "fadd204e3616f7d262add42a7f72a55d27079158",
+  "reviewCheckoutTree": "602216df49bb1884b3718b23b85e28b285f43ef2",
+  "source": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+  "sourceTree": "9e7564a188b8b87f5498ac749eee62db7951317f",
+  "sourceParent": "252dd1603f12eab69313ef25b538be1b040bc508",
+  "sourcePath": "contracts/solana/localnet/client-run.mjs",
+  "clientSource": "252dd1603f12eab69313ef25b538be1b040bc508",
+  "clientSourceReview": "fadd204e3616f7d262add42a7f72a55d27079158",
+  "authorEvidenceCommit": "fcd74b9d577a59af55d942d85d472de9cebe2228",
+  "authorEvidenceTree": "a65f2ec718da2430f325dfcc9bfbcf0fa87ca1e8",
+  "report": "docs/engineering/INDEPENDENT_SOLANA_PREPARED_FUNDING_NATIVE_REVIEW_GENERATION32_20261120.md",
+  "findings": [],
+  "controlledHelperProbes": {
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "helperAssertionsPerCase": 13,
+    "actualClient": true,
+    "extractedHelperSource": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+    "injectedActBoundary": "Actual confirm and sent journal record; replaces finalized polling."
+  },
+  "sourceIdentity": {
+    "source": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+    "sourceTree": "9e7564a188b8b87f5498ac749eee62db7951317f",
+    "parent": "252dd1603f12eab69313ef25b538be1b040bc508",
+    "sourcePath": "contracts/solana/localnet/client-run.mjs",
+    "changedPaths": [
+      "contracts/solana/localnet/client-run.mjs"
+    ],
+    "sourceBytes": 33030,
+    "sourceSha256": "11242e040bed614cdfcc054fbd3ca002fc653be6b888b5087c87af708a75ed83",
+    "sourceGitEntry": "100644 blob 97ca40a7f12b890bb516aab282ad0be2f5b665fa",
+    "unchangedOtherEntries": 2995,
+    "nonDocumentationEntries": 1030,
+    "helperSha256": "411a7ebf41f59e07892fb80d5f271228c87a8086db7b9517a066b42fbe678eb4",
+    "exactBaselineReconstruction": true,
+    "existingDriverRemainderByteIdentical": true,
+    "syntaxCheckOnly": {
+      "command": [
+        "node",
+        "--check",
+        "<temporary exact Git source copy>"
+      ],
+      "exitCode": 0
+    },
+    "fullMainToSourceWhitespace": {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061..e214f70f8bcbb9eb962fc147f2d318081daca2ce"
+      ],
+      "exitCode": 0
+    },
+    "nativeDriverEntryExecuted": false,
+    "validatorOrBrowserExecuted": false
+  },
+  "authorEvidenceVerification": {
+    "authorEvidenceCommit": "fcd74b9d577a59af55d942d85d472de9cebe2228",
+    "authorEvidenceTree": "a65f2ec718da2430f325dfcc9bfbcf0fa87ca1e8",
+    "source": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+    "sourceTree": "9e7564a188b8b87f5498ac749eee62db7951317f",
+    "docsOnlyPaths": 31,
+    "nonDocumentationEntriesPreserved": 1030,
+    "indexedArtifactsVerified": 17,
+    "compiledSourceInputsVerified": 42,
+    "compiledOutputsVerified": 1,
+    "compiledOutput": {
+      "file": "05-compiled-0.mjs.gz",
+      "rawBytes": 194659,
+      "rawSha256": "4bf495a5bbe5b4b931472967a216bdfe15b1e38bfb4c39a1a64f1953a9f7b3e6",
+      "gzipBytes": 52722,
+      "gzipSha256": "722ff0853158fa696c9d02ec29f7568740571dcfb0e8ddd4cfabdcf75ca9a445",
+      "gzipMtime": 0
+    },
+    "protectedRegionsVerified": 6,
+    "supplementalReceiptsVerified": [
+      "07-evidence-integrity.json",
+      "08-source-and-evidence-whitespace.json",
+      "10-git-entry-type-check.json",
+      "11-final-whitespace.json"
+    ],
+    "recoveryArtifactsVerified": 3,
+    "initialBuildDependencyFailurePreserved": true,
+    "packagingGitlinkFailurePreserved": true,
+    "gzipMtimeZero": true,
+    "nativeDriverEntryExecuted": false,
+    "compiledOutputExecuted": false
+  },
+  "commands": [
+    {
+      "source": "fadd204e3616f7d262add42a7f72a55d27079158",
+      "tree": "602216df49bb1884b3718b23b85e28b285f43ef2",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/check-native-driver-source.py"
+      ],
+      "startedAt": "2026-11-20T19:32:43.257606+00:00",
+      "completedAt": "2026-11-20T19:32:43.499841+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/native-driver-source.log",
+      "bytes": 1170,
+      "sha256": "6bfb86084cf1200d3dc6412ae472e01c0710a55133159dbdda56a142948282ff",
+      "finalSource": "fadd204e3616f7d262add42a7f72a55d27079158",
+      "cleanTrackedWorktree": true,
+      "summary": [],
+      "receipt": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-driver-source.json",
+      "output": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-driver-source.log.gz"
+    },
+    {
+      "source": "fadd204e3616f7d262add42a7f72a55d27079158",
+      "tree": "602216df49bb1884b3718b23b85e28b285f43ef2",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/independent-native-helper-probes.mjs"
+      ],
+      "startedAt": "2026-11-20T19:32:43.253447+00:00",
+      "completedAt": "2026-11-20T19:32:44.074771+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/native-helper-probes.log",
+      "bytes": 344,
+      "sha256": "009fc4ceee3c80b8ef4b65f2202e24040a9b85a0f8357632b1dbf4f188d838ed",
+      "finalSource": "fadd204e3616f7d262add42a7f72a55d27079158",
+      "cleanTrackedWorktree": true,
+      "summary": [
+        "\u2139 tests 2",
+        "\u2139 suites 0",
+        "\u2139 pass 2",
+        "\u2139 fail 0",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 703.153414"
+      ],
+      "receipt": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-helper-probes.json",
+      "output": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-helper-probes.log.gz"
+    },
+    {
+      "source": "fadd204e3616f7d262add42a7f72a55d27079158",
+      "tree": "602216df49bb1884b3718b23b85e28b285f43ef2",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/check-native-author-package.py"
+      ],
+      "startedAt": "2026-11-20T19:34:05.008109+00:00",
+      "completedAt": "2026-11-20T19:34:05.639478+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/native-author-package.log",
+      "bytes": 10541,
+      "sha256": "cd0497f66c75e65aa23c43d5d0c147b91317553bc76d6011b0c9533d9e6b4517",
+      "finalSource": "fadd204e3616f7d262add42a7f72a55d27079158",
+      "cleanTrackedWorktree": true,
+      "summary": [],
+      "receipt": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-author-package.json",
+      "output": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-author-package.log.gz"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-driver-source.json",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/native-driver-source.json",
+      "kind": "original command receipt",
+      "bytes": 690,
+      "sha256": "0fb20a2c26e9257d8d94b0386c8a349cdb31a0849dcc3971e79ef90affbadca8"
+    },
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-driver-source.log.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/native-driver-source.log",
+      "kind": "complete original command output",
+      "rawBytes": 1170,
+      "rawSha256": "6bfb86084cf1200d3dc6412ae472e01c0710a55133159dbdda56a142948282ff",
+      "gzipBytes": 629,
+      "gzipSha256": "37228abe046070a4bea6edc47194ae426234dcdb1f829b2bae3569801f11f98f",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-helper-probes.json",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/native-helper-probes.json",
+      "kind": "original command receipt",
+      "bytes": 968,
+      "sha256": "2e9528b2ec009bc85f808ff0f5a59b1cd6be10e6e858f79320e0072ddbcea1a2"
+    },
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-helper-probes.log.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/native-helper-probes.log",
+      "kind": "complete original command output",
+      "rawBytes": 344,
+      "rawSha256": "009fc4ceee3c80b8ef4b65f2202e24040a9b85a0f8357632b1dbf4f188d838ed",
+      "gzipBytes": 199,
+      "gzipSha256": "2365bd22f9d2f88d78a74d63dae64036711683d61e4a70b146ae5cab1304b810",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-author-package.json",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/native-author-package.json",
+      "kind": "original command receipt",
+      "bytes": 693,
+      "sha256": "55d659c54823189dc72d0d1a437b92b991ac49ab682382e193307c1d74bad9ec"
+    },
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/native-author-package.log.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/native-author-package.log",
+      "kind": "complete original command output",
+      "rawBytes": 10541,
+      "rawSha256": "cd0497f66c75e65aa23c43d5d0c147b91317553bc76d6011b0c9533d9e6b4517",
+      "gzipBytes": 3086,
+      "gzipSha256": "a120c3de19212802c86d13bceb80fc7b343e49d5a5388e3aa26be5aa83838c6f",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/check-native-driver-source.py.txt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/check-native-driver-source.py",
+      "kind": "original independent reviewer source",
+      "bytes": 3737,
+      "sha256": "73e1bfa4dc97a705acc153fbf813fec9881e9cfdfaf6567fa8e181c8867277f3"
+    },
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/check-native-author-package.py.txt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/check-native-author-package.py",
+      "kind": "original independent reviewer source",
+      "bytes": 7481,
+      "sha256": "920d27e802ecb1e14016f6f2f3b25e6f61f200b3e35c7d287db56ace93a4f6fb"
+    },
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/independent-native-helper-probes.mjs.txt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/independent-native-helper-probes.mjs",
+      "kind": "original independent reviewer source",
+      "bytes": 3928,
+      "sha256": "43152cf309098bc592650e8fe2ef2fd43fa5a3ae090f4953fdfaec22c7f35ced"
+    },
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/package-native-review.py.txt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/package-native-review.py",
+      "kind": "original independent reviewer source",
+      "bytes": 6526,
+      "sha256": "428b5cddcd4e52383beffaa057d59c751b86a3f657bc8f8bbc1e206613ae3195"
+    },
+    {
+      "path": "docs/engineering/evidence/solana-prepared-funding-native-independent-review-generation32/source/driver.patch.gz",
+      "origin": "git diff --binary 252dd1603f12eab69313ef25b538be1b040bc508 e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+      "kind": "exact reviewed driver delta",
+      "rawBytes": 6864,
+      "rawSha256": "33f8dc873aa39bbe2445feb4a620e1e972bba3b48d2d140b50d693a6d977e5b1",
+      "gzipBytes": 2367,
+      "gzipSha256": "5c3cb964be47bbb53ce3ddc3a5a75541a37d975481b277d99feba80f531b913d",
+      "gzipMtime": 0
+    }
+  ],
+  "limits": [
+    "The driver entry point, compiled output, validator, browser and native financial flow were not run.",
+    "No finalized/native acceptance is claimed by the controlled helper probes.",
+    "Client-source 98-case selection and helper 2-case selection are separate commands.",
+    "Root combined-source qualification and provenance remain separate.",
+    "Tier C actual source/target gates and owner authorization remain required."
+  ]
+}

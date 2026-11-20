@@ -1,0 +1,72 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { isDeepStrictEqual } from 'node:util';
+import { pathToFileURL } from 'node:url';
+
+const source = 'e214f70f8bcbb9eb962fc147f2d318081daca2ce';
+const path = 'contracts/solana/localnet/client-run.mjs';
+const driver = execFileSync('git', ['show', `${source}:${path}`], { encoding: 'utf8' });
+const start = driver.indexOf('async function reviewedFund(');
+const end = driver.indexOf('\nasync function nativeFlow() {', start);
+assert.ok(start >= 0 && end > start);
+const helper = driver.slice(start, end);
+const at = relative => import(pathToFileURL(`${process.cwd()}/${relative}`).href);
+const { connected, setupClient, splitWire } = await at('packages/chain-solana/test/lifecycle-support.mjs');
+const { ata, base58Encode, ok } = await at('packages/chain-solana/test/support.mjs');
+const { encodeBase64, parseLegacyMessage } = await at('packages/chain-solana/src/message.ts');
+const { verifyPlanMessage } = await at('packages/chain-solana/src/plan.ts');
+
+for (const kind of ['native', 'spl']) {
+  test(`independent driver helper: actual ${kind} preparation and confirmation preserve the reviewed bytes`, async t => {
+    const signLog = [], sendLog = [], checks = [];
+    const env = setupClient(kind, {
+      clusterOptions: { absent: true, handle(input) {
+        if (input.method === 'sendTransaction') sendLog.push(input.params[0]);
+      } },
+      wallet: { output(wire, input) {
+        signLog.push({ address: input.account.address, message: encodeBase64(splitWire(wire).message) });
+        return [{ signedTransaction: wire }];
+      } },
+    });
+    t.after(() => env.client.dispose());
+    const session = await connected(env, 'seller');
+    const sellerTokenAccount = kind === 'spl' ? ata(env.terms.seller, env.terms.mint) : null;
+    let confirmations = 0;
+    const ports = {
+      signLog, sendLog, isDeepStrictEqual, encodeBase64, parseLegacyMessage, verifyPlanMessage,
+      unwrap: (_label, result) => ok(result),
+      must: (name, result) => { checks.push(name); assert.equal(Boolean(result), true, name); },
+      sendsFor: signature => sendLog.filter(wire =>
+        base58Encode(Buffer.from(wire, 'base64').subarray(1, 65)) === signature).length,
+      // Controlled substitute for the driver's existing finalized-polling act() boundary.
+      // It confirms through the actual client and returns its actual sent journal record.
+      // It performs no validator call and makes no finalized/native-acceptance claim.
+      act: async (client, trade, _label, call) => {
+        assert.equal(client, env.client);
+        assert.equal(trade, env.trade);
+        confirmations++;
+        assert.equal(signLog.length, 0);
+        assert.equal(sendLog.length, 0);
+        const before = ok(await client.intents(trade));
+        assert.equal(before.length, 1);
+        assert.equal(before[0].state, 'prepared');
+        const submission = ok(await call());
+        assert.equal(submission.state, 'sent');
+        const record = ok(await client.intents(trade)).find(value => value.intentId === submission.intentId);
+        assert.equal(record.state, 'sent');
+        return { submission, record };
+      },
+    };
+    const reviewedFund = Function('ports',
+      `const { ${Object.keys(ports).join(', ')} } = ports;\n${helper}\nreturn reviewedFund;`)(ports);
+    const result = await reviewedFund(env.client, env.trade, session, `controlled ${kind}`, sellerTokenAccount);
+    assert.equal(confirmations, 1);
+    assert.equal(checks.length, 13);
+    assert.equal(new Set(checks).size, 13);
+    assert.deepEqual(env.journalFake.writes, ['prepared', 'signed', 'sendMarked', 'sent']);
+    assert.equal(result.record.action, 'fund');
+    assert.equal(env.walletFake.calls.sign.length, 1);
+    assert.equal(env.cluster.calls.filter(call => call.method === 'sendTransaction').length, 1);
+  });
+}
