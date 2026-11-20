@@ -75,6 +75,9 @@ jobs:
       - run: npm run test:favorites:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:templates:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:private:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}

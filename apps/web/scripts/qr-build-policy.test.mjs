@@ -21,7 +21,7 @@ test('decoder module scope is exact and unavailable to the document or private n
   assert.throws(() => inspectQrArtifact({}, undefined, []), /CORE_GRAPH_INVALID/);
   assert.throws(() => inspectQrArtifact({}, [], {}), /CORE_GRAPH_INVALID/);
   for (const path of QR_DECODER_MODULES) assert.doesNotThrow(() => assertQrDecoderModule(path));
-  for (const path of ['packages/storage/index.ts', 'packages/wallet/index.ts', 'packages/personalization/favorites.ts', 'packages/personalization/src/favorites.ts', 'apps/web/src/qr/review-controller.ts',
+  for (const path of ['packages/storage/index.ts', 'packages/wallet/index.ts', 'packages/personalization/favorites.ts', 'packages/personalization/src/favorites.ts', 'packages/personalization/templates.ts', 'packages/personalization/src/trade-draft-store.ts', 'packages/personalization/index.ts', 'apps/web/src/qr/review-controller.ts',
     'node_modules/jsqr/future.js', 'node_modules/@noble/hashes/sha2.js', '../outside/decoder.ts']) {
     assert.throws(() => assertQrDecoderModule(path), /QR_DECODER_MODULE/);
   }

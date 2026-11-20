@@ -242,6 +242,14 @@ const definitions = {
     "settings": "Settings"
   },
   drafts: {
+    "previewPut": "Store or replace reusable template defaults",
+    "previewDefault": "Change repeat default selection",
+    "previewExpires": "This preview expires after five minutes. Confirm only the change shown here.",
+    "none": "None",
+    "chainId": "EVM chain ID",
+    "nativeAsset": "Native asset",
+    "assetDecimals": "Asset decimals",
+    "repeatSelected": "Repeat default",
     "title": "New local draft",
     "help": "Reuse amounts only. Enter parties, instructions and deadlines again, then review exact current terms. Trading remains disabled.",
     "locked": "Unlock a profile to edit a private draft or manage encrypted templates.",

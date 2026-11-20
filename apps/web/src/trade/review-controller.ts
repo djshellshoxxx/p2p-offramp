@@ -9,8 +9,9 @@
  * bypasses today's checks. Locking calls forgetSaved(): reviews loaded from the profile leave memory and any saved-review
  * result still in flight is discarded.
  */
-import { MAX_TERMS_REVIEW_BYTES, reviewTermsBytes, type RegistryLookup, type ReviewedEvmTerms, type TermsReviewRejection, type TermsReviewResult } from '../../../../packages/domain/index.ts';
+import { MAX_TERMS_REVIEW_BYTES, reviewTermsBytes, buildTradeDraftDocument, type RegistryLookup, type ReviewedEvmTerms, type TermsReviewRejection, type TermsReviewResult } from '../../../../packages/domain/index.ts';
 import type { AppServices } from '../app-services.ts';
+import { parseTradeDraftDefaults, type TradeDraftDefaultsV1 } from '../../../../packages/schemas/index.ts';
 import type { RuntimeErrorCode, RuntimeResult, RuntimeSavedReviewRef, RuntimeSavedReviews, RuntimeSavedReviewFavorites, RuntimeSavedReviewFavorite } from '../../../../packages/schemas/index.ts';
 
 export const MAX_SESSION_REVIEWS = 8;
@@ -43,7 +44,7 @@ export type ImportState =
   | { readonly kind: 'rejected'; readonly code: ImportRejection }
   | { readonly kind: 'cancelled' }
   | { readonly kind: 'accepted'; readonly localId: string };
-export type ReviewSource = 'file' | 'synthetic-sample';
+export type ReviewSource = 'file' | 'synthetic-sample' | 'local-draft';
 export interface StoredReview {
   readonly localId: string; readonly review: ReviewedEvmTerms; readonly source: ReviewSource;
   /** The exact reviewed bytes, kept so the review can be saved without re-reading the file. */
@@ -79,7 +80,7 @@ export interface TradeReviewSnapshot {
 }
 /** The open profile's saved-review commands (AppServices). Results are bound to that profile by the runtime. */
 export interface SavedReviewStore {
-  saveTermsReview(source: ReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>>;
+  saveTermsReview(source: Exclude<ReviewSource, 'local-draft'>, bytes: Uint8Array, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>>;
   listTermsReviews(signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviews>>;
   deleteTermsReview(recordId: string, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>>;
 }
@@ -98,6 +99,10 @@ export interface TradeReviewOptions {
 }
 export interface FileLike { readonly size: number; arrayBuffer(): Promise<ArrayBuffer>; }
 
+export interface DraftRegistryIdentity {
+  readonly defaults: TradeDraftDefaultsV1; readonly chainId: string; readonly deploymentAddress: string;
+  readonly assetAddress: string | null; readonly assetDecimals: number;
+}
 export interface TradeReviewController {
   getSnapshot(): TradeReviewSnapshot;
   subscribe(listener: () => void): () => void;
@@ -105,6 +110,10 @@ export interface TradeReviewController {
   loadRegistry(): Promise<void>;
   importFile(file: FileLike): Promise<ImportOutcome>;
   importSample(id: string): Promise<ImportOutcome>;
+  /** Re-resolves all registry identities now. This grants no signing, agreement or transaction authority. */
+  resolveDraftDefaults(input: unknown): DraftRegistryIdentity | null;
+  /** Fresh random identity and private agreement, then the same explicit local terms review. */
+  reviewDraft(input: unknown, isCurrent: () => boolean, signal?: AbortSignal): Promise<ImportOutcome>;
   cancel(): void;
   /** Removes from this session only; a saved copy stays in the profile. */
   remove(localId: string): void;
@@ -183,12 +192,13 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
   const clearSession = () => { generation++; savedGeneration++; completedSavedLoad = null; savedAbort?.abort(); savedAbort=undefined; retireFavorites(); wipe(snapshot.reviews); for(const bytes of transient) bytes.fill(0); transient.clear(); publish({reviews:Object.freeze([]),job:Object.freeze({kind:'idle'}),saved:IDLE_SAVED,unreviewable:Object.freeze([]),favorites:IDLE_FAVORITES}); };
   const unavailable = (action: 'save'|'load'|'delete', code: SavedErrorCode) => publish({saved:Object.freeze({kind:'failed',action,code})});
 
-  async function run(source: ReviewSource, read: () => Promise<Uint8Array | ImportRejection>): Promise<ImportOutcome> {
+  async function run(source: ReviewSource, read: () => Promise<Uint8Array | ImportRejection>, admitted: () => boolean = () => true): Promise<ImportOutcome> {
     if (disposed) return { kind: 'stale' };
     const mine = ++generation;
-    const current = () => mine === generation && !disposed;
+    const current = () => mine === generation && !disposed && admitted();
     if (!registry) { const job = { kind: 'rejected', code: 'REGISTRY_NOT_READY' } as const; setJob(job); return job; }
     const lookup = registry;
+    if (!current()) return { kind: 'stale' };
     setJob({ kind: 'busy', step: 'reading' });
     let bytes: Uint8Array | ImportRejection;
     try { bytes = await read(); } catch { bytes = 'FILE_UNREADABLE'; }
@@ -202,7 +212,9 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       setJob(job);
       return job;
     }
-    bytes=bytes.slice(); const original=bytes.slice(); transient.add(bytes); transient.add(original);
+    const readBytes = bytes; bytes = bytes.slice();
+    if (source === 'local-draft') readBytes.fill(0); // This builder output is owned here, unlike an imported caller buffer.
+    const original=bytes.slice(); transient.add(bytes); transient.add(original);
     setJob({ kind: 'busy', step: 'checking' });
     let result: TermsReviewResult;
     try { result = await review(lookup, bytes); } catch { result = { ok: false, code: 'UNAVAILABLE' }; }
@@ -217,7 +229,16 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
     wipe(snapshot.reviews.filter(item=>!reviews.includes(item)));
     const job = Object.freeze({ kind: 'accepted', localId: stored.localId } as const);
     publish({ reviews: Object.freeze(reviews), job });
-    return current() ? job : {kind:'stale'};
+    if (current()) return job;
+    // A template controller can lose its selection synchronously in an observer of this publication.
+    // It has not received this fresh route ID yet, so retire the newly produced private projection here.
+    if (source === 'local-draft' && !existing) {
+      original.fill(0);
+      const retained = snapshot.reviews.filter(item => item !== stored);
+      if (retained.length !== snapshot.reviews.length) publish({ reviews: Object.freeze(retained),
+        job: snapshot.job.kind === 'accepted' && snapshot.job.localId === stored.localId ? Object.freeze({ kind: 'idle' }) : snapshot.job });
+    }
+    return { kind: 'stale' };
   }
 
   return Object.freeze({
@@ -248,6 +269,26 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       const sample = samples.find(item => item.id === id);
       return run('synthetic-sample', async () => sample ? sample.load(now()) : 'FILE_UNREADABLE');
     },
+    resolveDraftDefaults(input: unknown) {
+      if (disposed || !registry) return null;
+      try {
+        const defaults = parseTradeDraftDefaults(input), network = registry.network(defaults.networkId);
+        const deployment = registry.deployment(defaults.networkId, defaults.deploymentId);
+        const asset = network?.assets.find(item => item.id === defaults.assetId);
+        if (!network || network.id !== defaults.networkId || network.chain !== 'evm' || !deployment || deployment.id !== defaults.deploymentId || !asset ||
+            (asset.kind !== 'native' && asset.kind !== 'erc20') || asset.transferPolicy !== 'exact-transfer' || !deployment.supportedAssetIds.includes(asset.id)) return null;
+        return Object.freeze({ defaults, chainId: network.chainIdentity, deploymentAddress: deployment.address,
+          assetAddress: asset.address, assetDecimals: asset.decimals });
+      } catch { return null; }
+    },
+    reviewDraft(input: unknown, isCurrent: () => boolean, signal?: AbortSignal) {
+      const admitted = () => { try { return !signal?.aborted && isCurrent() === true; } catch { return false; } };
+      return run('local-draft', async () => {
+        if (!registry || !admitted()) return 'REGISTRY_NOT_READY';
+        const built = await buildTradeDraftDocument(registry, input, { nowSeconds: now, isCurrent: admitted, ...(signal ? { signal } : {}), randomBytes: random });
+        return built.ok ? built.bytes : built.code;
+      }, admitted);
+    },
     cancel() {
       if(snapshot.saved.kind === 'busy'){ const action=snapshot.saved.action; savedGeneration++; savedAbort?.abort(); savedAbort=undefined; unavailable(action,'UNKNOWN_OUTCOME'); }
       if (snapshot.favorites.kind === 'busy') { retireFavorites(); favoriteFailure('UNKNOWN_OUTCOME'); }
@@ -270,6 +311,8 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       const item = snapshot.reviews.find(entry => entry.localId === localId);
       if(disposed || snapshot.saved.kind==='busy' || snapshot.favorites.kind === 'busy')return;
       if(!item){unavailable('save','REVIEW_MISSING');return;}
+      // Local draft previews are ephemeral; the saved-review payload contract remains file/sample only.
+      if (item.source === 'local-draft') { unavailable('save', 'INVALID_INPUT'); return; }
       if(item.savedId!==null){publish({saved:Object.freeze({kind:'done',action:'save',skipped:0})});return;}
       const mine = ++savedGeneration;
       retireFavorites();

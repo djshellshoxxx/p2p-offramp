@@ -1,5 +1,6 @@
 /** Offline document composition boundary. UI receives state and commands, never a vault handle or record. */
 import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore,
+  type RuntimeTradeTemplates, type RuntimeTradeTemplatePreview, type RuntimeTradeTemplateReceipt, type RuntimeTradeTemplateCancelled, type RuntimeTradeTemplateConsent, type TradeDraftChangeV1,
   type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeSavedReviewFavorites, type RuntimeSavedReviewFavorite } from '../../../packages/schemas/index.ts';
 import { AppRuntime, type AppRuntimeOptions } from './runtime/app-runtime.ts';
 
@@ -31,6 +32,10 @@ export interface AppServices {
   /** Bounded IDs and revision only; opening a favorite still requires current-registry review. */
   listFavoriteReviews(signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewFavorites>>;
   setReviewFavorite(recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewFavorite>>;
+  loadTradeTemplates(signal?: AbortSignal): Promise<AppResult<RuntimeTradeTemplates>>;
+  previewTradeTemplateChange(expectedRevision: number, change: TradeDraftChangeV1, signal?: AbortSignal): Promise<AppResult<RuntimeTradeTemplatePreview>>;
+  commitTradeTemplateChange(previewId: string, expectedRevision: number, consent: RuntimeTradeTemplateConsent, signal?: AbortSignal): Promise<AppResult<RuntimeTradeTemplateReceipt>>;
+  cancelTradeTemplateChange(signal?: AbortSignal): Promise<AppResult<RuntimeTradeTemplateCancelled>>;
   /** Read-only unverified scalar journal references; no calldata, native truth or resend capability. */
   listRecoveryReferences(offset?: number, expectedRevision?: number | null, signal?: AbortSignal): Promise<AppResult<RuntimeRecoveryReferences>>;
   dispose(): Promise<void>;
@@ -95,6 +100,18 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     },
     setReviewFavorite: async (recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewFavorite>> => {
       try { return await runtime.setReviewFavorite(recordId, favorite, expectedRevision, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    loadTradeTemplates: async (signal?: AbortSignal): Promise<AppResult<RuntimeTradeTemplates>> => {
+      try { return await runtime.loadTradeTemplates(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    previewTradeTemplateChange: async (expectedRevision: number, change: TradeDraftChangeV1, signal?: AbortSignal): Promise<AppResult<RuntimeTradeTemplatePreview>> => {
+      try { return await runtime.previewTradeTemplateChange(expectedRevision, change, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    commitTradeTemplateChange: async (previewId: string, expectedRevision: number, consent: RuntimeTradeTemplateConsent, signal?: AbortSignal): Promise<AppResult<RuntimeTradeTemplateReceipt>> => {
+      try { return await runtime.commitTradeTemplateChange(previewId, expectedRevision, consent, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    cancelTradeTemplateChange: async (signal?: AbortSignal): Promise<AppResult<RuntimeTradeTemplateCancelled>> => {
+      try { return await runtime.cancelTradeTemplateChange(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     listRecoveryReferences: async (offset = 0, expectedRevision: number | null = null, signal?: AbortSignal): Promise<AppResult<RuntimeRecoveryReferences>> => {
       try { return await runtime.listRecoveryReferences(offset, expectedRevision, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }

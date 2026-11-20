@@ -28,14 +28,15 @@ const LOCALNET_WALLET_MODULES = /^packages\/wallet\/src\/evm-(?:adapter|terms|su
 const LOCALNET_ONLY_MODULES = [LOCALNET_WALLET_MODULES, /^packages\/(?:wallet|domain|chain-evm)\/localnet\.ts$/, /^packages\/(?:chain-evm|relay|exchange)\//, /^apps\/web\/src\/localnet\//];
 const LOCALNET_DEPENDENCIES = /^node_modules\/@noble\/(?:curves|hashes|ciphers)\//;
 export const LOCALNET_WEBSOCKET_MODULE = 'packages/relay/src/pool.ts';
-const FAVORITES_WORKER_MODULES = new Set(['packages/personalization/favorites.ts', 'packages/personalization/src/favorites.ts']);
+const PERSONALIZATION_WORKER_MODULES = new Set(['packages/personalization/favorites.ts', 'packages/personalization/src/favorites.ts',
+  'packages/personalization/templates.ts', 'packages/personalization/src/trade-draft-store.ts']);
 /** Throws NON_CORE_MODULE / UNREVIEWED_DEPENDENCY for a repository-relative module path the profile does not admit. */
 export function assertModuleAdmitted(path, localnet = false, solanaLocalnet = false, privateWorker = false) {
   assertNotQrDecoderModule(path);
   if (localnet && solanaLocalnet) throw new Error('LOCALNET_PROFILE_EXCLUSIVE');
-  // Exactly the reviewed favorites entry and consumer are native-Worker-only. The package barrel includes
-  // templates and is intentionally excluded; nested/look-alike paths never acquire this permission.
-  if (/(?:^|\/)packages\/personalization(?:\/|$)/.test(path) && (!privateWorker || !FAVORITES_WORKER_MODULES.has(path))) throw new Error('NON_CORE_MODULE');
+  // Exactly the reviewed favorites/templates facades and native consumers are Worker-only.
+  // The broad package barrel and nested/look-alike paths never acquire this permission.
+  if (/(?:^|\/)packages\/personalization(?:\/|$)/.test(path) && (!privateWorker || !PERSONALIZATION_WORKER_MODULES.has(path))) throw new Error('NON_CORE_MODULE');
   if (solanaLocalnet) {
     if (path.startsWith('../') || /(?:^|\/)(?:test|tests|fixtures)(?:\/|$)/.test(path) ||
         /(?:^|\/)packages\/(?:extensions|chain-evm|relay|exchange|wallet)(?:\/|$)|(?:^|\/)(?:05_ADVANCED|06_)/i.test(path) ||

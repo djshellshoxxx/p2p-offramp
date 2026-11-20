@@ -21,7 +21,7 @@ try {
   const documentGraph = JSON.parse(await readFile(resolve(out, 'core-graph-document.json'), 'utf8'));
   const workerGraph = JSON.parse(await readFile(resolve(out, 'core-graph-worker.json'), 'utf8'));
   const qrGraph = JSON.parse(await readFile(resolve(out, 'qr-graph-worker.json'), 'utf8'));
-  const favoritesPaths = ['packages/personalization/favorites.ts', 'packages/personalization/src/favorites.ts'];
+  const favoritesPaths = ['packages/personalization/favorites.ts', 'packages/personalization/src/favorites.ts', 'packages/personalization/src/trade-draft-store.ts', 'packages/personalization/templates.ts'];
   assert.deepEqual(workerGraph.modules.filter(module => module.path.startsWith('packages/personalization/')).map(module => module.path).sort(), favoritesPaths);
   assert.equal([...documentGraph.modules, ...qrGraph.modules].some(module => module.path.startsWith('packages/personalization/')), false);
   const workerName = (await readdir(resolve(out, 'assets'))).find(name => /^vault\.worker-[A-Za-z0-9_-]+\.js$/.test(name)); assert.ok(workerName);

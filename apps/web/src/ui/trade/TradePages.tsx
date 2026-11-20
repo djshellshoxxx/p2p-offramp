@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from 'react';
+import { TradeDraftPanel } from './TradeDraftPanel.tsx';
+import type { TradeDraftController } from '../../trade/draft-controller.ts';
 import type { FavoriteState, ImportOutcome, SavedReviewFavoriteStore, StoredReview, TradeReviewController, TradeReviewSnapshot } from '../../trade/review-controller.ts';
 import { tradePageMessages as p, tradeMessages } from './trade-messages.ts';
 import { TradeTermsReview } from './TradeTermsReview.tsx';
@@ -39,7 +41,7 @@ function SavedActions({ trade, item, store, busy, favorites }: { readonly trade:
       {favorites.recordIds.includes(item.savedId) ? p.removeFavorite : p.addFavorite}</button></> : null}
     {store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.deleteSaved(item.savedId!, store); }}>{p.deleteFromProfile}</button></> : null}
   </>;
-  return store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.saveToProfile(item.localId, store); }}>{p.saveToProfile}</button></> : null;
+  return store && item.source !== 'local-draft' ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.saveToProfile(item.localId, store); }}>{p.saveToProfile}</button></> : null;
 }
 
 function FavoritesPanel({ trade, snapshot, store }: { readonly trade: TradeReviewController; readonly snapshot: TradeReviewSnapshot } & SavedStoreProp) {
@@ -147,7 +149,7 @@ function ReviewForm({ trade, snapshot }: { readonly trade: TradeReviewController
   </>;
 }
 
-export function OffersPage({ trade, store = null }: { readonly trade: TradeReviewController | null; readonly store?: SavedReviewFavoriteStore | null }) {
+export function OffersPage({ trade, store = null, drafts = null }: { readonly trade: TradeReviewController | null; readonly store?: SavedReviewFavoriteStore | null; readonly drafts?: TradeDraftController | null }) {
   const snapshot = useTradeReview(trade);
   const registry = snapshot.registry;
   return <>
@@ -161,6 +163,7 @@ export function OffersPage({ trade, store = null }: { readonly trade: TradeRevie
         : registry.kind === 'failed' ? <p className="notice error" role="alert">{p.registryFailed}</p>
         : <><RegistryBanner registry={registry} /><ReviewForm trade={trade} snapshot={snapshot} /></>}
     </section>
+    {drafts ? <TradeDraftPanel drafts={drafts} /> : null}
     {trade && registry.kind === 'ready' ? <SavedPanel trade={trade} snapshot={snapshot} store={store} /> : null}
     {trade && registry.kind === 'ready' ? <SessionList trade={trade} snapshot={snapshot} store={store} /> : null}
   </>;
