@@ -1518,6 +1518,50 @@
   ],
   "remaining": [
     {
+      "id": "POSTMERGE-DOCS-PR222",
+      "priority": 1,
+      "state": "draft-followup-source-bound-review-and-hosted-checks-required",
+      "next_action": "Review exact current PR222 head, docs/spec/JSON/link CI, preserve runtime blob equality and obtain a separate scoped review before a guarded docs-only merge."
+    },
+    {
+      "id": "SIGNED-UPDATE-TRUST-OWN-LOCK",
+      "priority": 1,
+      "state": "incomplete-configured-trust-and-own-lock-adapter",
+      "next_action": "Require approved owner trust and transport configuration, exact lease ownership and fresh browser results; do not invent keys/endpoints or enable automatic updates."
+    },
+    {
+      "id": "SOLANA-NEGOTIATION-FUNDING",
+      "priority": 1,
+      "state": "incomplete-accepted-scope-and-owner-provider-inputs",
+      "next_action": "Complete full discovery, negotiation and funding only under an accepted bounded protocol/UI specification; preserve all physical-send/principal/fee/marker assertions and do not transact real funds."
+    },
+    {
+      "id": "OPTIONAL-ONE-PACKAGE-INTAKE",
+      "priority": 2,
+      "state": "nine-original-prs-preserved-unwired",
+      "next_action": "Review PR191–199 separately, one package per PR, with applicable CodeRabbit-or-Qodo standalone review and exact-source CI/native/browser gates; preserve default graph exclusion and ReleaseEnabled=0."
+    },
+    {
+      "id": "CURRENT-DISTRIBUTION-SEMANTIC-APPROVAL",
+      "priority": 2,
+      "state": "stale-immutable-locale-claim-evidence-unapproved",
+      "next_action": "Obtain current source-linked locale/claim semantic review; preserve the refusal instead of relaxing checks or inferring release approval."
+    },
+    {
+      "id": "PHYSICAL-DEVICE-QUALIFICATION",
+      "priority": 2,
+      "state": "external-device-input-required",
+      "next_action": "Qualify real wallets, cameras, mobile, printing/accessibility and supported devices with owner-controlled hardware; hosted-browser receipts are not physical-device proof."
+    },
+    {
+      "id": "EXPERIMENTAL-FEATURES",
+      "priority": 3,
+      "state": "preserved-not-default-activated",
+      "next_action": "Keep historical experimental paths and inconclusive provider evidence separate until accepted specification, independent review and current execution exist."
+    }
+  ],
+  "remaining_generation11_historical": [
+    {
       "id": "GATE-COMBINED-HOSTED",
       "priority": 1,
       "state": "generation11-current-d301-hosted-ten-queued-at0457",
@@ -1598,6 +1642,7 @@
       "next_action": "Preserve exact2311full/44independent evidence and source ancestry. Currentd301 hosted/native/browser gates remain; original212head unchanged and GitHub records stackedPRmerged."
     }
   ],
+  "remaining_historical_scope_note": "The preserved generation11 remaining rows are source-dated and superseded; the top-level remaining list describes current post-PR221 main status. This is not a release authorization.",
   "successor_generation": 18,
   "integration_local_source_sha": "fba06f12afeaee93572cd09c3e0d643adfe6f5f5",
   "parent_integration_pr": 213,
