@@ -934,7 +934,7 @@
     "required_oracle_pr": 214,
     "release_enabled": 0
   },
-  "current_overlay_key": "staging_overlay_generation15",
+  "current_overlay_key": "merged_main_overlay_generation17",
   "staging_overlay_generation15": {
     "pr": 219,
     "head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
@@ -949,5 +949,45 @@
     "native_hosted_gates": "pending",
     "optional_packages": "preserved separately; final-core qualification not claimed",
     "release_enabled": 0
+  },
+  "merged_main_overlay_generation17": {
+    "source_scope": "Current merged main; 27 historical pinned-main feature rows and generation15 staging overlay remain immutable source-dated evidence",
+    "merged_pr": 221,
+    "merge_commit": "1084a410676bc0658da97f33eba6a059493d74df",
+    "previous_main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+    "candidate_head": "24b67bb2db7c74654b9a5b9496279b4d44380d28",
+    "complete_tree": "7ccc0514c8320314a04fab333d5ebf14294f69dc",
+    "qualified_on": "2026-11-20",
+    "hosted_checks": {
+      "successful": 15,
+      "total": 15,
+      "snyk": "success"
+    },
+    "node_suite": {
+      "passed": 2362,
+      "failed": 0,
+      "skipped": 1,
+      "skipped_case": "Cast parity requires Foundry; separately passed in provisioned EVM/forge job"
+    },
+    "chromium_locale_listener_oracle": "passed on PR221 exact merge checkout; historical PR219 failed",
+    "backup_ui": "integrated; physical device qualification separate",
+    "signed_update_ui": "present with null default controller; trust and own-lock adapter incomplete",
+    "solana_public_recovery_export": "integrated; full negotiation and funding incomplete",
+    "semantic_locale_distribution_approved": false,
+    "optional_prs_separately_gated": [
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "default_optional_activation": false,
+    "release_enabled": 0,
+    "release_qualified": false,
+    "handoff": "CONTINUATION_GENERATION17_20261120.md"
   }
 }
