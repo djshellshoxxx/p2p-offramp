@@ -1,0 +1,181 @@
+{
+  "schema": "p2p-offramp.generations22-23-publication.v1",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "branch": "codex/runtime-update-continuation-g22-20261120",
+  "publishedParent": {
+    "pr": 233,
+    "head": "92663e46508b06645111d9c713beb82d3a6d1a0f",
+    "branch": "codex/continuation-g21-20261120"
+  },
+  "publicationMethod": "Authenticated GitHub connector. Every full source tree and ordered parent relationship was read back; commit metadata and IDs differ.",
+  "localEquivalentCheckpoint": {
+    "commit": "252a9d0a052c37d6f1db872f686d49b71185e218",
+    "tree": "afbbcf5db1ae7c4f1ff6a56109a4cdad26c5b8fa"
+  },
+  "publishedEquivalentCheckpoint": {
+    "commit": "b42290cc76812d7b2926dcf9753f052339fb869c",
+    "tree": "afbbcf5db1ae7c4f1ff6a56109a4cdad26c5b8fa"
+  },
+  "testedLocalSource": "4cff269483e7372f607a8e994d35ca558d7cff00",
+  "testedPublishedEquivalentSource": "6f7927ee633916c5a6b7a1dd721970127f467a7f",
+  "testedTree": "c5f9d82f618a935f24603e2290ecd8c946954d66",
+  "verification": {
+    "blobCount": 37,
+    "mappedCommits": 12,
+    "allTreesMatch": true,
+    "allOrderedParentsReadBack": true,
+    "nonEvidenceEntriesIdenticalToTestedSource": 1015
+  },
+  "commitMap": [
+    {
+      "localSha": "fe8179f5da712ada3de214c668814ad6911cc561",
+      "publishedSha": "c743a274a1e2a4ad6da3564afeeed4c57de2ef62",
+      "tree": "737ffe91f7406d555113703730327d398e9e4404",
+      "localParents": [
+        "92663e46508b06645111d9c713beb82d3a6d1a0f"
+      ],
+      "publishedParents": [
+        "92663e46508b06645111d9c713beb82d3a6d1a0f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "6763e18f0c4f6cd5b333ccd1ab4dc73ee7808fe7",
+      "publishedSha": "7d70203861e828e48e38cd0c573b91dbf40fc310",
+      "tree": "bc34ed701296f4d97bcf1cbf41e31f2f24ce676c",
+      "localParents": [
+        "fe8179f5da712ada3de214c668814ad6911cc561"
+      ],
+      "publishedParents": [
+        "c743a274a1e2a4ad6da3564afeeed4c57de2ef62"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "f0aada76b0f0df1886afd1a80051c39b315f3e13",
+      "publishedSha": "019780c0664cb00f4aec5babb8f75f87315f8127",
+      "tree": "80eeb66cbf0f3347d5ffe6f0041dce0cfd142633",
+      "localParents": [
+        "6763e18f0c4f6cd5b333ccd1ab4dc73ee7808fe7"
+      ],
+      "publishedParents": [
+        "7d70203861e828e48e38cd0c573b91dbf40fc310"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "167988afc92ba2a221d9eb596fe1cb164e5d2f90",
+      "publishedSha": "7b68917942b1836bfa38472c1cf7be5f77681d6a",
+      "tree": "226a3f2831d66b09c272070ec1ac5838f482226b",
+      "localParents": [
+        "f0aada76b0f0df1886afd1a80051c39b315f3e13"
+      ],
+      "publishedParents": [
+        "019780c0664cb00f4aec5babb8f75f87315f8127"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "54201e31a43325c0772865a11f1d4ea331161bd5",
+      "publishedSha": "6aacf7b38a212dacdbbcde547fa21ced9bb47441",
+      "tree": "fbc76223f0bd19d5b920a8a452bf85b0d62770db",
+      "localParents": [
+        "167988afc92ba2a221d9eb596fe1cb164e5d2f90"
+      ],
+      "publishedParents": [
+        "7b68917942b1836bfa38472c1cf7be5f77681d6a"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "fc7d1de47f3710ef690a425b380739e90d5d7843",
+      "publishedSha": "eba058d2827d9d9f60067ad6bbe52bafba33d4da",
+      "tree": "252ed648395edc9250ee4b74ce67aa29a391d49d",
+      "localParents": [
+        "54201e31a43325c0772865a11f1d4ea331161bd5"
+      ],
+      "publishedParents": [
+        "6aacf7b38a212dacdbbcde547fa21ced9bb47441"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "09fd78411d59c68f66d287c84204aa4e19443ed4",
+      "publishedSha": "95760b4a4a45ce49fea0e1538449aa2b822ce135",
+      "tree": "cc45806c9d0c9d4d2aef11f446b55d87239b9263",
+      "localParents": [
+        "fc7d1de47f3710ef690a425b380739e90d5d7843"
+      ],
+      "publishedParents": [
+        "eba058d2827d9d9f60067ad6bbe52bafba33d4da"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "4cff269483e7372f607a8e994d35ca558d7cff00",
+      "publishedSha": "6f7927ee633916c5a6b7a1dd721970127f467a7f",
+      "tree": "c5f9d82f618a935f24603e2290ecd8c946954d66",
+      "localParents": [
+        "09fd78411d59c68f66d287c84204aa4e19443ed4"
+      ],
+      "publishedParents": [
+        "95760b4a4a45ce49fea0e1538449aa2b822ce135"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "e28b0e2c3acf6bfc144be4f64ebb54690ecf39f2",
+      "publishedSha": "bb1e3a12fa94e23ec7925e3b9a454892c0dc95c4",
+      "tree": "1678e232c0b752bb70fe829cc4cfb5a04f28eaa3",
+      "localParents": [
+        "4cff269483e7372f607a8e994d35ca558d7cff00"
+      ],
+      "publishedParents": [
+        "6f7927ee633916c5a6b7a1dd721970127f467a7f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "87322057a08aceac4b753ac216cfefaa3f032d5e",
+      "publishedSha": "9ee18b1ebda02a97c87b78a640ca3a0de7b8ee0c",
+      "tree": "e49c1837fe91c51e9fc000a352f7b5b4a1a8772f",
+      "localParents": [
+        "e28b0e2c3acf6bfc144be4f64ebb54690ecf39f2"
+      ],
+      "publishedParents": [
+        "bb1e3a12fa94e23ec7925e3b9a454892c0dc95c4"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "58151f3a1830977907a2abe6f0ac48d5f62a8f8b",
+      "publishedSha": "d68bb4300dea6c9191ae5c57f09aa3036ddf3889",
+      "tree": "b96a2f2bd4a5bf68650ae43574e55568287a0eec",
+      "localParents": [
+        "87322057a08aceac4b753ac216cfefaa3f032d5e"
+      ],
+      "publishedParents": [
+        "9ee18b1ebda02a97c87b78a640ca3a0de7b8ee0c"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "252a9d0a052c37d6f1db872f686d49b71185e218",
+      "publishedSha": "b42290cc76812d7b2926dcf9753f052339fb869c",
+      "tree": "afbbcf5db1ae7c4f1ff6a56109a4cdad26c5b8fa",
+      "localParents": [
+        "58151f3a1830977907a2abe6f0ac48d5f62a8f8b"
+      ],
+      "publishedParents": [
+        "d68bb4300dea6c9191ae5c57f09aa3036ddf3889"
+      ],
+      "readBackVerified": true
+    }
+  ],
+  "limits": [
+    "The final branch appends this publication record; actual final head and proposed merge are recorded in the PR.",
+    "Local full2470/2470 and independent reviews qualify the named source; final current-target hosted gates remain required.",
+    "Original author sources44b0cae/2732f5b and documentation95bd08e are preserved locally; the qualification receipt verifies their exact corresponding file blobs in the composed source.",
+    "Runtime prerequisite and Node composition only; configured updater, production trust, native/browser/device/origin and release acceptance remain separate. ReleaseEnabled remains0."
+  ]
+}
