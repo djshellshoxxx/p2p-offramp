@@ -1,3 +1,29 @@
+# Current feature coverage — generations 24–25
+
+Frozen source `1a52c1c4f53a97cbbd0937f14a4379b88fd249b8`, tree
+`26938456c4924e4792a5671183a0879e86f8b7a2`, passed **2,478/2,478 tests** with
+zero failures/skips/cancellations and all eleven additional commands. It is
+staged on `codex/native-update-locale-continuation-g24-20261120` above published
+[PR234](https://github.com/djshellshoxxx/p2p-offramp/pull/234), not merged into the
+observed main `8e836baa877b676a863c877003e277b638fc5061` at this dated checkpoint.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| F01 / F24 native update composition | Six native scenarios and an additive Chromium step bind the actual runtime backup-selection lease directly to the updater. Build preparation passes; independent review executes 46 distinct Node cases without findings. No production adapter is missing. | Native scenarios are locally unrun; `nativeExecuted: false`. Hosted Worker/IndexedDB execution, native accepted-floor durability, physical wallet, trusted activation, actual navigation/origin and configured application acceptance remain separate. |
+| F19 / F20 privacy observations | One production panel resolves runtime message views and semantic mappings through the selected catalog. Eight cases reproduce the original display failure and pass repaired; author and independent focused selections each pass 51/51. Independent review found no issues. Reader/effect/transport code remains unchanged. | Production remains English-only/draft. Synthetic catalog tests supply no translation approval, native-browser/device/assistive-technology acceptance or new privacy authority. |
+| F25 evidence and integration | Source-bound author/reviewer reports and completed combined qualification retain exact logs and failure provenance. Eight non-documentation paths change; only the privacy panel is production code. | Current-target hosted gates and guarded integration remain pending. Generation 24 preparation failures are retained as partial error excerpts, not complete original logs. |
+
+Read the [generations 24–25 continuation](CONTINUATION_GENERATIONS24_25_20261120.md)
+and [combined receipt](qualification-generations24-25.json). Keep PR233 and
+PR234 frozen; merge PR233 when qualified, retarget and requalify PR234 on main,
+then qualify this child against its current target. Optional PR224–232 and audits 184–186
+remain separately owned. Production trust, default updater configuration and
+release approval remain absent; `ReleaseEnabled=0`. Earlier sections below
+retain their historical source scope and do not override this checkpoint or
+later exact-source publication receipts.
+
+---
+
 # Feature coverage — dated pinned-main baseline and reviewed current main
 
 ## Generations 22–23 staged runtime/update completion

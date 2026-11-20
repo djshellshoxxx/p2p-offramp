@@ -1,3 +1,42 @@
+# Current consolidation checkpoint — generations 24–25
+
+**Frozen child source passed 2,478/2,478 tests and all eleven additional
+qualification commands.** Source `1a52c1c4f53a97cbbd0937f14a4379b88fd249b8`,
+tree `26938456c4924e4792a5671183a0879e86f8b7a2`, combines native updater
+fixture preparation with a selected-catalog privacy-panel repair. Eight
+non-documentation paths change relative to PR234; only the privacy panel is
+production code. The eight new locale cases fail against the original panel
+and pass after correction.
+
+The six native scenarios are implemented but **not run locally** under the
+managed Unix-socket policy. Build-only success reports `nativeExecuted: false`.
+Hosted execution must qualify the actual Worker/native IndexedDB fixture;
+HTTP, accepted floor, wallet, gesture, destination, time and scheduling remain
+controlled. Independent selections passed 46 distinct generation 24 cases and
+51 generation 25 cases, with no findings; overlapping selections are not added
+to the full-suite total. Production remains English-only/draft.
+
+The branch is `codex/native-update-locale-continuation-g24-20261120`.
+Its published parent is [PR234](https://github.com/djshellshoxxx/p2p-offramp/pull/234)
+at `477777dc152cd3148ba7f25a75ce8f00dc1b03b5`, targeting
+[PR233](https://github.com/djshellshoxxx/p2p-offramp/pull/233)'s branch. PR233
+remains pinned at `92663e46508b06645111d9c713beb82d3a6d1a0f` against observed main
+`8e836baa877b676a863c877003e277b638fc5061`. At 17:42 UTC, PR233 had fourteen
+queued checks and PR234 twelve; current-target hosted acceptance remained pending.
+Keep both heads frozen: guarded merge of PR233, retarget and requalify PR234 on
+main, then qualify the child against its actual target. Later source-bound publication
+receipts supersede this prepublication checkpoint.
+
+Read the [generations 24–25 handoff](CONTINUATION_GENERATIONS24_25_20261120.md),
+[combined qualification](qualification-generations24-25.json) and
+[retained-log index](retained-logs-generations24-25.json). Trusted application/
+wallet/origin composition, actual navigation and release acceptance remain
+unfinished. The default updater is unconfigured, production trust is unset and
+`ReleaseEnabled=0`. Earlier content below is preserved as dated historical
+evidence; it does not override this checkpoint or later exact-source receipts.
+
+---
+
 # P2P-Offramp consolidation handoff
 
 ## Generations 22–23 checkpoint — runtime lease and direct updater composition
