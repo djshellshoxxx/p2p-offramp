@@ -1,0 +1,304 @@
+{
+  "schema": "p2p-offramp.generation28-main-merge.v1",
+  "recordedAt": "2026-11-20T21:08:33.848761+00:00",
+  "pr": 236,
+  "source": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+  "testedProposal": "af2750c21f47f59898e3a7d8670509095e2dcf94",
+  "main": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+  "tree": "437323a382952b9623a875c818f8af005a5d4563",
+  "orderedParents": [
+    "8e836baa877b676a863c877003e277b638fc5061",
+    "d9ddcf53d82100f05de7346143a0ad00d43c2c1a"
+  ],
+  "originalAncestors": [
+    "92663e46508b06645111d9c713beb82d3a6d1a0f",
+    "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+    "bca96b796db18d69563ae5f0395452494a0dacd5"
+  ],
+  "mergeTime": "2026-11-20T21:02:46Z",
+  "checks": [
+    {
+      "id": 136527778662,
+      "name": "CodeQL",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/runs/136527778662"
+    },
+    {
+      "id": 136482562638,
+      "name": "native-nostr-relay",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792220000/job/136482562638"
+    },
+    {
+      "id": 136482561567,
+      "name": "backup-verification-firefox",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219526/job/136482561567"
+    },
+    {
+      "id": 136482561332,
+      "name": "schemas-and-crypto",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219526/job/136482561332"
+    },
+    {
+      "id": 136482561201,
+      "name": "local-evm",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219526/job/136482561201"
+    },
+    {
+      "id": 136482561169,
+      "name": "inventory",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219521/job/136482561169"
+    },
+    {
+      "id": 136482561026,
+      "name": "browser",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219526/job/136482561026"
+    },
+    {
+      "id": 136482560960,
+      "name": "backup-verification-webkit",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219526/job/136482560960"
+    },
+    {
+      "id": 136482560904,
+      "name": "specs",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219526/job/136482560904"
+    },
+    {
+      "id": 136482560879,
+      "name": "forge",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219567/job/136482560879"
+    },
+    {
+      "id": 136482560431,
+      "name": "docs-tooling",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219526/job/136482560431"
+    },
+    {
+      "id": 136482560338,
+      "name": "program",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219517/job/136482560338"
+    },
+    {
+      "id": 136482560312,
+      "name": "local-trade",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792219567/job/136482560312"
+    },
+    {
+      "id": 136482548231,
+      "name": "Analyze (javascript-typescript)",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792212715/job/136482548231"
+    },
+    {
+      "id": 136482547429,
+      "name": "Analyze (python)",
+      "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44792212715/job/136482547429"
+    }
+  ],
+  "statuses": [
+    {
+      "context": "security/snyk (djshellshoxxx)",
+      "state": "success",
+      "url": "https://app.snyk.io/org/djshellshoxxx/pr-checks/719f74dc-2f69-490d-b4d5-57cb1c22c5b0"
+    }
+  ],
+  "nativeRun": 44792219517,
+  "nativeJob": 136482560338,
+  "clientChecks": 62,
+  "clientSends": 13,
+  "clientDurationSeconds": 1907,
+  "clientRealRefundWaitSeconds": 1852,
+  "clientDeviations": [
+    "getGenesisHash answered with the compiled synthetic genesis constant (localnet-only shim; see header)"
+  ],
+  "browserChecks": [
+    "actual module Worker refuses absent or wrong-pinned escrows and encrypts three complete original funded receipts",
+    "explicit public recovery download preserves the original document without a wallet connection or transaction",
+    "explicit cancellation and a wallet change during an actual sign-only prompt both send zero transactions",
+    "reviewed release finalizes alone, then a separate reviewed payout transfers exact principal to the original buyer",
+    "fresh-key restore preserves the unknown marker without resending; only finalized expiry and a new explicit review permit replacement",
+    "real chain time opens refund; separate reviewed refund and payout return original seller principal minus actual fees"
+  ],
+  "browserDurationSeconds": 2051,
+  "browserWalletPrompts": 8,
+  "browserSends": 7,
+  "browserFixtureErrors": [],
+  "ReleaseEnabled": 0,
+  "reconciliation": {
+    "at": "2026-11-20T21:04:10.855Z",
+    "main": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "pr233AutomaticallyMerged": true,
+    "updates": [
+      {
+        "number": 234,
+        "state": "closed",
+        "head": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+        "branch": "codex/runtime-update-continuation-g22-20261120",
+        "merged": false
+      },
+      {
+        "number": 235,
+        "state": "closed",
+        "head": "bca96b796db18d69563ae5f0395452494a0dacd5",
+        "branch": "codex/native-update-locale-continuation-g24-20261120",
+        "merged": false
+      },
+      {
+        "number": 237,
+        "state": "open",
+        "head": "33232f62dc9cd250528ef3eb0313c0c319d99495",
+        "base": "main",
+        "base_sha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "proposal": "b7fb1df14ee20c17516b776627d27fb8b8b39fe0"
+      }
+    ]
+  },
+  "pr237TargetPending": {
+    "recordedAt": "2026-11-20T21:07:00.109786+00:00",
+    "pr": 237,
+    "head": "33232f62dc9cd250528ef3eb0313c0c319d99495",
+    "apiBaseBranch": "main",
+    "apiBaseHead": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "apiAndFetchedProposal": "b7fb1df14ee20c17516b776627d27fb8b8b39fe0",
+    "tree": "452b08d0c279a82ea3076371723a2dbd12ef9596",
+    "actualProposalParents": [
+      "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "33232f62dc9cd250528ef3eb0313c0c319d99495"
+    ],
+    "currentTargetProposalVerified": false,
+    "reason": "After the authorized base retarget, both the API and fetched pull/237/merge still return the previous synthetic commit whose first parent is the old aggregate branch head. Do not label this as a synthetic merge against current main. Refresh later; no unchanged financial rerun or source mutation was requested to manufacture a new receipt. Standalone named-review gate also remains unsatisfied."
+  },
+  "artifacts": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g28-native-program-136482560338.log",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g28-native-program-136482560338.log.gz",
+      "decodedBytes": 192991,
+      "compressedBytes": 40967,
+      "decodedSha256": "572b3b5fa486658be800131740cbd97ed0541a0ef4ab641fb63ac4b28bd1e9a0",
+      "compressedSha256": "be72cf17850d1da47b71d403e2f7d2ba250bbe5dbdb798031d699ff4da3e15d4"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g28-native-program-log-receipt.json",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g28-native-program-log-receipt.json.gz",
+      "decodedBytes": 632,
+      "compressedBytes": 421,
+      "decodedSha256": "3dc2d28df310734a2dd61984f3402f22a3eda1c14908c2a20529589c25118e61",
+      "compressedSha256": "8efd1ca09cc28fd72cbd19c593407830bb5c4df54a5236e3bcf50a0891934b2a"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g28-native-acceptance-receipts.json",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g28-native-acceptance-receipts.json.gz",
+      "decodedBytes": 25112,
+      "compressedBytes": 5705,
+      "decodedSha256": "113433854b4883d83b388d561a89078724e483f30832fc6139c2bccab8ade577",
+      "compressedSha256": "0d61f70306f2a01d89d10059b66f70f5f6d75d8abb772da1d87e3736428ce41c"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g28-premerge-hosted-gates.json",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g28-premerge-hosted-gates.json.gz",
+      "decodedBytes": 9515,
+      "compressedBytes": 1674,
+      "decodedSha256": "74b708570ce5ded553b196c7461ef7dd6f92041cd0ffae31d47f09b7cacfb8a2",
+      "compressedSha256": "60c251f529fe1185dae7beffd1885a224a2549630a2856fd76dc265e69ab742b"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g28-current-git-preflight.json",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g28-current-git-preflight.json.gz",
+      "decodedBytes": 1078,
+      "compressedBytes": 669,
+      "decodedSha256": "3e5366d98af2371d6613504f7bd5832af890fca37edc1bddd0fec19fe30ac6e8",
+      "compressedSha256": "9b809169620d48afd14083a17e90fde170185f30f553c98f372cc4d44dd854d9"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g28-merge-result.json",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g28-merge-result.json.gz",
+      "decodedBytes": 410,
+      "compressedBytes": 280,
+      "decodedSha256": "7fa02cdf25822da17d3ca18ea7f42c8e22ad407a22962e26729e66e89bdcf44f",
+      "compressedSha256": "276121e6b678ae17712a71cc9935fa7b261fe20906d463d9123a46586f8440aa"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g28-postmerge-api-readback.json",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g28-postmerge-api-readback.json.gz",
+      "decodedBytes": 2378,
+      "compressedBytes": 698,
+      "decodedSha256": "32bb80124e16822326e4efadb36b7171fd0688ed4b79f5ab589de28050848c6f",
+      "compressedSha256": "e945addf4719d6fcfb6e230d5fc1f342ae3b0877d579ea42dac7d916b33cbdbc"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g28-postmerge-git-verification.json",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g28-postmerge-git-verification.json.gz",
+      "decodedBytes": 489,
+      "compressedBytes": 336,
+      "decodedSha256": "4428c293e3a0d1a176f591c1105186ed4fdeee85fd509e198a0b2e14317a8542",
+      "compressedSha256": "10841a98d434294375220820c34a4ac6a360c452f39944f9c0b75d73fad231a7"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g28-contained-pr-reconciliation.json",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g28-contained-pr-reconciliation.json.gz",
+      "decodedBytes": 824,
+      "compressedBytes": 398,
+      "decodedSha256": "901f73e07f38c469c4b5c2de6a09df7c1a007ab626c3b58c5ce6f3143879f471",
+      "compressedSha256": "5fa33c17f220068d3eaa1cbb8d9e813c6eca5bdee34c9595eed604ec5de66101"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g28-reconciled-source-and-g29-target-readback.json",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g28-reconciled-source-and-g29-target-readback.json.gz",
+      "decodedBytes": 6660,
+      "compressedBytes": 974,
+      "decodedSha256": "b19af36c0b9aaa0ebb7c2a3fb74db451a9f1392c254e16b448cbae55bcd5217f",
+      "compressedSha256": "86d300cf51f9663304067d84263f8bb06db086e4fb3d8b5a3cade0a93bbbda40"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g29-main-target-readback-pending.json",
+      "storedPath": "docs/execution/main-merge-generation28-20261120/g29-main-target-readback-pending.json.gz",
+      "decodedBytes": 916,
+      "compressedBytes": 574,
+      "decodedSha256": "0ea5c17861d2fdda54ed0ebc6670bf1f8babf2f737ecddd76b3fa5fe5c043a2e",
+      "compressedSha256": "e8c3bbcd8d5fa4113362e815f6a7ba8083657fd479cd86a6c4199a1ad81f596b"
+    }
+  ]
+}
