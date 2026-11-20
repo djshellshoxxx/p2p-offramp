@@ -1,0 +1,596 @@
+{
+  "scope": "Read-only hosted qualification snapshot; not current successor source qualification or release approval",
+  "observedAtUtc": "2026-11-20T02:30:30Z",
+  "inspectionWindowUtc": "2026-11-20T02:28:03Z through 2026-11-20T02:32:22Z",
+  "localReviewBase": "b67bd81e74b0f58338dc15bc694cd3a22b724cd4",
+  "localReviewBaseTree": "f2476312544b27fc5d8c44dcc16a30857e4e7381",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "prs": [
+    {
+      "number": 202,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/202",
+      "head": "codex/solana-browser-send-repair-20261119",
+      "headSha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "base": "codex/historical-recovery-20261119",
+      "baseSha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false,
+      "merged": false,
+      "sourceTree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+      "loggedCheckouts": [
+        {
+          "jobId": 136009252921,
+          "sha": "32f7353551660a6c1e3e9302eecf3647b482c0c3",
+          "merge": "2026-11-20T01:25:30.7124252Z HEAD is now at 32f7353 Merge d753c0af23ff43743e34679e6b778b9ac0370da2 into 2b23ee614ff2dd05bd3a6e79f1278658c30a3909"
+        }
+      ],
+      "checkoutTreeEqualsHead": true,
+      "checkoutParents": [
+        "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+        "d753c0af23ff43743e34679e6b778b9ac0370da2"
+      ],
+      "runs": [
+        {
+          "id": 44652103777,
+          "name": "Solana escrow",
+          "runNumber": 69,
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103777"
+        },
+        {
+          "id": 44652103846,
+          "name": "Specification inventory",
+          "runNumber": 824,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103846"
+        },
+        {
+          "id": 44652103772,
+          "name": "Vault foundation",
+          "runNumber": 822,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103772"
+        },
+        {
+          "id": 44652103806,
+          "name": "Nostr relay interoperability",
+          "runNumber": 29,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103806"
+        },
+        {
+          "id": 44652103985,
+          "name": "EVM escrow",
+          "runNumber": 733,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103985"
+        }
+      ]
+    },
+    {
+      "number": 203,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/203",
+      "head": "codex/solana-restore-ack-20261119",
+      "headSha": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "base": "codex/solana-browser-send-repair-20261119",
+      "baseSha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "draft": false,
+      "merged": false,
+      "sourceTree": "412efa7b9534cc182d05d2b97830d5f6ff09944e",
+      "loggedCheckouts": [
+        {
+          "jobId": 136022950037,
+          "sha": "8e2cd7b6ed1c907127b2e35e8b8826f59c039d90",
+          "merge": "2026-11-20T02:23:32.6417988Z HEAD is now at 8e2cd7b Merge 2245b3bfb462eca468b4cf759fdc12fa49c5cd3a into d753c0af23ff43743e34679e6b778b9ac0370da2"
+        }
+      ],
+      "checkoutTreeEqualsHead": true,
+      "checkoutParents": [
+        "d753c0af23ff43743e34679e6b778b9ac0370da2",
+        "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a"
+      ],
+      "runs": [
+        {
+          "id": 44656212078,
+          "name": "Vault foundation",
+          "runNumber": 824,
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078"
+        },
+        {
+          "id": 44656212063,
+          "name": "Specification inventory",
+          "runNumber": 826,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212063"
+        },
+        {
+          "id": 44656212245,
+          "name": "Solana escrow",
+          "runNumber": 70,
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212245"
+        },
+        {
+          "id": 44656212072,
+          "name": "Nostr relay interoperability",
+          "runNumber": 31,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212072"
+        },
+        {
+          "id": 44656212104,
+          "name": "EVM escrow",
+          "runNumber": 735,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212104"
+        }
+      ]
+    },
+    {
+      "number": 204,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/204",
+      "head": "codex/personalization-templates-ui-20261119",
+      "headSha": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "base": "codex/personalization-favorites-ui-20261119",
+      "baseSha": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "draft": false,
+      "merged": false,
+      "sourceTree": "f5c5bb060732a892ba4eb91532e82ed79f64f2c4",
+      "loggedCheckouts": [
+        {
+          "jobId": 136023879924,
+          "sha": "c579e9a646855b5d821caf97249df9872b3e98e1",
+          "merge": "2026-11-20T02:20:40.5063617Z HEAD is now at c579e9a Merge 98d33db64622eab3f5f4ece6141d445d255245e7 into f5241c09f268a7a6841a5760ed0faa90b5b7f005"
+        },
+        {
+          "jobId": 136023879609,
+          "sha": "c579e9a646855b5d821caf97249df9872b3e98e1",
+          "merge": "2026-11-20T02:16:02.0571433Z HEAD is now at c579e9a Merge 98d33db64622eab3f5f4ece6141d445d255245e7 into f5241c09f268a7a6841a5760ed0faa90b5b7f005"
+        }
+      ],
+      "checkoutTreeEqualsHead": true,
+      "checkoutParents": [
+        "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+        "98d33db64622eab3f5f4ece6141d445d255245e7"
+      ],
+      "runs": [
+        {
+          "id": 44656491879,
+          "name": "EVM escrow",
+          "runNumber": 736,
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491879"
+        },
+        {
+          "id": 44656491804,
+          "name": "Specification inventory",
+          "runNumber": 827,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491804"
+        },
+        {
+          "id": 44656491793,
+          "name": "Solana escrow",
+          "runNumber": 71,
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491793"
+        },
+        {
+          "id": 44656491835,
+          "name": "Nostr relay interoperability",
+          "runNumber": 32,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491835"
+        },
+        {
+          "id": 44656491717,
+          "name": "Vault foundation",
+          "runNumber": 825,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491717"
+        }
+      ]
+    },
+    {
+      "number": 205,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/205",
+      "head": "codex/generation5-core-20261119",
+      "headSha": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "base": "main",
+      "baseSha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "draft": true,
+      "merged": false,
+      "sourceTree": "ce3c69ddc36245f756005c540e521a26a3ce59b8",
+      "loggedCheckouts": [
+        {
+          "jobId": 136027175362,
+          "sha": "3dbe6ac3994c56bf2e6424676c6dc034ecc9a9b4",
+          "merge": "2026-11-20T02:26:26.0613629Z HEAD is now at 3dbe6ac Merge cd7d54ba075118a7ec043788c17718be842ee405 into 5c5a84ef6300330700c8b0ca54d074ac113f08be"
+        },
+        {
+          "jobId": 136027175464,
+          "sha": "3dbe6ac3994c56bf2e6424676c6dc034ecc9a9b4",
+          "merge": "2026-11-20T02:26:59.1983234Z HEAD is now at 3dbe6ac Merge cd7d54ba075118a7ec043788c17718be842ee405 into 5c5a84ef6300330700c8b0ca54d074ac113f08be"
+        }
+      ],
+      "checkoutTreeEqualsHead": true,
+      "checkoutParents": [
+        "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+        "cd7d54ba075118a7ec043788c17718be842ee405"
+      ],
+      "runs": [
+        {
+          "id": 44657477306,
+          "name": "EVM escrow",
+          "runNumber": 737,
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477306"
+        },
+        {
+          "id": 44657477515,
+          "name": "Specification inventory",
+          "runNumber": 828,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477515"
+        },
+        {
+          "id": 44657477383,
+          "name": "Nostr relay interoperability",
+          "runNumber": 33,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477383"
+        },
+        {
+          "id": 44657477232,
+          "name": "Solana escrow",
+          "runNumber": 72,
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477232"
+        },
+        {
+          "id": 44657477341,
+          "name": "Vault foundation",
+          "runNumber": 826,
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341"
+        }
+      ]
+    }
+  ],
+  "nativeRuns": [
+    {
+      "runId": 44652103777,
+      "headSha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "headTree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+      "attempt": 1,
+      "jobId": 136009253374,
+      "status": "in_progress",
+      "conclusion": null,
+      "validatorStep": {
+        "name": "Real validator client acceptance including refund and recovery",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 14
+      },
+      "browserStep": {
+        "name": "Actual Worker encrypted Solana recovery and real-time refund",
+        "status": "in_progress",
+        "conclusion": null,
+        "number": 16
+      },
+      "logArchiveAtInspection": "404 BlobNotFound while job in progress; no complete native receipt inspected"
+    },
+    {
+      "runId": 44656212245,
+      "headSha": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "headTree": "412efa7b9534cc182d05d2b97830d5f6ff09944e",
+      "attempt": 1,
+      "jobId": 136022950914,
+      "status": "in_progress",
+      "conclusion": null,
+      "validatorStep": {
+        "name": "Real validator client acceptance including refund and recovery",
+        "status": "in_progress",
+        "conclusion": null,
+        "number": 14
+      },
+      "browserStep": {
+        "name": "Actual Worker encrypted Solana recovery and real-time refund",
+        "status": "pending",
+        "conclusion": null,
+        "number": 16
+      },
+      "logArchiveAtInspection": "404 BlobNotFound while job in progress; no complete native receipt inspected"
+    },
+    {
+      "runId": 44656491793,
+      "headSha": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "headTree": "f5c5bb060732a892ba4eb91532e82ed79f64f2c4",
+      "attempt": 1,
+      "jobId": 136023880105,
+      "status": "in_progress",
+      "conclusion": null,
+      "validatorStep": {
+        "name": "Real validator client acceptance including refund and recovery",
+        "status": "in_progress",
+        "conclusion": null,
+        "number": 14
+      },
+      "browserStep": {
+        "name": "Actual Worker encrypted Solana recovery and real-time refund",
+        "status": "pending",
+        "conclusion": null,
+        "number": 16
+      },
+      "logArchiveAtInspection": "404 BlobNotFound while job in progress; no complete native receipt inspected"
+    },
+    {
+      "runId": 44657477232,
+      "headSha": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "headTree": "ce3c69ddc36245f756005c540e521a26a3ce59b8",
+      "attempt": 1,
+      "jobId": 136027174510,
+      "status": "in_progress",
+      "conclusion": null,
+      "validatorStep": {
+        "name": "Real validator client acceptance including refund and recovery",
+        "status": "in_progress",
+        "conclusion": null,
+        "number": 14
+      },
+      "browserStep": {
+        "name": "Actual Worker encrypted Solana recovery and real-time refund",
+        "status": "pending",
+        "conclusion": null,
+        "number": 16
+      },
+      "logArchiveAtInspection": "404 BlobNotFound while job in progress; no complete native receipt inspected"
+    }
+  ],
+  "pr205Browser": {
+    "jobId": 136027175362,
+    "checkout": {
+      "sha": "3dbe6ac3994c56bf2e6424676c6dc034ecc9a9b4",
+      "merge": "2026-11-20T02:26:26.0613629Z HEAD is now at 3dbe6ac Merge cd7d54ba075118a7ec043788c17718be842ee405 into 5c5a84ef6300330700c8b0ca54d074ac113f08be"
+    },
+    "conclusion": "success",
+    "commandGroups": [
+      {
+        "name": "Verify one actual browser POST for a withheld Solana acknowledgment",
+        "conclusion": "success"
+      },
+      {
+        "name": "Verify acknowledged Solana restore with the actual encrypted Worker",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:portal:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:distribution:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:web:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:favorites:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:templates:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:private:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:locator:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:chat:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:diagnostics:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:recovery:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:peer:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run test:locale:browser",
+        "conclusion": "success"
+      },
+      {
+        "name": "Verify isolated-peer live and stored signed-offer discovery",
+        "conclusion": "success"
+      }
+    ],
+    "receipts": [
+      {
+        "ok": true,
+        "kind": "SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC",
+        "browser": "158.0.8127.36",
+        "actualRuntimeRpc": true,
+        "warmedConnection": true,
+        "applicationCalls": 1,
+        "fetchCalls": 1,
+        "fetchFailures": 0,
+        "statuses": [
+          503
+        ],
+        "refusal": "RPC_UNAVAILABLE",
+        "physicalSendPosts": 1,
+        "validatorForwards": 0,
+        "unexpectedRequests": 0,
+        "fixtureErrors": 0,
+        "artifactSha256": "8e1d06fb99e221589dfdd888a8b120ac45195dc63535a39de1f000f7b835cb0a",
+        "rawResetQualified": false,
+        "generalBrowserRetransmissionGuarantee": false,
+        "nativeChainQualified": false,
+        "ReleaseEnabled": 0
+      },
+      {
+        "ok": true,
+        "kind": "SOLANA_RESTORE_ACK_BROWSER_DIAGNOSTIC",
+        "browser": "158.0.8127.36",
+        "actualEmittedApp": true,
+        "actualModuleWorker": true,
+        "encryptedIndexedDB": true,
+        "heldActualLockResponses": 2,
+        "freshProfileAndKey": true,
+        "staleFileBufferDiscarded": true,
+        "submittedDocumentBufferDiscarded": true,
+        "walletPrompts": 0,
+        "rpcRequests": 0,
+        "financialTransactions": 0,
+        "nativeChainQualified": false,
+        "ReleaseEnabled": 0,
+        "artifactSha256": "ba257e8b5178c52014e4eb4c00a3047cb71cb63d33ed395add6dc7754497a7a4"
+      },
+      {
+        "fixture": "historical-bound-distribution-nested-smoke",
+        "checks": 3,
+        "browser": "158.0.8127.36",
+        "assets": 42,
+        "fixtureSourceCommit": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+        "fixtureSourceTree": "a3701267756596e833247f50614c5ddc32f2cce0",
+        "toolingHashes": {
+          "scripts/distribution/stage.mjs": "3ad271a2aaa4cb07b4346aeda9db2b86e20182c0d606d28904da4cd1b301bedb",
+          "scripts/distribution/manifest.mjs": "b9a3dc7e73544312cf42789f03f74e3e944131ff78cb6d1fa0c7f039a0440328",
+          "scripts/docs/validate.mjs": "a50b96e58e2183f17859a76afaeea8e91067e90b385dd3ebd263babc926911c3",
+          "scripts/docs/copy-source.mjs": "f4d527849e9a49b1f328cf57fca53d5ea45f913463f4d4ba48aaa8ecf0c457b4",
+          "scripts/docs/generate.py": "10c998fa2d6cd133eaa476a0ef1c974381442d1260b3fb5dd683023a49634674"
+        },
+        "currentSourceRefused": true,
+        "currentSourceDistributionQualified": false,
+        "buildPasses": 2,
+        "localHeaderFixture": true,
+        "hostHeadersVerified": false,
+        "independentDistributionWitness": false,
+        "signedRelease": false,
+        "releaseEnabled": false,
+        "published": false,
+        "unexpectedRequests": 0
+      },
+      {
+        "fixture": "synthetic-emitted-favorites-native-worker-idb",
+        "browser": "158.0.8127.36",
+        "journey": [
+          "locked",
+          "explicit-load-revision",
+          "star",
+          "encrypted-at-rest",
+          "reload",
+          "current-registry-open",
+          "lock-revokes-route",
+          "profile-isolation",
+          "unstar-persists",
+          "delete-retains-dangling-reference",
+          "explicit-dangling-removal",
+          "invalid-terms-favorite-refused"
+        ],
+        "workerOnlyFavorites": true,
+        "unexpectedRequests": 0,
+        "tradingEnabled": false,
+        "releaseAcceptance": false
+      },
+      {
+        "fixture": "synthetic-emitted-trade-templates-native-worker-idb",
+        "browser": "158.0.8127.36",
+        "journey": [
+          "locked",
+          "explicit-load-revision-zero",
+          "preview-consent",
+          "cancel-no-write",
+          "seven-defaults-only",
+          "same-slot-update",
+          "encrypted-at-rest",
+          "apply-clears-transient-fields",
+          "missing-fresh-inputs-refused",
+          "fresh-order-nonce-and-agreement",
+          "reload",
+          "profile-isolation",
+          "explicit-repeat-default",
+          "clear-repeat-default",
+          "delete-clears-default",
+          "lock-revokes-preview",
+          "native-two-worker-cas",
+          "native-eight-slot-bound",
+          "native-extra-field-refusal",
+          "current-registry-refusal",
+          "explicit-blank-draft"
+        ],
+        "nativeProbe": {
+          "initialRevision": 0,
+          "winnerRevision": 1,
+          "staleCode": "CONFLICT",
+          "cancelledCode": "NOT_FOUND",
+          "ninthCode": "PROTOCOL_ERROR",
+          "extraFieldCode": "PROTOCOL_ERROR",
+          "finalRevision": 8,
+          "slots": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        "workerOnlyTemplates": true,
+        "unexpectedRequests": 0,
+        "walletPrompts": 0,
+        "tradingEnabled": false,
+        "releaseAcceptance": false
+      }
+    ]
+  },
+  "preservedGateFilesUnchangedFromPr205ToReviewBase": [
+    ".github/workflows/solana-escrow.yml",
+    "scripts/test-solana-localnet-browser.mjs",
+    "scripts/lib/solana-localnet-send-evidence.mjs",
+    "scripts/lib/solana-localnet-fixture.mjs",
+    "contracts/solana/localnet/client-run.mjs"
+  ],
+  "remoteMutations": 0,
+  "rerunsRequested": 0,
+  "localNativeOrBrowserExecutions": 0,
+  "releaseEnabled": 0
+}
