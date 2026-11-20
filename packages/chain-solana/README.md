@@ -1,5 +1,20 @@
 # Solana adapter and native escrow client for the D5 basic escrow
 
+## Core-only funding policy (generation 34)
+
+Accepted D4 Option C applies at `planFund`: new native SOL and original-SPL funding must carry the SHA-256 of the
+maintained count-zero capability encoding. It is derived from `encodeCapabilities([])`, rather than an all-zero
+hash or a new commitment format. Other commitments return `UNSUPPORTED_PROVIDER` before intent preparation,
+wallet signing or sending. Both direct `fund()` and `prepareFunding()`, including confirmation's replanning,
+use this same boundary. Existing role, branded-input and occupied-escrow checks retain their prior ordering.
+
+Binding, unsigned instruction codecs, exact-message verification, historical journal decoding and existing
+release/refund/payout paths still represent historical commitments. They do not grant new funding permission.
+Recovery retains cancellation, foreign-profile uncertainty, original send markers and no automatic resend.
+No optional capability mapping, contract/ABI, program, trust, margin policy or browser admission changes here.
+This repairs a client policy omission that predates prepared funding. Controlled regressions and existing vectors
+do not establish native execution, browser acceptance, release readiness or Tier C merge approval.
+
 ## Native funding display prerequisite (generation 33)
 
 The internal `src/funding-review.ts` helper, `projectNativeFundingReview(trade, prepared)`, produces frozen native-SOL
