@@ -240,7 +240,8 @@ test('a cancelled review remains display data without claiming live authority or
   assert.equal(env.cluster.sent.length, 0);
 });
 
-test('consistent copied bytes and height metadata may display but cannot prove original handle provenance', async () => {
+test('consistent copied bytes and height metadata may display but cannot prove original handle provenance',
+  async () => {
   const project = projector(), env = await fixture(), copy = clone(env.handle);
   copy.blockhash = key('supplied-display-blockhash');
   copy.message = encodeBase64(compileLegacyMessage(copy.feePayer, [ok(buildFundNative(env.trade))], copy.blockhash));
