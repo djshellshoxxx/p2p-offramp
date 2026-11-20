@@ -1,0 +1,233 @@
+{
+  "schema": "p2p-offramp.generation34-publication.v1",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "branch": "codex/native-funding-consolidation-g34-20261120",
+  "intendedTarget": {
+    "pr": 239,
+    "head": "708a3a2bc167cbbc15eaa3d3c168e058499c7f8e",
+    "branch": "codex/startup-compatibility-continuation-g31-20261120"
+  },
+  "preservedPublishedAncestor": {
+    "pr": 240,
+    "head": "7bd5cf595bddadaa204e51e418d0060a1d43a1bc",
+    "tree": "82c0aa18e572313727c880579596b0d6ee4d4834"
+  },
+  "integrationPlan": "One G32+G33+G34 funding candidate above frozen PR239, preserving the actual published PR240 head. PR240 remains draft/held/unmerged; no separate G33 PR. Existing PR240 commits were not remapped.",
+  "publicationMethod": "Authenticated GitHub connector. Every complete tree and ordered parent relationship was read back. Original local commits and actual prior published heads remain preserved; new commit metadata and IDs differ.",
+  "localEquivalentCheckpoint": {
+    "commit": "bacd160ce1b8aea2a36bce361d3091cf4f1c1fbe",
+    "tree": "f90ee31319dea95b115f30f3a23d60bdfe325311"
+  },
+  "publishedEquivalentCheckpoint": {
+    "commit": "b0517864350d73250f90044ea39c9ef4dbf79bfd",
+    "tree": "f90ee31319dea95b115f30f3a23d60bdfe325311"
+  },
+  "testedLocalSource": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+  "testedPublishedEquivalentSource": "f4d36236f55aca42cd631ff9288b78bcd1779c7a",
+  "testedTree": "78de2de3db335147d8261ad5ab9b116976faf986",
+  "componentTestedSources": {
+    "generation32": {
+      "testedLocal": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+      "testedPublished": "3c44c57693c5a76439d7b98dc6700a8072b7ce69",
+      "tree": "d3b738a378218927d86241a1db987a57af87eec8",
+      "mapping": "docs/engineering/generation32-publication.json"
+    },
+    "generation33": {
+      "testedLocal": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+      "testedPublished": "51d97d599efca4e3361dbe786ef6d693ac4dba2f",
+      "tree": "ac680be624aae21eac610f51157da49f1b3238cb"
+    },
+    "generation34": {
+      "testedLocal": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "testedPublished": "f4d36236f55aca42cd631ff9288b78bcd1779c7a",
+      "tree": "78de2de3db335147d8261ad5ab9b116976faf986"
+    }
+  },
+  "verification": {
+    "payloadBlobCount": 149,
+    "mappedCommits": 13,
+    "allTreesMatch": true,
+    "allOrderedParentsReadBack": true,
+    "nonEvidenceEntriesIdenticalToTestedSource": 1033,
+    "nonDocumentationDeltaVersusPR239": {
+      "modified": 5,
+      "added": 4,
+      "deleted": 0
+    }
+  },
+  "mergePolicy": {
+    "tier": "C",
+    "acceptedPacket": "docs/adr/proposed/D8-merge-policy-and-branch-protection.md",
+    "ownerApproval": "Require qualifying owner authorization explicitly recorded in the actual PR for its source and target. Local source work and independent review do not establish owner approval.",
+    "hostedAcceptance": "Applicable green hosted checks must execute new native SOL/SPL prepare-and-confirm admissions on the final source and target. Older direct-funding runs and local build-only checks are not qualification.",
+    "parentGates": "PR236 remains the frozen main-target aggregate. Standalone PR237 through PR239 retain Tier B CodeRabbit or Qodo pass requirements with findings answered. Reconcile actual main and refresh target-specific gates after parent merges."
+  },
+  "commitMap": [
+    {
+      "localSha": "b995de61ca585ec37bd11201fc6c944aed9f5d7c",
+      "publishedSha": "3a969a4f55d816027316937811ffdec5ce5bd59e",
+      "tree": "6678b5c9e8f8b2b1321f8386ce7af6718f75a069",
+      "localParents": [
+        "7bd5cf595bddadaa204e51e418d0060a1d43a1bc"
+      ],
+      "publishedParents": [
+        "7bd5cf595bddadaa204e51e418d0060a1d43a1bc"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "8e9ec0325570c2496e304400c3c8674c08708254",
+      "publishedSha": "5d9e6ccddbd650ddf501f3cf35d6b01b21860217",
+      "tree": "5c56f5a637d6f19ce936e56c29869a0bc5565e6a",
+      "localParents": [
+        "b995de61ca585ec37bd11201fc6c944aed9f5d7c"
+      ],
+      "publishedParents": [
+        "3a969a4f55d816027316937811ffdec5ce5bd59e"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+      "publishedSha": "51d97d599efca4e3361dbe786ef6d693ac4dba2f",
+      "tree": "ac680be624aae21eac610f51157da49f1b3238cb",
+      "localParents": [
+        "8e9ec0325570c2496e304400c3c8674c08708254"
+      ],
+      "publishedParents": [
+        "5d9e6ccddbd650ddf501f3cf35d6b01b21860217"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "4c53472d0539d65ccf2313cbdf369b904db0da6b",
+      "publishedSha": "145dbe2ce45f4009d8cc7a21268f2285e5cdbcb4",
+      "tree": "f4e889986888e88db8807d7baa75ab675438fa01",
+      "localParents": [
+        "a7d2a6699903b3791eda6b5f958b81e31adead6c"
+      ],
+      "publishedParents": [
+        "51d97d599efca4e3361dbe786ef6d693ac4dba2f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "f37a3816876c8d9b2d4142186e9eaa74fbc1f7fa",
+      "publishedSha": "945fa73a683d978cd1cf2ca2cc760792b1a2cc6b",
+      "tree": "251b129bc9be366a9fbb568d9accaf754ba18953",
+      "localParents": [
+        "4c53472d0539d65ccf2313cbdf369b904db0da6b"
+      ],
+      "publishedParents": [
+        "145dbe2ce45f4009d8cc7a21268f2285e5cdbcb4"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "1675aa4377efdedf7b54c32fe292f4e3c6f07155",
+      "publishedSha": "7460308bcdf4e053950eaf1ae1b8444a9bf70e8a",
+      "tree": "1bb52fa9b53fe6866b679ea3337a173dd40fa595",
+      "localParents": [
+        "f37a3816876c8d9b2d4142186e9eaa74fbc1f7fa"
+      ],
+      "publishedParents": [
+        "945fa73a683d978cd1cf2ca2cc760792b1a2cc6b"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "257d29b4421d7290dfff9b01074984133e37d4fb",
+      "publishedSha": "04b4c6d0ef13ed536e1760d6f34949bae4bc36ee",
+      "tree": "8e131d880be633d2a52741d10f80c19ef7bad9b6",
+      "localParents": [
+        "1675aa4377efdedf7b54c32fe292f4e3c6f07155"
+      ],
+      "publishedParents": [
+        "7460308bcdf4e053950eaf1ae1b8444a9bf70e8a"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "publishedSha": "f4d36236f55aca42cd631ff9288b78bcd1779c7a",
+      "tree": "78de2de3db335147d8261ad5ab9b116976faf986",
+      "localParents": [
+        "257d29b4421d7290dfff9b01074984133e37d4fb"
+      ],
+      "publishedParents": [
+        "04b4c6d0ef13ed536e1760d6f34949bae4bc36ee"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "0e7750f0df01a6b058667080768751b80594c29c",
+      "publishedSha": "5b803b43f980095675a4acadfb5b0b6b0580c768",
+      "tree": "3b9c709f4259559aeed00d7ae3c96cb85bd63bc3",
+      "localParents": [
+        "0b7832d1c5b348a0755d59152442d0318d4a620c"
+      ],
+      "publishedParents": [
+        "f4d36236f55aca42cd631ff9288b78bcd1779c7a"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "bd9ac8770a0874f1ce4c49514c4c077447cf21b4",
+      "publishedSha": "5ccd69cf763518f8822ef2b5c4bfc7424832004f",
+      "tree": "1831845280fc3b151910c20879c9411e3b1cddb8",
+      "localParents": [
+        "0e7750f0df01a6b058667080768751b80594c29c"
+      ],
+      "publishedParents": [
+        "5b803b43f980095675a4acadfb5b0b6b0580c768"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "e69ad7aed262aed9a7565e42b19b5dc71d87f6d0",
+      "publishedSha": "14cecfe9440426247ea15e31d8641f93a5858d1b",
+      "tree": "9bb2f6f6f7e9a08064b0ec64c3501be45cba56ae",
+      "localParents": [
+        "bd9ac8770a0874f1ce4c49514c4c077447cf21b4"
+      ],
+      "publishedParents": [
+        "5ccd69cf763518f8822ef2b5c4bfc7424832004f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "f6c0a6e0c87249f041ab560cd9900472174b81d5",
+      "publishedSha": "4b8761ad6c8781e7b119e8b275709a1cfd540932",
+      "tree": "bd20a049b96ee17ec8df841f74ee92508801ffee",
+      "localParents": [
+        "e69ad7aed262aed9a7565e42b19b5dc71d87f6d0"
+      ],
+      "publishedParents": [
+        "14cecfe9440426247ea15e31d8641f93a5858d1b"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "bacd160ce1b8aea2a36bce361d3091cf4f1c1fbe",
+      "publishedSha": "b0517864350d73250f90044ea39c9ef4dbf79bfd",
+      "tree": "f90ee31319dea95b115f30f3a23d60bdfe325311",
+      "localParents": [
+        "f6c0a6e0c87249f041ab560cd9900472174b81d5"
+      ],
+      "publishedParents": [
+        "4b8761ad6c8781e7b119e8b275709a1cfd540932"
+      ],
+      "readBackVerified": true
+    }
+  ],
+  "limits": [
+    "This record maps the checkpoint preceding the publication-record commit; it intentionally does not recursively claim its own commit identity.",
+    "Actual PR/proposed-merge readback, current-source/current-target hosted gates, matching recorded owner authorization and an expected-head guarded merge remain subsequent requirements.",
+    "All earlier branches and heads remain preserved. The held PR240 is superseded only by a qualified replacement; it is not independently merged while this consolidation is pending.",
+    "The D4 guard applies only to new funding planning. Historical binding, unsigned codecs, message verification, journals, recovery and funded exits remain unchanged.",
+    "G33 is an inactive data-consistency display with no confirmation authority or original/live pin claim. Fees and rent remain unknown.",
+    "Native driver compilation and controlled helper probes do not establish native finality, physical wallet or browser acceptance. Original real-time financial waits remain unchanged.",
+    "All original failure and correction evidence is retained. Default/demo output identity does not transfer hosted qualification from an earlier source.",
+    "G35 proposal parsing/records and later browser admission, wallet review/confirmation and funded recovery promotion are outside this candidate. No bilateral acceptance, production trust, deployment, release or optional activation is established. ReleaseEnabled remains zero."
+  ]
+}
