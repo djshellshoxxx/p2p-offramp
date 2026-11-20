@@ -115,6 +115,27 @@ jobs:
         run: node scripts/test-peer-offer-browser.mjs
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+  backup-verification-engines:
+    name: backup-verification-${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Install the pinned Playwright engine and system dependencies
+        run: node node_modules/playwright-core/cli.js install --with-deps ${{ matrix.browser }}
+      - name: Qualify backup verification with the actual Worker and IndexedDB
+        run: npm run test:backup:browser
+        env:
+          P2P_BACKUP_BROWSER: ${{ matrix.browser }}
   docs-tooling:
     runs-on: ubuntu-latest
     steps:

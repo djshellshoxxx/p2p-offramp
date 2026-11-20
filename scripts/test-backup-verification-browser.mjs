@@ -5,10 +5,14 @@ import { createServer } from 'node:http';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve, sep } from 'node:path';
-import { chromium } from 'playwright-core';
+import { chromium, firefox, webkit } from 'playwright-core';
 import { resolveChromiumPath } from './lib/chromium-path.mjs';
 import { buildWeb } from '../apps/web/scripts/build.mjs';
 
+const browserName = process.env.P2P_BACKUP_BROWSER ?? 'chromium';
+const browserTypes = Object.freeze({ chromium, firefox, webkit });
+if (!Object.hasOwn(browserTypes, browserName)) throw new Error('UNSUPPORTED_BACKUP_TEST_BROWSER');
+const browserType = browserTypes[browserName];
 const temporary = await mkdtemp(resolve(tmpdir(), 'p2p-backup-verification-'));
 const passphrase = 'synthetic complete backup browser passphrase';
 const destinationPassphrase = 'synthetic fresh profile browser passphrase';
@@ -31,7 +35,8 @@ try {
   });
   await new Promise((done, fail) => { server.once('error', fail); server.listen(0, '127.0.0.1', done); });
   const origin = `http://127.0.0.1:${server.address().port}`;
-  browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
+  browser = await browserType.launch(browserName === 'chromium' ?
+    { executablePath: resolveChromiumPath(), args: ['--no-sandbox'] } : {});
   const context = await browser.newContext({ acceptDownloads: true, serviceWorkers: 'block' });
   await context.route('**/*', route => {
     if (new URL(route.request().url()).origin === origin) return route.continue();
@@ -138,7 +143,8 @@ try {
   await page.reload(); await panel().getByText(/Unlock the matching local profile/).waitFor();
   assert.equal(await result(destinationId).count(), 0); assert.ok(await recheck().isDisabled());
   assert.deepEqual(unexpected, []);
-  console.log(JSON.stringify({ fixture: 'native-worker-backup-verification-ui', browser: browser.version(),
+  console.log(JSON.stringify({ fixture: 'native-worker-backup-verification-ui', browserEngine: browserType.name(),
+    browser: browser.version(), platform: process.platform,
     actualFileAuthenticated: true, displayedDigestMatched: true, explicitRecheck: true, wrongPassphraseRefused: true,
     lockAndReloadClear: true, restoredProfileRequiresOwnBackup: true, responsiveWidths: [320, 768, 1440],
     ReleaseEnabled: 0, walletPrompts: 0 }));

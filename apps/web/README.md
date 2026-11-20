@@ -26,7 +26,7 @@ Profiles live in this browser's IndexedDB. A different origin can show an empty 
 
 The document revokes its current handle on lock or `pagehide`. The Worker also enforces a five-minute idle deadline. Status polling does not extend it. Requests and replies carry a generation and request ID so the document can ignore a late result after cancellation or lock. That revocation can occur after a durable profile write, which is why an interrupted operation needs a fresh inventory check.
 
-Run from the repository root with Node 24 or newer. The browser fixtures use Chromium on loopback. Set `P2P_CHROMIUM` to the executable path if automatic discovery cannot find it.
+Run from the repository root with Node 24 or newer. The browser fixtures use Chromium on loopback by default. Set `P2P_CHROMIUM` to the executable path if automatic discovery cannot find it.
 
 ```sh
 npm ci --ignore-scripts
@@ -35,6 +35,13 @@ node scripts/test-runtime-browser.mjs
 node scripts/test-web-build-browser.mjs
 npm run test:backup:browser
 ```
+
+The backup verification journey also accepts `P2P_BACKUP_BROWSER=firefox` or
+`P2P_BACKUP_BROWSER=webkit`. Install the matching engine with the locked Playwright
+CLI, for example `node node_modules/playwright-core/cli.js install --with-deps firefox`,
+then run `P2P_BACKUP_BROWSER=firefox npm run test:backup:browser`. The hosted matrix
+is configured to run both engines with the same journey and assertions. This is scoped engine
+qualification; it does not certify Safari, mobile devices, wallets or the full app.
 
 The build type-checks the project and emits the default static app in `apps/web/dist/`. The runtime fixture exercises native Worker and IndexedDB operations. The web fixture drives the emitted UI through profile creation, export, restore, explicit unlock and interrupted-restore reconciliation. Both run locally. Hosted Pages checks and the two-party trading workflow require separate qualification.
 
