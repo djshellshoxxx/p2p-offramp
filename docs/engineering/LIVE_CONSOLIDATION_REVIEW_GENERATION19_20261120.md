@@ -139,4 +139,3 @@ Sources: [PR221](https://github.com/djshellshoxxx/p2p-offramp/pull/221),
 [PR223](https://github.com/djshellshoxxx/p2p-offramp/pull/223).
 The companion [complete review receipt](live-consolidation-review-generation19.json)
 preserves source identities and the dated inventory.
-

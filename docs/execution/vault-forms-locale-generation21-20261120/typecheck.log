@@ -1,5 +1,0 @@
-npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
-
-> p2p-offramp@0.1.0 typecheck
-> tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit && tsc -p apps/web/tsconfig.ui.json --noEmit
-

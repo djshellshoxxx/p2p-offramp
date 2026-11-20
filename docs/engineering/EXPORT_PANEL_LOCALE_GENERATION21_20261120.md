@@ -61,10 +61,10 @@ profile replacement and revision changes.
 The [machine-readable receipt](export-panel-locale-generation21.json) records
 the exact commands, source identities, environment, actual results and SHA-256
 digests of all four retained logs. The failed original run remains in
-[red.log](../execution/export-panel-locale-generation21-20261120/red.log);
-the [focused green run](../execution/export-panel-locale-generation21-20261120/green.log),
-[adjacent run](../execution/export-panel-locale-generation21-20261120/adjacent.log)
-and [type check](../execution/export-panel-locale-generation21-20261120/typecheck.log)
+[red.log](../execution/export-panel-locale-generation21-20261120/red.log.gz);
+the [focused green run](../execution/export-panel-locale-generation21-20261120/green.log.gz),
+[adjacent run](../execution/export-panel-locale-generation21-20261120/adjacent.log.gz)
+and [type check](../execution/export-panel-locale-generation21-20261120/typecheck.log.gz)
 are separate executions. Counts describe their scopes and are not a new
 full-suite total.
 
@@ -75,3 +75,7 @@ build and hosted gates. This worker made no remote changes and did not run a
 local browser, full suite, build or long native financial journey. Existing
 catalog/evidence pins and draft limitations remain unchanged; no production,
 device, release or distribution acceptance is claimed.
+
+Execution logs are retained with gzip packaging. Decoded bytes and the original
+raw-log hashes remain unchanged; see the [packaging index](retained-logs-generation21.json)
+for stored paths and both hashes. Original author commits retain their raw files.
