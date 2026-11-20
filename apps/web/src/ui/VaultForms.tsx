@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { MAX_BACKUP_BYTES, MAX_VAULT_PROFILES, type AppServices, type RuntimeInventory } from '../app-services.ts';
+import { MAX_BACKUP_BYTES, MAX_VAULT_PROFILES, type AppServices, type RuntimeErrorCode, type RuntimeInventory } from '../app-services.ts';
 import { ControlHelp } from './ControlHelp.tsx';
 import { messages as m } from './messages.ts';
 import { errorMessage, isProfileId } from './routes.ts';
 
-type Notice = { readonly error: boolean; readonly text: string } | null;
+type Notice = { readonly error: true; readonly key: 'profileInvalid' | 'consentRequired' | 'passphraseMismatch' | 'createConsentRequired' | 'restoreFileRequired' | 'restoreConsentRequired' } |
+  { readonly error: false; readonly key: 'exported' } |
+  { readonly error: true; readonly code: RuntimeErrorCode } |
+  { readonly error: false; readonly kind: 'restored'; readonly profileId: string; readonly records: number } | null;
 function NoticeText({ notice }: { readonly notice: Notice }) {
-  return notice ? <p className={notice.error ? 'notice error' : 'notice'} role={notice.error ? 'alert' : 'status'}>{notice.text}</p> : null;
+  if (!notice) return null;
+  const text = 'key' in notice ? m[notice.key] : 'code' in notice ? errorMessage(notice.code) : m.restored(notice.profileId, notice.records);
+  return <p className={notice.error ? 'notice error' : 'notice'} role={notice.error ? 'alert' : 'status'}>{text}</p>;
 }
 
 /** Loads the opaque local inventory once; the text field stays the authoritative, editable input. */
@@ -58,7 +63,7 @@ export function UnlockForm({ services, onCancel, initialProfileId = '' }: { read
     const passphrase = element.elements.namedItem('passphrase') as HTMLInputElement;
     let secret = passphrase.value;
     passphrase.value = '';
-    if (!isProfileId(profile.value)) { secret = ''; setNotice({ error: true, text: m.profileInvalid }); return; }
+    if (!isProfileId(profile.value)) { secret = ''; setNotice({ error: true, key: 'profileInvalid' }); return; }
     const controller = new AbortController();
     request.current = controller; setBusy(true); setNotice(null);
     try {
@@ -66,10 +71,10 @@ export function UnlockForm({ services, onCancel, initialProfileId = '' }: { read
       secret = '';
       if (!controller.signal.aborted) {
         if (result.ok) { request.current = null; onCancel(); }
-        else setNotice({ error: true, text: errorMessage(result.error.code) });
+        else setNotice({ error: true, code: result.error.code });
       }
     } catch {
-      if (!controller.signal.aborted) setNotice({ error: true, text: errorMessage('PROTOCOL_ERROR') });
+      if (!controller.signal.aborted) setNotice({ error: true, code: 'PROTOCOL_ERROR' });
     } finally {
       secret = ''; passphrase.value = '';
       if (!controller.signal.aborted) setBusy(false);
@@ -123,19 +128,19 @@ export function ExportForm({ services, refresh = 0 }: { readonly services: AppSe
     const element = event.currentTarget;
     const profile = element.elements.namedItem('profile') as HTMLInputElement;
     const consent = element.elements.namedItem('consent') as HTMLInputElement;
-    if (!isProfileId(profile.value)) { setNotice({ error: true, text: m.profileInvalid }); return; }
-    if (!consent.checked) { setNotice({ error: true, text: m.consentRequired }); return; }
+    if (!isProfileId(profile.value)) { setNotice({ error: true, key: 'profileInvalid' }); return; }
+    if (!consent.checked) { setNotice({ error: true, key: 'consentRequired' }); return; }
     const controller = new AbortController(); request.current = controller;
     setBusy(true); setNotice(null);
     try {
       const result = await services.exportEncrypted(profile.value, controller.signal);
       if (!controller.signal.aborted) {
-        if (!result.ok) setNotice({ error: true, text: errorMessage(result.error.code) });
-        else if (result.value.authentication !== 'not-checked') setNotice({ error: true, text: errorMessage('PROTOCOL_ERROR') });
-        else { saveCiphertext(result.value.bytes); consent.checked = false; setNotice({ error: false, text: m.exported }); }
+        if (!result.ok) setNotice({ error: true, code: result.error.code });
+        else if (result.value.authentication !== 'not-checked') setNotice({ error: true, code: 'PROTOCOL_ERROR' });
+        else { saveCiphertext(result.value.bytes); consent.checked = false; setNotice({ error: false, key: 'exported' }); }
       }
     } catch {
-      if (!controller.signal.aborted) setNotice({ error: true, text: errorMessage('PROTOCOL_ERROR') });
+      if (!controller.signal.aborted) setNotice({ error: true, code: 'PROTOCOL_ERROR' });
     } finally {
       if (!controller.signal.aborted) setBusy(false);
       if (request.current === controller) request.current = null;
@@ -185,9 +190,9 @@ export function CreateForm({ services, onDone }: { readonly services: AppService
     const element = event.currentTarget;
     const consent = element.elements.namedItem('consent') as HTMLInputElement;
     let [secret = '', repeat = ''] = takeSecrets(element, ['passphrase', 'confirm']);
-    if (secret !== repeat) { secret = ''; repeat = ''; setNotice({ error: true, text: m.passphraseMismatch }); return; }
+    if (secret !== repeat) { secret = ''; repeat = ''; setNotice({ error: true, key: 'passphraseMismatch' }); return; }
     repeat = '';
-    if (!consent.checked) { secret = ''; setNotice({ error: true, text: m.createConsentRequired }); return; }
+    if (!consent.checked) { secret = ''; setNotice({ error: true, key: 'createConsentRequired' }); return; }
     const controller = new AbortController(); request.current = controller; setBusy(true); setNotice(null);
     try {
       const result = await services.create(secret, controller.signal);
@@ -195,9 +200,9 @@ export function CreateForm({ services, onDone }: { readonly services: AppService
       // The unlocked notification can unmount this form before the result arrives. A success is a durable
       // profile whose public ID must still be reported; a real cancellation yields CANCELLED, never ok.
       if (result.ok) { request.current = null; onDone(result.value.profileId); }
-      else if (!controller.signal.aborted) setNotice({ error: true, text: errorMessage(result.error.code) });
+      else if (!controller.signal.aborted) setNotice({ error: true, code: result.error.code });
     } catch {
-      if (!controller.signal.aborted) setNotice({ error: true, text: errorMessage('PROTOCOL_ERROR') });
+      if (!controller.signal.aborted) setNotice({ error: true, code: 'PROTOCOL_ERROR' });
     } finally {
       secret = '';
       if (!controller.signal.aborted) setBusy(false);
@@ -259,8 +264,8 @@ export function RestoreForm({ services, onInventoryChanged, onOpenRestored }: { 
         setNotice(null);
         onInventoryChanged?.();
       }
-      else setNotice({ error: true, text: errorMessage(result.error.code) });
-    } catch { if (mounted.current) setNotice({ error: true, text: errorMessage('PROTOCOL_ERROR') }); }
+      else setNotice({ error: true, code: result.error.code });
+    } catch { if (mounted.current) setNotice({ error: true, code: 'PROTOCOL_ERROR' }); }
     finally { if (mounted.current) setChecking(false); }
   }
   useEffect(() => { const element = form.current; return () => { request.current?.abort(); element?.reset(); }; }, []);
@@ -275,11 +280,11 @@ export function RestoreForm({ services, onInventoryChanged, onOpenRestored }: { 
     let [source = '', secret = '', repeat = ''] = takeSecrets(element, ['source', 'passphrase', 'confirm']);
     const clear = () => { source = ''; secret = ''; repeat = ''; };
     const file = fileInput.files?.[0];
-    if (!file) { clear(); setNotice({ error: true, text: m.restoreFileRequired }); return; }
+    if (!file) { clear(); setNotice({ error: true, key: 'restoreFileRequired' }); return; }
     // Size is checked before reading so an oversized file is never loaded into memory.
-    if (file.size > MAX_BACKUP_BYTES) { clear(); setNotice({ error: true, text: errorMessage('LIMIT_EXCEEDED') }); return; }
-    if (secret !== repeat) { clear(); setNotice({ error: true, text: m.passphraseMismatch }); return; }
-    if (!consent.checked) { clear(); setNotice({ error: true, text: m.restoreConsentRequired }); return; }
+    if (file.size > MAX_BACKUP_BYTES) { clear(); setNotice({ error: true, code: 'LIMIT_EXCEEDED' }); return; }
+    if (secret !== repeat) { clear(); setNotice({ error: true, key: 'passphraseMismatch' }); return; }
+    if (!consent.checked) { clear(); setNotice({ error: true, key: 'restoreConsentRequired' }); return; }
     const controller = new AbortController(); request.current = controller; setBusy(true); setNotice(null); setReconciled(null);
     try {
       const bytes = new Uint8Array(await file.arrayBuffer());
@@ -289,10 +294,10 @@ export function RestoreForm({ services, onInventoryChanged, onOpenRestored }: { 
       if (!controller.signal.aborted) {
         if (result.ok) {
           element.reset(); setConfirmedProfileId(result.value.newProfileId);
-          setNotice({ error: false, text: m.restored(result.value.newProfileId, result.value.records) }); onInventoryChanged?.();
+          setNotice({ error: false, kind: 'restored', profileId: result.value.newProfileId, records: result.value.records }); onInventoryChanged?.();
         }
         else if (UNCERTAIN_RESTORE.has(result.error.code)) { setUncertain(true); setNotice(null); }
-        else setNotice({ error: true, text: errorMessage(result.error.code) });
+        else setNotice({ error: true, code: result.error.code });
       }
     } catch {
       if (!controller.signal.aborted) setUncertain(true);
