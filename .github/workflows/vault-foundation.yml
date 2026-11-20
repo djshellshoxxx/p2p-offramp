@@ -115,6 +115,9 @@ jobs:
         run: node scripts/test-peer-offer-browser.mjs
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:privacy-controls:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
   backup-verification-engines:
     name: backup-verification-${{ matrix.browser }}
     runs-on: ubuntu-latest
