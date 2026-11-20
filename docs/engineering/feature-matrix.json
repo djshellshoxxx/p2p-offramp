@@ -469,7 +469,7 @@
   ],
   "staging_overlay": {
     "source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
-    "scope": "Source on the generation-two child branch, not merged main. Exact hosted qualification and device/release acceptance remain distinct.",
+    "scope": "Generation2 source at PR190; optional PR191\u2013199 have independent source review and combined local qualification passed2553 tests. Main remains unchanged.",
     "updates": [
       {
         "feature_id": "F03",
@@ -504,14 +504,15 @@
       {
         "feature_id": "F25",
         "status": "Implemented within source-tooling scope",
-        "change": "Docs/lab/claims plus scriptless portal, strict unsigned staging and inert governance recovered; new portal/distribution hosted steps still need current-head execution."
+        "change": "Docs/lab/claims, portal, unsigned staging and inert governance recovered; actual PR190 hosted portal/distribution browser groups passed."
       },
       {
         "feature_id": "F22",
-        "status": "Accepted optional source; qualification active",
-        "change": "D7 parking superseded Nov18; nine separate package extractions are active and remain outside default app/Worker imports."
+        "status": "Nine reviewed source PRs; hosted qualification active",
+        "change": "PR191\u2013199 preserve one-package scope, native/custom gates and absent default imports. Combined source a2f90cbd passed2553 tests and all13 default files byte-match; current-head hosted qualification remains active."
       }
-    ]
+    ],
+    "published_head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909"
   },
   "additional_staging_capabilities": [
     {
@@ -527,13 +528,13 @@
         "packages/personalization/test/favorites.test.mjs",
         "packages/personalization/test/trade-draft-store.test.mjs"
       ],
-      "remaining": "Current profile/epoch-bound Worker and UI composition; no historical runtime replacement."
+      "remaining": "Current favorites UI/Worker composition is under independent review; two cached-review reopening regressions are held for correction. Template UI remains unimplemented."
     },
     {
       "id": "F29",
       "capability": "Scriptless public source-reference portal",
       "main_status": "Missing",
-      "staging_status": "Implemented source; hosted browser pending",
+      "staging_status": "Implemented source; actual hosted browser passed at PR190",
       "source": [
         "scripts/portal/build.mjs",
         "apps/portal/index.html"
@@ -542,13 +543,13 @@
         "scripts/portal/build.test.mjs",
         "scripts/test-scriptless-portal-browser.mjs"
       ],
-      "remaining": "Actual current-head hosted header/download/print qualification; no deployed-host claim."
+      "remaining": "No deployed-host, physical-print/device or release claim; preserve current source-bound qualification."
     },
     {
       "id": "F30",
       "capability": "Unsigned deterministic distribution staging",
       "main_status": "Missing",
-      "staging_status": "Implemented local source",
+      "staging_status": "Implemented local source; actual hosted browser passed at PR190",
       "source": [
         "scripts/distribution/stage.mjs",
         "scripts/distribution/manifest.mjs"
@@ -557,7 +558,7 @@
         "scripts/distribution/stage.test.mjs",
         "scripts/distribution/browser.test.mjs"
       ],
-      "remaining": "Current-head nested browser qualification; independent distribution and signed-release authority remain absent."
+      "remaining": "Independent distribution witness, signing, publication and release approval remain absent."
     },
     {
       "id": "F31",

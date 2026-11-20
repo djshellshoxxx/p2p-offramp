@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
-  "generation": 2,
-  "updated_at_utc": "2026-11-20T00:11:08.964508+00:00",
-  "phase": "generation-two-source-verified-hosted-qualification-pending-generation-three-active",
+  "generation": 3,
+  "updated_at_utc": "2026-11-20T00:50:49.094188+00:00",
+  "phase": "nine-optional-prs-reviewed-combined-local-qualification-passed-favorites-review-active",
   "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
   "integration_branch": "codex/historical-recovery-20261119",
   "integration_source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
@@ -40,6 +40,18 @@
       "original_heads_removed": 0,
       "subsequent_owned_branch": "codex/historical-recovery-20261119",
       "note": "Immutable 192-branch inventory is retained; overlay counts are dated observations, not future live counts."
+    },
+    "generation3_delta": {
+      "file": "inventory-delta-generation3.json",
+      "observed_at_utc": "2026-11-20T00:37:12.673296+00:00",
+      "branches_observed": 204,
+      "prs_observed": 196,
+      "open_prs": 53,
+      "merged_prs": 105,
+      "closed_unmerged_prs": 38,
+      "added_owned_branches": 12,
+      "original_heads_moved": 0,
+      "original_heads_removed": 0
     }
   },
   "completed": [
@@ -212,6 +224,60 @@
       "kind": "reproduced-defect",
       "state": "implemented-tested",
       "source": "scripts/lib/qr-browser-fixture.mjs"
+    },
+    {
+      "id": "FIX-PRIVACY-ATOMIC-GROUP-PRUNING",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/privacy-policy/src/plan.ts",
+      "repair_sha": "599fb729d4c02b7a50746268454ec9208bd8e2a8",
+      "severity": "Medium",
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-COURIER-RETURNED-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/courier/src/secrets.ts",
+      "repair_sha": "b987113452d644aa1f0ed72ba709ddaa1767c3e2",
+      "severity": null,
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-MEETUP-DISCLOSURE-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/meetup/src/disclosure-budget.ts",
+      "repair_sha": "c5808fa4b028b00681d6322a30782b7610dab0fb",
+      "severity": null,
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-MEETUP-POLICY-STORE-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/meetup/src/policy-data.ts",
+      "repair_sha": "c5808fa4b028b00681d6322a30782b7610dab0fb",
+      "severity": null,
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-PRIVACY-CONTROLS-RETURNED-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/privacy-controls/src/shared.ts",
+      "repair_sha": "c53410eaf3f4b46b6428063bc539f2dbe4f0721e",
+      "severity": null,
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-STEALTH-RETURNED-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/stealth/src/store.ts",
+      "repair_sha": "19792ad333a93db6e21cc5147234cc4e22629c5a",
+      "severity": null,
+      "scope": "Optional source: no default runtime or financial authority activation."
     }
   ],
   "verification": {
@@ -252,8 +318,8 @@
       "passed": 26,
       "failed": 0
     },
-    "actual_browser": "PR189 exact tree passed actual hosted Chromium; local Chromium remains blocked by Unix socket policy",
-    "hosted_exact_head": "PR189 browser and nine listed contexts passed; Solana remains pending; broader generation-two head still requires its own hosted checks",
+    "actual_browser": "PR189 exact merge/head tree passed10 groups; PR190 exact merge/head tree passed12 groups including portal/distribution. Local Chromium remains blocked by Unix socket policy.",
+    "hosted_exact_head": "PR190 all original seven required contexts plus docs-tooling/native Nostr passed; applicable Solana validator/browser/refund remains running.",
     "foundry_ci_profile": {
       "version": "1.5.1",
       "solc": "0.8.30",
@@ -337,6 +403,18 @@
       "signatures": 8,
       "sends": 3,
       "exact_durable_markers": 3
+    },
+    "generation_three_combined_full": {
+      "source_sha": "a2f90cbdac973843e1dc71fe078e9433d66cfa75",
+      "tree": "aa285f9a8546b1c78bb0bca51c2bc350874b063b",
+      "tests": 2553,
+      "passed": 2553,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "command": "FOUNDRY_BIN=<pinned-toolchain> FOUNDRY_SOLC=<pinned-solc-0.8.30> npm test",
+      "executor": "optional_source_b",
+      "coordinator_checked_actual_log_summary": true
     }
   },
   "workers": [
@@ -403,40 +481,55 @@
     {
       "generation": 3,
       "worker": "generation3_integration_review",
-      "state": "running",
-      "scope": "completed generation-two review; independently reviewing optional group A"
+      "state": "complete",
+      "scope": "generation2 review and independent proof-inputs/liquidity/privacy-policy reviews complete"
     },
     {
       "generation": 3,
       "worker": "generation3_ci",
       "state": "complete",
-      "scope": "actual PR189 hosted evidence"
+      "scope": "actual PR189/190 hosted browser evidence, native progress and tested optional merge-tree bindings"
     },
     {
       "generation": 3,
       "worker": "optional_source_a",
       "state": "complete",
-      "scope": "three independently scoped extractions awaiting cross-review"
+      "scope": "three published source extractions; independent privacy-policy repair closure complete"
     },
     {
       "generation": 3,
       "worker": "optional_source_b",
-      "state": "running",
-      "scope": "arbitration, courier and meetup; diagnostic repairs"
+      "state": "finishing-report",
+      "scope": "all-nine local qualification passed; preserving source/report provenance"
     },
     {
       "generation": 3,
       "worker": "optional_source_c",
+      "state": "complete",
+      "scope": "privacy-controls/stealth/proof-jobs source and independent review of arbitration/courier/meetup complete"
+    },
+    {
+      "generation": 4,
+      "worker": "personalization_favorites_ui",
       "state": "running",
-      "scope": "privacy-controls, stealth and proof-jobs"
+      "scope": "current saved-review favorites UI/private Worker; repairing independent cached-review finding",
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "source_checkpoint": "6a01b49b04d9d49f80ea1c32579f050bfd5f61cc"
+    },
+    {
+      "generation": 4,
+      "worker": "favorites_independent_review",
+      "state": "running",
+      "scope": "independent favorites native/runtime/registry/lifecycle review; two-case RED reproduced",
+      "branch": "codex/favorites-independent-review-20261119"
     }
   ],
   "remaining": [
     {
       "id": "GATE-COMBINED-HOSTED",
       "priority": 1,
-      "state": "pending",
-      "next_action": "Open/resolve generation-two child PR and inspect exact-head checks, including new portal/distribution browser groups; preserve real Solana waits."
+      "state": "browser-qualified-Solana-running",
+      "next_action": "Inspect PR190 exact-head native job135982126950 without changing its head or real timelocks. Browser12 groups already passed; no repeat investigation of the repaired QR fixture."
     },
     {
       "id": "GATE-PR189-SOLANA",
@@ -447,14 +540,14 @@
     {
       "id": "OPTIONAL-SOURCE-EXTRACTIONS",
       "priority": 2,
-      "state": "active-nine-package-queue",
-      "next_action": "Publish and independently qualify one package per PR; inspect individual state entries below. No default application wiring."
+      "state": "nine-published-independent-reviews-complete-hosted-running",
+      "next_action": "Complete all-nine local composition QA and live exact-head checks for PR191\u2013199, including actual custom browsers; integrate qualified packages individually and preserve the reviewed script/workflow union."
     },
     {
       "id": "COMPOSE-PERSONALIZATION-UI",
       "priority": 2,
-      "state": "source-ready-interface-work-remaining",
-      "next_action": "Design and implement current profile/epoch-bound Worker commands and UI from reviewed primitives in a separate owned branch; preserve current runtime instead of copying historical UI."
+      "state": "implementation-review-active-finding-held",
+      "next_action": "Author and fresh independent reviewer close two reproduced cached-review cases; finish full local QA; publish exact reviewed source with actual favorites browser gate and qualify it before integration."
     },
     {
       "id": "COMPOSE-ASSET-UPDATE-UI",
@@ -475,12 +568,12 @@
       "next_action": "Physical wallets/cameras/print/mobile/device matrix and owner-controlled trust inputs remain separate."
     }
   ],
-  "successor_generation": 3,
+  "successor_generation": 4,
   "integration_local_source_sha": "f29422b6afdf7973e102edaed3a83bd48671bbde",
   "parent_integration_pr": 188,
   "parent_integration_branch": "codex/max-consolidation-20261119",
   "parent_integration_head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
-  "pull_request_resolution": "Resolve the open PR whose head is integration_branch; this state is committed before opening that PR.",
+  "pull_request_resolution": "PR190 is the historical-recovery integration; PR191\u2013199 are separately reviewed optional source children. Resolve live refs before integration; main has not moved.",
   "main_merges_performed": 0,
   "published_generations": [
     {
@@ -495,10 +588,13 @@
       "source_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
       "source_tree": "f3ee86ab68eb60e4ab516037c58c9c498fc30ff4",
       "final_source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
-      "final_source_tree": "0fadc2154399d6bd70f6d988fa2670a84fa8c74b"
+      "final_source_tree": "0fadc2154399d6bd70f6d988fa2670a84fa8c74b",
+      "pr": 190,
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "head_tree": "a3701267756596e833247f50614c5ddc32f2cce0"
     }
   ],
-  "repair_counting": "12 reproduced repair cases in this session, excluding upstream fixes recovered through source PRs and excluding the separate profile-integration assertion.",
+  "repair_counting": "18 newly reproduced repair cases: the previous12 plus five returned-adapter diagnostic sites and one privacy-policy atomic-group composition defect. Upstream recovered fixes and the separate profile-integration assertion are excluded. The open favorites finding is not counted as fixed.",
   "hosted": [
     {
       "pr": 188,
@@ -506,9 +602,11 @@
       "browser": "failed-before-PR189-repair",
       "program_run": 44639090596,
       "program_job": 135965138780,
-      "program_observed_step": 14,
+      "program_observed_step": 16,
       "program_state": "in_progress",
-      "other_original_required_contexts": "passed"
+      "other_original_required_contexts": "passed",
+      "validator_acceptance": "passed",
+      "observed_at_utc": "2026-11-20T00:31:00Z"
     },
     {
       "pr": 189,
@@ -534,9 +632,45 @@
       "physical_camera_qualified": false,
       "program_run": 44640971208,
       "program_job": 135971622812,
+      "program_observed_step": 16,
+      "program_state": "in_progress",
+      "observed_at_utc": "2026-11-20T00:31:00Z",
+      "validator_acceptance": "passed"
+    },
+    {
+      "pr": 190,
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "merge_checkout": "966fa1bc6d0ec840dde5f529183763bbc8d4a1f5",
+      "head_and_merge_tree": "a3701267756596e833247f50614c5ddc32f2cce0",
+      "passed_contexts": [
+        "forge",
+        "local-trade",
+        "local-evm",
+        "schemas-and-crypto",
+        "browser",
+        "specs",
+        "inventory",
+        "docs-tooling",
+        "native-nostr-relay"
+      ],
+      "browser_run": 44644082347,
+      "browser_job": 135982130788,
+      "browser_groups": 12,
+      "qr_journeys": 6,
+      "portal_checks": 5,
+      "distribution_journeys": 3,
+      "distribution_assets": 42,
+      "distribution_build_passes": 2,
+      "unexpected_distribution_requests": 0,
+      "program_run": 44644082116,
+      "program_job": 135982126950,
       "program_observed_step": 14,
       "program_state": "in_progress",
-      "observed_at_utc": "2026-11-19T23:55:00Z"
+      "observed_at_utc": "2026-11-20T00:31:00Z",
+      "deployed_host_qualified": false,
+      "signed_release_qualified": false,
+      "physical_device_qualified": false,
+      "independent_distribution_witness": false
     }
   ],
   "policy": {
@@ -554,10 +688,36 @@
       "original_pr": 144,
       "source_sha": "0b681ed42330b9129502eb0097783cf5995e8382",
       "worker": "optional_source_a",
-      "local_head": "1eac87a0f604d8903daba6a26a761f005e87b89e",
-      "state": "independent-review-running",
+      "local_head": "023fae1c951979f00ed91ece632d976283adf488",
+      "state": "published-source-reviewed-hosted-qualification-pending",
       "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
-      "default_runtime_imports_authorized": false
+      "default_runtime_imports_authorized": false,
+      "pr": 191,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/191",
+      "branch": "codex/optional-proof-inputs-20261119",
+      "published_head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "published_tree": "be88b287938122c319b62ee7462bf3a5003dfd9a",
+      "package_tree": "8ce13a63a8df82b00cea3405d246babfe7f89746",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "generation3_integration_review",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_PROOF_INPUTS_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_PROOF_INPUTS_20261119.md",
+      "unit_tests": {
+        "passed": 21,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "typecheck:proof-inputs"
+      ]
     },
     {
       "id": "EXTRACT-OPTIONAL-LIQUIDITY",
@@ -565,21 +725,46 @@
       "original_pr": 145,
       "source_sha": "f03ebbfb395128f839fbe069226e6d79bc143258",
       "worker": "optional_source_a",
-      "local_head": "02e75bf2c7980ac5203a226e6ac23b2b55d296af",
-      "state": "independent-review-running",
+      "local_head": "e61cb9cb869f69861d43eb21cca70365991fc7f5",
+      "state": "published-source-reviewed-hosted-qualification-pending",
       "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
-      "default_runtime_imports_authorized": false
-    },
-    {
-      "id": "EXTRACT-OPTIONAL-PRIVACY-POLICY",
-      "package": "privacy-policy",
-      "original_pr": 148,
-      "source_sha": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
-      "worker": "optional_source_a",
-      "local_head": "7b9f6ee800ffc94a85e63133f6c423246ae9597d",
-      "state": "independent-review-running",
-      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
-      "default_runtime_imports_authorized": false
+      "default_runtime_imports_authorized": false,
+      "pr": 192,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/192",
+      "branch": "codex/optional-liquidity-20261119",
+      "published_head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "published_tree": "3ab9817bec3b4e62cab92b9ce0d9ef2f53435a02",
+      "package_tree": "ef4dace6c26423b61d98c6012e54ab56d714428e",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "generation3_integration_review",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_LIQUIDITY_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_LIQUIDITY_20261119.md",
+      "unit_tests": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "all-triggered-workflows-passed",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "independent Python4 scenarios/160 transitions"
+      ],
+      "hosted_observed_at_utc": "2026-11-20T00:45:00Z",
+      "hosted_workflows": {
+        "Vault foundation": 44644603490,
+        "EVM escrow": 44644603569,
+        "Nostr relay interoperability": 44644603641,
+        "Specification inventory": 44644603434
+      },
+      "hosted_browser_job": 135983875037,
+      "hosted_browser_groups": 12,
+      "integration_sequence": "Qualified child remains unmerged while PR190 runs its native gate; merging into that parent now would change its source head."
     },
     {
       "id": "EXTRACT-OPTIONAL-ARBITRATION",
@@ -587,10 +772,73 @@
       "original_pr": 147,
       "source_sha": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
       "worker": "optional_source_b",
-      "local_head": "ecbefff46a46ec3608c7c0eac32a5485412d0007",
-      "state": "local-qualification-complete-independent-review-pending",
+      "local_head": "5bde63c00ba9adb3522fdaf3d4ef97915d92b895",
+      "state": "published-source-reviewed-hosted-qualification-pending",
       "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
-      "default_runtime_imports_authorized": false
+      "default_runtime_imports_authorized": false,
+      "pr": 193,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/193",
+      "branch": "codex/optional-arbitration-20261119",
+      "published_head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "published_tree": "66d18800ca406996513eaa1eec97567d95d226b3",
+      "package_tree": "f6a8051adf0c1adeb5b655240ad478c58fac1ac6",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_c",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_ARBITRATION_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_ARBITRATION_20261119.md",
+      "unit_tests": {
+        "passed": 38,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "independent cast3 Vote vectors"
+      ]
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-PRIVACY-POLICY",
+      "package": "privacy-policy",
+      "original_pr": 148,
+      "source_sha": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "worker": "optional_source_a",
+      "local_head": "09cb40813c894f0a900690792060cb8164d5fa0e",
+      "state": "published-source-reviewed-hosted-qualification-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false,
+      "pr": 194,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/194",
+      "branch": "codex/optional-privacy-policy-20261119",
+      "published_head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "published_tree": "946ad1109e5a586439f43983de10e9fa8cd1e43d",
+      "package_tree": "5ab375b6f3b5520bd6059ff858f48699edf53aca",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "generation3_integration_review",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_PRIVACY_POLICY_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_PRIVACY_POLICY_20261119.md",
+      "unit_tests": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "atomic-group native replay required/optional/complete pair"
+      ]
     },
     {
       "id": "EXTRACT-OPTIONAL-COURIER",
@@ -598,10 +846,36 @@
       "original_pr": 146,
       "source_sha": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
       "worker": "optional_source_b",
-      "local_head": "e7f54bdaf35b0112de0eaaf920e1c143fb7e90fb",
-      "state": "local-qualification-complete-independent-review-pending",
+      "local_head": "d3b543d62b5da267d075f49fae530b6d05071777",
+      "state": "published-source-reviewed-hosted-qualification-pending",
       "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
-      "default_runtime_imports_authorized": false
+      "default_runtime_imports_authorized": false,
+      "pr": 195,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/195",
+      "branch": "codex/optional-courier-20261119",
+      "published_head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "published_tree": "cff27fd7b907474a3d25d9144755eee733c812d9",
+      "package_tree": "276211811104349ad9431dae3f64f3ea83c299b6",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_c",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_COURIER_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_COURIER_20261119.md",
+      "unit_tests": {
+        "passed": 61,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "independent Python278-byte container preimage"
+      ]
     },
     {
       "id": "EXTRACT-OPTIONAL-MEETUP",
@@ -609,10 +883,38 @@
       "original_pr": 163,
       "source_sha": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
       "worker": "optional_source_b",
-      "local_head": "e6661b1f103def15c0c019e5a095b8f430facb90",
-      "state": "local-qualification-complete-independent-review-pending",
+      "local_head": "f0145d869444a2346e9c81bf3889cdacb52f621e",
+      "state": "published-source-reviewed-hosted-qualification-pending",
       "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
-      "default_runtime_imports_authorized": false
+      "default_runtime_imports_authorized": false,
+      "pr": 196,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/196",
+      "branch": "codex/optional-meetup-20261119",
+      "published_head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "published_tree": "9feb9bdbe77edbd6f11e486bf1785ab76c43a5ca",
+      "package_tree": "a3fd556fb78cfbf8c0546068db657c4c69a7c9c7",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_c",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_MEETUP_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_MEETUP_20261119.md",
+      "unit_tests": {
+        "passed": 95,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "test:meetup:browser",
+        "Python1024 geohash/4096 comparisons",
+        "Python92 XYZ vectors"
+      ]
     },
     {
       "id": "EXTRACT-OPTIONAL-PRIVACY-CONTROLS",
@@ -620,10 +922,36 @@
       "original_pr": 160,
       "source_sha": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
       "worker": "optional_source_c",
-      "local_head": null,
-      "state": "diagnostic-regression-and-repair-in-progress",
+      "local_head": "5385470e282b6bd44c9e229bb85b816b81c90cd2",
+      "state": "published-source-reviewed-hosted-qualification-pending",
       "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
-      "default_runtime_imports_authorized": false
+      "default_runtime_imports_authorized": false,
+      "pr": 197,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/197",
+      "branch": "codex/optional-privacy-controls-20261119",
+      "published_head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "published_tree": "22d7b4e2ab6756a33eed3598115dab7ca1a9c24f",
+      "package_tree": "21480b1081bf720b21afa8277f2bfe99208790cc",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_b",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_PRIVACY_CONTROLS_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_PRIVACY_CONTROLS_20261119.md",
+      "unit_tests": {
+        "passed": 47,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "test:privacy-controls:browser"
+      ]
     },
     {
       "id": "EXTRACT-OPTIONAL-STEALTH",
@@ -631,10 +959,36 @@
       "original_pr": 161,
       "source_sha": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
       "worker": "optional_source_c",
-      "local_head": null,
-      "state": "diagnostic-regression-and-repair-in-progress",
+      "local_head": "5f52bc054550f3cf9dc25c41a376565d80ee4f60",
+      "state": "published-source-reviewed-hosted-qualification-pending",
       "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
-      "default_runtime_imports_authorized": false
+      "default_runtime_imports_authorized": false,
+      "pr": 198,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/198",
+      "branch": "codex/optional-stealth-20261119",
+      "published_head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "published_tree": "8feb969703a3fc6eecfc976f5eba550feccf240d",
+      "package_tree": "0a24172c193fc3f7c2f7fd8967f107e2e37b5f73",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_b",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_STEALTH_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_STEALTH_20261119.md",
+      "unit_tests": {
+        "passed": 55,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "independent cast3 public fixture hashes"
+      ]
     },
     {
       "id": "EXTRACT-OPTIONAL-PROOF-JOBS",
@@ -642,17 +996,50 @@
       "original_pr": 162,
       "source_sha": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
       "worker": "optional_source_c",
-      "local_head": "92d687750062f5b3a68c52a9476eccdcf37b5cdd",
-      "state": "local-qualification-complete-independent-review-pending",
+      "local_head": "8fbffb4077dab8ecc09af05c1e5b5296e4debb41",
+      "state": "published-source-reviewed-hosted-qualification-pending",
       "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
-      "default_runtime_imports_authorized": false
+      "default_runtime_imports_authorized": false,
+      "pr": 199,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/199",
+      "branch": "codex/optional-proof-jobs-20261119",
+      "published_head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "published_tree": "498f47b8d4ee8d79baab7a100c0ef2dec85377c9",
+      "package_tree": "4be7a4564974f96d8396f4901fbeb63789eaed75",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_b",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_PROOF_JOBS_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_PROOF_JOBS_20261119.md",
+      "unit_tests": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "typecheck:proof-jobs",
+        "test:proof:memory",
+        "test:proof:browser",
+        "optional-proof-jobs.yml"
+      ]
     }
   ],
   "automation": {
     "id": "Automation_ab68cc67e6ac8191bd31dc2d84a085e1",
     "enabled": true,
     "cadence": "hourly existing schedule",
-    "semantics": "durable scheduled continuation; not a claim that completed native workers run continuously"
+    "semantics": "durable scheduled continuation; not a claim that completed native workers run continuously",
+    "prompt_updated_at_utc": "2026-11-20T00:36:20.063232+00:00",
+    "last_observed_run": "2026-11-20T00:30:00Z",
+    "last_observed_run_state": "completed",
+    "last_result_scope": "Read-only source/check verification and PR190 qualification checkpoint; no source mutation."
   },
   "verification_log_sha256": {
     "generation2-full.tap": "3affa64cd3bdc9562dd5d08eb803a4c8764814332e23b574184c97c6c876d392",
@@ -669,6 +1056,81 @@
     "integration-evm-controller.log": "9dfef677e924d9ae514adc4e01c67cfbc17297e000ab65dc36185aa297e85866",
     "integration-erc20.log": "14c07ea72fd257ec390f6eb7650d52134aa4ec0f312b6196b8ef76d263601457",
     "generation2-final-docs.log": "ac8481319318f368052ce8cb10fe5d9c1bff19aae21e0bb7fdbadd898fb68c47",
-    "generation2-final-specs.log": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9"
+    "generation2-final-specs.log": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9",
+    "optional-composition-full.tap": "d80cb2293a85b22e3618dce1e48ed797394bc8a1e8ab32a9dcd8c8abfd842903",
+    "optional-composition-build-policy.tap": "4263e77d6f024ef15fffbca476fe3682b93b14ea4488374e2c5e6b58390b3b55",
+    "optional-composition-tooling.tap": "92bf3d7d77eab4715c19796ad2b14af59f9ffb4d411bcb1cba34a0938567a299",
+    "optional-composition-typecheck.log": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+    "optional-composition-proof-inputs-typecheck.log": "1e305eb1bfb14f1b5f68a29cd70d3d9dd040f5dd119fbbc45d75ca92a7e97e00",
+    "optional-composition-proof-jobs-typecheck.log": "01003589ca24dff5de5e5b62865f20ccb201f4b2a147d91fe1299cd36dfacfb0",
+    "optional-composition-proof-memory.log": "c23b861046b8c4db97b176c6021d6defd6cc8163dd0f3a89be90a2536e8cf805",
+    "optional-composition-boundaries.log": "a944fc8a95ecff4212e15f25f2fd2640826b9181bb575537268ac67c0b29ed90",
+    "optional-composition-artifact-comparison.json": "f5ba73d4cdcbb6c8f6e20880db1009b22aba8d0a2ba6354ce402e1f8c2db1e52",
+    "optional-composition-source-audit.json": "fa50af9204c3168e9da269824e2ab9f8e2deabbcb986961b098526ab6adb41cd",
+    "optional-composition-root-audit.json": "756734fd4866b669896767c4c6dbbef4b11c3dda5ce6407a2cd6d7b5fcdf5891"
+  },
+  "integration_pr": 190,
+  "integration_published_head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+  "integration_published_tree": "a3701267756596e833247f50614c5ddc32f2cce0",
+  "known_findings": [
+    {
+      "id": "PRIVACY-ATOMIC-GROUP-PRUNING",
+      "severity": "Medium",
+      "state": "independently-closed",
+      "pr": 194,
+      "repair_sha": "599fb729d4c02b7a50746268454ec9208bd8e2a8",
+      "scope": "Native planning under dependency pruning; optional source only."
+    },
+    {
+      "id": "FAVORITES-STALE-REVIEW-REOPEN",
+      "severity": "Medium",
+      "state": "reproduced-repair-and-independent-closure-required",
+      "reviewed_source": "6a01b49b04d9d49f80ea1c32579f050bfd5f61cc",
+      "red_test_commit": "d5ca7f1e72667331e73cef8376e0799cbb29f3df",
+      "reproduced_failures": 2,
+      "scope": "Fresh-review UI guarantee under trusted-port/infrastructure faults; not a demonstrated peer/funds exploit."
+    }
+  ],
+  "optional_composition": {
+    "branch": "codex/optional-composition-20261119",
+    "published": false,
+    "owner": "optional_source_b",
+    "base": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+    "source": "a2f90cbdac973843e1dc71fe078e9433d66cfa75",
+    "tree": "aa285f9a8546b1c78bb0bca51c2bc350874b063b",
+    "state": "local-qualification-passed-hosted-package-checks-pending",
+    "package_subtrees_match_all_nine_reviewed_heads": true,
+    "base_commands_preserved": 52,
+    "added_commands": 6,
+    "other_workflows_unchanged": 5,
+    "independent_integration_review": "OPTIONAL_COMPOSITION_INDEPENDENT_REVIEW_20261119.md",
+    "independent_review_result": "no-open-High-or-Medium-in-shared-integration-delta",
+    "completed_checks": {
+      "typescript_projects": 7,
+      "native_WASM_memory_probe": "passed",
+      "boundaries_production_files": 300,
+      "core_modules": 140,
+      "spec_audit": 173,
+      "spec_tests_passed": 32,
+      "docs_claims": 6,
+      "docs_pages": 7,
+      "governance_historical": 12,
+      "governance_pending": 0,
+      "governance_rows": 57,
+      "governance_stale_references": 13,
+      "full_suite": {
+        "tests": 2553,
+        "passed": 2553,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "duration_ms": 245457.647485
+      },
+      "build_policy_tests": 54,
+      "tooling_tests": 36,
+      "default_artifact_files": 13,
+      "default_artifact_byte_identical": true,
+      "optional_package_hits_in_default_graphs": 0
+    }
   }
 }

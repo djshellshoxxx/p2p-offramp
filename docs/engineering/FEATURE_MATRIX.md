@@ -34,9 +34,9 @@ Baseline: `5c5a84ef6300330700c8b0ca54d074ac113f08be`. Classifications describe a
 | F26 | Duplicate historical regression stack | Duplicate | D9 #69–75/#91–93 tests, isolated #78–80 tests, and #168 effective browser delta are already represented on current main. | No reimplementation. Exact normalized whole-file preservation and merge-tree proof are in branch-inventory.json.  |
 | F27 | Production release and live-funds qualification | Blocked | Release-disabled architecture, explicit build modes and signed trust primitives exist; no deployment/release is authorized in this task. | Owner-controlled trust roots/pins, physical wallets/public testnet, required independent reviews and explicit release authorization remain separate. Preserve ReleaseEnabled=0.  |
 
-## Staging overlay after two integration generations
+## Staging overlay through the optional-source generation
 
-The table above remains the immutable 27-capability assessment of starting main. The latest reviewed source is `ef9d74258de63e98917c7a34a9392076ff86c35c` on `codex/historical-recovery-20261119`; it has not merged to main. `consolidation-state.json` records exact source and test evidence.
+The table above remains the immutable 27-capability assessment of starting main. Generation 2 source `ef9d74258de63e98917c7a34a9392076ff86c35c` is published in PR #190 at `2b23ee614ff2dd05bd3a6e79f1278658c30a3909`; it has not merged to main. Nine separately reviewed optional source PRs and an active favorites implementation extend the work as recorded below. `consolidation-state.json` preserves exact source and test evidence.
 
 | Capability | Change on staging | Remaining qualification or composition |
 |---|---|---|
@@ -45,10 +45,10 @@ The table above remains the immutable 27-capability assessment of starting main.
 | F17 / F18 | Core guards and public image/camera QR review are integrated. PR189 completed six actual Chromium journeys. | Synthetic camera is not physical-device acceptance; unsigned review conveys no authority. |
 | F24 | Internal updater source and four storage lifecycle repairs are recovered. | Unexported/unwired; update UI and current trust composition remain separate. |
 | F25 | Docs/lab tooling and source-bound historical evidence checks are recovered. | Historical receipts remain dated; stale references stay explicit. |
-| F22 | The November18 D7 acceptance permits nine separate source-package extractions. | Independent reviews and package CI are active; no default runtime wiring is authorized by extraction alone. |
-| F28 — favorites/templates | Reviewed encrypted preference consumers and diagnostic repair are recovered. | Current UI/Worker commands and lifecycle composition remain incomplete. |
-| F29 — scriptless portal | Strict source-reference page, exact downloads and browser harness are recovered. | New current-head hosted browser checks remain pending; no deployed-header claim. |
-| F30 — unsigned staging | Real two-pass builds, exact current artifact roles and tamper refusals pass locally. | Nested-path browser gate remains pending; signing, publication and independent distribution approval stay false. |
+| F22 | All nine packages are published as #191–#199 with completed independent source reviews. Local all-nine composition preserves their exact source and prior gates. | Combined local qualification passed 2,553 tests and all 13 output files match the base; current-head hosted qualification remains active. No default runtime wiring is authorized by extraction alone. |
+| F28 — favorites/templates | Reviewed encrypted preference consumers are recovered. Two fresh workers are implementing and independently reviewing current favorites UI/Worker composition. | Two stale-review reopening regressions are held for repair and independent closure; actual browser gate remains pending. Template UI is still absent. |
+| F29 — scriptless portal | Strict source-reference page, exact downloads and actual PR190 hosted browser qualification passed, including PDF and enforced headers. | No deployed-host or physical print/device claim. |
+| F30 — unsigned staging | Real two-pass builds, current artifact roles and tamper refusal pass; actual PR190 nested-path browser qualification passed over 42 assets with zero unexpected requests. | Signing, publication and independent distribution approval stay false. |
 | F31 — inert governance | Historical record validators and assurance tooling pass;12 historical records,0 pending. |13 current non-owned historical references remain explicitly stale; records confer no authority. |
 
 The JSON companion preserves the baseline and records this overlay separately. Optional reference source acceptance supersedes the earlier parking wording; application and release acceptance remain their own decisions.
