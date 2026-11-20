@@ -1,0 +1,113 @@
+{
+  "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+  "tree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+  "parent": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+  "executions": [
+    {
+      "name": "01-missing-proposal-reader",
+      "source": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "660817d5fbf25679b464972ea3e79e05be649e4a",
+      "patchSha256": "3d9cc36c2233178b7648d516167146059f22c78034165ce0485797714dcccd15",
+      "verified": true
+    },
+    {
+      "name": "02-explicit-missing-reader-baseline",
+      "source": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "d5826ca08bdbb702ca57d6ca3f18fafe529ef2c5",
+      "patchSha256": "c4521ad80aff25c73eee15aad933fe497922833366198fca9102353c651ad09d",
+      "verified": true
+    },
+    {
+      "name": "03-proposal-aware-oracle",
+      "source": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "5c3842906b52818648d2d7d923794d8f3fff7df5",
+      "patchSha256": "25e394089a88214152d4923ca0363afdad63cfe488a1bbff38b1329b8412f1c4",
+      "verified": true
+    },
+    {
+      "name": "04-original-financial-source-preservation",
+      "source": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "11eaff779b795149854928210e0bfd14b325df7f",
+      "patchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "verified": true
+    },
+    {
+      "name": "05-combined-source-oracle",
+      "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+      "executionTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "patchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "verified": true
+    },
+    {
+      "name": "06-node-syntax",
+      "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+      "executionTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "patchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "verified": true
+    },
+    {
+      "name": "07-build-only-driver",
+      "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+      "executionTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "patchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "verified": true
+    },
+    {
+      "name": "08-final-source-preservation",
+      "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+      "executionTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "patchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "verified": true
+    },
+    {
+      "name": "09-frozen-whitespace",
+      "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+      "executionTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verified": true
+    }
+  ],
+  "sourceEntriesOutsideDocumentation": 1038,
+  "exactChangedPaths": [
+    "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+    "scripts/lib/solana-localnet-browser-fixture.mjs",
+    "scripts/lib/solana-localnet-send-evidence.mjs",
+    "scripts/test-solana-localnet-browser.mjs"
+  ],
+  "preservation": {
+    "baseline": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+    "originalDriverLinesPreserved": 190,
+    "driverAddedLines": 34,
+    "legacyFunctionsByteIdentical": [
+      "readSolanaVaultRecords",
+      "assertSolanaSendMarked"
+    ],
+    "fixtureChange": "Only import and awaited proposal-aware oracle call",
+    "financialFixturesUnchanged": true,
+    "fullMainWhitespacePassed": true,
+    "currentUISelectorsVerified": [
+      "Funding proposal JSON",
+      "Save seller funding proposal",
+      "data-proposal-id",
+      "Saved proposal",
+      "Original provenance preserved after restore",
+      "Your encrypted recovery profile"
+    ],
+    "driverSha256": "18453ace44c314314c8eca6cb47b32fde02b1c2c63017ad39f502aa68c7ec7ac",
+    "nativeExecuted": false
+  },
+  "verifierVersions": {
+    "schema": "retained-source-verifier-version-map.v1",
+    "reconstruction": "The earlier verifier is reconstructed exactly by reversing the later additive UI-selector edit; no command was rerun. Original execution receipts remain unchanged.",
+    "executions": {
+      "04-original-financial-source-preservation": {
+        "file": "verify-source-before-admission.py",
+        "sha256": "66d079a670f6d583f7fb4a5939673f3832cb77e4de0b2094aa655bdf257e3bf6"
+      },
+      "08-final-source-preservation": {
+        "file": "verify-source.py",
+        "sha256": "c5cccb98b7ad459e6b739845cf9254cdad1e90d942e2758c4f434ab86f8bdd86"
+      }
+    }
+  }
+}

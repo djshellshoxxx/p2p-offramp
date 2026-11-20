@@ -1,0 +1,1017 @@
+{
+  "schema": "p2p-offramp.solana-funding-admission-browser.generation36.v1",
+  "recordedAt": "2026-11-20T20:39:08.133599+00:00",
+  "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+  "tree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+  "parent": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+  "admissionSource": {
+    "originalSource": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+    "integratedSource": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+    "tree": "df931285bd7e1818db6736ba968930375bd6cb68",
+    "parent": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+    "method": "git cherry-pick --ff on exact parent; original author commit retained",
+    "companionPatchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+    "companionPaths": [
+      "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+      "scripts/lib/solana-localnet-browser-fixture.mjs",
+      "scripts/lib/solana-localnet-send-evidence.mjs",
+      "scripts/test-solana-localnet-browser.mjs"
+    ],
+    "preservedWorkingFiles": true
+  },
+  "changedPaths": [
+    "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+    "scripts/lib/solana-localnet-browser-fixture.mjs",
+    "scripts/lib/solana-localnet-send-evidence.mjs",
+    "scripts/test-solana-localnet-browser.mjs"
+  ],
+  "executions": [
+    {
+      "name": "01-missing-proposal-reader",
+      "source": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "headTree": "077ffa6a9cb7f964f5468a6eb33bd3ac231db98c",
+      "executionTree": "660817d5fbf25679b464972ea3e79e05be649e4a",
+      "uncommittedChanges": true,
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs"
+      ],
+      "startedAt": "2026-11-20T20:30:52.431566+00:00",
+      "completedAt": "2026-11-20T20:30:53.441086+00:00",
+      "exitCode": 1,
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/01-missing-proposal-reader.log",
+      "bytes": 3841,
+      "sha256": "d30a1bb99fd750e94c90c501614e39c9f82ba5e2d4aa2f608b7c33526a436d91",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/01-missing-proposal-reader.patch",
+      "patchSha256": "3d9cc36c2233178b7648d516167146059f22c78034165ce0485797714dcccd15",
+      "counts": {
+        "tests": 7,
+        "pass": 4,
+        "fail": 3,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "02-explicit-missing-reader-baseline",
+      "source": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "headTree": "077ffa6a9cb7f964f5468a6eb33bd3ac231db98c",
+      "executionTree": "d5826ca08bdbb702ca57d6ca3f18fafe529ef2c5",
+      "uncommittedChanges": true,
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs"
+      ],
+      "startedAt": "2026-11-20T20:31:13.590460+00:00",
+      "completedAt": "2026-11-20T20:31:14.388190+00:00",
+      "exitCode": 1,
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/02-explicit-missing-reader-baseline.log",
+      "bytes": 8043,
+      "sha256": "82659864820827583ac2eed38e79834b18c8b67703835cecdf60809469c52b1a",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/02-explicit-missing-reader-baseline.patch",
+      "patchSha256": "c4521ad80aff25c73eee15aad933fe497922833366198fca9102353c651ad09d",
+      "counts": {
+        "tests": 7,
+        "pass": 1,
+        "fail": 6,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "03-proposal-aware-oracle",
+      "source": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "headTree": "077ffa6a9cb7f964f5468a6eb33bd3ac231db98c",
+      "executionTree": "5c3842906b52818648d2d7d923794d8f3fff7df5",
+      "uncommittedChanges": true,
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+        "apps/web/test/solana-localnet-send-evidence.test.mjs"
+      ],
+      "startedAt": "2026-11-20T20:31:51.008357+00:00",
+      "completedAt": "2026-11-20T20:31:51.923956+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/03-proposal-aware-oracle.log",
+      "bytes": 1003,
+      "sha256": "aaaf72974205a3db7ee605a166b6b18d52261c974db7d929085f6a88b0694e33",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/03-proposal-aware-oracle.patch",
+      "patchSha256": "25e394089a88214152d4923ca0363afdad63cfe488a1bbff38b1329b8412f1c4",
+      "counts": {
+        "tests": 8,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "04-original-financial-source-preservation",
+      "source": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "headTree": "077ffa6a9cb7f964f5468a6eb33bd3ac231db98c",
+      "executionTree": "11eaff779b795149854928210e0bfd14b325df7f",
+      "uncommittedChanges": true,
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/verify-source.py"
+      ],
+      "startedAt": "2026-11-20T20:34:20.781254+00:00",
+      "completedAt": "2026-11-20T20:34:20.884778+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/04-original-financial-source-preservation.log",
+      "bytes": 486,
+      "sha256": "dbf6042f8cdcff46d084114ddf1adba072b6da748dbf3793599df96a597e04f3",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/04-original-financial-source-preservation.patch",
+      "patchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "counts": {}
+    },
+    {
+      "name": "05-combined-source-oracle",
+      "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+      "headTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "executionTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "uncommittedChanges": true,
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+        "apps/web/test/solana-localnet-send-evidence.test.mjs"
+      ],
+      "startedAt": "2026-11-20T20:36:53.358361+00:00",
+      "completedAt": "2026-11-20T20:36:54.278359+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/05-combined-source-oracle.log",
+      "bytes": 1000,
+      "sha256": "4b3e2a1c31d9191277571f78307dfe9504a021e9c28f421e9d1249da45757c5a",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/05-combined-source-oracle.patch",
+      "patchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "counts": {
+        "tests": 8,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "06-node-syntax",
+      "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+      "headTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "executionTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "uncommittedChanges": true,
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/check-syntax.py"
+      ],
+      "startedAt": "2026-11-20T20:37:25.368666+00:00",
+      "completedAt": "2026-11-20T20:37:25.741438+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/06-node-syntax.log",
+      "bytes": 312,
+      "sha256": "b71e739e7c12d4d566337493d7885500b98b4f07f8d447f2bffb01dbd8b4e978",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/06-node-syntax.patch",
+      "patchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "counts": {}
+    },
+    {
+      "name": "07-build-only-driver",
+      "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+      "headTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "executionTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "uncommittedChanges": true,
+      "command": [
+        "node",
+        "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/compile-driver.mjs"
+      ],
+      "startedAt": "2026-11-20T20:37:25.943478+00:00",
+      "completedAt": "2026-11-20T20:37:26.178448+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/07-build-only-driver.log",
+      "bytes": 11877,
+      "sha256": "213ae534102e9a8472df9e1af18ab8a8c55238e00ee089684a2608f929a7b6e7",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/07-build-only-driver.patch",
+      "patchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "counts": {}
+    },
+    {
+      "name": "08-final-source-preservation",
+      "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+      "headTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "executionTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "uncommittedChanges": true,
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/verify-source.py"
+      ],
+      "startedAt": "2026-11-20T20:37:26.345548+00:00",
+      "completedAt": "2026-11-20T20:37:26.419336+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/08-final-source-preservation.log",
+      "bytes": 725,
+      "sha256": "21736e568db24a1d271f6b96448c854e02b31ba15cc61d8990c9abb6b4eaf7f5",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/08-final-source-preservation.patch",
+      "patchSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "counts": {}
+    },
+    {
+      "name": "09-frozen-whitespace",
+      "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+      "headTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "executionTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "uncommittedChanges": false,
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061..HEAD"
+      ],
+      "startedAt": "2026-11-20T20:38:00.663527+00:00",
+      "completedAt": "2026-11-20T20:38:00.711184+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/09-frozen-whitespace.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/09-frozen-whitespace.patch",
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "counts": {}
+    }
+  ],
+  "artifacts": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/01-missing-proposal-reader.log",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/01-missing-proposal-reader.log.gz",
+      "decodedBytes": 3841,
+      "decodedSha256": "d30a1bb99fd750e94c90c501614e39c9f82ba5e2d4aa2f608b7c33526a436d91",
+      "compressedBytes": 917,
+      "compressedSha256": "3253565dca43e6ea50a86742a6c190b290e8bab5d64e81eda84073ffecf136cb",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/01-missing-proposal-reader.patch",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/01-missing-proposal-reader.patch.gz",
+      "decodedBytes": 8748,
+      "decodedSha256": "3d9cc36c2233178b7648d516167146059f22c78034165ce0485797714dcccd15",
+      "compressedBytes": 2568,
+      "compressedSha256": "b29833db3b0ea84195e84bfcc19834511f9d1a09f71c58eeabb73586629a7c40",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/01-missing-proposal-reader.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/01-missing-proposal-reader.json.gz",
+      "decodedBytes": 1060,
+      "decodedSha256": "c67ba2315dbe7218761545b7eec068c005f061e3489652cc9814826c1d2c56c2",
+      "compressedBytes": 573,
+      "compressedSha256": "a34597a1b17d5a8c6219ae65c042f30ac7265ce0c9e7824001a5b52da1d96f00",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/02-explicit-missing-reader-baseline.log",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/02-explicit-missing-reader-baseline.log.gz",
+      "decodedBytes": 8043,
+      "decodedSha256": "82659864820827583ac2eed38e79834b18c8b67703835cecdf60809469c52b1a",
+      "compressedBytes": 1065,
+      "compressedSha256": "c32d286a8094877fa237d7f875b1cd40ae16ef2c7b57a94f3dfb788b6471cf53",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/02-explicit-missing-reader-baseline.patch",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/02-explicit-missing-reader-baseline.patch.gz",
+      "decodedBytes": 8849,
+      "decodedSha256": "c4521ad80aff25c73eee15aad933fe497922833366198fca9102353c651ad09d",
+      "compressedBytes": 2589,
+      "compressedSha256": "9a7b0486b03859b7f883359b5159e86a67f62eb0f16e265f4207067f462f4754",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/02-explicit-missing-reader-baseline.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/02-explicit-missing-reader-baseline.json.gz",
+      "decodedBytes": 1087,
+      "decodedSha256": "df531c98960fe6416b95c161b8fd0cea11a326a52062f3cd9c9946f5a098c253",
+      "compressedBytes": 586,
+      "compressedSha256": "9ed1583055069ff61036d965d17cb6852894329e57305857e52feb23a01cc39b",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/03-proposal-aware-oracle.log",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/03-proposal-aware-oracle.log.gz",
+      "decodedBytes": 1003,
+      "decodedSha256": "aaaf72974205a3db7ee605a166b6b18d52261c974db7d929085f6a88b0694e33",
+      "compressedBytes": 553,
+      "compressedSha256": "a1f0aa6cc372739afa4495f91a3dfc2384c5407fa9b764d02a536b4e3e4e1c24",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/03-proposal-aware-oracle.patch",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/03-proposal-aware-oracle.patch.gz",
+      "decodedBytes": 21399,
+      "decodedSha256": "25e394089a88214152d4923ca0363afdad63cfe488a1bbff38b1329b8412f1c4",
+      "compressedBytes": 5617,
+      "compressedSha256": "b8c12e0d664a9753d7892fd88f3bbc0f7c37a9da221dbcde87290a7ca89606d2",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/03-proposal-aware-oracle.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/03-proposal-aware-oracle.json.gz",
+      "decodedBytes": 1114,
+      "decodedSha256": "e74b0609bc35b57a5b6c5aea622dfe9f6baa3cef66bf540f0e1e9a72deb2eff5",
+      "compressedBytes": 577,
+      "compressedSha256": "13b059f3144cd1c619e411c655396fd9f01299ce65a41b19ea6aa7ebd3a0e867",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/04-original-financial-source-preservation.log",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/04-original-financial-source-preservation.log.gz",
+      "decodedBytes": 486,
+      "decodedSha256": "dbf6042f8cdcff46d084114ddf1adba072b6da748dbf3793599df96a597e04f3",
+      "compressedBytes": 347,
+      "compressedSha256": "9643f4c6d5d8c442eda295c2c1d6eb074ca9f199dbe958db0495856cbcf835fd",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/04-original-financial-source-preservation.patch",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/04-original-financial-source-preservation.patch.gz",
+      "decodedBytes": 20729,
+      "decodedSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "compressedBytes": 5554,
+      "compressedSha256": "cd3194287f3b61a1cd9ae0c852395a876c9bd21326e3bb2b3841e15dbfb46a81",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/04-original-financial-source-preservation.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/04-original-financial-source-preservation.json.gz",
+      "decodedBytes": 940,
+      "decodedSha256": "962cca6fbbf6d7e8f94e7b5075bee75d7c357bf1a48c2e23e35df3a59a2481af",
+      "compressedBytes": 476,
+      "compressedSha256": "89e8ed4fd1f663c5fffbee421bd64a882e630fbdca6c41a0d0594cbf4dbae709",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/05-combined-source-oracle.log",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/05-combined-source-oracle.log.gz",
+      "decodedBytes": 1000,
+      "decodedSha256": "4b3e2a1c31d9191277571f78307dfe9504a021e9c28f421e9d1249da45757c5a",
+      "compressedBytes": 552,
+      "compressedSha256": "6a4964114e6658bcc7abb5292ac1e9eb7573564aa102a05c1480b5168d36a616",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/05-combined-source-oracle.patch",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/05-combined-source-oracle.patch.gz",
+      "decodedBytes": 20729,
+      "decodedSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "compressedBytes": 5554,
+      "compressedSha256": "cd3194287f3b61a1cd9ae0c852395a876c9bd21326e3bb2b3841e15dbfb46a81",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/05-combined-source-oracle.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/05-combined-source-oracle.json.gz",
+      "decodedBytes": 1117,
+      "decodedSha256": "6acf16cd45f6c827144e2c546a2733e8c54b0d8b30ffe178029a78d23fda0470",
+      "compressedBytes": 580,
+      "compressedSha256": "65723926a98db531c960fd283ab9645bb665c04715de93c464aa28100293abbc",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/06-node-syntax.log",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/06-node-syntax.log.gz",
+      "decodedBytes": 312,
+      "decodedSha256": "b71e739e7c12d4d566337493d7885500b98b4f07f8d447f2bffb01dbd8b4e978",
+      "compressedBytes": 179,
+      "compressedSha256": "c56b30f2d0f6e252aece407223f0a2694e803cb1215546252b87a81440c75c1e",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/06-node-syntax.patch",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/06-node-syntax.patch.gz",
+      "decodedBytes": 20729,
+      "decodedSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "compressedBytes": 5554,
+      "compressedSha256": "cd3194287f3b61a1cd9ae0c852395a876c9bd21326e3bb2b3841e15dbfb46a81",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/06-node-syntax.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/06-node-syntax.json.gz",
+      "decodedBytes": 858,
+      "decodedSha256": "64e89366a147a3ac7b1ed6d842d0785ab6cbdb9ae0d4afb276c6f4c0579d7369",
+      "compressedBytes": 460,
+      "compressedSha256": "736d80fded1fb8153c420ccd48ec63950fa7429ab9558b4d5132fd214b2babb5",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/07-build-only-driver.log",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/07-build-only-driver.log.gz",
+      "decodedBytes": 11877,
+      "decodedSha256": "213ae534102e9a8472df9e1af18ab8a8c55238e00ee089684a2608f929a7b6e7",
+      "compressedBytes": 4227,
+      "compressedSha256": "aea04b61479fe9ef6b67dff9f166ae74090514110752c5f6e4cad5c62b075488",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/07-build-only-driver.patch",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/07-build-only-driver.patch.gz",
+      "decodedBytes": 20729,
+      "decodedSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "compressedBytes": 5554,
+      "compressedSha256": "cd3194287f3b61a1cd9ae0c852395a876c9bd21326e3bb2b3841e15dbfb46a81",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/07-build-only-driver.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/07-build-only-driver.json.gz",
+      "decodedBytes": 879,
+      "decodedSha256": "382d95b5c36c4812df3a3b8f3a506c726e208c11b389d1f3b122fafb3fe8b7e6",
+      "compressedBytes": 463,
+      "compressedSha256": "b79b053eb9e25ff8612992d1ea6c1bc0444d34f0845923b9a5bd55539ef995be",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/08-final-source-preservation.log",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/08-final-source-preservation.log.gz",
+      "decodedBytes": 725,
+      "decodedSha256": "21736e568db24a1d271f6b96448c854e02b31ba15cc61d8990c9abb6b4eaf7f5",
+      "compressedBytes": 453,
+      "compressedSha256": "6c478cbf89f1c84b7328974af51f1252f84f40e401b5c1b0e42fae7fece52049",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/08-final-source-preservation.patch",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/08-final-source-preservation.patch.gz",
+      "decodedBytes": 20729,
+      "decodedSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "compressedBytes": 5554,
+      "compressedSha256": "cd3194287f3b61a1cd9ae0c852395a876c9bd21326e3bb2b3841e15dbfb46a81",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/08-final-source-preservation.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/08-final-source-preservation.json.gz",
+      "decodedBytes": 901,
+      "decodedSha256": "9626e0e8ac3994a42fc2d38917a0989bc8b0fd2197ac7acc478c895fba737efb",
+      "compressedBytes": 468,
+      "compressedSha256": "01bebd5e177890e58a4c93c27dc2e039c73d91dcfc7513d8c8a65e93eeae5382",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/09-frozen-whitespace.log",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/09-frozen-whitespace.log.gz",
+      "decodedBytes": 0,
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedBytes": 20,
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/09-frozen-whitespace.patch",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/09-frozen-whitespace.patch.gz",
+      "decodedBytes": 0,
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedBytes": 20,
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/09-frozen-whitespace.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/09-frozen-whitespace.json.gz",
+      "decodedBytes": 870,
+      "decodedSha256": "c715cb8469b9bce746737cf08ec52d0655cd7cc2f9107b660494112dc1c1c478",
+      "compressedBytes": 429,
+      "compressedSha256": "6eda06d4901c128e647bac3d65292ba383f61584b642b6277b2ca9af67149fb8",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/capture.py",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/capture.py.gz",
+      "decodedBytes": 2142,
+      "decodedSha256": "de9775de05caab12abb153f4f3c25061130513ba433a19460c788d2a0e07ccf6",
+      "compressedBytes": 983,
+      "compressedSha256": "79a8860b7f69736690b19c6240945a89ec19e9caa741d8f40d48043d70906dba",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/verify-source.py",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/verify-source.py.gz",
+      "decodedBytes": 2815,
+      "decodedSha256": "c5cccb98b7ad459e6b739845cf9254cdad1e90d942e2758c4f434ab86f8bdd86",
+      "compressedBytes": 1198,
+      "compressedSha256": "4221b4111a9b9c7e85e6055bb1ed05a6071a28e0b00600b2b3df539290b70a08",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/verify-source-before-admission.py",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/verify-source-before-admission.py.gz",
+      "decodedBytes": 2426,
+      "decodedSha256": "66d079a670f6d583f7fb4a5939673f3832cb77e4de0b2094aa655bdf257e3bf6",
+      "compressedBytes": 1036,
+      "compressedSha256": "fafe2566d87348bc8a40adbf6597ef7b7a167be0e5009574ad7753757cbc1b65",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/verifier-versions.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/verifier-versions.json.gz",
+      "decodedBytes": 621,
+      "decodedSha256": "bc8f5005f737d8dba5ae42857f56fc343b956fd6ff48e049b0b5c7575b4bfec8",
+      "compressedBytes": 373,
+      "compressedSha256": "46d20fabcbe48ef04e8cf9116b935c5a5f9d96e9d65d0e578b382ce23cd61ef1",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/compile-driver.mjs",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/compile-driver.mjs.gz",
+      "decodedBytes": 2462,
+      "decodedSha256": "5f49c65fd037b62afa15a80627fef97383d999920e7d5789f134dd23cde866f3",
+      "compressedBytes": 1146,
+      "compressedSha256": "3d76a25da500ab1d80ef76ea804c9c8aca0ff77c39029ef05a526b5a88e96f81",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/check-syntax.py",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/check-syntax.py.gz",
+      "decodedBytes": 566,
+      "decodedSha256": "b93d61d1d3a7cb2893e815fee422eb22890b4d15d02ba8c5ad88ab4dcb237b29",
+      "compressedBytes": 346,
+      "compressedSha256": "598788a36c1d6959c7d93cae0a3fcf17ac175039dfc8c198ccfd3fd3afd8e421",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/setup-path-diagnostics.txt",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/setup-path-diagnostics.txt.gz",
+      "decodedBytes": 952,
+      "decodedSha256": "2cee1989906913e67f0757b2c59196230ee276bd7916544efb5b02bb46ab2faf",
+      "compressedBytes": 510,
+      "compressedSha256": "e3b329d13183c6084c60f7b8ea1581ca660882af353f7ebbee513c4995149af9",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/admission-source.json",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/admission-source.json.gz",
+      "decodedBytes": 709,
+      "decodedSha256": "1a01e41e5cfae7e803ea9b891545ea0a3fafc375f3eaf5205f1579817d2168d8",
+      "compressedBytes": 397,
+      "compressedSha256": "aa412eb6978933205dc22bfc2155e9bc4d12230e3c3e1a5ef252f86c9587f3f4",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/compiled-driver-0.mjs.gz",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/compiled-driver-0.mjs.gz",
+      "decodedBytes": 309234,
+      "decodedSha256": "a11a99c81b7555ab587ddf580f790571638c852d9dcb371da4ee38727e95b1aa",
+      "compressedBytes": 82198,
+      "compressedSha256": "eeb819e9de2bd31986fa2f1ca2617b37c13cde770bbf78e6a2152ef9f4473140",
+      "gzipMtime": 0,
+      "producer": "retained original Node gzip"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/compiled-driver-1.mjs.gz",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/compiled-driver-1.mjs.gz",
+      "decodedBytes": 16390,
+      "decodedSha256": "419dc2822a17c03bf44b609f9e10a81309831c275b88c5c8994c463bc001faf5",
+      "compressedBytes": 5612,
+      "compressedSha256": "7ad6c6390ac52b0bbfcf1740e7f3c87221a94fbb00312c153eb0f727a784ca31",
+      "gzipMtime": 0,
+      "producer": "retained original Node gzip"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/compiled-driver-2.mjs.gz",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/compiled-driver-2.mjs.gz",
+      "decodedBytes": 91597,
+      "decodedSha256": "b715263a39dcf344efa91f7f22a76212ad01a17fce294d841015701e1bf5784d",
+      "compressedBytes": 28604,
+      "compressedSha256": "8cd2b94559242ad858cb291dad38e2792e85991b740781a87011f0b2fad4b21b",
+      "gzipMtime": 0,
+      "producer": "retained original Node gzip"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-native-driver/frozen-companion-source.patch",
+      "storedPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/frozen-companion-source.patch.gz",
+      "decodedBytes": 20729,
+      "decodedSha256": "8a70e3bf128d13aa109093f3ba76eedea8fa4baa49473f569df6c2135754d965",
+      "compressedBytes": 5554,
+      "compressedSha256": "cd3194287f3b61a1cd9ae0c852395a876c9bd21326e3bb2b3841e15dbfb46a81",
+      "gzipMtime": 0,
+      "producer": "Python gzip.compress mtime=0"
+    }
+  ],
+  "compilation": {
+    "check": "Build-only Node browser-driver compilation; generated output is never evaluated",
+    "nodeVersion": "v24.22.3",
+    "rolldownVersion": "1.2.15",
+    "source": "scripts/test-solana-localnet-browser.mjs",
+    "inputCount": 70,
+    "inputs": [
+      {
+        "path": "apps/web/scripts/artifact-policy.mjs",
+        "sha256": "7817ed04f64a800da0f62e7f189d3f6057f60c9b0ca13b7f8ada2d8afc0db398"
+      },
+      {
+        "path": "apps/web/scripts/build.mjs",
+        "sha256": "9d5d4ff5c33c164cd2d91ff85553009bb0b75de5ce518effdad3fabbbbf6b882"
+      },
+      {
+        "path": "apps/web/scripts/qr-build-policy.mjs",
+        "sha256": "09205d7bc3d67e65b97c5107037a8d8495c6da33f36cb5e0d6f487e85ba33077"
+      },
+      {
+        "path": "apps/web/scripts/source-locale.mjs",
+        "sha256": "4f730b6d7b0ca36a8bb6b8e1aef0f60405c110de685bd4a8e252c107e65f8cf5"
+      },
+      {
+        "path": "apps/web/scripts/static-build-plugin.mjs",
+        "sha256": "b1afc553772285330c732eafc3cb49db3af13b43ae7eb7521dff27ef4d4c976d"
+      },
+      {
+        "path": "apps/web/scripts/testnet-trust.mjs",
+        "sha256": "f52257af09ea837a74352ee8bdf17fde7e83013ae1ae87256cf87835c33c3fe3"
+      },
+      {
+        "path": "apps/web/src/localnet/config.ts",
+        "sha256": "973188b3646d4d4a9088d43f37d6d8cbd46c88648e1abde6f22f27e82cbaef98"
+      },
+      {
+        "path": "apps/web/src/solana-localnet/config.ts",
+        "sha256": "ab3045d87ce47a4591e42416de1da1ce597c4aa37e9a4795dae7ba53759a0f3c"
+      },
+      {
+        "path": "apps/web/src/solana-localnet/funding-proposal.ts",
+        "sha256": "e749b7b33a8b2a8ab0bdaa7f5a5ee3df0a10378f8519116614bfee5488591b8c"
+      },
+      {
+        "path": "apps/web/src/solana-localnet/validation.ts",
+        "sha256": "332f21ac7e2d1ee077ab442eb45bc9cd1723f69c925d6a6c4c9708b8dc6868e7"
+      },
+      {
+        "path": "apps/web/src/testnet/sepolia-network.ts",
+        "sha256": "1af89b6c9a32a1c48b82c5a6d8bf24c870e9ecfdb05a3ebf6b0740bc67205bc8"
+      },
+      {
+        "path": "apps/web/src/ui/locale/catalog.ts",
+        "sha256": "f1b8923380517a6f1012f9abbfde0a3277a7f15812a4e94f35c74bd41cf4b763"
+      },
+      {
+        "path": "apps/web/src/ui/locale/en.ts",
+        "sha256": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18"
+      },
+      {
+        "path": "apps/web/vite.config.ts",
+        "sha256": "c06238ffe63f31b89b3ae3ad2a09a4d52d735cce56c200b5d3b82279b05b0da4"
+      },
+      {
+        "path": "contracts/solana/localnet/driver.mjs",
+        "sha256": "5ac16f54283c8fcc3dd49f735ee8e7a5f86878cc7c70fd7185dce5ec540d42e1"
+      },
+      {
+        "path": "contracts/solana/localnet/tool-path.mjs",
+        "sha256": "d057d63871e6ae0fdb4ef8b9293bf85b10820f9afba79ade35df75920d069ef5"
+      },
+      {
+        "path": "contracts/solana/vectors/derive.mjs",
+        "sha256": "dc5cceb1404fe8589e0fef0799749ce502ad5c091bf48e6fe127d5bb30e90fba"
+      },
+      {
+        "path": "packages/chain-solana/src/address.ts",
+        "sha256": "eb919e23ef0d84a999b9dfe58ce75569612c390fb9d4e35b2ea74fb731ca07f8"
+      },
+      {
+        "path": "packages/chain-solana/src/auxiliary.ts",
+        "sha256": "c7a07093ceb10bdef19e371bf44cbcc05f9ce68e62eae1cebe83a0bf77f3ee89"
+      },
+      {
+        "path": "packages/chain-solana/src/bind.ts",
+        "sha256": "6e69bdf39d20156f3e789755a7a53b84a32b7c9bf6a88d846ef4f9e32d598886"
+      },
+      {
+        "path": "packages/chain-solana/src/codec.ts",
+        "sha256": "83fb33e97601e7b2803d41215f6df4a05047859c08f5d9008343eb1a0ecdd998"
+      },
+      {
+        "path": "packages/chain-solana/src/compose.ts",
+        "sha256": "969ef26ac76c464d86c8269ed47a3fd2d0402320607299f498a0ff42eb97722a"
+      },
+      {
+        "path": "packages/chain-solana/src/instructions.ts",
+        "sha256": "b9587cd5f8148a0221268998f17f927e093972682654d8c0f08ffb94366f6646"
+      },
+      {
+        "path": "packages/chain-solana/src/intent.ts",
+        "sha256": "aaf2dc624e2e64474d3498781cf4ee1ff04508938e4ecf69423e0d2060479143"
+      },
+      {
+        "path": "packages/chain-solana/src/journal.ts",
+        "sha256": "834c0cc0bdb3ac950e52fb0c0eeeff2c85c14bacc2f7633d93561128a839ef21"
+      },
+      {
+        "path": "packages/chain-solana/src/layout.ts",
+        "sha256": "4e5b88672ce76448be49bfcf022b2ee032fd2359006a38d28e4b8ced28e257a7"
+      },
+      {
+        "path": "packages/chain-solana/src/message.ts",
+        "sha256": "3cbc8d12f247eeeac9498f77b636a4229de0ec6c957bfda61952ab14e40e4920"
+      },
+      {
+        "path": "packages/chain-solana/src/payout.ts",
+        "sha256": "b282b4c5fb67cc95ed7e68afa07a71225f31d06232dc2ec6f81e5ad9efed6af8"
+      },
+      {
+        "path": "packages/chain-solana/src/plan.ts",
+        "sha256": "ef5e14a71bf9a15886d071b9455c03a55b22538da1161891d968bc3fdd1be4c0"
+      },
+      {
+        "path": "packages/chain-solana/src/policy.ts",
+        "sha256": "047238dfa2cf89b2f91dda4fdfc543f06299bf94547473768d1cf07510d3e186"
+      },
+      {
+        "path": "packages/chain-solana/src/reader.ts",
+        "sha256": "678e64326a997d18feff72803c2b08e234b92e12e9c336220e61c743bc51e2c0"
+      },
+      {
+        "path": "packages/chain-solana/src/recovery.ts",
+        "sha256": "b56b98c17061a047d3e0b223bbe4adbb84232c1104fe3d0fc31f43aa6b1a9c8e"
+      },
+      {
+        "path": "packages/chain-solana/src/submit.ts",
+        "sha256": "575e9f79e96c41c010591eba001f87eab0d04d197c3bb16495213037fe7c3856"
+      },
+      {
+        "path": "packages/chain-solana/src/wallet.ts",
+        "sha256": "391d8083235fb71ab873e29cc3a499787ae65ffc7ae3403daf3ab23b39c32fb1"
+      },
+      {
+        "path": "packages/chain-solana/src/window.ts",
+        "sha256": "5d322c7447a6f948f17476f6fa4b3484cb799ec54f935c749e53807cfd1b275f"
+      },
+      {
+        "path": "packages/domain/index.ts",
+        "sha256": "c9404cdbc78cc8d5989a856f9ec191ac68b797efd02df4074508d43332a4e1b1"
+      },
+      {
+        "path": "packages/domain/src/errors.ts",
+        "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5"
+      },
+      {
+        "path": "packages/domain/src/journey-view.ts",
+        "sha256": "c1c4827fe287846806270b0975b6728b542d1781147da2aa118a34f86e90314f"
+      },
+      {
+        "path": "packages/domain/src/observation-dispatcher.ts",
+        "sha256": "4029e90b88f14985542cdb41ec126c3a122422d089853d51e9d0ece544ba1ef2"
+      },
+      {
+        "path": "packages/domain/src/privacy-view.ts",
+        "sha256": "78f87e101f3b73e4bec7a19451d59063daca9c33245a65cf9dda1f89ae78e715"
+      },
+      {
+        "path": "packages/domain/src/registry.ts",
+        "sha256": "2674e7aae8f10e949ed0e22219e4727340c57c9352095aa7c5c5a04b0a605f18"
+      },
+      {
+        "path": "packages/domain/src/terms-review.ts",
+        "sha256": "21771f29867c14a4fc6f4e3e0c3ca07313fcd504c93a5314db0afb1c81c5f364"
+      },
+      {
+        "path": "packages/domain/src/trade-draft.ts",
+        "sha256": "9376a28f27287e9c6ce17940de24012e5308c6b11dcb5a09605624da025c51f1"
+      },
+      {
+        "path": "packages/domain/src/trade-terms.ts",
+        "sha256": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2"
+      },
+      {
+        "path": "packages/schemas/index.ts",
+        "sha256": "d3246790ee5c8e4213611771c2e30c0b74d36a39094f28ab0ad18f03986cfa15"
+      },
+      {
+        "path": "packages/schemas/src/core.ts",
+        "sha256": "b2e16e203d47a7add7531ffdd5701dad932e6ebd275470b66d56d8417749037e"
+      },
+      {
+        "path": "packages/schemas/src/intent.ts",
+        "sha256": "3b91d8edbae6f359c1b67eab3469f3c0ed7c02604083f15310529257f893d948"
+      },
+      {
+        "path": "packages/schemas/src/recovery-reference.ts",
+        "sha256": "52cf80934460a4c4dbe134b3be7f058ab037fe9512765b4bb48994bff4147625"
+      },
+      {
+        "path": "packages/schemas/src/registry.ts",
+        "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183"
+      },
+      {
+        "path": "packages/schemas/src/runtime.ts",
+        "sha256": "7555752bd735d2a23335d102bb1ea4a44e29fc49255f3d3b0c41750d3e90b93c"
+      },
+      {
+        "path": "packages/schemas/src/saved-review.ts",
+        "sha256": "5d6ad0a31b5c0ff880f2e7202a602bf8aa961166f51db3dc8b821cc33dd8f9c5"
+      },
+      {
+        "path": "packages/schemas/src/solana-recovery-reference.ts",
+        "sha256": "2684bec2dd59d3760b50fb9a58d9780d39b1b8e05c292c532397e0d738cb8897"
+      },
+      {
+        "path": "packages/schemas/src/trade-drafts.ts",
+        "sha256": "964ee6756b1ad68b2489a51147542f09c6d287c9dc5efbaa7ad3f02622d60838"
+      },
+      {
+        "path": "packages/schemas/src/transport-selection.ts",
+        "sha256": "23298bcc145008000acffb1632a9be35729ae3e99d7db458a3fd762caabaae42"
+      },
+      {
+        "path": "packages/schemas/src/transport.ts",
+        "sha256": "084c0b5e16975340911f7e4f70eaf5d3823799b7cb19037db5012f6d3c892dc8"
+      },
+      {
+        "path": "packages/schemas/src/vault.ts",
+        "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8"
+      },
+      {
+        "path": "packages/security/index.ts",
+        "sha256": "5d10ac31c235c8ec4b6cfafa0c6b13367175dead87f5209da95aceabe83184a9"
+      },
+      {
+        "path": "packages/security/src/acceptance-gates.ts",
+        "sha256": "1377c53a6cf794c5d0af1f2b40f999f4e7409fbd70153ef3c399f6f80eed041b"
+      },
+      {
+        "path": "packages/security/src/content-policy.ts",
+        "sha256": "4685e0018840b551557fab53834971bba1751cb92f436e0409ad2510dde72381"
+      },
+      {
+        "path": "packages/security/src/release-locator.ts",
+        "sha256": "a9de13ed5853f2c58c9ea6c725346b60da47958bc180adc07a50b81c1ca6c4e4"
+      },
+      {
+        "path": "packages/security/src/release-manifest.ts",
+        "sha256": "d01f4becc6e88cf2ff2a3ddfa9909c83147154f86f60fead0629daa56d7a4969"
+      },
+      {
+        "path": "packages/security/src/release-proof.ts",
+        "sha256": "309f3660a5ce5a4d5d15f549bdcb54fde8749c18b3464a7b23a85b544c34fafe"
+      },
+      {
+        "path": "packages/storage/src/vault-crypto.ts",
+        "sha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513"
+      },
+      {
+        "path": "scripts/lib/chromium-path.mjs",
+        "sha256": "c4e049e5739047ae82f800758f3085b2161f94a712c1509c28d2232d20818728"
+      },
+      {
+        "path": "scripts/lib/is-main.mjs",
+        "sha256": "122a4e55eb0f064ecbc3bd48e4ef21a5880267418af0fc0dc23d0a96654af3eb"
+      },
+      {
+        "path": "scripts/lib/solana-localnet-browser-fixture.mjs",
+        "sha256": "5c11d48d153d0daa668288bf794bfb05bc931604aa42ed26efaba1f5c0339ab9"
+      },
+      {
+        "path": "scripts/lib/solana-localnet-fixture.mjs",
+        "sha256": "d6a554f5ac1f3384c6b094a29cdb24b30980d22ec94e192bedddba875923d1fd"
+      },
+      {
+        "path": "scripts/lib/solana-localnet-send-evidence.mjs",
+        "sha256": "da767a37f483251e30b77d15f25101df7a6ab570c3d3b3c9868a3e3fdee208b5"
+      },
+      {
+        "path": "scripts/lib/solana-localnet-withheld-send.mjs",
+        "sha256": "b4d2f20c16e4ac1cea943a1b915fd7b0f972d1d9c3de695f715cae0a60f54b32"
+      },
+      {
+        "path": "scripts/test-solana-localnet-browser.mjs",
+        "sha256": "18453ace44c314314c8eca6cb47b32fde02b1c2c63017ad39f502aa68c7ec7ac"
+      }
+    ],
+    "warnings": [],
+    "outputs": [
+      {
+        "file": "compiled-driver-0.mjs.gz",
+        "rawBytes": 309234,
+        "rawSha256": "a11a99c81b7555ab587ddf580f790571638c852d9dcb371da4ee38727e95b1aa",
+        "compressedBytes": 82198,
+        "compressedSha256": "eeb819e9de2bd31986fa2f1ca2617b37c13cde770bbf78e6a2152ef9f4473140",
+        "gzipMtime": 0
+      },
+      {
+        "file": "compiled-driver-1.mjs.gz",
+        "rawBytes": 16390,
+        "rawSha256": "419dc2822a17c03bf44b609f9e10a81309831c275b88c5c8994c463bc001faf5",
+        "compressedBytes": 5612,
+        "compressedSha256": "7ad6c6390ac52b0bbfcf1740e7f3c87221a94fbb00312c153eb0f727a784ca31",
+        "gzipMtime": 0
+      },
+      {
+        "file": "compiled-driver-2.mjs.gz",
+        "rawBytes": 91597,
+        "rawSha256": "b715263a39dcf344efa91f7f22a76212ad01a17fce294d841015701e1bf5784d",
+        "compressedBytes": 28604,
+        "compressedSha256": "8cd2b94559242ad858cb291dad38e2792e85991b740781a87011f0b2fad4b21b",
+        "gzipMtime": 0
+      }
+    ],
+    "external": "Node builtins and bare package imports",
+    "nativeBrowserExecuted": false,
+    "nativeValidatorExecuted": false,
+    "compiledOutputExecuted": false,
+    "ReleaseEnabled": 0
+  },
+  "sourcePreservation": {
+    "baseline": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+    "originalDriverLinesPreserved": 190,
+    "driverAddedLines": 34,
+    "legacyFunctionsByteIdentical": [
+      "readSolanaVaultRecords",
+      "assertSolanaSendMarked"
+    ],
+    "fixtureChange": "Only import and awaited proposal-aware oracle call",
+    "financialFixturesUnchanged": true,
+    "fullMainWhitespacePassed": true,
+    "currentUISelectorsVerified": [
+      "Funding proposal JSON",
+      "Save seller funding proposal",
+      "data-proposal-id",
+      "Saved proposal",
+      "Original provenance preserved after restore",
+      "Your encrypted recovery profile"
+    ],
+    "driverSha256": "18453ace44c314314c8eca6cb47b32fde02b1c2c63017ad39f502aa68c7ec7ac",
+    "nativeExecuted": false
+  },
+  "verifierVersions": {
+    "schema": "retained-source-verifier-version-map.v1",
+    "reconstruction": "The earlier verifier is reconstructed exactly by reversing the later additive UI-selector edit; no command was rerun. Original execution receipts remain unchanged.",
+    "executions": {
+      "04-original-financial-source-preservation": {
+        "file": "verify-source-before-admission.py",
+        "sha256": "66d079a670f6d583f7fb4a5939673f3832cb77e4de0b2094aa655bdf257e3bf6"
+      },
+      "08-final-source-preservation": {
+        "file": "verify-source.py",
+        "sha256": "c5cccb98b7ad459e6b739845cf9254cdad1e90d942e2758c4f434ab86f8bdd86"
+      }
+    }
+  },
+  "nativeBrowserExecuted": false,
+  "nativeValidatorExecuted": false,
+  "compiledOutputExecuted": false,
+  "ReleaseEnabled": 0,
+  "limits": [
+    "The first baseline reported 4/7 passing because three negative tests accidentally caught the missing-helper assertion. That full output and source are preserved. Explicit helper-presence checks before rejection assertions produce the final 1/7 baseline with six intended missing-helper failures; no production behavior was relaxed.",
+    "The seven new oracle cases and one maintained physical-send case are controlled Node checks. They do not execute the browser driver, IndexedDB, a validator or a financial journey.",
+    "The browser driver gains a real UI proposal-save step, exact encrypted-record assertions and restoration/idle-unlock checks for the existing absent escrow. Its original 190 lines remain in order; original financial assertions and waits are unchanged.",
+    "The proposal-aware wrapper admits only exact G35 records validated by the maintained decoder. Every remaining record reaches the unchanged strict legacy recovery/journal oracle. The original physical-send verifier remains byte-identical.",
+    "The Node driver compilation emits and retains code and module hashes without evaluating generated code. It is not a configured-browser build or actual native acceptance.",
+    "The earlier source verifier is reconstructed exactly by reversing the later additive UI-selector edit; both versions and their mapping are retained without rerunning either execution. Original execution receipts remain unchanged.",
+    "Read-only setup path/glob failures are retained as a clearly labeled recovered diagnostic summary. They are not original validation logs and did not change source or test claims.",
+    "The coordinator owns full repository qualification, current-source/current-target hosted acceptance and merge authorization. No remote publication, release, optional activation, new financial wait, validator setup, trust, key or endpoint was introduced by this companion."
+  ]
+}
