@@ -1,3 +1,55 @@
+# Current feature coverage — generations 35–37 (2026-11-20 UTC)
+
+Corrected combined source `88bd126bace2b88886017b0ff4eb5daffcdc060e`, tree
+`5ecf56b74e82f04b4fed8961179a46bcbd330def`, passed **2,915/2,915 tests**,
+zero other outcomes, and all six additional qualification commands. Independent
+source and composition reviews accept that exact source. Packaged checkpoint
+`d77b17e33382a8968b3a71144266d12eb7421085` preserves all 1,043 source
+entries. The complete G35–G37 delta above actual PR241 is 21 paths, with actual
+PR241/PR240 ancestry preserved.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| Public/private funding proposal | G35 exact 4 KiB public and 8 KiB private codecs derive and validate full binding/record identity, all immutable terms and original profile/configuration provenance. Historical data remains readable without installing saved configuration. | Parsed data grants no wallet or economic authority. The existing native planner still decides eligibility, including the G34 core-capability guard. |
+| Explicit encrypted admission | G36 proposal import performs one encrypted CAS and no RPC/wallet/preparation; duplicates preserve original bytes. Eight distinct bindings are shared with funded recovery, with collision/occupied-ID checks and readable legacy overflow. | Admission is seller-direct local proposal storage. It does not establish bilateral acceptance, escrow funding or public-network qualification. |
+| Original seller review and confirmation | G37 dedicated proposal commands retain original proposal/bound/wallet/client/profile/session/epoch and prepared handle. G33 immutable terms/message display now has actual consumers; confirmation remains one-shot with physical prompt ownership. | Projection remains data-only; fees/rent/total are unknown. Actual hosted execution of the new browser funding journey is still required. |
+| Reconciliation, restore and promotion | A live review reconciles without orphan cancellation. Foreign-profile uncertainty and explicit dropped-intent rebuild remain. Only trusted finalized native escrow observation promotes recovery with original provenance, occupancy/revision CAS guards and pending-intent exit gates. | Signatures and intermediate journal states prove no finality. Existing recovery admission, native guards and no-auto-resend rules continue to apply. |
+| Snapshot lifecycle correction | Independent G37-R1 reproduced a genuine idle-expiry null dereference. Pure view reference checks now avoid mid-projection revocation while action-side currentness guards remain; one maintained regression and independent probes pass. | Original initial-source 2,914/2,914 and pre-fix failures stay historical. Corrected-source qualification is 2,915/2,915; overlapping selections are not added. |
+| Separate native funding oracle | Fixed funding verifier re-decodes saved provenance, full installed binding, durable marker, maintained message and independent signature proof. Old exit oracle/readers, per-trade financial assertions, withheld acknowledgment and refund waits are unchanged. Driver expects one new fund plus seven old exit sends, nine total prompts. | The 70-input, three-chunk fixture was compiled only; all input hashes match corrected source. It was never executed locally. Tier C actual native acceptance remains open. |
+| Ordinary artifacts and source evidence | Default/demo remain 12 assets / 817,257 bytes and 13 / 829,355 bytes, with graphs 102/30/4 and 104/30/4. Both 27-file initial/corrected output sets match. Complete logs, source mappings, original failures and independent reviews are retained. | Ordinary build identity and 37-module updater preparation establish no native or physical-device acceptance. ReleaseEnabled remains 0; connection origins stay empty. |
+| Main branch consolidation | PR236 actually merged to main 01f6f4fe with matching qualified tree/ordered parents and actual older-source native receipts. PR233 is auto-merged by containment; PR234/235 are closed as superseded; original branches are preserved. | Earlier main acceptance does not qualify the later funding code. PR237–239 retain separate named review and current-target gates. |
+
+The active integration plan is **one complete G35+G36+G37 draft above frozen
+PR241 `29491c2842e0aedcb00a674cbfffb9edc2424013`**, targeting its published
+branch and preserving actual PR240 ancestry. No new PR number, published head
+or standalone G35/G36 PR is claimed here. PR240 remains held and unmerged;
+PR241 retains its separate Tier C actual native prepare-and-confirm acceptance
+and matching recorded owner authorization. The new browser candidate needs its
+own actual-source/actual-target hosted funding/promotion acceptance and matching
+PR-recorded owner authorization.
+
+At the coordinator's **21:33:07 UTC** readback, all 12 PR237 checks passed, but
+its proposal still had the old PR236 source as first parent after retargeting
+to main. Its owner-account coordination comment is not a qualifying review.
+Standalone PR237/238/239 still require **CodeRabbit or Qodo pass with findings
+answered**. PR241 had two checks successful, two running and eight queued with
+no matching owner approval. These are dated retained observations, not a new
+remote check by this handoff worker. Reconcile actual source/target gates after
+parent merges. Separate G38 portable-proposal work is active and absent here;
+optional PR224–232 and audits184–186 retain their owners.
+
+Read the [G35–G37 continuation](CONTINUATION_GENERATIONS35_37_20261120.md),
+[corrected qualification](qualification-generation37.json),
+[retained logs](retained-logs-generation37.json),
+[independent source review](SOLANA_BROWSER_FUNDING_FLOW_INDEPENDENT_REVIEW_GENERATION37_20261120.md),
+[composition review](SOLANA_BROWSER_FUNDING_FLOW_COMPOSITION_REVIEW_GENERATION37_20261120.md)
+and [actual main-merge proof](generation28-main-merge.json).
+Earlier narrative bytes below remain exact historical suffixes, including
+superseded publication and ownership labels; their hashes are recorded in the
+new continuation.
+
+---
+
 # Current feature coverage — generations 33–34 (2026-11-20 UTC)
 
 Frozen combined source `0b7832d1c5b348a0755d59152442d0318d4a620c`, tree

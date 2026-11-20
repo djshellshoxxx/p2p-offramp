@@ -1,0 +1,187 @@
+{
+  "source": "4228040248963389d7dae28881f1db2927ca54ec",
+  "authorEvidence": "adbdffdc95654a4a0bb4a642e41d7343aad4ff39",
+  "authorEvidenceTree": "8ee56cacbd9f6aa3191f605a529af6eb9c02526a",
+  "manifest": "docs/execution/solana-funding-proposal-generation35-20261120/receipt.json",
+  "manifestSha256": "aa7a405bd4d1ebb204d8b9ab39f9af9dac6f5a4b341cfe86f2c865c6fd4f6e3c",
+  "artifactCount": 16,
+  "artifacts": [
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/01-baseline.log.gz",
+      "compressedSha256": "6a5f43427c38d652716f38960498a7c4609d3ee28081813a3ef931c8561a5da8",
+      "decodedSha256": "715c1a9d1f8acb46c6a83419f6b7e751ea07275a11fa03690eb3cee3bbebb540",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/01-baseline.patch.gz",
+      "compressedSha256": "97d70862928142fbac636c6682d51f86130f6de551214cc6e0f7795e617b0815",
+      "decodedSha256": "73a3d842970822590476e71ebc49a865bcebfd763c244dcaf32902ec8fef42ea",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/02-first-implementation.log.gz",
+      "compressedSha256": "12a9b9e1849eac6c3ba46f34269cdba9ca4e491a37340dba4811e18b28cbd406",
+      "decodedSha256": "1c1a1373bb24b84a98f1444aa26fc72db6b16aa9776351590b917c2754e091d9",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/02-first-implementation.patch.gz",
+      "compressedSha256": "e55edcba6e70860c94156b5afa65b6009ff6da1d66fb6f7a6f1cf2b81c0b762b",
+      "decodedSha256": "c8aab6b31bd16483479cb1701c9028323d1ab5a45b493e931aeedbbbf53e080e",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/03-ui-typescript.log.gz",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/03-ui-typescript.patch.gz",
+      "compressedSha256": "e55edcba6e70860c94156b5afa65b6009ff6da1d66fb6f7a6f1cf2b81c0b762b",
+      "decodedSha256": "c8aab6b31bd16483479cb1701c9028323d1ab5a45b493e931aeedbbbf53e080e",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/04-focused-corrected.log.gz",
+      "compressedSha256": "c28455d80df1953c6d653bc2c0fda15cc2ec39c3401721a435f443717c7e3918",
+      "decodedSha256": "610626dc965bc9331fb23a456caec013e6acb2b4830474f5934a95d8b96bb1fe",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/04-focused-corrected.patch.gz",
+      "compressedSha256": "90a819818b5d97342e0bcac4a5d96f4f5338127d999173df8ab9aec4945b0481",
+      "decodedSha256": "6e6c78e208b82dfb38c9f9cd931d45e92066c1a5c1fb2a6d91271254aa38aaf5",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/05-boundaries.log.gz",
+      "compressedSha256": "01563b399db9a8f5e230455be16e6bba2e094357f8477c7d967d5aebeba0d20b",
+      "decodedSha256": "57b3c937bbdb01e88c246681dbbd7f8e0e638bc3aa23bc8017283572b8164f3f",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/05-boundaries.patch.gz",
+      "compressedSha256": "90a819818b5d97342e0bcac4a5d96f4f5338127d999173df8ab9aec4945b0481",
+      "decodedSha256": "6e6c78e208b82dfb38c9f9cd931d45e92066c1a5c1fb2a6d91271254aa38aaf5",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/06-frozen-typescript.log.gz",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/06-frozen-typescript.patch.gz",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/07-frozen-whitespace.log.gz",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/07-frozen-whitespace.patch.gz",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/run.py.gz",
+      "compressedSha256": "89613cf921042378df9b8fb32886d82cb0d83fff9635ee8b76b3415abfd100a1",
+      "decodedSha256": "1c07f608eef630efa597b0dbeec09f4c3b69fd19fb07ddd754d601145eb0cd16",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/source.patch.gz",
+      "compressedSha256": "90a819818b5d97342e0bcac4a5d96f4f5338127d999173df8ab9aec4945b0481",
+      "decodedSha256": "6e6c78e208b82dfb38c9f9cd931d45e92066c1a5c1fb2a6d91271254aa38aaf5",
+      "gzipMtime": 0
+    }
+  ],
+  "executionSnapshots": 7,
+  "fullWhitespaceBaseline": "8e836baa877b676a863c877003e277b638fc5061",
+  "nonDocumentationEntriesPreserved": 1035,
+  "allChangesAreAddedDocumentation": true,
+  "changedDocumentationPaths": [
+    "docs/engineering/SOLANA_FUNDING_PROPOSAL_CODEC_GENERATION35_20261120.md",
+    "docs/execution/solana-funding-proposal-generation35-20261120/01-baseline.log.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/01-baseline.patch.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/02-first-implementation.log.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/02-first-implementation.patch.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/03-ui-typescript.log.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/03-ui-typescript.patch.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/04-focused-corrected.log.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/04-focused-corrected.patch.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/05-boundaries.log.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/05-boundaries.patch.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/06-frozen-typescript.log.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/06-frozen-typescript.patch.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/07-frozen-whitespace.log.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/07-frozen-whitespace.patch.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/execution-snapshot-verification.json",
+    "docs/execution/solana-funding-proposal-generation35-20261120/receipt.json",
+    "docs/execution/solana-funding-proposal-generation35-20261120/run.py.gz",
+    "docs/execution/solana-funding-proposal-generation35-20261120/source.patch.gz"
+  ],
+  "authorSnapshotVerificationSha256": "e909c60a8620fd33e99026df62995b02f4f613e54b7c0462a1a057632fb8aeef",
+  "authorSnapshotVerification": {
+    "schema": "p2p-offramp.generation35-execution-snapshots.v1",
+    "snapshots": [
+      {
+        "command": "01-baseline",
+        "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+        "executionTree": "12df5f52124c8853533c2221d07699ae6758641e",
+        "reconstructedTree": "12df5f52124c8853533c2221d07699ae6758641e",
+        "fullBinaryPatchExact": true
+      },
+      {
+        "command": "02-first-implementation",
+        "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+        "executionTree": "f570971e723b8d76973773e45a985fec490ece93",
+        "reconstructedTree": "f570971e723b8d76973773e45a985fec490ece93",
+        "fullBinaryPatchExact": true
+      },
+      {
+        "command": "03-ui-typescript",
+        "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+        "executionTree": "f570971e723b8d76973773e45a985fec490ece93",
+        "reconstructedTree": "f570971e723b8d76973773e45a985fec490ece93",
+        "fullBinaryPatchExact": true
+      },
+      {
+        "command": "04-focused-corrected",
+        "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+        "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+        "reconstructedTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+        "fullBinaryPatchExact": true
+      },
+      {
+        "command": "05-boundaries",
+        "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+        "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+        "reconstructedTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+        "fullBinaryPatchExact": true
+      },
+      {
+        "command": "06-frozen-typescript",
+        "source": "4228040248963389d7dae28881f1db2927ca54ec",
+        "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+        "reconstructedTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+        "fullBinaryPatchExact": true
+      },
+      {
+        "command": "07-frozen-whitespace",
+        "source": "4228040248963389d7dae28881f1db2927ca54ec",
+        "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+        "reconstructedTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+        "fullBinaryPatchExact": true
+      }
+    ],
+    "allReconstructed": true
+  }
+}

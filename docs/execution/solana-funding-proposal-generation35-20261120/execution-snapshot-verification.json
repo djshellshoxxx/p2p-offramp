@@ -1,0 +1,55 @@
+{
+  "schema": "p2p-offramp.generation35-execution-snapshots.v1",
+  "snapshots": [
+    {
+      "command": "01-baseline",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "12df5f52124c8853533c2221d07699ae6758641e",
+      "reconstructedTree": "12df5f52124c8853533c2221d07699ae6758641e",
+      "fullBinaryPatchExact": true
+    },
+    {
+      "command": "02-first-implementation",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "f570971e723b8d76973773e45a985fec490ece93",
+      "reconstructedTree": "f570971e723b8d76973773e45a985fec490ece93",
+      "fullBinaryPatchExact": true
+    },
+    {
+      "command": "03-ui-typescript",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "f570971e723b8d76973773e45a985fec490ece93",
+      "reconstructedTree": "f570971e723b8d76973773e45a985fec490ece93",
+      "fullBinaryPatchExact": true
+    },
+    {
+      "command": "04-focused-corrected",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "reconstructedTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "fullBinaryPatchExact": true
+    },
+    {
+      "command": "05-boundaries",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "reconstructedTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "fullBinaryPatchExact": true
+    },
+    {
+      "command": "06-frozen-typescript",
+      "source": "4228040248963389d7dae28881f1db2927ca54ec",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "reconstructedTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "fullBinaryPatchExact": true
+    },
+    {
+      "command": "07-frozen-whitespace",
+      "source": "4228040248963389d7dae28881f1db2927ca54ec",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "reconstructedTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "fullBinaryPatchExact": true
+    }
+  ],
+  "allReconstructed": true
+}

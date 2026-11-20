@@ -1,0 +1,64 @@
+{
+  "schema": "p2p-offramp.g36-author-execution-snapshots.v1",
+  "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+  "tree": "df931285bd7e1818db6736ba968930375bd6cb68",
+  "snapshots": [
+    {
+      "name": "01-admission-baseline",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "7a21985cb81eaa90d81d20b0cd7ca390b68b869c",
+      "patchSha256": "fab1b6540ea76ae4dd38150e5e3fab89b4a219856c1659134ef2fd058b279608",
+      "exactReconstruction": true,
+      "matchesFrozenSource": false
+    },
+    {
+      "name": "02-admission-implementation",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "d67a10ab0f55aac47b059d4dd0b9dafb8058f6fa",
+      "patchSha256": "bc031c22b0a769099e1d17119d1837c0e7aee3e0bac9cef6097b4020ee1aa47b",
+      "exactReconstruction": true,
+      "matchesFrozenSource": false
+    },
+    {
+      "name": "03-ui-client",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "b5e659850aa74febd62d218fc39b131f8fe02e0f",
+      "patchSha256": "20751f61b8f56838fda510cebcf8a737a31d1b21ce6fee8f24ca7955c9d0bcf7",
+      "exactReconstruction": true,
+      "matchesFrozenSource": false
+    },
+    {
+      "name": "04-scoped-regressions",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "patchSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "exactReconstruction": true,
+      "matchesFrozenSource": true
+    },
+    {
+      "name": "05-typecheck",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "patchSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "exactReconstruction": true,
+      "matchesFrozenSource": true
+    },
+    {
+      "name": "06-boundaries",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "patchSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "exactReconstruction": true,
+      "matchesFrozenSource": true
+    },
+    {
+      "name": "07-full-whitespace",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "patchSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "exactReconstruction": true,
+      "matchesFrozenSource": true
+    }
+  ],
+  "allVerified": true
+}

@@ -1,0 +1,9 @@
+{
+  "recordedAt": "2026-11-20T20:06:52.677546+00:00",
+  "base": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+  "tree": "78de2de3db335147d8261ad5ab9b116976faf986",
+  "branch": "codex/funding-proposal-codec-review-g35-20261120",
+  "worktree": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-review-g35",
+  "dependencyPreparation": "Immutable physical hardlink copy; no package install or mutation",
+  "gitStatus": ""
+}

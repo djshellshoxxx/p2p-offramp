@@ -1,0 +1,88 @@
+import datetime
+import gzip
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+REPO = Path('/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-review-g35')
+OUT = Path(__file__).resolve().parent
+PARENT = '54a5245faf9340e5ec74abeb5ee39b9e81f6e6af'
+PREFIX = Path('docs/engineering/evidence/solana-funding-proposal-composition-independent-review-generation35')
+TARGET = REPO / PREFIX
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == PARENT
+assert not git('status', '--porcelain').strip()
+assert not TARGET.exists()
+TARGET.mkdir(parents=True)
+artifacts = []
+for path in sorted(OUT.rglob('*.gz')):
+    relative = path.relative_to(OUT)
+    raw = path.read_bytes()
+    content = gzip.decompress(raw)
+    assert int.from_bytes(raw[4:8], 'little') == 0
+    destination = TARGET / relative
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(raw)
+    artifacts.append({'path': (PREFIX / relative).as_posix(), 'bytes': len(raw), 'sha256': sha(raw),
+                      'rawBytes': len(content), 'rawSha256': sha(content), 'gzipMtime': 0})
+assert len(artifacts) == 35
+for name, suffix, compress in [
+    ('capture-check.py', '.txt', False),
+    ('check-root-qualification.py', '.txt', False),
+    ('package-composition-review.py', '.txt', False),
+    ('root-qualification-verification.json', '', False),
+    ('combined-qualification-verification.json', '', False),
+    ('combined-qualification-verification.log', '.gz', True),
+]:
+    original = (OUT / name).read_bytes()
+    raw = gzip.compress(original, mtime=0) if compress else original
+    (TARGET / (name + suffix)).write_bytes(raw)
+    artifacts.append({'path': (PREFIX / (name + suffix)).as_posix(), 'bytes': len(raw), 'sha256': sha(raw),
+                      'rawBytes': len(original), 'rawSha256': sha(original), 'gzipMtime': 0 if compress else None})
+verification = json.loads((OUT / 'root-qualification-verification.json').read_bytes())
+command = json.loads((OUT / 'combined-qualification-verification.json').read_bytes())
+assert command['source'] == command['finalSource'] == PARENT and command['cleanTrackedWorktree']
+assert command['exitCode'] == 0
+log = (OUT / 'combined-qualification-verification.log').read_bytes()
+assert sha(log) == command['sha256'] and len(log) == command['bytes']
+receipt = {
+    'schema': 'p2p-offramp.solana-funding-proposal-composition-review.generation35.v1',
+    'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'source': verification['source'], 'tree': verification['tree'],
+    'reviewEvidenceParent': PARENT, 'authorSource': verification['authorSource'],
+    'publishedParent': verification['publishedParent'],
+    'publishedParentPr': verification['publishedParentPr'],
+    'targetSemantics': verification['targetSemantics'],
+    'qualificationStartedAt': verification['qualificationStartedAt'],
+    'qualificationCompletedAt': verification['qualificationCompletedAt'],
+    'findings': [], 'verification': verification, 'reviewCommands': [command], 'artifacts': artifacts,
+    'limits': [
+        'This is a locally qualified G35 component above frozen PR241 for later actual browser admission and funding integration; no standalone inactive-codec PR is planned.',
+        'The published PR241 parent and every one of its entries remain intact; the only source additions are the codec and focused tests.',
+        'No full suite or build was rerun by this reviewer; completed coordinator receipts, full logs and actual files were verified.',
+        'Native updater fixture compilation does not establish Solana prepared-funding browser/validator acceptance.',
+        'The eventual actual admission/funding candidate still requires applicable hosted checks and matching recorded owner authorization; local data-only qualification does not supply either.',
+        'No deployment, release, optional activation, remote mutation or real financial execution occurred; ReleaseEnabled remains 0.',
+    ],
+}
+receipt_path = REPO / 'docs/engineering/solana-funding-proposal-composition-review-generation35.json'
+report_path = REPO / 'docs/engineering/INDEPENDENT_SOLANA_FUNDING_PROPOSAL_COMPOSITION_REVIEW_GENERATION35_20261120.md'
+assert not receipt_path.exists() and not report_path.exists()
+receipt_path.write_text(json.dumps(receipt, indent=2) + '\n')
+report_path.write_bytes((OUT / 'report.md').read_bytes())
+for item in artifacts:
+    raw = (REPO / item['path']).read_bytes()
+    assert sha(raw) == item['sha256'] and len(raw) == item['bytes']
+print(json.dumps({'source': verification['source'], 'reviewParent': PARENT,
+                  'retainedArtifacts': len(artifacts), 'report': str(report_path),
+                  'receipt': str(receipt_path)}, indent=2))

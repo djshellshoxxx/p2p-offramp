@@ -1,4 +1,4 @@
-/** Pure native-SOL review data. This module grants no authority and has no application command consumer. */
+/** Pure native-SOL display data for explicit app funding review. This module grants no authority. */
 import { parseIntentId } from '../../schemas/index.ts';
 import { deepFreeze, isBoundSolanaTrade, type BoundSolanaTrade } from './bind.ts';
 import { decimalU64, decodeBase64, fail, fromHex32 } from './codec.ts';

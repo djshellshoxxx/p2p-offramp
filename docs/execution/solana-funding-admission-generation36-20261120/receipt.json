@@ -1,0 +1,509 @@
+{
+  "schema": "p2p-offramp.solana-funding-admission-generation36.v1",
+  "recordedAt": "2026-11-20T20:37:58.544598+00:00",
+  "base": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+  "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+  "tree": "df931285bd7e1818db6736ba968930375bd6cb68",
+  "worktree": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-g36",
+  "branch": "codex/funding-admission-g36-20261120",
+  "changedPaths": [
+    "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+    "apps/web/src/solana-localnet/client.ts",
+    "apps/web/src/solana-localnet/controller.ts",
+    "apps/web/src/solana-localnet/protocol.ts",
+    "apps/web/src/solana-localnet/validation.ts",
+    "apps/web/test/solana-funding-admission-ui.test.mjs",
+    "apps/web/test/solana-localnet-funding-admission.test.mjs",
+    "apps/web/test/solana-public-recovery-ui.test.mjs"
+  ],
+  "sourceScope": {
+    "added": [
+      "apps/web/test/solana-funding-admission-ui.test.mjs",
+      "apps/web/test/solana-localnet-funding-admission.test.mjs"
+    ],
+    "modified": [
+      "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+      "apps/web/src/solana-localnet/client.ts",
+      "apps/web/src/solana-localnet/controller.ts",
+      "apps/web/src/solana-localnet/protocol.ts",
+      "apps/web/src/solana-localnet/validation.ts",
+      "apps/web/test/solana-public-recovery-ui.test.mjs"
+    ],
+    "deleted": [],
+    "nonDocumentationEntries": 1037,
+    "gitlinksIncluded": true
+  },
+  "sourceBlobs": {
+    "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx": {
+      "gitEntry": "100644 blob 381939e2d3002a29556bd4b29da96ce95f0a3d55",
+      "sha256": "a056a3aab76b5262bd8bdc4db45ba5e1844a1f2f4bf2b2dc14ed02bba032c01a"
+    },
+    "apps/web/src/solana-localnet/client.ts": {
+      "gitEntry": "100644 blob f25ac051b91427d2c7f75f28463ff8f7f4640887",
+      "sha256": "fcb00018523d5205d7732a361ca59e33a5a468be4084467451467710d6337ef8"
+    },
+    "apps/web/src/solana-localnet/controller.ts": {
+      "gitEntry": "100644 blob b3c75d9121e61b897f73abd93cda4f3b718b0198",
+      "sha256": "a2c12045ee85b43209a0b11c1a7fb8d50f4f0a677573fe367eb00a64f00263eb"
+    },
+    "apps/web/src/solana-localnet/protocol.ts": {
+      "gitEntry": "100644 blob 63de3ab41e9a809e187ec337de72e781e38e7fec",
+      "sha256": "d36282ef72fd4a126585cf8f1f9a8d91aaa075687eb66a41fc32f93d87d38d7a"
+    },
+    "apps/web/src/solana-localnet/validation.ts": {
+      "gitEntry": "100644 blob a27f6141a89f53d73bb56e472b289c2c11a4256b",
+      "sha256": "332f21ac7e2d1ee077ab442eb45bc9cd1723f69c925d6a6c4c9708b8dc6868e7"
+    },
+    "apps/web/test/solana-funding-admission-ui.test.mjs": {
+      "gitEntry": "100644 blob 0f46f18ec08a30754308f0a8ddbd4a41a5d1c93f",
+      "sha256": "b76d63e584466349de0e962310f3bd842cb82d814e44536eb31c575b3324aa81"
+    },
+    "apps/web/test/solana-localnet-funding-admission.test.mjs": {
+      "gitEntry": "100644 blob ef676c3c5cb19e0370eb7e434e9bc1245f103cba",
+      "sha256": "af295c7c883bd1e5c2eb98b9289168f71cb7d333be1c6dedecbbe825a3892288"
+    },
+    "apps/web/test/solana-public-recovery-ui.test.mjs": {
+      "gitEntry": "100644 blob 778a31fad89c0e4138d9d8010062d1f09d69a5b9",
+      "sha256": "0cff1aa79ffb34ce98645ef6ad04ca4f2d99a464156d1b065868dc5856e46583"
+    }
+  },
+  "commands": [
+    {
+      "name": "01-admission-baseline",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "7a21985cb81eaa90d81d20b0cd7ca390b68b869c",
+      "command": [
+        "node",
+        "--test",
+        "apps/web/test/solana-localnet-funding-admission.test.mjs"
+      ],
+      "startedAt": "2026-11-20T20:29:44.298352+00:00",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/01-admission-baseline.patch",
+      "patchSha256": "fab1b6540ea76ae4dd38150e5e3fab89b4a219856c1659134ef2fd058b279608",
+      "statusBefore": "?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "completedAt": "2026-11-20T20:29:47.408307+00:00",
+      "exitCode": 1,
+      "counts": {
+        "tests": 26,
+        "pass": 0,
+        "fail": 26,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/01-admission-baseline.log",
+      "bytes": 24587,
+      "sha256": "2082f37140937e10cfe2aa82f7e6e70f8f1ee7130ea39619522b2194f90126cb",
+      "executionTreeAfter": "7a21985cb81eaa90d81d20b0cd7ca390b68b869c",
+      "unchangedExecutionTree": true,
+      "statusAfter": "?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "retainedLog": "docs/execution/solana-funding-admission-generation36-20261120/01-admission-baseline.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-admission-generation36-20261120/01-admission-baseline.patch.gz",
+      "retainedOriginalReceipt": "docs/execution/solana-funding-admission-generation36-20261120/01-admission-baseline.json.gz",
+      "patchBytes": 18564,
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-g36"
+    },
+    {
+      "name": "02-admission-implementation",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "d67a10ab0f55aac47b059d4dd0b9dafb8058f6fa",
+      "command": [
+        "node",
+        "--test",
+        "apps/web/test/solana-localnet-funding-admission.test.mjs"
+      ],
+      "startedAt": "2026-11-20T20:31:28.126330+00:00",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/02-admission-implementation.patch",
+      "patchSha256": "bc031c22b0a769099e1d17119d1837c0e7aee3e0bac9cef6097b4020ee1aa47b",
+      "statusBefore": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "completedAt": "2026-11-20T20:31:36.549412+00:00",
+      "exitCode": 0,
+      "counts": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/02-admission-implementation.log",
+      "bytes": 2753,
+      "sha256": "14cf4b1fba5cde992e6ee142aec3b56a7dd0fce2f2b2f3ebafbacd3fa4646cb0",
+      "executionTreeAfter": "d67a10ab0f55aac47b059d4dd0b9dafb8058f6fa",
+      "unchangedExecutionTree": true,
+      "statusAfter": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "retainedLog": "docs/execution/solana-funding-admission-generation36-20261120/02-admission-implementation.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-admission-generation36-20261120/02-admission-implementation.patch.gz",
+      "retainedOriginalReceipt": "docs/execution/solana-funding-admission-generation36-20261120/02-admission-implementation.json.gz",
+      "patchBytes": 48228,
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-g36"
+    },
+    {
+      "name": "03-ui-client",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "b5e659850aa74febd62d218fc39b131f8fe02e0f",
+      "command": [
+        "node",
+        "--test",
+        "apps/web/test/solana-funding-admission-ui.test.mjs",
+        "apps/web/test/solana-public-recovery-ui.test.mjs",
+        "apps/web/test/solana-localnet-restore-lifecycle.test.mjs"
+      ],
+      "startedAt": "2026-11-20T20:33:45.042750+00:00",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/03-ui-client.patch",
+      "patchSha256": "20751f61b8f56838fda510cebcf8a737a31d1b21ce6fee8f24ca7955c9d0bcf7",
+      "statusBefore": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-funding-admission-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "completedAt": "2026-11-20T20:33:47.561875+00:00",
+      "exitCode": 0,
+      "counts": {
+        "tests": 20,
+        "pass": 20,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/03-ui-client.log",
+      "bytes": 1855,
+      "sha256": "21bf58f56a11b600ae8a670fc6c371fbd977c3ffe9312c7665ce6f589530099a",
+      "executionTreeAfter": "b5e659850aa74febd62d218fc39b131f8fe02e0f",
+      "unchangedExecutionTree": true,
+      "statusAfter": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-funding-admission-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "retainedLog": "docs/execution/solana-funding-admission-generation36-20261120/03-ui-client.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-admission-generation36-20261120/03-ui-client.patch.gz",
+      "retainedOriginalReceipt": "docs/execution/solana-funding-admission-generation36-20261120/03-ui-client.json.gz",
+      "patchBytes": 63129,
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-g36"
+    },
+    {
+      "name": "04-scoped-regressions",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "command": [
+        "node",
+        "--test",
+        "apps/web/test/solana-localnet-funding-admission.test.mjs",
+        "apps/web/test/solana-funding-admission-ui.test.mjs",
+        "apps/web/test/solana-localnet-controller.test.mjs",
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs",
+        "apps/web/test/solana-localnet-withheld-send.test.mjs",
+        "apps/web/test/solana-localnet-wallet.test.mjs",
+        "apps/web/test/solana-localnet-restore-lifecycle.test.mjs",
+        "apps/web/test/solana-public-recovery-ui.test.mjs"
+      ],
+      "startedAt": "2026-11-20T20:35:02.208533+00:00",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/04-scoped-regressions.patch",
+      "patchSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "statusBefore": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-funding-admission-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "completedAt": "2026-11-20T20:35:13.053317+00:00",
+      "exitCode": 0,
+      "counts": {
+        "tests": 153,
+        "pass": 153,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/04-scoped-regressions.log",
+      "bytes": 11987,
+      "sha256": "58568efa51fe107c936a5a66648e049adbf3f842fb6ee5a9b1e5b5124e0096eb",
+      "executionTreeAfter": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "unchangedExecutionTree": true,
+      "statusAfter": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-funding-admission-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "retainedLog": "docs/execution/solana-funding-admission-generation36-20261120/04-scoped-regressions.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-admission-generation36-20261120/04-scoped-regressions.patch.gz",
+      "retainedOriginalReceipt": "docs/execution/solana-funding-admission-generation36-20261120/04-scoped-regressions.json.gz",
+      "patchBytes": 66396,
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-g36"
+    },
+    {
+      "name": "05-typecheck",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-11-20T20:35:10.117880+00:00",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/05-typecheck.patch",
+      "patchSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "statusBefore": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-funding-admission-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "completedAt": "2026-11-20T20:35:13.214698+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/05-typecheck.log",
+      "bytes": 341,
+      "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "executionTreeAfter": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "unchangedExecutionTree": true,
+      "statusAfter": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-funding-admission-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "retainedLog": "docs/execution/solana-funding-admission-generation36-20261120/05-typecheck.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-admission-generation36-20261120/05-typecheck.patch.gz",
+      "retainedOriginalReceipt": "docs/execution/solana-funding-admission-generation36-20261120/05-typecheck.json.gz",
+      "patchBytes": 66396,
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-g36"
+    },
+    {
+      "name": "06-boundaries",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "startedAt": "2026-11-20T20:35:10.125044+00:00",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/06-boundaries.patch",
+      "patchSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "statusBefore": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-funding-admission-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "completedAt": "2026-11-20T20:35:11.842599+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/06-boundaries.log",
+      "bytes": 392,
+      "sha256": "12c40248b08325299d1256b441c41b43708180d4164d231fa28d7b782a5eeca4",
+      "executionTreeAfter": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "unchangedExecutionTree": true,
+      "statusAfter": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-funding-admission-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "retainedLog": "docs/execution/solana-funding-admission-generation36-20261120/06-boundaries.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-admission-generation36-20261120/06-boundaries.patch.gz",
+      "retainedOriginalReceipt": "docs/execution/solana-funding-admission-generation36-20261120/06-boundaries.json.gz",
+      "patchBytes": 66396,
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-g36"
+    },
+    {
+      "name": "07-full-whitespace",
+      "head": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "executionTree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "startedAt": "2026-11-20T20:36:00.148212+00:00",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/07-full-whitespace.patch",
+      "patchSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "statusBefore": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-funding-admission-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "completedAt": "2026-11-20T20:36:00.346321+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "log": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/07-full-whitespace.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "executionTreeAfter": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "unchangedExecutionTree": true,
+      "statusAfter": " M apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx\n M apps/web/src/solana-localnet/client.ts\n M apps/web/src/solana-localnet/controller.ts\n M apps/web/src/solana-localnet/protocol.ts\n M apps/web/src/solana-localnet/validation.ts\n M apps/web/test/solana-public-recovery-ui.test.mjs\n?? apps/web/test/solana-funding-admission-ui.test.mjs\n?? apps/web/test/solana-localnet-funding-admission.test.mjs\n",
+      "retainedLog": "docs/execution/solana-funding-admission-generation36-20261120/07-full-whitespace.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-admission-generation36-20261120/07-full-whitespace.patch.gz",
+      "retainedOriginalReceipt": "docs/execution/solana-funding-admission-generation36-20261120/07-full-whitespace.json.gz",
+      "patchBytes": 66396,
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-g36"
+    }
+  ],
+  "executionSnapshotVerification": "docs/execution/solana-funding-admission-generation36-20261120/execution-snapshot-verification.json",
+  "artifacts": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/01-admission-baseline.log",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/01-admission-baseline.log.gz",
+      "decodedBytes": 24587,
+      "compressedBytes": 1939,
+      "decodedSha256": "2082f37140937e10cfe2aa82f7e6e70f8f1ee7130ea39619522b2194f90126cb",
+      "compressedSha256": "d8c5c7f4a068daeee79bdc949b785b441769fe642d1e3361305804e8cea0482e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/01-admission-baseline.patch",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/01-admission-baseline.patch.gz",
+      "decodedBytes": 18564,
+      "compressedBytes": 4753,
+      "decodedSha256": "fab1b6540ea76ae4dd38150e5e3fab89b4a219856c1659134ef2fd058b279608",
+      "compressedSha256": "9ef0a3545784c660b602bd8665fe8e6ac192951175b587fb489ac691ecfc5734"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/01-admission-baseline.json",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/01-admission-baseline.json.gz",
+      "decodedBytes": 1156,
+      "compressedBytes": 526,
+      "decodedSha256": "6b43e0af3051d7fa7f5516709a3be31aae12bcbe2e51eded6a9c2025923a9207",
+      "compressedSha256": "9d81b02a20558b45749b86053c24de11716fa72674f794ef0d1c0db7d12ad52d"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/02-admission-implementation.log",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/02-admission-implementation.log.gz",
+      "decodedBytes": 2753,
+      "compressedBytes": 1085,
+      "decodedSha256": "14cf4b1fba5cde992e6ee142aec3b56a7dd0fce2f2b2f3ebafbacd3fa4646cb0",
+      "compressedSha256": "0da77e18b19dd2b2d302e727fa621377a8b5ced45ad0a7de1efa9c99408dbbc7"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/02-admission-implementation.patch",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/02-admission-implementation.patch.gz",
+      "decodedBytes": 48228,
+      "compressedBytes": 12612,
+      "decodedSha256": "bc031c22b0a769099e1d17119d1837c0e7aee3e0bac9cef6097b4020ee1aa47b",
+      "compressedSha256": "22b38fb4bf372baeb710fc571ce58399a7277daba261ea6a88282788d7a17a73"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/02-admission-implementation.json",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/02-admission-implementation.json.gz",
+      "decodedBytes": 1755,
+      "compressedBytes": 616,
+      "decodedSha256": "32ea141e9ec3c2b50e0497838c87e02e6a88046b484c3d69f4420e9c02ee3ea8",
+      "compressedSha256": "800c67f7c1ec92d861a7483a8c9853a9c1a0850c0e0095b784e758f4a170890b"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/03-ui-client.log",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/03-ui-client.log.gz",
+      "decodedBytes": 1855,
+      "compressedBytes": 792,
+      "decodedSha256": "21bf58f56a11b600ae8a670fc6c371fbd977c3ffe9312c7665ce6f589530099a",
+      "compressedSha256": "6a9345db419b14a4963b1bb8c6d961218186a975ab07cc0e0313b600d8ac868c"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/03-ui-client.patch",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/03-ui-client.patch.gz",
+      "decodedBytes": 63129,
+      "compressedBytes": 16264,
+      "decodedSha256": "20751f61b8f56838fda510cebcf8a737a31d1b21ce6fee8f24ca7955c9d0bcf7",
+      "compressedSha256": "fa9daf05715f5511e8892935f8575be4890eee666b100ad537133b1aa7c794d3"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/03-ui-client.json",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/03-ui-client.json.gz",
+      "decodedBytes": 1934,
+      "compressedBytes": 631,
+      "decodedSha256": "f7158db461afd14e78881dee0d81e34c8959ac5ae0f7732cb560e032532f21b4",
+      "compressedSha256": "e7e654c54e9fa45255abd3ce1a0673bb6dd89c723a3aaf61fe5b02575014a21b"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/04-scoped-regressions.log",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/04-scoped-regressions.log.gz",
+      "decodedBytes": 11987,
+      "compressedBytes": 4129,
+      "decodedSha256": "58568efa51fe107c936a5a66648e049adbf3f842fb6ee5a9b1e5b5124e0096eb",
+      "compressedSha256": "fbb3ba635e133041ebb7a3197da34d02585d1ef6cce732206baa6fceecf34cdd"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/04-scoped-regressions.patch",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/04-scoped-regressions.patch.gz",
+      "decodedBytes": 66396,
+      "compressedBytes": 17018,
+      "decodedSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "compressedSha256": "f5f7673b7b361204be6ad063c54391d7ef8d16faefc6f47d3b777a2c9529187d"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/04-scoped-regressions.json",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/04-scoped-regressions.json.gz",
+      "decodedBytes": 2261,
+      "compressedBytes": 683,
+      "decodedSha256": "b568c1e7947cb25253a4dc4658ed49d00ce0a6ef48bd16cfed8cace4372ed673",
+      "compressedSha256": "24bf10ddc54901b638037ab3bd1ea740825423797653ef54ea673bfd095b21c2"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/05-typecheck.log",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/05-typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/05-typecheck.patch",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/05-typecheck.patch.gz",
+      "decodedBytes": 66396,
+      "compressedBytes": 17018,
+      "decodedSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "compressedSha256": "f5f7673b7b361204be6ad063c54391d7ef8d16faefc6f47d3b777a2c9529187d"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/05-typecheck.json",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/05-typecheck.json.gz",
+      "decodedBytes": 1665,
+      "compressedBytes": 574,
+      "decodedSha256": "ef6ef75567ae03d570da57ced89a9f846b75bae3fc44aa121302e57df1fb3b00",
+      "compressedSha256": "ddf16f1be79d496b98426a23ecb161a6cceefcfe4e34c653d2cf5b47615a1848"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/06-boundaries.log",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/06-boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 288,
+      "decodedSha256": "12c40248b08325299d1256b441c41b43708180d4164d231fa28d7b782a5eeca4",
+      "compressedSha256": "2f4f991f57e25fb0a7412712e194bd2b633c4f1847d3a898a37d3d2a93f80bab"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/06-boundaries.patch",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/06-boundaries.patch.gz",
+      "decodedBytes": 66396,
+      "compressedBytes": 17018,
+      "decodedSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "compressedSha256": "f5f7673b7b361204be6ad063c54391d7ef8d16faefc6f47d3b777a2c9529187d"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/06-boundaries.json",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/06-boundaries.json.gz",
+      "decodedBytes": 1675,
+      "compressedBytes": 578,
+      "decodedSha256": "28dababe9e907817dc0824b623479b9cff5085401d626ff6cc6227649694f6fa",
+      "compressedSha256": "dc1327652f4153ca2ebcf9754dc96356f913723b0b386dd8a642ab2247812de9"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/07-full-whitespace.log",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/07-full-whitespace.log.gz",
+      "decodedBytes": 0,
+      "compressedBytes": 20,
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/07-full-whitespace.patch",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/07-full-whitespace.patch.gz",
+      "decodedBytes": 66396,
+      "compressedBytes": 17018,
+      "decodedSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "compressedSha256": "f5f7673b7b361204be6ad063c54391d7ef8d16faefc6f47d3b777a2c9529187d"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/07-full-whitespace.json",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/07-full-whitespace.json.gz",
+      "decodedBytes": 1728,
+      "compressedBytes": 600,
+      "decodedSha256": "cf2fa4bf57a6ba7a0e1572df72fdf1bcad61e4f46b1366b1cbae2ead59f2577e",
+      "compressedSha256": "4274284159d7bbab6006025d9b69c2e71c999d903eb024e9ff8b7ae46108572a"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/run.py",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/run.py.gz",
+      "decodedBytes": 1975,
+      "compressedBytes": 1003,
+      "decodedSha256": "5527f6a7db4a169f77b060f743ebf253bbdc4e88ac0ef6f59cd253a4c640b9b7",
+      "compressedSha256": "de49df03bf9cbce56a52b65ec6302aab9155db38feaa8879cd21364253d2b7d1"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/package.py",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/package.py.gz",
+      "decodedBytes": 5873,
+      "compressedBytes": 2414,
+      "decodedSha256": "9b2f399cac83ee844b78c25fc069b32621e946f98686282ca99e5f457118a587",
+      "compressedSha256": "448fdec201ae3dd01fdfedb62675939e69af93c004d543914ffe6eb9a45fcfa1"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-funding-admission-author/frozen-source.patch",
+      "storedPath": "docs/execution/solana-funding-admission-generation36-20261120/frozen-source.patch.gz",
+      "decodedBytes": 66396,
+      "compressedBytes": 17018,
+      "decodedSha256": "44f5413754c392c39d97b05b0600ad87db6a115b9302539ae010da2c9dd40b44",
+      "compressedSha256": "f5f7673b7b361204be6ad063c54391d7ef8d16faefc6f47d3b777a2c9529187d"
+    }
+  ],
+  "limits": [
+    "Only the five local-profile production paths, two new focused tests and one synthetic snapshot fixture changed.",
+    "The baseline stops at missing-command/inventory assertions; the final153-case selection has40newcases and113existing adjacent cases. Counts overlap earlier selections.",
+    "All seven execution snapshots are exact uncommitted trees; the final four match the later frozen source tree.",
+    "No full repository suite, build, browser, native validator, financial run, external action or dependency mutation was performed.",
+    "In-memory encrypted vault/scripted RPC and controlled TSX/Worker delivery do not establish hosted/native/browser acceptance.",
+    "Native browser acceptance companion, independent review, combined qualification and Tier C merge gates remain separate. ReleaseEnabled=0."
+  ]
+}

@@ -1,3 +1,88 @@
+# Current consolidation checkpoint — generations 35–37 (2026-11-20 UTC)
+
+**The local Solana browser profile now completes explicit seller funding from a
+saved proposal through finalized recovery promotion.** Corrected source
+`88bd126bace2b88886017b0ff4eb5daffcdc060e`, tree
+`5ecf56b74e82f04b4fed8961179a46bcbd330def`, passed **2,915/2,915 tests**,
+zero other outcomes, and all six additional qualification commands. Independent
+source and composition reviews accept the corrected source within their scopes.
+Packaged checkpoint `d77b17e33382a8968b3a71144266d12eb7421085`, tree
+`d0512d15929e1e10c66e947b58bc1c904dfcfcb3`, preserves its 1,043 source entries.
+The complete G35–G37 delta above published PR241 is 21 paths: 11 modified and
+10 added. Actual PR241/PR240 ancestry remains intact.
+
+G35 now supplies the exact 4 KiB public proposal / 8 KiB private record codecs.
+G36 adds explicit one-CAS/no-RPC encrypted admission, immutable duplicate and
+restore provenance, escrow-collision checks and an eight-distinct-binding quota
+shared with funded recovery. G37 retains the original proposal, bound trade,
+wallet/client/profile/session/epoch and private prepared handle for explicit
+review and one-shot confirmation. G33's projection now has actual facade and
+application consumers while remaining data-only; fee/rent/total remain unknown.
+
+Refresh reconciles a live review without cancelling its original preparation.
+Restore retains foreign-origin uncertainty and never automatically resends.
+Only trusted finalized native escrow observation promotes ordinary recovery.
+Promotion preserves original proposal bytes/provenance and existing recovery
+role/origin, checks unknown occupied IDs, captures revision before the occupancy
+read and keeps pending-intent settlement gates. Physical wallet prompt ownership
+and all native authority checks remain unchanged.
+
+Independent review found G37-R1, a real idle-expiry snapshot `TypeError`, after
+the initial 2,914-case suite passed. The narrow correction separates pure view
+projection from action-side currentness checks and adds one maintained
+regression. Original failures and the initial run remain retained. Corrective
+author 100/100, corrected independent 38/38 and final root 2,915/2,915 have exact
+separate source attribution; overlapping counts are not added.
+
+The separate fixed native funding oracle verifies saved-proposal provenance,
+full installed binding, durable marker and canonical signed bytes. The old
+exit-only oracle, record readers and financial assertions remain unchanged.
+The extended driver's contract is eight sends and nine prompts, preserving all
+original exits, withheld acknowledgment, refund/payout checks and real waits.
+Its prior 70-input / three-chunk compilation was build-only; all input hashes
+remain equal after correction. Root's 37-module updater preparation is also
+build-only. Actual execution of the new funding journey remains required.
+Default/demo ordinary artifacts and graphs remain equal to G36. `ReleaseEnabled=0`.
+
+**PR236 actually merged to main `01f6f4feca051d68de24a04299cd3bb444bce40c`
+at 21:02:46 UTC**, after 15 hosted checks plus Snyk and actual older-source
+native acceptance. Exact merged tree, ordered parents and original ancestry are
+retained in the [main-merge proof](CONSOLIDATION_MAIN_MERGE_GENERATION28_20261120.md).
+PR233 was automatically marked merged by containment; PR234/235 were closed as
+superseded. All original source branches remain preserved. That native evidence
+is separately attributed and does not qualify the later funding candidate.
+
+The coordinator's retained **21:33:07 UTC** readback has all 12 PR237 checks
+successful, but proposal `b7fb1df14ee20c17516b776627d27fb8b8b39fe0` still has
+the old PR236 source as first parent after retargeting to current main. Actual
+current-main proposal verification remains pending. Its owner-account
+coordination comment is not a named review. Each standalone PR237/238/239
+retains **CodeRabbit or Qodo pass with findings answered**, applicable checks
+and independent review. Reconcile actual targets after each parent merge.
+
+Published draft PR241 remains frozen at
+`29491c2842e0aedcb00a674cbfffb9edc2424013`, targeting PR239; PR240 remains
+held and unmerged beneath it. At the dated readback PR241 had two checks
+successful, two running and eight queued, with no matching owner approval.
+**Prepare one complete G35+G36+G37 draft above actual PR241; no standalone G35
+or G36 PR and no new published identity are claimed here.** Both candidates
+retain their own Tier C actual-source/actual-target hosted native acceptance
+and explicit matching owner authorization recorded in the PR. Local review,
+older-source native receipts and unchanged artifacts do not satisfy those gates.
+
+Read the [G35–G37 continuation](CONTINUATION_GENERATIONS35_37_20261120.md),
+[corrected qualification](qualification-generation37.json),
+[retained logs](retained-logs-generation37.json),
+[independent source review](SOLANA_BROWSER_FUNDING_FLOW_INDEPENDENT_REVIEW_GENERATION37_20261120.md)
+and [composition review](SOLANA_BROWSER_FUNDING_FLOW_COMPOSITION_REVIEW_GENERATION37_20261120.md).
+Separate G38 portable-proposal work is active and absent from this checkpoint.
+Bilateral/public-network acceptance, production trust, optional PR224–232 and
+audits184–186 retain their existing boundaries and owners. Every earlier byte
+below remains unchanged historical evidence; suffix hashes are recorded in the
+new continuation.
+
+---
+
 # Current consolidation checkpoint — generations 33–34 (2026-11-20 UTC)
 
 **The native funding candidate now combines prepared funding, immutable review

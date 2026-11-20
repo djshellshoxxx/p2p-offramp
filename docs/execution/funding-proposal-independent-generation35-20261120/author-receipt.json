@@ -1,0 +1,401 @@
+{
+  "schema": "p2p-offramp.solana-funding-proposal-generation35.v1",
+  "recordedAt": "2026-11-20T20:19:10.004388+00:00",
+  "base": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+  "source": "4228040248963389d7dae28881f1db2927ca54ec",
+  "tree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+  "worktree": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-g35",
+  "branch": "codex/funding-proposal-codec-g35-20261120",
+  "changedPaths": [
+    "apps/web/src/solana-localnet/funding-proposal.ts",
+    "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+  ],
+  "sourceScope": {
+    "added": [
+      "apps/web/src/solana-localnet/funding-proposal.ts",
+      "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+    ],
+    "modified": [],
+    "deleted": [],
+    "nonDocumentationEntries": 1035,
+    "allBaseEntriesPreserved": true,
+    "gitlinksIncluded": true
+  },
+  "sourceBlobs": {
+    "apps/web/src/solana-localnet/funding-proposal.ts": {
+      "gitEntry": "100644 blob 2636d5687e47c1381b017d27a0feca15336791da",
+      "sha256": "e749b7b33a8b2a8ab0bdaa7f5a5ee3df0a10378f8519116614bfee5488591b8c"
+    },
+    "apps/web/test/solana-localnet-funding-proposal.test.mjs": {
+      "gitEntry": "100644 blob e416d281023d20d0f4088056f0642411f9b72a34",
+      "sha256": "465bed02acd7b01b7279de37cf12171a3d9055857ee68611eed0bbdfd4923719"
+    }
+  },
+  "contract": {
+    "publicFormat": "p2p-offramp/solana-local-funding-proposal/v1",
+    "privateFormat": "p2p-offramp/solana-local-funding-proposal-record/v1",
+    "publicDecodedBytes": 4096,
+    "privateDecodedBytes": 8192,
+    "identity": "SHA-256 of maintained encodeSolanaTerms, not JSON; record ID is first16 SHA-256 bytes of the record-format/full-binding array.",
+    "publicShape": "Exactly format and terms; all15 canonical G16 fields, native asset with null mint/tokenProgram.",
+    "privateShape": "Exact proposal, full binding, seller role, nonzero original profile and immutable configuration provenance in PrivateRecordV1 kind trade/schema1.",
+    "authority": "Data only; requires installed parseSolanaLocalnetConfig result, never installs imported pins, endpoints or margins. No bound-trade brand, preparation, acceptance or funding claim."
+  },
+  "commands": [
+    {
+      "name": "01-baseline",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-g35",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "12df5f52124c8853533c2221d07699ae6758641e",
+      "startedAt": "2026-11-20T20:11:47.470042+00:00",
+      "completedAt": "2026-11-20T20:11:48.439296+00:00",
+      "exitCode": 1,
+      "counts": {
+        "tests": 78,
+        "pass": 1,
+        "fail": 77,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/01-baseline.log",
+      "bytes": 110307,
+      "sha256": "715c1a9d1f8acb46c6a83419f6b7e751ea07275a11fa03690eb3cee3bbebb540",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/01-baseline.patch",
+      "patchBytes": 19009,
+      "patchSha256": "73a3d842970822590476e71ebc49a865bcebfd763c244dcaf32902ec8fef42ea",
+      "retainedLog": "docs/execution/solana-funding-proposal-generation35-20261120/01-baseline.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-proposal-generation35-20261120/01-baseline.patch.gz"
+    },
+    {
+      "name": "02-first-implementation",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-g35",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "f570971e723b8d76973773e45a985fec490ece93",
+      "startedAt": "2026-11-20T20:15:27.277381+00:00",
+      "completedAt": "2026-11-20T20:15:28.821615+00:00",
+      "exitCode": 1,
+      "counts": {
+        "tests": 78,
+        "pass": 77,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/02-first-implementation.log",
+      "bytes": 6531,
+      "sha256": "1c1a1373bb24b84a98f1444aa26fc72db6b16aa9776351590b917c2754e091d9",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/02-first-implementation.patch",
+      "patchBytes": 30028,
+      "patchSha256": "c8aab6b31bd16483479cb1701c9028323d1ab5a45b493e931aeedbbbf53e080e",
+      "retainedLog": "docs/execution/solana-funding-proposal-generation35-20261120/02-first-implementation.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-proposal-generation35-20261120/02-first-implementation.patch.gz"
+    },
+    {
+      "name": "03-ui-typescript",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.ui.json",
+        "--noEmit"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-g35",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "f570971e723b8d76973773e45a985fec490ece93",
+      "startedAt": "2026-11-20T20:15:34.273593+00:00",
+      "completedAt": "2026-11-20T20:15:35.630200+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "log": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/03-ui-typescript.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/03-ui-typescript.patch",
+      "patchBytes": 30028,
+      "patchSha256": "c8aab6b31bd16483479cb1701c9028323d1ab5a45b493e931aeedbbbf53e080e",
+      "retainedLog": "docs/execution/solana-funding-proposal-generation35-20261120/03-ui-typescript.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-proposal-generation35-20261120/03-ui-typescript.patch.gz"
+    },
+    {
+      "name": "04-focused-corrected",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-g35",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "startedAt": "2026-11-20T20:16:06.317497+00:00",
+      "completedAt": "2026-11-20T20:16:07.992246+00:00",
+      "exitCode": 0,
+      "counts": {
+        "tests": 82,
+        "pass": 82,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/04-focused-corrected.log",
+      "bytes": 4839,
+      "sha256": "610626dc965bc9331fb23a456caec013e6acb2b4830474f5934a95d8b96bb1fe",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/04-focused-corrected.patch",
+      "patchBytes": 32504,
+      "patchSha256": "6e6c78e208b82dfb38c9f9cd931d45e92066c1a5c1fb2a6d91271254aa38aaf5",
+      "retainedLog": "docs/execution/solana-funding-proposal-generation35-20261120/04-focused-corrected.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-proposal-generation35-20261120/04-focused-corrected.patch.gz"
+    },
+    {
+      "name": "05-boundaries",
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-g35",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "startedAt": "2026-11-20T20:16:06.317933+00:00",
+      "completedAt": "2026-11-20T20:16:07.908791+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "log": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/05-boundaries.log",
+      "bytes": 392,
+      "sha256": "57b3c937bbdb01e88c246681dbbd7f8e0e638bc3aa23bc8017283572b8164f3f",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/05-boundaries.patch",
+      "patchBytes": 32504,
+      "patchSha256": "6e6c78e208b82dfb38c9f9cd931d45e92066c1a5c1fb2a6d91271254aa38aaf5",
+      "retainedLog": "docs/execution/solana-funding-proposal-generation35-20261120/05-boundaries.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-proposal-generation35-20261120/05-boundaries.patch.gz"
+    },
+    {
+      "name": "06-frozen-typescript",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-g35",
+      "source": "4228040248963389d7dae28881f1db2927ca54ec",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "startedAt": "2026-11-20T20:16:38.700092+00:00",
+      "completedAt": "2026-11-20T20:16:41.589750+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "log": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/06-frozen-typescript.log",
+      "bytes": 341,
+      "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/06-frozen-typescript.patch",
+      "patchBytes": 0,
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedLog": "docs/execution/solana-funding-proposal-generation35-20261120/06-frozen-typescript.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-proposal-generation35-20261120/06-frozen-typescript.patch.gz"
+    },
+    {
+      "name": "07-frozen-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061..HEAD"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-g35",
+      "source": "4228040248963389d7dae28881f1db2927ca54ec",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "startedAt": "2026-11-20T20:17:24.085014+00:00",
+      "completedAt": "2026-11-20T20:17:24.128123+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "log": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/07-frozen-whitespace.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "patch": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/07-frozen-whitespace.patch",
+      "patchBytes": 0,
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedLog": "docs/execution/solana-funding-proposal-generation35-20261120/07-frozen-whitespace.log.gz",
+      "retainedExecutionPatch": "docs/execution/solana-funding-proposal-generation35-20261120/07-frozen-whitespace.patch.gz"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/01-baseline.log.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/01-baseline.log",
+      "decodedBytes": 110307,
+      "compressedBytes": 4282,
+      "decodedSha256": "715c1a9d1f8acb46c6a83419f6b7e751ea07275a11fa03690eb3cee3bbebb540",
+      "compressedSha256": "6a5f43427c38d652716f38960498a7c4609d3ee28081813a3ef931c8561a5da8",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/01-baseline.patch.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/01-baseline.patch",
+      "decodedBytes": 19009,
+      "compressedBytes": 5543,
+      "decodedSha256": "73a3d842970822590476e71ebc49a865bcebfd763c244dcaf32902ec8fef42ea",
+      "compressedSha256": "97d70862928142fbac636c6682d51f86130f6de551214cc6e0f7795e617b0815",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/02-first-implementation.log.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/02-first-implementation.log",
+      "decodedBytes": 6531,
+      "compressedBytes": 2105,
+      "decodedSha256": "1c1a1373bb24b84a98f1444aa26fc72db6b16aa9776351590b917c2754e091d9",
+      "compressedSha256": "12a9b9e1849eac6c3ba46f34269cdba9ca4e491a37340dba4811e18b28cbd406",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/02-first-implementation.patch.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/02-first-implementation.patch",
+      "decodedBytes": 30028,
+      "compressedBytes": 8153,
+      "decodedSha256": "c8aab6b31bd16483479cb1701c9028323d1ab5a45b493e931aeedbbbf53e080e",
+      "compressedSha256": "e55edcba6e70860c94156b5afa65b6009ff6da1d66fb6f7a6f1cf2b81c0b762b",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/03-ui-typescript.log.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/03-ui-typescript.log",
+      "decodedBytes": 0,
+      "compressedBytes": 20,
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/03-ui-typescript.patch.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/03-ui-typescript.patch",
+      "decodedBytes": 30028,
+      "compressedBytes": 8153,
+      "decodedSha256": "c8aab6b31bd16483479cb1701c9028323d1ab5a45b493e931aeedbbbf53e080e",
+      "compressedSha256": "e55edcba6e70860c94156b5afa65b6009ff6da1d66fb6f7a6f1cf2b81c0b762b",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/04-focused-corrected.log.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/04-focused-corrected.log",
+      "decodedBytes": 4839,
+      "compressedBytes": 1715,
+      "decodedSha256": "610626dc965bc9331fb23a456caec013e6acb2b4830474f5934a95d8b96bb1fe",
+      "compressedSha256": "c28455d80df1953c6d653bc2c0fda15cc2ec39c3401721a435f443717c7e3918",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/04-focused-corrected.patch.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/04-focused-corrected.patch",
+      "decodedBytes": 32504,
+      "compressedBytes": 8623,
+      "decodedSha256": "6e6c78e208b82dfb38c9f9cd931d45e92066c1a5c1fb2a6d91271254aa38aaf5",
+      "compressedSha256": "90a819818b5d97342e0bcac4a5d96f4f5338127d999173df8ab9aec4945b0481",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/05-boundaries.log.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/05-boundaries.log",
+      "decodedBytes": 392,
+      "compressedBytes": 287,
+      "decodedSha256": "57b3c937bbdb01e88c246681dbbd7f8e0e638bc3aa23bc8017283572b8164f3f",
+      "compressedSha256": "01563b399db9a8f5e230455be16e6bba2e094357f8477c7d967d5aebeba0d20b",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/05-boundaries.patch.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/05-boundaries.patch",
+      "decodedBytes": 32504,
+      "compressedBytes": 8623,
+      "decodedSha256": "6e6c78e208b82dfb38c9f9cd931d45e92066c1a5c1fb2a6d91271254aa38aaf5",
+      "compressedSha256": "90a819818b5d97342e0bcac4a5d96f4f5338127d999173df8ab9aec4945b0481",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/06-frozen-typescript.log.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/06-frozen-typescript.log",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/06-frozen-typescript.patch.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/06-frozen-typescript.patch",
+      "decodedBytes": 0,
+      "compressedBytes": 20,
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/07-frozen-whitespace.log.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/07-frozen-whitespace.log",
+      "decodedBytes": 0,
+      "compressedBytes": 20,
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/07-frozen-whitespace.patch.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/07-frozen-whitespace.patch",
+      "decodedBytes": 0,
+      "compressedBytes": 20,
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/run.py.gz",
+      "original": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-author/run.py",
+      "decodedBytes": 1624,
+      "compressedBytes": 888,
+      "decodedSha256": "1c07f608eef630efa597b0dbeec09f4c3b69fd19fb07ddd754d601145eb0cd16",
+      "compressedSha256": "89613cf921042378df9b8fb32886d82cb0d83fff9635ee8b76b3415abfd100a1",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-funding-proposal-generation35-20261120/source.patch.gz",
+      "original": "0b7832d1c5b348a0755d59152442d0318d4a620c..4228040248963389d7dae28881f1db2927ca54ec",
+      "decodedBytes": 32504,
+      "compressedBytes": 8623,
+      "decodedSha256": "6e6c78e208b82dfb38c9f9cd931d45e92066c1a5c1fb2a6d91271254aa38aaf5",
+      "compressedSha256": "90a819818b5d97342e0bcac4a5d96f4f5338127d999173df8ab9aec4945b0481",
+      "gzipMtime": 0
+    }
+  ],
+  "snapshotVerification": "docs/execution/solana-funding-proposal-generation35-20261120/execution-snapshot-verification.json",
+  "failureHistory": [
+    "01: initial78-case baseline: one maintained G16 control passed and77 cases failed because the feature/export did not exist.",
+    "02: first implementation77/78 passed. Retained endpoint rejection surfaced the existing config helper generic error instead of a codec INVALID_INPUT failure. The correction wraps only parseSolanaRpcUrl failure; validation stays fail-closed.",
+    "03: the UI TypeScript check passed on the first implementation tree before that narrow error-normalization correction.",
+    "04: final82-case suite adds four cases for exact public/private byte caps, full-binding ID separation and readable historical provenance. All82 passed; this is not the same78-case command as the initial baseline.",
+    "04 and05 ran on an uncommitted snapshot whose complete tree equals the subsequently frozen source. 06 and07 ran on the clean frozen commit. Exact patches reconstruct every execution tree."
+  ],
+  "limits": [
+    "Only the codec and its focused test are added; no command, controller, client, wallet bridge, journal, facade, storage implementation, trust configuration or build-profile change.",
+    "Canonical non-core capability commitments, past deadlines and G16-valid values remain data. Shared G34 planFund performs later funding-policy checks; this parser does not duplicate or weaken them.",
+    "Existing installed configuration is a caller precondition. Structural copying does not authenticate a registry or promote retained endpoints/margins into executable configuration.",
+    "Independent escrow collision, union quota, duplicate provenance, session/epoch/CAS, confirmation ownership and funded recovery materialization belong to later explicit admission integration.",
+    "The actual encrypted vault/backup services and existing recovery controller were exercised with an in-memory store and scripted native ports. This is not browser, validator, live-chain or wallet-provider execution.",
+    "Codec purity counters cover selected clock/random/network/wallet/storage globals. Own getters are refused; arbitrary caller Proxy reflection traps are not claimed inert.",
+    "No build, full-repository suite, native financial execution, external target, dependency installation, deployment or release ran. Dependencies were immutable physical hardlinks. ReleaseEnabled remains0.",
+    "Independent review and combined/current-source/current-target qualification are coordinator-owned; this evidence alone establishes no merge approval."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "01-focused-independent",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "apps/web/test/solana-localnet-funding-proposal.test.mjs",
+    "packages/domain/test/trade-terms.test.mjs",
+    "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-independent/probes.test.mjs"
+  ],
+  "workingDirectory": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-review-g35",
+  "environment": {
+    "P2P_G35_REVIEW_REPO": "/workspace/scratch/dcf03ef9bee8/p2p-funding-proposal-codec-review-g35"
+  },
+  "startedAt": "2026-11-20T20:17:17.490052+00:00",
+  "completedAt": "2026-11-20T20:17:19.876975+00:00",
+  "source": "4228040248963389d7dae28881f1db2927ca54ec",
+  "tree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+  "sourceTreeSnapshot": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-independent/01-focused-independent-source-tree.bin",
+    "bytes": 399548,
+    "sha256": "8b9ac36b9ca4d3472bec4609ada71142e26a1526b63fc8a4e5f6664931eabb28"
+  },
+  "independentProbes": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-independent/probes.test.mjs",
+    "bytes": 9351,
+    "sha256": "91c42b51cdb7371eed76019ccb7ba4c2ab7a2a4f507053e14176d58785422d06"
+  },
+  "exitCode": 0,
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-independent/01-focused-independent.log",
+    "bytes": 6359,
+    "sha256": "8903ce50591f6f4648514bd4d8d53c744241ba2b44e2b44c8ddb0b2f23b0686c"
+  },
+  "counts": {},
+  "finalSource": "4228040248963389d7dae28881f1db2927ca54ec",
+  "finalTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+  "finalStatus": "",
+  "nativeExecuted": false,
+  "browserExecuted": false
+}
