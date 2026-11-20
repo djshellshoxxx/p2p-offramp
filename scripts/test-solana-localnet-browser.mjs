@@ -11,6 +11,7 @@ const checks = [], began = Date.now();
 const pass = name => { checks.push(name); console.log(`ok - ${name}`); };
 let fixture;
 const card = id => fixture.page.locator(`[data-trade-id="${id}"]`);
+const proposalCard = id => fixture.page.locator(`[data-proposal-id="${id}"]`);
 const review = () => fixture.page.locator('[data-review-id]');
 const idle = () => until(async () => await fixture.page.locator('main').getAttribute('aria-busy') === 'false', 'acknowledged UI command completion');
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -26,6 +27,7 @@ async function unlock(id, passphrase) {
   await fixture.page.getByRole('button', { name: 'Unlock recovery profile', exact: true }).click();
   await until(async () => await fixture.profileId() === id, 'explicit profile unlock'); await idle();
   assert.equal(await fixture.page.getByLabel('Recovery JSON', { exact: true }).inputValue(), '', 'lock/switch clears prior profile recovery input');
+  assert.equal(await fixture.page.getByLabel('Funding proposal JSON', { exact: true }).inputValue(), '', 'lock/switch clears prior profile proposal input');
 }
 async function connect(id) {
   await card(id).getByRole('button', { name: 'Connect seller wallet', exact: true }).click();
@@ -70,6 +72,31 @@ try {
     await page.getByRole('button', { name: 'Verify and save recovery document', exact: true }).click();
     await page.getByRole('alert').waitFor(); await idle(); assert.equal(await page.locator('[data-trade-id]').count(), 0);
   }
+  const beforeProposal = await fixture.vault();
+  const publicProposal = { format: 'p2p-offramp/solana-local-funding-proposal/v1', terms: chain.documents.absent.terms };
+  const proposalJson = JSON.stringify(publicProposal), connectsBeforeProposal = fixture.walletConnects;
+  const promptsBeforeProposal = fixture.prompts.length, sendsBeforeProposal = chain.summary.appSends.length;
+  await page.getByLabel('Funding proposal JSON', { exact: true }).fill(proposalJson);
+  await page.getByRole('button', { name: 'Save seller funding proposal', exact: true }).click();
+  await page.locator('[data-proposal-id]').waitFor(); await idle();
+  const proposalVault = await fixture.vault(); assert.equal(proposalVault.proposals.length, 1);
+  const savedProposal = proposalVault.proposals[0];
+  assert.deepEqual(savedProposal.value.proposal, publicProposal);
+  assert.deepEqual(savedProposal.value.binding, { chain: 'solana', networkId: chain.documents.absent.network.networkId,
+    deploymentId: chain.documents.absent.network.deploymentId, tradeId: ids.absent });
+  assert.equal(savedProposal.value.originProfileId, originalProfile); assert.equal(savedProposal.value.role, 'seller');
+  assert.deepEqual(savedProposal.value.configuration, { registrySha256: chain.buildOption.registrySha256,
+    programDataSha256: chain.summary.programDataSha256, artifactSha256: chain.summary.artifactSha256,
+    assetId: chain.documents.absent.asset.id, rpcUrl: chain.buildOption.rpcUrl, margins: chain.buildOption.margins });
+  assert.equal(proposalVault.snapshot.revision, beforeProposal.snapshot.revision + 1, 'one explicit proposal admission commits once');
+  assert.deepEqual(proposalVault.intents, beforeProposal.intents, 'saving creates no prepared journal intent');
+  assert.equal(JSON.stringify(proposalVault.row).includes(ids.absent), false);
+  assert.equal(JSON.stringify(proposalVault.row).includes(savedProposal.record.payload), false, 'private proposal payload is encrypted at rest');
+  await proposalCard(savedProposal.record.id).getByText('Saved proposal', { exact: true }).waitFor();
+  assert.equal(await card(ids.absent).count(), 0, 'a saved proposal is not a funded recovery card');
+  assert.equal(fixture.walletConnects, connectsBeforeProposal); assert.equal(fixture.prompts.length, promptsBeforeProposal);
+  assert.equal(chain.summary.appSends.length, sendsBeforeProposal);
+  pass('explicit seller proposal admission encrypts complete fixed terms without wallet, prepared intent or send');
   for (const name of ['release', 'rebuild', 'refund']) {
     await page.getByLabel('Recovery JSON', { exact: true }).fill(JSON.stringify(chain.documents[name]));
     await page.getByRole('button', { name: 'Verify and save recovery document', exact: true }).click();
@@ -127,9 +154,11 @@ try {
   const sendsBeforeRestore = chain.summary.appSends.length, promptsBeforeRestore = fixture.prompts.length, connectsBeforeRestore = fixture.walletConnects;
   const downloadEvent = page.waitForEvent('download'); await page.getByRole('button', { name: 'Export encrypted backup', exact: true }).click();
   const download = await downloadEvent, backup = await readFile(await download.path()); await idle();
+  await page.getByLabel('Funding proposal JSON', { exact: true }).fill(proposalJson);
   await page.getByRole('button', { name: 'Lock profile', exact: true }).click();
   await until(async () => await fixture.profileId() === '', 'profile lock'); await idle();
   assert.equal(await page.locator('[data-trade-id]').count(), 0);
+  assert.equal(await page.locator('[data-proposal-id]').count(), 0, 'lock redacts saved proposals');
   await page.getByLabel('Encrypted backup', { exact: true }).setInputFiles({ name: 'local-recovery.backup', mimeType: 'application/octet-stream', buffer: backup });
   await page.getByLabel('Backup passphrase', { exact: true }).fill(PASS);
   await page.getByLabel('New profile passphrase', { exact: true }).fill(NEW_PASS); fixture.setPassphrase(NEW_PASS);
@@ -137,12 +166,16 @@ try {
   await until(async () => /^[0-9a-f]{32}$/.test(await fixture.profileId()) && await fixture.profileId() !== originalProfile, 'fresh-key encrypted restore'); await idle();
   const freshProfile = await fixture.profileId();
   assert.equal(await page.getByLabel('Recovery JSON', { exact: true }).inputValue(), '', 'fresh restore does not retain the prior profile input');
+  assert.equal(await page.getByLabel('Funding proposal JSON', { exact: true }).inputValue(), '', 'fresh restore clears the prior proposal input');
   assert.equal(chain.summary.appSends.length, sendsBeforeRestore, 'the entire export/lock/restore sequence performs no physical send');
   assert.equal(fixture.prompts.length, promptsBeforeRestore, 'restore opens no sign prompt');
   assert.equal(fixture.walletConnects, connectsBeforeRestore, 'restore never reconnects the external wallet');
   let restored = await fixture.vault(), old = restored.intents.find(r => r.intentId === uncertain.intentId);
   assert.equal(old.originProfileId, originalProfile); assert.equal(old.signature, uncertain.signature); assert.equal(old.sendMarkedAt, uncertain.sendMarkedAt);
   for (const receipt of restored.documents) assert.equal(receipt.originProfileId, originalProfile);
+  assert.deepEqual(restored.proposals, [savedProposal], 'fresh-key restore preserves exact proposal payload, binding and original provenance');
+  await proposalCard(savedProposal.record.id).getByText('Original provenance preserved after restore', { exact: true }).waitFor();
+  assert.equal(await card(ids.absent).count(), 0, 'restore never promotes an unfunded proposal to recovery');
   await noAutomaticSend(sendsBeforeRestore, promptsBeforeRestore);
   await connect(ids.rebuild);
   await until(async () => { await refresh(); return (await fixture.vault()).intents.find(r => r.intentId === uncertain.intentId).state === 'dropped'; },
@@ -166,6 +199,7 @@ try {
   }, 'real minimum-duration refund deadline', 2100000, 15000);
   assert.equal(await fixture.profileId(), '', 'the real idle interval locks the profile while waiting for chain time');
   await unlock(freshProfile, NEW_PASS); await connect(ids.refund); await refresh();
+  assert.deepEqual((await fixture.vault()).proposals, [savedProposal], 'real idle lock and explicit unlock retain the original proposal');
   const sellerBefore = await getBalance(chain.rpc, chain.seller, 'finalized');
   await prepare(ids.refund, 'refund'); await confirm(); await settled(ids.refund, 'refunded', false);
   await prepare(ids.refund, 'payout'); await confirm(); await settled(ids.refund, 'refunded', true);

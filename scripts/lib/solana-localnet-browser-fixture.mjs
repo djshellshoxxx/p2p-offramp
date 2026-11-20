@@ -11,7 +11,7 @@ import { buildSolanaLocalnetContentPolicy } from '../../packages/security/src/co
 import { openEnvelope, disposeMaterial } from '../../packages/storage/src/vault-crypto.ts';
 import { resolveChromiumPath } from './chromium-path.mjs';
 import { startSolanaLocalnetFixture } from './solana-localnet-fixture.mjs';
-import { assertSolanaSendMarked, readSolanaVaultRecords } from './solana-localnet-send-evidence.mjs';
+import { assertSolanaSendMarked, readSolanaBrowserVaultRecords } from './solana-localnet-send-evidence.mjs';
 
 export async function waitSolanaBrowser(check, label, timeoutMs = 45000, intervalMs = 100) {
   const start = Date.now();
@@ -42,7 +42,7 @@ export async function startSolanaBrowserFixture() {
   async function vault() {
     const id = await profileId(page); assert.match(id, /^[0-9a-f]{32}$/); assert.equal(typeof passphrase, 'string');
     const row = await encryptedRow(page, id), opened = await openEnvelope(row, passphrase, crypto);
-    try { return { id, row, snapshot: opened.snapshot, ...readSolanaVaultRecords(opened.snapshot) }; }
+    try { return { id, row, snapshot: opened.snapshot, ...await readSolanaBrowserVaultRecords(opened.snapshot) }; }
     finally { disposeMaterial(opened.material); }
   }
   try {

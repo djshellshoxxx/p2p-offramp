@@ -5,6 +5,8 @@ import { decodeBase64url, parseStrictJsonBytes, sameBinding } from '../../packag
 import { parseSolanaIntent } from '../../packages/chain-solana/src/intent.ts';
 import { parseRecoveryDocument } from '../../packages/chain-solana/src/recovery.ts';
 import { base58Encode, decodeKey } from '../../contracts/solana/vectors/derive.mjs';
+import { decodeSolanaFundingProposalRecord, SOLANA_FUNDING_PROPOSAL_RECORD_FORMAT }
+  from '../../apps/web/src/solana-localnet/funding-proposal.ts';
 
 export function readSolanaVaultRecords(snapshot) {
   const intents = [], documents = [];
@@ -31,6 +33,23 @@ export function readSolanaVaultRecords(snapshot) {
   }
   assert.equal(new Set(intents.map(r => r.intentId)).size, intents.length);
   return { intents, documents };
+}
+
+/** Only fully validated proposal records leave the unchanged strict legacy oracle's input. */
+export async function readSolanaBrowserVaultRecords(snapshot) {
+  const records = [], proposals = [];
+  for (const record of snapshot.records) {
+    if (record.kind === 'trade') {
+      const raw = parseStrictJsonBytes(decodeBase64url(record.payload, 1, 262144), 262144);
+      if (raw?.format === SOLANA_FUNDING_PROPOSAL_RECORD_FORMAT) {
+        const retained = Object.freeze({ ...record });
+        const value = await decodeSolanaFundingProposalRecord(retained);
+        proposals.push({ record: retained, value }); continue;
+      }
+    }
+    records.push(record);
+  }
+  return { ...readSolanaVaultRecords({ records }), proposals };
 }
 
 export function assertSolanaSendMarked(intents, base64Wire, profileId, pins, seenSignatures) {
