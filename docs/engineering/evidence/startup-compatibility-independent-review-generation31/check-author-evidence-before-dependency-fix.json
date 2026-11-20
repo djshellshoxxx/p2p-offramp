@@ -1,0 +1,8 @@
+{
+  "rawBytes": 5699,
+  "rawSha256": "73334a44e8e4bab60749b85a4c8e1f1e3fbd7aee11bc6c760a73386b4d2f5063",
+  "gzipBytes": 2041,
+  "gzipSha256": "cb60dad3a56a8415792384640ffed501ed61d5718bf515996a608224cebbbe5b",
+  "gzipMtime": 0,
+  "cause": "Reviewer graph readback initially attempted git show for ignored node_modules modules. Retained dependency bytes require filesystem hashing, while tracked graph modules remain bound to source Git blobs."
+}

@@ -1,0 +1,30 @@
+{
+  "name": "06-author-evidence",
+  "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+  "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-author-evidence.py",
+    "faf70e3afadbeadd27106139ef2a5e3adf9197fb"
+  ],
+  "startedAt": "2026-11-20T19:07:01.433326+00:00",
+  "completedAt": "2026-11-20T19:07:01.870241+00:00",
+  "exitCode": 1,
+  "sourceStatusAtStart": "",
+  "sourceUnchanged": true,
+  "sourceStatusAtEnd": "",
+  "scriptInputs": [
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-author-evidence.py",
+      "bytes": 5699,
+      "sha256": "73334a44e8e4bab60749b85a4c8e1f1e3fbd7aee11bc6c760a73386b4d2f5063"
+    }
+  ],
+  "rawBytes": 1533,
+  "rawSha256": "004b39af89c6b7a1c5091ee7401c2b08507c2c511b68f1d614a9b7972ab98fad",
+  "gzipBytes": 575,
+  "gzipSha256": "bee5296099b120dd46694968449cae2ce59b466e5eeefd30ecc4d9820f2d9ffc",
+  "gzipMtime": 0,
+  "summary": []
+}
