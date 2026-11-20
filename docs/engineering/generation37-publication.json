@@ -1,0 +1,394 @@
+{
+  "schema": "p2p-offramp.generation37-publication.v1",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "branch": "codex/browser-funding-continuation-g37-20261120",
+  "intendedTarget": {
+    "pr": 241,
+    "head": "29491c2842e0aedcb00a674cbfffb9edc2424013",
+    "branch": "codex/native-funding-consolidation-g34-20261120"
+  },
+  "preservedPublishedAncestor": {
+    "pr": 241,
+    "head": "29491c2842e0aedcb00a674cbfffb9edc2424013",
+    "tree": "484aed89e4839dd914e430f77b474e3c4c1549db",
+    "earlierPr240": "7bd5cf595bddadaa204e51e418d0060a1d43a1bc"
+  },
+  "integrationPlan": "One complete G35 public/private proposal codec, G36 explicit encrypted admission/inventory and corrected G37 seller browser funding candidate above actual frozen PR241. No standalone G35/G36 PR. PR241 remains a separate dependency and preserves actual PR240 ancestry.",
+  "publicationMethod": "Authenticated GitHub connector. Every complete tree and ordered parent relationship was read back. Original local commits and actual prior published heads remain preserved; new commit metadata and IDs differ.",
+  "localEquivalentCheckpoint": {
+    "commit": "1aae89c774ef6937e63b7548b837c0ef24ff33c9",
+    "tree": "1716d5e400e6ce6770edaf7d84cd8526b81f5342"
+  },
+  "publishedEquivalentCheckpoint": {
+    "commit": "f336a2ae183cc5d0a1b4aeb7c378140b4aa6b369",
+    "tree": "1716d5e400e6ce6770edaf7d84cd8526b81f5342"
+  },
+  "testedLocalSource": "88bd126bace2b88886017b0ff4eb5daffcdc060e",
+  "testedPublishedEquivalentSource": "74fcf8900132f118413c189a12e0a9b15558ab5f",
+  "testedTree": "5ecf56b74e82f04b4fed8961179a46bcbd330def",
+  "componentTestedSources": {
+    "generation35": {
+      "testedLocal": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "testedPublished": "8080ec514a8631eae2d96ef5d5abc8df48158e25",
+      "tree": "077ffa6a9cb7f964f5468a6eb33bd3ac231db98c",
+      "qualificationTransferred": false
+    },
+    "generation36": {
+      "testedLocal": "b785a01ffc54a75d497641d0e758d077adff41d0",
+      "testedPublished": "8fc2d43f2ade5258e877ec644d60d783a33c9e77",
+      "tree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+      "qualificationTransferred": false
+    },
+    "generation37Initial": {
+      "testedLocal": "dcdb86d19b8d1e1b09cd12a0f5cbf9626eff0fd3",
+      "testedPublished": "c473397cfc11da6733b4489d7ca24fd4c0c5d890",
+      "tree": "3e1f569f57fbc3ee01f6f4b32ea6bfd32abba65a",
+      "qualificationTransferred": false
+    },
+    "generation37Corrected": {
+      "testedLocal": "88bd126bace2b88886017b0ff4eb5daffcdc060e",
+      "testedPublished": "74fcf8900132f118413c189a12e0a9b15558ab5f",
+      "tree": "5ecf56b74e82f04b4fed8961179a46bcbd330def",
+      "qualificationTransferred": false
+    }
+  },
+  "verification": {
+    "payloadBlobCount": 363,
+    "mappedCommits": 24,
+    "allTreesMatch": true,
+    "allOrderedParentsReadBack": true,
+    "nonEvidenceEntriesIdenticalToTestedSource": 1043,
+    "nonDocumentationDeltaVersusPR241": {
+      "modified": 11,
+      "added": 10,
+      "deleted": 0
+    },
+    "correctedRootTests": {
+      "tests": 2915,
+      "pass": 2915,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "additionalQualificationCommandsPassed": 6
+  },
+  "resolvedFinding": {
+    "id": "G37-R1",
+    "severity": "P2",
+    "status": "fixed and independently rechecked",
+    "originalCorrection": "3ccf809e01e729980b3ab5fbe12ba3993fbe9982",
+    "mappedLocalCorrection": "88bd126bace2b88886017b0ff4eb5daffcdc060e",
+    "originalFailuresRetained": true,
+    "initialRoot2914Run": "Retained against initial source, superseded after the independent snapshot-expiry finding; not corrected-source acceptance."
+  },
+  "mergePolicy": {
+    "tier": "C",
+    "acceptedPacket": "docs/adr/proposed/D8-merge-policy-and-branch-protection.md",
+    "ownerApproval": "Require matching owner authorization explicitly recorded in the actual PR for its source and target. Local source work and independent review do not establish approval.",
+    "hostedAcceptance": "Require applicable current-source/current-target hosted checks including actual browser proposal admission, seller funding and finalized-only recovery promotion. Local controlled tests and driver compilation are not native acceptance.",
+    "parentGates": "PR236 is merged to main01f6f4feca051d68de24a04299cd3bb444bce40c. Standalone PR237-239 retain their separate CodeRabbit or Qodo pass requirements with findings answered. PR237 target-preview readback remains stale. PR241 remains frozen draft and separately gated. Reconcile actual main and target-specific acceptance after each parent merge."
+  },
+  "commitMap": [
+    {
+      "localSha": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+      "publishedSha": "8080ec514a8631eae2d96ef5d5abc8df48158e25",
+      "tree": "077ffa6a9cb7f964f5468a6eb33bd3ac231db98c",
+      "localParents": [
+        "29491c2842e0aedcb00a674cbfffb9edc2424013"
+      ],
+      "publishedParents": [
+        "29491c2842e0aedcb00a674cbfffb9edc2424013"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "cbe7cfc6e2b87a59488edad738ddbb2ee6292de4",
+      "publishedSha": "a9ab06361cd9cc8c9dd787c496afa98354872329",
+      "tree": "63af84eb2e5cce20539e7ccdafbce72e0d812433",
+      "localParents": [
+        "ea3ee7f5b5d36456616bd9fef893257327560a10"
+      ],
+      "publishedParents": [
+        "8080ec514a8631eae2d96ef5d5abc8df48158e25"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "cf3b92b89e912aacda3bdce5eab9a43d2903c1e1",
+      "publishedSha": "86db8df692716256250cbd85ed7701dcf213fe32",
+      "tree": "e2a3c1b2c77a45862c9de4238db70a0c1d5a253c",
+      "localParents": [
+        "cbe7cfc6e2b87a59488edad738ddbb2ee6292de4"
+      ],
+      "publishedParents": [
+        "a9ab06361cd9cc8c9dd787c496afa98354872329"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "1d22f853158c00c821b48fc9d531590b5b8e9897",
+      "publishedSha": "e1589ef45d5ac40b0225960bfed4fa2971ee67eb",
+      "tree": "7b7c58798d7f19a564ab1e4c1f7881d1704f2470",
+      "localParents": [
+        "cf3b92b89e912aacda3bdce5eab9a43d2903c1e1"
+      ],
+      "publishedParents": [
+        "86db8df692716256250cbd85ed7701dcf213fe32"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "98f75c23fe0db47f28fa5d7221048b631bc68b96",
+      "publishedSha": "1e85178a0f8ca728fa9a9e405a8a5daf73498f12",
+      "tree": "f41c39130f96eb4a27a48bd212ab08271b9c3d8e",
+      "localParents": [
+        "1d22f853158c00c821b48fc9d531590b5b8e9897"
+      ],
+      "publishedParents": [
+        "e1589ef45d5ac40b0225960bfed4fa2971ee67eb"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "54fb841a5d182da2929d71cbde087adea55e115f",
+      "publishedSha": "a38d2f8d65d1e74cb42b5980b1c9979061652984",
+      "tree": "d443b6d247905028311f80a66309ecd2f74666e4",
+      "localParents": [
+        "98f75c23fe0db47f28fa5d7221048b631bc68b96"
+      ],
+      "publishedParents": [
+        "1e85178a0f8ca728fa9a9e405a8a5daf73498f12"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "b785a01ffc54a75d497641d0e758d077adff41d0",
+      "publishedSha": "8fc2d43f2ade5258e877ec644d60d783a33c9e77",
+      "tree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+      "localParents": [
+        "54fb841a5d182da2929d71cbde087adea55e115f"
+      ],
+      "publishedParents": [
+        "a38d2f8d65d1e74cb42b5980b1c9979061652984"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "15bb293c9c5f904b69ddf17b82e4b8cfec2d7c87",
+      "publishedSha": "5b9116c22c702971f93ce838e1e17b0fc660ed97",
+      "tree": "1026dddf74c6fc07286f7cf35987308620c2783b",
+      "localParents": [
+        "b785a01ffc54a75d497641d0e758d077adff41d0"
+      ],
+      "publishedParents": [
+        "8fc2d43f2ade5258e877ec644d60d783a33c9e77"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "a1c9c1822292f33b79addaec6768332a8ab8b0cc",
+      "publishedSha": "514bd2792520cf73a37c4144c3940881a039e293",
+      "tree": "344504dffc8c5bfb8a0e1e89a8d5eb22361b7925",
+      "localParents": [
+        "15bb293c9c5f904b69ddf17b82e4b8cfec2d7c87"
+      ],
+      "publishedParents": [
+        "5b9116c22c702971f93ce838e1e17b0fc660ed97"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "cad6ba13246284a6cb5c267bd84957bd2ef0c0a5",
+      "publishedSha": "64cdf48188db51e0205f79a110484f17f88d8dd6",
+      "tree": "d6649ed19d3f1fa8dbf01c11f444c81724c60fc5",
+      "localParents": [
+        "a1c9c1822292f33b79addaec6768332a8ab8b0cc"
+      ],
+      "publishedParents": [
+        "514bd2792520cf73a37c4144c3940881a039e293"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "6ac362520ca16c289eb7e37e7472613f2b64e9c9",
+      "publishedSha": "6c97d2d2dd80c4ac8cfd930377820d95fb4d8cbb",
+      "tree": "37fd4b2490bbc68ab1bfdd85c4a9641c3bdf3420",
+      "localParents": [
+        "cad6ba13246284a6cb5c267bd84957bd2ef0c0a5"
+      ],
+      "publishedParents": [
+        "64cdf48188db51e0205f79a110484f17f88d8dd6"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "b94066283fe33bc8174ab72e5539a2fa98da92c5",
+      "publishedSha": "8be5ab93815014c1bfd64464dceab06871964200",
+      "tree": "7184a743d7220cfc6cbae02bed95d6d5be80b184",
+      "localParents": [
+        "6ac362520ca16c289eb7e37e7472613f2b64e9c9"
+      ],
+      "publishedParents": [
+        "6c97d2d2dd80c4ac8cfd930377820d95fb4d8cbb"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "1dd6a00cb24547ffe80cf0b33ff9b9beec035be4",
+      "publishedSha": "c815f5532db493a92af483a1564a4768c03e6018",
+      "tree": "536e6a96661acbaeabb55822a9fe8f2c60f877e9",
+      "localParents": [
+        "b94066283fe33bc8174ab72e5539a2fa98da92c5"
+      ],
+      "publishedParents": [
+        "8be5ab93815014c1bfd64464dceab06871964200"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "157524b6209f32338f60760bff4d1e8c012e0d97",
+      "publishedSha": "abb2355552446d174b8ad9a43c68e9cede24b485",
+      "tree": "e946806b5ad0ec0d8f85f50ca5e42eeac4f60f9c",
+      "localParents": [
+        "1dd6a00cb24547ffe80cf0b33ff9b9beec035be4"
+      ],
+      "publishedParents": [
+        "c815f5532db493a92af483a1564a4768c03e6018"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "dcdb86d19b8d1e1b09cd12a0f5cbf9626eff0fd3",
+      "publishedSha": "c473397cfc11da6733b4489d7ca24fd4c0c5d890",
+      "tree": "3e1f569f57fbc3ee01f6f4b32ea6bfd32abba65a",
+      "localParents": [
+        "157524b6209f32338f60760bff4d1e8c012e0d97"
+      ],
+      "publishedParents": [
+        "abb2355552446d174b8ad9a43c68e9cede24b485"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "0413b336780f4b6f90b429272f7e9fd865182c11",
+      "publishedSha": "37d16c53f7091e701dfd80d3e59012c21a2076f4",
+      "tree": "12d504eba2f4c6192b5b4641339cfaa2cbc5520b",
+      "localParents": [
+        "dcdb86d19b8d1e1b09cd12a0f5cbf9626eff0fd3"
+      ],
+      "publishedParents": [
+        "c473397cfc11da6733b4489d7ca24fd4c0c5d890"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "1104afcdc2c1605e5dfdb5947dd7303d028547ff",
+      "publishedSha": "11fbc4427a36c93e0b794f63801a4a6985095c06",
+      "tree": "1728a825618a8e8191a7db717745d5d6d22c01ca",
+      "localParents": [
+        "0413b336780f4b6f90b429272f7e9fd865182c11"
+      ],
+      "publishedParents": [
+        "37d16c53f7091e701dfd80d3e59012c21a2076f4"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "88bd126bace2b88886017b0ff4eb5daffcdc060e",
+      "publishedSha": "74fcf8900132f118413c189a12e0a9b15558ab5f",
+      "tree": "5ecf56b74e82f04b4fed8961179a46bcbd330def",
+      "localParents": [
+        "1104afcdc2c1605e5dfdb5947dd7303d028547ff"
+      ],
+      "publishedParents": [
+        "11fbc4427a36c93e0b794f63801a4a6985095c06"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "3ce32d67bccc1e917fc52e8a726ccd07726148f8",
+      "publishedSha": "81e4f41ebb34b8fd1fe813fdb1c5d86f04bd405f",
+      "tree": "ffd68cf2c42a35f1039671cb81666a16d3806b94",
+      "localParents": [
+        "88bd126bace2b88886017b0ff4eb5daffcdc060e"
+      ],
+      "publishedParents": [
+        "74fcf8900132f118413c189a12e0a9b15558ab5f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "9fe97a05759980f445d63231ede47edef9038261",
+      "publishedSha": "9882e31cf96a7d6c08c9e812c5b93c43b1e64413",
+      "tree": "2144603c307c6b40da0ae5b57220b8b34f18b879",
+      "localParents": [
+        "3ce32d67bccc1e917fc52e8a726ccd07726148f8"
+      ],
+      "publishedParents": [
+        "81e4f41ebb34b8fd1fe813fdb1c5d86f04bd405f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "b1ea14be9ec1831f90aceca530e348d07a55a016",
+      "publishedSha": "d2fba096e5ccf035d82f4cfef3cdeeca48ea3b36",
+      "tree": "60ddf70b4a61430676ffb55f831d0cf3615a5cc8",
+      "localParents": [
+        "9fe97a05759980f445d63231ede47edef9038261"
+      ],
+      "publishedParents": [
+        "9882e31cf96a7d6c08c9e812c5b93c43b1e64413"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "d77b17e33382a8968b3a71144266d12eb7421085",
+      "publishedSha": "dd452dc42cb328de164e58d0347ed616c97431f3",
+      "tree": "d0512d15929e1e10c66e947b58bc1c904dfcfcb3",
+      "localParents": [
+        "b1ea14be9ec1831f90aceca530e348d07a55a016"
+      ],
+      "publishedParents": [
+        "d2fba096e5ccf035d82f4cfef3cdeeca48ea3b36"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "d3c8cbbbf249a323d5e1e40ebe95eb885b78efdc",
+      "publishedSha": "a59d4576fce483272bd802952a97859ec969d51c",
+      "tree": "c0cdd62273361fa01490c2dd83c1e9078525ef32",
+      "localParents": [
+        "d77b17e33382a8968b3a71144266d12eb7421085"
+      ],
+      "publishedParents": [
+        "dd452dc42cb328de164e58d0347ed616c97431f3"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "1aae89c774ef6937e63b7548b837c0ef24ff33c9",
+      "publishedSha": "f336a2ae183cc5d0a1b4aeb7c378140b4aa6b369",
+      "tree": "1716d5e400e6ce6770edaf7d84cd8526b81f5342",
+      "localParents": [
+        "d3c8cbbbf249a323d5e1e40ebe95eb885b78efdc"
+      ],
+      "publishedParents": [
+        "a59d4576fce483272bd802952a97859ec969d51c"
+      ],
+      "readBackVerified": true
+    }
+  ],
+  "limits": [
+    "This maps the checkpoint before the publication-record commit and intentionally does not recursively claim its own commit identity.",
+    "Actual PR/proposed-merge tree and ordered-parent readback, hosted gates, matching recorded authorization and an expected-head guarded merge remain subsequent requirements.",
+    "All original branches, evidence, failures and tested source identities remain preserved. Published PR241/240 commits were not remapped.",
+    "Saved proposals do not establish peer acceptance. Explicit funding uses the original proposal/binding/wallet/client/profile/session/epoch and private prepared handle; public views cannot replace authority.",
+    "The corrected snapshot uses a pure reference projection; action-side currentness, expiry and identity checks remain. Independent corrected38 and author100 selections overlap the corrected full2915 and are not added.",
+    "Import has no RPC/wallet/preparation effects; uncertainty is reconciled without automatic resend. Only trusted finalized native escrow permits revision/occupied-ID guarded recovery promotion while preserving proposal/recovery provenance and pending-intent exit gates.",
+    "The separate fixed funding-send oracle preserves the original exit-only verifier. The native browser driver adds exactly one early funding send, with original financial assertions, deadlines, margins and waits unchanged.",
+    "Native driver compilation ran on initial combinedb695; all70 tracked inputs remain identical after correction. Compiled output was not evaluated. Controlled/build-only evidence is not native browser, public-network or device qualification.",
+    "Earlier hosted PR236 and PR237 native results retain their original checkout attribution and do not qualify later funding code. Default/demo asset identity does not transfer hosted acceptance.",
+    "Public proposal export/file-loading G38 is subsequent isolated engineering and absent here. No production trust, bilateral acceptance, real funds, deployment, release or optional default activation. ReleaseEnabled=0."
+  ]
+}
