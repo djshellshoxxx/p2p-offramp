@@ -1,0 +1,66 @@
+import datetime
+import hashlib
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8')
+REPO = ROOT / 'p2p-solana-core-capability-guard-g34'
+DEST = ROOT / 'g34-core-capability-author'
+DEST.mkdir(exist_ok=True)
+label, command = sys.argv[1], sys.argv[2:]
+assert command and re.fullmatch(r'[0-9]{2}-[a-z0-9-]+', label)
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+
+paths = ['packages/chain-solana/src/plan.ts', 'packages/chain-solana/test/core-capability-funding.test.mjs', 'packages/chain-solana/README.md']
+paths = [p for p in paths if (REPO / p).exists()]
+source_files = {p: {'bytes': (REPO / p).stat().st_size,
+                    'sha256': digest((REPO / p).read_bytes())} for p in paths}
+patch = git('diff', '--binary', '--no-ext-diff', 'HEAD')
+for name in git('ls-files', '--others', '--exclude-standard', '-z').split(b'\0'):
+    if name:
+        found = subprocess.run(['git', 'diff', '--no-index', '--binary', '--', '/dev/null', name.decode()],
+                               cwd=REPO, stdout=subprocess.PIPE, check=False)
+        assert found.returncode in (0, 1)
+        patch += found.stdout
+out, snapshot, receipt_path = (DEST / f'{label}{suffix}' for suffix in ('.log', '.patch', '.json'))
+assert not any(p.exists() for p in (out, snapshot, receipt_path)), 'Retained executions cannot be overwritten'
+snapshot.write_bytes(patch)
+receipt = {'label': label, 'command': command, 'cwd': str(REPO),
+           'source': git('rev-parse', 'HEAD').decode().strip(),
+           'tree': git('rev-parse', 'HEAD^{tree}').decode().strip(),
+           'statusBefore': git('status', '--porcelain').decode(),
+           'sourceFiles': source_files,
+           'patch': {'path': str(snapshot), 'bytes': len(patch), 'sha256': digest(patch)},
+           'startedAt': now()}
+with out.open('xb') as sink:
+    result = subprocess.run(command, cwd=REPO, stdout=sink, stderr=subprocess.STDOUT)
+data = out.read_bytes()
+counts = {}
+for line in data.decode('utf-8', errors='replace').splitlines():
+    match = re.match(r'^[#ℹ]\s+(tests|pass|fail|cancelled|skipped|todo)\s+(\d+)', line)
+    if match:
+        counts[match[1]] = int(match[2])
+receipt.update(completedAt=now(), exitCode=result.returncode, counts=counts,
+               log={'path': str(out), 'bytes': len(data), 'sha256': digest(data)},
+               statusAfter=git('status', '--porcelain').decode())
+assert source_files == {p: {'bytes': (REPO / p).stat().st_size,
+                           'sha256': digest((REPO / p).read_bytes())} for p in paths}
+receipt_path.write_text(json.dumps(receipt, indent=2) + '\n')
+print(json.dumps({'label': label, 'exitCode': result.returncode, 'counts': counts,
+                  'receipt': str(receipt_path), 'logSha256': digest(data)}))
+raise SystemExit(result.returncode)

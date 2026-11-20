@@ -1,0 +1,105 @@
+import datetime
+import gzip
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8')
+REPO = ROOT / 'p2p-solana-core-capability-guard-g34'
+LOGS = ROOT / 'g34-core-capability-author'
+OUT = REPO / 'docs/execution/solana-core-capability-generation34-20261120'
+REPORT = 'docs/engineering/SOLANA_CORE_CAPABILITY_GUARD_GENERATION34_20261120.md'
+SOURCE = '2c21958684e8943a3058b0195fd310bfeba68866'
+MAIN = '8e836baa877b676a863c877003e277b638fc5061'
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+
+def entries(ref):
+    return {p: meta for meta, p in (line.split(b'\t', 1) for line in
+            git('ls-tree', '-r', '-z', ref).split(b'\0') if line) if not p.startswith(b'docs/')}
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert not (OUT / '09-source-and-evidence-whitespace.json').exists()
+receipt_path = OUT / 'receipt.json'
+receipt = json.loads(receipt_path.read_text())
+assert len(receipt['commands']) == 8 and len(receipt['artifacts']) == 27
+for artifact in receipt['artifacts']:
+    data = (REPO / artifact['path']).read_bytes()
+    assert len(data) == artifact['bytes'] and digest(data) == artifact['sha256']
+    if artifact['gzipMtime'] == 0:
+        assert data[4:8] == b'\0' * 4
+        raw = gzip.decompress(data)
+        assert len(raw) == artifact['rawBytes'] and digest(raw) == artifact['rawSha256']
+
+
+def save(name, raw, compress=False, provenance='final evidence verification'):
+    data = gzip.compress(raw, mtime=0) if compress else raw
+    path = OUT / name
+    assert not path.exists()
+    path.write_bytes(data)
+    item = {'path': str(path.relative_to(REPO)), 'bytes': len(data), 'sha256': digest(data),
+            'rawBytes': len(raw), 'rawSha256': digest(raw), 'gzipMtime': 0 if compress else None,
+            'provenance': provenance}
+    receipt['artifacts'].append(item)
+    return item
+
+
+save('finalize-evidence.py.txt', (LOGS / 'finalize-evidence.py').read_bytes(),
+     provenance='exact retained evidence finalization script')
+receipt_path.write_text(json.dumps(receipt, indent=2) + '\n')
+subprocess.run(['git', 'add', '--', REPORT, str(OUT.relative_to(REPO))], cwd=REPO, check=True)
+assert not git('diff', '--name-only').strip(), 'All current evidence must be staged'
+source_entries = entries(SOURCE)
+assert len(source_entries) == 1033
+staged = git('write-tree').decode().strip()
+assert entries(staged) == source_entries
+paths = git('diff', '--cached', '--name-only', SOURCE).decode().splitlines()
+assert paths and all(p.startswith('docs/') for p in paths)
+commands = [
+    ['git', 'diff', '--check', MAIN, SOURCE],
+    ['git', 'diff', '--cached', '--check', MAIN],
+]
+started = now()
+outputs = []
+checks = []
+for command in commands:
+    run = subprocess.run(command, cwd=REPO, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
+    outputs.append(run.stdout)
+    checks.append({'command': command, 'exitCode': run.returncode, 'outputBytes': len(run.stdout)})
+raw = b''.join(outputs)
+log = save('09-source-and-evidence-whitespace.log.gz', raw, True)
+check = {
+    'checks': checks, 'cwd': str(REPO), 'source': SOURCE,
+    'tree': git('rev-parse', SOURCE + '^{tree}').decode().strip(),
+    'stagedEvidenceTreeBeforeReceiptRegistration': staged,
+    'stagedDocumentationPaths': paths,
+    'nonDocsEntriesExactToSource': len(source_entries),
+    'startedAt': started, 'completedAt': now(),
+    'exitCode': max(c['exitCode'] for c in checks), 'log': log,
+    'scope': ('Full source and staged source/evidence diffs against the frozen main baseline, without exclusions. '
+              'This receipt and log are subsequently registered, then the complete staged and final committed '
+              'diffs are checked again. No self-referential final-commit identity is claimed.'),
+}
+save('09-source-and-evidence-whitespace.json', (json.dumps(check, indent=2) + '\n').encode())
+receipt_path.write_text(json.dumps(receipt, indent=2) + '\n')
+assert check['exitCode'] == 0, 'Recorded whitespace check failed'
+subprocess.run(['git', 'add', '--', str(OUT.relative_to(REPO))], cwd=REPO, check=True)
+subprocess.run(['git', 'diff', '--cached', '--check', MAIN], cwd=REPO, check=True)
+final_tree = git('write-tree').decode().strip()
+assert entries(final_tree) == source_entries
+assert not git('diff', '--name-only').strip()
+print(json.dumps({'source': SOURCE, 'stagedEvidenceTree': final_tree, 'artifacts': len(receipt['artifacts']),
+                  'nonDocsEntriesExactToSource': len(source_entries), 'fullWhitespaceExitCode': 0}))

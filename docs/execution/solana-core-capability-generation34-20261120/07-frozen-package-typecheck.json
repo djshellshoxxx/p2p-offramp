@@ -1,0 +1,41 @@
+{
+  "label": "07-frozen-package-typecheck",
+  "command": [
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--noEmit"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-solana-core-capability-guard-g34",
+  "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+  "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+  "statusBefore": "",
+  "sourceFiles": {
+    "packages/chain-solana/src/plan.ts": {
+      "bytes": 15445,
+      "sha256": "ef5e14a71bf9a15886d071b9455c03a55b22538da1161891d968bc3fdd1be4c0"
+    },
+    "packages/chain-solana/test/core-capability-funding.test.mjs": {
+      "bytes": 8046,
+      "sha256": "163bd637580337f3909e4f9f5f619047479aa4132fd50c07330361b5ba1a6e6b"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 20668,
+      "sha256": "d133f8b5b00ee7c6f1f65f73d7a709e18cbda6ecdbdf3f9d83893073df15069b"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g34-core-capability-author/07-frozen-package-typecheck.patch",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "startedAt": "2026-11-20T19:53:31.768581+00:00",
+  "completedAt": "2026-11-20T19:53:32.432847+00:00",
+  "exitCode": 0,
+  "counts": {},
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g34-core-capability-author/07-frozen-package-typecheck.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "statusAfter": ""
+}

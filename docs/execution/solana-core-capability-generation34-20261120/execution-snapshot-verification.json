@@ -1,0 +1,50 @@
+[
+  {
+    "label": "01-baseline",
+    "head": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+    "reconstructedTree": "a163409c16ad32aa1953ecd4b81fc71404516ace",
+    "verifiedSourceFiles": 3
+  },
+  {
+    "label": "02-corrected-baseline",
+    "head": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+    "reconstructedTree": "7152c034942354c7b97680b55e1c24f63d0f7693",
+    "verifiedSourceFiles": 3
+  },
+  {
+    "label": "03-guard-focused",
+    "head": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+    "reconstructedTree": "01d94ab04b10f9742a64b52bccf2a81cd30eaef4",
+    "verifiedSourceFiles": 3
+  },
+  {
+    "label": "04-final-fixture-baseline",
+    "head": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+    "reconstructedTree": "a62196a0ba87014594df14b585a9e57839afed17",
+    "verifiedSourceFiles": 3
+  },
+  {
+    "label": "05-final-focused",
+    "head": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+    "reconstructedTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+    "verifiedSourceFiles": 3
+  },
+  {
+    "label": "06-frozen-solana-package",
+    "head": "2c21958684e8943a3058b0195fd310bfeba68866",
+    "reconstructedTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+    "verifiedSourceFiles": 3
+  },
+  {
+    "label": "07-frozen-package-typecheck",
+    "head": "2c21958684e8943a3058b0195fd310bfeba68866",
+    "reconstructedTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+    "verifiedSourceFiles": 3
+  },
+  {
+    "label": "08-frozen-boundaries",
+    "head": "2c21958684e8943a3058b0195fd310bfeba68866",
+    "reconstructedTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+    "verifiedSourceFiles": 3
+  }
+]

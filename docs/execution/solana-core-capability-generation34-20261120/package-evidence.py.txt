@@ -1,0 +1,111 @@
+import datetime
+import gzip
+import hashlib
+import json
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8')
+REPO = ROOT / 'p2p-solana-core-capability-guard-g34'
+LOGS = ROOT / 'g34-core-capability-author'
+OUT = REPO / 'docs/execution/solana-core-capability-generation34-20261120'
+SOURCE = '2c21958684e8943a3058b0195fd310bfeba68866'
+BASE = '448cdcc2a9d13109421f21eaa1107936da0ac5c8'
+assert not OUT.exists(), 'Refusing to overwrite evidence'
+
+
+def git(*args, env=None):
+    return subprocess.check_output(['git', *args], cwd=REPO, env=env)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def entries(ref):
+    return {p.decode(): meta.decode() for meta, p in
+            (line.split(b'\t', 1) for line in git('ls-tree', '-r', '-z', ref).split(b'\0') if line)}
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert not git('status', '--porcelain').strip()
+base, source = entries(BASE), entries(SOURCE)
+changed = sorted(p for p in base.keys() | source.keys() if base.get(p) != source.get(p))
+assert changed == ['packages/chain-solana/README.md', 'packages/chain-solana/src/plan.ts',
+                   'packages/chain-solana/test/core-capability-funding.test.mjs']
+assert len([p for p in source if not p.startswith('docs/')]) == 1033
+OUT.mkdir(parents=True)
+artifacts = []
+
+
+def save(name, raw, compress=False, provenance='original execution artifact'):
+    data = gzip.compress(raw, mtime=0) if compress else raw
+    path = OUT / name
+    path.write_bytes(data)
+    if compress:
+        assert gzip.decompress(data) == raw and data[4:8] == b'\0' * 4
+    artifacts.append({'path': str(path.relative_to(REPO)), 'bytes': len(data), 'sha256': digest(data),
+                      'rawBytes': len(raw), 'rawSha256': digest(raw), 'gzipMtime': 0 if compress else None,
+                      'provenance': provenance})
+
+
+commands = []
+snapshots = []
+for receipt_path in sorted(LOGS.glob('[0-9][0-9]-*.json')):
+    receipt = json.loads(receipt_path.read_text())
+    label = receipt['label']
+    raw_log = (LOGS / f'{label}.log').read_bytes()
+    patch = (LOGS / f'{label}.patch').read_bytes()
+    assert digest(raw_log) == receipt['log']['sha256'] and len(raw_log) == receipt['log']['bytes']
+    assert digest(patch) == receipt['patch']['sha256'] and len(patch) == receipt['patch']['bytes']
+    with tempfile.TemporaryDirectory(prefix='g34-evidence-index-') as directory:
+        env = dict(os.environ, GIT_INDEX_FILE=str(Path(directory) / 'index'))
+        subprocess.run(['git', 'read-tree', receipt['source']], cwd=REPO, env=env, check=True)
+        if patch:
+            subprocess.run(['git', 'apply', '--cached', '--binary', str(LOGS / f'{label}.patch')],
+                           cwd=REPO, env=env, check=True)
+        tree = git('write-tree', env=env).decode().strip()
+    for name, expected in receipt['sourceFiles'].items():
+        raw = git('show', f'{tree}:{name}')
+        assert len(raw) == expected['bytes'] and digest(raw) == expected['sha256']
+    snapshots.append({'label': label, 'head': receipt['source'], 'reconstructedTree': tree,
+                      'verifiedSourceFiles': len(receipt['sourceFiles'])})
+    save(f'{label}.json', receipt_path.read_bytes())
+    save(f'{label}.log.gz', raw_log, True)
+    save(f'{label}.patch.gz', patch, True)
+    commands.append({k: receipt[k] for k in ['label', 'command', 'source', 'tree', 'startedAt', 'completedAt',
+                                           'exitCode', 'counts']})
+
+for name in ['capture-command.py', 'package-evidence.py']:
+    save(name + '.txt', (LOGS / name).read_bytes(), provenance='exact retained execution/packaging script')
+save('execution-snapshot-verification.json', (json.dumps(snapshots, indent=2) + '\n').encode(),
+     provenance='reconstruction of recorded source plus exact retained patch')
+receipt = {
+    'version': 1, 'generation': 34, 'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'base': BASE, 'baseTree': git('rev-parse', BASE + '^{tree}').decode().strip(),
+    'source': SOURCE, 'sourceTree': git('rev-parse', SOURCE + '^{tree}').decode().strip(),
+    'sourceFiles': [{'path': p, 'gitEntry': source[p], 'bytes': len(git('show', f'{SOURCE}:{p}')),
+                     'sha256': digest(git('show', f'{SOURCE}:{p}'))} for p in changed],
+    'composition': {'baselineEntries': len(base), 'sourceEntries': len(source), 'nonDocsEntries': 1033,
+                    'modifiedPaths': [p for p in changed if p in base],
+                    'addedPaths': [p for p in changed if p not in base], 'deletedPaths': [],
+                    'allOtherBaselineEntriesExact': True},
+    'commands': commands, 'artifacts': artifacts,
+    'dependencyMode': 'Existing immutable physical hardlinks from p2p-continuation-g32; no installation or mutation.',
+    'limits': [
+        'Accepted D4 guard applies only to new funding plans, shared by direct funding, preparation and confirmation replanning.',
+        'The maintained encoder and SHA-256 derive the count-zero value; existing Python vectors and Node crypto verify it independently.',
+        'Binding, historical codecs, journal verification, recovery, exits, native programs, ABI and configuration remain unchanged.',
+        'Initial baseline contains two wrong duplicate-confirm expectations and two wrong historical reprepare expectations in addition to 18 absent-policy failures.',
+        'The corrected intermediate baseline passed 15 controls and failed 18 policy cases; the first guarded selection then exposed two historical reprepare error-precedence assumptions.',
+        'The final historical control asserts decoded-record confirmation refusal, while all 18 new-funding refusal assertions remain. Final baseline is 15 pass/18 fail; guarded selection is 38/38.',
+        'All original command outputs and patches are retained, including fixture corrections; no production change was made to satisfy those corrections.',
+        'All tests use controlled local ports and synthetic records. No browser, validator, physical wallet, external target or native financial run occurred.',
+        'No full repository suite or artifact build was run by this author; root owns combined qualification and Tier C approval/gates.',
+    ],
+}
+(OUT / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
+print(json.dumps({'source': SOURCE, 'commands': len(commands), 'artifacts': len(artifacts),
+                  'verifiedExecutionSnapshots': len(snapshots), 'nonDocsEntries': 1033}))

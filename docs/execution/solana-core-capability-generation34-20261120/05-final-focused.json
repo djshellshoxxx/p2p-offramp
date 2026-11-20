@@ -1,0 +1,52 @@
+{
+  "label": "05-final-focused",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "packages/chain-solana/test/core-capability-funding.test.mjs",
+    "packages/chain-solana/test/boundary.test.mjs"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-solana-core-capability-guard-g34",
+  "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+  "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+  "statusBefore": " M packages/chain-solana/README.md\n M packages/chain-solana/src/plan.ts\n?? packages/chain-solana/test/core-capability-funding.test.mjs\n",
+  "sourceFiles": {
+    "packages/chain-solana/src/plan.ts": {
+      "bytes": 15445,
+      "sha256": "ef5e14a71bf9a15886d071b9455c03a55b22538da1161891d968bc3fdd1be4c0"
+    },
+    "packages/chain-solana/test/core-capability-funding.test.mjs": {
+      "bytes": 8046,
+      "sha256": "163bd637580337f3909e4f9f5f619047479aa4132fd50c07330361b5ba1a6e6b"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 20668,
+      "sha256": "d133f8b5b00ee7c6f1f65f73d7a709e18cbda6ecdbdf3f9d83893073df15069b"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g34-core-capability-author/05-final-focused.patch",
+    "bytes": 12537,
+    "sha256": "9fb4a4f991d502e098860ad4e7b655f51f2a074f21e73fb25e0ab2cf960e7854"
+  },
+  "startedAt": "2026-11-20T19:52:43.734309+00:00",
+  "completedAt": "2026-11-20T19:52:44.995643+00:00",
+  "exitCode": 0,
+  "counts": {
+    "tests": 38,
+    "pass": 38,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g34-core-capability-author/05-final-focused.log",
+    "bytes": 3442,
+    "sha256": "41fcd661800d16397b3b60f1336cd8c726236638f052f40f4bb361aaf4f71c62"
+  },
+  "statusAfter": " M packages/chain-solana/README.md\n M packages/chain-solana/src/plan.ts\n?? packages/chain-solana/test/core-capability-funding.test.mjs\n"
+}
