@@ -91,10 +91,12 @@ and [independent codec review](INDEPENDENT_FUNDING_PROPOSAL_CODEC_REVIEW_GENERAT
 G36 adds explicit `funding.proposal.import`, separate private proposal
 inventory and maintained UI admission. Exact command parsing bounds the text;
 the codec also enforces the UTF-8 byte limit. Admission performs **one encrypted
-CAS and no proposal RPC, wallet connection or preparation**. A canonical exact
+CAS and no proposal RPC, wallet connection or preparation**. An unpaired canonical exact
 duplicate returns the saved record without rewriting its bytes or original
 provenance, including after restore, configuration change or capacity changes.
-A funded recovery record blocks new proposal admission for that binding.
+A retained funded recovery blocks proposal import for that binding, including
+reimport of identical public terms: the command returns `CONFLICT` without
+rewriting the existing proposal or its original provenance.
 
 The quota is **eight distinct full bindings** across proposals and funded
 recoveries; a paired proposal/recovery counts once. Existing overflow remains
