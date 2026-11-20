@@ -1,0 +1,46 @@
+{
+  "label": "06-frozen-whitespace",
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "8e836baa877b676a863c877003e277b638fc5061..HEAD"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-g33",
+  "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+  "tree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+  "statusBefore": "",
+  "sourceFiles": {
+    "packages/chain-solana/src/funding-review.ts": {
+      "bytes": 6791,
+      "sha256": "c45531865f4ac3c2e5a0efdcffb148922bea77aa7a0e807867c82996c61dc500"
+    },
+    "packages/chain-solana/test/funding-review.test.mjs": {
+      "bytes": 15904,
+      "sha256": "796bca4a5bd98997a2a770b39b7e32ac5e7a7615276886409184b01089e461e4"
+    },
+    "packages/chain-solana/test/boundary.test.mjs": {
+      "bytes": 5896,
+      "sha256": "b7eeeeb4189e1c8049a3ae1edb49fddb326ffab5ac5efd66ebaf0fe05d68042d"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 19421,
+      "sha256": "b312a2425db489387f7b32f9638b0ebc670008fc96dacac5a325b63022711a6f"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g33-funding-review-author/06-frozen-whitespace.patch",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "startedAt": "2026-11-20T19:42:18.210615+00:00",
+  "completedAt": "2026-11-20T19:42:18.246965+00:00",
+  "exitCode": 0,
+  "counts": {},
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g33-funding-review-author/06-frozen-whitespace.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "statusAfter": ""
+}

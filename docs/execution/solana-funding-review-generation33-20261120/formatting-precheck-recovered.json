@@ -1,0 +1,8 @@
+{
+  "provenance": "Recovered exact stdout/stderr text from exec tool result a20265; this is not an original file capture.",
+  "compoundCommandExitCode": 0,
+  "cause": "Formatting assertion still found a 121-character test declaration. The shell continued to git commit and git show after that assertion.",
+  "createdSource": "b8792ac4088f75603be8e0b40ba1506f2fb137f2",
+  "correction": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a wraps only that declaration into two lines.",
+  "preservedOriginalFailure": "02-projection-and-boundaries.json and its original full log/patch retain the actual failed package-line check before formatting corrections."
+}

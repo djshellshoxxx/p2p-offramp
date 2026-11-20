@@ -1,0 +1,44 @@
+[
+  {
+    "label": "01-baseline",
+    "head": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+    "reconstructedTree": "15cc2d67e3d12e916fa2714f73c8bb8a3ff54399",
+    "verifiedSourceFiles": 3
+  },
+  {
+    "label": "02-projection-and-boundaries",
+    "head": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+    "reconstructedTree": "1d3d104f16ce51bf2caf57934afebbfebc7f3046",
+    "verifiedSourceFiles": 4
+  },
+  {
+    "label": "03-frozen-focused-adjacent",
+    "head": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+    "reconstructedTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+    "verifiedSourceFiles": 4
+  },
+  {
+    "label": "04-frozen-package-types",
+    "head": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+    "reconstructedTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+    "verifiedSourceFiles": 4
+  },
+  {
+    "label": "05-frozen-import-boundaries",
+    "head": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+    "reconstructedTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+    "verifiedSourceFiles": 4
+  },
+  {
+    "label": "06-frozen-whitespace",
+    "head": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+    "reconstructedTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+    "verifiedSourceFiles": 4
+  },
+  {
+    "label": "07-final-projection-boundaries",
+    "head": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+    "reconstructedTree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+    "verifiedSourceFiles": 4
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "label": "01-baseline",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "packages/chain-solana/test/funding-review.test.mjs"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-g33",
+  "source": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+  "tree": "d3b738a378218927d86241a1db987a57af87eec8",
+  "statusBefore": "?? packages/chain-solana/test/funding-review.test.mjs\n",
+  "sourceFiles": {
+    "packages/chain-solana/test/funding-review.test.mjs": {
+      "bytes": 15886,
+      "sha256": "4b72a2a38500e718ab6882a15dba52c8abd9692a1e07ac527c5389dc1985bbbd"
+    },
+    "packages/chain-solana/test/boundary.test.mjs": {
+      "bytes": 5871,
+      "sha256": "4783036be38bf5a9abbaaf3e0cba1557227517c82898aaed1dc4b609ab58763c"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 17475,
+      "sha256": "07e57c9a4db863ca06596affa4c0748bfd96aa4cb785fa5fdb97b1ac02db4abd"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g33-funding-review-author/01-baseline.patch",
+    "bytes": 16409,
+    "sha256": "b8fb0f919b9e87989b8896cc7dbbbffcd3286bf9d514e4fd7e1e488292327c46"
+  },
+  "startedAt": "2026-11-20T19:39:05.669546+00:00",
+  "completedAt": "2026-11-20T19:39:06.722146+00:00",
+  "exitCode": 1,
+  "counts": {
+    "tests": 48,
+    "pass": 1,
+    "fail": 47,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g33-funding-review-author/01-baseline.log",
+    "bytes": 57959,
+    "sha256": "265b11f8c26ddbb4c51a1b8900b408b22bb79f0f22d5c1f5544dc21b29aa7d31"
+  },
+  "statusAfter": "?? packages/chain-solana/test/funding-review.test.mjs\n"
+}
