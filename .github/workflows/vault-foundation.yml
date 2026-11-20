@@ -35,6 +35,7 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npm run typecheck
+      - run: npm run typecheck:proof-inputs
       - run: npm test
       - run: npm run test:formal:unit
       - run: npm run test:acceptance:cli
@@ -107,8 +108,14 @@ jobs:
       - run: npm run test:locale:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:meetup:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - name: Verify isolated-peer live and stored signed-offer discovery
         run: node scripts/test-peer-offer-browser.mjs
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:privacy-controls:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
   docs-tooling:
