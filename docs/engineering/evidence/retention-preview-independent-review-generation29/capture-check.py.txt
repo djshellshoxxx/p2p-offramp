@@ -1,0 +1,57 @@
+from pathlib import Path
+from datetime import datetime, timezone
+import gzip
+import hashlib
+import json
+import re
+import shlex
+import subprocess
+import sys
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-review-g29')
+OUT = Path('/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-review-evidence-g29')
+EVIDENCE = 'docs/engineering/evidence/retention-preview-independent-review-generation29'
+
+def timestamp():
+    return datetime.now(timezone.utc).isoformat()
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT, text=True).strip()
+
+def identity():
+    return {'commit': git('rev-parse', 'HEAD'), 'tree': git('rev-parse', 'HEAD^{tree}'),
+            'status': git('status', '--porcelain=v1', '--untracked-files=all')}
+
+name, expected, *command = sys.argv[1:]
+expected = int(expected)
+started = timestamp()
+before = identity()
+try:
+    result = subprocess.run(command, cwd=ROOT, stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT, timeout=120, check=False)
+    output, code, timed_out = result.stdout, result.returncode, False
+except subprocess.TimeoutExpired as error:
+    output, code, timed_out = error.stdout or b'', None, True
+ended = timestamp()
+compressed = gzip.compress(output, mtime=0)
+(OUT / f'{name}.log.gz').write_bytes(compressed)
+record = {'name': name, 'command': shlex.join(command), 'argv': command,
+          'working_directory': str(ROOT), 'started_utc': started, 'ended_utc': ended,
+          'source_before': before, 'source_after': identity(),
+          'expected_exit_code': expected, 'exit_code': code,
+          'exit_matches_expectation': code == expected and not timed_out,
+          'timeout_seconds': 120, 'timed_out': timed_out,
+          'log': f'{EVIDENCE}/{name}.log.gz',
+          'raw_log_bytes': len(output), 'raw_log_sha256': hashlib.sha256(output).hexdigest(),
+          'gzip_bytes': len(compressed), 'gzip_sha256': hashlib.sha256(compressed).hexdigest()}
+decoded = output.decode('utf-8', errors='replace')
+for label in ['tests', 'suites', 'pass', 'fail', 'cancelled', 'skipped', 'todo']:
+    match = re.search(r'(?m)^(?:#|\u2139)\s+' + label + r'\s+(\d+)\s*$', decoded)
+    if match:
+        record[label] = int(match.group(1))
+record['failed_cases'] = re.findall(r'(?m)^not ok \d+ - (.+)$', decoded)
+(OUT / f'{name}.json').write_text(json.dumps(record, indent=2) + '\n')
+print(json.dumps(record, indent=2))
+if not record['exit_matches_expectation']:
+    print(decoded)
+    sys.exit(1)

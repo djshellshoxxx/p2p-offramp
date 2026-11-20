@@ -1,0 +1,54 @@
+import gzip
+import hashlib
+import json
+import re
+import subprocess
+
+COMMIT = 'b57b5b38bc5bec61b9d1fef00d887a4f13db9452'
+SOURCE = '5ad059fa8b77cfb8beffcf2f1889e5f19d727ea4'
+RECEIPT = 'docs/execution/retention-preview-backend-generation29-20261120/receipt.json'
+
+def blob(commit, path):
+    return subprocess.check_output(['git', 'show', commit + ':' + path])
+
+def sha(value):
+    return hashlib.sha256(value).hexdigest()
+
+receipt_bytes = blob(COMMIT, RECEIPT)
+receipt = json.loads(receipt_bytes)
+assert receipt['source_commit'] == SOURCE
+assert subprocess.check_output(['git', 'rev-parse', COMMIT + '^'], text=True).strip() == SOURCE
+assert subprocess.check_output(['git', 'rev-parse', SOURCE + '^{tree}'], text=True).strip() == receipt['source_tree']
+files = []
+for row in receipt['source_paths']:
+    value = blob(SOURCE, row['path'])
+    assert len(value) == row['bytes'] and sha(value) == row['sha256']
+    assert blob(COMMIT, row['path']) == value
+    files.append({'path': row['path'], 'bytes': len(value), 'sha256': sha(value), 'preserved_in_evidence_commit': True})
+logs = []
+for row in receipt['checks']:
+    compressed = blob(COMMIT, row['log'])
+    raw = gzip.decompress(compressed)
+    assert len(compressed) == row['gzip_bytes'] and sha(compressed) == row['gzip_sha256']
+    assert len(raw) == row['raw_bytes'] and sha(raw) == row['raw_sha256']
+    assert int.from_bytes(compressed[4:8], 'little') == row['gzip_mtime'] == 0
+    counts = {}
+    decoded = raw.decode()
+    for label in ['tests', 'pass', 'fail', 'skipped', 'cancelled', 'todo']:
+        matches = re.findall(r'(?m)^(?:#|\u2139)\s+' + label + r'\s+(\d+)\s*$', decoded)
+        if matches:
+            assert len(matches) == 1
+            counts[label] = int(matches[0])
+    for label, expected in row.get('test_counts', {}).items():
+        assert counts[label] == expected
+    logs.append({'path': row['log'], 'exit_code': row['exit_code'], 'raw_bytes': len(raw),
+        'raw_sha256': sha(raw), 'gzip_bytes': len(compressed), 'gzip_sha256': sha(compressed),
+        'mtime': 0, 'counts_from_raw_log': counts,
+        'execution_source_state': row['execution_source_state']})
+changed = subprocess.check_output(['git', 'diff', '--name-only', SOURCE, COMMIT], text=True).splitlines()
+assert changed and all(path.startswith('docs/') for path in changed)
+print(json.dumps({'evidence_commit': COMMIT, 'source_commit': SOURCE,
+    'receipt_path': RECEIPT, 'receipt_sha256': sha(receipt_bytes), 'files': files, 'logs': logs,
+    'source_files_verified': len(files), 'full_raw_logs_verified': len(logs),
+    'evidence_only_changed_paths': changed,
+    'interpretation': 'Recorded evidence independently rehashed and parsed; the reviewer did not rerun the author RED or adjacent 148-test suite.'}, indent=2))

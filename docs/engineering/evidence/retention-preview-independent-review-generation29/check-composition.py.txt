@@ -1,0 +1,50 @@
+import hashlib
+import json
+import subprocess
+
+BASE = '76d107e4e0ca1a2533636a6057d9d603861668e1'
+PUBLISHED_BASE = 'd9ddcf53d82100f05de7346143a0ad00d43c2c1a'
+BACKEND = '5ad059fa8b77cfb8beffcf2f1889e5f19d727ea4'
+BACKEND_APPLIED = 'fbf60f0'
+BACKEND_EVIDENCE = 'b57b5b38bc5bec61b9d1fef00d887a4f13db9452'
+BACKEND_EVIDENCE_APPLIED = '5d6ae5a'
+UI = '0d1d929d8bfb97b9772f84eb5fa3425de6fd3602'
+COMBINED = 'fa7c1a11ff990be4646053731f1030d09eb8f9b6'
+
+def git(*args):
+    return subprocess.check_output(['git', *args]).decode().strip()
+
+def entries(commit):
+    return dict(item.decode().split('\t', 1)[::-1] for item in subprocess.check_output(
+        ['git', 'ls-tree', '-rz', '--full-tree', commit]).split(b'\0') if item)
+
+def changed(before, after):
+    return sorted(path for path in before.keys() | after.keys() if before.get(path) != after.get(path))
+
+base, backend, backend_evidence, ui, combined = [entries(commit) for commit in [BASE, BACKEND, BACKEND_EVIDENCE, UI, COMBINED]]
+backend_paths = changed(base, backend)
+evidence_paths = changed(backend, backend_evidence)
+ui_paths = changed(entries(UI + '^'), ui)
+checks = {
+    'review_checkout_is_exact_combined': git('rev-parse', 'HEAD') == COMBINED,
+    'combined_tree_is_frozen': git('rev-parse', COMBINED + '^{tree}') == 'dc34c0065a6bc4d66b4195b16d573ef1ec7463a5',
+    'published_base_matches_reviewed_local_base': entries(PUBLISHED_BASE) == base,
+    'applied_backend_tree_matches_author': entries(BACKEND_APPLIED) == backend,
+    'applied_backend_evidence_tree_matches_author': entries(BACKEND_EVIDENCE_APPLIED) == backend_evidence,
+    'backend_source_and_tests_preserved_in_combination': all(combined[path] == backend[path] for path in backend_paths),
+    'backend_evidence_preserved_in_combination': all(combined[path] == backend_evidence[path] for path in evidence_paths),
+    'ui_source_and_tests_preserved_in_combination': all(combined[path] == ui[path] for path in ui_paths),
+    'all_other_baseline_entries_preserved': all(combined.get(path) == value for path, value in base.items() if path not in backend_paths + ui_paths),
+    'combined_delta_exactly_both_sources_plus_backend_evidence': changed(base, combined) == sorted(backend_paths + evidence_paths + ui_paths),
+    'backend_evidence_is_documentation_only': all(path.startswith('docs/') for path in evidence_paths),
+    'all_nondocumentation_entries_match_complete_ui_author_tree': {p: v for p, v in combined.items() if not p.startswith('docs/')} == {p: v for p, v in ui.items() if not p.startswith('docs/')},
+    'published_base_is_ancestor': subprocess.run(['git', 'merge-base', '--is-ancestor', PUBLISHED_BASE, COMBINED]).returncode == 0,
+    'checkout_is_clean': git('status', '--porcelain=v1', '--untracked-files=all') == '',
+}
+print(json.dumps({'checks': checks, 'base': BASE, 'published_base': PUBLISHED_BASE, 'combined': COMBINED,
+    'backend_author': BACKEND, 'backend_applied': git('rev-parse', BACKEND_APPLIED),
+    'backend_evidence_author': BACKEND_EVIDENCE, 'backend_evidence_applied': git('rev-parse', BACKEND_EVIDENCE_APPLIED),
+    'ui_author': UI, 'source_entries': len(combined), 'baseline_entries': len(base),
+    'backend_paths': backend_paths, 'ui_paths': ui_paths, 'backend_evidence_paths': evidence_paths,
+    'unchanged_baseline_entries': sum(combined.get(p) == value for p, value in base.items())}, indent=2))
+assert all(checks.values()), 'frozen source composition check failed'
