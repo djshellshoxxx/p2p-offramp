@@ -1,0 +1,42 @@
+import hashlib
+import json
+import subprocess
+
+BASE = "33232f62dc9cd250528ef3eb0313c0c319d99495"
+AUTHOR_BASE = "fa7c1a11ff990be4646053731f1030d09eb8f9b6"
+AUTHOR = "a2d69851430971ce51588c22c571e48b30b4ca01"
+COMBINED = "3bfb7761b6ec430c8e437d117ec31007503f0d12"
+EXPECTED_TREE = "b46873509b64467338978820a6469de7fffdc619"
+def git(*args):
+    return subprocess.check_output(["git", *args])
+def entries(ref):
+    output = {}
+    for row in git("ls-tree", "-rz", ref).split(b"\0"):
+        if row:
+            header, path = row.split(b"\t", 1)
+            mode, kind, oid = header.decode().split()
+            output[path.decode()] = {"mode": mode, "type": kind, "oid": oid}
+    return output
+def nondocs(value):
+    return {key: entry for key, entry in value.items() if not key.startswith("docs/")}
+base, author_base, author, combined = map(entries, [BASE, AUTHOR_BASE, AUTHOR, COMBINED])
+assert nondocs(base) == nondocs(author_base)
+changes = {key: value for key, value in author.items() if author_base.get(key) != value}
+assert set(changes) == {"apps/web/src/main.tsx", "apps/web/src/OfflineRoot.tsx", "apps/web/src/ui/App.tsx", "apps/web/src/ui/Pages.tsx", "apps/web/test/generic-app-share-composition.test.mjs", "apps/web/test/generic-app-share-lifecycle.test.mjs"}
+assert set(author_base) - set(author) == set()
+expected = dict(base)
+expected.update(changes)
+assert expected == combined
+assert nondocs(combined) == nondocs(author)
+assert len(nondocs(combined)) == 1028
+assert git("rev-parse", COMBINED + "^{tree}").decode().strip() == EXPECTED_TREE
+assert git("show", "-s", "--format=%P", COMBINED).decode().strip() == BASE
+print(json.dumps({"published_generation29_parent": BASE, "published_parent_tree": git("rev-parse", BASE + "^{tree}").decode().strip(),
+ "author_base": AUTHOR_BASE, "author_source": AUTHOR, "combined_source": COMBINED, "combined_tree": EXPECTED_TREE,
+ "published_parent_non_documentation_entries": len(nondocs(base)), "combined_non_documentation_entries": len(nondocs(combined)),
+ "all_1028_non_documentation_entries_equal_author": True,
+ "complete_tree_is_exact_published_parent_plus_six_author_entries": True,
+ "preserved_parent_entries": sum(value == combined.get(key) for key, value in base.items()),
+ "changed_or_added_entries": changes,
+ "combined_non_documentation_identity_sha256": hashlib.sha256(json.dumps(nondocs(combined),sort_keys=True,separators=(",", ":")).encode()).hexdigest()
+}, indent=2))
