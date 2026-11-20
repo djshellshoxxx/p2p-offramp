@@ -1,4 +1,51 @@
-# Read-only Solana adapter for the D5 basic escrow (local qualification)
+# Solana adapter and native escrow client for the D5 basic escrow
+
+## Explicit prepared funding (generation 32)
+
+The native client in `src/compose.ts` adds a separate
+`prepareFunding(trade, sellerSession, options?)` entry. It returns an immutable
+`PreparedSolanaFunding` capability with `action: 'fund'`, seller role, absent
+escrow expectation, the exact message and original blockhash, and the funding
+shape. Preparation persists the intent before returning and never signs or
+broadcasts. A host can display the bound trade terms and this exact review, then
+call `confirm(review, sellerSession)` only after explicit confirmation.
+
+The existing `prepare` method and `PreparedSolanaActionKind` remain exit-only:
+`prepare(trade, session, 'fund')` still returns `INVALID_INPUT`. The new entry
+does not add a funding command to the existing recovery browser protocol or
+relax its requirement for an already funded escrow. Direct `fund()` behavior is
+unchanged. The ordinary offline build still excludes this native package.
+
+Funding options are captured synchronously as plain own data properties before
+any queued or asynchronous work. Only `sellerTokenAccount` and `rebuildOf` are
+accepted. A supplied SPL source address must be a canonical 32-byte base58 key;
+an explicit replacement must be an existing-format intent ID. Unknown, symbol,
+accessor and non-plain fields are refused without evaluating field getters.
+Later caller mutation cannot alter the retained planner or reviewed bytes.
+The existing planner chooses the default SPL source ATA when no override is
+given; source-account ownership and execution remain program checks, not a
+new claim made by preparation.
+
+Funding reviews share the existing private per-client capability map,
+confirmation and cancellation path. Copies and serialized views have no
+authority. The original seller session, deployment binding and profile must
+remain current. Confirmation consumes the capability before asynchronous work,
+checks fresh finalized funding eligibility and the original blockhash before
+signing and after a delayed wallet response, and compares the exact message.
+Cancellation never releases a pending physical wallet slot early or retracts a
+marked/submitted intent. Uncertain outcomes remain journaled and are reconciled
+without resending. A definitively dropped intent requires an explicit
+replacement before another funding preparation; the existing rules for other
+terminal outcomes remain unchanged.
+
+The existing native SOL/original-SPL, freeze-authority, deployment, deadline,
+journal and send policies remain unchanged. No mint, endpoint, production trust
+or release approval is added. Controlled client/journal/provider tests establish
+local composition behavior; previous direct-funding validator runs do not
+establish native execution of this new preparation path. Native acceptance,
+browser funding composition and the Tier C merge gates remain separate work.
+
+## Reader-layer reference
 
 Finalized-only reader and unsigned instruction builders for `contracts/solana/programs/basic-escrow`. It has no
 endpoint, connection, wallet, key, signer, sender or simulator. The caller injects `rpc.request` (it resolves to the
