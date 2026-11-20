@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "task": "T51",
+  "scope": "OFFLINE_COMPARISON_ONLY",
+  "diagnosticOnly": true,
+  "economicAuthority": false,
+  "defaultProfile": null,
+  "automaticDetection": false,
+  "wireInteroperabilityApproved": false,
+  "sourceContract": "docs/execution/profiles/stealth-local-contract.json",
+  "sources": [
+    { "id": "erc5564", "repository": "ethereum/ERCs", "commit": "90bed817701ba554ad0ef80494497a55c50a1a3b", "evidence": "ERC-5564 prose, ABI, published reference notebook" },
+    { "id": "sdk", "repository": "ScopeLift/stealth-address-sdk", "commit": "88bcc27c3b6163080ee18f330dfd6336dc8bd2e2", "evidence": "beta.5 generateStealthAddress.ts source", "executed": false },
+    { "id": "sdk-noble-default", "repository": "paulmillr/noble-secp256k1", "commit": "d38ed222f1a6d5d296a9e4f815a1c174e46c335f", "evidence": "2.0.0 getSharedSecret default compressed=true; SDK declares ^2.0.0 without an evaluated lock" }
+  ],
+  "localChoices": [
+    "Only mandatory named xy64-reference and ecdh33-SDK-comparison profiles; neither selected for wire use",
+    "Normal recipient requires distinct viewing key and spending PUBLIC point; single/equal-key fixtures stay private test data",
+    "Native fresh view-only capabilities; no secret import or caller entropy override",
+    "Version1 internal encrypted G02 preference namespace scoped by profile/context and both public points; not a native or wire profile",
+    "Local admission limits:16 live view handles,10 fixture pages,30-second logical timeout; physical slot retained until actual drain",
+    "10000 total derivations/job including cached candidate rederivation and10000 matched candidates; underlying G02 storage may refuse earlier"
+  ],
+  "decisionGaps": [
+    { "id": "scheme1-wire", "blockedBy": "Published reference hashes64-byte x||y while SDK-source comparison hashes33-byte compressed shared point", "nextAction": "Select and independently review an exact named interoperability profile against independently executed compatible implementations" },
+    { "id": "live-native-profile", "blockedBy": "No approved network/emitter code identity, native canonicality/deposit/reorg-window and brokered RPC profile", "nextAction": "Specify bounded native observation and reorg rules before adding transport; current caller-supplied anchors remain claims" },
+    { "id": "view-recovery", "blockedBy": "No durable external opaque view-purpose provider/recovery profile; native local handles intentionally lost on lock", "nextAction": "Define view-only purpose provenance and revocation without wallet seed/spending secret import" },
+    { "id": "economic-integration", "blockedBy": "No reviewed new-unfunded agreement commitment or external wallet spending/gas recovery contract", "nextAction": "Specify terms binding and external wallet ownership/spend flow without exposing spending secrets; do not mutate funded agreements" },
+    { "id": "independent-qualification", "blockedBy": "No specialist cryptographic review or native deployed interoperability qualification", "nextAction": "Review exact candidate source, profile and independent byte vectors before any activation" }
+  ]
+}
