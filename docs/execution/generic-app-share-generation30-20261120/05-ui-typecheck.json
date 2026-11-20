@@ -1,0 +1,33 @@
+{
+  "label": "05-ui-typecheck",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-g30",
+  "argv": [
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "-p",
+    "apps/web/tsconfig.ui.json",
+    "--noEmit"
+  ],
+  "head": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+  "headTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+  "patch": "05-ui-typecheck.patch",
+  "patchSha256": "ef30ff53829f2193c472506e90e63a121975da3a2a8f9d96f5ef3b60a4dbbfc2",
+  "files": {
+    "apps/web/src/main.tsx": "56d6f772c3fd335e2d07d7480d6ff497fa87a4e3c489e8c0c7ecdf88f5c0bf31",
+    "apps/web/src/OfflineRoot.tsx": "1c3071c4e4c8c212eba69a8d40a86016e29c5f511475a018ad428ae62c91c344",
+    "apps/web/src/ui/App.tsx": "6169f92593de33110f0cab0d9e54bd28640c476f2239a2486f8c2b964642ebd1",
+    "apps/web/src/ui/Pages.tsx": "5db3601177d38a826428ea475e60b18f3a13f00219a6da62f3721a89d5adc520",
+    "apps/web/src/ui/GenericAppShare.tsx": "3185010cbfa3070f7345d6ca316c6946400582b65f08a6b5466f6a4d3229db8d",
+    "apps/web/src/sharing/generic-app-link.ts": "a6a0f81b2430d4d4c2d66712c9679f722f5b3aa707364d1bbfaad057972b7f71",
+    "apps/web/test/generic-app-share.test.mjs": "8c4e9dff4afcbc42f4e5d93a1db6fdce18069c83e58c723a773f313c5d434eee",
+    "apps/web/test/generic-app-share-composition.test.mjs": "18e02f7be36405c4c8dd5d876e69f1e76333d7975c9f62b9c7bac1e9ae77b142",
+    "apps/web/test/generic-app-share-lifecycle.test.mjs": "54ae61122554642e8996094c2af7de450923fbb4c948d9d80b2dd4788a610251"
+  },
+  "startedAt": "2026-11-20T18:45:42.597208+00:00",
+  "durationSeconds": 2.062,
+  "exitCode": 0,
+  "endedAt": "2026-11-20T18:45:44.659575+00:00",
+  "log": "05-ui-typecheck.log",
+  "logBytes": 0,
+  "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

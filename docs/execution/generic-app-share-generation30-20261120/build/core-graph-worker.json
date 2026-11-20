@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "scope": "native-worker",
+  "modules": [
+    {
+      "path": "apps/web/src/runtime/worker-endpoint.ts",
+      "sha256": "e57d0f94a4ad0311017d6e3e4d61d8776fcaedb2dc1a63b2925e4657104f2db7"
+    },
+    {
+      "path": "apps/web/src/workers/vault.worker.ts",
+      "sha256": "005357465e3eb8c6f8bccdf5124524aa692063de6c21c146ef1a26ed4d47397e"
+    },
+    {
+      "path": "packages/personalization/favorites.ts",
+      "sha256": "4a3d3ffbe3f2bd1db80c42393b11dc5958f01f2bd6e40c4cd8832f1f41da281f"
+    },
+    {
+      "path": "packages/personalization/src/favorites.ts",
+      "sha256": "57b4681a8e871a4de685e64388e29e30e7294986159c36440a8e3824d7628e72"
+    },
+    {
+      "path": "packages/personalization/src/trade-draft-store.ts",
+      "sha256": "25c8b47c76b881c127f014647590c47003bfacfd88f43b8e51cdaf012c9b9deb"
+    },
+    {
+      "path": "packages/personalization/templates.ts",
+      "sha256": "8c91a9c82732966a28cf6cc56d88829bc14652c50bcac04e5a9fdc06f54e6c30"
+    },
+    {
+      "path": "packages/schemas/index.ts",
+      "sha256": "d3246790ee5c8e4213611771c2e30c0b74d36a39094f28ab0ad18f03986cfa15"
+    },
+    {
+      "path": "packages/schemas/src/backup-verification.ts",
+      "sha256": "37341acb6b0d61c63856039af8eda24d8586621cf9c0274009a1a983b57519ca"
+    },
+    {
+      "path": "packages/schemas/src/backup.ts",
+      "sha256": "703ed5c8083ba97a05d8c4131e267833420d867fbafc837f3e467c6bb9f9c399"
+    },
+    {
+      "path": "packages/schemas/src/core.ts",
+      "sha256": "b2e16e203d47a7add7531ffdd5701dad932e6ebd275470b66d56d8417749037e"
+    },
+    {
+      "path": "packages/schemas/src/identity.ts",
+      "sha256": "df9a3278760f9d8d6c8062cd9202e0f0710d8bb7e8153eb3729c328fa6be5a4e"
+    },
+    {
+      "path": "packages/schemas/src/intent.ts",
+      "sha256": "3b91d8edbae6f359c1b67eab3469f3c0ed7c02604083f15310529257f893d948"
+    },
+    {
+      "path": "packages/schemas/src/recovery-reference.ts",
+      "sha256": "52cf80934460a4c4dbe134b3be7f058ab037fe9512765b4bb48994bff4147625"
+    },
+    {
+      "path": "packages/schemas/src/registry.ts",
+      "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183"
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha256": "7555752bd735d2a23335d102bb1ea4a44e29fc49255f3d3b0c41750d3e90b93c"
+    },
+    {
+      "path": "packages/schemas/src/saved-review.ts",
+      "sha256": "5d6ad0a31b5c0ff880f2e7202a602bf8aa961166f51db3dc8b821cc33dd8f9c5"
+    },
+    {
+      "path": "packages/schemas/src/solana-recovery-reference.ts",
+      "sha256": "2684bec2dd59d3760b50fb9a58d9780d39b1b8e05c292c532397e0d738cb8897"
+    },
+    {
+      "path": "packages/schemas/src/trade-drafts.ts",
+      "sha256": "964ee6756b1ad68b2489a51147542f09c6d287c9dc5efbaa7ad3f02622d60838"
+    },
+    {
+      "path": "packages/schemas/src/transport-selection.ts",
+      "sha256": "23298bcc145008000acffb1632a9be35729ae3e99d7db458a3fd762caabaae42"
+    },
+    {
+      "path": "packages/schemas/src/transport.ts",
+      "sha256": "084c0b5e16975340911f7e4f70eaf5d3823799b7cb19037db5012f6d3c892dc8"
+    },
+    {
+      "path": "packages/schemas/src/vault-service.ts",
+      "sha256": "d64f63d2223be386c89ca4537c439c58365cc0d47e776f69b1b0343820cad9d0"
+    },
+    {
+      "path": "packages/schemas/src/vault.ts",
+      "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8"
+    },
+    {
+      "path": "packages/storage/index.ts",
+      "sha256": "fdf0645dab98e09a2779117242ca293458353872ef210ff31198d761fb493d31"
+    },
+    {
+      "path": "packages/storage/src/backup-service.ts",
+      "sha256": "422e2b69c906fff5bd3c620a0b7be3cdaa59337ac971012d25a9d71842f422f0"
+    },
+    {
+      "path": "packages/storage/src/idb-vault-store.ts",
+      "sha256": "835cca222821a3907b9172c285b2a351d97cc03440cd85ebba66a1e8b33efb69"
+    },
+    {
+      "path": "packages/storage/src/migration-service.ts",
+      "sha256": "3d839994b618d2877bb266626adc941f586242f208ed9942f6e8194c60001357"
+    },
+    {
+      "path": "packages/storage/src/recovery-slot.ts",
+      "sha256": "f0ffd258c6c47d5d7a42a6e69eddafdeec883e23d8acade6b02d48098f3fa181"
+    },
+    {
+      "path": "packages/storage/src/retention-service.ts",
+      "sha256": "79b599ba13dbce4604a5e9be06559c2e07b500b084796a00aa89d28c2ada8183"
+    },
+    {
+      "path": "packages/storage/src/vault-crypto.ts",
+      "sha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513"
+    },
+    {
+      "path": "packages/storage/src/vault-service.ts",
+      "sha256": "bf7f283caebc989be5b7b29b3efb97ffc1b69462e7d542fde8bd5a7eeb5c25ec"
+    }
+  ],
+  "frameworkDomInternals": "React DOM contains internal HTML sink code. Application token checks and browser hostile-text probes are separate evidence.",
+  "completeXssProof": false
+}

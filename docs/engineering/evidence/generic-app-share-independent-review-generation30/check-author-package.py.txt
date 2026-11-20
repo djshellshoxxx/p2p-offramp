@@ -1,0 +1,48 @@
+from pathlib import Path
+import hashlib
+import gzip
+import json
+import subprocess
+
+ROOT = Path.cwd().parent / "p2p-generic-app-share-g30"
+HEAD = "3338964189a00f7181ba8e52166c594b61a48fe7"
+SOURCE = "a2d69851430971ce51588c22c571e48b30b4ca01"
+def git(*args):
+    return subprocess.check_output(["git", *args], cwd=ROOT).decode().strip()
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+assert git("rev-parse", "HEAD") == HEAD
+assert git("rev-parse", "HEAD^") == SOURCE
+assert git("status", "--porcelain=v1", "--untracked-files=all") == ""
+paths = git("diff", "--name-only", SOURCE, HEAD).splitlines()
+assert len(paths) == 43 and all(name.startswith("docs/") for name in paths)
+prefix = "docs/execution/generic-app-share-generation30-20261120/"
+manifest_raw = (ROOT / prefix / "receipt.json").read_bytes()
+manifest = json.loads(manifest_raw)
+assert manifest["source"] == SOURCE
+records = []
+for artifact in manifest["artifacts"]:
+    payload = (ROOT / artifact["path"]).read_bytes()
+    if artifact["path"].endswith(".gz"):
+        raw = gzip.decompress(payload)
+        assert len(raw) == artifact["rawBytes"] and sha(raw) == artifact["rawSha256"], artifact
+        assert len(payload) == artifact["gzipBytes"] and sha(payload) == artifact["gzipSha256"], artifact
+        assert int.from_bytes(payload[4:8], "little") == artifact["gzipMtime"] == 0
+    else:
+        raw = payload
+        assert len(raw) == artifact["bytes"] and sha(raw) == artifact["sha256"], artifact
+    assert raw == Path(artifact["origin"]).read_bytes(), artifact["origin"]
+    records.append({"path": artifact["path"], "raw_bytes": len(raw), "raw_sha256": sha(raw), "stored_bytes": len(payload), "stored_sha256": sha(payload)})
+assert len(records) == 39
+final = json.loads((ROOT / prefix / "11-source-and-evidence-whitespace.json").read_bytes())
+raw = (ROOT / prefix / "11-source-and-evidence-whitespace.log.gz").read_bytes()
+assert len(raw) == final["gzipBytes"] and sha(raw) == final["gzipSha256"]
+assert gzip.decompress(raw) == b"" and final["rawBytes"] == 0
+assert all(check["exitCode"] == 0 for check in final["checks"])
+patch = subprocess.check_output(["git", "diff", "--binary", manifest["base"], SOURCE], cwd=ROOT)
+assert sha(patch) == manifest["sourcePatchSha256"]
+for name in ["04-focused-composition", "05-ui-typecheck", "06-source-whitespace"]:
+    assert gzip.decompress((ROOT / prefix / (name + ".patch.gz")).read_bytes()) == patch
+print(json.dumps({"author_evidence_commit": HEAD, "author_evidence_tree": git("rev-parse", "HEAD^{tree}"),
+ "parent_source": SOURCE, "docs_only_paths": len(paths), "manifest_sha256": sha(manifest_raw),
+ "manifest_artifacts_verified": records, "staged_whitespace_receipt_verified": True,
+ "pre_freeze_04_05_06_patches_equal_exact_source_diff": True}, indent=2))

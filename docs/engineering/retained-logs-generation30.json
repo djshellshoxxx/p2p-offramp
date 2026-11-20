@@ -1,0 +1,81 @@
+{
+  "schema": "p2p-offramp.generation30-retained-logs.v1",
+  "testedSource": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+  "testedTree": "b46873509b64467338978820a6469de7fffdc619",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g30-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generation30-20261120/full-node.log.gz",
+      "decodedBytes": 261868,
+      "compressedBytes": 87360,
+      "decodedSha256": "d96d9ca33073f1ab7a249ad14da964954635f2171eb0200b57b4034053a53433",
+      "compressedSha256": "49646b8e62b0256ec52c7770cff71404aec5cbc9ad4b55b78b25d505e95227a9"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g30-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generation30-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g30-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generation30-20261120/build-policy.log.gz",
+      "decodedBytes": 7610,
+      "compressedBytes": 3129,
+      "decodedSha256": "b3f132e4f1a6fbbb2c7759f65fb91d7c7b81691c01fdd164503e71ae13399d82",
+      "compressedSha256": "5136facbc26fe755a86e02a0cb4555304c11d7b5bc4d4b195ab3343ff6ef40d6"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g30-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generation30-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 287,
+      "decodedSha256": "41de51ce2b3a88b93a9c4d4b02d8670ee7eeb1afd57e600f662cc7612a839eef",
+      "compressedSha256": "1ba1f4fd51332fe1bfb6546ed2610815301f85e6820a084a5f64b0936536b464"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g30-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generation30-20261120/default-build.log.gz",
+      "decodedBytes": 1027,
+      "compressedBytes": 496,
+      "decodedSha256": "a788f56a5686346b30e31dbfccb9796c74890f908768a0eb4203a28b6d9702a1",
+      "compressedSha256": "24ee4bb4b21fbf7cddea8adac2e8802cc129662b028ca4cb53a8ee6f3be65f1e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g30-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generation30-20261120/demo-build.log.gz",
+      "decodedBytes": 1175,
+      "compressedBytes": 521,
+      "decodedSha256": "d3abe10e14ca5a8ed6f1e7747f99f2a53bb30d5be3b9b33cc6c29df46713aca8",
+      "compressedSha256": "41de159e50534fafbcb95aaa8a37a4dda18004629a74ac56981124c631925371"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g30-qualification/native-fixture-preparation.log",
+      "storedPath": "docs/execution/continuation-generation30-20261120/native-fixture-preparation.log.gz",
+      "decodedBytes": 2195,
+      "compressedBytes": 861,
+      "decodedSha256": "b22c93ee462a30115d1e5dfedfe921d5e1e5011a9ea0f69e1d8cc6bde18d0e43",
+      "compressedSha256": "6f9125add70ecdeeb6c75ba9fb5d6fa2e942b261d8f4b70bc291e855f3679fd9"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/execution/generic-app-share-generation30-20261120/receipt.json",
+    "docs/execution/generic-app-share-generation30-20261120/11-source-and-evidence-whitespace.json",
+    "docs/engineering/generic-app-share-independent-review-generation30.json",
+    "docs/engineering/generic-app-share-composition-review-generation30.json"
+  ],
+  "limits": [
+    "Four production-file composition changes connect the existing generic hosting-address helper and sharing panel. No referral IDs, trade/profile/invite/payment/counterparty data enter the app link.",
+    "The main module captures its own import.meta.url once. The unchanged fail-closed helper preserves hosting prefixes and does not derive from the document route, query or hash.",
+    "Clipboard lifecycle cases use maintained TSX with controlled hooks and promises. They verify admission and stale completion behavior, not native clipboard reachability or browser/device acceptance.",
+    "Initial baseline 2 pass/7 fail and final baseline 26 pass/7 fail retain the same missing-composition cause. Existing helper and leaf lifecycle cases pass on unchanged baseline source.",
+    "Author, adjacent, independent and full-suite selections overlap and must not be summed.",
+    "Native updater fixture compilation is build-only. The maintained command removed its temporary compiled fixture; no native scenarios executed locally.",
+    "The vault Worker remains byte-identical to the published parent. That identity does not transfer parent or old hosted checks to this child or a changed target.",
+    "Existing helper, GenericAppShare leaf, locales, styles, native EVM/Solana branches, runtime authority, workflows, dependencies, trust settings and optional/audit ownership remain unchanged.",
+    "Generic app sharing is the bounded ID-free sharing slice of documentation growth, not completion of referrals or all documentation-growth requirements.",
+    "No deployment, production trust provisioning, live Wiki, supported translation, physical-device acceptance or release activation follows. ReleaseEnabled remains zero."
+  ]
+}

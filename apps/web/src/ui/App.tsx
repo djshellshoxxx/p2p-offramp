@@ -25,9 +25,11 @@ export interface AppProps {
   readonly diagnostics?: Diagnostics | null;
   /** Optional trusted composition only; the default entry supplies no updater. */
   readonly updates?: AssetUpdateController | null;
+  /** Display-only hosting address derived from the actual main entry, never the current route. */
+  readonly appLink?: string | null;
 }
 
-export function App({ services, starting = false, startupError, trade = null, diagnostics = null, updates = null }: AppProps) {
+export function App({ services, starting = false, startupError, trade = null, diagnostics = null, updates = null, appLink = null }: AppProps) {
   const tradeSnapshot = useTradeReview(trade);
   const [drafts, setDrafts] = useState<TradeDraftController | null>(null);
   useEffect(() => {
@@ -124,7 +126,7 @@ export function App({ services, starting = false, startupError, trade = null, di
           route.page === 'recovery' ? <><Recovery services={services} onOpenRestored={id => {
             if (!isProfileId(id)) return;
             setRestoredProfileId(id); window.location.hash = '#/home';
-          }} /><QrPanel services={services} trade={trade} scope={scope} /></> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} updates={updates} /> :
+          }} /><QrPanel services={services} trade={trade} scope={scope} /></> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} updates={updates} appLink={appLink} /> :
           route.page === 'offers' ? <OffersPage trade={trade} store={store} drafts={drafts} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
           <UnavailablePage page={route.page} />}
       </main>

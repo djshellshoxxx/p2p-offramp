@@ -1,3 +1,37 @@
+# Current feature coverage — generation 30 (2026-11-20 UTC)
+
+Frozen combined source `3bfb7761b6ec430c8e437d117ec31007503f0d12`, tree
+`b46873509b64467338978820a6469de7fffdc619`, passed **2,581/2,581 tests**
+with zero other outcomes plus all six additional qualification commands.
+Independent source and composition reviews accepted the exact source without
+findings. This is a separate unpublished follow-up above published PR237 head
+`33232f62dc9cd250528ef3eb0313c0c319d99495`; PR236 remains the frozen
+main-target aggregate containing PR233–235.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| Documentation growth: generic app sharing | Four production paths connect the actual main module URL through the unchanged helper to the unchanged Settings sharing leaf. Supported nested hosting/IPFS prefixes remain intact; route, query, fragment and private profile/trade/invitation/payment data are excluded. | Referrals, incentives, recipient selection and wider documentation-growth acceptance remain separate. A hosting address does not authenticate a release. |
+| Sharing lifecycle and presentation | Maintained-source composition and shared-module clipboard probes cover explicit-copy admission, simultaneous/replacement mounts, stale completion, manual selection, fixed errors and locale changes. The ordinary emitted main captures and forwards its own module URL. | Controlled promises/hooks and static artifacts do not establish operating-system clipboard, native browser, assistive-technology or physical-device acceptance. |
+| F25 source and evidence | All 1,028 non-documentation entries equal the reviewed author source: four changes and two additions over published PR237, with 1,022 parent entries preserved. Source, author evidence, independent review and root qualification retain separate identities and exact failed-baseline evidence. | Publish with source/evidence mapping and actual proposed-merge readback; require current-source/current-target hosted acceptance and standalone D8 Tier B CodeRabbit-or-Qodo pass with findings answered. |
+| F24 / F27 updater and release | Ordinary/demo builds preserve the generation 29 vault Worker, empty connection origins and ReleaseEnabled=0. Native updater fixture preparation compiles 37 modules with nativeExecuted=false. | Native execution, trusted activation and release acceptance remain separate. Parent checks and Worker byte identity do not qualify a changed child target. |
+| Startup compatibility continuation | Existing helper/guard/notice remain available for the separately assigned G31 integration. | Fresh author/reviewer work is active; no G31 source or qualification completion is claimed. |
+
+The aggregate plan still supersedes sequential PR233/234/235 merging. Preserve
+all original heads and branches, qualify and guard PR236's merge, then read
+main/tree/ordered parents and prove containment before reconciling those PRs.
+PR237 is its published retention child. Retarget/reconcile follow-ups after
+parent merges and refresh actual-target gates. Optional PR224–232 and
+audits184–186 retain their owners.
+
+Read the [generation 30 continuation](CONTINUATION_GENERATION30_20261120.md),
+[combined qualification](qualification-generation30.json) and
+[independent composition supplement](GENERIC_APP_SHARE_COMPOSITION_REVIEW_GENERATION30_20261120.md).
+Author, reviewer, adjacent and full-suite selections overlap and are not summed.
+The handoff records historical suffix hashes; every earlier byte below remains
+unchanged and its older present-tense status stays a dated assessment.
+
+---
+
 # Current feature coverage — generation 29 (2026-11-20 UTC)
 
 Frozen combined source `fa7c1a11ff990be4646053731f1030d09eb8f9b6`, tree

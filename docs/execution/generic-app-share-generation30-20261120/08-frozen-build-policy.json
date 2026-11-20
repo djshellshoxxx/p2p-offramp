@@ -1,0 +1,31 @@
+{
+  "label": "08-frozen-build-policy",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-g30",
+  "argv": [
+    "npm",
+    "run",
+    "test:build-policy"
+  ],
+  "head": "a2d69851430971ce51588c22c571e48b30b4ca01",
+  "headTree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+  "patch": "08-frozen-build-policy.patch",
+  "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "files": {
+    "apps/web/src/main.tsx": "56d6f772c3fd335e2d07d7480d6ff497fa87a4e3c489e8c0c7ecdf88f5c0bf31",
+    "apps/web/src/OfflineRoot.tsx": "1c3071c4e4c8c212eba69a8d40a86016e29c5f511475a018ad428ae62c91c344",
+    "apps/web/src/ui/App.tsx": "6169f92593de33110f0cab0d9e54bd28640c476f2239a2486f8c2b964642ebd1",
+    "apps/web/src/ui/Pages.tsx": "5db3601177d38a826428ea475e60b18f3a13f00219a6da62f3721a89d5adc520",
+    "apps/web/src/ui/GenericAppShare.tsx": "3185010cbfa3070f7345d6ca316c6946400582b65f08a6b5466f6a4d3229db8d",
+    "apps/web/src/sharing/generic-app-link.ts": "a6a0f81b2430d4d4c2d66712c9679f722f5b3aa707364d1bbfaad057972b7f71",
+    "apps/web/test/generic-app-share.test.mjs": "8c4e9dff4afcbc42f4e5d93a1db6fdce18069c83e58c723a773f313c5d434eee",
+    "apps/web/test/generic-app-share-composition.test.mjs": "18e02f7be36405c4c8dd5d876e69f1e76333d7975c9f62b9c7bac1e9ae77b142",
+    "apps/web/test/generic-app-share-lifecycle.test.mjs": "54ae61122554642e8996094c2af7de450923fbb4c948d9d80b2dd4788a610251"
+  },
+  "startedAt": "2026-11-20T18:46:43.630216+00:00",
+  "durationSeconds": 6.823,
+  "exitCode": 0,
+  "endedAt": "2026-11-20T18:46:50.453351+00:00",
+  "log": "08-frozen-build-policy.log",
+  "logBytes": 7622,
+  "logSha256": "1b4f52b6f688b08b810c34f93cb71618eee17084a9b69f9216448d464db32b9f"
+}

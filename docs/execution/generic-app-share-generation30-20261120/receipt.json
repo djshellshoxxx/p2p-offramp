@@ -1,0 +1,700 @@
+{
+  "version": 1,
+  "generation": 30,
+  "recordedAt": "2026-11-20T18:53:50.638299+00:00",
+  "base": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+  "baseTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+  "source": "a2d69851430971ce51588c22c571e48b30b4ca01",
+  "sourceTree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+  "sourceFiles": [
+    {
+      "path": "apps/web/src/OfflineRoot.tsx",
+      "sha256": "1c3071c4e4c8c212eba69a8d40a86016e29c5f511475a018ad428ae62c91c344",
+      "gitBlob": "2291cec0be13c00bf1d4a9dd25e4470949b67fde"
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "sha256": "56d6f772c3fd335e2d07d7480d6ff497fa87a4e3c489e8c0c7ecdf88f5c0bf31",
+      "gitBlob": "438fa5c037cae8f51f90cd0d3f80587eea63d119"
+    },
+    {
+      "path": "apps/web/src/ui/App.tsx",
+      "sha256": "6169f92593de33110f0cab0d9e54bd28640c476f2239a2486f8c2b964642ebd1",
+      "gitBlob": "68a9f6fdf599d2cd08141d4df51cfefba92c7be7"
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "sha256": "5db3601177d38a826428ea475e60b18f3a13f00219a6da62f3721a89d5adc520",
+      "gitBlob": "e4cddb844e883d8a28be31220b423bc640b4fee9"
+    },
+    {
+      "path": "apps/web/test/generic-app-share-composition.test.mjs",
+      "sha256": "18e02f7be36405c4c8dd5d876e69f1e76333d7975c9f62b9c7bac1e9ae77b142",
+      "gitBlob": "ee6d782733aaab3dec967958fd8c103d5a6a5788"
+    },
+    {
+      "path": "apps/web/test/generic-app-share-lifecycle.test.mjs",
+      "sha256": "54ae61122554642e8996094c2af7de450923fbb4c948d9d80b2dd4788a610251",
+      "gitBlob": "728e19e6a55e8f3a64f3a11288b84c5e8503c9e9"
+    }
+  ],
+  "sourcePatchSha256": "ef30ff53829f2193c472506e90e63a121975da3a2a8f9d96f5ef3b60a4dbbfc2",
+  "composition": {
+    "baselineEntries": 2846,
+    "sourceEntries": 2848,
+    "unchangedBaselineEntries": 2842,
+    "modifiedPaths": [
+      "apps/web/src/OfflineRoot.tsx",
+      "apps/web/src/main.tsx",
+      "apps/web/src/ui/App.tsx",
+      "apps/web/src/ui/Pages.tsx"
+    ],
+    "addedPaths": [
+      "apps/web/test/generic-app-share-composition.test.mjs",
+      "apps/web/test/generic-app-share-lifecycle.test.mjs"
+    ],
+    "deletedPaths": [],
+    "otherBaselineEntriesExact": true
+  },
+  "commands": [
+    {
+      "label": "01-baseline-composition",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/generic-app-share-composition.test.mjs"
+      ],
+      "head": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+      "headTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+      "startedAt": "2026-11-20T18:44:28.294842+00:00",
+      "endedAt": "2026-11-20T18:44:29.665239+00:00",
+      "durationSeconds": 1.37,
+      "exitCode": 1,
+      "counts": {
+        "tests": 9,
+        "suites": 0,
+        "pass": 2,
+        "fail": 7,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/generic-app-share-generation30-20261120/01-baseline-composition.json",
+      "output": "docs/execution/generic-app-share-generation30-20261120/01-baseline-composition.log.gz",
+      "sourcePatch": "docs/execution/generic-app-share-generation30-20261120/01-baseline-composition.patch.gz"
+    },
+    {
+      "label": "02-baseline-leaf",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/generic-app-share.test.mjs",
+        "apps/web/test/generic-app-share-lifecycle.test.mjs"
+      ],
+      "head": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+      "headTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+      "startedAt": "2026-11-20T18:44:33.043211+00:00",
+      "endedAt": "2026-11-20T18:44:34.729430+00:00",
+      "durationSeconds": 1.686,
+      "exitCode": 0,
+      "counts": {
+        "tests": 23,
+        "suites": 0,
+        "pass": 23,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/generic-app-share-generation30-20261120/02-baseline-leaf.json",
+      "output": "docs/execution/generic-app-share-generation30-20261120/02-baseline-leaf.log.gz",
+      "sourcePatch": "docs/execution/generic-app-share-generation30-20261120/02-baseline-leaf.patch.gz"
+    },
+    {
+      "label": "03-baseline-final-fixtures",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/generic-app-share.test.mjs",
+        "apps/web/test/generic-app-share-composition.test.mjs",
+        "apps/web/test/generic-app-share-lifecycle.test.mjs"
+      ],
+      "head": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+      "headTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+      "startedAt": "2026-11-20T18:45:14.567563+00:00",
+      "endedAt": "2026-11-20T18:45:16.444807+00:00",
+      "durationSeconds": 1.877,
+      "exitCode": 1,
+      "counts": {
+        "tests": 33,
+        "suites": 0,
+        "pass": 26,
+        "fail": 7,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/generic-app-share-generation30-20261120/03-baseline-final-fixtures.json",
+      "output": "docs/execution/generic-app-share-generation30-20261120/03-baseline-final-fixtures.log.gz",
+      "sourcePatch": "docs/execution/generic-app-share-generation30-20261120/03-baseline-final-fixtures.patch.gz"
+    },
+    {
+      "label": "04-focused-composition",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/generic-app-share.test.mjs",
+        "apps/web/test/generic-app-share-composition.test.mjs",
+        "apps/web/test/generic-app-share-lifecycle.test.mjs",
+        "apps/web/test/app-shell-locale.test.mjs",
+        "apps/web/test/retention-preview-ui.test.mjs"
+      ],
+      "head": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+      "headTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+      "startedAt": "2026-11-20T18:45:42.606654+00:00",
+      "endedAt": "2026-11-20T18:45:45.516191+00:00",
+      "durationSeconds": 2.909,
+      "exitCode": 0,
+      "counts": {
+        "tests": 74,
+        "suites": 0,
+        "pass": 74,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/generic-app-share-generation30-20261120/04-focused-composition.json",
+      "output": "docs/execution/generic-app-share-generation30-20261120/04-focused-composition.log.gz",
+      "sourcePatch": "docs/execution/generic-app-share-generation30-20261120/04-focused-composition.patch.gz"
+    },
+    {
+      "label": "05-ui-typecheck",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.ui.json",
+        "--noEmit"
+      ],
+      "head": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+      "headTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+      "startedAt": "2026-11-20T18:45:42.597208+00:00",
+      "endedAt": "2026-11-20T18:45:44.659575+00:00",
+      "durationSeconds": 2.062,
+      "exitCode": 0,
+      "counts": {},
+      "receipt": "docs/execution/generic-app-share-generation30-20261120/05-ui-typecheck.json",
+      "output": "docs/execution/generic-app-share-generation30-20261120/05-ui-typecheck.log.gz",
+      "sourcePatch": "docs/execution/generic-app-share-generation30-20261120/05-ui-typecheck.patch.gz"
+    },
+    {
+      "label": "06-source-whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "fa7c1a11ff990be4646053731f1030d09eb8f9b6"
+      ],
+      "head": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+      "headTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+      "startedAt": "2026-11-20T18:46:11.848915+00:00",
+      "endedAt": "2026-11-20T18:46:11.855353+00:00",
+      "durationSeconds": 0.006,
+      "exitCode": 0,
+      "counts": {},
+      "receipt": "docs/execution/generic-app-share-generation30-20261120/06-source-whitespace.json",
+      "output": "docs/execution/generic-app-share-generation30-20261120/06-source-whitespace.log.gz",
+      "sourcePatch": "docs/execution/generic-app-share-generation30-20261120/06-source-whitespace.patch.gz"
+    },
+    {
+      "label": "07-frozen-import-boundaries",
+      "argv": [
+        "node",
+        "scripts/check-import-boundaries.mjs"
+      ],
+      "head": "a2d69851430971ce51588c22c571e48b30b4ca01",
+      "headTree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+      "startedAt": "2026-11-20T18:46:43.628546+00:00",
+      "endedAt": "2026-11-20T18:46:45.646670+00:00",
+      "durationSeconds": 2.018,
+      "exitCode": 0,
+      "counts": {},
+      "receipt": "docs/execution/generic-app-share-generation30-20261120/07-frozen-import-boundaries.json",
+      "output": "docs/execution/generic-app-share-generation30-20261120/07-frozen-import-boundaries.log.gz",
+      "sourcePatch": "docs/execution/generic-app-share-generation30-20261120/07-frozen-import-boundaries.patch.gz"
+    },
+    {
+      "label": "08-frozen-build-policy",
+      "argv": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "head": "a2d69851430971ce51588c22c571e48b30b4ca01",
+      "headTree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+      "startedAt": "2026-11-20T18:46:43.630216+00:00",
+      "endedAt": "2026-11-20T18:46:50.453351+00:00",
+      "durationSeconds": 6.823,
+      "exitCode": 0,
+      "counts": {
+        "tests": 58,
+        "suites": 0,
+        "pass": 58,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/generic-app-share-generation30-20261120/08-frozen-build-policy.json",
+      "output": "docs/execution/generic-app-share-generation30-20261120/08-frozen-build-policy.log.gz",
+      "sourcePatch": "docs/execution/generic-app-share-generation30-20261120/08-frozen-build-policy.patch.gz"
+    },
+    {
+      "label": "09-frozen-ordinary-build",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--input-type=module",
+        "-e",
+        "import { buildWeb } from \"./apps/web/scripts/build.mjs\"; const evidence = await buildWeb({ delivery: \"meta\", outDir: \"/workspace/scratch/dcf03ef9bee8/p2p-g30-build\" }); console.log(JSON.stringify(evidence, null, 2));"
+      ],
+      "head": "a2d69851430971ce51588c22c571e48b30b4ca01",
+      "headTree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+      "startedAt": "2026-11-20T18:46:43.631312+00:00",
+      "endedAt": "2026-11-20T18:46:45.563620+00:00",
+      "durationSeconds": 1.932,
+      "exitCode": 0,
+      "counts": {},
+      "receipt": "docs/execution/generic-app-share-generation30-20261120/09-frozen-ordinary-build.json",
+      "output": "docs/execution/generic-app-share-generation30-20261120/09-frozen-ordinary-build.log.gz",
+      "sourcePatch": "docs/execution/generic-app-share-generation30-20261120/09-frozen-ordinary-build.patch.gz"
+    },
+    {
+      "label": "10-frozen-focused-sharing",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/generic-app-share.test.mjs",
+        "apps/web/test/generic-app-share-composition.test.mjs",
+        "apps/web/test/generic-app-share-lifecycle.test.mjs"
+      ],
+      "head": "a2d69851430971ce51588c22c571e48b30b4ca01",
+      "headTree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+      "startedAt": "2026-11-20T18:46:59.038922+00:00",
+      "endedAt": "2026-11-20T18:47:00.858444+00:00",
+      "durationSeconds": 1.819,
+      "exitCode": 0,
+      "counts": {
+        "tests": 33,
+        "suites": 0,
+        "pass": 33,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/generic-app-share-generation30-20261120/10-frozen-focused-sharing.json",
+      "output": "docs/execution/generic-app-share-generation30-20261120/10-frozen-focused-sharing.log.gz",
+      "sourcePatch": "docs/execution/generic-app-share-generation30-20261120/10-frozen-focused-sharing.patch.gz"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/01-baseline-composition.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/01-baseline-composition.json",
+      "bytes": 1820,
+      "sha256": "ea27261e2f5cbbda172bdbbf0d2c96e69abcb423f7daf548f176db50526676bf"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/01-baseline-composition.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/01-baseline-composition.log",
+      "rawBytes": 43314,
+      "rawSha256": "e3548c5899d7f61582f892151559b05a25a3203dea6f88c02fe52d10ac0d9fdf",
+      "gzipBytes": 4044,
+      "gzipSha256": "07f54fcd71a9c613087cd9b4508bd1292192440f024d6c988a1acfe7339c838d",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/01-baseline-composition.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/01-baseline-composition.patch",
+      "rawBytes": 24130,
+      "rawSha256": "94be27d46ca2c8ae5fda2494b1db00d87eebc433db820d1064a0ccf7f6abaa13",
+      "gzipBytes": 6767,
+      "gzipSha256": "1ce0ac5d7530461abe3760b8203e57a29bd2f84661bf8d0a66e783e8059282ed",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/02-baseline-leaf.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/02-baseline-leaf.json",
+      "bytes": 1845,
+      "sha256": "1bdd799da7ac9083661148f275f7c0eeb68e443b84895e9f1772133ad94956f6"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/02-baseline-leaf.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/02-baseline-leaf.log",
+      "rawBytes": 2543,
+      "rawSha256": "283cf13c143b737ef3de2e90e7f483c473edeffa2fd64acc366e8be960998595",
+      "gzipBytes": 1065,
+      "gzipSha256": "8d2cdaf649d6eff0e0cfa19bd3a5914d9c94dddb279a07e2064330cba61d8174",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/02-baseline-leaf.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/02-baseline-leaf.patch",
+      "rawBytes": 24130,
+      "rawSha256": "94be27d46ca2c8ae5fda2494b1db00d87eebc433db820d1064a0ccf7f6abaa13",
+      "gzipBytes": 6767,
+      "gzipSha256": "1ce0ac5d7530461abe3760b8203e57a29bd2f84661bf8d0a66e783e8059282ed",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/03-baseline-final-fixtures.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/03-baseline-final-fixtures.json",
+      "bytes": 1936,
+      "sha256": "155cb9be901bf63e1bd4b7c45089ce654e8ca0a9d9d4147a29bf21a8177645e7"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/03-baseline-final-fixtures.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/03-baseline-final-fixtures.log",
+      "rawBytes": 45315,
+      "rawSha256": "e8d1bb052116fbbd05b8066d1b948fec8172a2ee8de38f6bb6a3003d8c7f340a",
+      "gzipBytes": 4879,
+      "gzipSha256": "c3cc8b1c4ade0528eea6a0ef10c6e0b8d00846a77cb1082b850ad51c1d39bbe6",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/03-baseline-final-fixtures.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/03-baseline-final-fixtures.patch",
+      "rawBytes": 24851,
+      "rawSha256": "8d6d1eaf3697df4ec85c3dbce18e6d09b9aa74d9b5fa79531d1049ff78054f52",
+      "gzipBytes": 6898,
+      "gzipSha256": "e597221e3ea3c279a0ba16082e6d414e8a02bae15c7e0c9f278ef0c386da4503",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/04-focused-composition.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/04-focused-composition.json",
+      "bytes": 2021,
+      "sha256": "523f475ec6c0d523acee955e4c162547121085e4421d979f6a51bfdcea80eb9a"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/04-focused-composition.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/04-focused-composition.log",
+      "rawBytes": 7879,
+      "rawSha256": "f410c27b522b99744576d9b2431b7cb7212f9d7b46710288c9e6f8c043f75a44",
+      "gzipBytes": 2736,
+      "gzipSha256": "12c46dcb94462473fb784e893b27fbcb4772e21dd932586008cb1f3f2f82313a",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/04-focused-composition.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/04-focused-composition.patch",
+      "rawBytes": 31763,
+      "rawSha256": "ef30ff53829f2193c472506e90e63a121975da3a2a8f9d96f5ef3b60a4dbbfc2",
+      "gzipBytes": 8656,
+      "gzipSha256": "9c1e55786bb45e93dc868943d643c9a7ed951be5d2bd276f7fe0fb8d40d9e6c6",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/05-ui-typecheck.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/05-ui-typecheck.json",
+      "bytes": 1754,
+      "sha256": "25d9eef081e8c59ec62a97fe2781f75e83ac7f3eafcb7c3cfa8b6ef80ad4a125"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/05-ui-typecheck.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/05-ui-typecheck.log",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/05-ui-typecheck.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/05-ui-typecheck.patch",
+      "rawBytes": 31763,
+      "rawSha256": "ef30ff53829f2193c472506e90e63a121975da3a2a8f9d96f5ef3b60a4dbbfc2",
+      "gzipBytes": 8656,
+      "gzipSha256": "9c1e55786bb45e93dc868943d643c9a7ed951be5d2bd276f7fe0fb8d40d9e6c6",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/06-source-whitespace.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/06-source-whitespace.json",
+      "bytes": 1745,
+      "sha256": "646f50a9013c2cba7c010305badc27ed62035218f5fa930b729d33f3bec55f8a"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/06-source-whitespace.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/06-source-whitespace.log",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/06-source-whitespace.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/06-source-whitespace.patch",
+      "rawBytes": 31763,
+      "rawSha256": "ef30ff53829f2193c472506e90e63a121975da3a2a8f9d96f5ef3b60a4dbbfc2",
+      "gzipBytes": 8656,
+      "gzipSha256": "9c1e55786bb45e93dc868943d643c9a7ed951be5d2bd276f7fe0fb8d40d9e6c6",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/07-frozen-import-boundaries.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/07-frozen-import-boundaries.json",
+      "bytes": 1737,
+      "sha256": "7ece86b68e454e191bbe7f4fd431558c0b6d04dd3c1a14b49cbca3e21eeddcf6"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/07-frozen-import-boundaries.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/07-frozen-import-boundaries.log",
+      "rawBytes": 160,
+      "rawSha256": "a0c4283101cea02686558cc41b580282fc0bc94aa99a94c16e2fec8c56fa2735",
+      "gzipBytes": 146,
+      "gzipSha256": "3d4808e744fd18842b966a845e120cd6bc7314f3461c370ee0e0017ea6178d6b",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/07-frozen-import-boundaries.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/07-frozen-import-boundaries.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/08-frozen-build-policy.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/08-frozen-build-policy.json",
+      "bytes": 1715,
+      "sha256": "a74cd9f3e5710f8e6642c1712cc447e32b706138b83c745dc94d7f24cc126eb3"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/08-frozen-build-policy.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/08-frozen-build-policy.log",
+      "rawBytes": 7622,
+      "rawSha256": "1b4f52b6f688b08b810c34f93cb71618eee17084a9b69f9216448d464db32b9f",
+      "gzipBytes": 3134,
+      "gzipSha256": "9a537702f89fcb2217e6a8332a69eb4b5f7acada0daed82dff5f5ae3087588a9",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/08-frozen-build-policy.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/08-frozen-build-policy.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/09-frozen-ordinary-build.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/09-frozen-ordinary-build.json",
+      "bytes": 2016,
+      "sha256": "40f357e271852b73b442792ecfa492a55e2ccbbdb0cc41b8721cd5f70816aaae"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/09-frozen-ordinary-build.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/09-frozen-ordinary-build.log",
+      "rawBytes": 3395,
+      "rawSha256": "2beee3d1f8a50addb163b4747ce99dcc5cc2cf8cef5dda2c159ba4f72c69c87d",
+      "gzipBytes": 1336,
+      "gzipSha256": "3fbbcb8e46c13143bab1c29f4db2df255cbdd7f33e57303a8350d393ff39ed21",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/09-frozen-ordinary-build.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/09-frozen-ordinary-build.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/10-frozen-focused-sharing.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/10-frozen-focused-sharing.json",
+      "bytes": 1932,
+      "sha256": "695b290419fcdcacbfd78841ac80b64b319ac685cc3cbb8295bd955d9d9029c1"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/10-frozen-focused-sharing.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/10-frozen-focused-sharing.log",
+      "rawBytes": 3812,
+      "rawSha256": "ec63b1931fc94f7bb7b401617cace3077df7087733684e742204b753ed5202c7",
+      "gzipBytes": 1461,
+      "gzipSha256": "8692cd2ec6e33e39bb48dd9a980f86331050fc1dfedfb5e20fe785b2ba4a3be6",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/10-frozen-focused-sharing.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence/10-frozen-focused-sharing.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/build/core-graph-document.json",
+      "kind": "ordinary-build-module-graph",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-build/core-graph-document.json",
+      "bytes": 14724,
+      "sha256": "289d0002e582e3210d4b7cf0d783992e3d60629aeee3b35ab207bb6a5d4583de"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/build/core-graph-worker.json",
+      "kind": "ordinary-build-module-graph",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-build/core-graph-worker.json",
+      "bytes": 4758,
+      "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/build/qr-graph-worker.json",
+      "kind": "ordinary-build-module-graph",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-build/qr-graph-worker.json",
+      "bytes": 905,
+      "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/build/local-build-evidence.json",
+      "kind": "ordinary-build-evidence",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-build/local-build-evidence.json",
+      "bytes": 2526,
+      "sha256": "79e929b28c99b1f739b57625362eb7b335a20311818c52fd3c4d2d57b58238bd"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/build/content-policy.json",
+      "kind": "ordinary-build-content-policy",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-build/content-policy.json",
+      "bytes": 1009,
+      "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/build/assets/index-Bn32YCpH.js.gz",
+      "kind": "ordinary-emitted-javascript",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-build/assets/index-Bn32YCpH.js",
+      "rawBytes": 220890,
+      "rawSha256": "4a54d4f63b019c44859b29f4d3d9ec2113d69ebad641a0fb40431b280d72ac9c",
+      "gzipBytes": 68181,
+      "gzipSha256": "82d2dd9d3916b42f5a3f530a92534ac208334fdf3cec9acbb50fe096b663367b",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/build/assets/OfflineRoot-C_PPoKsm.js.gz",
+      "kind": "ordinary-emitted-javascript",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-build/assets/OfflineRoot-C_PPoKsm.js",
+      "rawBytes": 308243,
+      "rawSha256": "1d31ec2e5132a3bc2841d5b02ac4a453ecb6948bcb3f1345384d4b9f623617ba",
+      "gzipBytes": 87225,
+      "gzipSha256": "5c32da577e8f3fde08ee802deb2af45a580a1992d36c1cca703ace5d29a84ea7",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/capture-command.py.txt",
+      "kind": "original-command-recorder",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g30-run.py",
+      "bytes": 2217,
+      "sha256": "d9f170bd1cfda92827971dc5cf63ba810a83575a7a1bb5c813d8e9d3e909a7c1"
+    },
+    {
+      "path": "docs/execution/generic-app-share-generation30-20261120/package-evidence.py.txt",
+      "kind": "evidence-packager-and-verifier",
+      "origin": "/workspace/scratch/dcf03ef9bee8/package-g30-author-evidence.py",
+      "bytes": 10628,
+      "sha256": "21568d61bf22a48e526164efc34b6215375b86ae8c5eff9e8b5140d88de909be"
+    }
+  ],
+  "qualification": {
+    "baseline": "The final maintained test bytes at baseline source fail seven missing-composition assertions; both native branch controls pass. The earlier baseline and earlier fixture bytes are retained independently.",
+    "preFreezeChecks": "Commands 04, 05 and 06 carry a source patch byte-identical to the complete baseline-to-frozen-source diff; all recorded affected source and test hashes agree.",
+    "frozenChecks": "Commands 07 through 10 ran at the clean frozen source commit, with empty pre-command patches.",
+    "ordinaryBuild": {
+      "files": 12,
+      "bytes": 812179,
+      "graphs": {
+        "core-graph-document.json": 98,
+        "core-graph-worker.json": 30,
+        "qr-graph-worker.json": 4
+      },
+      "assetsVerified": 12,
+      "entry": {
+        "path": "assets/index-Bn32YCpH.js",
+        "bytes": 220890,
+        "sha256": "4a54d4f63b019c44859b29f4d3d9ec2113d69ebad641a0fb40431b280d72ac9c"
+      },
+      "offlineChunk": {
+        "path": "assets/OfflineRoot-C_PPoKsm.js",
+        "bytes": 308243,
+        "sha256": "1d31ec2e5132a3bc2841d5b02ac4a453ecb6948bcb3f1345384d4b9f623617ba"
+      },
+      "vaultWorker": {
+        "path": "assets/vault.worker-yOnLqpF_.js",
+        "bytes": 102355,
+        "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+      },
+      "emittedEntryCaptureObserved": true,
+      "ReleaseEnabled": 0
+    },
+    "dependencies": "Existing physical node_modules directory with immutable hardlinked package files. No package installation or dependency mutation was performed in this task.",
+    "runtime": {
+      "node": "v24.22.3",
+      "npm": "11.19.1",
+      "typescript": "7.0.2"
+    },
+    "independentReview": "Separate reviewer evidence and root combined qualification are recorded by their owners, not claimed by this author receipt.",
+    "limitations": [
+      "Controlled VM, hook, handler and port tests do not establish native clipboard permission or actual browser event delivery.",
+      "The ordinary build proves static artifact composition only; it is not native Worker or browser execution.",
+      "The composition fixture suppresses effects and unrelated startup ports; it does not qualify startup lifecycle.",
+      "Generic hosting-address sharing does not authenticate a release or implement referrals, share targets, recipient selection or financial actions.",
+      "Standalone Tier B still requires the accepted named CodeRabbit-or-Qodo review and current applicable hosted checks before merge."
+    ]
+  }
+}

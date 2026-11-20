@@ -1,0 +1,571 @@
+{
+  "version": 1,
+  "recorded_utc": "2026-11-20T18:59:37.692847+00:00",
+  "source_review_evidence_commit": "6a8d0ae0d3ac01379642a8b7111d58ec23388316",
+  "scope": "Independent exact combined-source identity and finalized root qualification readback; no repeated full suite, builds or native/browser execution.",
+  "combined_source_identity": {
+    "published_generation29_parent": "33232f62dc9cd250528ef3eb0313c0c319d99495",
+    "published_parent_tree": "452b08d0c279a82ea3076371723a2dbd12ef9596",
+    "author_base": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+    "author_source": "a2d69851430971ce51588c22c571e48b30b4ca01",
+    "combined_source": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+    "combined_tree": "b46873509b64467338978820a6469de7fffdc619",
+    "published_parent_non_documentation_entries": 1026,
+    "combined_non_documentation_entries": 1028,
+    "all_1028_non_documentation_entries_equal_author": true,
+    "complete_tree_is_exact_published_parent_plus_six_author_entries": true,
+    "preserved_parent_entries": 2905,
+    "changed_or_added_entries": {
+      "apps/web/src/OfflineRoot.tsx": {
+        "mode": "100644",
+        "type": "blob",
+        "oid": "2291cec0be13c00bf1d4a9dd25e4470949b67fde"
+      },
+      "apps/web/src/main.tsx": {
+        "mode": "100644",
+        "type": "blob",
+        "oid": "438fa5c037cae8f51f90cd0d3f80587eea63d119"
+      },
+      "apps/web/src/ui/App.tsx": {
+        "mode": "100644",
+        "type": "blob",
+        "oid": "68a9f6fdf599d2cd08141d4df51cfefba92c7be7"
+      },
+      "apps/web/src/ui/Pages.tsx": {
+        "mode": "100644",
+        "type": "blob",
+        "oid": "e4cddb844e883d8a28be31220b423bc640b4fee9"
+      },
+      "apps/web/test/generic-app-share-composition.test.mjs": {
+        "mode": "100644",
+        "type": "blob",
+        "oid": "ee6d782733aaab3dec967958fd8c103d5a6a5788"
+      },
+      "apps/web/test/generic-app-share-lifecycle.test.mjs": {
+        "mode": "100644",
+        "type": "blob",
+        "oid": "728e19e6a55e8f3a64f3a11288b84c5e8503c9e9"
+      }
+    },
+    "combined_non_documentation_identity_sha256": "c3d94a488e9df500192f863ac6a010cb729254152b1bea25be9dc2570c10a546"
+  },
+  "checks": [
+    {
+      "name": "combined-source-identity",
+      "command": "python /workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/check-combined-source.py",
+      "argv": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/check-combined-source.py"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30",
+      "started_utc": "2026-11-20T18:56:35.628163+00:00",
+      "ended_utc": "2026-11-20T18:56:35.737245+00:00",
+      "source_before": {
+        "commit": "6a8d0ae0d3ac01379642a8b7111d58ec23388316",
+        "tree": "ea33f138c4e007925980c5992b6ee865647e391e",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "6a8d0ae0d3ac01379642a8b7111d58ec23388316",
+        "tree": "ea33f138c4e007925980c5992b6ee865647e391e",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/combined-source-identity.log.gz",
+      "raw_log_bytes": 1740,
+      "raw_log_sha256": "1dddbb075099fdeaa2c594b0f88ff22819289ce75a2d62dfa5a4f48a6e2b66cb",
+      "gzip_bytes": 720,
+      "gzip_sha256": "4d23f4cbae3573547868c749d37c99e1df46d73e266ddecede16394f7d818f7a",
+      "failed_cases": []
+    },
+    {
+      "name": "root-qualification-readback",
+      "command": "python /workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/check-root-qualification.py",
+      "argv": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/check-root-qualification.py"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30",
+      "started_utc": "2026-11-20T18:58:43.530149+00:00",
+      "ended_utc": "2026-11-20T18:58:44.184863+00:00",
+      "source_before": {
+        "commit": "6a8d0ae0d3ac01379642a8b7111d58ec23388316",
+        "tree": "ea33f138c4e007925980c5992b6ee865647e391e",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "6a8d0ae0d3ac01379642a8b7111d58ec23388316",
+        "tree": "ea33f138c4e007925980c5992b6ee865647e391e",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/root-qualification-readback.log.gz",
+      "raw_log_bytes": 14226,
+      "raw_log_sha256": "85312ca7a6367096fe06ff1165202ee457c2107286e68366fc471de1ed52bb6c",
+      "gzip_bytes": 3238,
+      "gzip_sha256": "ce2f5e24bc4a7b42af1275fbf26ac34a4b3c47ad251f01c9dc9b43b3f3ccfbbf",
+      "failed_cases": []
+    }
+  ],
+  "root_qualification_readback": {
+    "source": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+    "tree": "b46873509b64467338978820a6469de7fffdc619",
+    "receipt_source_path": "/workspace/scratch/dcf03ef9bee8/p2p-g30-qualification/qualification.json",
+    "receipt": {
+      "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/root-qualification.json.gz",
+      "raw_bytes": 66301,
+      "raw_sha256": "be295e83ba8f53414ed34d5154ce5a0b79dbf154cf44c94ea26a9055c45c7788",
+      "gzip_bytes": 9564,
+      "gzip_sha256": "3bcfce337f8c20b0b36bd3165b94cb7c26a0f887b6c8ef79a9653958ccdcb55a",
+      "mtime": 0
+    },
+    "commands": [
+      {
+        "name": "full-node",
+        "command": [
+          "npm",
+          "test"
+        ],
+        "source": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+        "tree": "b46873509b64467338978820a6469de7fffdc619",
+        "exit_code": 0,
+        "counts_from_raw_log": {
+          "tests": 2581,
+          "pass": 2581,
+          "fail": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0
+        },
+        "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/root-full-node.log.gz",
+        "raw_bytes": 261868,
+        "raw_sha256": "d96d9ca33073f1ab7a249ad14da964954635f2171eb0200b57b4034053a53433",
+        "gzip_bytes": 87360,
+        "gzip_sha256": "49646b8e62b0256ec52c7770cff71404aec5cbc9ad4b55b78b25d505e95227a9",
+        "mtime": 0
+      },
+      {
+        "name": "typecheck",
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "source": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+        "tree": "b46873509b64467338978820a6469de7fffdc619",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/root-typecheck.log.gz",
+        "raw_bytes": 341,
+        "raw_sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+        "gzip_bytes": 211,
+        "gzip_sha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+        "mtime": 0
+      },
+      {
+        "name": "build-policy",
+        "command": [
+          "npm",
+          "run",
+          "test:build-policy"
+        ],
+        "source": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+        "tree": "b46873509b64467338978820a6469de7fffdc619",
+        "exit_code": 0,
+        "counts_from_raw_log": {
+          "tests": 58,
+          "pass": 58,
+          "fail": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0
+        },
+        "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/root-build-policy.log.gz",
+        "raw_bytes": 7610,
+        "raw_sha256": "b3f132e4f1a6fbbb2c7759f65fb91d7c7b81691c01fdd164503e71ae13399d82",
+        "gzip_bytes": 3129,
+        "gzip_sha256": "5136facbc26fe755a86e02a0cb4555304c11d7b5bc4d4b195ab3343ff6ef40d6",
+        "mtime": 0
+      },
+      {
+        "name": "boundaries",
+        "command": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "source": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+        "tree": "b46873509b64467338978820a6469de7fffdc619",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/root-boundaries.log.gz",
+        "raw_bytes": 392,
+        "raw_sha256": "41de51ce2b3a88b93a9c4d4b02d8670ee7eeb1afd57e600f662cc7612a839eef",
+        "gzip_bytes": 287,
+        "gzip_sha256": "1ba1f4fd51332fe1bfb6546ed2610815301f85e6820a084a5f64b0936536b464",
+        "mtime": 0
+      },
+      {
+        "name": "default-build",
+        "command": [
+          "node",
+          "apps/web/scripts/build.mjs"
+        ],
+        "source": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+        "tree": "b46873509b64467338978820a6469de7fffdc619",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/root-default-build.log.gz",
+        "raw_bytes": 1027,
+        "raw_sha256": "a788f56a5686346b30e31dbfccb9796c74890f908768a0eb4203a28b6d9702a1",
+        "gzip_bytes": 496,
+        "gzip_sha256": "24ee4bb4b21fbf7cddea8adac2e8802cc129662b028ca4cb53a8ee6f3be65f1e",
+        "mtime": 0
+      },
+      {
+        "name": "demo-build",
+        "command": [
+          "node",
+          "apps/web/scripts/build.mjs",
+          "demo"
+        ],
+        "source": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+        "tree": "b46873509b64467338978820a6469de7fffdc619",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/root-demo-build.log.gz",
+        "raw_bytes": 1175,
+        "raw_sha256": "d3abe10e14ca5a8ed6f1e7747f99f2a53bb30d5be3b9b33cc6c29df46713aca8",
+        "gzip_bytes": 521,
+        "gzip_sha256": "41de159e50534fafbcb95aaa8a37a4dda18004629a74ac56981124c631925371",
+        "mtime": 0
+      },
+      {
+        "name": "native-fixture-preparation",
+        "command": [
+          "node",
+          "scripts/test-update-runtime-browser.mjs",
+          "--build-only"
+        ],
+        "source": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+        "tree": "b46873509b64467338978820a6469de7fffdc619",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/root-native-fixture-preparation.log.gz",
+        "raw_bytes": 2195,
+        "raw_sha256": "b22c93ee462a30115d1e5dfedfe921d5e1e5011a9ea0f69e1d8cc6bde18d0e43",
+        "gzip_bytes": 861,
+        "gzip_sha256": "6f9125add70ecdeeb6c75ba9fb5d6fa2e942b261d8f4b70bc291e855f3679fd9",
+        "mtime": 0
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "default",
+        "directory": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g30/apps/web/dist",
+        "assets": [
+          {
+            "path": "_headers",
+            "bytes": 342,
+            "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+          },
+          {
+            "path": "assets/OfflineRoot-C_PPoKsm.js",
+            "bytes": 308243,
+            "sha256": "1d31ec2e5132a3bc2841d5b02ac4a453ecb6948bcb3f1345384d4b9f623617ba"
+          },
+          {
+            "path": "assets/decode.worker-DGcSBxfL.js",
+            "bytes": 133927,
+            "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+          },
+          {
+            "path": "assets/index-Bn32YCpH.js",
+            "bytes": 220890,
+            "sha256": "4a54d4f63b019c44859b29f4d3d9ec2113d69ebad641a0fb40431b280d72ac9c"
+          },
+          {
+            "path": "assets/index-rPDFZ4F5.css",
+            "bytes": 8414,
+            "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+          },
+          {
+            "path": "assets/vault.worker-yOnLqpF_.js",
+            "bytes": 102355,
+            "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+          },
+          {
+            "path": "content-policy.json",
+            "bytes": 1009,
+            "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+          },
+          {
+            "path": "core-graph-document.json",
+            "bytes": 14724,
+            "sha256": "289d0002e582e3210d4b7cf0d783992e3d60629aeee3b35ab207bb6a5d4583de"
+          },
+          {
+            "path": "core-graph-worker.json",
+            "bytes": 4758,
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb"
+          },
+          {
+            "path": "index.html",
+            "bytes": 1283,
+            "sha256": "ec45749b890f9d39a471c1de614d28514b50d786c7a2ce9d3576ccb668b4b1ab"
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "bytes": 905,
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          },
+          {
+            "path": "third-party-licenses.json",
+            "bytes": 15329,
+            "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+          }
+        ],
+        "all_actual_files_accounted_for": true,
+        "evidence_sha256": "79e929b28c99b1f739b57625362eb7b335a20311818c52fd3c4d2d57b58238bd",
+        "asset_count": 12,
+        "asset_bytes": 812179,
+        "graphs": [
+          {
+            "path": "core-graph-document.json",
+            "sha256": "289d0002e582e3210d4b7cf0d783992e3d60629aeee3b35ab207bb6a5d4583de",
+            "modules": 98,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "core-graph-worker.json",
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+            "modules": 30,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+            "modules": 4,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          }
+        ],
+        "ReleaseEnabled": 0,
+        "connectOrigins": [],
+        "signedRelease": false,
+        "releaseAcceptance": false
+      },
+      {
+        "name": "demo",
+        "directory": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g30/apps/web/dist-demo",
+        "assets": [
+          {
+            "path": "_headers",
+            "bytes": 342,
+            "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+          },
+          {
+            "path": "assets/OfflineRoot-lKQHcPNj.js",
+            "bytes": 314288,
+            "sha256": "c04ee87d15e7bcab208bac0fb9904fdbe7e55cd82afb660a2d08ef0c22ccf2ab"
+          },
+          {
+            "path": "assets/decode.worker-DGcSBxfL.js",
+            "bytes": 133927,
+            "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+          },
+          {
+            "path": "assets/index-BUlFGNdG.js",
+            "bytes": 220902,
+            "sha256": "bf5a5505751e9b6c2ab9a6751b19f82e29765ef268dc2ded04d6a78c728e9b0c"
+          },
+          {
+            "path": "assets/index-rPDFZ4F5.css",
+            "bytes": 8414,
+            "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+          },
+          {
+            "path": "assets/synthetic-local-C5F-kvNy.js",
+            "bytes": 5743,
+            "sha256": "b4ca175ff61fdb37bd8d8c591070004a2d865bee5d395442d1f0ef8c0a7899af"
+          },
+          {
+            "path": "assets/vault.worker-yOnLqpF_.js",
+            "bytes": 102355,
+            "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+          },
+          {
+            "path": "content-policy.json",
+            "bytes": 1009,
+            "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+          },
+          {
+            "path": "core-graph-document.json",
+            "bytes": 15023,
+            "sha256": "5372312f37957a6cb8e3e1e089dd194259293e321b5a8a7c9036eba4fa8df859"
+          },
+          {
+            "path": "core-graph-worker.json",
+            "bytes": 4758,
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb"
+          },
+          {
+            "path": "index.html",
+            "bytes": 1283,
+            "sha256": "f897f46da10f22b04ed616c7c298f138270d6460764e5aff3f6aaf28bd6aa7f5"
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "bytes": 905,
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          },
+          {
+            "path": "third-party-licenses.json",
+            "bytes": 15329,
+            "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+          }
+        ],
+        "all_actual_files_accounted_for": true,
+        "evidence_sha256": "793eeade05ec8256c7e70eb9bbe3582dcabac1b7aeeec8a7ef6c2835d14f9381",
+        "asset_count": 13,
+        "asset_bytes": 824278,
+        "graphs": [
+          {
+            "path": "core-graph-document.json",
+            "sha256": "5372312f37957a6cb8e3e1e089dd194259293e321b5a8a7c9036eba4fa8df859",
+            "modules": 100,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "core-graph-worker.json",
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+            "modules": 30,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+            "modules": 4,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          }
+        ],
+        "ReleaseEnabled": 0,
+        "connectOrigins": [],
+        "signedRelease": false,
+        "releaseAcceptance": false
+      }
+    ],
+    "preparation": {
+      "fixture": "native-update-runtime-controlled-composition",
+      "nativeExecuted": false,
+      "strictFixtureCompilation": true,
+      "fixtureModules": 37,
+      "fixtureModuleSha256": "304fc08883179c4019bf7e0aab21fb3c4711345ce9e2dbcad75f3f0e615c0bad",
+      "emittedWorker": {
+        "path": "assets/vault.worker-yOnLqpF_.js",
+        "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+      },
+      "defaultGraphs": [
+        {
+          "path": "core-graph-document.json",
+          "sha256": "289d0002e582e3210d4b7cf0d783992e3d60629aeee3b35ab207bb6a5d4583de",
+          "modules": 98
+        },
+        {
+          "path": "core-graph-worker.json",
+          "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+          "modules": 30
+        },
+        {
+          "path": "qr-graph-worker.json",
+          "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+          "modules": 4
+        }
+      ],
+      "publicCorpusSha256": "a260b81fd7bdce84f9c7573ca86c6c66e89bb6e198677d8bb955d85470326010",
+      "defaultUpdaterIncluded": false,
+      "ReleaseEnabled": 0
+    },
+    "limits": {
+      "reviewer_reran_complete_suite_or_builds": false,
+      "native_execution_qualified": false,
+      "temporary_fixture_modules_retained": false,
+      "fixture_preparation_log_and_current_default_worker_graphs_directly_verified": true
+    },
+    "total_retained_assets_verified": 25,
+    "total_graphs_verified": 6,
+    "total_graph_module_references_verified": 266
+  },
+  "verification_scripts": [
+    {
+      "path": "docs/engineering/evidence/generic-app-share-independent-review-generation30/check-combined-source.py.txt",
+      "bytes": 2431,
+      "sha256": "79c0034dfd07d44022e97e7cbbc039c7a311022429c7a2c793ab45dd06a110f9"
+    },
+    {
+      "path": "docs/engineering/evidence/generic-app-share-independent-review-generation30/check-root-qualification.py.txt",
+      "bytes": 8992,
+      "sha256": "68e0e954a08454de89a9b80b20e937acfede015fd5ebc05d304977d1084f401e"
+    }
+  ],
+  "findings": [],
+  "remaining_gates": [
+    "Applicable hosted qualification on the actual source and intended target; source metadata publication alone does not satisfy it.",
+    "Standalone D8 Tier B CodeRabbit or Qodo pass with findings answered; independent agent review is separate."
+  ],
+  "limits": {
+    "reviewer_reran_complete_suite_or_builds": false,
+    "native_execution_qualified": false,
+    "temporary_fixture_modules_retained": false,
+    "fixture_preparation_log_and_current_default_worker_graphs_directly_verified": true
+  },
+  "staged_supplement_whitespace": {
+    "name": "supplement-full-whitespace",
+    "command": "git diff --cached --check 8e836baa877b676a863c877003e277b638fc5061",
+    "argv": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "8e836baa877b676a863c877003e277b638fc5061"
+    ],
+    "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30",
+    "started_utc": "2026-11-20T18:59:37.754361+00:00",
+    "ended_utc": "2026-11-20T18:59:37.788771+00:00",
+    "source_before": {
+      "commit": "6a8d0ae0d3ac01379642a8b7111d58ec23388316",
+      "tree": "ea33f138c4e007925980c5992b6ee865647e391e",
+      "status": "A  docs/engineering/GENERIC_APP_SHARE_COMPOSITION_REVIEW_GENERATION30_20261120.md\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/check-combined-source.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/check-root-qualification.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/combined-source-identity.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-boundaries.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-build-policy.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-default-build.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-demo-build.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-full-node.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-native-fixture-preparation.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-qualification-readback.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-qualification.json.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-typecheck.log.gz\nA  docs/engineering/generic-app-share-composition-review-generation30.json"
+    },
+    "source_after": {
+      "commit": "6a8d0ae0d3ac01379642a8b7111d58ec23388316",
+      "tree": "ea33f138c4e007925980c5992b6ee865647e391e",
+      "status": "A  docs/engineering/GENERIC_APP_SHARE_COMPOSITION_REVIEW_GENERATION30_20261120.md\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/check-combined-source.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/check-root-qualification.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/combined-source-identity.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-boundaries.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-build-policy.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-default-build.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-demo-build.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-full-node.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-native-fixture-preparation.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-qualification-readback.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-qualification.json.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/root-typecheck.log.gz\nA  docs/engineering/generic-app-share-composition-review-generation30.json"
+    },
+    "expected_exit_code": 0,
+    "exit_code": 0,
+    "exit_matches_expectation": true,
+    "timeout_seconds": 120,
+    "timed_out": false,
+    "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/supplement-full-whitespace.log.gz",
+    "raw_log_bytes": 0,
+    "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "failed_cases": [],
+    "limitation": "This check preceded adding its own archive/receipt field; the complete staged result and final commit are checked again without exclusions."
+  }
+}

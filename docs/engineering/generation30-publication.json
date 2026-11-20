@@ -1,0 +1,119 @@
+{
+  "schema": "p2p-offramp.generation30-publication.v1",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "branch": "codex/generic-share-continuation-g30-20261120",
+  "intendedTarget": "codex/retention-preview-continuation-g29-20261120",
+  "publishedParent": {
+    "pr": 237,
+    "head": "33232f62dc9cd250528ef3eb0313c0c319d99495",
+    "branch": "codex/retention-preview-continuation-g29-20261120"
+  },
+  "publicationMethod": "Authenticated GitHub connector. Every complete tree and ordered parent relationship was read back. Commit metadata and IDs differ; original local commits remain preserved.",
+  "localEquivalentCheckpoint": {
+    "commit": "d82ff32cbbfaf11531012d0b032b8966a9b58b59",
+    "tree": "9c489d7802631359cd62a7dd5c214d82a29ced9a"
+  },
+  "publishedEquivalentCheckpoint": {
+    "commit": "9761240e8fadffc67efcf6888b9dae69e8aa173b",
+    "tree": "9c489d7802631359cd62a7dd5c214d82a29ced9a"
+  },
+  "testedLocalSource": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+  "testedPublishedEquivalentSource": "c8c37871f16f13c33bf4e4c90722cbe41c04c182",
+  "testedTree": "b46873509b64467338978820a6469de7fffdc619",
+  "verification": {
+    "payloadBlobCount": 68,
+    "mappedCommits": 6,
+    "allTreesMatch": true,
+    "allOrderedParentsReadBack": true,
+    "nonEvidenceEntriesIdenticalToTestedSource": 1028
+  },
+  "mergePolicy": {
+    "tier": "B",
+    "acceptedPacket": "docs/adr/proposed/D8-merge-policy-and-branch-protection.md",
+    "requiredNamedReview": "CodeRabbit or Qodo pass with findings answered",
+    "namedReviewCompletedAtCheckpoint": false,
+    "independentReview": "Source and combined-provenance reviews completed separately; they do not replace the named review."
+  },
+  "commitMap": [
+    {
+      "localSha": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+      "publishedSha": "c8c37871f16f13c33bf4e4c90722cbe41c04c182",
+      "tree": "b46873509b64467338978820a6469de7fffdc619",
+      "localParents": [
+        "33232f62dc9cd250528ef3eb0313c0c319d99495"
+      ],
+      "publishedParents": [
+        "33232f62dc9cd250528ef3eb0313c0c319d99495"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "7f4a1ea6920b633446b9868dda4e07ef10ae76e1",
+      "publishedSha": "9e5a24d7494849da4fc2fd8561597cf924426ce2",
+      "tree": "65d73327415a53cd070812b6bbbb5510ec4ee5f8",
+      "localParents": [
+        "3bfb7761b6ec430c8e437d117ec31007503f0d12"
+      ],
+      "publishedParents": [
+        "c8c37871f16f13c33bf4e4c90722cbe41c04c182"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "bc1d86a222b191a2edd487c2078e79e27949fa63",
+      "publishedSha": "e6e42f1f74014caa7ae2ba1b583e554ccac2501d",
+      "tree": "df360f2652c05f3699a376c06dbfac17d8f7f94b",
+      "localParents": [
+        "7f4a1ea6920b633446b9868dda4e07ef10ae76e1"
+      ],
+      "publishedParents": [
+        "9e5a24d7494849da4fc2fd8561597cf924426ce2"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "a4c48e898afdf3860e2043d89b826e7f41b0d783",
+      "publishedSha": "a2eb62d0cfe5f33fa6a2c142f3fa5fb4aae94767",
+      "tree": "740f18b739da9217625d6f9a1a612327eb2204df",
+      "localParents": [
+        "bc1d86a222b191a2edd487c2078e79e27949fa63"
+      ],
+      "publishedParents": [
+        "e6e42f1f74014caa7ae2ba1b583e554ccac2501d"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "6a96c1333f1153f9ff49c1c6bb234b970e57ad35",
+      "publishedSha": "339c65cc4b88b238e89a992cc6c358546d7a9dad",
+      "tree": "8321b5b149a09623dc4396c1071b20fa311215d8",
+      "localParents": [
+        "a4c48e898afdf3860e2043d89b826e7f41b0d783"
+      ],
+      "publishedParents": [
+        "a2eb62d0cfe5f33fa6a2c142f3fa5fb4aae94767"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "d82ff32cbbfaf11531012d0b032b8966a9b58b59",
+      "publishedSha": "9761240e8fadffc67efcf6888b9dae69e8aa173b",
+      "tree": "9c489d7802631359cd62a7dd5c214d82a29ced9a",
+      "localParents": [
+        "6a96c1333f1153f9ff49c1c6bb234b970e57ad35"
+      ],
+      "publishedParents": [
+        "339c65cc4b88b238e89a992cc6c358546d7a9dad"
+      ],
+      "readBackVerified": true
+    }
+  ],
+  "limits": [
+    "This record maps the checkpoint before the publication-record commit; it intentionally does not recursively claim its own commit identity.",
+    "The actual child pull request and proposed merge, applicable current-source/current-target hosted gates, named automated review and guarded merge readback remain subsequent requirements.",
+    "PR236 remains the frozen main-target aggregate and PR237 its separate retention-preview child. Preserve both sources; after parent merges, retarget or reconcile against actual main and refresh target-specific qualification.",
+    "Published PR233 through PR237 retain their original heads and branches. Parent or older-source checks do not qualify this child.",
+    "Controlled sharing and clipboard lifecycle tests plus emitted artifact readback do not establish native browser, operating-system clipboard or device acceptance.",
+    "Generic ID-free app address sharing does not complete referrals or all documentation-growth scope. No deployment, release activation, trust provisioning or optional-feature activation follows. ReleaseEnabled remains zero."
+  ]
+}

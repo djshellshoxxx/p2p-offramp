@@ -1,3 +1,46 @@
+# Current consolidation checkpoint — generation 30 (2026-11-20 UTC)
+
+**Generic app address sharing now reaches Settings through the ordinary offline
+entry.** Frozen combined source `3bfb7761b6ec430c8e437d117ec31007503f0d12`,
+tree `b46873509b64467338978820a6469de7fffdc619`, passed **2,581/2,581 tests**
+with zero other outcomes and all six additional qualification commands.
+Independent source and composition reviews accepted the exact source and
+retained artifacts without findings. Four production files connect the actual
+main module URL to the existing helper and sharing panel; two test files are added.
+All 1,028 non-documentation entries match the reviewed author source. Existing
+helper/clipboard behavior, native dispatch and authority remain unchanged.
+This closes generic ID-free sharing, not the wider referral roadmap.
+
+Generation 29 is now published as
+[PR237](https://github.com/djshellshoxxx/p2p-offramp/pull/237), head
+`33232f62dc9cd250528ef3eb0313c0c319d99495`, tree
+`452b08d0c279a82ea3076371723a2dbd12ef9596`, targeting PR236's branch.
+Generation 30 is a separate unpublished follow-up above that exact parent.
+**Keep PR236 frozen as the main-target aggregate for PR233–235.** Its guarded
+merge and main/tree/ancestry readback precede reconciliation of the contained
+PRs; preserve their branches. Older sequential merge instructions remain
+superseded. After parent merges, retarget/reconcile children to actual main and
+refresh applicable source/target acceptance.
+
+Standalone G30 is D8 Tier B: applicable hosted checks and a
+**CodeRabbit-or-Qodo pass with findings answered** remain required alongside
+the completed independent review. Local qualification and identical Worker
+bytes do not substitute for those gates. Native preparation was build-only;
+browser, device and operating-system clipboard acceptance remain unclaimed.
+`ReleaseEnabled=0` and existing trust boundaries remain fixed.
+
+Read the [generation 30 handoff](CONTINUATION_GENERATION30_20261120.md),
+[combined receipt](qualification-generation30.json),
+[retained-log index](retained-logs-generation30.json) and
+[independent composition supplement](GENERIC_APP_SHARE_COMPOSITION_REVIEW_GENERATION30_20261120.md).
+The handoff records source/evidence identities, dated pending PR236/237
+observations and historical suffix hashes. G31 startup compatibility has
+separate author/reviewer ownership and no completion claim. Optional PR224–232
+and audits184–186 remain independently owned. All earlier bytes below remain
+historical evidence, including older publication-pending statements.
+
+---
+
 # Current consolidation checkpoint — generation 29 (2026-11-20 UTC)
 
 **The staged DATA01 offline retention preview now reaches Settings through the

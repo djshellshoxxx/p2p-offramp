@@ -1,0 +1,48 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+import sys
+
+BASE = 'fa7c1a11ff990be4646053731f1030d09eb8f9b6'
+SOURCE = sys.argv[1]
+FOUR = {'apps/web/src/main.tsx', 'apps/web/src/OfflineRoot.tsx',
+        'apps/web/src/ui/App.tsx', 'apps/web/src/ui/Pages.tsx'}
+
+def git(*args):
+    return subprocess.check_output(['git', *args])
+
+def entries(ref):
+    result = {}
+    for row in git('ls-tree', '-rz', ref).split(b'\0'):
+        if not row:
+            continue
+        info, name = row.split(b'\t', 1)
+        mode, kind, oid = info.decode().split()
+        result[name.decode()] = {'mode': mode, 'type': kind, 'oid': oid}
+    return result
+
+before, after = entries(BASE), entries(SOURCE)
+changed = sorted(name for name in before if name in after and before[name] != after[name])
+deleted = sorted(set(before) - set(after))
+added = sorted(set(after) - set(before))
+assert changed == sorted(FOUR), changed
+assert deleted == [], deleted
+unexpected_additions = [name for name in added if not name.startswith('docs/') and not (
+    name.startswith('apps/web/test/generic-app-share-') and name.endswith('.test.mjs'))]
+assert unexpected_additions == [], unexpected_additions
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert git('status', '--porcelain=v1', '--untracked-files=all') == b''
+record = {
+    'baseline': BASE,
+    'baseline_tree': git('rev-parse', BASE + '^{tree}').decode().strip(),
+    'source': SOURCE,
+    'source_tree': git('rev-parse', SOURCE + '^{tree}').decode().strip(),
+    'baseline_entries': len(before), 'source_entries': len(after),
+    'preserved_baseline_entries': sum(before[name] == after.get(name) for name in before),
+    'changed_existing_entries': {name: {'before': before[name], 'after': after[name],
+        'working_file_sha256': hashlib.sha256(Path(name).read_bytes()).hexdigest()} for name in changed},
+    'added_entries': {name: after[name] for name in added}, 'deleted_entries': deleted,
+    'preservation_statement': 'Every baseline entry outside the four composition files retains its exact mode, type and object ID.',
+}
+print(json.dumps(record, indent=2))
