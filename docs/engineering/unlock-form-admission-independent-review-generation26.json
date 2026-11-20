@@ -1,0 +1,422 @@
+{
+  "schema": "p2p-offramp-unlock-form-admission-independent-review/v1",
+  "recorded_utc": "2026-11-20T17:58:39.136491+00:00",
+  "reviewer": "/root/unlock_admission_review_g26",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "review_branch": "codex/unlock-form-admission-independent-review-g26-20261120",
+  "review_worktree": "/workspace/scratch/dcf03ef9bee8/p2p-unlock-admission-review-g26",
+  "decision": "accept-for-scoped-integration",
+  "findings": [],
+  "standards_review": {
+    "findings": [],
+    "conclusion": "Existing ref ownership and handler-test conventions are preserved; no documented-standard violation or relevant smell found in the assigned diff."
+  },
+  "behavioral_review": {
+    "findings": [],
+    "conclusion": "The synchronous request ref guard preserves the admitted controller and stops duplicate facade work; cancellation, notices, secret clearing, normal success and explicit retry pass the bounded regression."
+  },
+  "base_commit": "1a52c1c4f53a97cbbd0937f14a4379b88fd249b8",
+  "base_tree": "26938456c4924e4792a5671183a0879e86f8b7a2",
+  "red_commit": "6df5a34a7c00f8a6fa489a53ca8f783616e285f5",
+  "red_tree": "4526273027691552d891ebce9d0d66bec19fb828",
+  "source_commit": "a2a854a285563d4560610577a0df099b041643bf",
+  "source_tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+  "environment": {
+    "recorded_utc": "2026-11-20T17:55:26.745734+00:00",
+    "review_branch": "codex/unlock-form-admission-independent-review-g26-20261120",
+    "head": "a2a854a285563d4560610577a0df099b041643bf",
+    "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+    "status": "",
+    "node_version": "v24.22.3",
+    "npm_version": "11.19.1",
+    "node_modules_is_symlink": false,
+    "dependency_source": "physical copy of /workspace/scratch/dcf03ef9bee8/p2p-ui-admission-recon-g26/node_modules",
+    "package_lock_sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72"
+  },
+  "source_identity": {
+    "recorded_utc": "2026-11-20T17:56:46.368056+00:00",
+    "commands": [
+      "git ls-tree -rz --full-tree <commit>",
+      "git rev-parse <commit>^{tree}",
+      "git rev-parse <commit>^",
+      "git show <commit>:<path>",
+      "git status --porcelain=v1",
+      "git diff 1a52c1c4f53a97cbbd0937f14a4379b88fd249b8...a2a854a285563d4560610577a0df099b041643bf"
+    ],
+    "commits": [
+      {
+        "label": "base",
+        "commit": "1a52c1c4f53a97cbbd0937f14a4379b88fd249b8",
+        "tree": "26938456c4924e4792a5671183a0879e86f8b7a2",
+        "entries": 2728
+      },
+      {
+        "label": "red",
+        "commit": "6df5a34a7c00f8a6fa489a53ca8f783616e285f5",
+        "tree": "4526273027691552d891ebce9d0d66bec19fb828",
+        "entries": 2729
+      },
+      {
+        "label": "green",
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "entries": 2729
+      }
+    ],
+    "base_to_red_changed_paths": [
+      "apps/web/test/unlock-form-admission.test.mjs"
+    ],
+    "red_to_green_changed_paths": [
+      "apps/web/src/ui/VaultForms.tsx"
+    ],
+    "base_to_green_changed_paths": [
+      "apps/web/src/ui/VaultForms.tsx",
+      "apps/web/test/unlock-form-admission.test.mjs"
+    ],
+    "unchanged_base_entries_in_green": 2727,
+    "invariants": {
+      "red_adds_only_regression_test": true,
+      "red_preserves_every_base_entry": true,
+      "green_changes_only_unlock_form_from_red": true,
+      "same_regression_blob_red_green": true,
+      "green_preserves_every_other_base_entry": true,
+      "frozen_green_tree_matches_assignment": true,
+      "linear_base_red_green": true,
+      "working_tree_is_exact_green": true,
+      "ReleaseEnabled_zero_in_actual_facade": true
+    },
+    "source_files": [
+      {
+        "path": "apps/web/src/ui/VaultForms.tsx",
+        "git_entry": "100644 blob 2c7c2ab5a8f706afae36213f12802cbdc46f8491",
+        "bytes": 20586,
+        "sha256": "c45331bf70e75ad617f389d4dda5e118c07d067c0778f404d914b0ac9459b606"
+      },
+      {
+        "path": "apps/web/test/unlock-form-admission.test.mjs",
+        "git_entry": "100644 blob 61718845f6246e4df6dbb5dc51eed033c18b888e",
+        "bytes": 11923,
+        "sha256": "55d038f4005bdd8f9c800477cec790a317e1f9342d931f51f7910bfd6d5924e7"
+      },
+      {
+        "path": "apps/web/src/app-services.ts",
+        "git_entry": "100644 blob 59d25937b0e365e6da0870f768360025e3313c44",
+        "bytes": 11327,
+        "sha256": "5c3934ccb0a1a486e334ca58b7058f8c53ac9f0660c56ef67ce31eb2af74f0f5"
+      },
+      {
+        "path": "apps/web/src/runtime/app-runtime.ts",
+        "git_entry": "100644 blob 5c6daffc86ad2946713d3a300bf49a4ea28c661f",
+        "bytes": 29519,
+        "sha256": "f22e23eb06fdcc864024929628adc4afdbbc3241fd571333462a140805e2d8cb"
+      },
+      {
+        "path": "scripts/test-support/register-tsx.mjs",
+        "git_entry": "100644 blob 2b89d9904a856aff5714f83a377d023d9b1dbefe",
+        "bytes": 86,
+        "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+      },
+      {
+        "path": "scripts/test-support/tsx-hooks.mjs",
+        "git_entry": "100644 blob 1af8a252a20242db7b2e380aacb3b0bf3efa314b",
+        "bytes": 489,
+        "sha256": "4a9d9bbbe692840bc290126b4c905f08d90c7747728db7e8731c5cc4a3679ebe"
+      },
+      {
+        "path": "package-lock.json",
+        "git_entry": "100644 blob dd429efb353a01c1c25d5f6e96508e020ecb7eeb",
+        "bytes": 57692,
+        "sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72"
+      }
+    ],
+    "production_diff": "diff --git a/apps/web/src/ui/VaultForms.tsx b/apps/web/src/ui/VaultForms.tsx\nindex d268f42..2c7c2ab 100644\n--- a/apps/web/src/ui/VaultForms.tsx\n+++ b/apps/web/src/ui/VaultForms.tsx\n@@ -57,7 +57,8 @@ export function UnlockForm({ services, onCancel, initialProfileId = '' }: { read\n \n   async function submit(event: FormEvent<HTMLFormElement>) {\n     event.preventDefault();\n-    if (busy) return;\n+    // Preserve the active controller even before the busy state rerenders.\n+    if (busy || request.current !== null) return;\n     const element = event.currentTarget;\n     const profile = element.elements.namedItem('profile') as HTMLInputElement;\n     const passphrase = element.elements.namedItem('passphrase') as HTMLInputElement;\n"
+  },
+  "executions": [
+    {
+      "name": "regression-red",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/unlock-form-admission.test.mjs",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/unlock-form-admission.test.mjs"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-unlock-admission-review-g26",
+      "started_utc": "2026-11-20T17:56:00.368676+00:00",
+      "ended_utc": "2026-11-20T17:56:01.116477+00:00",
+      "source_before": {
+        "commit": "6df5a34a7c00f8a6fa489a53ca8f783616e285f5",
+        "tree": "4526273027691552d891ebce9d0d66bec19fb828",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "6df5a34a7c00f8a6fa489a53ca8f783616e285f5",
+        "tree": "4526273027691552d891ebce9d0d66bec19fb828",
+        "status": ""
+      },
+      "exit_code": 1,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/regression-red.log.gz",
+      "raw_log_bytes": 3669,
+      "raw_log_sha256": "c5bb5dbbc42b38ed4680d1407f4c059860dc2ed4b77edd0b0e29a519f0d94ec6",
+      "gzip_bytes": 859,
+      "gzip_sha256": "a32581fdae1403da8b8f649021fdbeb6fef792b240483beb1115a4c1ad91b798",
+      "tests": 8,
+      "suites": 0,
+      "pass": 4,
+      "fail": 4,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "expected_exit_code": 1,
+      "expected_result_matched": true,
+      "gzip_roundtrip_verified": true
+    },
+    {
+      "name": "regression-green",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/unlock-form-admission.test.mjs",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/unlock-form-admission.test.mjs"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-unlock-admission-review-g26",
+      "started_utc": "2026-11-20T17:56:05.384561+00:00",
+      "ended_utc": "2026-11-20T17:56:06.114893+00:00",
+      "source_before": {
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "status": ""
+      },
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/regression-green.log.gz",
+      "raw_log_bytes": 838,
+      "raw_log_sha256": "195ed1d7a44034d8a5e0af68a07fa3870afc92b7abdaff630f4db4cfec051dd4",
+      "gzip_bytes": 431,
+      "gzip_sha256": "2034a228486641691ee71c2a3f563c9d423cf961e73849af2173a0ea4a17971c",
+      "tests": 8,
+      "suites": 0,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "expected_exit_code": 0,
+      "expected_result_matched": true,
+      "gzip_roundtrip_verified": true
+    },
+    {
+      "name": "affected-tests",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/vault-forms-locale.test.mjs apps/web/test/app-services.test.mjs apps/web/test/app-runtime.test.mjs apps/web/test/pending-metadata.test.mjs",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/vault-forms-locale.test.mjs",
+        "apps/web/test/app-services.test.mjs",
+        "apps/web/test/app-runtime.test.mjs",
+        "apps/web/test/pending-metadata.test.mjs"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-unlock-admission-review-g26",
+      "started_utc": "2026-11-20T17:56:13.710584+00:00",
+      "ended_utc": "2026-11-20T17:56:18.095888+00:00",
+      "source_before": {
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "status": ""
+      },
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/affected-tests.log.gz",
+      "raw_log_bytes": 6012,
+      "raw_log_sha256": "1c6ca293cea13623d2ba5c0909858cbed3cf111e4443a4b468875bf6de4067fd",
+      "gzip_bytes": 2190,
+      "gzip_sha256": "2ccb5ba111e4b7d56a3f410c9b3fa3fa395e8234d502d66c6163857c9ebb36d4",
+      "tests": 52,
+      "suites": 0,
+      "pass": 52,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "expected_exit_code": 0,
+      "expected_result_matched": true,
+      "gzip_roundtrip_verified": true
+    },
+    {
+      "name": "ui-typecheck",
+      "command": "./node_modules/.bin/tsc -p apps/web/tsconfig.ui.json --noEmit",
+      "argv": [
+        "./node_modules/.bin/tsc",
+        "-p",
+        "apps/web/tsconfig.ui.json",
+        "--noEmit"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-unlock-admission-review-g26",
+      "started_utc": "2026-11-20T17:56:13.720917+00:00",
+      "ended_utc": "2026-11-20T17:56:15.278251+00:00",
+      "source_before": {
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "status": ""
+      },
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/ui-typecheck.log.gz",
+      "raw_log_bytes": 0,
+      "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip_bytes": 20,
+      "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "expected_exit_code": 0,
+      "expected_result_matched": true,
+      "gzip_roundtrip_verified": true
+    },
+    {
+      "name": "source-diff-check",
+      "command": "git diff --check 1a52c1c4f53a97cbbd0937f14a4379b88fd249b8...a2a854a285563d4560610577a0df099b041643bf",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "1a52c1c4f53a97cbbd0937f14a4379b88fd249b8...a2a854a285563d4560610577a0df099b041643bf"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-unlock-admission-review-g26",
+      "started_utc": "2026-11-20T17:56:13.737953+00:00",
+      "ended_utc": "2026-11-20T17:56:13.761919+00:00",
+      "source_before": {
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "status": ""
+      },
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/source-diff-check.log.gz",
+      "raw_log_bytes": 0,
+      "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip_bytes": 20,
+      "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "expected_exit_code": 0,
+      "expected_result_matched": true,
+      "gzip_roundtrip_verified": true
+    },
+    {
+      "name": "source-identity",
+      "command": "python3 /workspace/scratch/dcf03ef9bee8/p2p-unlock-admission-review-evidence-g26/source_identity.py",
+      "argv": [
+        "python3",
+        "/workspace/scratch/dcf03ef9bee8/p2p-unlock-admission-review-evidence-g26/source_identity.py"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-unlock-admission-review-g26",
+      "started_utc": "2026-11-20T17:56:46.246204+00:00",
+      "ended_utc": "2026-11-20T17:56:46.384789+00:00",
+      "source_before": {
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2a854a285563d4560610577a0df099b041643bf",
+        "tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+        "status": ""
+      },
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/source-identity.log.gz",
+      "raw_log_bytes": 4164,
+      "raw_log_sha256": "d8d4cf1cce76de1b84793025be362060b8ace974ddf1b67bb0c5ad60d2ee226f",
+      "gzip_bytes": 1717,
+      "gzip_sha256": "aa5f055603182ac5a256a9d3115bd042b64e1b42fe15b5d6c759f68f5b21e516",
+      "expected_exit_code": 0,
+      "expected_result_matched": true,
+      "gzip_roundtrip_verified": true
+    }
+  ],
+  "review_report": {
+    "path": "docs/engineering/unlock-form-admission-independent-review-generation26.md",
+    "bytes": 10645,
+    "sha256": "31536c832e7347141734ef23d9eccc196f49cd52588f0ff191dbebd7c13ffb6d"
+  },
+  "support_files": [
+    {
+      "path": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/capture-check.py.txt",
+      "bytes": 2180,
+      "sha256": "c7539f3d70d9f76c27ac29e9896b36b2f322ae3524d7db93b46ede8e58ff3a52"
+    },
+    {
+      "path": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/source-identity.py.txt",
+      "bytes": 3418,
+      "sha256": "c90f46a7a30b86401d0d1bdf05673f9ea8f03f7160fde4450c0ea912e9068da4"
+    }
+  ],
+  "evidence_integrity": {
+    "all_gzip_roundtrips_verified": true,
+    "verification": "Every decompressed raw byte count and SHA-256, and every compressed byte count and SHA-256, matched the capture metadata before handoff."
+  },
+  "regression_coverage": [
+    "single cancellation and delayed valid response suppression",
+    "same-render duplicate with immediate Cancel and unmount",
+    "settled duplicate followed by Cancel",
+    "settled duplicate followed by unmount",
+    "pending UI and original authentication notice preserved",
+    "rerender-separated duplicate control",
+    "ordinary successful unlock",
+    "fresh explicit retry after completed authentication refusal"
+  ],
+  "composition": {
+    "form": "Maintained VaultForms.tsx body transpiled through Vite/Oxc and executed with controlled hooks and JSX in a VM context.",
+    "facade": "Actual startAppServices and AppServices unlock path; observation wrapper forwards arguments and results.",
+    "runtime": "Actual AppRuntime request admission, protocol validation, abort, generation, status and subscriber code.",
+    "port": "Controlled EventTarget port holds unlock commands and dispatches well-formed correlated response fixtures.",
+    "positive_controls": "Single success and explicit retry demonstrate authorized unlocked publication; cancellation cases assert delivered success reply, locked final public state and no unlocked publication.",
+    "red_observation_limit": "The independent RED log directly establishes failed original abort and premature busy clearing. Late publication on RED follows from source analysis; RED stops at its first ownership/busy assertion and does not log a separate publication observation."
+  },
+  "ReleaseEnabled": 0,
+  "preserved": [
+    "other baseline tree entries",
+    "facade and runtime implementation",
+    "Worker and protocol implementation",
+    "dependency manifests and lockfile",
+    "trust and activation inputs",
+    "passphrase clearing and notice mapping",
+    "ordinary completion and explicit retry"
+  ],
+  "limits": [
+    "No native React/browser event-reachability qualification.",
+    "No native Worker, storage or cryptographic authentication qualification from the new regression.",
+    "No cooldown or rate-policy expansion.",
+    "No broad suite, financial run, local browser launch, remote operation, publication, deployment or release activation.",
+    "No claim about remote main or a later composed source; coordinator owns composed-source qualification."
+  ],
+  "evidence_only_change": true
+}
