@@ -1,0 +1,696 @@
+{
+  "schema": "p2p-consolidation-inventory-delta/v1",
+  "observed_at_utc": "2026-11-20T02:26:11.694718+00:00",
+  "baseline": "docs/engineering/branch-inventory.json",
+  "baseline_branches": 192,
+  "current_remote_branches": 210,
+  "main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+  "changed_baseline_refs": [],
+  "new_remote_branches": [
+    {
+      "branch": "codex/consolidation-handoff-20261119",
+      "head": "f0773c2c91ec271b86c84baf3745c9cd56d1cf36",
+      "tree": "a3c94e992597a84a5603a16527156c0c934a762e",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 35,
+      "behind": 0
+    },
+    {
+      "branch": "codex/generation5-core-20261119",
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "tree": "ce3c69ddc36245f756005c540e521a26a3ce59b8",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 40,
+      "behind": 0
+    },
+    {
+      "branch": "codex/historical-recovery-20261119",
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "tree": "a3701267756596e833247f50614c5ddc32f2cce0",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 33,
+      "behind": 0
+    },
+    {
+      "branch": "codex/max-consolidation-20261119",
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "tree": "b6d2d90b8ee5f148e7f6e7d8be962ef6e565e3ec",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 22,
+      "behind": 0
+    },
+    {
+      "branch": "codex/optional-arbitration-20261119",
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "tree": "66d18800ca406996513eaa1eec97567d95d226b3",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0
+    },
+    {
+      "branch": "codex/optional-courier-20261119",
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "tree": "cff27fd7b907474a3d25d9144755eee733c812d9",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0
+    },
+    {
+      "branch": "codex/optional-liquidity-20261119",
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "tree": "3ab9817bec3b4e62cab92b9ce0d9ef2f53435a02",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0
+    },
+    {
+      "branch": "codex/optional-meetup-20261119",
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "tree": "9feb9bdbe77edbd6f11e486bf1785ab76c43a5ca",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0
+    },
+    {
+      "branch": "codex/optional-privacy-controls-20261119",
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "tree": "22d7b4e2ab6756a33eed3598115dab7ca1a9c24f",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0
+    },
+    {
+      "branch": "codex/optional-privacy-policy-20261119",
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "tree": "946ad1109e5a586439f43983de10e9fa8cd1e43d",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0
+    },
+    {
+      "branch": "codex/optional-proof-inputs-20261119",
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "tree": "be88b287938122c319b62ee7462bf3a5003dfd9a",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0
+    },
+    {
+      "branch": "codex/optional-proof-jobs-20261119",
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "tree": "498f47b8d4ee8d79baab7a100c0ef2dec85377c9",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0
+    },
+    {
+      "branch": "codex/optional-stealth-20261119",
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "tree": "8feb969703a3fc6eecfc976f5eba550feccf240d",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0
+    },
+    {
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "tree": "2e88aa8eec7a6e609ca113d35a36177c40bf156d",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 34,
+      "behind": 0
+    },
+    {
+      "branch": "codex/personalization-templates-ui-20261119",
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "tree": "f5c5bb060732a892ba4eb91532e82ed79f64f2c4",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 35,
+      "behind": 0
+    },
+    {
+      "branch": "codex/qr-camera-fixture-20261119",
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "tree": "938b76f923df166717ef522666575e37a0623825",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 24,
+      "behind": 0
+    },
+    {
+      "branch": "codex/solana-browser-send-repair-20261119",
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "tree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 34,
+      "behind": 0
+    },
+    {
+      "branch": "codex/solana-restore-ack-20261119",
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "tree": "412efa7b9534cc182d05d2b97830d5f6ff09944e",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 35,
+      "behind": 0
+    }
+  ],
+  "local_successor_source": "b67bd81e74b0f58338dc15bc694cd3a22b724cd4",
+  "prs_observed": 200,
+  "pr_summary": {
+    "open": 59,
+    "merged": 105,
+    "closed_unmerged": 36
+  },
+  "pr_lookup_scope": "Combined all-state and closed-state connector searches; preserves original baseline without rewriting its historical counts.",
+  "open_prs": [
+    {
+      "number": 205,
+      "title": "Integrate reviewed core recovery, encrypted preferences and tooling repairs",
+      "head": "codex/generation5-core-20261119",
+      "head_sha": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "base": "main",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "draft": true
+    },
+    {
+      "number": 204,
+      "title": "Compose encrypted templates with explicit consent and fresh draft review",
+      "head": "codex/personalization-templates-ui-20261119",
+      "head_sha": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "base": "codex/personalization-favorites-ui-20261119",
+      "base_sha": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "draft": false
+    },
+    {
+      "number": 203,
+      "title": "Fix Solana restore acknowledgment and backup byte ownership",
+      "head": "codex/solana-restore-ack-20261119",
+      "head_sha": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "base": "codex/solana-browser-send-repair-20261119",
+      "base_sha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "draft": false
+    },
+    {
+      "number": 202,
+      "title": "fix: complete withheld Solana acknowledgment and qualify one browser POST",
+      "head": "codex/solana-browser-send-repair-20261119",
+      "head_sha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 201,
+      "title": "Compose encrypted saved-review favorites with fresh-review and lifecycle checks",
+      "head": "codex/personalization-favorites-ui-20261119",
+      "head_sha": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 200,
+      "title": "Persist optional-source qualification and successor engineering handoff",
+      "head": "codex/consolidation-handoff-20261119",
+      "head_sha": "f0773c2c91ec271b86c84baf3745c9cd56d1cf36",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 199,
+      "title": "Recover optional proof-jobs with independent source qualification",
+      "head": "codex/optional-proof-jobs-20261119",
+      "head_sha": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 198,
+      "title": "Recover optional stealth with independent source qualification",
+      "head": "codex/optional-stealth-20261119",
+      "head_sha": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 197,
+      "title": "Recover optional privacy-controls source with reviewed boundary repairs",
+      "head": "codex/optional-privacy-controls-20261119",
+      "head_sha": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 196,
+      "title": "Recover optional meetup source with reviewed boundary repairs",
+      "head": "codex/optional-meetup-20261119",
+      "head_sha": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 195,
+      "title": "Recover optional courier source with reviewed boundary repairs",
+      "head": "codex/optional-courier-20261119",
+      "head_sha": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 194,
+      "title": "Recover optional privacy-policy source with reviewed boundary repairs",
+      "head": "codex/optional-privacy-policy-20261119",
+      "head_sha": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 193,
+      "title": "Recover accepted optional arbitration source with independent review",
+      "head": "codex/optional-arbitration-20261119",
+      "head_sha": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 192,
+      "title": "Recover accepted optional liquidity source with independent review",
+      "head": "codex/optional-liquidity-20261119",
+      "head_sha": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 191,
+      "title": "Recover accepted optional proof-inputs source with independent review",
+      "head": "codex/optional-proof-inputs-20261119",
+      "head_sha": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "base": "codex/historical-recovery-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "draft": false
+    },
+    {
+      "number": 190,
+      "title": "Recover reviewed historical modules, tooling and durable consolidation handoff",
+      "head": "codex/historical-recovery-20261119",
+      "head_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base": "codex/max-consolidation-20261119",
+      "base_sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "draft": false
+    },
+    {
+      "number": 189,
+      "title": "Repair synthetic QR camera frame production during browser qualification",
+      "head": "codex/qr-camera-fixture-20261119",
+      "head_sha": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "base": "codex/max-consolidation-20261119",
+      "base_sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "draft": false
+    },
+    {
+      "number": 188,
+      "title": "Consolidate seven source branches and repair QR/Solana browser qualification",
+      "head": "codex/max-consolidation-20261119",
+      "head_sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "base": "main",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "draft": false
+    },
+    {
+      "number": 187,
+      "title": "fix(web): bound actual trade-review reads before retention (test-first)",
+      "head": "chatgpt/zero-codex/review-read-bounds-20261119-119",
+      "head_sha": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "base": "main",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "draft": true
+    },
+    {
+      "number": 186,
+      "title": "docs(audit): record static sharing and privacy endpoint inspections (113–114)",
+      "head": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+      "head_sha": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "base": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "base_sha": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "draft": true
+    },
+    {
+      "number": 185,
+      "title": "docs(audit): record Pages startup-capability review (112)",
+      "head": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "head_sha": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "base": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "base_sha": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "draft": true
+    },
+    {
+      "number": 184,
+      "title": "docs(audit): rotate static-client content-admission review (110)",
+      "head": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "head_sha": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "base": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "base_sha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "draft": true
+    },
+    {
+      "number": 183,
+      "title": "feat(web): add bounded public QR capture and explicit review",
+      "head": "feature/public-qr-capture-20261119",
+      "head_sha": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "base": "main",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "draft": false
+    },
+    {
+      "number": 182,
+      "title": "docs(audit): read-only Solana intent and send-marker inspection 109",
+      "head": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "head_sha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "base": "main",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "draft": false
+    },
+    {
+      "number": 181,
+      "title": "fix(web): publish current readiness during relay recovery",
+      "head": "fix/localnet-readiness-20261119",
+      "head_sha": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "base": "main",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "draft": false
+    },
+    {
+      "number": 179,
+      "title": "feat(solana): compose funded recovery with exact browser transaction review",
+      "head": "consolidation/solana-browser-recovery-20261119",
+      "head_sha": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "base": "main",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "draft": true
+    },
+    {
+      "number": 178,
+      "title": "docs(wiki): reconcile qualified main, resumption, and merge policy",
+      "head": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+      "head_sha": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+      "base": "main",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "draft": false
+    },
+    {
+      "number": 176,
+      "title": "Record comprehensive consolidation, verification and remaining MVP work",
+      "head": "docs/consolidation-20261119",
+      "head_sha": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+      "base": "main",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "draft": true
+    },
+    {
+      "number": 174,
+      "title": "Repair and integrate historical documentation and lab tooling (#154)",
+      "head": "consolidation/tooling154-20261119",
+      "head_sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "base": "main",
+      "base_sha": "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+      "draft": false
+    },
+    {
+      "number": 172,
+      "title": "fix(qr): normalize JCS array descriptor traps (test-first)",
+      "head": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
+      "head_sha": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "base": "main",
+      "base_sha": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "draft": false
+    },
+    {
+      "number": 171,
+      "title": "fix(qr): bound display grouping size (D6, regression first)",
+      "head": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+      "head_sha": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "base": "main",
+      "base_sha": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "draft": false
+    },
+    {
+      "number": 163,
+      "title": "[Lane B] B2 optional package 9/9: meetup",
+      "head": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+      "head_sha": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "base": "main",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "draft": false
+    },
+    {
+      "number": 162,
+      "title": "[Lane B] B2 optional package 8/9: proof-jobs (own optional workflow)",
+      "head": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+      "head_sha": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "base": "main",
+      "base_sha": "539ad540731be82c5499e9d3446482bfa1a1a51d",
+      "draft": false
+    },
+    {
+      "number": 161,
+      "title": "[Lane B] B2 optional package 7/9: stealth",
+      "head": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+      "head_sha": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "base": "main",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "draft": false
+    },
+    {
+      "number": 160,
+      "title": "[Lane B] B2 optional package 6/9: privacy-controls",
+      "head": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+      "head_sha": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "base": "main",
+      "base_sha": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+      "draft": false
+    },
+    {
+      "number": 159,
+      "title": "G1/G2: D1 peer acceptance in exchange v2, wallet signer, localnet build profile (in progress)",
+      "head": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "head_sha": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "base": "main",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "draft": true
+    },
+    {
+      "number": 156,
+      "title": "[Lane B] B4 governance 3/3: inert governance records (historical), assurance packet, evidence binding",
+      "head": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+      "head_sha": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "base": "main",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "draft": true
+    },
+    {
+      "number": 155,
+      "title": "[Lane B] B4 intake 2/3: dependency intake probes and Semaphore v4 reputation evaluation",
+      "head": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+      "head_sha": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+      "base": "main",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "draft": true
+    },
+    {
+      "number": 154,
+      "title": "[Lane B] B4 tooling 1/3: lab, docs consistency tooling, claims register, tool-path",
+      "head": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
+      "head_sha": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+      "base": "main",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "draft": true
+    },
+    {
+      "number": 148,
+      "title": "[Lane B] B2 optional package 5/9: privacy-policy",
+      "head": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+      "head_sha": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "base": "main",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "draft": false
+    },
+    {
+      "number": 147,
+      "title": "[Lane B] B2 optional package 4/9: arbitration",
+      "head": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+      "head_sha": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "base": "main",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "draft": false
+    },
+    {
+      "number": 146,
+      "title": "[Lane B] B2 optional package 3/9: courier",
+      "head": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+      "head_sha": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "base": "main",
+      "base_sha": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+      "draft": false
+    },
+    {
+      "number": 145,
+      "title": "[Lane B] B2 optional package 2/9: liquidity",
+      "head": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+      "head_sha": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "base": "main",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "draft": false
+    },
+    {
+      "number": 144,
+      "title": "[Lane B] B2 optional package 1/9: proof-inputs",
+      "head": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+      "head_sha": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "base": "main",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "draft": false
+    },
+    {
+      "number": 142,
+      "title": "Consolidation run 3: post-#134 retirement script, branching rules, ledger entry",
+      "head": "claude/p2p-offramp-consolidation-k5h13u",
+      "head_sha": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+      "base": "main",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "draft": true
+    },
+    {
+      "number": 81,
+      "title": "Integrate #56 Sonar fixes and split-stack extractions #37/#38/#40–#43",
+      "head": "claude/vibrant-cray-ny4gum",
+      "head_sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "base": "integration/p2p-consolidated-20261109",
+      "base_sha": "5243449b56bca9470e1c0643ae85f0da4b4ed712",
+      "draft": true
+    },
+    {
+      "number": 56,
+      "title": "Resolve PR #54 review findings, harden agent workflow, record live project state",
+      "head": "claude/vibrant-cray-ny4gum",
+      "head_sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "base": "codex/core-continuation-20261104",
+      "base_sha": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+      "draft": true
+    },
+    {
+      "number": 48,
+      "title": "Split PR #26 (12/12): execution evidence, review receipts and root docs",
+      "head": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+      "head_sha": "494703e837897d04bce1cb04134fa8be6b747377",
+      "base": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "base_sha": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "draft": false
+    },
+    {
+      "number": 47,
+      "title": "Split PR #26 (11/12): governance records, assurance packet and final CI wiring",
+      "head": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "head_sha": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "base": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "base_sha": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "draft": false
+    },
+    {
+      "number": 46,
+      "title": "Split PR #26 (10/12): optional reference packages (D7 recommends parking)",
+      "head": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "head_sha": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "base": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "base_sha": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "draft": false
+    },
+    {
+      "number": 45,
+      "title": "Split PR #26 (9/12): dependency and candidate intake evaluations",
+      "head": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "head_sha": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "base": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "base_sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "draft": false
+    },
+    {
+      "number": 44,
+      "title": "Split PR #26 (8/12): recovery portal, test lab, docs tooling and distribution",
+      "head": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "head_sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "base": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "base_sha": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "draft": false
+    },
+    {
+      "number": 43,
+      "title": "Split PR #26 (7/12): native private-trade journey and retention",
+      "head": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "head_sha": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "base": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "base_sha": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "draft": false
+    },
+    {
+      "number": 42,
+      "title": "Split PR #26 (6/12): personalization, web runtime, UI wiring and browser qualification",
+      "head": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "head_sha": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "base": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "base_sha": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "draft": false
+    },
+    {
+      "number": 40,
+      "title": "Split PR #26 (4/12): wallet EIP-1271 acceptance and signed asset updates",
+      "head": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+      "head_sha": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "base": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+      "base_sha": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+      "draft": false
+    },
+    {
+      "number": 37,
+      "title": "Split PR #26 (1/12): gate tooling, signature oracle, Sepolia and formal EVM checks",
+      "head": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+      "head_sha": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "base": "main",
+      "base_sha": "bebbbf582bae8bc65d57a943c974c1871acc83a4",
+      "draft": false
+    },
+    {
+      "number": 35,
+      "title": "Fix PR #31 journey findings F01, F03 and F06 (parked pending D9)",
+      "head": "claude/loving-einstein-xgzvdy-journey",
+      "head_sha": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+      "base": "claude/loving-einstein-xgzvdy",
+      "base_sha": "3e32c981bd06088acaa7d80603b4283effb15955",
+      "draft": true
+    },
+    {
+      "number": 28,
+      "title": "Fix PR #26 browser, cancellation, relay and HTTP defects",
+      "head": "claude/loving-einstein-xgzvdy",
+      "head_sha": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+      "base": "autonomous/completion-20261102",
+      "base_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "draft": true
+    },
+    {
+      "number": 26,
+      "title": "Complete local recovery and trade workflows with whole-source audit",
+      "head": "autonomous/completion-20261102",
+      "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "base": "main",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "draft": false
+    }
+  ]
+}
