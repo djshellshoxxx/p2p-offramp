@@ -1,4 +1,4 @@
-import { useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { TradeDraftChangeV1, TradeDraftDefaultsV1 } from '../../../../../packages/schemas/index.ts';
 import { DEFAULT_FIELD_NAMES, DRAFT_FIELD_NAMES, type TradeDraftController, type TradeDraftSnapshot } from '../../trade/draft-controller.ts';
 import { message, messageGroup } from '../locale/runtime.ts';
@@ -32,6 +32,8 @@ function ChangePreview({ drafts, snapshot }: { readonly drafts: TradeDraftContro
   </section>;
 }
 function FreshDraftForm({ drafts, snapshot }: { readonly drafts: TradeDraftController; readonly snapshot: TradeDraftSnapshot }) {
+  const mounted = useRef(true);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const [consent, setConsent] = useState({ generation: snapshot.generation, amounts: false, identities: false, empty: false });
   const amounts = consent.generation === snapshot.generation && consent.amounts, identities = consent.generation === snapshot.generation && consent.identities, empty = consent.generation === snapshot.generation && consent.empty;
   const check = (field: 'amounts' | 'identities' | 'empty', value: boolean) => setConsent({ generation: snapshot.generation, amounts, identities, empty, [field]: value });
@@ -44,8 +46,11 @@ function FreshDraftForm({ drafts, snapshot }: { readonly drafts: TradeDraftContr
         onChange={event => drafts.edit(field, event.currentTarget.value)} />}</label>);
   async function review(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const route = window.location.hash;
     const id = await drafts.review({ amounts, identities, emptyInstructions: empty });
-    if (id) window.location.hash = `#/trade/${id}`;
+    const current = drafts.getSnapshot();
+    // A late review cannot replace a route chosen after leaving the form or retiring its private draft.
+    if (mounted.current && id && current.unlocked && current.generation === snapshot.generation && window.location.hash === route) window.location.hash = `#/trade/${id}`;
   }
   return <form aria-label={text.title} onSubmit={event => { void review(event); }}>
     <p>{text.savedAmountsNeedReview}</p>

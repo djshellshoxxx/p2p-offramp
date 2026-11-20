@@ -50,9 +50,10 @@ function FavoritesPanel({ trade, snapshot, store }: { readonly trade: TradeRevie
   if (!store) return null;
   const favorites = snapshot.favorites, busy = snapshot.saved.kind === 'busy' || favorites.kind === 'busy';
   async function open(recordId: string) {
+    const route = window.location.hash;
     const localId = await trade.openFavorite(recordId, store!);
     // A lock, switch, cancellation or unmounted page cannot navigate using a late private projection.
-    if (mounted.current && localId && trade.find(localId)?.savedId === recordId) window.location.hash = `#/trade/${localId}`;
+    if (mounted.current && localId && window.location.hash === route && trade.find(localId)?.savedId === recordId) window.location.hash = `#/trade/${localId}`;
   }
   return <section className="plain-section" aria-label={p.favoritesTitle}>
     <h3>{p.favoritesTitle}</h3><p className="helper">{p.favoritesHelp}</p>
@@ -115,9 +116,9 @@ function ReviewForm({ trade, snapshot }: { readonly trade: TradeReviewController
   const [missingFile, setMissingFile] = useState(false);
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const busy = snapshot.job.kind === 'busy';
-  const follow = (outcome: ImportOutcome) => {
+  const follow = (outcome: ImportOutcome, route: string) => {
     // Navigate only for this page's own, still-current result.
-    if (mounted.current && outcome.kind === 'accepted') window.location.hash = `#/trade/${outcome.localId}`;
+    if (mounted.current && window.location.hash === route && outcome.kind === 'accepted') window.location.hash = `#/trade/${outcome.localId}`;
   };
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -126,7 +127,8 @@ function ReviewForm({ trade, snapshot }: { readonly trade: TradeReviewController
     const file = input.files?.[0];
     if (!file) { setMissingFile(true); return; }
     setMissingFile(false);
-    follow(await trade.importFile(file));
+    const route = window.location.hash;
+    follow(await trade.importFile(file), route);
   }
   const registry = snapshot.registry;
   return <>
@@ -143,7 +145,7 @@ function ReviewForm({ trade, snapshot }: { readonly trade: TradeReviewController
     {registry.kind === 'ready' && registry.samples.length > 0 ? <section aria-labelledby="samples-title">
       <h3 id="samples-title">{p.samplesTitle}</h3><p className="helper">{p.samplesHelp}</p>
       <div className="actions">{registry.samples.map(sample => <button key={sample.id} type="button" disabled={busy}
-        onClick={() => { void trade.importSample(sample.id).then(follow); }}>{sample.label}</button>)}</div>
+        onClick={() => { const route = window.location.hash; void trade.importSample(sample.id).then(outcome => follow(outcome, route)); }}>{sample.label}</button>)}</div>
     </section> : null}
     <JobStatus snapshot={snapshot} />
   </>;
