@@ -468,8 +468,8 @@
     }
   ],
   "staging_overlay": {
-    "source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
-    "scope": "Source on the generation-two child branch, not merged main. Exact hosted qualification and device/release acceptance remain distinct.",
+    "source_sha": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+    "scope": "Generation5 core locally qualified2217 full tests and independently reviewed; publication and hosted execution pending. Original27-capability main assessment remains immutable. Nine optional sources remain separate PR191-199.",
     "updates": [
       {
         "feature_id": "F03",
@@ -484,7 +484,7 @@
       {
         "feature_id": "F16",
         "status": "Partial",
-        "change": "Funded-exit browser source and stable labels integrated. Exact-head Solana validator/browser refund workflow remains running; discovery/negotiation/funding UI is not added."
+        "change": "Funded-exit source plus acknowledgment fixture and restore lifecycle repairs are composed and independently reviewed. Older native flows failed; current full hosted qualification remains pending. No discovery/funding parity added."
       },
       {
         "feature_id": "F17",
@@ -504,14 +504,15 @@
       {
         "feature_id": "F25",
         "status": "Implemented within source-tooling scope",
-        "change": "Docs/lab/claims plus scriptless portal, strict unsigned staging and inert governance recovered; new portal/distribution hosted steps still need current-head execution."
+        "change": "Recovered tooling now verifies immutable copy text even with current locale drift. Current unsigned distribution stays refused; historical-client positive staging is explicitly separate."
       },
       {
         "feature_id": "F22",
-        "status": "Accepted optional source; qualification active",
-        "change": "D7 parking superseded Nov18; nine separate package extractions are active and remain outside default app/Worker imports."
+        "status": "Nine reviewed source PRs; hosted qualification active",
+        "change": "PR191\u2013199 preserve one-package scope, native/custom gates and absent default imports. Combined source a2f90cbd passed2553 tests and all13 default files byte-match; current-head hosted qualification remains active."
       }
-    ]
+    ],
+    "published_head": null
   },
   "additional_staging_capabilities": [
     {
@@ -527,13 +528,18 @@
         "packages/personalization/test/favorites.test.mjs",
         "packages/personalization/test/trade-draft-store.test.mjs"
       ],
-      "remaining": "Current profile/epoch-bound Worker and UI composition; no historical runtime replacement."
+      "remaining": "Favorites PR201 Medium independently closed; PR204 adds maintained templates UI/Worker and tooling repair. Core2217 full and independent506 affected/38 policy/3 shared-revision/backup probes passed. Actual current-source hosted favorites/templates gates remain pending.",
+      "status": "Implemented in reviewed source; hosted qualification pending",
+      "source_prs": [
+        201,
+        204
+      ]
     },
     {
       "id": "F29",
       "capability": "Scriptless public source-reference portal",
       "main_status": "Missing",
-      "staging_status": "Implemented source; hosted browser pending",
+      "staging_status": "Implemented source; actual hosted browser passed at PR190",
       "source": [
         "scripts/portal/build.mjs",
         "apps/portal/index.html"
@@ -542,13 +548,13 @@
         "scripts/portal/build.test.mjs",
         "scripts/test-scriptless-portal-browser.mjs"
       ],
-      "remaining": "Actual current-head hosted header/download/print qualification; no deployed-host claim."
+      "remaining": "No deployed-host, physical-print/device or release claim; preserve current source-bound qualification."
     },
     {
       "id": "F30",
       "capability": "Unsigned deterministic distribution staging",
       "main_status": "Missing",
-      "staging_status": "Implemented local source",
+      "staging_status": "Implemented local source; actual hosted browser passed at PR190",
       "source": [
         "scripts/distribution/stage.mjs",
         "scripts/distribution/manifest.mjs"
@@ -557,7 +563,7 @@
         "scripts/distribution/stage.test.mjs",
         "scripts/distribution/browser.test.mjs"
       ],
-      "remaining": "Current-head nested browser qualification; independent distribution and signed-release authority remain absent."
+      "remaining": "Current locale drift keeps unsigned staging refused. Historical-client/current-tooling fixture passes with currentSourceDistributionQualified:false; no signed-release or distribution approval."
     },
     {
       "id": "F31",

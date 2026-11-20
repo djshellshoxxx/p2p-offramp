@@ -1,8 +1,11 @@
 /**
  * Worker-private composition root. The narrow protocol cannot read, mutate or return private records, except the
- * purpose-bound saved terms reviews (G07) and unverified scalar recovery references (G12), in the selected profile only.
+ * purpose-bound saved terms reviews and their bounded favorites/templates (G07) and unverified scalar recovery references (G12),
+ * in the selected profile only.
  */
 import { EncryptedVaultService, EncryptedBackupService, BackupError } from '../../../../packages/storage/index.ts';
+import { createTradeDraftStore, type TradeDraftStore } from '../../../../packages/personalization/templates.ts';
+import { createSavedReviewFavorites } from '../../../../packages/personalization/favorites.ts';
 import {
   decodeBase64url, parseStrictJsonBytes, MAX_SAVED_REVIEW_BYTES, encodeBase64url, encodeSavedReviewPayload, parseSavedReviewPayload, parseRuntimeCommand, MAX_SAVED_REVIEWS, SAVED_REVIEW_SCHEMA_VERSION, parseRuntimeMessage, runtimeFailure, RuntimeBoundaryError, projectRecoveryReferences,
   RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
@@ -71,6 +74,7 @@ class VaultWorkerEndpoint {
   #generation = 0;
   #lastRequest = 0;
   #selection: Selection | undefined;
+  #drafts: TradeDraftStore | undefined;
   #active: ActiveJob | undefined;
   #deadline: number | undefined;
   #lastTime = -Infinity;
@@ -87,6 +91,7 @@ class VaultWorkerEndpoint {
   #clear(): void {
     if (this.#timer !== undefined) clearTimeout(this.#timer);
     this.#timer = undefined; this.#deadline = undefined;
+    this.#drafts?.dispose(); this.#drafts = undefined;
     const previous = this.#selection; this.#selection = undefined;
     previous?.lease.dispose(); this.#active?.controller.abort(); this.#services?.vault.lockAll();
   }
@@ -129,6 +134,18 @@ class VaultWorkerEndpoint {
     const session = selection?.lease.current();
     if (!selection || !session || selection.handle.profileId !== profileId || session.profileId !== profileId) throw new RuntimeBoundaryError('LOCKED');
     return session;
+  }
+  /** The same native store owns preview and commit, bound to this exact selection/epoch. */
+  #templates(profileId: string): TradeDraftStore {
+    const session = this.#selected(profileId), selection = this.#selection;
+    this.#drafts ??= vaultValue(createTradeDraftStore({ vault: this.#services!.vault, session,
+      now: () => this.#time(),
+      randomBytes: length => (this.#options.random ?? (value => crypto.getRandomValues(value)))(new Uint8Array(length)),
+      isCurrent: () => {
+        if (this.#active) this.#guard(this.#active);
+        return this.#selection === selection && this.#selected(profileId).sessionId === session.sessionId;
+      } }));
+    return this.#drafts;
   }
   #protocol(code: RuntimeErrorCode = 'PROTOCOL_ERROR'): void {
     if (this.#closed) return;
@@ -208,6 +225,40 @@ class VaultWorkerEndpoint {
         } else if (command.operation === 'exportEncrypted') {
           const value = await this.#services.backup.exportWithStatus(command.profileId, job.controller.signal); this.#guard(job);
           this.#reply(command, { ok: true, value });
+        } else if (command.operation === 'loadTradeTemplates' || command.operation === 'previewTradeTemplateChange' || command.operation === 'commitTradeTemplateChange' || command.operation === 'cancelTradeTemplateChange') {
+          const templates = this.#templates(command.profileId);
+          if (command.operation === 'cancelTradeTemplateChange') {
+            templates.cancel(); this.#guard(job); this.#selected(command.profileId);
+            this.#reply(command, { ok: true, value: Object.freeze({ cancelled: true }) });
+          } else {
+            const value = command.operation === 'loadTradeTemplates' ? vaultValue(await templates.load(job.controller.signal)) :
+              command.operation === 'previewTradeTemplateChange' ? vaultValue(await templates.plan(command.expectedRevision, command.change, job.controller.signal)) :
+              vaultValue(await templates.commit(command.previewId, command.expectedRevision, command.consent, job.controller.signal));
+            // A native durable receipt is not rollback. Suppress retired acknowledgements and require an explicit reload.
+            this.#guard(job); this.#selected(command.profileId);
+            if ('sessionCurrent' in value && !value.sessionCurrent) throw new RuntimeBoundaryError('LOCKED');
+            this.#reply(command, { ok: true, value });
+          }
+        } else if (command.operation === 'listFavoriteReviews' || command.operation === 'setReviewFavorite') {
+          const session = this.#selected(command.profileId), selection = this.#selection;
+          const favorites = vaultValue(createSavedReviewFavorites({ vault: this.#services.vault, session, isCurrent: () => {
+            this.#guard(job);
+            return this.#selection === selection && this.#selected(command.profileId).sessionId === session.sessionId;
+          } }));
+          try {
+            if (command.operation === 'listFavoriteReviews') {
+              const value = vaultValue(await favorites.list(job.controller.signal));
+              this.#guard(job); this.#selected(command.profileId);
+              this.#reply(command, { ok: true, value });
+            } else {
+              const receipt = vaultValue(await favorites.set(command.recordId, command.favorite, command.expectedRevision, job.controller.signal));
+              // Native durable receipts survive retirement. The document acknowledgement remains selection-bound;
+              // a committed write after cancellation is reconciled by an explicit reload, never an automatic retry.
+              this.#guard(job); this.#selected(command.profileId);
+              if (!receipt.sessionCurrent) throw new RuntimeBoundaryError('LOCKED');
+              this.#reply(command, { ok: true, value: Object.freeze({ recordId: receipt.recordId, favorite: receipt.favorite, revision: receipt.revision }) });
+            }
+          } finally { favorites.dispose(); }
         } else if (command.operation === 'listRecoveryReferences') {
           const vault = this.#services.vault, session = this.#selected(command.profileId);
           vaultValue(await vault.assertFresh(session.sessionId, job.controller.signal)); this.#guard(job);

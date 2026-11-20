@@ -60,6 +60,14 @@ jobs:
         uses: browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce # v1.7.3, official annotated tag dereferenced
         with:
           chrome-version: stable
+      - name: Verify one actual browser POST for a withheld Solana acknowledgment
+        run: npm run test:solana:ack:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - name: Verify acknowledged Solana restore with the actual encrypted Worker
+        run: npm run test:solana:restore:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
@@ -70,6 +78,12 @@ jobs:
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:web:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:favorites:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:templates:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:private:browser
