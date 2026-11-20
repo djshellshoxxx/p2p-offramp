@@ -1,0 +1,824 @@
+{
+  "schema_version": 1,
+  "generation": 27,
+  "kind": "independent-scoped-review",
+  "recorded_utc": "2026-11-20T18:11:58.244611+00:00",
+  "decision": "accept-for-scoped-integration",
+  "standards_findings": [],
+  "spec_findings": [],
+  "source": [
+    {
+      "label": "base",
+      "commit": "f36a0a07dff55aa83b9d01a69501d049461d9b33",
+      "tree": "e465bb6894fa4d890255ad045c68398e3aae9a5c",
+      "entries": 2764
+    },
+    {
+      "label": "red",
+      "commit": "515a7c945b6bef136c3ede436577635b17ccd4e2",
+      "tree": "ae419673f5930a09e96aa19db26e8537e3cbb931",
+      "entries": 2765
+    },
+    {
+      "label": "green",
+      "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+      "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+      "entries": 2765
+    }
+  ],
+  "review_branch": "codex/remaining-vault-admission-independent-review-g27-20261120",
+  "review_worktree": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27",
+  "source_identity": {
+    "recorded_utc": "2026-11-20T18:07:37.598589+00:00",
+    "commits": [
+      {
+        "label": "base",
+        "commit": "f36a0a07dff55aa83b9d01a69501d049461d9b33",
+        "tree": "e465bb6894fa4d890255ad045c68398e3aae9a5c",
+        "entries": 2764
+      },
+      {
+        "label": "red",
+        "commit": "515a7c945b6bef136c3ede436577635b17ccd4e2",
+        "tree": "ae419673f5930a09e96aa19db26e8537e3cbb931",
+        "entries": 2765
+      },
+      {
+        "label": "green",
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "entries": 2765
+      }
+    ],
+    "base_to_red_changed_paths": [
+      "apps/web/test/vault-form-admission.test.mjs"
+    ],
+    "red_to_green_changed_paths": [
+      "apps/web/src/ui/VaultForms.tsx"
+    ],
+    "base_to_green_changed_paths": [
+      "apps/web/src/ui/VaultForms.tsx",
+      "apps/web/test/vault-form-admission.test.mjs"
+    ],
+    "unchanged_base_entries_in_green": 2763,
+    "invariants": {
+      "red_adds_only_regression_test": true,
+      "red_preserves_every_base_entry": true,
+      "green_changes_only_vault_forms_from_red": true,
+      "same_regression_blob_red_green": true,
+      "same_regression_sha256_as_frozen_assignment": true,
+      "green_preserves_every_other_base_entry": true,
+      "green_adds_only_three_existing_ref_guards": true,
+      "UnlockForm_block_unchanged": true,
+      "G26_unlock_regression_unchanged": true,
+      "frozen_green_tree_matches_assignment": true,
+      "linear_base_red_green": true,
+      "working_tree_is_exact_green": true,
+      "ReleaseEnabled_zero_in_actual_facade": true,
+      "physical_dependency_root": true,
+      "physical_package_files": true,
+      "dependency_lock_matches_copy_source": true
+    },
+    "source_files": [
+      {
+        "path": "apps/web/src/ui/VaultForms.tsx",
+        "git_entry": "100644 blob 3b63b4541be3061937a18eb1fc1975588955be96",
+        "bytes": 20670,
+        "sha256": "2c904bf1de21baf328bbfe80cd8b3de640687bfddd286671ad5360b9925221f4"
+      },
+      {
+        "path": "apps/web/test/vault-form-admission.test.mjs",
+        "git_entry": "100644 blob 42136f64ef31c1bf646ae1d67946e363a3db48cd",
+        "bytes": 20364,
+        "sha256": "ff52ac643512849b2178977b8d07d4affe688a9b460bc91a0add033984a538b4"
+      },
+      {
+        "path": "apps/web/test/unlock-form-admission.test.mjs",
+        "git_entry": "100644 blob 61718845f6246e4df6dbb5dc51eed033c18b888e",
+        "bytes": 11923,
+        "sha256": "55d038f4005bdd8f9c800477cec790a317e1f9342d931f51f7910bfd6d5924e7"
+      },
+      {
+        "path": "apps/web/src/app-services.ts",
+        "git_entry": "100644 blob 59d25937b0e365e6da0870f768360025e3313c44",
+        "bytes": 11327,
+        "sha256": "5c3934ccb0a1a486e334ca58b7058f8c53ac9f0660c56ef67ce31eb2af74f0f5"
+      },
+      {
+        "path": "apps/web/src/runtime/app-runtime.ts",
+        "git_entry": "100644 blob 5c6daffc86ad2946713d3a300bf49a4ea28c661f",
+        "bytes": 29519,
+        "sha256": "f22e23eb06fdcc864024929628adc4afdbbc3241fd571333462a140805e2d8cb"
+      },
+      {
+        "path": "scripts/test-support/register-tsx.mjs",
+        "git_entry": "100644 blob 2b89d9904a856aff5714f83a377d023d9b1dbefe",
+        "bytes": 86,
+        "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+      },
+      {
+        "path": "scripts/test-support/tsx-hooks.mjs",
+        "git_entry": "100644 blob 1af8a252a20242db7b2e380aacb3b0bf3efa314b",
+        "bytes": 489,
+        "sha256": "4a9d9bbbe692840bc290126b4c905f08d90c7747728db7e8731c5cc4a3679ebe"
+      },
+      {
+        "path": "packages/storage/test/fixtures/vault-python-v1.json",
+        "git_entry": "100644 blob 54fe8ea7a3716681bf63ee6dc45b22d34218cd35",
+        "bytes": 6999,
+        "sha256": "c12a25f1fddb68e9b1e976c167d38df4b050dec1d20df2da66fe367466b7f740"
+      },
+      {
+        "path": "package.json",
+        "git_entry": "100644 blob 9bb6a80bcea23db82555085914b96eb02dbd3487",
+        "bytes": 7915,
+        "sha256": "fa0c8282beaacf1bf59aa9e62489699cd2e7ecc9df201d6222a8581e7045f0dd"
+      },
+      {
+        "path": "package-lock.json",
+        "git_entry": "100644 blob dd429efb353a01c1c25d5f6e96508e020ecb7eeb",
+        "bytes": 57692,
+        "sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72"
+      }
+    ],
+    "dependencies": {
+      "copied_from": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-g27/node_modules",
+      "physical_root": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27/node_modules",
+      "node": "v24.22.3",
+      "npm": "11.19.1",
+      "node_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "packages": [
+        {
+          "name": "react",
+          "version": "19.3.1",
+          "package_path": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27/node_modules/react/package.json",
+          "real_package_path": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27/node_modules/react/package.json",
+          "package_sha256": "9cc9c3de5441a2eea7f41f52f3f2a15a4fc51f90c0b72741f0d7638643a85e67",
+          "same_inode_as_source": false
+        },
+        {
+          "name": "react-dom",
+          "version": "19.3.1",
+          "package_path": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27/node_modules/react-dom/package.json",
+          "real_package_path": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27/node_modules/react-dom/package.json",
+          "package_sha256": "89d54f11575c9b0f7819962d9d72a31970dfb4d103f07e8b1d1b37e6d1fc3258",
+          "same_inode_as_source": false
+        },
+        {
+          "name": "vite",
+          "version": "8.3.5",
+          "package_path": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27/node_modules/vite/package.json",
+          "real_package_path": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27/node_modules/vite/package.json",
+          "package_sha256": "c9586ac07b42763a8a7f6aac6b4a805d70f057bd8c67c43da81c0cc4e5da8293",
+          "same_inode_as_source": false
+        },
+        {
+          "name": "typescript",
+          "version": "7.0.2",
+          "package_path": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27/node_modules/typescript/package.json",
+          "real_package_path": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27/node_modules/typescript/package.json",
+          "package_sha256": "3722b30210616a13a3213ded11575ba6b2dbab10c32a5ef67afca8513e27017e",
+          "same_inode_as_source": false
+        }
+      ]
+    },
+    "production_diff": "diff --git a/apps/web/src/ui/VaultForms.tsx b/apps/web/src/ui/VaultForms.tsx\nindex 2c7c2ab..3b63b45 100644\n--- a/apps/web/src/ui/VaultForms.tsx\n+++ b/apps/web/src/ui/VaultForms.tsx\n@@ -125,7 +125,7 @@ export function ExportForm({ services, refresh = 0 }: { readonly services: AppSe\n \n   async function submit(event: FormEvent<HTMLFormElement>) {\n     event.preventDefault();\n-    if (busy) return;\n+    if (busy || request.current !== null) return;\n     const element = event.currentTarget;\n     const profile = element.elements.namedItem('profile') as HTMLInputElement;\n     const consent = element.elements.namedItem('consent') as HTMLInputElement;\n@@ -187,7 +187,7 @@ export function CreateForm({ services, onDone }: { readonly services: AppService\n \n   async function submit(event: FormEvent<HTMLFormElement>) {\n     event.preventDefault();\n-    if (busy) return;\n+    if (busy || request.current !== null) return;\n     const element = event.currentTarget;\n     const consent = element.elements.namedItem('consent') as HTMLInputElement;\n     let [secret = '', repeat = ''] = takeSecrets(element, ['passphrase', 'confirm']);\n@@ -273,7 +273,7 @@ export function RestoreForm({ services, onInventoryChanged, onOpenRestored }: {\n \n   async function submit(event: FormEvent<HTMLFormElement>) {\n     event.preventDefault();\n-    if (busy) return;\n+    if (busy || request.current !== null) return;\n     setConfirmedProfileId('');\n     const element = event.currentTarget;\n     const fileInput = element.elements.namedItem('file') as HTMLInputElement;\n",
+    "executed_argv": [
+      [
+        "git",
+        "ls-tree",
+        "-rz",
+        "--full-tree",
+        "f36a0a07dff55aa83b9d01a69501d049461d9b33"
+      ],
+      [
+        "git",
+        "ls-tree",
+        "-rz",
+        "--full-tree",
+        "515a7c945b6bef136c3ede436577635b17ccd4e2"
+      ],
+      [
+        "git",
+        "ls-tree",
+        "-rz",
+        "--full-tree",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2"
+      ],
+      [
+        "git",
+        "show",
+        "f36a0a07dff55aa83b9d01a69501d049461d9b33:apps/web/src/ui/VaultForms.tsx"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:apps/web/src/ui/VaultForms.tsx"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:apps/web/test/vault-form-admission.test.mjs"
+      ],
+      [
+        "git",
+        "rev-parse",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2^{tree}"
+      ],
+      [
+        "git",
+        "rev-parse",
+        "515a7c945b6bef136c3ede436577635b17ccd4e2^"
+      ],
+      [
+        "git",
+        "rev-parse",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2^"
+      ],
+      [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:apps/web/src/app-services.ts"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:apps/web/src/ui/VaultForms.tsx"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:apps/web/test/vault-form-admission.test.mjs"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:apps/web/test/unlock-form-admission.test.mjs"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:apps/web/src/app-services.ts"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:apps/web/src/runtime/app-runtime.ts"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:scripts/test-support/register-tsx.mjs"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:scripts/test-support/tsx-hooks.mjs"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:packages/storage/test/fixtures/vault-python-v1.json"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:package.json"
+      ],
+      [
+        "git",
+        "show",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2:package-lock.json"
+      ],
+      [
+        "git",
+        "rev-parse",
+        "f36a0a07dff55aa83b9d01a69501d049461d9b33^{tree}"
+      ],
+      [
+        "git",
+        "rev-parse",
+        "515a7c945b6bef136c3ede436577635b17ccd4e2^{tree}"
+      ],
+      [
+        "git",
+        "rev-parse",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2^{tree}"
+      ],
+      [
+        "node",
+        "--version"
+      ],
+      [
+        "npm",
+        "--version"
+      ],
+      [
+        "node",
+        "-p",
+        "process.execPath"
+      ],
+      [
+        "git",
+        "diff",
+        "515a7c945b6bef136c3ede436577635b17ccd4e2",
+        "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "--",
+        "apps/web/src/ui/VaultForms.tsx"
+      ]
+    ]
+  },
+  "checks": [
+    {
+      "name": "regression-red",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test --test-reporter=tap --test-timeout=10000 apps/web/test/vault-form-admission.test.mjs",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "--test-timeout=10000",
+        "apps/web/test/vault-form-admission.test.mjs"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27",
+      "started_utc": "2026-11-20T18:06:22.846202+00:00",
+      "ended_utc": "2026-11-20T18:06:23.917563+00:00",
+      "source_before": {
+        "commit": "515a7c945b6bef136c3ede436577635b17ccd4e2",
+        "tree": "ae419673f5930a09e96aa19db26e8537e3cbb931",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "515a7c945b6bef136c3ede436577635b17ccd4e2",
+        "tree": "ae419673f5930a09e96aa19db26e8537e3cbb931",
+        "status": ""
+      },
+      "expected_exit_code": 1,
+      "exit_code": 1,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/regression-red.log.gz",
+      "raw_log_bytes": 22717,
+      "raw_log_sha256": "ac988906f52645ca8a9d83ecd8cf6f42f5df5167212ea094f8db5cfa41af1d62",
+      "gzip_bytes": 2236,
+      "gzip_sha256": "43c49c82fa461a440573fd2d07d8a523feca12bd41ced9dcb6a9b3c874d2881e",
+      "tests": 19,
+      "suites": 0,
+      "pass": 7,
+      "fail": 12,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "failed_cases": [
+        "ExportForm same-render duplicate preserves immediate teardown ownership",
+        "CreateForm same-render duplicate preserves immediate teardown ownership",
+        "ExportForm a settled duplicate cannot clear pending ownership or publish after unmount",
+        "CreateForm a settled duplicate cannot clear pending ownership or publish after unmount",
+        "RestoreForm a settled duplicate cannot clear pending ownership or publish after unmount",
+        "RestoreForm duplicate during a held file read cannot continue after Cancel (forward release)",
+        "RestoreForm duplicate during a held file read cannot continue after Cancel (reverse release)",
+        "RestoreForm a duplicate file read settling first cannot orphan the still-pending original read",
+        "RestoreForm duplicate after runtime admission leaves Cancel attached to the first request",
+        "ExportForm duplicate preserves the original refusal and permits a fresh explicit retry",
+        "CreateForm duplicate preserves the original refusal and permits a fresh explicit retry",
+        "RestoreForm duplicate preserves the original refusal and permits a fresh explicit retry"
+      ]
+    },
+    {
+      "name": "regression-green",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test --test-reporter=tap --test-timeout=10000 apps/web/test/vault-form-admission.test.mjs",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "--test-timeout=10000",
+        "apps/web/test/vault-form-admission.test.mjs"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27",
+      "started_utc": "2026-11-20T18:07:37.449649+00:00",
+      "ended_utc": "2026-11-20T18:07:39.093970+00:00",
+      "source_before": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/regression-green.log.gz",
+      "raw_log_bytes": 6122,
+      "raw_log_sha256": "6f91c1c44b5d7db4bc231c54f3afd5bedc47319fc4a3c482eaf950c4bb00aac5",
+      "gzip_bytes": 1117,
+      "gzip_sha256": "a41b3a257a11752bf727382df58c5ad3142e520f50fe88dd03478e95c5bc4d07",
+      "tests": 19,
+      "suites": 0,
+      "pass": 19,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "failed_cases": []
+    },
+    {
+      "name": "affected-tests",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test --test-reporter=tap --test-concurrency=2 --test-timeout=10000 apps/web/test/unlock-form-admission.test.mjs apps/web/test/vault-forms-locale.test.mjs apps/web/test/app-services.test.mjs apps/web/test/app-runtime.test.mjs apps/web/test/pending-metadata.test.mjs",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=2",
+        "--test-timeout=10000",
+        "apps/web/test/unlock-form-admission.test.mjs",
+        "apps/web/test/vault-forms-locale.test.mjs",
+        "apps/web/test/app-services.test.mjs",
+        "apps/web/test/app-runtime.test.mjs",
+        "apps/web/test/pending-metadata.test.mjs"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27",
+      "started_utc": "2026-11-20T18:07:37.431727+00:00",
+      "ended_utc": "2026-11-20T18:07:42.278706+00:00",
+      "source_before": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/affected-tests.log.gz",
+      "raw_log_bytes": 15498,
+      "raw_log_sha256": "3c5f49a1a5a1ac3af22d6e5ab83353314e2cb24b40fbaa0ca8980c59b93ade00",
+      "gzip_bytes": 3027,
+      "gzip_sha256": "8bd8972271d1a2bdf3763d08fd5920fb00c7f4ff1e58a773b97fd47d18b73398",
+      "tests": 60,
+      "suites": 0,
+      "pass": 60,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "failed_cases": []
+    },
+    {
+      "name": "ui-typecheck",
+      "command": "./node_modules/.bin/tsc -p apps/web/tsconfig.ui.json --noEmit",
+      "argv": [
+        "./node_modules/.bin/tsc",
+        "-p",
+        "apps/web/tsconfig.ui.json",
+        "--noEmit"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27",
+      "started_utc": "2026-11-20T18:07:37.414591+00:00",
+      "ended_utc": "2026-11-20T18:07:39.455038+00:00",
+      "source_before": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/ui-typecheck.log.gz",
+      "raw_log_bytes": 0,
+      "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip_bytes": 20,
+      "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "failed_cases": []
+    },
+    {
+      "name": "source-diff-check",
+      "command": "git diff --check f36a0a07dff55aa83b9d01a69501d049461d9b33...0df0e191e5829e66141d4ba9c028599ce9c91de2",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "f36a0a07dff55aa83b9d01a69501d049461d9b33...0df0e191e5829e66141d4ba9c028599ce9c91de2"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27",
+      "started_utc": "2026-11-20T18:07:37.427793+00:00",
+      "ended_utc": "2026-11-20T18:07:37.451216+00:00",
+      "source_before": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-diff-check.log.gz",
+      "raw_log_bytes": 0,
+      "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip_bytes": 20,
+      "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "failed_cases": []
+    },
+    {
+      "name": "source-identity",
+      "command": "python /workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-evidence-g27/source-identity.py",
+      "argv": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-evidence-g27/source-identity.py"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27",
+      "started_utc": "2026-11-20T18:07:37.412538+00:00",
+      "ended_utc": "2026-11-20T18:07:38.030954+00:00",
+      "source_before": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-identity.log.gz",
+      "raw_log_bytes": 11282,
+      "raw_log_sha256": "517460f02934f0ea17c32d91d0dc15ef1e14c3f2b940a0ad51e7bf28a3e8c91e",
+      "gzip_bytes": 2839,
+      "gzip_sha256": "0b4f11f4cd3b9fdbe9f60054f276ee6b73356f3a0790ddcafbed5238aa627e20",
+      "failed_cases": []
+    },
+    {
+      "name": "staged-diff-check",
+      "command": "git diff --cached --check f36a0a07dff55aa83b9d01a69501d049461d9b33",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "f36a0a07dff55aa83b9d01a69501d049461d9b33"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27",
+      "started_utc": "2026-11-20T18:11:44.459331+00:00",
+      "ended_utc": "2026-11-20T18:11:44.531597+00:00",
+      "source_before": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": "A  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/affected-tests.log.gz\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/capture-check.py.txt\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/regression-green.log.gz\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/regression-red.log.gz\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-diff-check.log.gz\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-identity.log.gz\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-identity.py.txt\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/ui-typecheck.log.gz\nA  docs/engineering/remaining-vault-admission-independent-review-generation27.json\nA  docs/engineering/remaining-vault-admission-independent-review-generation27.md"
+      },
+      "source_after": {
+        "commit": "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+        "tree": "69395d2cc344ba360cddb0ca3e1b19884a568ed9",
+        "status": "A  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/affected-tests.log.gz\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/capture-check.py.txt\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/regression-green.log.gz\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/regression-red.log.gz\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-diff-check.log.gz\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-identity.log.gz\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-identity.py.txt\nA  docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/ui-typecheck.log.gz\nA  docs/engineering/remaining-vault-admission-independent-review-generation27.json\nA  docs/engineering/remaining-vault-admission-independent-review-generation27.md"
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/staged-diff-check.log.gz",
+      "raw_log_bytes": 0,
+      "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip_bytes": 20,
+      "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "failed_cases": []
+    }
+  ],
+  "red_observed_diagnostics": [
+    {
+      "case": "ExportForm same-render duplicate preserves immediate teardown ownership",
+      "observed": {
+        "attempts": 2,
+        "workerCommands": 1,
+        "originalAborted": false,
+        "downloads": 1,
+        "done": [],
+        "inventoryChanges": 0,
+        "state": "locked",
+        "publishedUnlocked": false
+      }
+    },
+    {
+      "case": "CreateForm same-render duplicate preserves immediate teardown ownership",
+      "observed": {
+        "attempts": 2,
+        "workerCommands": 1,
+        "originalAborted": false,
+        "downloads": 0,
+        "done": [
+          null,
+          "cccccccccccccccccccccccccccccccc"
+        ],
+        "inventoryChanges": 0,
+        "state": "unlocked",
+        "publishedUnlocked": true
+      }
+    },
+    {
+      "case": "ExportForm a settled duplicate cannot clear pending ownership or publish after unmount",
+      "observed": {
+        "busy": false,
+        "notices": [
+          "Another local operation is running. Wait for it to finish before trying again."
+        ],
+        "attempts": 2,
+        "workerCommands": 1,
+        "originalAborted": false,
+        "downloads": 1,
+        "done": [],
+        "inventoryChanges": 0,
+        "state": "locked",
+        "publishedUnlocked": false
+      }
+    },
+    {
+      "case": "CreateForm a settled duplicate cannot clear pending ownership or publish after unmount",
+      "observed": {
+        "busy": false,
+        "notices": [
+          "Another local operation is running. Wait for it to finish before trying again."
+        ],
+        "attempts": 2,
+        "workerCommands": 1,
+        "originalAborted": false,
+        "downloads": 0,
+        "done": [
+          "cccccccccccccccccccccccccccccccc"
+        ],
+        "inventoryChanges": 0,
+        "state": "unlocked",
+        "publishedUnlocked": true
+      }
+    },
+    {
+      "case": "RestoreForm a settled duplicate cannot clear pending ownership or publish after unmount",
+      "observed": {
+        "busy": false,
+        "notices": [
+          "Another local operation is running. Wait for it to finish before trying again."
+        ],
+        "attempts": 2,
+        "workerCommands": 1,
+        "originalAborted": false,
+        "downloads": 0,
+        "done": [],
+        "inventoryChanges": 1,
+        "state": "locked",
+        "publishedUnlocked": false
+      }
+    },
+    {
+      "case": "RestoreForm duplicate during a held file read cannot continue after Cancel (forward release)",
+      "observed": {
+        "reads": 2,
+        "attempts": 1,
+        "workerCommands": 1,
+        "inventoryChanges": 1,
+        "opened": [],
+        "retryDisabled": true
+      }
+    },
+    {
+      "case": "RestoreForm duplicate during a held file read cannot continue after Cancel (reverse release)",
+      "observed": {
+        "reads": 2,
+        "attempts": 1,
+        "workerCommands": 1,
+        "inventoryChanges": 1,
+        "opened": [],
+        "retryDisabled": true
+      }
+    },
+    {
+      "case": "RestoreForm a duplicate file read settling first cannot orphan the still-pending original read",
+      "observed": {
+        "busy": false,
+        "notices": [
+          "The local operation could not use this input. Check the profile ID and passphrase requirements."
+        ],
+        "reads": 2,
+        "attempts": 2,
+        "workerCommands": 1,
+        "inventoryChanges": 1
+      }
+    },
+    {
+      "case": "RestoreForm duplicate after runtime admission leaves Cancel attached to the first request",
+      "observed": {
+        "reads": 2,
+        "attempts": 1,
+        "workerCommands": 1,
+        "originalAborted": false,
+        "downloads": 0,
+        "done": [],
+        "inventoryChanges": 1,
+        "state": "locked",
+        "publishedUnlocked": false
+      }
+    }
+  ],
+  "evidence_inputs": [
+    {
+      "path": "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/capture-check.py.txt",
+      "bytes": 2523,
+      "sha256": "771a5c0ba5678369a4ba5f2a143587eb2515fab42248ded0ad1f3125951a9dc9"
+    },
+    {
+      "path": "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-identity.py.txt",
+      "bytes": 5930,
+      "sha256": "5a58ab32fda208f9076e85a2a8f35d54c5b4dc73956c142c312957995ef48241"
+    }
+  ],
+  "gzip_bytes_and_decoded_bytes_verified": true,
+  "scope": [
+    "Maintained ExportForm/CreateForm/RestoreForm handlers composed with real AppServices and AppRuntime.",
+    "One retained per-form controller across same-render duplicate calls; no new global admission or cooldown policy.",
+    "Controlled hooks, fields, file-read completion, download elements, and held EventTarget Worker port.",
+    "Cancellation and unmount suppress observed late effects; this does not establish rollback of dispatched storage writes.",
+    "Create valid-success callback after observer unmount remains intact; test does not perform a storage commit.",
+    "Restore retry evidence begins after original request settlement and complete explicit inventory reconciliation."
+  ],
+  "limits": {
+    "native_browser_event_reachability_qualified": false,
+    "native_worker_crypto_or_storage_qualified_by_new_regression": false,
+    "global_rate_policy_qualified": false,
+    "cancellation_storage_rollback_claimed": false,
+    "reviewer_full_suite_or_build_run": false,
+    "reviewer_financial_or_remote_operations": false,
+    "author_or_root_worktree_edited": false,
+    "ReleaseEnabled": 0,
+    "frozen_prs": [
+      233,
+      234,
+      235
+    ],
+    "later_aggregate_requires_separate_combined_and_current_target_hosted_gates": true
+  },
+  "packaging": {
+    "whitespace_command": "git diff --cached --check f36a0a07dff55aa83b9d01a69501d049461d9b33",
+    "path_exclusions": [],
+    "staged_snapshot": {
+      "recorded_utc": "2026-11-20T18:11:44.210658+00:00",
+      "index_tree": "5997b8ceb8e068d81808046f821a24c0fd0e5291",
+      "paths": [
+        "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/affected-tests.log.gz",
+        "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/capture-check.py.txt",
+        "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/regression-green.log.gz",
+        "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/regression-red.log.gz",
+        "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-diff-check.log.gz",
+        "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-identity.log.gz",
+        "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/source-identity.py.txt",
+        "docs/engineering/evidence/remaining-vault-admission-independent-review-generation27/ui-typecheck.log.gz",
+        "docs/engineering/remaining-vault-admission-independent-review-generation27.json",
+        "docs/engineering/remaining-vault-admission-independent-review-generation27.md"
+      ],
+      "identity_command": "git write-tree",
+      "path_command": "git diff --cached --name-only"
+    },
+    "staged_gate": "staged-diff-check",
+    "receipt_appended_after_staged_snapshot": true,
+    "final_committed_range_rechecked_at_handoff": true
+  }
+}
