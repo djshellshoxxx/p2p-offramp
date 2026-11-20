@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
-  "generation": 11,
-  "updated_at_utc": "2026-11-20T05:09:05.194802+00:00",
-  "phase": "verified-quiescent-current-core-and-optional-qualified-hosted-external-gates-pending",
+  "generation": 14,
+  "updated_at_utc": "2026-11-20T06:43:36.796568+00:00",
+  "phase": "reviewed-source-published-combined-qualification-and-recovery-export-review-active",
   "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
-  "integration_branch": "codex/transport-qualification-20261120",
-  "integration_source_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
-  "integration_source_tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+  "integration_branch": "codex/main-consolidation-g12-20261120",
+  "integration_source_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+  "integration_source_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
   "scope": {
     "deployment_authorized": false,
     "release_enabled": 0,
@@ -1598,12 +1598,12 @@
       "next_action": "Preserve exact2311full/44independent evidence and source ancestry. Currentd301 hosted/native/browser gates remain; original212head unchanged and GitHub records stackedPRmerged."
     }
   ],
-  "successor_generation": 12,
-  "integration_local_source_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+  "successor_generation": 15,
+  "integration_local_source_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
   "parent_integration_pr": 207,
   "parent_integration_branch": "codex/generation8-core-20261120",
   "parent_integration_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
-  "pull_request_resolution": "Current root-owned210d301 includes all reviewed core followups and212, with2311full/44independent local qualification; all9optional layers have2711full/16independent evidence on exact finalcore. GitHub records212merged into stacked210, with original212head unchanged; zero main merges and no explicitmergeAPIcall byroot. Original207/component/optional refs preserved. Fresh221/209delta found no additional unowned safelyactionable source. Remain quiescent/restartable while exact-source gates and named/external prerequisites are pending.",
+  "pull_request_resolution": "Main-target213 freezes complete reviewed210 core;214 mandatory Cast oracle,215 backup verification UI,216 compatible lockfile advisory repair and217 Firefox/WebKit flow gates are published separately. No main merge yet; source-bound current-target native/browser gates remain required. Signed-update view-only slice and independent reviews active. Original source refs and optional scopes preserved.",
   "main_merges_performed": 0,
   "published_generations": [
     {
@@ -2813,7 +2813,7 @@
     "generation11_optional_full": "07831fb7cbd89692037327c2d221cd49afe61a436bd5927dc990e2965714e052",
     "generation11_optional_independent": "fb2cc67c4ab1ac6c156dc6b7a81d10008030f63ca6eabdfb5362fea93537cd51"
   },
-  "integration_pr": 210,
+  "integration_pr": 213,
   "integration_published_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
   "integration_published_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
   "known_findings": [
@@ -2953,7 +2953,7 @@
     "author_report": "OPTIONAL_COMPOSITION_20261119.md",
     "author_report_commit": "27fba7450600836b5edc131ae1f4f1744ae96248"
   },
-  "native_workers_actually_launched": 44,
+  "native_workers_actually_launched": 13,
   "optional_hosted_snapshot": {
     "observed_at_utc": "2026-11-20T01:16:13.483Z",
     "checks": {
@@ -4790,22 +4790,16 @@
     "external_owner_data_removed": false
   },
   "continuation_control": {
-    "generation11_assigned_work_complete": true,
-    "fresh_final_delta_no_additional_unowned_safely_actionable_source": true,
-    "native_workers_actually_launched": 44,
-    "generation11_fresh_workers_actually_launched": 3,
-    "all_generation11_workers_complete": true,
-    "native_workers_permanently_live": false,
-    "quiescent": true,
-    "next_generation_number_if_triggered": 12,
-    "next_generation_workers_launched": 0,
-    "restart_triggers": [
-      "completed relevant current-source hosted/native/browser gate",
-      "concrete new source/PR delta",
-      "compatible dependency remediation",
-      "required owner trust/device/provider input or accepted feature specification"
+    "status": "active-renewed-request",
+    "handoff": "CONTINUATION_GENERATIONS12_13_20261120.md",
+    "scope": "Original request preserved through context renewal; use new workers for useful bounded work, and retain exact-source review/native/browser gates.",
+    "active_workers": [
+      "combined_qualification_g14",
+      "next_feature_g14",
+      "solana_export_review_g14"
     ],
-    "next_action": "Read livePR200/handoff/state and actualrefs; avoid closed-audit repeats, assign isolated fresh workers only to concrete unowned work, preserve all source-bound evidence and gates."
+    "automation_id": "Automation_ab68cc67e6ac8191bd31dc2d84a085e1",
+    "temporary_automation_notice_must_be_replaced_before_handoff": true
   },
   "generation11_core_composition": {
     "pr": 210,
@@ -5413,5 +5407,125 @@
     "composition_new_cause_count": 0
   },
   "hosted_generation11_snapshot": "hosted-snapshot-generation11.json",
-  "current_hosted_snapshot_key": "hosted_generation11_snapshot"
+  "current_hosted_snapshot_key": "hosted_generations12_13_snapshot",
+  "previous_generation11_top_level_checkpoint": {
+    "generation": 11,
+    "updated_at_utc": "2026-11-20T05:09:05.194802+00:00",
+    "phase": "verified-quiescent-current-core-and-optional-qualified-hosted-external-gates-pending",
+    "integration_branch": "codex/transport-qualification-20261120",
+    "integration_pr": 210,
+    "integration_source_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+    "integration_source_tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+    "pull_request_resolution": "Current root-owned210d301 includes all reviewed core followups and212, with2311full/44independent local qualification; all9optional layers have2711full/16independent evidence on exact finalcore. GitHub records212merged into stacked210, with original212head unchanged; zero main merges and no explicitmergeAPIcall byroot. Original207/component/optional refs preserved. Fresh221/209delta found no additional unowned safelyactionable source. Remain quiescent/restartable while exact-source gates and named/external prerequisites are pending.",
+    "native_workers_actually_launched": 44,
+    "continuation_control": {
+      "generation11_assigned_work_complete": true,
+      "fresh_final_delta_no_additional_unowned_safely_actionable_source": true,
+      "native_workers_actually_launched": 44,
+      "generation11_fresh_workers_actually_launched": 3,
+      "all_generation11_workers_complete": true,
+      "native_workers_permanently_live": false,
+      "quiescent": true,
+      "next_generation_number_if_triggered": 12,
+      "next_generation_workers_launched": 0,
+      "restart_triggers": [
+        "completed relevant current-source hosted/native/browser gate",
+        "concrete new source/PR delta",
+        "compatible dependency remediation",
+        "required owner trust/device/provider input or accepted feature specification"
+      ],
+      "next_action": "Read livePR200/handoff/state and actualrefs; avoid closed-audit repeats, assign isolated fresh workers only to concrete unowned work, preserve all source-bound evidence and gates."
+    },
+    "current_hosted_snapshot_key": "hosted_generation11_snapshot"
+  },
+  "previous_root_native_workers_actually_launched": 44,
+  "native_worker_count_scope": "current renewed owner request only; historical root retained separately",
+  "hosted_generations12_13_snapshot": "generation12-13-hosted-snapshot.json",
+  "current_continuation_handoff": "CONTINUATION_GENERATIONS12_13_20261120.md",
+  "continuation_generations12_13": {
+    "request": "Continue source consolidation and useful unfinished features with fresh native workers through context renewal.",
+    "reports": [
+      "CONTINUATION_GENERATIONS12_13_20261120.md",
+      "BRANCH_CONSOLIDATION_REVIEW_G12.md",
+      "GENERATION12_CI_ORACLE_COVERAGE_20261120.md",
+      "BACKUP_VERIFICATION_UI_GENERATION12_20261120.md",
+      "INDEPENDENT_BACKUP_VERIFICATION_UI_REVIEW_GENERATION12_20261120.md",
+      "GENERATION12_SOLANA_DEPENDENCY_REMEDIATION_20261120.md",
+      "INDEPENDENT_DEPENDENCY_REVIEW_GENERATION12_20261120.md",
+      "BACKUP_CROSS_BROWSER_GENERATION13_20261120.md",
+      "INDEPENDENT_MAIN_GATE_REVIEW_GENERATION13_20261120.md",
+      "SIGNED_UPDATE_UI_GENERATION13_20261120.md"
+    ],
+    "published_prs": [
+      213,
+      214,
+      215,
+      216,
+      217
+    ],
+    "full_combined_suite": {
+      "source": "8ad9497b8260c4fa9bed65a2e7c15dcb64d44946",
+      "tree": "b28837ad902a8b525dd2835a5b43eec2f97b226f",
+      "passed": 2325,
+      "failed": 0,
+      "skipped": 0
+    },
+    "final_focused_ui": {
+      "source": "bf12a45604497860b8ded9d0e65f06a1c0cc9860",
+      "tree": "3ed920615ec2ffcea9621339ff88556a19f0f9d7",
+      "passed": 17,
+      "full_suite_recount_claimed": false
+    },
+    "root_qualification": "generation12-combined-qualification.json",
+    "active_workers": [
+      "signed_update_ui_review_g13",
+      "next_feature_g14"
+    ],
+    "completed_workers": [
+      "branch_inventory",
+      "ci_qualification",
+      "feature_completion",
+      "dependency_patch",
+      "backup_ui_review",
+      "dependency_review",
+      "backup_cross_browser",
+      "signed_update_ui",
+      "main_gate_review_g13"
+    ],
+    "dependency_qualification": {
+      "audit_vulnerabilities_before": 1,
+      "audit_vulnerabilities_after": 0,
+      "unchanged_maintenance_warnings": 5,
+      "host_compilation_exit": 0,
+      "host_defined_tests": 0,
+      "sbpf_completed": false,
+      "sbpf_failure": "SIGKILL in unchanged anchor-lang-idl; cause unproven",
+      "hosted_required": true
+    },
+    "release_enabled": 0,
+    "latest_independent_hosted_review": "independent-main-gate-review-generation13.json"
+  },
+  "latest_generation14_checkpoint": {
+    "handoff": "CONTINUATION_GENERATIONS12_13_20261120.md",
+    "published_prs": [
+      213,
+      214,
+      215,
+      216,
+      217,
+      218
+    ],
+    "active_workers": [
+      "combined_qualification_g14",
+      "next_feature_g14",
+      "solana_export_review_g14"
+    ],
+    "combined_source": "e7c262659f94af30d18caf790a48e8b1fed77370",
+    "combined_tree": "30c9264b9cc98786f43279b8aa513bd2c5fce9d3",
+    "combined_status": "running",
+    "signed_update_head": "7d40620c8320945750bd51bf865226dadde998ca",
+    "signed_update_tree": "b97e184459d9bca9303230edfb4791507a870dac",
+    "solana_export_source": "b993d17fdbd7cdfce8f0d1e5d239c7785c9d787e",
+    "solana_export_status": "independent-review-active"
+  }
 }

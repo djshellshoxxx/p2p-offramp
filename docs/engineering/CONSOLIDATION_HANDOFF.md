@@ -1,6 +1,15 @@
 # P2P-Offramp consolidation handoff
 
-## Current generation 11 checkpoint — verified and restartable
+
+## Current continuation — generations 12 and 13
+
+The owner renewed consolidation and unfinished-feature engineering. Read the
+[current source, qualification and worker handoff](CONTINUATION_GENERATIONS12_13_20261120.md)
+before resuming. Main-target PR213 and followups214–218 now exist. The generation11
+sections below remain dated historical evidence and do not describe the current
+work queue. Applicable native/browser checks remain required.
+
+## Historical generation 11 checkpoint — verified and restartable
 
 **The combined core and nine preserved optional layers are locally qualified,
 independently reviewed and published on the exact current core.** All three fresh

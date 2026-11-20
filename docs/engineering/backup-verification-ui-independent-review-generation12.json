@@ -1,0 +1,124 @@
+{
+  "source_commit": "358868f673f7a71ea09764752dcbaaed87f53dc0",
+  "source_tree": "0c1824c69baccfdaee5869b9b850420dee31e12d",
+  "historical_source": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+  "review_scope": [
+    ".github/workflows/vault-foundation.yml",
+    "apps/web/README.md",
+    "apps/web/src/ui/BackupVerificationForm.tsx",
+    "apps/web/src/ui/Pages.tsx",
+    "apps/web/test/backup-verification-ui.test.mjs",
+    "package.json",
+    "scripts/test-backup-verification-browser.mjs"
+  ],
+  "review_result": "No actionable finding in the scoped source and integration review; exact-source hosted browser/native gates remain pending.",
+  "source_file_sha256": {
+    ".github/workflows/vault-foundation.yml": "f79a8ed58a2bd14466e06e68a310df0deb6048da2c6e86cfe0e12094fbf71bf9",
+    "apps/web/README.md": "fc3194283f2e1cf252e364f232a22cb6c73c869d26af7b2bdee175df3007ba6d",
+    "apps/web/src/ui/BackupVerificationForm.tsx": "588277a8cc113b93b4d782328613ba83092714ca2d1d67a6f67c9efe6db6639a",
+    "apps/web/src/ui/Pages.tsx": "533d72ce15aeb88c616d737d17b69df0000067a6c501c0d717124022b8658348",
+    "apps/web/test/backup-verification-ui.test.mjs": "7ccc29bd4d4c9667fc8baee07c80bc36fb93c2cad6882fbd6863ed2854667974",
+    "package.json": "9cdae60ef3ad14247ee2c80a578f9a68ac95bf817645641313cfd51b5822e7c7",
+    "scripts/test-backup-verification-browser.mjs": "1e0379c48cc70f077959098049944dbbacf62356ecb22b9a5346c3ddf71f86f0"
+  },
+  "executed": {
+    "maintained_affected_tests": {
+      "tests": 39,
+      "pass": 39,
+      "fail": 0,
+      "skip": 0
+    },
+    "new_independent_cases": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "skip": 0
+    },
+    "maintained_ui_including_independent_cases": {
+      "tests": 17,
+      "pass": 17,
+      "fail": 0,
+      "skip": 0
+    },
+    "typescript_projects": 4,
+    "boundaries": {
+      "production_files": 239,
+      "core_modules": 143
+    },
+    "default_artifacts": 13,
+    "demo_artifacts": 14
+  },
+  "separate_scopes_do_not_sum": true,
+  "browser_executed": false,
+  "local_browser_limitation": "Author launch refused with socket() failed: Operation not permitted. Reviewer did not repeat or bypass it.",
+  "build_graphs": {
+    "meta/core-graph-document.json": {
+      "modules": 94,
+      "sha256": "6bf85539dfcb89440254db99f22560be1dcef248a954c97ab17241bc067c1803"
+    },
+    "meta/core-graph-worker.json": {
+      "modules": 30,
+      "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+    },
+    "meta/qr-graph-worker.json": {
+      "modules": 4,
+      "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+    },
+    "demo/core-graph-document.json": {
+      "modules": 96,
+      "sha256": "7333bab4512e862cb53be9ba25765f67da5beb15d7414d249058ea08ccdaca96"
+    },
+    "demo/core-graph-worker.json": {
+      "modules": 30,
+      "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+    },
+    "demo/qr-graph-worker.json": {
+      "modules": 4,
+      "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+    }
+  },
+  "log_sha256": {
+    "backup-ui-independent-probes.log": "396fa5c0493d24795e43f21d3111894e80265a0a966fe628d8f16a32917a0f18",
+    "backup-ui-review-boundaries.log": "2dfba649e4e8a9f10695ab238460bb8e402fd3e651a49ec39d47e4acbe85ad8a",
+    "backup-ui-review-builds-final.log": "4a190c5376e2ec3f344c2ff55b6675b640391031566d4a544a5492fc840bed47",
+    "backup-ui-review-builds.log": "885273e3f51648e93a7354207cb9d61647abd690c32378b1d43fd5ce35588622",
+    "backup-ui-review-maintained17.log": "77e174a0eaf5afeb93a963c2e7c54ceeb37f6068a88a3b1ea9aeff1d624208cd",
+    "backup-ui-review-tests.log": "d35bb1b706923632204db9df033d411cb064fc8604abfaab41f358128d1d0245",
+    "backup-ui-review-types.log": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53"
+  },
+  "independent_test_file_sha256": "c27ad20f259b368c0558d207bc90950b9ed4441b0aa10de98d9e16a6144af2ef",
+  "artifact_maps": {
+    "meta": {
+      "_headers": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+      "assets/OfflineRoot-CtqbvMoA.js": "7ec100f4462024ad7863d72f48af5a1c5edc867f413c324bd9a519da73a2c9dd",
+      "assets/decode.worker-DGcSBxfL.js": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+      "assets/index-CejmKC9k.js": "227e0e177230d46302cfce3df3dbf50002a9e24ce718ae020362226089b95a51",
+      "assets/index-rPDFZ4F5.css": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+      "assets/vault.worker-BFynfgnx.js": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044",
+      "content-policy.json": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+      "core-graph-document.json": "6bf85539dfcb89440254db99f22560be1dcef248a954c97ab17241bc067c1803",
+      "core-graph-worker.json": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+      "index.html": "68eb71f3d33fdcb61782b02ef0dafbd154e25adc407cb900fa854a03c85e0306",
+      "local-build-evidence.json": "2d6b6fead57bf8d1a8e414d00866e0784625860e692608e84051dcff6f59cca5",
+      "qr-graph-worker.json": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+      "third-party-licenses.json": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+    },
+    "demo": {
+      "_headers": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+      "assets/OfflineRoot-CQJdtb7J.js": "1d32c0b610584a1a88d5accf499916d4b1e54b4fda05efc644d7367cd932990a",
+      "assets/decode.worker-DGcSBxfL.js": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+      "assets/index-B2wJMrtf.js": "d74b6010294a0ad1650eced0f8ffb20eebfe22d9f55e767aca5aa4493cfe6eef",
+      "assets/index-rPDFZ4F5.css": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+      "assets/synthetic-local-MdjGh0DS.js": "5b9d5f9129d9214288560329f7b9881fd645c9b75adbfd38cbfc2965a6d1f058",
+      "assets/vault.worker-BFynfgnx.js": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044",
+      "content-policy.json": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+      "core-graph-document.json": "7333bab4512e862cb53be9ba25765f67da5beb15d7414d249058ea08ccdaca96",
+      "core-graph-worker.json": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+      "index.html": "89ffbb2239aead4a541f1a9f11c49825aa9d86b019ac0d37b6172bf3bcc94126",
+      "local-build-evidence.json": "88b76073e2df834266733122d970d490a623f707b1088d9d06952cb116a4b3c9",
+      "qr-graph-worker.json": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+      "third-party-licenses.json": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+    }
+  },
+  "qualification_script_correction": "The first review wrapper assumed core-graph-qr-worker.json; actual maintained path is qr-graph-worker.json. Default build succeeded; wrapper failed ENOENT. Corrected wrapper reused that output, built demo, and passed. No product defect or test rule changed."
+}

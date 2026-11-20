@@ -1,5 +1,25 @@
 # Feature coverage — pinned main and retained candidates
 
+## Current continuation overlay: generations 12 and 13
+
+This overlay records published staging source. The pinned-main assessment and
+older overlays below retain their historical scope. Main is still5c5a84e;
+main-target [PR213](https://github.com/djshellshoxxx/p2p-offramp/pull/213) freezes
+the reviewed d301 core. Applicable current-target CI remains incomplete. Read the
+[current handoff](CONTINUATION_GENERATIONS12_13_20261120.md) for exact source trees
+and distinct author, independent and hosted execution evidence.
+
+| Capability | Current engineering result | Remaining qualification |
+| --- | --- | --- |
+| F01 / F24 backup prerequisite | PR215 adds selected-file authentication and fresh-recheck Settings UI over the reviewed current-runtime service. Final independent UI suite17/17. | New real app/Worker/IndexedDB Chromium fixture is queued; PR217 adds the same journey on Firefox/WebKit. No physical-device claim. |
+| F24 signed-update view | Local source723b8d1 adds optional explicit check, complete verified identity review and trusted acceptance gesture; independent UI23/23. Default controller remains null and executable updater stays out of default build graphs. | Publication follows review evidence. Exact-own-lock backup adapter, trusted configuration and actual native origin transition remain incomplete. |
+| F16 Solana funded exits | Existing funded exit/recovery slice remains the implemented scope. A worker is adding explicit export of its existing validated public recovery document. | Full discovery/negotiation/funding is not an implemented UI: accepted D1 currently specifies the EVM carrier and Solana prepared-review API excludes funding. No new protocol authority is inferred. |
+| Dependency qualification | PR216 uses compatible Cargo updates to remove the remaining RustSec vulnerability match; independent lock replay and audit pass. Host compilation succeeds but defines zero tests. | SBPF attempts were SIGKILLed in unchanged anchor-lang-idl; exact updated-source native/hosted gates remain pending. Five maintenance warnings remain visible. |
+| EVM verification | PR214 requires the existing independent Cast calldata test in the Foundry job. Exact step passed14/14 without skips locally. | Current-source hosted oracle execution is queued. |
+| F22 optional packages / F27 release | Nine separate optional packages and previous exact-core evidence remain preserved. ReleaseEnabled remains0. | Standalone review, device/provider/trust and release authorization gates remain; no default optional activation. |
+
+## Immutable pinned-main assessment
+
 Baseline: `5c5a84ef6300330700c8b0ca54d074ac113f08be`. Classifications describe actual source scope on this commit. Tests listed below are verified test-source paths; this inventory does not claim fresh product execution. Coordinator test results belong in the consolidation handoff.
 
 **Implemented** means the named source capability exists at the stated scope. Localnet implementations remain isolated test profiles. It does not mean the default static app is enabled for live trades, that physical wallets are qualified, or that a release is authorized.

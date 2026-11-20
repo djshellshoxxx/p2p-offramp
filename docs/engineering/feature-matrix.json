@@ -893,5 +893,45 @@
       "cause_count_increment": 0,
       "scope": "One Low temporary POST-copy cleanup cause with two refusal variants; no demonstrated network leak/financial impact. Count after accepted-source qualification."
     }
+  },
+  "staging_overlay_history_generation13": {
+    "handoff": "CONTINUATION_GENERATIONS12_13_20261120.md",
+    "main_unchanged": true,
+    "main_target_pr": 213,
+    "core_source": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "core_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "backup_verification": {
+      "pr": 215,
+      "source": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+      "final_ui_tests": 17,
+      "cross_browser_pr": 217,
+      "hosted_browser_execution_pending": true
+    },
+    "signed_update_view": {
+      "local_source": "723b8d105a185f3c84130d1ccd5c9a907ff13153",
+      "default_controller": null,
+      "independent_ui_tests": 23,
+      "executable_updater_in_default_graph": false,
+      "configured_runtime_qualified": false,
+      "remaining": [
+        "exact-own-lock backup lease adapter",
+        "trusted controller configuration",
+        "native origin transition",
+        "physical wallet/device qualification"
+      ]
+    },
+    "solana_funded_exits": {
+      "public_recovery_export": "implementation active",
+      "full_discovery_negotiation_funding": "outside implemented accepted carrier/review scope"
+    },
+    "dependency_remediation": {
+      "pr": 216,
+      "audit_vulnerabilities_before": 1,
+      "audit_vulnerabilities_after": 0,
+      "host_library_defined_tests": 0,
+      "native_gates_pending": true
+    },
+    "required_oracle_pr": 214,
+    "release_enabled": 0
   }
 }

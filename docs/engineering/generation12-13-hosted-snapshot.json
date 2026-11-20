@@ -1,0 +1,340 @@
+{
+  "observed_utc": "2026-11-20 06:27:15 UTC",
+  "scope": [
+    {
+      "pr": 213,
+      "sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "branch": "codex/main-consolidation-g12-20261120",
+      "runs": [
+        {
+          "id": 44685352684,
+          "name": "EVM escrow",
+          "branch": "codex/main-consolidation-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:05:33Z",
+          "updated_at": "2026-11-20T06:05:33Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44685352684"
+        },
+        {
+          "id": 44685352661,
+          "name": "Vault foundation",
+          "branch": "codex/main-consolidation-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:05:33Z",
+          "updated_at": "2026-11-20T06:05:33Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44685352661"
+        },
+        {
+          "id": 44685352623,
+          "name": "Specification inventory",
+          "branch": "codex/main-consolidation-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:05:33Z",
+          "updated_at": "2026-11-20T06:05:33Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44685352623"
+        },
+        {
+          "id": 44685352627,
+          "name": "Nostr relay interoperability",
+          "branch": "codex/main-consolidation-g12-20261120",
+          "status": "completed",
+          "conclusion": "success",
+          "created_at": "2026-11-20T06:05:33Z",
+          "updated_at": "2026-11-20T06:22:38Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44685352627"
+        },
+        {
+          "id": 44685352632,
+          "name": "Solana escrow",
+          "branch": "codex/main-consolidation-g12-20261120",
+          "status": "in_progress",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:05:33Z",
+          "updated_at": "2026-11-20T06:25:03Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44685352632"
+        },
+        {
+          "id": 44685341266,
+          "name": "PR #213",
+          "branch": "refs/pull/213/head",
+          "status": "completed",
+          "conclusion": "success",
+          "created_at": "2026-11-20T06:05:27Z",
+          "updated_at": "2026-11-20T06:26:30Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44685341266"
+        },
+        {
+          "id": 44677307789,
+          "name": "Vault foundation",
+          "branch": "codex/transport-qualification-20261120",
+          "status": "completed",
+          "conclusion": "success",
+          "created_at": "2026-11-20T04:52:47Z",
+          "updated_at": "2026-11-20T05:52:02Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307789"
+        },
+        {
+          "id": 44677307459,
+          "name": "EVM escrow",
+          "branch": "codex/transport-qualification-20261120",
+          "status": "completed",
+          "conclusion": "success",
+          "created_at": "2026-11-20T04:52:47Z",
+          "updated_at": "2026-11-20T05:45:05Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307459"
+        },
+        {
+          "id": 44677307450,
+          "name": "Nostr relay interoperability",
+          "branch": "codex/transport-qualification-20261120",
+          "status": "completed",
+          "conclusion": "success",
+          "created_at": "2026-11-20T04:52:47Z",
+          "updated_at": "2026-11-20T05:32:25Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307450"
+        },
+        {
+          "id": 44677307785,
+          "name": "Specification inventory",
+          "branch": "codex/transport-qualification-20261120",
+          "status": "completed",
+          "conclusion": "success",
+          "created_at": "2026-11-20T04:52:47Z",
+          "updated_at": "2026-11-20T05:34:31Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307785"
+        },
+        {
+          "id": 44677307772,
+          "name": "Solana escrow",
+          "branch": "codex/transport-qualification-20261120",
+          "status": "in_progress",
+          "conclusion": null,
+          "created_at": "2026-11-20T04:52:47Z",
+          "updated_at": "2026-11-20T05:34:08Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307772"
+        }
+      ]
+    },
+    {
+      "pr": 214,
+      "sha": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+      "branch": "codex/ci-oracle-g12-20261120",
+      "runs": [
+        {
+          "id": 44685876577,
+          "name": "Vault foundation",
+          "branch": "codex/ci-oracle-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:10:03Z",
+          "updated_at": "2026-11-20T06:10:03Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44685876577"
+        },
+        {
+          "id": 44685876342,
+          "name": "EVM escrow",
+          "branch": "codex/ci-oracle-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:10:03Z",
+          "updated_at": "2026-11-20T06:10:03Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44685876342"
+        },
+        {
+          "id": 44685876340,
+          "name": "Nostr relay interoperability",
+          "branch": "codex/ci-oracle-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:10:03Z",
+          "updated_at": "2026-11-20T06:10:03Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44685876340"
+        },
+        {
+          "id": 44685876426,
+          "name": "Specification inventory",
+          "branch": "codex/ci-oracle-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:10:03Z",
+          "updated_at": "2026-11-20T06:10:03Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44685876426"
+        }
+      ]
+    },
+    {
+      "pr": 215,
+      "sha": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+      "branch": "codex/backup-verification-ui-g12-20261120",
+      "runs": [
+        {
+          "id": 44686692832,
+          "name": "EVM escrow",
+          "branch": "codex/backup-verification-ui-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:16:57Z",
+          "updated_at": "2026-11-20T06:16:57Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44686692832"
+        },
+        {
+          "id": 44686692777,
+          "name": "Specification inventory",
+          "branch": "codex/backup-verification-ui-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:16:57Z",
+          "updated_at": "2026-11-20T06:16:57Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44686692777"
+        },
+        {
+          "id": 44686692828,
+          "name": "Nostr relay interoperability",
+          "branch": "codex/backup-verification-ui-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:16:57Z",
+          "updated_at": "2026-11-20T06:16:57Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44686692828"
+        },
+        {
+          "id": 44686692816,
+          "name": "Solana escrow",
+          "branch": "codex/backup-verification-ui-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:16:57Z",
+          "updated_at": "2026-11-20T06:16:57Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44686692816"
+        },
+        {
+          "id": 44686692737,
+          "name": "Vault foundation",
+          "branch": "codex/backup-verification-ui-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:16:57Z",
+          "updated_at": "2026-11-20T06:16:57Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44686692737"
+        }
+      ]
+    },
+    {
+      "pr": 216,
+      "sha": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+      "branch": "codex/dependency-g12-20261120",
+      "runs": [
+        {
+          "id": 44687350905,
+          "name": "Vault foundation",
+          "branch": "codex/dependency-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:22:35Z",
+          "updated_at": "2026-11-20T06:22:35Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44687350905"
+        },
+        {
+          "id": 44687350995,
+          "name": "Nostr relay interoperability",
+          "branch": "codex/dependency-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:22:35Z",
+          "updated_at": "2026-11-20T06:22:35Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44687350995"
+        },
+        {
+          "id": 44687350997,
+          "name": "Specification inventory",
+          "branch": "codex/dependency-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:22:35Z",
+          "updated_at": "2026-11-20T06:22:35Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44687350997"
+        },
+        {
+          "id": 44687351087,
+          "name": "Solana escrow",
+          "branch": "codex/dependency-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:22:35Z",
+          "updated_at": "2026-11-20T06:22:35Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44687351087"
+        },
+        {
+          "id": 44687350901,
+          "name": "EVM escrow",
+          "branch": "codex/dependency-g12-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:22:35Z",
+          "updated_at": "2026-11-20T06:22:35Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44687350901"
+        }
+      ]
+    },
+    {
+      "pr": 217,
+      "sha": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+      "branch": "codex/backup-cross-browser-g13-20261120",
+      "runs": [
+        {
+          "id": 44687510433,
+          "name": "EVM escrow",
+          "branch": "codex/backup-cross-browser-g13-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:23:56Z",
+          "updated_at": "2026-11-20T06:23:56Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44687510433"
+        },
+        {
+          "id": 44687510367,
+          "name": "Nostr relay interoperability",
+          "branch": "codex/backup-cross-browser-g13-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:23:56Z",
+          "updated_at": "2026-11-20T06:23:56Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44687510367"
+        },
+        {
+          "id": 44687510481,
+          "name": "Vault foundation",
+          "branch": "codex/backup-cross-browser-g13-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:23:56Z",
+          "updated_at": "2026-11-20T06:23:56Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44687510481"
+        },
+        {
+          "id": 44687510387,
+          "name": "Solana escrow",
+          "branch": "codex/backup-cross-browser-g13-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:23:56Z",
+          "updated_at": "2026-11-20T06:23:56Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44687510387"
+        },
+        {
+          "id": 44687510365,
+          "name": "Specification inventory",
+          "branch": "codex/backup-cross-browser-g13-20261120",
+          "status": "queued",
+          "conclusion": null,
+          "created_at": "2026-11-20T06:23:56Z",
+          "updated_at": "2026-11-20T06:23:56Z",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44687510365"
+        }
+      ]
+    }
+  ]
+}
