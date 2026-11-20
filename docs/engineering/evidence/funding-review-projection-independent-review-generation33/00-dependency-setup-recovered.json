@@ -1,0 +1,11 @@
+{
+  "provenance": "Recovered exact executor output and command input; no original file capture existed.",
+  "exitCode": 1,
+  "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+  "cause": "Sample path typescript/lib/typescript.js is absent from the installed TypeScript 7 package. Worktree creation and physical hardlink copy completed before the sample assertion.",
+  "rawBytes": 259,
+  "rawSha256": "a7b4911d2fdd6aed00f83c4dc9aef5c5d407c35cf2fe1d7cc085b8ed08058fc5",
+  "gzipBytes": 218,
+  "gzipSha256": "ddd42e1b50066009880d287dc6201be67de30075fdcc80dfcc896275db39a163",
+  "gzipMtime": 0
+}

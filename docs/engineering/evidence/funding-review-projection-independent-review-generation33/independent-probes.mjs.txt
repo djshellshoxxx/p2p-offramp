@@ -1,0 +1,83 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { projectNativeFundingReview } from '../p2p-funding-review-projection-review-g33/packages/chain-solana/src/funding-review.ts';
+import { buildFundNative } from '../p2p-funding-review-projection-review-g33/packages/chain-solana/src/instructions.ts';
+import { compileLegacyMessage, encodeBase64 } from '../p2p-funding-review-projection-review-g33/packages/chain-solana/src/message.ts';
+import { connected, setupClient } from '../p2p-funding-review-projection-review-g33/packages/chain-solana/test/lifecycle-support.mjs';
+import { key, ok } from '../p2p-funding-review-projection-review-g33/packages/chain-solana/test/support.mjs';
+
+const invalid = work => assert.throws(work, value => value?.code === 'INVALID_INPUT' &&
+  value.message === 'Solana read failed.');
+async function prepared(termsChanges = {}) {
+  const env = setupClient('native', { termsChanges, clusterOptions: { absent: true } });
+  const session = await connected(env, 'seller');
+  const handle = ok(await env.client.prepareFunding(env.trade, session));
+  return { ...env, session, handle };
+}
+const state = env => ({ rpcCalls: env.cluster.calls.length, signs: env.walletFake.calls.sign.length,
+  sends: env.cluster.sent.length, writes: [...env.journalFake.writes],
+  records: structuredClone(env.journalFake.records(env.binding)) });
+
+test('independent: a hidden agreement commitment cannot be rebound onto the original funding bytes', async () => {
+  const env = await prepared(), before = state(env);
+  const other = setupClient('native', { terms: { ...env.terms, privateAgreementHash: 'c'.repeat(64) },
+    clusterOptions: { absent: true } });
+  assert.notEqual(other.trade.termsHash, env.trade.termsHash);
+  assert.equal(other.trade.escrow.address, env.trade.escrow.address);
+  const rebound = { ...env.handle, binding: other.binding };
+  invalid(() => projectNativeFundingReview(other.trade, rebound));
+  assert.deepEqual(state(env), before);
+  assert.equal(other.cluster.calls.length, 0);
+  ok(await env.client.cancel(env.handle));
+});
+
+test('independent: a structurally valid message with a second funding instruction is refused', async () => {
+  const env = await prepared(), before = state(env), instruction = ok(buildFundNative(env.trade));
+  const message = encodeBase64(compileLegacyMessage(env.terms.seller,
+    [instruction, instruction], env.handle.blockhash));
+  assert.notEqual(message, env.handle.message);
+  invalid(() => projectNativeFundingReview(env.trade, { ...env.handle, message }));
+  assert.deepEqual(state(env), before);
+  ok(await env.client.cancel(env.handle));
+});
+
+test('independent: nested descriptor reentrancy cannot replace already captured review bytes', async () => {
+  const env = await prepared(), before = state(env), copy = structuredClone(env.handle);
+  const binding = copy.binding;
+  let trapObserved = false, propertyReads = 0;
+  copy.binding = new Proxy(binding, {
+    ownKeys(target) {
+      trapObserved = true;
+      copy.message = '';
+      copy.blockhash = key('changed-after-outer-snapshot');
+      return Reflect.ownKeys(target);
+    },
+    get() { propertyReads++; throw new Error('unexpected ordinary property read'); },
+  });
+  const view = projectNativeFundingReview(env.trade, copy);
+  assert.equal(trapObserved, true);
+  assert.equal(propertyReads, 0);
+  assert.equal(copy.message, '');
+  assert.equal(view.transaction.message, env.handle.message);
+  assert.equal(view.transaction.blockhash, env.handle.blockhash);
+  assert.equal(view.validation, 'data-consistency-only');
+  assert.equal(view.confirmationAuthority, false);
+  assert.deepEqual(state(env), before);
+  ok(await env.client.cancel(env.handle));
+});
+
+test('independent: maximum native principal and height metadata remain exact and non-authoritative', async () => {
+  const env = await prepared({ amountBaseUnits: '9007199254740991' }), before = state(env);
+  for (const lastValidBlockHeight of ['0', '18446744073709551615']) {
+    const view = projectNativeFundingReview(env.trade, { ...env.handle, lastValidBlockHeight });
+    assert.equal(view.principal.amountBaseUnits, '9007199254740991');
+    assert.equal(view.transaction.lastValidBlockHeight, lastValidBlockHeight);
+    assert.equal(view.transaction.lastValidBlockHeightEvidence, 'supplied-metadata');
+    assert.equal(view.transaction.message, env.handle.message);
+    assert.equal(view.confirmationAuthority, false);
+    assert.equal(view.fundingOutcome, 'not-established');
+    assert.deepEqual(view.costs, { feeLamports: null, escrowRentLamports: null, totalDebitLamports: null });
+  }
+  assert.deepEqual(state(env), before);
+  ok(await env.client.cancel(env.handle));
+});

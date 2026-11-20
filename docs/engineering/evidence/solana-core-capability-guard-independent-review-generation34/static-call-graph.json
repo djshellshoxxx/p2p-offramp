@@ -1,0 +1,18 @@
+{
+  "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+  "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/check-call-graph.py",
+    "2c21958684e8943a3058b0195fd310bfeba68866"
+  ],
+  "startedAt": "2026-11-20T19:57:29.794884+00:00",
+  "completedAt": "2026-11-20T19:57:30.430293+00:00",
+  "exitCode": 0,
+  "log": "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/static-call-graph.log",
+  "bytes": 3540,
+  "sha256": "7133c522ce0f2524c486825e5c42be0ddd26ba607c0132fcf6e78856f794668b",
+  "finalSource": "2c21958684e8943a3058b0195fd310bfeba68866",
+  "cleanTrackedWorktree": true,
+  "summary": []
+}

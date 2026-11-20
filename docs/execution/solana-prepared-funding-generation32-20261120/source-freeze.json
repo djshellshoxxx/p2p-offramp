@@ -1,0 +1,10 @@
+{
+  "source": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+  "tree": "1ed7fc7a7181e0ee964183642e01319468316fce",
+  "parent": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+  "paths": [
+    "packages/chain-solana/README.md",
+    "packages/chain-solana/src/compose.ts",
+    "packages/chain-solana/test/prepared-funding.test.mjs"
+  ]
+}

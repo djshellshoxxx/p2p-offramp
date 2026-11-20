@@ -1,0 +1,18 @@
+{
+  "source": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+  "tree": "1ed7fc7a7181e0ee964183642e01319468316fce",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/check-source.py",
+    "800e633dc47c3bd24065093b50bdc78fa709d3ab"
+  ],
+  "startedAt": "2026-11-20T19:17:57.070452+00:00",
+  "completedAt": "2026-11-20T19:17:57.156048+00:00",
+  "exitCode": 0,
+  "log": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/source-identity.log",
+  "bytes": 1186,
+  "sha256": "7ecb87ec18aebf1c3c7e9dead7b63053097e5bbe089715887c8720d986df28c4",
+  "finalSource": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+  "cleanTrackedWorktree": true,
+  "summary": []
+}

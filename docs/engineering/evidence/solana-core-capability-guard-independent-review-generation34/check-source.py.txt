@@ -1,0 +1,64 @@
+import hashlib
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+REPO = Path('/workspace/scratch/dcf03ef9bee8/p2p-solana-core-capability-guard-review-g34')
+BASE = '448cdcc2a9d13109421f21eaa1107936da0ac5c8'
+MAIN = '8e836baa877b676a863c877003e277b638fc5061'
+source = sys.argv[1]
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+def entries(ref):
+    result = {}
+    for row in git('ls-tree', '-r', '-z', ref).split(b'\0'):
+        if row:
+            identity, path = row.split(b'\t', 1)
+            result[path.decode()] = identity.decode()
+    return result
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == source
+assert not git('status', '--porcelain').strip()
+assert git('show', '-s', '--format=%P', source).decode().strip() == BASE
+base, current = entries(BASE), entries(source)
+changed = sorted(path for path in base.keys() | current.keys() if base.get(path) != current.get(path))
+expected = sorted([
+    'packages/chain-solana/src/plan.ts',
+    'packages/chain-solana/test/core-capability-funding.test.mjs',
+    'packages/chain-solana/README.md',
+])
+assert changed == expected
+assert not base.keys() - current.keys()
+for path, identity in base.items():
+    if path not in expected:
+        assert current[path] == identity, path
+for baseline in (BASE, MAIN):
+    subprocess.run(['git', 'diff', '--check', baseline + '..' + source], cwd=REPO, check=True)
+assert current['packages/domain/test/fixtures/g16-vectors.json'] == base['packages/domain/test/fixtures/g16-vectors.json']
+vector = json.loads(git('show', source + ':packages/domain/test/fixtures/g16-vectors.json'))
+expected_hash = hashlib.sha256(bytes([0])).hexdigest()
+assert vector['generator'] == 'scripts/vectors/g16_vectors.py'
+assert vector['privateAgreements'][0]['input']['capabilities'] == []
+assert vector['privateAgreements'][0]['capabilitiesHash'] == expected_hash
+assert all(entry['input']['capabilitiesHash'] == expected_hash for entry in vector['solanaTerms'])
+print(json.dumps({
+    'base': BASE, 'main': MAIN, 'source': source,
+    'tree': git('rev-parse', source + '^{tree}').decode().strip(),
+    'changed': changed,
+    'baselineEntryCount': len(base), 'sourceEntryCount': len(current),
+    'unchangedBaselineEntries': sum(current.get(path) == identity for path, identity in base.items()),
+    'nonDocumentationEntries': sum(not path.startswith('docs/') for path in current),
+    'entries': {path: {'identity': current[path], 'sha256': hashlib.sha256(git('show', source + ':' + path)).hexdigest()}
+                for path in changed},
+    'allOtherEntriesPreserved': True,
+    'fullWhitespaceBaselines': [BASE, MAIN],
+    'independentPythonCountZeroSha256': expected_hash,
+    'frozenVectorGenerator': vector['generator'],
+    'frozenVectorUnchanged': True,
+}, indent=2))

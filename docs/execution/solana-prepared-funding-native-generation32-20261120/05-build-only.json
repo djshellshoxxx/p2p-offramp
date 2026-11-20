@@ -1,0 +1,19 @@
+{
+  "name": "05-build-only.log",
+  "file": "05-build-only.log.gz",
+  "argv": [
+    "node",
+    "--input-type=module"
+  ],
+  "stdinArtifact": "05-compile-driver-script.mjs",
+  "sourceCommit": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+  "sourceTree": "9e7564a188b8b87f5498ac749eee62db7951317f",
+  "startedAt": "2026-11-20T19:25:47.751984+00:00",
+  "completedAt": "2026-11-20T19:25:48.057565+00:00",
+  "exitCode": 0,
+  "rawBytes": 6952,
+  "rawSha256": "b5f3e5781d151875f89aff5927a778e40b67686ac744422496d6498c5dd843db",
+  "gzipBytes": 2527,
+  "gzipSha256": "3e78af36f6cd9dd783941e2d2f3b27f37e1dcb5398bf3634ecbd6b5c37246d1f",
+  "gzipMtime": 0
+}

@@ -1,0 +1,110 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
+
+const root = process.cwd();
+const load = path => import(pathToFileURL(join(root, path)).href);
+const { planFund } = await load('packages/chain-solana/src/plan.ts');
+const { parseSolanaIntent, verifyIntentForTrade, SOLANA_INTENT_FORMAT } =
+  await load('packages/chain-solana/src/intent.ts');
+const { buildFundNative, buildFundSpl } = await load('packages/chain-solana/src/instructions.ts');
+const { compileLegacyMessage, encodeBase64 } = await load('packages/chain-solana/src/message.ts');
+const { projectNativeFundingReview } = await load('packages/chain-solana/src/funding-review.ts');
+const { connected, MARGINS, setupClient } = await load('packages/chain-solana/test/lifecycle-support.mjs');
+const { ata, error, ok } = await load('packages/chain-solana/test/support.mjs');
+const vectors = JSON.parse(readFileSync(join(root, 'packages/domain/test/fixtures/g16-vectors.json')));
+const nonCore = vectors.privateAgreements[1].capabilitiesHash;
+
+// Construct only historical unsigned data, using unchanged codecs. This grants no prepared capability.
+function historicalRecord(env) {
+  const blockhash = env.cluster.hashOf(env.cluster.slot);
+  const instruction = ok(env.terms.assetKind === 'native' ? buildFundNative(env.trade)
+    : buildFundSpl(env.trade, ata(env.terms.seller, env.terms.mint)));
+  const record = parseSolanaIntent({
+    format: SOLANA_INTENT_FORMAT, intentId: 'A'.repeat(43), binding: { ...env.binding },
+    genesisHash: env.trade.network.genesisHash, programId: env.trade.deployment.address,
+    programDataSha256: env.trade.deployment.runtime.programDataSha256, escrow: env.trade.escrow.address,
+    action: 'fund', role: 'seller', feePayer: env.terms.seller, expectedEscrowState: 'absent',
+    message: encodeBase64(compileLegacyMessage(env.terms.seller, [instruction], blockhash)),
+    blockhash, blockhashSlot: String(env.cluster.slot),
+    lastValidBlockHeight: String(env.cluster.heightOf(env.cluster.slot) + 150),
+    signature: null, state: 'prepared', sendMarkedAt: null, outcome: null, replacementOf: null,
+    originProfileId: 'a'.repeat(32), createdAt: 1000, updatedAt: 1000,
+  });
+  verifyIntentForTrade(record, env.trade);
+  return record;
+}
+
+const nonCoreEnv = kind => setupClient(kind, {
+  termsChanges: { capabilitiesHash: nonCore }, clusterOptions: { absent: true },
+});
+const sends = env => env.cluster.calls.filter(call => call.method === 'sendTransaction').length;
+function noEconomicAction(env) {
+  assert.equal(env.walletFake.calls.sign.length, 0);
+  assert.equal(sends(env), 0);
+  assert.equal(env.cluster.calls.filter(call => call.method === 'getLatestBlockhash').length, 0);
+}
+
+test('independent: brand refusal precedes access to untrusted trade and snapshot properties', () => {
+  let getterCalls = 0;
+  const poisoned = Object.defineProperty({}, 'terms', { get() { getterCalls++; throw new Error('getter'); } });
+  error(planFund(poisoned, {}, 'seller', MARGINS), 'INVALID_INPUT');
+  assert.equal(getterCalls, 0);
+  const env = nonCoreEnv('native');
+  const fakeSnapshot = Object.defineProperty({}, 'observation', {
+    get() { getterCalls++; throw new Error('snapshot getter'); },
+  });
+  error(planFund(env.trade, fakeSnapshot, 'seller', MARGINS), 'INVALID_INPUT');
+  assert.equal(getterCalls, 0);
+  noEconomicAction(env);
+});
+
+for (const kind of ['native', 'spl']) {
+  test(`independent: foreign-profile historical non-core ${kind} funding stays uncertain and cannot prepare anew`, async () => {
+    const env = nonCoreEnv(kind), record = historicalRecord(env);
+    ok(await env.journalFake.journal.write(env.binding, 0, record));
+    env.journalFake.setProfile('b'.repeat(32));
+    const before = structuredClone(env.journalFake.records(env.binding));
+    const writes = env.journalFake.writes.length;
+    const recovered = ok(await env.client.recover(env.trade));
+    assert.deepEqual(recovered, before);
+    assert.equal(recovered[0].state, 'prepared');
+    assert.equal(recovered[0].originProfileId, 'a'.repeat(32));
+    assert.equal(recovered[0].sendMarkedAt, null);
+    const seller = await connected(env, 'seller');
+    error(await env.client.prepareFunding(env.trade, seller), 'UNSUPPORTED_PROVIDER');
+    error(await env.client.fund(env.trade, seller), 'UNSUPPORTED_PROVIDER');
+    error(await env.client.confirm(record, seller), 'UNAUTHORIZED');
+    assert.deepEqual(env.journalFake.records(env.binding), before);
+    assert.equal(env.journalFake.writes.length, writes);
+    noEconomicAction(env);
+  });
+}
+
+test('independent: historical non-core native display validates data but has no confirmation authority', async () => {
+  const env = nonCoreEnv('native'), record = historicalRecord(env);
+  const view = {
+    intentId: record.intentId, action: 'fund', role: 'seller', feePayer: record.feePayer,
+    binding: { ...record.binding }, programId: record.programId, escrow: record.escrow,
+    expectedEscrowState: 'absent', message: record.message, blockhash: record.blockhash,
+    lastValidBlockHeight: record.lastValidBlockHeight, shape: { action: 'fund', sellerTokenAccount: null },
+  };
+  const projected = projectNativeFundingReview(env.trade, view);
+  assert.equal(projected.terms.capabilitiesHash, nonCore);
+  assert.equal(projected.validation, 'data-consistency-only');
+  assert.equal(projected.confirmationAuthority, false);
+  assert.equal(projected.transaction.message, record.message);
+  assert.equal(projected.transaction.lastValidBlockHeightEvidence, 'supplied-metadata');
+  assert.equal(projected.deployment.evidence, 'supplied-bound-trade');
+  assert.equal(projected.counterpartyAcceptance, 'not-established');
+  assert.equal(projected.fundingOutcome, 'not-established');
+  assert(Object.isFrozen(projected));
+  const seller = await connected(env, 'seller');
+  error(await env.client.confirm(view, seller), 'UNAUTHORIZED');
+  error(await env.client.prepareFunding(env.trade, seller), 'UNSUPPORTED_PROVIDER');
+  assert.deepEqual(env.journalFake.writes, []);
+  assert.deepEqual(env.journalFake.records(env.binding), []);
+  noEconomicAction(env);
+});

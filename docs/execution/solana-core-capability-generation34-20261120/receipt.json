@@ -1,0 +1,536 @@
+{
+  "version": 1,
+  "generation": 34,
+  "recordedAt": "2026-11-20T19:55:04.000481+00:00",
+  "base": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+  "baseTree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+  "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+  "sourceTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+  "sourceFiles": [
+    {
+      "path": "packages/chain-solana/README.md",
+      "gitEntry": "100644 blob 32d491840808c45dfe6910e4e6b8f8c070803c27",
+      "bytes": 20668,
+      "sha256": "d133f8b5b00ee7c6f1f65f73d7a709e18cbda6ecdbdf3f9d83893073df15069b"
+    },
+    {
+      "path": "packages/chain-solana/src/plan.ts",
+      "gitEntry": "100644 blob fa1cb3d41d54bbad8fcadea342b305e18eaaeb99",
+      "bytes": 15445,
+      "sha256": "ef5e14a71bf9a15886d071b9455c03a55b22538da1161891d968bc3fdd1be4c0"
+    },
+    {
+      "path": "packages/chain-solana/test/core-capability-funding.test.mjs",
+      "gitEntry": "100644 blob c460a54add8d02c1901dee398b4dd8e48cfc3415",
+      "bytes": 8046,
+      "sha256": "163bd637580337f3909e4f9f5f619047479aa4132fd50c07330361b5ba1a6e6b"
+    }
+  ],
+  "composition": {
+    "baselineEntries": 3101,
+    "sourceEntries": 3102,
+    "nonDocsEntries": 1033,
+    "modifiedPaths": [
+      "packages/chain-solana/README.md",
+      "packages/chain-solana/src/plan.ts"
+    ],
+    "addedPaths": [
+      "packages/chain-solana/test/core-capability-funding.test.mjs"
+    ],
+    "deletedPaths": [],
+    "allOtherBaselineEntriesExact": true
+  },
+  "commands": [
+    {
+      "label": "01-baseline",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=1",
+        "packages/chain-solana/test/core-capability-funding.test.mjs"
+      ],
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "startedAt": "2026-11-20T19:51:26.880892+00:00",
+      "completedAt": "2026-11-20T19:51:28.058948+00:00",
+      "exitCode": 1,
+      "counts": {
+        "tests": 33,
+        "pass": 11,
+        "fail": 22,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "label": "02-corrected-baseline",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=1",
+        "packages/chain-solana/test/core-capability-funding.test.mjs"
+      ],
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "startedAt": "2026-11-20T19:51:41.251745+00:00",
+      "completedAt": "2026-11-20T19:51:42.785684+00:00",
+      "exitCode": 1,
+      "counts": {
+        "tests": 33,
+        "pass": 15,
+        "fail": 18,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "label": "03-guard-focused",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=1",
+        "packages/chain-solana/test/core-capability-funding.test.mjs",
+        "packages/chain-solana/test/boundary.test.mjs"
+      ],
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "startedAt": "2026-11-20T19:52:12.805376+00:00",
+      "completedAt": "2026-11-20T19:52:14.111436+00:00",
+      "exitCode": 1,
+      "counts": {
+        "tests": 38,
+        "pass": 36,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "label": "04-final-fixture-baseline",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=1",
+        "packages/chain-solana/test/core-capability-funding.test.mjs"
+      ],
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "startedAt": "2026-11-20T19:52:42.487553+00:00",
+      "completedAt": "2026-11-20T19:52:43.661142+00:00",
+      "exitCode": 1,
+      "counts": {
+        "tests": 33,
+        "pass": 15,
+        "fail": 18,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "label": "05-final-focused",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=1",
+        "packages/chain-solana/test/core-capability-funding.test.mjs",
+        "packages/chain-solana/test/boundary.test.mjs"
+      ],
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "startedAt": "2026-11-20T19:52:43.734309+00:00",
+      "completedAt": "2026-11-20T19:52:44.995643+00:00",
+      "exitCode": 0,
+      "counts": {
+        "tests": 38,
+        "pass": 38,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "label": "06-frozen-solana-package",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=4",
+        "packages/chain-solana/test/acceptance-vectors.test.mjs",
+        "packages/chain-solana/test/acceptance.test.mjs",
+        "packages/chain-solana/test/adapter.test.mjs",
+        "packages/chain-solana/test/address.test.mjs",
+        "packages/chain-solana/test/bind.test.mjs",
+        "packages/chain-solana/test/boundary.test.mjs",
+        "packages/chain-solana/test/codec.test.mjs",
+        "packages/chain-solana/test/core-capability-funding.test.mjs",
+        "packages/chain-solana/test/fixture.test.mjs",
+        "packages/chain-solana/test/funding-review.test.mjs",
+        "packages/chain-solana/test/identity.test.mjs",
+        "packages/chain-solana/test/independent-expiry-context.test.mjs",
+        "packages/chain-solana/test/independent-recovery-compatibility.test.mjs",
+        "packages/chain-solana/test/independent-review-regressions.test.mjs",
+        "packages/chain-solana/test/independent-vault-dispatch.test.mjs",
+        "packages/chain-solana/test/instructions.test.mjs",
+        "packages/chain-solana/test/intent.test.mjs",
+        "packages/chain-solana/test/layout.test.mjs",
+        "packages/chain-solana/test/lifecycle.test.mjs",
+        "packages/chain-solana/test/message.test.mjs",
+        "packages/chain-solana/test/offchain.test.mjs",
+        "packages/chain-solana/test/payout.test.mjs",
+        "packages/chain-solana/test/plan.test.mjs",
+        "packages/chain-solana/test/policy.test.mjs",
+        "packages/chain-solana/test/prepared-actions.test.mjs",
+        "packages/chain-solana/test/prepared-funding.test.mjs",
+        "packages/chain-solana/test/reader.test.mjs",
+        "packages/chain-solana/test/reconciliation-context.test.mjs",
+        "packages/chain-solana/test/recovery.test.mjs",
+        "packages/chain-solana/test/replay.test.mjs",
+        "packages/chain-solana/test/settlement.test.mjs",
+        "packages/chain-solana/test/vaultjournal.test.mjs",
+        "packages/chain-solana/test/wallet.test.mjs",
+        "packages/chain-solana/test/window.test.mjs"
+      ],
+      "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+      "startedAt": "2026-11-20T19:53:13.196597+00:00",
+      "completedAt": "2026-11-20T19:53:31.664724+00:00",
+      "exitCode": 0,
+      "counts": {
+        "tests": 448,
+        "pass": 448,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "label": "07-frozen-package-typecheck",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+      "startedAt": "2026-11-20T19:53:31.768581+00:00",
+      "completedAt": "2026-11-20T19:53:32.432847+00:00",
+      "exitCode": 0,
+      "counts": {}
+    },
+    {
+      "label": "08-frozen-boundaries",
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+      "startedAt": "2026-11-20T19:53:32.504173+00:00",
+      "completedAt": "2026-11-20T19:53:33.840589+00:00",
+      "exitCode": 0,
+      "counts": {}
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/01-baseline.json",
+      "bytes": 1763,
+      "sha256": "ceae48c8976b008e95061f5a42957df19320d0990c4583bc83c034506728e188",
+      "rawBytes": 1763,
+      "rawSha256": "ceae48c8976b008e95061f5a42957df19320d0990c4583bc83c034506728e188",
+      "gzipMtime": null,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/01-baseline.log.gz",
+      "bytes": 6580,
+      "sha256": "366e3d7cf4e71ac88e0184b5a34c5b7f7f854c438bf3360fc9c26f043bcaaabc",
+      "rawBytes": 59865,
+      "rawSha256": "b04e47c34609905e2fa56fd46d2e6cad7db46725053182f564b17637c3255c8c",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/01-baseline.patch.gz",
+      "bytes": 2487,
+      "sha256": "2bf78881a53bbe1560c919622de1659b361247590b8f601d44bfcf04baeb0da2",
+      "rawBytes": 8408,
+      "rawSha256": "02aa6ddad3fd868497edb7888da1fd116b29fd444797a3961585b1ed83133592",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/02-corrected-baseline.json",
+      "bytes": 1793,
+      "sha256": "b6f378a63680f67998d661f39ebde3871ed9e3af43c9d6d6e438e67c9f608be6",
+      "rawBytes": 1793,
+      "rawSha256": "b6f378a63680f67998d661f39ebde3871ed9e3af43c9d6d6e438e67c9f608be6",
+      "gzipMtime": null,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/02-corrected-baseline.log.gz",
+      "bytes": 6378,
+      "sha256": "3c4eda26a0c6ed673d27830e79df7946e4a46f65be6ef22190d2213f3c841d98",
+      "rawBytes": 56106,
+      "rawSha256": "0f93a7290374139377c1e2707a86b359fbe5ecf7386d69ce9aadb400a2854111",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/02-corrected-baseline.patch.gz",
+      "bytes": 2525,
+      "sha256": "50f5e397e6cab4bfcbf7ad61081dec87b04415f8ea841ef47d55128eff18639d",
+      "rawBytes": 8492,
+      "rawSha256": "82c22b9fef9061aec9758a48c68f889dcaa5a1598b3a2616d70e4af66275be92",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/03-guard-focused.json",
+      "bytes": 1977,
+      "sha256": "4bc1ccd2bbe0fcbaf3879fef1756a5d1367d181a7c46fc8860d4854bf5d2bf93",
+      "rawBytes": 1977,
+      "rawSha256": "4bc1ccd2bbe0fcbaf3879fef1756a5d1367d181a7c46fc8860d4854bf5d2bf93",
+      "gzipMtime": null,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/03-guard-focused.log.gz",
+      "bytes": 1364,
+      "sha256": "e2eec8784c439ebaa39688f8bcb0ca59c0660f2ac59c334b2561e532a5c2f0d8",
+      "rawBytes": 5368,
+      "rawSha256": "b0458add8a436b728170c8102c6870c45b6dd833a7d5757e26cb369617c0f0aa",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/03-guard-focused.patch.gz",
+      "bytes": 4074,
+      "sha256": "35ddb86a36b2cd0bacc1611a1f19fdbf693f86964899bc536d75d4d1b6175c1c",
+      "rawBytes": 12551,
+      "rawSha256": "44b8a54775c73c0bf55b408c35050360cbc5202f83242e3837a8a6f936f439be",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/04-final-fixture-baseline.json",
+      "bytes": 1878,
+      "sha256": "097f7da0664ba2e575003b8b219e080099823c73fbdfa2c44d103d55267f144b",
+      "rawBytes": 1878,
+      "rawSha256": "097f7da0664ba2e575003b8b219e080099823c73fbdfa2c44d103d55267f144b",
+      "gzipMtime": null,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/04-final-fixture-baseline.log.gz",
+      "bytes": 6389,
+      "sha256": "b50770a895fc373575df788a71c8982b7fa016c69b3542957eca09446f466807",
+      "rawBytes": 56112,
+      "rawSha256": "7d59f24d5923436204f39f75f7559415c51e01a225cd1c3b0d738fc6f6872ddb",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/04-final-fixture-baseline.patch.gz",
+      "bytes": 3258,
+      "sha256": "db2af045974799f13d246a147720d94b2d29b6e24dcff4471080dd1688129f12",
+      "rawBytes": 10189,
+      "rawSha256": "1c9cde09d809f1ee114e312c2cca7e034967b99083158edd76fdd332badf1244",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/05-final-focused.json",
+      "bytes": 1977,
+      "sha256": "e375fbc64cb8c39ed37a58666be0867343b5955c34bab1833a365b5e0f6264bc",
+      "rawBytes": 1977,
+      "rawSha256": "e375fbc64cb8c39ed37a58666be0867343b5955c34bab1833a365b5e0f6264bc",
+      "gzipMtime": null,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/05-final-focused.log.gz",
+      "bytes": 950,
+      "sha256": "1c71e328fa24b37630511341979fcf97cf1665662ed6b2d2ac7cfb50b2b20999",
+      "rawBytes": 3442,
+      "rawSha256": "41fcd661800d16397b3b60f1336cd8c726236638f052f40f4bb361aaf4f71c62",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/05-final-focused.patch.gz",
+      "bytes": 4073,
+      "sha256": "3202abd3bcdfec9c9de742cd10e50b58d4a68c7b1eef6c2f46d28e42a409aaee",
+      "rawBytes": 12537,
+      "rawSha256": "9fb4a4f991d502e098860ad4e7b655f51f2a074f21e73fb25e0ab2cf960e7854",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/06-frozen-solana-package.json",
+      "bytes": 3500,
+      "sha256": "05bbebf58064b7480a98672bf2a0433d3e87f71940ae29a60d5683f5acabb5c2",
+      "rawBytes": 3500,
+      "rawSha256": "05bbebf58064b7480a98672bf2a0433d3e87f71940ae29a60d5683f5acabb5c2",
+      "gzipMtime": null,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/06-frozen-solana-package.log.gz",
+      "bytes": 11811,
+      "sha256": "e027b4229914e61fe77bad8a72dc0b603ed69fa0541d23b0d4b48e2c6a3f80fc",
+      "rawBytes": 33242,
+      "rawSha256": "ef63b99d1ba69c74f068d36a00fae47d1b588f96d3716f87faa0acd7fecf1730",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/06-frozen-solana-package.patch.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/07-frozen-package-typecheck.json",
+      "bytes": 1455,
+      "sha256": "68b58041d84b91735863ea859abc01bb27b5e686a234c37e51d61aea8c858fa3",
+      "rawBytes": 1455,
+      "rawSha256": "68b58041d84b91735863ea859abc01bb27b5e686a234c37e51d61aea8c858fa3",
+      "gzipMtime": null,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/07-frozen-package-typecheck.log.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/07-frozen-package-typecheck.patch.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/08-frozen-boundaries.json",
+      "bytes": 1415,
+      "sha256": "b4ebe113825925c00f0f087d44eff1c8085c1685b044b18851c273ea013f7529",
+      "rawBytes": 1415,
+      "rawSha256": "b4ebe113825925c00f0f087d44eff1c8085c1685b044b18851c273ea013f7529",
+      "gzipMtime": null,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/08-frozen-boundaries.log.gz",
+      "bytes": 288,
+      "sha256": "98f5e0eb711f2510a3764442d254b68d1d8531c6dd4e7acf3a919fdcbab49cb1",
+      "rawBytes": 392,
+      "rawSha256": "b460f1c640842daae2ad9cc06e4760d7947d23a24226953417652dd33b5032b8",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/08-frozen-boundaries.patch.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0,
+      "provenance": "original execution artifact"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/capture-command.py.txt",
+      "bytes": 3008,
+      "sha256": "55a714152c19658ce9ae50ec745845fd9578d1447ef284fa2913bd99cc66eb75",
+      "rawBytes": 3008,
+      "rawSha256": "55a714152c19658ce9ae50ec745845fd9578d1447ef284fa2913bd99cc66eb75",
+      "gzipMtime": null,
+      "provenance": "exact retained execution/packaging script"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/package-evidence.py.txt",
+      "bytes": 6550,
+      "sha256": "758d13cf9d39c5f882bed54539401b51eeb3b9b59d4168d1aa80932163787e84",
+      "rawBytes": 6550,
+      "rawSha256": "758d13cf9d39c5f882bed54539401b51eeb3b9b59d4168d1aa80932163787e84",
+      "gzipMtime": null,
+      "provenance": "exact retained execution/packaging script"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/execution-snapshot-verification.json",
+      "bytes": 1603,
+      "sha256": "00baa23cae7c3b2a697fad2b8273eb0f6051149ed7856d9bf393bfc48e692b45",
+      "rawBytes": 1603,
+      "rawSha256": "00baa23cae7c3b2a697fad2b8273eb0f6051149ed7856d9bf393bfc48e692b45",
+      "gzipMtime": null,
+      "provenance": "reconstruction of recorded source plus exact retained patch"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/finalize-evidence.py.txt",
+      "bytes": 4716,
+      "sha256": "6be7b6e7b506fba17a150e9bd2f1f9b66237d3f1342bb61bc5608194efd7313f",
+      "rawBytes": 4716,
+      "rawSha256": "6be7b6e7b506fba17a150e9bd2f1f9b66237d3f1342bb61bc5608194efd7313f",
+      "gzipMtime": null,
+      "provenance": "exact retained evidence finalization script"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/09-source-and-evidence-whitespace.log.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0,
+      "provenance": "final evidence verification"
+    },
+    {
+      "path": "docs/execution/solana-core-capability-generation34-20261120/09-source-and-evidence-whitespace.json",
+      "bytes": 4450,
+      "sha256": "fc09b1ec80389f484af8ba283591de0c9ab9314537e697460d5e454fcdc3f81d",
+      "rawBytes": 4450,
+      "rawSha256": "fc09b1ec80389f484af8ba283591de0c9ab9314537e697460d5e454fcdc3f81d",
+      "gzipMtime": null,
+      "provenance": "final evidence verification"
+    }
+  ],
+  "dependencyMode": "Existing immutable physical hardlinks from p2p-continuation-g32; no installation or mutation.",
+  "limits": [
+    "Accepted D4 guard applies only to new funding plans, shared by direct funding, preparation and confirmation replanning.",
+    "The maintained encoder and SHA-256 derive the count-zero value; existing Python vectors and Node crypto verify it independently.",
+    "Binding, historical codecs, journal verification, recovery, exits, native programs, ABI and configuration remain unchanged.",
+    "Initial baseline contains two wrong duplicate-confirm expectations and two wrong historical reprepare expectations in addition to 18 absent-policy failures.",
+    "The corrected intermediate baseline passed 15 controls and failed 18 policy cases; the first guarded selection then exposed two historical reprepare error-precedence assumptions.",
+    "The final historical control asserts decoded-record confirmation refusal, while all 18 new-funding refusal assertions remain. Final baseline is 15 pass/18 fail; guarded selection is 38/38.",
+    "All original command outputs and patches are retained, including fixture corrections; no production change was made to satisfy those corrections.",
+    "All tests use controlled local ports and synthetic records. No browser, validator, physical wallet, external target or native financial run occurred.",
+    "No full repository suite or artifact build was run by this author; root owns combined qualification and Tier C approval/gates."
+  ]
+}

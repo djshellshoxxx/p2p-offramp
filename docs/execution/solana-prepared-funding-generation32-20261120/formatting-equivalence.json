@@ -1,0 +1,44 @@
+{
+  "path": "packages/chain-solana/test/prepared-funding.test.mjs",
+  "originalSource": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+  "originalSha256": "06f4b947e5caf718003af442f8ae984f6a1a543000f69103b89b8ab34cad6a9d",
+  "finalSha256": "fec56fa82e3e26f643ca01195b24db3ce136d6cc5534001beb488ccdfdd52608",
+  "method": "Exhaustive five exact replacements of whitespace outside quoted strings; applying only these replacements equals the entire final file byte for byte",
+  "replacements": [
+    {
+      "before": "test('funding views are private capabilities, and a wrong confirmation session consumes only its original review', async () => {",
+      "after": "test('funding views are private capabilities, and a wrong confirmation session consumes only its original review',\n  async () => {"
+    },
+    {
+      "before": "for (const kind of ['native', 'spl']) test(`${kind} confirmation consumes once and preserves exact reviewed bytes and blockhash`, async () => {",
+      "after": "for (const kind of ['native', 'spl']) test(\n  `${kind} confirmation consumes once and preserves exact reviewed bytes and blockhash`, async () => {"
+    },
+    {
+      "before": "test('an uncertain funding marker remains durable and only explicit definitive-drop replacement permits a new review', async () => {",
+      "after": "test('an uncertain funding marker remains durable and only explicit definitive-drop replacement permits a new review',\n  async () => {"
+    },
+    {
+      "before": "  const env = fundingEnv('native', { clusterOptions: { sendBehavior: () => { throw new Error('SECRET synthetic provider'); } } });",
+      "after": "  const env = fundingEnv('native', {\n    clusterOptions: { sendBehavior: () => { throw new Error('SECRET synthetic provider'); } }\n  });"
+    },
+    {
+      "before": "test('real encrypted journal funding preparation loses authority on lock without releasing pending wallet work', async t => {",
+      "after": "test('real encrypted journal funding preparation loses authority on lock without releasing pending wallet work',\n  async t => {"
+    }
+  ],
+  "identicalAfterRecordedWrapping": true,
+  "preliminaryProbes": [
+    {
+      "exitCode": 1,
+      "reason": "Installed TypeScript package exposes no ScriptTarget compiler API",
+      "log": "formatting-equivalence-initial.log",
+      "capture": "Error transcript recovered from original tool return; preceding git diff retained in formatting-only.patch"
+    },
+    {
+      "exitCode": 1,
+      "reason": "esbuild is not an installed direct dependency",
+      "log": "formatting-equivalence-second.log",
+      "capture": "Error transcript recovered from original tool return"
+    }
+  ]
+}

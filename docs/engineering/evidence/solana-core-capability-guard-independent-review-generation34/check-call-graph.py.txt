@@ -1,0 +1,67 @@
+import hashlib
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+REPO = Path('/workspace/scratch/dcf03ef9bee8/p2p-solana-core-capability-guard-review-g34')
+source = sys.argv[1]
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == source
+assert not git('status', '--porcelain').strip()
+paths = git('ls-tree', '-r', '--name-only', source).decode().splitlines()
+names = ['planFund', 'signIntent', 'markAndSend', 'signWithWallet',
+         'solanaTermsConsentRequest', 'solanaPeerAcceptanceRequest']
+matches = {name: [] for name in names}
+audited_files = []
+for path in paths:
+    parts = Path(path).parts
+    if parts[0] not in ('apps', 'packages') or Path(path).suffix not in ('.ts', '.tsx'):
+        continue
+    if 'test' in parts or 'tests' in parts or 'node_modules' in parts:
+        continue
+    raw = git('show', source + ':' + path)
+    audited_files.append(path)
+    for number, line in enumerate(raw.decode().splitlines(), 1):
+        for name in names:
+            if name in line:
+                matches[name].append({'path': path, 'line': number, 'text': line.strip()})
+
+expected_paths = {
+    'planFund': ['packages/chain-solana/src/compose.ts', 'packages/chain-solana/src/plan.ts'],
+    'signIntent': ['packages/chain-solana/src/compose.ts', 'packages/chain-solana/src/submit.ts'],
+    'markAndSend': ['packages/chain-solana/src/compose.ts', 'packages/chain-solana/src/submit.ts'],
+    'signWithWallet': ['packages/chain-solana/src/submit.ts', 'packages/chain-solana/src/wallet.ts'],
+    'solanaTermsConsentRequest': ['packages/chain-solana/src/acceptance.ts'],
+    'solanaPeerAcceptanceRequest': ['packages/chain-solana/src/acceptance.ts'],
+}
+for name, expected in expected_paths.items():
+    assert sorted({entry['path'] for entry in matches[name]}) == expected, name
+for name in ('solanaTermsConsentRequest', 'solanaPeerAcceptanceRequest'):
+    assert len(matches[name]) == 1 and matches[name][0]['text'].startswith('export function '), name
+facade = git('show', source + ':packages/chain-solana/localnet.ts')
+for name in names:
+    assert name not in facade.decode(), name
+acceptance = git('show', source + ':packages/chain-solana/src/acceptance.ts').decode()
+assert 'readonly candidateOnly: true; readonly economicPreparationAllowed: false;' in acceptance
+compose = git('show', source + ':packages/chain-solana/src/compose.ts').decode()
+assert compose.count('if (revalidate) stored = await revalidate(stored);') == 2
+assert 'const planned = value(preparation.plan(await read(trade)));' in compose
+assert 'const plan: Planner = snapshot => action === \'fund\' ? planFund' in compose
+print(json.dumps({
+    'source': source,
+    'tree': git('rev-parse', source + '^{tree}').decode().strip(),
+    'method': 'Static tracked production TypeScript reference inventory plus manual call-graph review; not dynamic reachability proof.',
+    'productionFilesScanned': len(audited_files),
+    'referenceMatches': matches,
+    'localnetFacadeSha256': hashlib.sha256(facade).hexdigest(),
+    'internalSigningAndSendingNotExportedByLocalnetFacade': True,
+    'offchainRequestConstructorsHaveNoProductionCaller': True,
+    'preparedConfirmRevalidationSites': 2,
+    'historicalVerificationAndCodecsPreserved': True,
+}, indent=2))

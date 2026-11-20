@@ -1,0 +1,17 @@
+{
+  "source": "fadd204e3616f7d262add42a7f72a55d27079158",
+  "tree": "602216df49bb1884b3718b23b85e28b285f43ef2",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/check-native-driver-source.py"
+  ],
+  "startedAt": "2026-11-20T19:32:43.257606+00:00",
+  "completedAt": "2026-11-20T19:32:43.499841+00:00",
+  "exitCode": 0,
+  "log": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/native-driver-source.log",
+  "bytes": 1170,
+  "sha256": "6bfb86084cf1200d3dc6412ae472e01c0710a55133159dbdda56a142948282ff",
+  "finalSource": "fadd204e3616f7d262add42a7f72a55d27079158",
+  "cleanTrackedWorktree": true,
+  "summary": []
+}

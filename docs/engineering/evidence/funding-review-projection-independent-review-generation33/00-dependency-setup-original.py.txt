@@ -1,0 +1,16 @@
+from pathlib import Path
+import subprocess,json,hashlib,datetime
+root=Path('/workspace/scratch/dcf03ef9bee8');repo=root/'p2p-funding-review-projection-review-g33';deps=root/'p2p-continuation-g31';evidence=root/'p2p-funding-review-projection-review-evidence-g33'
+assert not repo.exists()
+source='31ae6627a6b14a4ef40f7d81c98b04470a30aa1a'
+subprocess.run(['git','worktree','add','-b','codex/funding-review-projection-review-g33-20261120',str(repo),source],cwd=root/'p2p-continuation-g32',check=True)
+subprocess.run(['cp','-al',str(deps/'node_modules'),str(repo/'node_modules')],check=True)
+rows=[]
+for rel in ['typescript/package.json','typescript/lib/typescript.js','@noble/hashes/package.json']:
+ a=deps/'node_modules'/rel;b=repo/'node_modules'/rel
+ assert a.is_file() and b.is_file() and a.stat().st_ino==b.stat().st_ino
+ rows.append({'path':'node_modules/'+rel,'sourceInode':a.stat().st_ino,'reviewInode':b.stat().st_ino,'bytes':b.stat().st_size,'sha256':hashlib.sha256(b.read_bytes()).hexdigest()})
+record={'recordedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'sourceWorktree':str(deps),'reviewWorktree':str(repo),'sourceDirectoryInode':(deps/'node_modules').stat().st_ino,'reviewDirectoryInode':(repo/'node_modules').stat().st_ino,'source':source,'mode':'physical immutable hardlink reuse; no installation or dependency mutation','samples':rows}
+assert record['sourceDirectoryInode']!=record['reviewDirectoryInode']
+(evidence/'dependency-directory-provenance.json').write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps({'source':source,'tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],cwd=repo,text=True).strip(),'worktree':str(repo),'dependencySamples':len(rows)}))

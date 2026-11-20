@@ -1,0 +1,32 @@
+{
+  "source": "252dd1603f12eab69313ef25b538be1b040bc508",
+  "tree": "65667d0089b986250b5f8697518863069368d855",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "packages/chain-solana/test/boundary.test.mjs",
+    "packages/chain-solana/test/prepared-actions.test.mjs",
+    "packages/chain-solana/test/prepared-funding.test.mjs",
+    "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/independent-funding-probes.mjs"
+  ],
+  "startedAt": "2026-11-20T19:21:24.165363+00:00",
+  "completedAt": "2026-11-20T19:21:26.051930+00:00",
+  "exitCode": 0,
+  "log": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/focused-independent-final.log",
+  "bytes": 7481,
+  "sha256": "df420e96a767050b7de26f187e6762bf897c8270f94eb1c30745a6bef6fa2e05",
+  "finalSource": "252dd1603f12eab69313ef25b538be1b040bc508",
+  "cleanTrackedWorktree": true,
+  "summary": [
+    "\u2139 tests 98",
+    "\u2139 suites 0",
+    "\u2139 pass 98",
+    "\u2139 fail 0",
+    "\u2139 cancelled 0",
+    "\u2139 skipped 0",
+    "\u2139 todo 0",
+    "\u2139 duration_ms 1763.693331"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061",
+        "2c21958684e8943a3058b0195fd310bfeba68866"
+      ],
+      "exitCode": 0,
+      "outputBytes": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "exitCode": 0,
+      "outputBytes": 0
+    }
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-solana-core-capability-guard-g34",
+  "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+  "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+  "stagedEvidenceTreeBeforeReceiptRegistration": "987597ff437baecfcf66aba65585309f801e7660",
+  "stagedDocumentationPaths": [
+    "docs/engineering/SOLANA_CORE_CAPABILITY_GUARD_GENERATION34_20261120.md",
+    "docs/execution/solana-core-capability-generation34-20261120/01-baseline.json",
+    "docs/execution/solana-core-capability-generation34-20261120/01-baseline.log.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/01-baseline.patch.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/02-corrected-baseline.json",
+    "docs/execution/solana-core-capability-generation34-20261120/02-corrected-baseline.log.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/02-corrected-baseline.patch.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/03-guard-focused.json",
+    "docs/execution/solana-core-capability-generation34-20261120/03-guard-focused.log.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/03-guard-focused.patch.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/04-final-fixture-baseline.json",
+    "docs/execution/solana-core-capability-generation34-20261120/04-final-fixture-baseline.log.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/04-final-fixture-baseline.patch.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/05-final-focused.json",
+    "docs/execution/solana-core-capability-generation34-20261120/05-final-focused.log.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/05-final-focused.patch.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/06-frozen-solana-package.json",
+    "docs/execution/solana-core-capability-generation34-20261120/06-frozen-solana-package.log.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/06-frozen-solana-package.patch.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/07-frozen-package-typecheck.json",
+    "docs/execution/solana-core-capability-generation34-20261120/07-frozen-package-typecheck.log.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/07-frozen-package-typecheck.patch.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/08-frozen-boundaries.json",
+    "docs/execution/solana-core-capability-generation34-20261120/08-frozen-boundaries.log.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/08-frozen-boundaries.patch.gz",
+    "docs/execution/solana-core-capability-generation34-20261120/capture-command.py.txt",
+    "docs/execution/solana-core-capability-generation34-20261120/execution-snapshot-verification.json",
+    "docs/execution/solana-core-capability-generation34-20261120/finalize-evidence.py.txt",
+    "docs/execution/solana-core-capability-generation34-20261120/package-evidence.py.txt",
+    "docs/execution/solana-core-capability-generation34-20261120/receipt.json"
+  ],
+  "nonDocsEntriesExactToSource": 1033,
+  "startedAt": "2026-11-20T19:56:43.606346+00:00",
+  "completedAt": "2026-11-20T19:56:43.678092+00:00",
+  "exitCode": 0,
+  "log": {
+    "path": "docs/execution/solana-core-capability-generation34-20261120/09-source-and-evidence-whitespace.log.gz",
+    "bytes": 20,
+    "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzipMtime": 0,
+    "provenance": "final evidence verification"
+  },
+  "scope": "Full source and staged source/evidence diffs against the frozen main baseline, without exclusions. This receipt and log are subsequently registered, then the complete staged and final committed diffs are checked again. No self-referential final-commit identity is claimed."
+}

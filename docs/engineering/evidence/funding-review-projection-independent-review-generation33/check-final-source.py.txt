@@ -1,0 +1,29 @@
+import json, subprocess
+from pathlib import Path
+repo=Path('/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33')
+prior='31ae6627a6b14a4ef40f7d81c98b04470a30aa1a'
+source='448cdcc2a9d13109421f21eaa1107936da0ac5c8'
+path='packages/chain-solana/test/funding-review.test.mjs'
+def git(*args): return subprocess.check_output(['git',*args],cwd=repo)
+def entries(ref):
+ out={}
+ for row in git('ls-tree','-r','-z',ref).split(b'\0'):
+  if row:
+   meta,path=row.split(b'\t',1);out[path.decode()]=meta.decode()
+ return out
+assert git('rev-parse','HEAD').decode().strip()==source
+assert git('show','-s','--format=%P',source).decode().split()==[prior]
+assert not git('status','--porcelain').strip()
+a,b=entries(prior),entries(source)
+assert {p for p in a.keys()|b.keys() if a.get(p)!=b.get(p)}=={path}
+old=git('show',prior+':'+path).decode();new=git('show',source+':'+path).decode()
+old1="  const forbidden = () => { throw new Error('projection attempted an operation'); };"
+new1="  let operations = 0;\n  const forbidden = () => { operations++; throw new Error('projection attempted an operation'); };"
+old2="  assert.deepEqual({ rpc: env.cluster.calls.length, wallet: env.walletFake.calls,\n    writes: env.journalFake.writes, records: env.journalFake.records(env.binding) }, before);"
+new2="  assert.equal(operations, 0);\n"+old2
+assert old.count(old1)==1 and old.count(old2)==1
+assert old.replace(old1,new1).replace(old2,new2)==new
+subprocess.run(['git','diff','--check','8e836baa877b676a863c877003e277b638fc5061..'+source],cwd=repo,check=True)
+print(json.dumps({'source':source,'tree':git('rev-parse','HEAD^{tree}').decode().strip(),'priorSource':prior,
+ 'change':'Exactly an operation counter, increment and zero assertion in the existing purity case.',
+ 'allOtherEntriesExact':len(b)-1,'productionIdentical':True,'fullMainWhitespace':'passed','clean':True},indent=2))

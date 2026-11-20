@@ -1,3 +1,79 @@
+# Current feature coverage — generations 33–34 (2026-11-20 UTC)
+
+Frozen combined source `0b7832d1c5b348a0755d59152442d0318d4a620c`, tree
+`78de2de3db335147d8261ad5ab9b116976faf986`, passed **2,735/2,735 tests**
+with zero other outcomes and all six additional qualification commands. Source,
+evidence and composition reviews found no blocking issue within their scopes.
+G33's separate combined source passed 2,702/2,702 before the 33 guard cases.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| Native prepared funding and driver | G32 retains immutable review, exact durable intent, private one-use confirmation, physical wallet ownership and configured SOL/SPL prepare-and-confirm admissions. | Actual current-source/current-target hosted native execution remains required; local driver compilation and controlled helper probes do not establish finality. |
+| Native funding display | G33's internal helper returns frozen complete terms, principal, message and supplied metadata using maintained exact-message verification. No facade or application consumer is added. | Display grants no confirmation authority. Supplied pins/height do not prove original or live provenance, freshness, acceptance or funded outcome; fees/rent remain unknown. |
+| Core capability policy | G34 requires the hash of maintained encodeCapabilities([]) at shared planFund for direct funding, preparation and confirmation replans. Other commitments refuse before preparation, blockhash, signing or send. | Funding eligibility still requires the existing ownership, state, time and trust checks. No additional asset, network, margin, program or browser permission is introduced. |
+| Historical recovery and exits | Binding, unsigned codecs, message verification, journal decoding, recovery and funded release/refund/payout preserve historical commitments. Foreign-profile uncertainty and no-auto-resend rules remain intact. | A decoded historical record or copied display never becomes a private prepared capability. Existing browser recovery imports remain funded-only. |
+| Consolidated source and evidence | Nine changed source paths against PR239 yield 1,033 exact reviewed entries. Original PR240 ancestry, seven source mappings and retained failure history are verified; G34 composition checks 176 earlier artifacts. | Publish one G32+G33+G34 candidate above frozen PR239 from actual PR240 ancestry. PR240 remains draft/held/unmerged; no standalone G33 PR. Apply actual Tier C hosted gates and matching recorded owner authorization. |
+| Ordinary artifacts and release | G34 default/demo assets and graphs exactly match retained G32/G33: 12 entries / 817,257 bytes and 13 / 829,355 bytes; graphs 102/30/4 and 104/30/4. Updater preparation strictly compiles 37 modules, build only. | Native/browser acceptance cannot be inferred from unchanged artifacts. ReleaseEnabled remains 0, connect origins stay empty and no deployment or release follows. |
+| Seller-direct browser proposal | G35 has a frozen design and active fresh implementation owner for a 4 KiB public parser and 8 KiB private record codec, with derived binding and immutable original provenance. | No G35 completion is claimed. Explicit import, shared quota/escrow-collision handling, original handle/session ownership, funding confirmation and finalized-only recovery promotion remain unimplemented in this checkpoint. |
+
+Keep PR236 frozen as the main-target aggregate for PR233–235 and preserve the
+original branches. The coordinator's 2026-11-20 20:06 UTC observation recorded
+14/15 checks successful and the Solana program check running; it does not record
+completion. PR237, PR238 and PR239 retain standalone Tier B **CodeRabbit or Qodo
+pass with findings answered** gates. After each parent merge, reconcile or
+retarget actual main and refresh source/target acceptance. Funding consolidation
+does not waive a parent gate. Optional PR224–232 and audits184–186 keep their
+existing owners.
+
+Read the [G33–G34 continuation](CONTINUATION_GENERATIONS33_34_20261120.md),
+[G33 qualification](qualification-generation33.json),
+[G34 qualification](qualification-generation34.json) and
+[G34 composition review](INDEPENDENT_SOLANA_CORE_CAPABILITY_COMPOSITION_REVIEW_GENERATION34_20261120.md).
+G33's 107/107 review on the format-corrected source and separate final 1/1,
+G34's author 448/448 and review 100/100, and both full suites are overlapping,
+source-attributed executions. Original failures are retained. Earlier narrative
+bytes below remain exact historical suffixes, including superseded publication
+and ownership status labels; their hashes are recorded in the new continuation.
+
+---
+
+# Current feature coverage — generation 32 (2026-11-20 UTC)
+
+Frozen combined source `5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031`, tree
+`d3b738a378218927d86241a1db987a57af87eec8`, passed **2,654/2,654 tests**
+with zero other outcomes plus all six additional qualification commands.
+Independent client, driver and combined-provenance reviews accepted the exact
+source without actionable findings. G32 is a separate unpublished child above
+published PR239 head `708a3a2bc167cbbc15eaa3d3c168e058499c7f8e` at this
+checkpoint; PR236 remains the frozen main-target aggregate for PR233–235.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| Native funding review | Dedicated `prepareFunding()` creates immutable seller/absent-escrow review data and a durable exact unsigned intent using existing SOL/original-SPL planning. Options are captured before queueing. | Actual execution of the new review path on the final hosted source remains required. Preparation does not prove account execution or add asset/trust permissions. |
+| Confirmation and recovery ownership | Existing private capability, one-shot consumption, physical wallet lease, exact-byte rechecks, current profile/session checks and durable send marker are retained. Copies and foreign views gain no authority; uncertain results never automatically resend. | Controlled RPC/wallet/vault fixtures do not establish native browser, validator or physical-device acceptance. Existing exit-only preparation and browser recovery admission remain unchanged. |
+| Native acceptance companion | Existing SOL/SPL driver admissions now prepare and explicitly confirm. Checks bind review, original blockhash, journal identity and one physical sign/send; the entire remaining driver is preserved. | The 42-module driver compilation never evaluated the output. Two independent helper probes use actual sent records through a substituted reconciliation boundary. Hosted execution must establish actual finality and program behavior. |
+| Combined source and evidence | Four source paths yield 1,030 exact reviewed non-documentation entries, preserving 1,026 parent entries. Seven qualification commands and three independent review scopes are retained with original failures and exact hashes. | Publish G32 with source/evidence mapping and actual proposed-merge readback; apply D8 Tier C current-source/current-target hosted gates and recorded owner approval before merge. |
+| Artifact and release boundary | Default/demo assets and graphs exactly match G31: 12 files / 817,257 bytes and 13 files / 829,355 bytes; graphs 102/30/4 and 104/30/4. Native updater preparation compiles 37 modules with nativeExecuted=false. | Artifact identity and configured-profile compilation do not transfer native acceptance. ReleaseEnabled remains 0, connection origins remain empty, and no deployment or trusted activation follows. |
+| Browser funding prerequisite | Separate G33 author/reviewer work is developing an inactive pure display projection from prepared funding data. | No G33 completion is claimed. Unfunded browser admission needs an explicit provenance/restore contract; funded recovery imports and candidate Solana peer acceptance stay unchanged. |
+
+Preserve PR236's aggregate plan and original PR233–235 heads/branches. Its
+qualified guarded merge and main/tree/ordered-parent/ancestry readback precede
+reconciliation of contained PRs. PR237 retention, PR238 sharing and PR239 startup
+remain separate published follow-ups. Their standalone Tier B **CodeRabbit or Qodo pass with findings answered** requirements remain in force. Retarget or
+reconcile each child after parent merges and refresh actual-target gates.
+Optional PR224–232 and audits184–186 retain independent owners.
+
+Read the [G32 continuation](CONTINUATION_GENERATION32_20261120.md),
+[qualification](qualification-generation32.json) and
+[independent composition report](INDEPENDENT_SOLANA_PREPARED_FUNDING_COMPOSITION_REVIEW_GENERATION32_20261120.md).
+The handoff distinguishes author 367/367, independent client 98/98, separate
+driver 2/2 and full-suite coverage without adding overlaps. Original baseline,
+line-boundary, optional-tooling and packaging failures remain attributed and
+retained. Historical suffix hashes are recorded there; every earlier byte below
+remains unchanged, including older publication-pending status labels.
+
+---
+
 # Current feature coverage — generation 31 (2026-11-20 UTC)
 
 Frozen combined source `8d566f0e46ee76ee35a957cab0a4358a3da4aeb3`, tree

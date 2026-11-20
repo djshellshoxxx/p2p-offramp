@@ -1,0 +1,56 @@
+{
+  "label": "07-final-projection-boundaries",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "packages/chain-solana/test/funding-review.test.mjs",
+    "packages/chain-solana/test/boundary.test.mjs"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-g33",
+  "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+  "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+  "statusBefore": "",
+  "sourceFiles": {
+    "packages/chain-solana/src/funding-review.ts": {
+      "bytes": 6791,
+      "sha256": "c45531865f4ac3c2e5a0efdcffb148922bea77aa7a0e807867c82996c61dc500"
+    },
+    "packages/chain-solana/test/funding-review.test.mjs": {
+      "bytes": 15971,
+      "sha256": "21441f4e800767198927e6896626b7c065c444b186326a9c868c5e3b925afd8f"
+    },
+    "packages/chain-solana/test/boundary.test.mjs": {
+      "bytes": 5896,
+      "sha256": "b7eeeeb4189e1c8049a3ae1edb49fddb326ffab5ac5efd66ebaf0fe05d68042d"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 19421,
+      "sha256": "b312a2425db489387f7b32f9638b0ebc670008fc96dacac5a325b63022711a6f"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g33-funding-review-author/07-final-projection-boundaries.patch",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "startedAt": "2026-11-20T19:45:08.769423+00:00",
+  "completedAt": "2026-11-20T19:45:10.156033+00:00",
+  "exitCode": 0,
+  "counts": {
+    "tests": 53,
+    "pass": 53,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g33-funding-review-author/07-final-projection-boundaries.log",
+    "bytes": 4100,
+    "sha256": "c211e3af15a446dfdf0e2dadce938148199c038f1b65e77076c99280eb4fa0ab"
+  },
+  "statusAfter": ""
+}

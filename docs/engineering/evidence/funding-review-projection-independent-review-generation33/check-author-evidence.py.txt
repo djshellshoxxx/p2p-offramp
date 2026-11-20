@@ -1,0 +1,123 @@
+import gzip, hashlib, json, os, re, subprocess, sys, tempfile
+from pathlib import Path
+repo=Path('/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33')
+evidence=Path('/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33')
+author=sys.argv[1]
+source='448cdcc2a9d13109421f21eaa1107936da0ac5c8'
+prefix='docs/execution/solana-funding-review-generation33-20261120/'
+def git(*args,env=None,input=None):
+ return subprocess.check_output(['git',*args],cwd=repo,env=env,input=input)
+def blob(path): return git('show',author+':'+path)
+def digest(data): return hashlib.sha256(data).hexdigest()
+def entries(ref):
+ out={}
+ for row in git('ls-tree','-r','-z',ref).split(b'\0'):
+  if row:
+   meta,path=row.split(b'\t',1);out[path.decode()]=meta.decode()
+ return out
+assert git('show','-s','--format=%P',author).decode().split()==[source]
+s,a=entries(source),entries(author)
+changed=[p for p in s.keys()|a.keys() if s.get(p)!=a.get(p)]
+assert changed and all(p.startswith('docs/') for p in changed)
+assert {p:e for p,e in s.items() if not p.startswith('docs/')}=={
+ p:e for p,e in a.items() if not p.startswith('docs/')}
+receipt=json.loads(blob(prefix+'receipt.json'))
+assert receipt['source']==source and receipt['sourceTree']==git('rev-parse',source+'^{tree}').decode().strip()
+assert receipt['base']=='5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031'
+for item in receipt['sourceFiles']:
+ data=git('show',source+':'+item['path'])
+ assert len(data)==item['bytes'] and digest(data)==item['sha256'],item['path']
+ assert s[item['path']]==item['gitEntry'],item['path']
+for item in receipt['artifacts']:
+ data=blob(item['path']);assert len(data)==item['bytes'] and digest(data)==item['sha256'],item['path']
+ if item['path'].endswith('.gz'):
+  assert int.from_bytes(data[4:8],'little')==item['gzipMtime']==0
+  raw=gzip.decompress(data)
+ else:
+  assert item['gzipMtime'] is None
+  raw=data
+ assert len(raw)==item['rawBytes'] and digest(raw)==item['rawSha256'],item['path']
+execution=[]
+for row in receipt['commands']:
+ label=row['label'];command=json.loads(blob(prefix+label+'.json'))
+ for key in ['label','command','source','tree','startedAt','completedAt','exitCode','counts']:
+  assert command[key]==row[key],(label,key)
+ assert command['tree']==git('rev-parse',command['source']+'^{tree}').decode().strip()
+ raw=gzip.decompress(blob(prefix+label+'.log.gz'))
+ patch=gzip.decompress(blob(prefix+label+'.patch.gz'))
+ assert len(raw)==command['log']['bytes'] and digest(raw)==command['log']['sha256']
+ assert len(patch)==command['patch']['bytes'] and digest(patch)==command['patch']['sha256']
+ text=raw.decode();counts={}
+ for line in text.splitlines():
+  match=re.match(r'^[#ℹ]\s+(tests|pass|fail|cancelled|skipped|todo)\s+(\d+)',line)
+  if match: counts[match[1]]=int(match[2])
+ assert counts==command['counts'],(label,counts,command['counts'])
+ with tempfile.TemporaryDirectory(prefix='g33-author-index-',dir=evidence) as temporary:
+  env=dict(os.environ,GIT_INDEX_FILE=str(Path(temporary)/'index'))
+  git('read-tree',command['source'],env=env)
+  if patch: git('apply','--cached','--binary','-',env=env,input=patch)
+  tree=git('write-tree',env=env).decode().strip()
+  for path, recorded in command['sourceFiles'].items():
+   data=git('show',tree+':'+path)
+   assert len(data)==recorded['bytes'] and digest(data)==recorded['sha256'],(label,path)
+  if label=='01-baseline':
+   assert 'packages/chain-solana/src/funding-review.ts' not in entries(tree)
+   assert counts=={'tests':48,'pass':1,'fail':47,'cancelled':0,'skipped':0,'todo':0}
+   assert 'native funding review projection exists' in text
+   assert 'ERR_MODULE_NOT_FOUND' not in text and 'SyntaxError' not in text
+  elif label=='02-projection-and-boundaries':
+   initial=receipt['initialSource']
+   executionEntries,initialEntries=entries(tree),entries(initial)
+   expectedChanges={'packages/chain-solana/README.md','packages/chain-solana/src/funding-review.ts',
+    'packages/chain-solana/test/funding-review.test.mjs'}
+   assert {p for p in executionEntries.keys()|initialEntries.keys()
+    if executionEntries.get(p)!=initialEntries.get(p)}==expectedChanges
+   changes={
+    'packages/chain-solana/README.md':[
+     ('both deadlines, deployment pins, seller funding source, exact message, original supplied blockhash and height.',
+      'both deadlines, deployment pins, seller funding source, exact message, exact supplied blockhash and height.')],
+    'packages/chain-solana/src/funding-review.ts':[
+     ('    readonly feePayer: string; readonly message: string; readonly blockhash: string; readonly lastValidBlockHeight: string;',
+      '    readonly feePayer: string; readonly message: string; readonly blockhash: string;\n    readonly lastValidBlockHeight: string;')],
+    'packages/chain-solana/test/funding-review.test.mjs':[
+     ("test('a cancelled review can remain display data without claiming live authority or current chain state', async () => {",
+      "test('a cancelled review remains display data without claiming live authority or current chain state',\n  async () => {")],
+   }
+   for path,replacements in changes.items():
+    before=git('show',tree+':'+path).decode()
+    for first,second in replacements:
+     assert before.count(first)==1
+     before=before.replace(first,second)
+    assert before==git('show',initial+':'+path).decode()
+   assert counts=={'tests':53,'pass':52,'fail':1,'cancelled':0,'skipped':0,'todo':0}
+   assert 'package-lines-at-most-120' in text and 'funding-review.ts:34' in text
+  else:
+   assert tree==command['tree'] and not patch
+  execution.append({'label':label,'source':command['source'],'executionTree':tree,'exitCode':command['exitCode'],'counts':counts})
+white=json.loads(blob(prefix+'08-source-and-evidence-whitespace.json'))
+assert white['source']==source and white['tree']==receipt['sourceTree'] and white['exitCode']==0
+assert white['command']==['git','diff','--check','8e836baa877b676a863c877003e277b638fc5061']
+record=white['log'];data=blob(record['path']);raw=gzip.decompress(data)
+assert len(data)==record['bytes'] and digest(data)==record['sha256']
+assert len(raw)==record['rawBytes']==0 and digest(raw)==record['rawSha256']
+assert int.from_bytes(data[4:8],'little')==record['gzipMtime']==0
+with tempfile.TemporaryDirectory(prefix='g33-whitespace-index-',dir=evidence) as temporary:
+ env=dict(os.environ,GIT_INDEX_FILE=str(Path(temporary)/'index'))
+ git('read-tree',source,env=env)
+ for path in white['stagedDocumentationPaths']:
+  assert path.startswith('docs/')
+  mode,kind,sha=a[path].split();assert kind=='blob'
+  git('update-index','--add','--cacheinfo',mode+','+sha+','+path,env=env)
+ tree=git('write-tree',env=env).decode().strip()
+ assert tree==white['stagedEvidenceTreeBeforeReceiptRegistration']
+ staged=entries(tree)
+ assert {p for p in staged.keys()|a.keys() if staged.get(p)!=a.get(p)}=={
+  prefix+'08-source-and-evidence-whitespace.json',record['path']}
+subprocess.run(['git','diff','--check','8e836baa877b676a863c877003e277b638fc5061..'+author],cwd=repo,check=True)
+result={'authorEvidence':author,'authorTree':git('rev-parse',author+'^{tree}').decode().strip(),
+ 'source':source,'sourceTree':receipt['sourceTree'],'documentationPaths':len(changed),
+ 'verifiedArtifacts':len(receipt['artifacts']),'sourceFiles':len(receipt['sourceFiles']),
+ 'nonDocumentationEntriesExact':len([p for p in s if not p.startswith('docs/')]),
+ 'executionSnapshots':execution,'separateEvidenceWhitespaceVerified':True,'completeWhitespace':'passed'}
+(evidence/'author-evidence-verification.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result,indent=2))

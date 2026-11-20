@@ -8,12 +8,13 @@
  * reader snapshot that shows `Released`/`Refunded` and an unpaid principal. There is no API that takes an
  * instruction list, and `verifyPlanMessage` rebuilds the expected bytes and refuses anything else.
  */
-import { createCoreError, createOperationId } from '../../domain/index.ts';
+import { sha256 } from '@noble/hashes/sha2.js';
+import { createCoreError, createOperationId, encodeCapabilities } from '../../domain/index.ts';
 import type { CoreErrorCode, CoreResult } from '../../schemas/index.ts';
 import { associatedTokenAddress, ATA_PROGRAM_ID, SYSTEM_PROGRAM_ID } from './address.ts';
 import { buildCreateAtaIdempotent, buildSystemTransfer } from './auxiliary.ts';
 import { isBoundSolanaTrade, type BoundSolanaTrade } from './bind.ts';
-import { decimalU64, equalBytes, fail, failureCode, readU64 } from './codec.ts';
+import { decimalU64, equalBytes, fail, failureCode, hex, readU64 } from './codec.ts';
 import {
   buildFundNative, buildFundSpl, buildPayout, buildRefund, buildRelease, type SolanaInstruction,
 } from './instructions.ts';
@@ -49,6 +50,7 @@ export interface SolanaMessagePlan {
 
 const PLANS = new WeakSet<object>();
 const TRUSTED = new WeakSet<object>();
+const CORE_CAPABILITIES_HASH = hex(sha256(encodeCapabilities([])));
 export const isSolanaMessagePlan = (value: unknown): value is SolanaMessagePlan =>
   typeof value === 'object' && value !== null && PLANS.has(value);
 export const isTrustedSnapshot = (value: unknown): value is SolanaEscrowSnapshot =>
@@ -160,6 +162,8 @@ export function planFund(
     const feePayer = payer(trade, role, ['seller']);
     if (read.escrow !== null || read.occupant === 'escrow') return fail('CONFLICT');
     const terms = trade.terms;
+    // Accepted D4: new funding is core-only; historical decoding and all exit plans remain policy-neutral.
+    if (terms.capabilitiesHash !== CORE_CAPABILITIES_HASH) return fail('UNSUPPORTED_PROVIDER');
     const window = value(fundingWindow(terms.acceptBeforeSeconds, terms.escrowExpirySeconds,
       read.live.timestampSeconds, limits.submitMarginSeconds));
     if (window !== 'open') return fail('EXPIRED');

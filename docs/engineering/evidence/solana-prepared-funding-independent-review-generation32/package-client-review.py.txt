@@ -1,0 +1,160 @@
+import datetime
+import gzip
+import hashlib
+import json
+import re
+import subprocess
+from pathlib import Path
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8')
+REPO = ROOT / 'p2p-solana-prepared-funding-review-g32'
+RAW = Path(__file__).resolve().parent
+BASE = '8d566f0e46ee76ee35a957cab0a4358a3da4aeb3'
+FIRST = '800e633dc47c3bd24065093b50bdc78fa709d3ab'
+SOURCE = '252dd1603f12eab69313ef25b538be1b040bc508'
+AUTHOR = '2a5fb33568d5433749ffa2fd78786060b8d4ab07'
+MAIN = '8e836baa877b676a863c877003e277b638fc5061'
+PREFIX = Path('docs/engineering/evidence/solana-prepared-funding-independent-review-generation32')
+REPORT = Path('docs/engineering/INDEPENDENT_SOLANA_PREPARED_FUNDING_REVIEW_GENERATION32_20261120.md')
+RECEIPT = Path('docs/engineering/solana-prepared-funding-independent-review-generation32.json')
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+def digest(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def entries(ref):
+    return {row.split(b'\t', 1)[1].decode(): row.split(b'\t', 1)[0].decode()
+            for row in git('ls-tree', '-r', '-z', ref).split(b'\0') if row}
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert not git('status', '--porcelain').strip()
+assert not (REPO / PREFIX).exists() and not (REPO / REPORT).exists() and not (REPO / RECEIPT).exists()
+(REPO / PREFIX).mkdir(parents=True)
+artifacts = []
+
+
+def retain(name, raw, origin, kind, compressed=False):
+    path = PREFIX / (name + ('.gz' if compressed else ''))
+    target = REPO / path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    assert not target.exists()
+    value = gzip.compress(raw, mtime=0) if compressed else raw
+    target.write_bytes(value)
+    item = {'path': str(path), 'kind': kind, 'origin': origin}
+    if compressed:
+        assert int.from_bytes(value[4:8], 'little') == 0 and gzip.decompress(value) == raw
+        item.update(rawBytes=len(raw), rawSha256=digest(raw), gzipBytes=len(value),
+                    gzipSha256=digest(value), gzipMtime=0)
+    else:
+        item.update(bytes=len(value), sha256=digest(value))
+    artifacts.append(item)
+    return str(path)
+
+
+commands = []
+labels = ['focused-independent', 'source-identity', 'typecheck', 'focused-independent-final',
+          'source-identity-final', 'typecheck-final', 'source-whitespace-final',
+          'dependency-provenance', 'author-package-readback']
+for label in labels:
+    receipt_path, log_path = RAW / (label + '.json'), RAW / (label + '.log')
+    raw_receipt, raw_log = receipt_path.read_bytes(), log_path.read_bytes()
+    receipt = json.loads(raw_receipt)
+    assert receipt['bytes'] == len(raw_log) and receipt['sha256'] == digest(raw_log)
+    assert receipt['source'] == receipt['finalSource'] and receipt['cleanTrackedWorktree']
+    assert receipt['source'] == (FIRST if label in labels[:3] else SOURCE)
+    assert receipt['tree'] == git('rev-parse', receipt['source'] + '^{tree}').decode().strip()
+    assert receipt['startedAt'] < receipt['completedAt'] and receipt['exitCode'] == 0
+    summary = [line for line in raw_log.decode().splitlines()
+               if re.match(r'^[#ℹ]\s+(?:tests|suites|pass|fail|cancelled|skipped|todo|duration_ms)\s', line)]
+    assert summary == receipt['summary']
+    commands.append({**receipt,
+        'receipt': retain(label + '.json', raw_receipt, str(receipt_path), 'original command receipt'),
+        'output': retain(label + '.log', raw_log, str(log_path), 'complete original command output', True)})
+
+for name in ['capture-check.py', 'check-author-package.py', 'check-corrected-source.py',
+             'check-dependencies.py', 'check-source.py', 'independent-funding-probes.mjs',
+             'package-client-review.py']:
+    retain(name + '.txt', (RAW / name).read_bytes(), str(RAW / name), 'original independent reviewer source')
+retain('dependency-path-diagnostic.log', (RAW / 'dependency-path-diagnostic.log').read_bytes(),
+       str(RAW / 'dependency-path-diagnostic.log'), 'recovered non-test diagnostic', True)
+
+source_entries = entries(SOURCE)
+retain('source/base-to-source.patch', git('diff', '--binary', '--no-ext-diff', BASE, SOURCE),
+       f'git diff --binary --no-ext-diff {BASE} {SOURCE}', 'complete reviewed source delta', True)
+retain('source/non-docs-tree.json', (json.dumps({p: v for p, v in source_entries.items()
+       if not p.startswith('docs/')}, indent=2) + '\n').encode(),
+       f'git ls-tree -r -z {SOURCE}', 'all source entries outside docs/')
+
+author = json.loads((RAW / 'author-package-readback.log').read_text())
+assert author['authorEvidenceCommit'] == AUTHOR and author['verifiedManifestArtifacts'] == 38
+assert author['documentationPaths'] == 42 and author['nonDocumentationEntriesPreserved'] == 1030
+identity = json.loads((RAW / 'source-identity-final.log').read_text())
+assert identity['source'] == SOURCE and identity['exactFiveLineWrapReplacementsVerified']
+report = (RAW / 'source-review-report.md').read_text()
+report = report.replace('AUTHOR_EVIDENCE_PLACEHOLDER',
+    '38 indexed artifacts, all nine execution snapshots, all source hashes, 1,030 unchanged non-documentation '
+    'entries and the separate evidence-whitespace receipt verified across the 42-document author commit')
+report = report.replace('AUTHOR_HISTORY_PLACEHOLDER',
+    'The author evidence commit is `2a5fb33568d5433749ffa2fd78786060b8d4ab07`, tree '
+    '`b40e4c52dad2717facce64654d8686b12ed16a34`, directly above the corrected source. The independent '
+    'artifact checker verifies all 38 indexed files against their complete original bytes, both hashes of '
+    'each deterministic gzip, every source-file hash and the complete source patch. It reconstructs all '
+    'nine recorded execution trees in private temporary Git indexes from the original per-command patches. '
+    'The baseline reports 50 cases: one existing exit-only control passes, 46 assertions fail because the '
+    'dedicated method is absent, and three parent subtests also report aggregate failure. This is not 49 '
+    'distinct missing-method behaviors. The first implementation passes its 50 focused cases; the wider '
+    '367-case package command reports 366 passes and the existing 120-column boundary failure. The five '
+    'line wraps resolve that check without changing assertions or production. The corrected boundary '
+    'selection passes 55/55 and the final package selection passes 367/367. Two failed optional formatting '
+    'diagnostics are retained by the author as explicitly labeled recovered error transcripts, not '
+    'original command captures. No baseline failure, package failure or preliminary diagnostic was removed.')
+assert 'PLACEHOLDER' not in report
+(REPO / REPORT).write_text(report)
+receipt = {
+    'schema': 'p2p-offramp-independent-review/v1',
+    'generation': 32,
+    'reviewKind': 'native Solana prepared funding source and controlled lifecycle review',
+    'reviewedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'base': BASE, 'initialSource': FIRST,
+    'initialSourceTree': git('rev-parse', FIRST + '^{tree}').decode().strip(),
+    'source': SOURCE, 'sourceTree': git('rev-parse', SOURCE + '^{tree}').decode().strip(),
+    'sourceParent': FIRST, 'authorEvidenceCommit': AUTHOR,
+    'authorEvidenceTree': git('rev-parse', AUTHOR + '^{tree}').decode().strip(),
+    'report': str(REPORT), 'findings': [],
+    'finalFocused': {'tests': 98, 'pass': 98, 'fail': 0, 'cancelled': 0, 'skipped': 0, 'todo': 0,
+        'includes': {'existingPreparedExits': 39, 'fundingReportedCases': 50, 'packageBoundaries': 5,
+                     'independentProbes': 4}},
+    'initialFocused': {'tests': 93, 'pass': 93, 'fail': 0, 'cancelled': 0, 'skipped': 0, 'todo': 0},
+    'overlappingSelectionsMustNotBeSummed': True,
+    'typeScriptProjects': 4,
+    'sourceIdentity': identity,
+    'authorEvidenceVerification': {k: v for k, v in author.items() if k != 'artifacts'},
+    'commands': commands,
+    'artifacts': artifacts,
+    'limits': ['No full repository suite or build was executed by this reviewer.',
+        'No native validator, browser, physical wallet or financial flow was executed.',
+        'Controlled fixtures do not establish native prepared-funding acceptance.',
+        'The separately scoped e214f70 native driver is not covered by this source review.',
+        'Combined-source provenance and hosted acceptance remain separate.',
+        'Tier C merge authorization and checks must be recorded against actual source and target.'],
+}
+(REPO / RECEIPT).write_text(json.dumps(receipt, indent=2) + '\n')
+for link in re.findall(r'\]\(([^)]+)\)', report):
+    assert not link.startswith('http') and (REPO / REPORT.parent / link).exists(), link
+for item in artifacts:
+    stored = (REPO / item['path']).read_bytes()
+    if item['path'].endswith('.gz'):
+        assert len(stored) == item['gzipBytes'] and digest(stored) == item['gzipSha256']
+        raw = gzip.decompress(stored)
+        assert len(raw) == item['rawBytes'] and digest(raw) == item['rawSha256']
+    else:
+        assert len(stored) == item['bytes'] and digest(stored) == item['sha256']
+print(json.dumps({'source': SOURCE, 'report': str(REPORT), 'receipt': str(RECEIPT),
+                  'artifacts': len(artifacts), 'documents': len(artifacts) + 2,
+                  'commands': len(commands), 'reportLinksVerified': True}))

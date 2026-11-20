@@ -1,0 +1,56 @@
+{
+  "label": "02-projection-and-boundaries",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "packages/chain-solana/test/funding-review.test.mjs",
+    "packages/chain-solana/test/boundary.test.mjs"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-g33",
+  "source": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+  "tree": "d3b738a378218927d86241a1db987a57af87eec8",
+  "statusBefore": " M packages/chain-solana/README.md\n M packages/chain-solana/test/boundary.test.mjs\n?? packages/chain-solana/src/funding-review.ts\n?? packages/chain-solana/test/funding-review.test.mjs\n",
+  "sourceFiles": {
+    "packages/chain-solana/src/funding-review.ts": {
+      "bytes": 6787,
+      "sha256": "a4b8f82092fd832f16f26050fcece90fddf83e25863e40c37d77a1356b4b8939"
+    },
+    "packages/chain-solana/test/funding-review.test.mjs": {
+      "bytes": 15903,
+      "sha256": "8980f4a782e6d07637922e270e222008221d6ecf3f528cc50c113ce5051adc76"
+    },
+    "packages/chain-solana/test/boundary.test.mjs": {
+      "bytes": 5896,
+      "sha256": "b7eeeeb4189e1c8049a3ae1edb49fddb326ffab5ac5efd66ebaf0fe05d68042d"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 19424,
+      "sha256": "23cac696561594780f708e1e73a332e89989d6973f222c7450aa429df7dfe844"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g33-funding-review-author/02-projection-and-boundaries.patch",
+    "bytes": 26326,
+    "sha256": "ded06e5973c72f359ad9dc365b344319bbfd543f12560b2d67963ef5b8ef1c1f"
+  },
+  "startedAt": "2026-11-20T19:40:08.876855+00:00",
+  "completedAt": "2026-11-20T19:40:10.807197+00:00",
+  "exitCode": 1,
+  "counts": {
+    "tests": 53,
+    "pass": 52,
+    "fail": 1,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g33-funding-review-author/02-projection-and-boundaries.log",
+    "bytes": 5151,
+    "sha256": "1394408cc11ee77653a5f1503394ad9ed55665c35e76a7a3d0cfcdbca1db4bf2"
+  },
+  "statusAfter": " M packages/chain-solana/README.md\n M packages/chain-solana/test/boundary.test.mjs\n?? packages/chain-solana/src/funding-review.ts\n?? packages/chain-solana/test/funding-review.test.mjs\n"
+}

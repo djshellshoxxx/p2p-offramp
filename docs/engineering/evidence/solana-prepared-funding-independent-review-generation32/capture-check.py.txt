@@ -1,0 +1,54 @@
+import datetime
+import hashlib
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8')
+REPO = ROOT / 'p2p-solana-prepared-funding-review-g32'
+OUT = Path(__file__).resolve().parent
+expected, name, *command = sys.argv[1:]
+assert re.fullmatch(r'[a-f0-9]{40}', expected)
+assert re.fullmatch(r'[a-z0-9-]+', name) and command
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+def digest(value):
+    return hashlib.sha256(value).hexdigest()
+
+
+source = git('rev-parse', 'HEAD').decode().strip()
+assert source == expected
+assert not git('status', '--porcelain').strip()
+tree = git('rev-parse', 'HEAD^{tree}').decode().strip()
+log = OUT / (name + '.log')
+receipt = OUT / (name + '.json')
+assert not log.exists() and not receipt.exists()
+started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+with log.open('xb') as stream:
+    result = subprocess.run(command, cwd=REPO, stdout=stream, stderr=subprocess.STDOUT)
+raw = log.read_bytes()
+record = {
+    'source': source,
+    'tree': tree,
+    'command': command,
+    'startedAt': started,
+    'completedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'exitCode': result.returncode,
+    'log': str(log),
+    'bytes': len(raw),
+    'sha256': digest(raw),
+    'finalSource': git('rev-parse', 'HEAD').decode().strip(),
+    'cleanTrackedWorktree': not git('status', '--porcelain').strip(),
+}
+record['summary'] = [line for line in raw.decode('utf-8', errors='replace').splitlines()
+                     if re.match(r'^[#ℹ]\s+(?:tests|suites|pass|fail|cancelled|skipped|todo|duration_ms)\s', line)]
+receipt.write_text(json.dumps(record, indent=2) + '\n')
+assert record['finalSource'] == source and record['cleanTrackedWorktree']
+print(json.dumps(record))
+raise SystemExit(result.returncode)

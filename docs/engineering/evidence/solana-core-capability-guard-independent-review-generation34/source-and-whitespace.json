@@ -1,0 +1,18 @@
+{
+  "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+  "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/check-source.py",
+    "2c21958684e8943a3058b0195fd310bfeba68866"
+  ],
+  "startedAt": "2026-11-20T19:56:07.660416+00:00",
+  "completedAt": "2026-11-20T19:56:07.813693+00:00",
+  "exitCode": 0,
+  "log": "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/source-and-whitespace.log",
+  "bytes": 1547,
+  "sha256": "d57cbfd4a091f4dcb6f80809816ae28260efbe92f4f91d332d33217538ada631",
+  "finalSource": "2c21958684e8943a3058b0195fd310bfeba68866",
+  "cleanTrackedWorktree": true,
+  "summary": []
+}

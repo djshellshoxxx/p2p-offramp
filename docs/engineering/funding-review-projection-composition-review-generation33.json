@@ -1,0 +1,621 @@
+{
+  "schema": "p2p-offramp.funding-review-projection-composition-review.generation33.v1",
+  "recordedAt": "2026-11-20T19:55:12.680365+00:00",
+  "reviewerEvidenceParent": "6d3dc0437d525c6068bc7b67669cbc2e2fa7821d",
+  "source": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+  "tree": "ac680be624aae21eac610f51157da49f1b3238cb",
+  "publishedParent": "7bd5cf595bddadaa204e51e418d0060a1d43a1bc",
+  "authorSource": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+  "qualificationStartedAt": "2026-11-20T19:50:36.647345+00:00",
+  "qualificationCompletedAt": "2026-11-20T19:52:30.133476+00:00",
+  "findings": [],
+  "verification": {
+    "source": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+    "tree": "ac680be624aae21eac610f51157da49f1b3238cb",
+    "publishedParent": "7bd5cf595bddadaa204e51e418d0060a1d43a1bc",
+    "authorSource": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+    "nonDocumentationEntries": 1032,
+    "allAuthorNonDocumentationEntriesExact": true,
+    "allParentEntriesOutsideFourPathDeltaExact": true,
+    "mappedSourceCommits": [
+      {
+        "original": "b8792ac4088f75603be8e0b40ba1506f2fb137f2",
+        "combined": "b995de61ca585ec37bd11201fc6c944aed9f5d7c",
+        "exactPatch": true
+      },
+      {
+        "original": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+        "combined": "8e9ec0325570c2496e304400c3c8674c08708254",
+        "exactPatch": true
+      },
+      {
+        "original": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+        "combined": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+        "exactPatch": true
+      }
+    ],
+    "ordinaryArtifactsExactGeneration32": true,
+    "nativeProfileBuildCoveredByMaintainedNodeCase": true,
+    "receipt_source_path": "/workspace/scratch/dcf03ef9bee8/p2p-g33-qualification/qualification.json",
+    "receipt": {
+      "log": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-qualification.json.gz",
+      "raw_bytes": 67842,
+      "raw_sha256": "fd3245244528f016905a0b0c7e44cdc55b5f75fa48f67302818f8e014a0f86de",
+      "gzip_bytes": 9793,
+      "gzip_sha256": "2dbe504ddcf087596f459c1d7dd9897de9782ae221dad8260040b8f2d297e46e",
+      "mtime": 0
+    },
+    "commands": [
+      {
+        "name": "full-node",
+        "command": [
+          "npm",
+          "test"
+        ],
+        "source": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+        "tree": "ac680be624aae21eac610f51157da49f1b3238cb",
+        "exit_code": 0,
+        "counts_from_raw_log": {
+          "tests": 2702,
+          "pass": 2702,
+          "fail": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0
+        },
+        "log": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-full-node.log.gz",
+        "raw_bytes": 271351,
+        "raw_sha256": "faa48d7c0fd6c1f83a28504ca8df02b225d3db3aa4ef3c12078112b32236efce",
+        "gzip_bytes": 89784,
+        "gzip_sha256": "dd7a2ceb722046a1829186aa41645a32bebb0013a253375ade3bd8431493d305",
+        "mtime": 0
+      },
+      {
+        "name": "typecheck",
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "source": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+        "tree": "ac680be624aae21eac610f51157da49f1b3238cb",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-typecheck.log.gz",
+        "raw_bytes": 341,
+        "raw_sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+        "gzip_bytes": 211,
+        "gzip_sha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+        "mtime": 0
+      },
+      {
+        "name": "build-policy",
+        "command": [
+          "npm",
+          "run",
+          "test:build-policy"
+        ],
+        "source": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+        "tree": "ac680be624aae21eac610f51157da49f1b3238cb",
+        "exit_code": 0,
+        "counts_from_raw_log": {
+          "tests": 58,
+          "pass": 58,
+          "fail": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0
+        },
+        "log": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-build-policy.log.gz",
+        "raw_bytes": 7610,
+        "raw_sha256": "fc3aeddaf1345ae4e3ccf6388ec0f01192c993610c4e0d53bcc5d54346a0b998",
+        "gzip_bytes": 3123,
+        "gzip_sha256": "6a4e7a0ef718328b3555e6931f8563deb5fe84bd860eab54ac972b19e011f465",
+        "mtime": 0
+      },
+      {
+        "name": "boundaries",
+        "command": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "source": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+        "tree": "ac680be624aae21eac610f51157da49f1b3238cb",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-boundaries.log.gz",
+        "raw_bytes": 392,
+        "raw_sha256": "b460f1c640842daae2ad9cc06e4760d7947d23a24226953417652dd33b5032b8",
+        "gzip_bytes": 288,
+        "gzip_sha256": "98f5e0eb711f2510a3764442d254b68d1d8531c6dd4e7acf3a919fdcbab49cb1",
+        "mtime": 0
+      },
+      {
+        "name": "default-build",
+        "command": [
+          "node",
+          "apps/web/scripts/build.mjs"
+        ],
+        "source": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+        "tree": "ac680be624aae21eac610f51157da49f1b3238cb",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-default-build.log.gz",
+        "raw_bytes": 1027,
+        "raw_sha256": "ada86b0800314ecfa367456174ba71c916da30d5d4f2b5bac1b2f6831618bed8",
+        "gzip_bytes": 498,
+        "gzip_sha256": "be8654a6ba08181be525b66081473ba5da8b3c20f23899d587c366e67a33ccca",
+        "mtime": 0
+      },
+      {
+        "name": "demo-build",
+        "command": [
+          "node",
+          "apps/web/scripts/build.mjs",
+          "demo"
+        ],
+        "source": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+        "tree": "ac680be624aae21eac610f51157da49f1b3238cb",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-demo-build.log.gz",
+        "raw_bytes": 1175,
+        "raw_sha256": "b594691d96a15e3acf848469d7c0ed2e2d88ac58c9d30db59c352efa314ac5ea",
+        "gzip_bytes": 521,
+        "gzip_sha256": "ce6a909a6dc49c340c7ddd3aba28db72e59d05d81256356c6fda70cd72742e12",
+        "mtime": 0
+      },
+      {
+        "name": "native-fixture-preparation",
+        "command": [
+          "node",
+          "scripts/test-update-runtime-browser.mjs",
+          "--build-only"
+        ],
+        "source": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+        "tree": "ac680be624aae21eac610f51157da49f1b3238cb",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-native-fixture-preparation.log.gz",
+        "raw_bytes": 2196,
+        "raw_sha256": "bc36e8d63b6953fd5f946f9a33b3349bf23035cf066866d2b05efca6ad0e1711",
+        "gzip_bytes": 862,
+        "gzip_sha256": "06fabe484eab5318be3f5eaada255bbaa3df4e2cde0f8276b598070c1aaaf53f",
+        "mtime": 0
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "default",
+        "directory": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g33/apps/web/dist",
+        "assets": [
+          {
+            "path": "_headers",
+            "bytes": 342,
+            "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+          },
+          {
+            "path": "assets/OfflineRoot-KpNTfNjc.js",
+            "bytes": 312712,
+            "sha256": "4788669b1638bc7a7b8a93303999250708eb4a817f5cb943b10e922efc5d8f69"
+          },
+          {
+            "path": "assets/decode.worker-DGcSBxfL.js",
+            "bytes": 133927,
+            "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+          },
+          {
+            "path": "assets/index-6AlRBUfF.js",
+            "bytes": 220890,
+            "sha256": "bea32e4a4ac7775b0e13e840e4b7e84fb394bb915f40ce1253f8d77ee0a23dc1"
+          },
+          {
+            "path": "assets/index-rPDFZ4F5.css",
+            "bytes": 8414,
+            "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+          },
+          {
+            "path": "assets/vault.worker-yOnLqpF_.js",
+            "bytes": 102355,
+            "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+          },
+          {
+            "path": "content-policy.json",
+            "bytes": 1009,
+            "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+          },
+          {
+            "path": "core-graph-document.json",
+            "bytes": 15333,
+            "sha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367"
+          },
+          {
+            "path": "core-graph-worker.json",
+            "bytes": 4758,
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb"
+          },
+          {
+            "path": "index.html",
+            "bytes": 1283,
+            "sha256": "847a35d4bfbe9ca5794e65092e337cbdb561e7459a8d8a68aeba33fdd79f7736"
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "bytes": 905,
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          },
+          {
+            "path": "third-party-licenses.json",
+            "bytes": 15329,
+            "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+          }
+        ],
+        "all_actual_files_accounted_for": true,
+        "evidence_sha256": "318f9da44946d460600452df796056dbdffd1a19525f881600676dbdc16fbe8c",
+        "asset_count": 12,
+        "asset_bytes": 817257,
+        "graphs": [
+          {
+            "path": "core-graph-document.json",
+            "sha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367",
+            "modules": 102,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "core-graph-worker.json",
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+            "modules": 30,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+            "modules": 4,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          }
+        ],
+        "ReleaseEnabled": 0,
+        "connectOrigins": [],
+        "signedRelease": false,
+        "releaseAcceptance": false
+      },
+      {
+        "name": "demo",
+        "directory": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g33/apps/web/dist-demo",
+        "assets": [
+          {
+            "path": "_headers",
+            "bytes": 342,
+            "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+          },
+          {
+            "path": "assets/OfflineRoot-DZJg4sm1.js",
+            "bytes": 318756,
+            "sha256": "25d623ebc801b8b58f11c7902e811681ccbcf447b17b34fb9d8f479ad515ca23"
+          },
+          {
+            "path": "assets/decode.worker-DGcSBxfL.js",
+            "bytes": 133927,
+            "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+          },
+          {
+            "path": "assets/index-B4Z_yDNv.js",
+            "bytes": 220902,
+            "sha256": "72f94c14153646bcc7adb0f4ab4c0d45998b1e502c39d3be8fd99a4e91636e9f"
+          },
+          {
+            "path": "assets/index-rPDFZ4F5.css",
+            "bytes": 8414,
+            "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+          },
+          {
+            "path": "assets/synthetic-local-Crz7gj8D.js",
+            "bytes": 5743,
+            "sha256": "c28426d06b4b26a1715cef85c2ce35ff14cd63227db66cee60a69c69ab354d91"
+          },
+          {
+            "path": "assets/vault.worker-yOnLqpF_.js",
+            "bytes": 102355,
+            "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+          },
+          {
+            "path": "content-policy.json",
+            "bytes": 1009,
+            "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+          },
+          {
+            "path": "core-graph-document.json",
+            "bytes": 15632,
+            "sha256": "a888d9df61a623b3fb99f4f79cc3bd536c84b9b467f4583f0b331a950b31245a"
+          },
+          {
+            "path": "core-graph-worker.json",
+            "bytes": 4758,
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb"
+          },
+          {
+            "path": "index.html",
+            "bytes": 1283,
+            "sha256": "2459880fac514978acee76e97d749107670912b68ae95f670fa95f3e548314be"
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "bytes": 905,
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          },
+          {
+            "path": "third-party-licenses.json",
+            "bytes": 15329,
+            "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+          }
+        ],
+        "all_actual_files_accounted_for": true,
+        "evidence_sha256": "f7f748135b7f6fe44b6a3bcb40ba9ad6e88c2d709906c5113db1c946628b4124",
+        "asset_count": 13,
+        "asset_bytes": 829355,
+        "graphs": [
+          {
+            "path": "core-graph-document.json",
+            "sha256": "a888d9df61a623b3fb99f4f79cc3bd536c84b9b467f4583f0b331a950b31245a",
+            "modules": 104,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "core-graph-worker.json",
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+            "modules": 30,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+            "modules": 4,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          }
+        ],
+        "ReleaseEnabled": 0,
+        "connectOrigins": [],
+        "signedRelease": false,
+        "releaseAcceptance": false
+      }
+    ],
+    "preparation": {
+      "fixture": "native-update-runtime-controlled-composition",
+      "nativeExecuted": false,
+      "strictFixtureCompilation": true,
+      "fixtureModules": 37,
+      "fixtureModuleSha256": "304fc08883179c4019bf7e0aab21fb3c4711345ce9e2dbcad75f3f0e615c0bad",
+      "emittedWorker": {
+        "path": "assets/vault.worker-yOnLqpF_.js",
+        "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+      },
+      "defaultGraphs": [
+        {
+          "path": "core-graph-document.json",
+          "sha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367",
+          "modules": 102
+        },
+        {
+          "path": "core-graph-worker.json",
+          "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+          "modules": 30
+        },
+        {
+          "path": "qr-graph-worker.json",
+          "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+          "modules": 4
+        }
+      ],
+      "publicCorpusSha256": "9bf4a2313b42d0737dc80786ddf2584977e8f5116e1c00c350a6f1d21d3ab4df",
+      "defaultUpdaterIncluded": false,
+      "ReleaseEnabled": 0
+    },
+    "limits": {
+      "reviewer_reran_complete_suite_or_builds": false,
+      "native_execution_qualified": false,
+      "temporary_fixture_modules_retained": false,
+      "fixture_preparation_log_and_current_default_worker_graphs_directly_verified": true
+    },
+    "prior_independent_attribution": {
+      "source31ae662": "107/107 and package TypeScript",
+      "final448cdcc": "1/1 tightened purity case; prior selections overlap"
+    },
+    "g34_policy_guard_completion_claimed": false,
+    "total_retained_assets_verified": 25,
+    "total_graphs_verified": 6,
+    "total_graph_module_references_verified": 274
+  },
+  "reviewCommands": [
+    {
+      "name": "09-root-qualification",
+      "source": "6d3dc0437d525c6068bc7b67669cbc2e2fa7821d",
+      "tree": "478c7e386dc62cc6d58b281264d2945230c5eef0",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-root-qualification.py",
+        "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+        "ac680be624aae21eac610f51157da49f1b3238cb",
+        "7bd5cf595bddadaa204e51e418d0060a1d43a1bc"
+      ],
+      "startedAt": "2026-11-20T19:53:04.194563+00:00",
+      "completedAt": "2026-11-20T19:53:05.153227+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-root-qualification.py",
+          "bytes": 13445,
+          "sha256": "903470fab05b7dbf4e57fed20ad5adbdc4a32e84b8609bba5259a1cb8f84903b"
+        }
+      ],
+      "rawBytes": 15491,
+      "rawSha256": "e94bbd4ac435e7836252ba333e7ae67763bd790d359d98a680e9813c2e1729ed",
+      "gzipBytes": 3720,
+      "gzipSha256": "dc0b7f924f5e3b53d2d6cd31a6024668c9e3a2c72686cd0e3683a7c87421cf0b",
+      "gzipMtime": 0,
+      "summary": []
+    },
+    {
+      "name": "10-composition-evidence-whitespace",
+      "source": "6d3dc0437d525c6068bc7b67669cbc2e2fa7821d",
+      "tree": "478c7e386dc62cc6d58b281264d2945230c5eef0",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "startedAt": "2026-11-20T19:55:15.656130+00:00",
+      "completedAt": "2026-11-20T19:55:15.759592+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "A  docs/engineering/INDEPENDENT_FUNDING_REVIEW_PROJECTION_COMPOSITION_REVIEW_GENERATION33_20261120.md\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/09-root-qualification.json\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/09-root-qualification.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/check-root-qualification.py.txt\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-boundaries.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-build-policy.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-default-build.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-demo-build.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-full-node.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-native-fixture-preparation.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-qualification-verification.json\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-qualification.json.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-typecheck.log.gz\nA  docs/engineering/funding-review-projection-composition-review-generation33.json",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "A  docs/engineering/INDEPENDENT_FUNDING_REVIEW_PROJECTION_COMPOSITION_REVIEW_GENERATION33_20261120.md\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/09-root-qualification.json\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/09-root-qualification.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/check-root-qualification.py.txt\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-boundaries.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-build-policy.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-default-build.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-demo-build.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-full-node.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-native-fixture-preparation.log.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-qualification-verification.json\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-qualification.json.gz\nA  docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-typecheck.log.gz\nA  docs/engineering/funding-review-projection-composition-review-generation33.json",
+      "scriptInputs": [],
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0,
+      "summary": []
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-full-node.log.gz",
+      "bytes": 89784,
+      "sha256": "dd7a2ceb722046a1829186aa41645a32bebb0013a253375ade3bd8431493d305",
+      "rawBytes": 271351,
+      "rawSha256": "faa48d7c0fd6c1f83a28504ca8df02b225d3db3aa4ef3c12078112b32236efce",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-typecheck.log.gz",
+      "bytes": 211,
+      "sha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "rawBytes": 341,
+      "rawSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-build-policy.log.gz",
+      "bytes": 3123,
+      "sha256": "6a4e7a0ef718328b3555e6931f8563deb5fe84bd860eab54ac972b19e011f465",
+      "rawBytes": 7610,
+      "rawSha256": "fc3aeddaf1345ae4e3ccf6388ec0f01192c993610c4e0d53bcc5d54346a0b998",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-boundaries.log.gz",
+      "bytes": 288,
+      "sha256": "98f5e0eb711f2510a3764442d254b68d1d8531c6dd4e7acf3a919fdcbab49cb1",
+      "rawBytes": 392,
+      "rawSha256": "b460f1c640842daae2ad9cc06e4760d7947d23a24226953417652dd33b5032b8",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-default-build.log.gz",
+      "bytes": 498,
+      "sha256": "be8654a6ba08181be525b66081473ba5da8b3c20f23899d587c366e67a33ccca",
+      "rawBytes": 1027,
+      "rawSha256": "ada86b0800314ecfa367456174ba71c916da30d5d4f2b5bac1b2f6831618bed8",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-demo-build.log.gz",
+      "bytes": 521,
+      "sha256": "ce6a909a6dc49c340c7ddd3aba28db72e59d05d81256356c6fda70cd72742e12",
+      "rawBytes": 1175,
+      "rawSha256": "b594691d96a15e3acf848469d7c0ed2e2d88ac58c9d30db59c352efa314ac5ea",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-native-fixture-preparation.log.gz",
+      "bytes": 862,
+      "sha256": "06fabe484eab5318be3f5eaada255bbaa3df4e2cde0f8276b598070c1aaaf53f",
+      "rawBytes": 2196,
+      "rawSha256": "bc36e8d63b6953fd5f946f9a33b3349bf23035cf066866d2b05efca6ad0e1711",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-qualification.json.gz",
+      "bytes": 9793,
+      "sha256": "2dbe504ddcf087596f459c1d7dd9897de9782ae221dad8260040b8f2d297e46e",
+      "rawBytes": 67842,
+      "rawSha256": "fd3245244528f016905a0b0c7e44cdc55b5f75fa48f67302818f8e014a0f86de",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/root-qualification-verification.json",
+      "bytes": 15491,
+      "sha256": "e94bbd4ac435e7836252ba333e7ae67763bd790d359d98a680e9813c2e1729ed",
+      "rawBytes": 15491,
+      "rawSha256": "e94bbd4ac435e7836252ba333e7ae67763bd790d359d98a680e9813c2e1729ed",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/check-root-qualification.py.txt",
+      "bytes": 13445,
+      "sha256": "903470fab05b7dbf4e57fed20ad5adbdc4a32e84b8609bba5259a1cb8f84903b",
+      "rawBytes": 13445,
+      "rawSha256": "903470fab05b7dbf4e57fed20ad5adbdc4a32e84b8609bba5259a1cb8f84903b",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/09-root-qualification.json",
+      "bytes": 1244,
+      "sha256": "c56fda9c5685e574ab7b7076573b3a0981a980be5d8c383dc13f56af610a6baa",
+      "rawBytes": 1244,
+      "rawSha256": "c56fda9c5685e574ab7b7076573b3a0981a980be5d8c383dc13f56af610a6baa",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/09-root-qualification.log.gz",
+      "bytes": 3720,
+      "sha256": "dc0b7f924f5e3b53d2d6cd31a6024668c9e3a2c72686cd0e3683a7c87421cf0b",
+      "rawBytes": 15491,
+      "rawSha256": "e94bbd4ac435e7836252ba333e7ae67763bd790d359d98a680e9813c2e1729ed",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/10-composition-evidence-whitespace.json",
+      "bytes": 4249,
+      "sha256": "0d8a19ad78b948ad936801938a0d87edadc1ca772c5f7e912ee06058e4c3a0a5",
+      "rawBytes": 4249,
+      "rawSha256": "0d8a19ad78b948ad936801938a0d87edadc1ca772c5f7e912ee06058e4c3a0a5",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33/10-composition-evidence-whitespace.log.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0
+    }
+  ],
+  "integrationPlan": {
+    "g33Publication": "Retain locally qualified G33 without a separate PR at this checkpoint.",
+    "laterCandidate": "Coordinator intends to consolidate G32, G33 and the separately owned accepted-D4 guard above frozen PR239, preserving actual published PR240 head ancestry.",
+    "g34CompletionClaimed": false,
+    "earlierParentGatesTransferred": false
+  },
+  "limits": [
+    "No reviewer suite/build rerun, browser, validator, native financial execution, deployment or remote mutation.",
+    "Native fixture metadata and current Worker/graphs were verified; removed temporary fixture modules were not independently rehashed.",
+    "Earlier107/107 belongs to31ae662 and targeted1/1 to448cdcc; combined2702/2702 belongs to a7d2a669.",
+    "Projection remains data-consistency-only; no capability, peer acceptance, original/live-pin, height-origin, freshness or funding-outcome proof.",
+    "Later consolidated candidate needs its own source/target qualification, applicable hosted checks and Tier C owner-authorization record."
+  ]
+}

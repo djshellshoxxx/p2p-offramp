@@ -1,0 +1,59 @@
+[
+  {
+    "name": "00-original-driver.mjs",
+    "file": "00-original-driver.mjs.gz",
+    "rawBytes": 29331,
+    "rawSha256": "125ea6aee62e024ce8555691d970c9d1c7b06f98210116477a01673a04ca5ff2",
+    "gzipBytes": 9164,
+    "gzipSha256": "3abd606dafbfbe7b301396ea0f50e897ab520e3653c0efdc07d8545c30dccd52",
+    "gzipMtime": 0,
+    "purpose": "Exact base source before modification"
+  },
+  {
+    "name": "01-source.patch",
+    "file": "01-source.patch.gz",
+    "rawBytes": 6864,
+    "rawSha256": "33f8dc873aa39bbe2445feb4a620e1e972bba3b48d2d140b50d693a6d977e5b1",
+    "gzipBytes": 2367,
+    "gzipSha256": "5c3cb964be47bbb53ce3ddc3a5a75541a37d975481b277d99feba80f531b913d",
+    "gzipMtime": 0,
+    "purpose": "Exact candidate patch, no validator executed"
+  },
+  {
+    "name": "02-node-syntax.log",
+    "file": "02-node-syntax.log.gz",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzipBytes": 20,
+    "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "gzipMtime": 0,
+    "argv": [
+      "node",
+      "--check",
+      "contracts/solana/localnet/client-run.mjs"
+    ],
+    "exitCode": 0,
+    "startedAt": "2026-11-20T19:24:41.900837+00:00",
+    "completedAt": "2026-11-20T19:24:41.968594+00:00",
+    "sourceFileSha256": "11242e040bed614cdfcc054fbd3ca002fc653be6b888b5087c87af708a75ed83"
+  },
+  {
+    "name": "03-full-whitespace.log",
+    "file": "03-full-whitespace.log.gz",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzipBytes": 20,
+    "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "gzipMtime": 0,
+    "argv": [
+      "git",
+      "diff",
+      "--check",
+      "8e836baa877b676a863c877003e277b638fc5061"
+    ],
+    "exitCode": 0,
+    "startedAt": "2026-11-20T19:24:41.969167+00:00",
+    "completedAt": "2026-11-20T19:24:41.997695+00:00",
+    "sourceFileSha256": "11242e040bed614cdfcc054fbd3ca002fc653be6b888b5087c87af708a75ed83"
+  }
+]

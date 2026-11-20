@@ -1,0 +1,211 @@
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import re
+import subprocess
+import sys
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8/p2p-continuation-g33')
+REVIEW = Path('/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33')
+OUT = Path('/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33')
+INPUT = Path('/workspace/scratch/dcf03ef9bee8/p2p-g33-qualification/qualification.json')
+EVIDENCE = 'docs/engineering/evidence/funding-review-projection-composition-independent-review-generation33'
+SOURCE, TREE, PUBLISHED_PARENT = sys.argv[1:4]
+AUTHOR_SOURCE = '448cdcc2a9d13109421f21eaa1107936da0ac5c8'
+AUTHOR_BASE = '5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031'
+
+def sha(value):
+    return hashlib.sha256(value).hexdigest()
+
+def preserve(name, raw):
+    compressed = gzip.compress(raw, mtime=0)
+    target = OUT / name
+    if target.exists():
+        assert target.read_bytes() == compressed, 'Never overwrite differing retained evidence'
+    else:
+        target.write_bytes(compressed)
+    assert gzip.decompress(compressed) == raw and int.from_bytes(compressed[4:8], 'little') == 0
+    return {'log': EVIDENCE + '/' + name, 'raw_bytes': len(raw), 'raw_sha256': sha(raw),
+        'gzip_bytes': len(compressed), 'gzip_sha256': sha(compressed), 'mtime': 0}
+
+def entries(ref):
+    result = {}
+    for row in subprocess.check_output(['git', 'ls-tree', '-r', '-z', ref], cwd=REVIEW).split(b'\0'):
+        if row:
+            meta, path = row.split(b'\t', 1)
+            result[path.decode()] = meta.decode()
+    return result
+
+def nondoc(value):
+    return {path: meta for path, meta in value.items() if not path.startswith('docs/')}
+
+# Root cherry-picks the exact three frozen G33 source commits onto published G32.
+original_chain = ['b8792ac4088f75603be8e0b40ba1506f2fb137f2',
+                  '31ae6627a6b14a4ef40f7d81c98b04470a30aa1a', AUTHOR_SOURCE]
+local_chain = subprocess.check_output(['git', 'rev-list', '--reverse', PUBLISHED_PARENT + '..' + SOURCE],
+                                      cwd=REVIEW, text=True).splitlines()
+assert len(local_chain) == 3
+mapped_source_commits = []
+previous_local = PUBLISHED_PARENT
+for original, local in zip(original_chain, local_chain):
+    parents = subprocess.check_output(['git', 'show', '-s', '--format=%P', local], cwd=REVIEW, text=True).strip()
+    assert parents == previous_local
+    original_patch = subprocess.check_output(['git', 'diff', '--binary', original + '^', original], cwd=REVIEW)
+    local_patch = subprocess.check_output(['git', 'diff', '--binary', local + '^', local], cwd=REVIEW)
+    assert local_patch == original_patch
+    mapped_source_commits.append({'original': original, 'combined': local, 'exactPatch': True})
+    previous_local = local
+assert previous_local == SOURCE
+parent, combined, author_source, author_base = map(entries, [PUBLISHED_PARENT, SOURCE, AUTHOR_SOURCE, AUTHOR_BASE])
+assert nondoc(parent) == nondoc(author_base) and len(nondoc(parent)) == 1030
+assert nondoc(combined) == nondoc(author_source) and len(nondoc(combined)) == 1032
+expected = {'packages/chain-solana/src/funding-review.ts', 'packages/chain-solana/README.md', 'packages/chain-solana/test/funding-review.test.mjs', 'packages/chain-solana/test/boundary.test.mjs'}
+changed = {path for path in parent.keys() | combined.keys() if parent.get(path) != combined.get(path)}
+assert changed == expected
+assert all(combined[path] == author_source[path] for path in changed)
+assert all(combined[path] == value for path, value in parent.items() if path not in changed)
+assert subprocess.check_output(['git', 'diff', '--check',
+    '8e836baa877b676a863c877003e277b638fc5061..' + SOURCE], cwd=REVIEW) == b''
+
+receipt_bytes = INPUT.read_bytes()
+receipt = json.loads(receipt_bytes)
+assert receipt.get('completedAt'), 'An incomplete root receipt is not qualification evidence'
+assert receipt['source'] == receipt['finalSource'] == SOURCE and receipt['tree'] == TREE
+assert receipt['cleanTrackedWorktree'] is True and receipt['nativeExecuted'] is False
+assert subprocess.check_output(['git', 'rev-parse', SOURCE + '^{tree}'], cwd=REVIEW, text=True).strip() == TREE
+names = ['full-node', 'typecheck', 'build-policy', 'boundaries', 'default-build', 'demo-build', 'native-fixture-preparation']
+assert [row['name'] for row in receipt['commands']] == names
+commands = []
+for row in receipt['commands']:
+    assert row['source'] == SOURCE and row['tree'] == TREE and row['exitCode'] == 0
+    raw = Path(row['log']).read_bytes()
+    assert len(raw) == row['bytes'] and sha(raw) == row['sha256']
+    decoded = raw.decode()
+    counts = {}
+    for label in ['tests', 'pass', 'fail', 'skipped', 'cancelled', 'todo']:
+        matches = re.findall(r'(?m)^(?:#|\u2139)\s+' + label + r'\s+(\d+)\s*$', decoded)
+        if matches:
+            assert len(matches) == 1
+            counts[label] = int(matches[0])
+    assert counts == row['counts']
+    if counts:
+        assert counts['tests'] == counts['pass']
+        assert all(counts[label] == 0 for label in ['fail', 'skipped', 'cancelled', 'todo'])
+    commands.append({'name': row['name'], 'command': row['command'], 'source': SOURCE, 'tree': TREE,
+        'exit_code': row['exitCode'], 'counts_from_raw_log': counts,
+        **preserve('root-' + row['name'] + '.log.gz', raw)})
+previous = json.loads((INPUT.parent.parent / 'p2p-g32-qualification/qualification.json').read_bytes())
+assert previous['source'] == AUTHOR_BASE and previous.get('completedAt')
+assert commands[0]['counts_from_raw_log']['tests'] == previous['commands'][0]['counts']['tests'] + 48
+assert commands[0]['counts_from_raw_log']['tests'] == 2702
+assert commands[2]['counts_from_raw_log']['tests'] == 58
+
+artifacts = []
+for name, recorded in receipt['artifacts'].items():
+    directory = ROOT / 'apps/web' / ('dist' if name == 'default' else 'dist-demo')
+    evidence_path = directory / 'local-build-evidence.json'
+    evidence_bytes = evidence_path.read_bytes()
+    evidence = json.loads(evidence_bytes)
+    assert evidence == recorded['evidence']
+    assert evidence['ReleaseEnabled'] == 0
+    assert all(evidence[key] is False for key in ['signedRelease', 'releaseAcceptance', 'testnet', 'framingAttestation'])
+    assert 'testnetTrust' not in evidence
+    listed = set()
+    assets = []
+    for asset in evidence['assets']:
+        relative = Path(asset['path'])
+        assert not relative.is_absolute() and '..' not in relative.parts and asset['path'] not in listed
+        listed.add(asset['path'])
+        raw = (directory / relative).read_bytes()
+        assert len(raw) == asset['bytes'] and sha(raw) == asset['sha256']
+        assets.append(asset)
+    actual = {str(p.relative_to(directory)) for p in directory.rglob('*') if p.is_file()}
+    assert actual == listed | {'local-build-evidence.json'}
+    assert len(assets) == evidence['inspection']['files']
+    assert sum(row['bytes'] for row in assets) == evidence['inspection']['bytes']
+    policy = json.loads((directory / 'content-policy.json').read_bytes())
+    assert policy['ReleaseEnabled'] == 0 and policy['releaseAcceptance'] is False
+    assert policy['manifest']['connectOrigins'] == [] and "connect-src 'none'" in policy['csp']
+    graphs = []
+    for path, recorded_graph in recorded['graphs'].items():
+        raw = (directory / path).read_bytes()
+        graph = json.loads(raw)
+        assert sha(raw) == recorded_graph['sha256'] and graph == recorded_graph['graph']
+        modules = graph['modules']
+        assert len(modules) == len({row['path'] for row in modules})
+        for module in modules:
+            relative = Path(module['path'])
+            assert not relative.is_absolute() and '..' not in relative.parts
+            actual_module = (ROOT / relative).read_bytes()
+            assert sha(actual_module) == module['sha256']
+            assert sha((REVIEW / relative).read_bytes()) == module['sha256']
+            if not module['path'].startswith('node_modules/'):
+                frozen = subprocess.check_output(['git', 'show', SOURCE + ':' + module['path']], cwd=REVIEW)
+                assert frozen == actual_module
+        paths = {row['path'] for row in modules}
+        assert not any(re.search(r'packages/security/src/release-update(?:-http|-store)?\.ts$', path) for path in paths)
+        if path == 'core-graph-document.json':
+            assert {'apps/web/src/compatibility/model.ts', 'apps/web/src/compatibility/probe.ts', 'apps/web/src/compatibility/startup.ts', 'apps/web/src/ui/StartupCompatibilityNotice.tsx'} <= paths
+            assert 'apps/web/src/ui/RetentionPreviewPanel.tsx' in paths
+            assert 'apps/web/src/ui/GenericAppShare.tsx' in paths
+            assert 'apps/web/src/sharing/generic-app-link.ts' in paths
+            assert 'packages/storage/src/retention-service.ts' not in paths
+        if path == 'core-graph-worker.json':
+            assert not {'apps/web/src/compatibility/model.ts', 'apps/web/src/compatibility/probe.ts', 'apps/web/src/compatibility/startup.ts', 'apps/web/src/ui/StartupCompatibilityNotice.tsx'} & paths
+            assert 'packages/storage/src/retention-service.ts' in paths
+            assert 'apps/web/src/ui/GenericAppShare.tsx' not in paths
+            assert 'apps/web/src/sharing/generic-app-link.ts' not in paths
+        graphs.append({'path': path, 'sha256': sha(raw), 'modules': len(modules),
+            'all_module_hashes_match_actual_and_frozen_source': True,
+            'executable_updater_absent': True})
+    artifacts.append({'name': name, 'directory': str(directory), 'assets': assets,
+        'all_actual_files_accounted_for': True, 'evidence_sha256': sha(evidence_bytes),
+        'asset_count': len(assets), 'asset_bytes': sum(row['bytes'] for row in assets), 'graphs': graphs,
+        'ReleaseEnabled': 0, 'connectOrigins': [], 'signedRelease': False, 'releaseAcceptance': False})
+
+# The inactive G33 projection remains absent from both ordinary artifact profiles.
+# Compare every emitted artifact and graph with G32's actual retained qualification.
+for mode in ['default', 'demo']:
+    assert receipt['artifacts'][mode] == previous['artifacts'][mode]
+    assert all(not module['path'].startswith('packages/chain-solana/')
+               for graph in receipt['artifacts'][mode]['graphs'].values()
+               for module in graph['graph']['modules'])
+entry = next(asset for asset in receipt['artifacts']['default']['evidence']['assets']
+             if re.fullmatch(r'assets/index-[A-Za-z0-9_-]+\.js', asset['path']))
+main = (ROOT / 'apps/web/dist' / entry['path']).read_text()
+captures = list(re.finditer(r'(?:,|var )([\w$]+)=import\.meta\.url,', main))
+assert len(captures) == 1
+assert '{entryModuleUrl:' + captures[0].group(1) + '}' in main
+assert 'import(`./OfflineRoot-' in main
+full_log = Path(receipt['commands'][0]['log']).read_text()
+assert re.search(r'(?m)^✔ emitted native Worker artifact requires its own library profile, exact CSP and unchanged release refusal \(', full_log)
+assert 'vite v8.3.5 building client environment for solana-localnet...' in full_log
+
+preparation_row = receipt['commands'][-1]
+log_preparations = [json.loads(line) for line in Path(preparation_row['log']).read_text().splitlines() if line.startswith('{"fixture":')]
+assert len(log_preparations) == 1 and log_preparations[0] == preparation_row['preparation']
+preparation = log_preparations[0]
+assert preparation['nativeExecuted'] is False and preparation['strictFixtureCompilation'] is True
+assert preparation['defaultUpdaterIncluded'] is False and preparation['ReleaseEnabled'] == 0
+assert preparation['fixtureModules'] == 37
+default = receipt['artifacts']['default']
+worker = next(row for row in default['evidence']['assets'] if row['path'] == preparation['emittedWorker']['path'])
+assert worker['sha256'] == preparation['emittedWorker']['sha256']
+for graph in preparation['defaultGraphs']:
+    actual = default['graphs'][graph['path']]
+    assert graph['sha256'] == actual['sha256'] and graph['modules'] == len(actual['graph']['modules'])
+
+report = {'source': SOURCE, 'tree': TREE, 'publishedParent': PUBLISHED_PARENT, 'authorSource': AUTHOR_SOURCE, 'nonDocumentationEntries': 1032, 'allAuthorNonDocumentationEntriesExact': True, 'allParentEntriesOutsideFourPathDeltaExact': True, 'mappedSourceCommits': mapped_source_commits, 'ordinaryArtifactsExactGeneration32': True, 'nativeProfileBuildCoveredByMaintainedNodeCase': True, 'receipt_source_path': str(INPUT),
+    'receipt': preserve('root-qualification.json.gz', receipt_bytes),
+    'commands': commands, 'artifacts': artifacts, 'preparation': preparation,
+    'limits': {'reviewer_reran_complete_suite_or_builds': False, 'native_execution_qualified': False,
+        'temporary_fixture_modules_retained': False,
+        'fixture_preparation_log_and_current_default_worker_graphs_directly_verified': True},
+    'prior_independent_attribution': {'source31ae662': '107/107 and package TypeScript', 'final448cdcc': '1/1 tightened purity case; prior selections overlap'},
+    'g34_policy_guard_completion_claimed': False,
+    'total_retained_assets_verified': sum(row['asset_count'] for row in artifacts),
+    'total_graphs_verified': sum(len(row['graphs']) for row in artifacts),
+    'total_graph_module_references_verified': sum(graph['modules'] for row in artifacts for graph in row['graphs'])}
+(OUT / 'root-qualification-verification.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(report, indent=2))

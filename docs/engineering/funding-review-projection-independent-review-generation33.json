@@ -1,0 +1,668 @@
+{
+  "schema": "p2p-offramp.funding-review-projection-independent-review.generation33.v1",
+  "recordedAt": "2026-11-20T19:49:54.503462+00:00",
+  "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+  "sourceTree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+  "priorReviewedSource": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+  "priorReviewedTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+  "baseline": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+  "initialFeature": "b8792ac4088f75603be8e0b40ba1506f2fb137f2",
+  "authorEvidence": "29939815306494ca13a09741eb97c004b0dab781",
+  "authorEvidenceTree": "d0e50bc890d84f49972ee006f97358362900426d",
+  "findings": [],
+  "sourceVerification": {
+    "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+    "tree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+    "base": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+    "feature": "b8792ac4088f75603be8e0b40ba1506f2fb137f2",
+    "changedPaths": [
+      "packages/chain-solana/README.md",
+      "packages/chain-solana/src/funding-review.ts",
+      "packages/chain-solana/test/boundary.test.mjs",
+      "packages/chain-solana/test/funding-review.test.mjs"
+    ],
+    "preservedBaselineEntries": 3097,
+    "addedPaths": [
+      "packages/chain-solana/src/funding-review.ts",
+      "packages/chain-solana/test/funding-review.test.mjs"
+    ],
+    "deletedPaths": [],
+    "nonDocumentationEntries": 1032,
+    "correction": "Exactly one test declaration line wrap; all other entries exact.",
+    "boundaryChange": "Exactly one new source filename; all existing guard assertions and exceptions unchanged.",
+    "fullMainWhitespace": "passed",
+    "clean": true
+  },
+  "finalSourceVerification": {
+    "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+    "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+    "priorSource": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+    "change": "Exactly an operation counter, increment and zero assertion in the existing purity case.",
+    "allOtherEntriesExact": 3100,
+    "productionIdentical": true,
+    "fullMainWhitespace": "passed",
+    "clean": true
+  },
+  "authorEvidenceVerification": {
+    "authorEvidence": "29939815306494ca13a09741eb97c004b0dab781",
+    "authorTree": "d0e50bc890d84f49972ee006f97358362900426d",
+    "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+    "sourceTree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+    "documentationPaths": 30,
+    "verifiedArtifacts": 26,
+    "sourceFiles": 4,
+    "nonDocumentationEntriesExact": 1032,
+    "executionSnapshots": [
+      {
+        "label": "01-baseline",
+        "source": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+        "executionTree": "15cc2d67e3d12e916fa2714f73c8bb8a3ff54399",
+        "exitCode": 1,
+        "counts": {
+          "tests": 48,
+          "pass": 1,
+          "fail": 47,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "label": "02-projection-and-boundaries",
+        "source": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+        "executionTree": "1d3d104f16ce51bf2caf57934afebbfebc7f3046",
+        "exitCode": 1,
+        "counts": {
+          "tests": 53,
+          "pass": 52,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "label": "03-frozen-focused-adjacent",
+        "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+        "executionTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+        "exitCode": 0,
+        "counts": {
+          "tests": 103,
+          "pass": 103,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "label": "04-frozen-package-types",
+        "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+        "executionTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+        "exitCode": 0,
+        "counts": {}
+      },
+      {
+        "label": "05-frozen-import-boundaries",
+        "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+        "executionTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+        "exitCode": 0,
+        "counts": {}
+      },
+      {
+        "label": "06-frozen-whitespace",
+        "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+        "executionTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+        "exitCode": 0,
+        "counts": {}
+      },
+      {
+        "label": "07-final-projection-boundaries",
+        "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+        "executionTree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+        "exitCode": 0,
+        "counts": {
+          "tests": 53,
+          "pass": 53,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      }
+    ],
+    "separateEvidenceWhitespaceVerified": true,
+    "completeWhitespace": "passed"
+  },
+  "commands": [
+    {
+      "name": "01-source-identity",
+      "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+      "tree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-source.py"
+      ],
+      "startedAt": "2026-11-20T19:44:19.404502+00:00",
+      "completedAt": "2026-11-20T19:44:19.550551+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-source.py",
+          "bytes": 2891,
+          "sha256": "09b7bd7c480058277b15f31ea933d6df64f68c88e69c6c786ac31eebd67102ad"
+        }
+      ],
+      "rawBytes": 919,
+      "rawSha256": "dd25d7450aa485ddc70874e4dd94a3d64f1ab7dce7f951049721134ba3c0a285",
+      "gzipBytes": 464,
+      "gzipSha256": "043d60e33c2110017e9198a271ecfcb3ac3768956161ae80dd5b749b64ae0ae2",
+      "gzipMtime": 0,
+      "summary": []
+    },
+    {
+      "name": "02-focused-independent",
+      "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+      "tree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=1",
+        "packages/chain-solana/test/funding-review.test.mjs",
+        "packages/chain-solana/test/prepared-funding.test.mjs",
+        "packages/chain-solana/test/boundary.test.mjs",
+        "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/independent-probes.mjs"
+      ],
+      "startedAt": "2026-11-20T19:44:19.408008+00:00",
+      "completedAt": "2026-11-20T19:44:23.156205+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/scripts/test-support/register-tsx.mjs",
+          "bytes": 86,
+          "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/packages/chain-solana/test/funding-review.test.mjs",
+          "bytes": 15904,
+          "sha256": "796bca4a5bd98997a2a770b39b7e32ac5e7a7615276886409184b01089e461e4"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/packages/chain-solana/test/prepared-funding.test.mjs",
+          "bytes": 21266,
+          "sha256": "fec56fa82e3e26f643ca01195b24db3ce136d6cc5534001beb488ccdfdd52608"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/packages/chain-solana/test/boundary.test.mjs",
+          "bytes": 5896,
+          "sha256": "b7eeeeb4189e1c8049a3ae1edb49fddb326ffab5ac5efd66ebaf0fe05d68042d"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/independent-probes.mjs",
+          "bytes": 4700,
+          "sha256": "2d91a50fa3425a47865e1a9d93e9137d24dcc55b584fb4b0064e1b3b217400df"
+        }
+      ],
+      "rawBytes": 7971,
+      "rawSha256": "3eb9536053ca121422918564febeea872c01e7c76268622aaf1c96bab779e254",
+      "gzipBytes": 2711,
+      "gzipSha256": "538bdda08432e3b279de64b67e2402863882e6dc90f10b75362473422efa5f9d",
+      "gzipMtime": 0,
+      "summary": [
+        "\u2139 tests 107",
+        "\u2139 suites 0",
+        "\u2139 pass 107",
+        "\u2139 fail 0",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 3631.387467"
+      ]
+    },
+    {
+      "name": "03-package-typecheck",
+      "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+      "tree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json"
+      ],
+      "startedAt": "2026-11-20T19:44:19.404487+00:00",
+      "completedAt": "2026-11-20T19:44:20.302335+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [],
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0,
+      "summary": []
+    },
+    {
+      "name": "04-final-source-identity",
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-final-source.py"
+      ],
+      "startedAt": "2026-11-20T19:45:49.719143+00:00",
+      "completedAt": "2026-11-20T19:45:49.826549+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-final-source.py",
+          "bytes": 1881,
+          "sha256": "f2cd21c44c8cc6c38f765bae2ea05922f6d441842ea1b8a829ecb6b6a66bfec7"
+        }
+      ],
+      "rawBytes": 391,
+      "rawSha256": "e6ae846083b997b48805df73c720adade6b8148df1d62d4e034a679c7dced546",
+      "gzipBytes": 282,
+      "gzipSha256": "232fd1342aa0114e19f6cfe3fc990b1cb52b1b5c0ab26258f7086cd000d70dab",
+      "gzipMtime": 0,
+      "summary": []
+    },
+    {
+      "name": "05-final-purity-case",
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-name-pattern=^projection and fixed refusals perform no additional port, clock, random or network operation$",
+        "packages/chain-solana/test/funding-review.test.mjs"
+      ],
+      "startedAt": "2026-11-20T19:45:49.705614+00:00",
+      "completedAt": "2026-11-20T19:45:50.440845+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/scripts/test-support/register-tsx.mjs",
+          "bytes": 86,
+          "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/packages/chain-solana/test/funding-review.test.mjs",
+          "bytes": 15971,
+          "sha256": "21441f4e800767198927e6896626b7c065c444b186326a9c868c5e3b925afd8f"
+        }
+      ],
+      "rawBytes": 226,
+      "rawSha256": "8e837732bce8e355287ee21ae6bd0938a4a083fb4266a2e41e5df67a5b5156d3",
+      "gzipBytes": 181,
+      "gzipSha256": "1bce79642dd75030114038c1417fdea413231ce0a1f251e2b0c132a4fe591751",
+      "gzipMtime": 0,
+      "summary": [
+        "\u2139 tests 1",
+        "\u2139 suites 0",
+        "\u2139 pass 1",
+        "\u2139 fail 0",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 624.553139"
+      ]
+    },
+    {
+      "name": "06-author-evidence",
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-author-evidence.py",
+        "29939815306494ca13a09741eb97c004b0dab781"
+      ],
+      "startedAt": "2026-11-20T19:47:07.819926+00:00",
+      "completedAt": "2026-11-20T19:47:08.107058+00:00",
+      "exitCode": 1,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-author-evidence.py",
+          "bytes": 4841,
+          "sha256": "fc1497f6de5658170ba78d7f47f62664477b994dd668679aa35f93f46f5bf12e"
+        }
+      ],
+      "rawBytes": 360,
+      "rawSha256": "25f8ab2284ed0cc84f798189752601c5471f7ef4833307a64fa2af990b2c64ce",
+      "gzipBytes": 244,
+      "gzipSha256": "4df0ed7afcd9e6364b2f8216a0b85e2410a073a5171849a930ceb790abcee0b9",
+      "gzipMtime": 0,
+      "summary": []
+    },
+    {
+      "name": "07-author-evidence-corrected",
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-author-evidence.py",
+        "29939815306494ca13a09741eb97c004b0dab781"
+      ],
+      "startedAt": "2026-11-20T19:48:16.026053+00:00",
+      "completedAt": "2026-11-20T19:48:16.630018+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-author-evidence.py",
+          "bytes": 7617,
+          "sha256": "31e71014aa9a0121749fa950344c69c026ad875be91b1a663838e2b7b15217cd"
+        }
+      ],
+      "rawBytes": 2552,
+      "rawSha256": "a65812aed832ca89a6011bb8fbac596e9960a949e10688855471e9df0c1f17ab",
+      "gzipBytes": 691,
+      "gzipSha256": "e8c9fe027e99f008a838c045ac514d41000225b66121338d91d24041cc7e3073",
+      "gzipMtime": 0,
+      "summary": []
+    },
+    {
+      "name": "08-evidence-whitespace",
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "startedAt": "2026-11-20T19:49:59.990673+00:00",
+      "completedAt": "2026-11-20T19:50:00.092093+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "A  docs/engineering/INDEPENDENT_FUNDING_REVIEW_PROJECTION_REVIEW_GENERATION33_20261120.md\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/00-dependency-setup-original.py.txt\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/00-dependency-setup-recovered.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/00-dependency-setup-recovered.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/01-source-identity.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/01-source-identity.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/02-focused-independent.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/02-focused-independent.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/03-package-typecheck.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/03-package-typecheck.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/04-final-source-identity.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/04-final-source-identity.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/05-final-purity-case.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/05-final-purity-case.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/06-author-evidence.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/06-author-evidence.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/07-author-evidence-corrected.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/07-author-evidence-corrected.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/author-evidence-verification.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/capture-check.py.txt\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-author-evidence-before-snapshot-correction.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-author-evidence-before-snapshot-correction.py.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-author-evidence.py.txt\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-final-source.py.txt\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-source.py.txt\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/dependency-directory-provenance.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/design-review-notes.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/independent-probes.mjs.txt\nA  docs/engineering/funding-review-projection-independent-review-generation33.json",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "A  docs/engineering/INDEPENDENT_FUNDING_REVIEW_PROJECTION_REVIEW_GENERATION33_20261120.md\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/00-dependency-setup-original.py.txt\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/00-dependency-setup-recovered.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/00-dependency-setup-recovered.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/01-source-identity.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/01-source-identity.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/02-focused-independent.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/02-focused-independent.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/03-package-typecheck.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/03-package-typecheck.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/04-final-source-identity.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/04-final-source-identity.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/05-final-purity-case.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/05-final-purity-case.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/06-author-evidence.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/06-author-evidence.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/07-author-evidence-corrected.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/07-author-evidence-corrected.log.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/author-evidence-verification.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/capture-check.py.txt\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-author-evidence-before-snapshot-correction.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-author-evidence-before-snapshot-correction.py.gz\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-author-evidence.py.txt\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-final-source.py.txt\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-source.py.txt\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/dependency-directory-provenance.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/design-review-notes.json\nA  docs/engineering/evidence/funding-review-projection-independent-review-generation33/independent-probes.mjs.txt\nA  docs/engineering/funding-review-projection-independent-review-generation33.json",
+      "scriptInputs": [],
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0,
+      "summary": []
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/00-dependency-setup-original.py.txt",
+      "bytes": 1712,
+      "sha256": "6606b0556760abbf7a7c9e462901c9894e30c18f5f4350c512ce75180f43df7c",
+      "rawBytes": 1712,
+      "rawSha256": "6606b0556760abbf7a7c9e462901c9894e30c18f5f4350c512ce75180f43df7c",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/00-dependency-setup-recovered.json",
+      "bytes": 594,
+      "sha256": "9f61fb8d2f47120c8b8bff41943a01ec3ef602bb749da9da4e4ee014008d2431",
+      "rawBytes": 594,
+      "rawSha256": "9f61fb8d2f47120c8b8bff41943a01ec3ef602bb749da9da4e4ee014008d2431",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/00-dependency-setup-recovered.log.gz",
+      "bytes": 218,
+      "sha256": "ddd42e1b50066009880d287dc6201be67de30075fdcc80dfcc896275db39a163",
+      "rawBytes": 259,
+      "rawSha256": "a7b4911d2fdd6aed00f83c4dc9aef5c5d407c35cf2fe1d7cc085b8ed08058fc5",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/01-source-identity.json",
+      "bytes": 1069,
+      "sha256": "26173d9dee5fc8763ca5af88332365539c372771aea5facaab40b74412eb0ed6",
+      "rawBytes": 1069,
+      "rawSha256": "26173d9dee5fc8763ca5af88332365539c372771aea5facaab40b74412eb0ed6",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/01-source-identity.log.gz",
+      "bytes": 464,
+      "sha256": "043d60e33c2110017e9198a271ecfcb3ac3768956161ae80dd5b749b64ae0ae2",
+      "rawBytes": 919,
+      "rawSha256": "dd25d7450aa485ddc70874e4dd94a3d64f1ab7dce7f951049721134ba3c0a285",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/02-focused-independent.json",
+      "bytes": 2579,
+      "sha256": "a0c1bcb3137af4909d2f0d217aae9a914985602c847e2d1888e02e6c158c9b4e",
+      "rawBytes": 2579,
+      "rawSha256": "a0c1bcb3137af4909d2f0d217aae9a914985602c847e2d1888e02e6c158c9b4e",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/02-focused-independent.log.gz",
+      "bytes": 2711,
+      "sha256": "538bdda08432e3b279de64b67e2402863882e6dc90f10b75362473422efa5f9d",
+      "rawBytes": 7971,
+      "rawSha256": "3eb9536053ca121422918564febeea872c01e7c76268622aaf1c96bab779e254",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/03-package-typecheck.json",
+      "bytes": 797,
+      "sha256": "cc70b7e76d42b4f3bfae4af781bcf060b359670bec20a6314edae24fe378140c",
+      "rawBytes": 797,
+      "rawSha256": "cc70b7e76d42b4f3bfae4af781bcf060b359670bec20a6314edae24fe378140c",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/03-package-typecheck.log.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/04-final-source-identity.json",
+      "bytes": 1087,
+      "sha256": "bd9b8a8802ef6f3d94a3200f2329570911a873616c05628333f7fdc2456faade",
+      "rawBytes": 1087,
+      "rawSha256": "bd9b8a8802ef6f3d94a3200f2329570911a873616c05628333f7fdc2456faade",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/04-final-source-identity.log.gz",
+      "bytes": 282,
+      "sha256": "232fd1342aa0114e19f6cfe3fc990b1cb52b1b5c0ab26258f7086cd000d70dab",
+      "rawBytes": 391,
+      "rawSha256": "e6ae846083b997b48805df73c720adade6b8148df1d62d4e034a679c7dced546",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/05-final-purity-case.json",
+      "bytes": 1688,
+      "sha256": "69307e39a6c09750dad0871153875ccab1ba54f53a567c3fe0826f78b223c160",
+      "rawBytes": 1688,
+      "rawSha256": "69307e39a6c09750dad0871153875ccab1ba54f53a567c3fe0826f78b223c160",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/05-final-purity-case.log.gz",
+      "bytes": 181,
+      "sha256": "1bce79642dd75030114038c1417fdea413231ce0a1f251e2b0c132a4fe591751",
+      "rawBytes": 226,
+      "rawSha256": "8e837732bce8e355287ee21ae6bd0938a4a083fb4266a2e41e5df67a5b5156d3",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/06-author-evidence.json",
+      "bytes": 1135,
+      "sha256": "5bf1e70f6d5be77eb6dbe52eb5ec67a74012fe074bc971f44084ffbcbf164d66",
+      "rawBytes": 1135,
+      "rawSha256": "5bf1e70f6d5be77eb6dbe52eb5ec67a74012fe074bc971f44084ffbcbf164d66",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/06-author-evidence.log.gz",
+      "bytes": 244,
+      "sha256": "4df0ed7afcd9e6364b2f8216a0b85e2410a073a5171849a930ceb790abcee0b9",
+      "rawBytes": 360,
+      "rawSha256": "25f8ab2284ed0cc84f798189752601c5471f7ef4833307a64fa2af990b2c64ce",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/07-author-evidence-corrected.json",
+      "bytes": 1146,
+      "sha256": "71fe682f1187323accbf2e8f206763aed41d0249cb4693ad692d626675842855",
+      "rawBytes": 1146,
+      "rawSha256": "71fe682f1187323accbf2e8f206763aed41d0249cb4693ad692d626675842855",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/07-author-evidence-corrected.log.gz",
+      "bytes": 691,
+      "sha256": "e8c9fe027e99f008a838c045ac514d41000225b66121338d91d24041cc7e3073",
+      "rawBytes": 2552,
+      "rawSha256": "a65812aed832ca89a6011bb8fbac596e9960a949e10688855471e9df0c1f17ab",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/author-evidence-verification.json",
+      "bytes": 2552,
+      "sha256": "a65812aed832ca89a6011bb8fbac596e9960a949e10688855471e9df0c1f17ab",
+      "rawBytes": 2552,
+      "rawSha256": "a65812aed832ca89a6011bb8fbac596e9960a949e10688855471e9df0c1f17ab",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/capture-check.py.txt",
+      "bytes": 2437,
+      "sha256": "b801bacfaaccafe5aa47d6378ea0e1dbaf5e85fa3b717c973dea49fe20ba4504",
+      "rawBytes": 2437,
+      "rawSha256": "b801bacfaaccafe5aa47d6378ea0e1dbaf5e85fa3b717c973dea49fe20ba4504",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-author-evidence-before-snapshot-correction.json",
+      "bytes": 492,
+      "sha256": "6c02e336c22061c22409319486434ae6bf61dd9c79e7620eb01075df87e01c26",
+      "rawBytes": 492,
+      "rawSha256": "6c02e336c22061c22409319486434ae6bf61dd9c79e7620eb01075df87e01c26",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-author-evidence-before-snapshot-correction.py.gz",
+      "bytes": 1947,
+      "sha256": "55f499d9eaa4dd6649ef6f9943dfa001541ab91f86400ffb5eb72583d03d2107",
+      "rawBytes": 4841,
+      "rawSha256": "fc1497f6de5658170ba78d7f47f62664477b994dd668679aa35f93f46f5bf12e",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-author-evidence.py.txt",
+      "bytes": 7617,
+      "sha256": "31e71014aa9a0121749fa950344c69c026ad875be91b1a663838e2b7b15217cd",
+      "rawBytes": 7617,
+      "rawSha256": "31e71014aa9a0121749fa950344c69c026ad875be91b1a663838e2b7b15217cd",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-final-source.py.txt",
+      "bytes": 1881,
+      "sha256": "f2cd21c44c8cc6c38f765bae2ea05922f6d441842ea1b8a829ecb6b6a66bfec7",
+      "rawBytes": 1881,
+      "rawSha256": "f2cd21c44c8cc6c38f765bae2ea05922f6d441842ea1b8a829ecb6b6a66bfec7",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/check-source.py.txt",
+      "bytes": 2891,
+      "sha256": "09b7bd7c480058277b15f31ea933d6df64f68c88e69c6c786ac31eebd67102ad",
+      "rawBytes": 2891,
+      "rawSha256": "09b7bd7c480058277b15f31ea933d6df64f68c88e69c6c786ac31eebd67102ad",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/dependency-directory-provenance.json",
+      "bytes": 1320,
+      "sha256": "94e7f6f38a2cc0bf77b34e7813db92e572e07bdfb992e4f3f0b42b3bb46c6ee9",
+      "rawBytes": 1320,
+      "rawSha256": "94e7f6f38a2cc0bf77b34e7813db92e572e07bdfb992e4f3f0b42b3bb46c6ee9",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/design-review-notes.json",
+      "bytes": 1556,
+      "sha256": "3d03fcea841f29ae9d0f4b55cdf18500b27406a5bf74e9379cdc3a7f7cac2cf9",
+      "rawBytes": 1556,
+      "rawSha256": "3d03fcea841f29ae9d0f4b55cdf18500b27406a5bf74e9379cdc3a7f7cac2cf9",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/independent-probes.mjs.txt",
+      "bytes": 4700,
+      "sha256": "2d91a50fa3425a47865e1a9d93e9137d24dcc55b584fb4b0064e1b3b217400df",
+      "rawBytes": 4700,
+      "rawSha256": "2d91a50fa3425a47865e1a9d93e9137d24dcc55b584fb4b0064e1b3b217400df",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/08-evidence-whitespace.json",
+      "bytes": 7569,
+      "sha256": "568ec16fa2b6dc015d567ec1577d97b60328aced5a486a84dab01f9b3991e826",
+      "rawBytes": 7569,
+      "rawSha256": "568ec16fa2b6dc015d567ec1577d97b60328aced5a486a84dab01f9b3991e826",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/funding-review-projection-independent-review-generation33/08-evidence-whitespace.log.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0
+    }
+  ],
+  "testAttribution": {
+    "priorSource": "107/107 with zero other outcomes on31ae662:48 projection/control+50 funding+5 boundary+4 independent probes.",
+    "finalSource": "One strengthened purity case passed on448cdcc; all production and other source files exact. Not a claim of107 tests rerun on final source.",
+    "typecheck": "One package TypeScript project passed on31ae662; TypeScript inputs unchanged on final source."
+  },
+  "retainedDiagnostics": [
+    "Recovered exact dependency setup command/output: absent legacy TypeScript API sample; corrected to installed compiler entry.",
+    "Initial author-evidence checker assumed an uncommitted execution snapshot equaled its later feature commit. Original checker/failure retained; corrected exact patch reconstruction and literal transformation proof pass."
+  ],
+  "limits": [
+    "Pure native-SOL display only; inactive with no facade/UI/command consumer.",
+    "Data consistency does not establish private prepared-handle authority, original/live registry pins, height provenance or expiry.",
+    "No full repository suite, artifact build, browser, validator, native financial execution, deployment or remote mutation by this reviewer.",
+    "Tier C owner authorization and current-source/current-target hosted qualification remain coordinator requirements."
+  ]
+}

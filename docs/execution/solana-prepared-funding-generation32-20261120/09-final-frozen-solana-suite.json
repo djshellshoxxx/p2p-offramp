@@ -1,0 +1,82 @@
+{
+  "label": "09-final-frozen-solana-suite",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-concurrency=4",
+    "packages/chain-solana/test/acceptance-vectors.test.mjs",
+    "packages/chain-solana/test/acceptance.test.mjs",
+    "packages/chain-solana/test/adapter.test.mjs",
+    "packages/chain-solana/test/address.test.mjs",
+    "packages/chain-solana/test/bind.test.mjs",
+    "packages/chain-solana/test/boundary.test.mjs",
+    "packages/chain-solana/test/codec.test.mjs",
+    "packages/chain-solana/test/fixture.test.mjs",
+    "packages/chain-solana/test/identity.test.mjs",
+    "packages/chain-solana/test/independent-expiry-context.test.mjs",
+    "packages/chain-solana/test/independent-recovery-compatibility.test.mjs",
+    "packages/chain-solana/test/independent-review-regressions.test.mjs",
+    "packages/chain-solana/test/independent-vault-dispatch.test.mjs",
+    "packages/chain-solana/test/instructions.test.mjs",
+    "packages/chain-solana/test/intent.test.mjs",
+    "packages/chain-solana/test/layout.test.mjs",
+    "packages/chain-solana/test/lifecycle.test.mjs",
+    "packages/chain-solana/test/message.test.mjs",
+    "packages/chain-solana/test/offchain.test.mjs",
+    "packages/chain-solana/test/payout.test.mjs",
+    "packages/chain-solana/test/plan.test.mjs",
+    "packages/chain-solana/test/policy.test.mjs",
+    "packages/chain-solana/test/prepared-actions.test.mjs",
+    "packages/chain-solana/test/prepared-funding.test.mjs",
+    "packages/chain-solana/test/reader.test.mjs",
+    "packages/chain-solana/test/reconciliation-context.test.mjs",
+    "packages/chain-solana/test/recovery.test.mjs",
+    "packages/chain-solana/test/replay.test.mjs",
+    "packages/chain-solana/test/settlement.test.mjs",
+    "packages/chain-solana/test/vaultjournal.test.mjs",
+    "packages/chain-solana/test/wallet.test.mjs",
+    "packages/chain-solana/test/window.test.mjs"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-solana-prepared-funding-g32",
+  "source": "252dd1603f12eab69313ef25b538be1b040bc508",
+  "tree": "65667d0089b986250b5f8697518863069368d855",
+  "statusBefore": "",
+  "sourceFiles": {
+    "packages/chain-solana/src/compose.ts": {
+      "bytes": 27107,
+      "sha256": "969ef26ac76c464d86c8269ed47a3fd2d0402320607299f498a0ff42eb97722a"
+    },
+    "packages/chain-solana/test/prepared-funding.test.mjs": {
+      "bytes": 21266,
+      "sha256": "fec56fa82e3e26f643ca01195b24db3ce136d6cc5534001beb488ccdfdd52608"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 17475,
+      "sha256": "07e57c9a4db863ca06596affa4c0748bfd96aa4cb785fa5fdb97b1ac02db4abd"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/09-final-frozen-solana-suite.patch",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "startedAt": "2026-11-20T19:20:34.927117+00:00",
+  "completedAt": "2026-11-20T19:20:52.986692+00:00",
+  "exitCode": 0,
+  "counts": {
+    "tests": 367,
+    "pass": 367,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/09-final-frozen-solana-suite.log",
+    "bytes": 26437,
+    "sha256": "01f45b105dab8d10802a13184ed75be68bdf9e440e5765cefd26d7a8a3e3ef57"
+  },
+  "statusAfter": ""
+}

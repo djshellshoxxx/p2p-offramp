@@ -1,0 +1,84 @@
+{
+  "label": "06-frozen-solana-package",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-concurrency=4",
+    "packages/chain-solana/test/acceptance-vectors.test.mjs",
+    "packages/chain-solana/test/acceptance.test.mjs",
+    "packages/chain-solana/test/adapter.test.mjs",
+    "packages/chain-solana/test/address.test.mjs",
+    "packages/chain-solana/test/bind.test.mjs",
+    "packages/chain-solana/test/boundary.test.mjs",
+    "packages/chain-solana/test/codec.test.mjs",
+    "packages/chain-solana/test/core-capability-funding.test.mjs",
+    "packages/chain-solana/test/fixture.test.mjs",
+    "packages/chain-solana/test/funding-review.test.mjs",
+    "packages/chain-solana/test/identity.test.mjs",
+    "packages/chain-solana/test/independent-expiry-context.test.mjs",
+    "packages/chain-solana/test/independent-recovery-compatibility.test.mjs",
+    "packages/chain-solana/test/independent-review-regressions.test.mjs",
+    "packages/chain-solana/test/independent-vault-dispatch.test.mjs",
+    "packages/chain-solana/test/instructions.test.mjs",
+    "packages/chain-solana/test/intent.test.mjs",
+    "packages/chain-solana/test/layout.test.mjs",
+    "packages/chain-solana/test/lifecycle.test.mjs",
+    "packages/chain-solana/test/message.test.mjs",
+    "packages/chain-solana/test/offchain.test.mjs",
+    "packages/chain-solana/test/payout.test.mjs",
+    "packages/chain-solana/test/plan.test.mjs",
+    "packages/chain-solana/test/policy.test.mjs",
+    "packages/chain-solana/test/prepared-actions.test.mjs",
+    "packages/chain-solana/test/prepared-funding.test.mjs",
+    "packages/chain-solana/test/reader.test.mjs",
+    "packages/chain-solana/test/reconciliation-context.test.mjs",
+    "packages/chain-solana/test/recovery.test.mjs",
+    "packages/chain-solana/test/replay.test.mjs",
+    "packages/chain-solana/test/settlement.test.mjs",
+    "packages/chain-solana/test/vaultjournal.test.mjs",
+    "packages/chain-solana/test/wallet.test.mjs",
+    "packages/chain-solana/test/window.test.mjs"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-solana-core-capability-guard-g34",
+  "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+  "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+  "statusBefore": "",
+  "sourceFiles": {
+    "packages/chain-solana/src/plan.ts": {
+      "bytes": 15445,
+      "sha256": "ef5e14a71bf9a15886d071b9455c03a55b22538da1161891d968bc3fdd1be4c0"
+    },
+    "packages/chain-solana/test/core-capability-funding.test.mjs": {
+      "bytes": 8046,
+      "sha256": "163bd637580337f3909e4f9f5f619047479aa4132fd50c07330361b5ba1a6e6b"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 20668,
+      "sha256": "d133f8b5b00ee7c6f1f65f73d7a709e18cbda6ecdbdf3f9d83893073df15069b"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g34-core-capability-author/06-frozen-solana-package.patch",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "startedAt": "2026-11-20T19:53:13.196597+00:00",
+  "completedAt": "2026-11-20T19:53:31.664724+00:00",
+  "exitCode": 0,
+  "counts": {
+    "tests": 448,
+    "pass": 448,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/g34-core-capability-author/06-frozen-solana-package.log",
+    "bytes": 33242,
+    "sha256": "ef63b99d1ba69c74f068d36a00fae47d1b588f96d3716f87faa0acd7fecf1730"
+  },
+  "statusAfter": ""
+}

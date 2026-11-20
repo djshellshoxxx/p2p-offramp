@@ -1,0 +1,124 @@
+import datetime
+import gzip
+import hashlib
+import json
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8')
+REPO = ROOT / 'p2p-funding-review-projection-g33'
+LOGS = ROOT / 'g33-funding-review-author'
+OUT = REPO / 'docs/execution/solana-funding-review-generation33-20261120'
+SOURCE = '448cdcc2a9d13109421f21eaa1107936da0ac5c8'
+FORMATTED = '31ae6627a6b14a4ef40f7d81c98b04470a30aa1a'
+BASE = '5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031'
+assert not OUT.exists(), 'Refusing to overwrite evidence'
+
+
+def git(*args, env=None):
+    return subprocess.check_output(['git', *args], cwd=REPO, env=env)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def entries(ref):
+    return {p.decode(): meta.decode() for meta, p in
+            (line.split(b'\t', 1) for line in git('ls-tree', '-r', '-z', ref).split(b'\0') if line)}
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert not git('status', '--porcelain').strip()
+base, source = entries(BASE), entries(SOURCE)
+changed = sorted(p for p in base.keys() | source.keys() if base.get(p) != source.get(p))
+assert changed == ['packages/chain-solana/README.md', 'packages/chain-solana/src/funding-review.ts',
+                   'packages/chain-solana/test/boundary.test.mjs', 'packages/chain-solana/test/funding-review.test.mjs']
+assert len([p for p in source if not p.startswith('docs/')]) == 1032
+assert git('diff', 'b8792ac4088f75603be8e0b40ba1506f2fb137f2', FORMATTED, '--numstat').decode().strip() == (
+    '2\t1\tpackages/chain-solana/test/funding-review.test.mjs')
+assert git('diff', FORMATTED, SOURCE, '--numstat').decode().strip() == (
+    '3\t1\tpackages/chain-solana/test/funding-review.test.mjs')
+previous = entries(FORMATTED)
+assert [p for p in previous.keys() | source.keys() if previous.get(p) != source.get(p)] == [
+    'packages/chain-solana/test/funding-review.test.mjs']
+OUT.mkdir(parents=True)
+artifacts = []
+
+
+def save(name, raw, compress=False, provenance='original execution artifact'):
+    data = gzip.compress(raw, mtime=0) if compress else raw
+    path = OUT / name
+    path.write_bytes(data)
+    if compress:
+        assert gzip.decompress(data) == raw and data[4:8] == b'\0' * 4
+    artifacts.append({'path': str(path.relative_to(REPO)), 'bytes': len(data), 'sha256': digest(data),
+                      'rawBytes': len(raw), 'rawSha256': digest(raw), 'gzipMtime': 0 if compress else None,
+                      'provenance': provenance})
+
+
+commands = []
+snapshots = []
+for receipt_path in sorted(LOGS.glob('[0-9][0-9]-*.json')):
+    receipt = json.loads(receipt_path.read_text())
+    label = receipt['label']
+    raw_log = (LOGS / f'{label}.log').read_bytes()
+    patch = (LOGS / f'{label}.patch').read_bytes()
+    assert digest(raw_log) == receipt['log']['sha256'] and len(raw_log) == receipt['log']['bytes']
+    assert digest(patch) == receipt['patch']['sha256'] and len(patch) == receipt['patch']['bytes']
+    with tempfile.TemporaryDirectory(prefix='g33-evidence-index-') as directory:
+        env = dict(os.environ, GIT_INDEX_FILE=str(Path(directory) / 'index'))
+        subprocess.run(['git', 'read-tree', receipt['source']], cwd=REPO, env=env, check=True)
+        if patch:
+            subprocess.run(['git', 'apply', '--cached', '--binary', str(LOGS / f'{label}.patch')],
+                           cwd=REPO, env=env, check=True)
+        tree = git('write-tree', env=env).decode().strip()
+    for name, expected in receipt['sourceFiles'].items():
+        raw = git('show', f'{tree}:{name}')
+        assert len(raw) == expected['bytes'] and digest(raw) == expected['sha256']
+    snapshots.append({'label': label, 'head': receipt['source'], 'reconstructedTree': tree,
+                      'verifiedSourceFiles': len(receipt['sourceFiles'])})
+    save(f'{label}.json', receipt_path.read_bytes())
+    save(f'{label}.log.gz', raw_log, True)
+    save(f'{label}.patch.gz', patch, True)
+    commands.append({k: receipt[k] for k in ['label', 'command', 'source', 'tree', 'startedAt', 'completedAt',
+                                           'exitCode', 'counts']})
+
+for name in ['capture-command.py', 'package-evidence.py']:
+    save(name + '.txt', (LOGS / name).read_bytes(), provenance='exact retained execution/packaging script')
+save('formatting-precheck-recovered.log.gz', (LOGS / 'formatting-precheck-recovered.log').read_bytes(), True,
+     'recovered exec tool result; not original file capture')
+save('formatting-precheck-recovered.json', (LOGS / 'formatting-precheck-recovered.json').read_bytes(),
+     provenance='recovery attribution and compound exit-status note')
+save('execution-snapshot-verification.json', (json.dumps(snapshots, indent=2) + '\n').encode(),
+     provenance='reconstruction of recorded source plus exact retained patch')
+receipt = {
+    'version': 1, 'generation': 33, 'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'base': BASE, 'baseTree': git('rev-parse', BASE + '^{tree}').decode().strip(),
+    'initialSource': 'b8792ac4088f75603be8e0b40ba1506f2fb137f2',
+    'formatCorrectedSource': FORMATTED,
+    'testOnlyStrengthening': {'source': SOURCE, 'path': 'packages/chain-solana/test/funding-review.test.mjs',
+                            'allOtherTrackedEntriesExact': True,
+                            'change': 'Count attempted forbidden operations and assert zero, including refusal paths.'},
+    'source': SOURCE, 'sourceTree': git('rev-parse', SOURCE + '^{tree}').decode().strip(),
+    'sourceFiles': [{'path': p, 'gitEntry': source[p], 'bytes': len(git('show', f'{SOURCE}:{p}')),
+                     'sha256': digest(git('show', f'{SOURCE}:{p}'))} for p in changed],
+    'composition': {'baselineEntries': len(base), 'sourceEntries': len(source), 'nonDocsEntries': 1032,
+                    'modifiedPaths': [p for p in changed if p in base],
+                    'addedPaths': [p for p in changed if p not in base], 'deletedPaths': [],
+                    'allOtherBaselineEntriesExact': True},
+    'commands': commands, 'artifacts': artifacts,
+    'dependencyMode': 'Existing immutable physical hardlinks from p2p-continuation-g31; no installation or mutation.',
+    'limits': [
+        'Native SOL only; internal helper without facade, UI, controller, command or protocol consumer.',
+        'Data consistency does not authenticate the private prepared capability, original pin snapshot or current chain.',
+        'Deployment pins are supplied-bound-trade metadata; last-valid height is supplied metadata outside the message.',
+        'No peer-acceptance, funding-outcome, fresh eligibility, browser/native execution or Tier C approval established.',
+        'No full repository suite or artifact build was run by this author; root owns combined qualification.',
+    ],
+}
+(OUT / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
+print(json.dumps({'source': SOURCE, 'commands': len(commands), 'artifacts': len(artifacts),
+                  'verifiedExecutionSnapshots': len(snapshots), 'nonDocsEntries': 1032}))
