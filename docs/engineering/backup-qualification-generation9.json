@@ -1,0 +1,77 @@
+{
+  "source": "2e2cf4ddefa56ad1df1e4b41f8d6bd66080a52d0",
+  "tree": "e7f140d25550e29c9716a0f37c3a364ce2bb6604",
+  "steps": [
+    {
+      "step": "full",
+      "exit": 0,
+      "tests": 2277,
+      "passed": 2277,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "log": "/workspace/scratch/6eace968c0df/verification-backup-final-g9/full.log",
+      "sha256": "1db063a86baf779966e526e009c61056a1eaa79c6d0408166484083ad20809ad"
+    },
+    {
+      "step": "types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 3.187,
+      "log": "/workspace/scratch/6eace968c0df/verification-backup-final-g9/types.log",
+      "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53"
+    },
+    {
+      "step": "policy",
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 6.593,
+      "log": "/workspace/scratch/6eace968c0df/verification-backup-final-g9/policy.log",
+      "sha256": "6806d93010e077f3d757b6fa11d543da330bbe4b22ab9b8eacdfa7219f9b60a8"
+    },
+    {
+      "step": "boundaries",
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 1.051,
+      "log": "/workspace/scratch/6eace968c0df/verification-backup-final-g9/boundaries.log",
+      "sha256": "a2afff1ba06119367082cb0aec36223a649eae2fcc0580855c50a042cf9f7684"
+    },
+    {
+      "step": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.051,
+      "log": "/workspace/scratch/6eace968c0df/verification-backup-final-g9/build.log",
+      "sha256": "bc6bef2408c970f568594bcac30197881f8959c4505066d6265a4d804e089408"
+    },
+    {
+      "step": "build-demo",
+      "command": [
+        "npm",
+        "run",
+        "build:demo"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.179,
+      "log": "/workspace/scratch/6eace968c0df/verification-backup-final-g9/build-demo.log",
+      "sha256": "2885cb53fea01b4bdecb1b71e40531a929cac94d45550afcc05d126a4ea5936c"
+    }
+  ]
+}

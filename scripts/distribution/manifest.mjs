@@ -34,12 +34,13 @@ export const PUBLIC_COPIES=Object.freeze([
 export const RECIPE_INPUTS=Object.freeze(['package.json','package-lock.json','THIRD_PARTY_NOTICES.md','tsconfig.json','apps/web/index.html','apps/web/vite.config.ts',
  'apps/web/tsconfig.ui.json','apps/web/tsconfig.runtime.json','apps/web/tsconfig.worker.json','apps/web/scripts/build.mjs','apps/web/scripts/artifact-policy.mjs',
  'apps/web/scripts/static-build-plugin.mjs','apps/web/scripts/qr-build-policy.mjs','apps/web/scripts/source-locale.mjs','apps/web/scripts/testnet-trust.mjs','apps/web/src/testnet/sepolia-network.ts',
- 'apps/portal/index.html','apps/portal/portal.css','scripts/portal/build.mjs','scripts/portal/policy.mjs','scripts/docs/validate.mjs','scripts/docs/generate.py',
+ 'apps/portal/index.html','apps/portal/portal.css','scripts/portal/build.mjs','scripts/portal/policy.mjs','scripts/docs/validate.mjs','scripts/docs/copy-source.mjs','scripts/docs/generate.py',
  'scripts/lib/is-main.mjs','scripts/distribution/stage.mjs','scripts/distribution/manifest.mjs','docs/distribution/README.md','contracts/evm/foundry.toml',
  'packages/claims/index.ts','packages/claims/src/claims.ts','node_modules/vite/package.json','node_modules/typescript/package.json','node_modules/react/package.json','node_modules/react-dom/package.json',
  'node_modules/jsqr/package.json','node_modules/jsqr/LICENSE','node_modules/jsqr/dist/jsQR.js']);
 export function allowedSourceInputPath(path){
  safeArtifactPath(path);if(path.split('/').some(part=>part.startsWith('.')))return false;
+ if(path.startsWith('packages/personalization/'))return ['packages/personalization/favorites.ts','packages/personalization/src/favorites.ts','packages/personalization/templates.ts','packages/personalization/src/trade-draft-store.ts'].includes(path);
  return RECIPE_INPUTS.includes(path)||PUBLIC_COPIES.some(([source])=>source===path)||
   /^apps\/web\/(?:src|scripts)\/[A-Za-z0-9_./-]+\.(?:ts|tsx|mjs|css)$/.test(path)||
   /^packages\/(?:security\/release-context|wallet\/contract-acceptance)\.ts$/.test(path)||

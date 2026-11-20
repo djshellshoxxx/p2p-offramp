@@ -126,6 +126,18 @@ const localnetProfile = { relayOrigin: 'ws://127.0.0.1:7447' };
 function graphContext(root, paths, emitted = []) {
   return { getModuleIds: () => paths.map(path => resolve(root, path)), getModuleInfo: () => ({ isExternal: false }), emitFile: file => { emitted.push(file); } };
 }
+test('favorites and templates admit only the exact private Worker graph and never the document or broad barrel', async () => {
+  const favorites = ['packages/personalization/favorites.ts', 'packages/personalization/src/favorites.ts', 'packages/personalization/src/trade-draft-store.ts', 'packages/personalization/templates.ts'];
+  for (const delivery of ['meta', 'header']) {
+    for (const path of favorites) await assert.rejects(staticBuildPlugin(repositoryRoot, delivery, false).generateBundle.call(graphContext(repositoryRoot, [path]), {}, {}), /NON_CORE_MODULE/);
+    const emitted = [];
+    await staticBuildPlugin(repositoryRoot, delivery, true).generateBundle.call(graphContext(repositoryRoot, favorites, emitted), {}, {});
+    assert.deepEqual(JSON.parse(emitted.find(file => file.fileName === 'core-graph-worker.json').source).modules.map(module => module.path).sort(), favorites);
+  }
+  for (const path of ['packages/personalization/index.ts', 'packages/personalization/src/other.ts', 'packages/personalization/other.ts', 'node_modules/x/packages/personalization/src/favorites.ts']) {
+    for (const worker of [false, true]) await assert.rejects(staticBuildPlugin(repositoryRoot, 'meta', worker).generateBundle.call(graphContext(repositoryRoot, [path]), {}, {}), /NON_CORE_MODULE/);
+  }
+});
 test('default, header, demo and testnet plugins still reject every localnet-only module (document and worker)', async () => {
   for (const worker of [false, true]) for (const delivery of ['meta', 'header']) for (const path of LOCALNET_ONLY_MODULES) {
     const plugin = staticBuildPlugin(repositoryRoot, delivery, worker);
