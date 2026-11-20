@@ -1,0 +1,17 @@
+{
+  "source": "54a5245faf9340e5ec74abeb5ee39b9e81f6e6af",
+  "tree": "6394e96a203d35fa9ca30e0f0209c39accb34550",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-composition-independent/check-root-qualification.py"
+  ],
+  "startedAt": "2026-11-20T20:24:30.881612+00:00",
+  "completedAt": "2026-11-20T20:24:31.785044+00:00",
+  "exitCode": 0,
+  "log": "/workspace/scratch/dcf03ef9bee8/g35-funding-proposal-composition-independent/combined-qualification-verification.log",
+  "bytes": 26757,
+  "sha256": "58beae8f02fd079bef3dd0a0c1889a03d420c6f1ef33ae7fc0dde08a450ebf32",
+  "finalSource": "54a5245faf9340e5ec74abeb5ee39b9e81f6e6af",
+  "cleanTrackedWorktree": true,
+  "summary": []
+}
