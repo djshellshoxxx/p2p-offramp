@@ -1,0 +1,477 @@
+{
+  "schema": "p2p-offramp.generation37-retained-logs.v1",
+  "testedSource": "88bd126bace2b88886017b0ff4eb5daffcdc060e",
+  "testedTree": "5ecf56b74e82f04b4fed8961179a46bcbd330def",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-corrected-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generation37-20261120/full-node.log.gz",
+      "decodedBytes": 288677,
+      "compressedBytes": 94506,
+      "decodedSha256": "3982d7a24d64c9519c574761ca99ea24cc003153c59b214037e873bafe147420",
+      "compressedSha256": "ea62b26f14425ae79bce5a076fb9395b6bef14f1e24c8bc0305f274f550c629e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-corrected-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generation37-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-corrected-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generation37-20261120/build-policy.log.gz",
+      "decodedBytes": 7611,
+      "compressedBytes": 3132,
+      "decodedSha256": "0fcc2ed0ef37d69131039cc41fde87fd47f850dadf12723eaca1b86ac8fe02fd",
+      "compressedSha256": "64c07e42d798e12bafb312dd319c194aa095e30434297fc01a5b5d646f8ae279"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-corrected-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generation37-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 288,
+      "decodedSha256": "12c40248b08325299d1256b441c41b43708180d4164d231fa28d7b782a5eeca4",
+      "compressedSha256": "2f4f991f57e25fb0a7412712e194bd2b633c4f1847d3a898a37d3d2a93f80bab"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-corrected-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generation37-20261120/default-build.log.gz",
+      "decodedBytes": 1027,
+      "compressedBytes": 498,
+      "decodedSha256": "46e42ed63d599b3d59d8a8e3e2cc6e444a3f567f276aab0fc5b1e86df632d741",
+      "compressedSha256": "9d654707f50f893c437a196876bb43734a72294cfe250e003219dfd76f25ab9f"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-corrected-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generation37-20261120/demo-build.log.gz",
+      "decodedBytes": 1175,
+      "compressedBytes": 521,
+      "decodedSha256": "fb7674d8f84e8702e8a4ef74e89551b4896955ee2c45a26bddffc43cf72d2290",
+      "compressedSha256": "e6a1decdde711305d05dab770d6fb8ff0742a10bc2127f99b59dda1497f39715"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-corrected-qualification/native-fixture-preparation.log",
+      "storedPath": "docs/execution/continuation-generation37-20261120/native-fixture-preparation.log.gz",
+      "decodedBytes": 2196,
+      "compressedBytes": 863,
+      "decodedSha256": "6f0ff885940722150b794cf4733aa64017d3e1c0cc7f167bc43c154ea9481e81",
+      "compressedSha256": "bcccb9023a66549618cc8e6dbb292266b39a1da34ded7dbf040e6e86e2dfee7f"
+    }
+  ],
+  "initialQualification": {
+    "source": "dcdb86d19b8d1e1b09cd12a0f5cbf9626eff0fd3",
+    "tree": "3e1f569f57fbc3ee01f6f4b32ea6bfd32abba65a",
+    "startedAt": "2026-11-20T21:14:34.454707+00:00",
+    "completedAt": "2026-11-20T21:16:32.867353+00:00",
+    "counts": {
+      "tests": 2914,
+      "pass": 2914,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "acceptance": "Superseded after genuine independent idle-expiry snapshot failure; retained evidence, not corrected-source acceptance.",
+    "artifacts": [
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-qualification/qualification.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/qualification.json.gz",
+        "decodedBytes": 67842,
+        "compressedBytes": 9798,
+        "decodedSha256": "6bc6aa87aca95703923f646f134aca8ac8c9442e647b73f840b1a448efb1c13e",
+        "compressedSha256": "b23058a9884958216338776098a37ef12c874acf935937bbe7ff42c643b3eb73"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-qualification/full-node.log",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/full-node.log.gz",
+        "decodedBytes": 288552,
+        "compressedBytes": 94588,
+        "decodedSha256": "5a60c32e58ea84ce6e24f74e898201f33cdaea165837def7a6904c62b62b70b2",
+        "compressedSha256": "8076d747c212746fee8978c729744f8162a3053af5263f7adf980d46f3f412ef"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-qualification/typecheck.log",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/typecheck.log.gz",
+        "decodedBytes": 341,
+        "compressedBytes": 211,
+        "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+        "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-qualification/build-policy.log",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build-policy.log.gz",
+        "decodedBytes": 7627,
+        "compressedBytes": 3144,
+        "decodedSha256": "01dd54cf1dac25de7b5c0f50ace225d5b6146cf866ab9fcf7666697a6a86c0f6",
+        "compressedSha256": "6745f317e545e5b56f56ad1a71bfb0b31c7eba8504ca5aef66dd00107e7744cb"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-qualification/boundaries.log",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/boundaries.log.gz",
+        "decodedBytes": 392,
+        "compressedBytes": 288,
+        "decodedSha256": "12c40248b08325299d1256b441c41b43708180d4164d231fa28d7b782a5eeca4",
+        "compressedSha256": "2f4f991f57e25fb0a7412712e194bd2b633c4f1847d3a898a37d3d2a93f80bab"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-qualification/default-build.log",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/default-build.log.gz",
+        "decodedBytes": 1027,
+        "compressedBytes": 499,
+        "decodedSha256": "eafc56429141ab97e7f2fac538a10b37f1d1a8363212b54e13694d67a8c44ef0",
+        "compressedSha256": "d60258f83f697d7dcd8669a35911d6a83b443822bd720ea47f61cc5e107cca38"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-qualification/demo-build.log",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/demo-build.log.gz",
+        "decodedBytes": 1175,
+        "compressedBytes": 521,
+        "decodedSha256": "57d00e0c1a8550a5b255e1d47a0e5e226efc314ec3636747cbccf21e04b1ac78",
+        "compressedSha256": "03c47ec2414d802d03a683b1e4a6385089721a9ad4bf157551219620e4e1c997"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-qualification/native-fixture-preparation.log",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/native-fixture-preparation.log.gz",
+        "decodedBytes": 2196,
+        "compressedBytes": 861,
+        "decodedSha256": "44bed4578facbf84880836fdb6a6cda76b0144c2fa0976cf0764d6d8939921bc",
+        "compressedSha256": "1736b471caa07a9db449fcf5eb5560e38d8c8aa920c380d587f0273d13ada292"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/_headers",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/_headers.gz",
+        "decodedBytes": 342,
+        "compressedBytes": 186,
+        "decodedSha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+        "compressedSha256": "aa86005c1f212ccc8581daf7bc5dd97e90fe994583f0e6fb9da9a161c0649ddb"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/assets/OfflineRoot-KpNTfNjc.js",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/assets/OfflineRoot-KpNTfNjc.js.gz",
+        "decodedBytes": 312712,
+        "compressedBytes": 88588,
+        "decodedSha256": "4788669b1638bc7a7b8a93303999250708eb4a817f5cb943b10e922efc5d8f69",
+        "compressedSha256": "37cb3a2fa3b36209487376877e1c8fb295d5ce61f8afbc294808b4f9fda709ec"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/assets/decode.worker-DGcSBxfL.js",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/assets/decode.worker-DGcSBxfL.js.gz",
+        "decodedBytes": 133927,
+        "compressedBytes": 48082,
+        "decodedSha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+        "compressedSha256": "342071691c68045d832f211bc6c05bce417637fc5352e7499a6a65f3c71a749b"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/assets/index-6AlRBUfF.js",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/assets/index-6AlRBUfF.js.gz",
+        "decodedBytes": 220890,
+        "compressedBytes": 68182,
+        "decodedSha256": "bea32e4a4ac7775b0e13e840e4b7e84fb394bb915f40ce1253f8d77ee0a23dc1",
+        "compressedSha256": "7309bb88bdc975ec17ed6f9c1d2f0dea281c45e457638f4ad28d448a82444d20"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/assets/index-rPDFZ4F5.css",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/assets/index-rPDFZ4F5.css.gz",
+        "decodedBytes": 8414,
+        "compressedBytes": 2496,
+        "decodedSha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+        "compressedSha256": "2b07424909a688395e382bf21bdf38bcded7ab2df6e910bd58b7c07887ae9512"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/assets/vault.worker-yOnLqpF_.js",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/assets/vault.worker-yOnLqpF_.js.gz",
+        "decodedBytes": 102355,
+        "compressedBytes": 25531,
+        "decodedSha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165",
+        "compressedSha256": "f3837021a8640b39cafaffb2edd9b6a780dae83b831f03c075d3e5a4f43456c2"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/content-policy.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/content-policy.json.gz",
+        "decodedBytes": 1009,
+        "compressedBytes": 385,
+        "decodedSha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+        "compressedSha256": "a998594b8ab93164f1916bae3ce19d95a62d8b58b371d74cbd0d0d28c119f3f2"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/core-graph-document.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/core-graph-document.json.gz",
+        "decodedBytes": 15333,
+        "compressedBytes": 5390,
+        "decodedSha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367",
+        "compressedSha256": "f096d0a3a161b91a79a0813fa5d9775d58fea65612ccd3bd9538faf6e986ff39"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/core-graph-worker.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/core-graph-worker.json.gz",
+        "decodedBytes": 4758,
+        "compressedBytes": 1779,
+        "decodedSha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+        "compressedSha256": "c831056490d4ccabe0af5002b85db42a2d174a322df79ac6c80ecc114f83d6bc"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/index.html",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/index.html.gz",
+        "decodedBytes": 1283,
+        "compressedBytes": 684,
+        "decodedSha256": "847a35d4bfbe9ca5794e65092e337cbdb561e7459a8d8a68aeba33fdd79f7736",
+        "compressedSha256": "796b76da3e8cd1162536c4f1b0fb48aed1492d7dead10356370c837a1b3df7e6"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/local-build-evidence.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/local-build-evidence.json.gz",
+        "decodedBytes": 2526,
+        "compressedBytes": 1105,
+        "decodedSha256": "318f9da44946d460600452df796056dbdffd1a19525f881600676dbdc16fbe8c",
+        "compressedSha256": "58f003a16dcb70f4e0755c5c5bccd206515d7e764b7eeb4f3e3556ec7d98681d"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/qr-graph-worker.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/qr-graph-worker.json.gz",
+        "decodedBytes": 905,
+        "compressedBytes": 470,
+        "decodedSha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+        "compressedSha256": "5d9d16721b7dad1aeec25f75365d3eb7c1c5c3ef08d6786d76ea165c8bd5b7b1"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/default/third-party-licenses.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/default/third-party-licenses.json.gz",
+        "decodedBytes": 15329,
+        "compressedBytes": 4607,
+        "decodedSha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca",
+        "compressedSha256": "4243c030e799a0dd24eba9eaafd4311033dbc24a1e330afe1357c7fd75d73eac"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/_headers",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/_headers.gz",
+        "decodedBytes": 342,
+        "compressedBytes": 186,
+        "decodedSha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+        "compressedSha256": "aa86005c1f212ccc8581daf7bc5dd97e90fe994583f0e6fb9da9a161c0649ddb"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/assets/OfflineRoot-DZJg4sm1.js",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/assets/OfflineRoot-DZJg4sm1.js.gz",
+        "decodedBytes": 318756,
+        "compressedBytes": 90317,
+        "decodedSha256": "25d623ebc801b8b58f11c7902e811681ccbcf447b17b34fb9d8f479ad515ca23",
+        "compressedSha256": "beec84205a15346de0cf88ce8384d4ae55581d19c4b4e2d14870949e1c8a69b5"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/assets/decode.worker-DGcSBxfL.js",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/assets/decode.worker-DGcSBxfL.js.gz",
+        "decodedBytes": 133927,
+        "compressedBytes": 48082,
+        "decodedSha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+        "compressedSha256": "342071691c68045d832f211bc6c05bce417637fc5352e7499a6a65f3c71a749b"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/assets/index-B4Z_yDNv.js",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/assets/index-B4Z_yDNv.js.gz",
+        "decodedBytes": 220902,
+        "compressedBytes": 68188,
+        "decodedSha256": "72f94c14153646bcc7adb0f4ab4c0d45998b1e502c39d3be8fd99a4e91636e9f",
+        "compressedSha256": "d47172aff021c8e8984893115a97503e7afe3b5ef8ba61f772c83f1a05ed7806"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/assets/index-rPDFZ4F5.css",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/assets/index-rPDFZ4F5.css.gz",
+        "decodedBytes": 8414,
+        "compressedBytes": 2496,
+        "decodedSha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+        "compressedSha256": "2b07424909a688395e382bf21bdf38bcded7ab2df6e910bd58b7c07887ae9512"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/assets/synthetic-local-Crz7gj8D.js",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/assets/synthetic-local-Crz7gj8D.js.gz",
+        "decodedBytes": 5743,
+        "compressedBytes": 1686,
+        "decodedSha256": "c28426d06b4b26a1715cef85c2ce35ff14cd63227db66cee60a69c69ab354d91",
+        "compressedSha256": "3dfb36fafcb4f086780d581820ced7c5851b281c47b0de1a9c4b4e95aa2753dc"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/assets/vault.worker-yOnLqpF_.js",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/assets/vault.worker-yOnLqpF_.js.gz",
+        "decodedBytes": 102355,
+        "compressedBytes": 25531,
+        "decodedSha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165",
+        "compressedSha256": "f3837021a8640b39cafaffb2edd9b6a780dae83b831f03c075d3e5a4f43456c2"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/content-policy.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/content-policy.json.gz",
+        "decodedBytes": 1009,
+        "compressedBytes": 385,
+        "decodedSha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+        "compressedSha256": "a998594b8ab93164f1916bae3ce19d95a62d8b58b371d74cbd0d0d28c119f3f2"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/core-graph-document.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/core-graph-document.json.gz",
+        "decodedBytes": 15632,
+        "compressedBytes": 5492,
+        "decodedSha256": "a888d9df61a623b3fb99f4f79cc3bd536c84b9b467f4583f0b331a950b31245a",
+        "compressedSha256": "472d94be5451d977d61eb492264dba521caf85a3c40dd071f5974ec8fceceb2f"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/core-graph-worker.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/core-graph-worker.json.gz",
+        "decodedBytes": 4758,
+        "compressedBytes": 1779,
+        "decodedSha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+        "compressedSha256": "c831056490d4ccabe0af5002b85db42a2d174a322df79ac6c80ecc114f83d6bc"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/index.html",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/index.html.gz",
+        "decodedBytes": 1283,
+        "compressedBytes": 684,
+        "decodedSha256": "2459880fac514978acee76e97d749107670912b68ae95f670fa95f3e548314be",
+        "compressedSha256": "0e328204508668b3b9ca5865a49eb2213ff70cc3939fa45a00148e70f9819569"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/local-build-evidence.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/local-build-evidence.json.gz",
+        "decodedBytes": 2694,
+        "compressedBytes": 1176,
+        "decodedSha256": "f7f748135b7f6fe44b6a3bcb40ba9ad6e88c2d709906c5113db1c946628b4124",
+        "compressedSha256": "71547efe32283f84fb3b3169bede04727e30336873b7c2819ca4df35dd343411"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/qr-graph-worker.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/qr-graph-worker.json.gz",
+        "decodedBytes": 905,
+        "compressedBytes": 470,
+        "decodedSha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+        "compressedSha256": "5d9d16721b7dad1aeec25f75365d3eb7c1c5c3ef08d6786d76ea165c8bd5b7b1"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g37-initial-build-outputs/demo/third-party-licenses.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/build/demo/third-party-licenses.json.gz",
+        "decodedBytes": 15329,
+        "compressedBytes": 4607,
+        "decodedSha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca",
+        "compressedSha256": "4243c030e799a0dd24eba9eaafd4311033dbc24a1e330afe1357c7fd75d73eac"
+      },
+      {
+        "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-initial-qualification-preservation.json",
+        "storedPath": "docs/execution/continuation-generation37-20261120/initial/preservation.json.gz",
+        "decodedBytes": 5012,
+        "compressedBytes": 1560,
+        "decodedSha256": "162c104cbd2fdd18e3d61b129361ca239e07e9f48f24bd72d473379f8f89841b",
+        "compressedSha256": "7c596dac1949e60fc3763c168e6110c6f0f32aab365770805de50ea37133344c"
+      }
+    ],
+    "ordinaryBuildFilesPreserved": 27,
+    "ordinaryBuildFilesIdenticalAfterCorrection": true
+  },
+  "mappingArtifacts": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-combined-source.json",
+      "storedPath": "docs/execution/continuation-generation37-20261120/mapping/g37-combined-source.json.gz",
+      "decodedBytes": 2036,
+      "compressedBytes": 765,
+      "decodedSha256": "0a66c7d2c3f80f228db82d88b1498137d237dfb2f0732c804615d8603f2d7c07",
+      "compressedSha256": "198a7efdf802046f5f2dc72be0e8ffa8bada6797331bd0f7ae26c4fa0eca26af"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-corrected-source.json",
+      "storedPath": "docs/execution/continuation-generation37-20261120/mapping/g37-corrected-source.json.gz",
+      "decodedBytes": 466,
+      "compressedBytes": 318,
+      "decodedSha256": "0b4632b26cc3dfc88bf3b6bdf87920aa877dc9415b83d4c13ce025ba8c0e0bb2",
+      "compressedSha256": "8fc719a1847f4990435b38de674bd0b38afeecbca87d721aeb77062b2e48c3ec"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-integrated-component-evidence.json",
+      "storedPath": "docs/execution/continuation-generation37-20261120/mapping/g37-integrated-component-evidence.json.gz",
+      "decodedBytes": 479,
+      "compressedBytes": 285,
+      "decodedSha256": "6f39fa4c12fec5089ac52fd0c0ab97b9087f9396cac4f6ab744e135c65235e99",
+      "compressedSha256": "05a331b105be4b7d8ba3528021ef4a3860047d49c52ae51ef1932c856f9e2651"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-integrated-correction-evidence.json",
+      "storedPath": "docs/execution/continuation-generation37-20261120/mapping/g37-integrated-correction-evidence.json.gz",
+      "decodedBytes": 470,
+      "compressedBytes": 318,
+      "decodedSha256": "958cea35c819e3d1f082f1d0ced5ffbace650ec096bec06b48b730bae4c02732",
+      "compressedSha256": "69cec3bfe171a89e5bcc0c65743c94e973a523c29f4e97cb6f4afac20b8d58ce"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-integrated-independent-source-review.json",
+      "storedPath": "docs/execution/continuation-generation37-20261120/mapping/g37-integrated-independent-source-review.json.gz",
+      "decodedBytes": 378,
+      "compressedBytes": 275,
+      "decodedSha256": "1dec256e333fe029b8e9748e2d421fb707e4d4cb6ca95bd52d1dfd25320334db",
+      "compressedSha256": "04339236a4fcee2d55ba7dfd2267eb4612bca2c7b967876b19495822cf3125af"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-integrated-composition-review.json",
+      "storedPath": "docs/execution/continuation-generation37-20261120/mapping/g37-integrated-composition-review.json.gz",
+      "decodedBytes": 369,
+      "compressedBytes": 268,
+      "decodedSha256": "a8810fcd5327d71f1aaba75c55f8cb576642e7d31ee6b6e6f9f818c985b9e7fc",
+      "compressedSha256": "519ae4f1f84f6be7a1c53a31ba67a5aed61937d2739ed6a343217624b823d970"
+    }
+  ],
+  "parentGateArtifacts": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-parent-gate-readback.json",
+      "storedPath": "docs/execution/continuation-generation37-20261120/parent-gates/g37-parent-gate-readback.json.gz",
+      "decodedBytes": 14458,
+      "compressedBytes": 2515,
+      "decodedSha256": "cae970aee6b3f95deaf25fbe704b4151f3c39a8bd65d946b1486b452cdef0e8a",
+      "compressedSha256": "c249e366707502722280520dbdf9801ec7531a47a27c9ddb79b97ba2a0fdd5a8"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g29-native-program-log-receipt.json",
+      "storedPath": "docs/execution/continuation-generation37-20261120/parent-gates/g29-native-program-log-receipt.json.gz",
+      "decodedBytes": 783,
+      "compressedBytes": 476,
+      "decodedSha256": "ec22e76e857434608abf0c9bc3e3ca15132d45ccd29ce35f06e98e2214e27516",
+      "compressedSha256": "c52812a9b8037279087ba610bc0731329fe330aa6ab9956cefd4b6dbcae25721"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g29-native-program-136499578114.log",
+      "storedPath": "docs/execution/continuation-generation37-20261120/parent-gates/g29-native-program-136499578114.log.gz",
+      "decodedBytes": 193232,
+      "compressedBytes": 41045,
+      "decodedSha256": "f0e3ce0434104c388f4f6e324339830ad6caba34cb9509444a9cb3f087da88ed",
+      "compressedSha256": "d5a859a4c6021c84e4fef94f6125ef32d2dac2780b07b51c0d532c1f3f1edc17"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g29-native-acceptance-receipts.json",
+      "storedPath": "docs/execution/continuation-generation37-20261120/parent-gates/g29-native-acceptance-receipts.json.gz",
+      "decodedBytes": 27266,
+      "compressedBytes": 6038,
+      "decodedSha256": "36ccf9f31d7fc2904fddf74fa33d1be0858491a5af2083b0eba7a6045bd636fb",
+      "compressedSha256": "b56714352c0ec2fd4f722a501b0e52db4989ee3793e2e42b8b02dc3ae8ac1714"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/execution/solana-browser-funding-generation37-20261120/receipt.json",
+    "docs/execution/solana-browser-funding-native-generation37-20261120/receipt.json",
+    "docs/execution/solana-browser-funding-snapshot-correction-generation37-20261120/receipt.json",
+    "docs/engineering/browser-funding-flow-independent-review-generation37.json",
+    "docs/engineering/browser-funding-flow-composition-review-generation37.json",
+    "docs/engineering/qualification-generation35.json",
+    "docs/engineering/qualification-generation36.json",
+    "docs/engineering/generation28-main-merge.json"
+  ],
+  "limits": [
+    "Complete seller-direct local native-SOL proposal import, explicit seller connection, native preparation, exact G33 review, one-shot confirmation, uncertainty reconciliation and finalized-only recovery promotion. No bilateral or peer acceptance is established.",
+    "Dedicated funding commands use the private proposal record ID. Existing RecoveryAction and review.prepare remain exit-only. The original proposal, bound trade, actual wallet/client/profile/session/epoch and original PreparedSolanaFunding remain private authority; public copies and projections cannot substitute.",
+    "Existing wallet bridge single physical prompt, one-shot exact bytes, revocation and late-result rules remain unchanged. Document grants/unblocking and proposal wallet redaction recognize the two new explicit commands.",
+    "Proposal import remains one encrypted CAS and zero RPC/wallet/preparation. Unlock/restore load validated journal display without proposal RPC. Explicit refresh reconciles a live review instead of canceling it through recovery; foreign-origin uncertainty and no automatic resend remain.",
+    "Only trusted finalized native escrow observation materializes recovery. The ordinary deterministic ID must be unoccupied; a captured revision spans occupancy read and CAS. Storage/revision/lock errors propagate to revocation. Existing recovery role/origin, original proposal bytes/origin and pending-intent settlement gates are preserved; paired quota counts once even in legacy overflow.",
+    "Native companion adds a fixed funding physical-send oracle with maintained saved-proposal/full-binding/message validation and independent Ed25519 verification; legacy exit-only verifier and both readers remain byte-identical. Driver adds one early fund using existing acceptance/deadline/margins and no new long wait: exact8sends=1fund+7originalexits,9prompts=1fund+8original. All original refund/payout/withheld financial assertions remain.",
+    "Initial author208/208 includes41new app cases; native19/19 includes9new and10existing cases. Initial root2914/2914 passed but independent idle-expiry review subsequently blocked acceptance. Narrow correction adds one maintained regression: author100/100 and independent38/38 on their exact corrected source, then root2915/2915. These overlapping counts are never added. All missing-command/helper, fixture and genuine snapshot failure outputs retain actual source attribution.",
+    "Native driver strict build-only compilation ran on original combinedb695:70modules/3chunks/429784rawbytes,zero warnings,output never evaluated. Independent review verified all70 input hashes remain identical after the three-path correction, so no second driver compilation is claimed. Root corrected native updater preparation remains37modules/build-only. Hosted browser/validator/financial acceptance is separate.",
+    "All1043 non-documentation entries match the frozen corrected independent combined source. G37 alone changes16paths overG36; completeG35-37 delta versus actualPR241 is21paths,11modified10added. Actual241/240 ancestry is preserved. Current main01f is separately recorded, not falsely described as this stack parent.",
+    "Default/demo listed assets and module graphs remain identical to qualifiedG36 and publishedG34. The full suite builds the separate configured local-Solana profile; unchanged ordinary builds do not establish native or physical-device acceptance.",
+    "Actual earlier PR236 acceptance and merged main01f remain separately attributed. Their success is not transferred to later funding code. Standalone237-239 gates and TierC hosted acceptance/explicit matching owner authorization remain. No production trust, optional default activation, deployment or release. ReleaseEnabled=0."
+  ]
+}
