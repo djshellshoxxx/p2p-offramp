@@ -1,5 +1,28 @@
 # Feature coverage — dated pinned-main baseline and reviewed current main
 
+## Generations 22–23 staged runtime/update completion
+
+Child source `4cff269483e7372f607a8e994d35ca558d7cff00` builds on published
+[PR233](https://github.com/djshellshoxxx/p2p-offramp/pull/233) head
+`92663e46508b06645111d9c713beb82d3a6d1a0f` and passed **2,470/2,470 tests**,
+including forty new cases, plus ten additional commands. Main remains
+`8e836baa877b676a863c877003e277b638fc5061` at this dated snapshot. The child
+branch `codex/runtime-update-continuation-g22-20261120` is unpublished; parent
+and child hosted qualification remain pending.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| F01 / F24 runtime ownership | Opaque lease captures the current selection, performs fresh Worker-owned backup checks and recognizes only its exact acknowledged lock. Admitted openings, competing locks, cancellation and invalidation retire ownership. | Current-head integration gates and trusted full-application composition. |
+| F24 controller composition | Twelve new Node cases join the actual runtime, vault, updater, transport and signature verification. The facade binds directly; no extra production backup adapter is needed. | Native Worker/IndexedDB, physical wallet/device, activation, origin isolation and actual navigation qualification; controlled fixture ports provide none of those claims. |
+| F25 updater contract documentation | Reviewed README describes the four-method lease, direct binding and separate freshness/ownership contracts. Independent runtime and composition selections passed 88/88 and 59/59 without findings. | Preserve source-bound receipts and refresh live publication/gate status without changing historical evidence. |
+
+See the [generations 22–23 handoff](CONTINUATION_GENERATIONS22_23_20261120.md)
+and [combined qualification](qualification-generations22-23.json). Keep PR233
+frozen; publish the child against its branch, then revalidate source/tree/gates
+before retargeting to merged main. F24 remains partial: default updater
+construction, production trust and enabled release remain absent.
+`ReleaseEnabled=0`; older overlays below remain dated historical assessments.
+
 ## Generation 21 staged feature completion and remaining scope
 
 Main was read back at `8e836baa877b676a863c877003e277b638fc5061` after

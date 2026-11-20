@@ -1,5 +1,34 @@
 # P2P-Offramp consolidation handoff
 
+## Generations 22–23 checkpoint — runtime lease and direct updater composition
+
+**The exact runtime backup-selection prerequisite is implemented and its direct
+updater composition passed local qualification.** Frozen child source
+`4cff269483e7372f607a8e994d35ca558d7cff00`, tree
+`c5f9d82f618a935f24603e2290ecd8c946954d66`, passed **2,470/2,470 tests** with
+zero failures/skips/cancellations and all ten additional commands. Forty new
+cases cover opaque selection ownership and actual local runtime/updater
+composition. Independent selections passed 88/88 and 59/59 with no findings.
+
+The real published parent is [PR233](https://github.com/djshellshoxxx/p2p-offramp/pull/233)
+at `92663e46508b06645111d9c713beb82d3a6d1a0f`. Main remains
+`8e836baa877b676a863c877003e277b638fc5061` at this snapshot. The child branch
+`codex/runtime-update-continuation-g22-20261120` is not yet published or merged.
+The parent had fourteen queued checks and Snyk success at the latest recorded
+snapshot; applicable hosted qualification remains pending. Keep PR233 frozen,
+target its branch for the child, and revalidate source/tree/gates before any
+later retarget to main.
+
+Read the [generations 22–23 continuation](CONTINUATION_GENERATIONS22_23_20261120.md),
+[combined qualification](qualification-generations22-23.json) and
+[retained evidence index](retained-logs-generations22-23.json). The facade binds
+directly to the existing updater backup contract; no production backup adapter
+is missing. Trusted application/wallet/source composition and native-browser
+origin qualification remain incomplete. The default updater is unconfigured,
+production trust is unset and `ReleaseEnabled=0`. Earlier sections below retain
+their dated source scope and are superseded for coordination by this checkpoint
+and subsequent exact-source publication receipts.
+
 ## Generation 21 checkpoint — reviewed locale completion awaiting hosted integration
 
 **The new composed source passed 2,430/2,430 tests with zero failures or skips.**
