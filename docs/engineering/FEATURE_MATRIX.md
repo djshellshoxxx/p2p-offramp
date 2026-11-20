@@ -1,12 +1,35 @@
-# Feature coverage — pinned main and retained candidates
+# Feature coverage — dated pinned-main baseline and reviewed current main
 
 
-## Current generation 15 staging overlay
+## Current generation 17 main source and remaining scope
+
+The reviewed corrected source from [PR221](https://github.com/djshellshoxxx/p2p-offramp/pull/221)
+merged to `main` at `1084a410676bc0658da97f33eba6a059493d74df`,
+complete tree `7ccc0514c8320314a04fab333d5ebf14294f69dc`.
+Its exact-source hosted checks passed 15/15 plus Snyk; the Node suite had
+2,362 passes, zero failures and one Foundry-dependent skip, separately
+covered by a successful provisioned Foundry job. Actual hosted Chromium,
+Firefox, WebKit, Nostr and updated-lock Solana validator/browser gates passed.
+PR219's original Chromium failure remains historical failed evidence.
+See the [generation 17 continuation](CONTINUATION_GENERATION17_20261120.md).
+
+Backup verification UI and public Solana recovery export are integrated.
+The signed-update UI is present with a null default controller, but the
+trusted/own-lock update adapter is incomplete. Full Solana negotiation and
+funding, physical-wallet/camera/mobile acceptance, supported-locale semantic
+approval, release trust/configuration and the nine separately reviewed
+optional PR191–199 packages remain outstanding. `ReleaseEnabled=0` and
+default optional imports remain disabled. The 27 historical pinned-main
+feature rows and earlier overlays below are source-dated evidence; they
+do not describe the latest main checkout or grant release approval.
+
+## Historical generation 15 staging overlay (superseded)
 
 [PR219](https://github.com/djshellshoxxx/p2p-offramp/pull/219) consolidates reviewed
 core and completed followups. Its frozen tree768be48c passed the full2,361-test
-suite and fresh independent composition review. Main is unchanged; current-target
-hosted native/browser checks are pending. Exact evidence and remaining inputs are
+suite and fresh independent composition review. At that dated snapshot, main was unchanged
+and native/browser checks were pending; PR219 later failed Chromium and was superseded by the
+corrected PR221 merge. Exact evidence and remaining inputs are
 in the [current handoff](CONTINUATION_GENERATION15_20261120.md).
 
 | Capability | Implemented staging scope | Remaining scope |

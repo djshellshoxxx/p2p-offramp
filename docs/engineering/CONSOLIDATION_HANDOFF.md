@@ -25,14 +25,14 @@ own-lock lifecycle, full Solana negotiation/funding, real devices and distributi
 approval remain incomplete; none were authorized or silently promoted.
 
 
-## Current generation 15 checkpoint — one main-target candidate
+## Historical generation 15 checkpoint — superseded by reviewed generation 17 merge
 
 **PR219 now contains the reviewed core and completed feature/fix followups in one
 frozen, independently reviewed tree. Its exact source passed 2,361/2,361 tests.**
 Read the [current generation15 handoff](CONTINUATION_GENERATION15_20261120.md),
 [publication map](generation15-publication.json), and
 [hosted snapshot](generation15-hosted-snapshot.json) before resuming.
-Main remains unchanged; final-candidate CI is queued and must pass before merge.
+At the dated generation 15 snapshot, main was unchanged and candidate CI had not completed. PR219 subsequently failed the actual Chromium locale-listener check; the reviewed correction qualified on PR221 and merged to main in generation 17. These generation 15 lines are historical evidence, not current integration instructions.
 The six component PRs213–218 are closed as superseded; their source branches
 and commit histories remain, verified after closure.
 Sixteen workers completed this renewed continuation. The existing hourly task

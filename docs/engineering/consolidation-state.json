@@ -1598,13 +1598,13 @@
       "next_action": "Preserve exact2311full/44independent evidence and source ancestry. Currentd301 hosted/native/browser gates remain; original212head unchanged and GitHub records stackedPRmerged."
     }
   ],
-  "successor_generation": 16,
-  "integration_local_source_sha": "430fbcaa6eff20dcd869d30a73e6a2ca6add0f0c",
+  "successor_generation": 18,
+  "integration_local_source_sha": "fba06f12afeaee93572cd09c3e0d643adfe6f5f5",
   "parent_integration_pr": 213,
   "parent_integration_branch": "codex/main-consolidation-g12-20261120",
   "parent_integration_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
-  "pull_request_resolution": "PR219 is the single complete main-target candidate. PR213–218 were closed as superseded after verifying their heads as candidate parents; all six branch refs read back unchanged. Main remains unchanged; final exact-source CI and merge remain pending.",
-  "main_merges_performed": 0,
+  "pull_request_resolution": "PR221 corrected main-target source passed all 15 exact-source checks plus Snyk and merged as 1084a410676bc0658da97f33eba6a059493d74df. PR219's historical Chromium failure remains failed; its GitHub merged-by-ancestry flag is not a pass. PR220 was closed unmerged as superseded; its tested correction is included through PR221. PR222 is a separate draft documentation-only follow-up, not merged.",
+  "main_merges_performed": 1,
   "published_generations": [
     {
       "generation": 1,
@@ -2813,9 +2813,9 @@
     "generation11_optional_full": "07831fb7cbd89692037327c2d221cd49afe61a436bd5927dc990e2965714e052",
     "generation11_optional_independent": "fb2cc67c4ab1ac6c156dc6b7a81d10008030f63ca6eabdfb5362fea93537cd51"
   },
-  "integration_pr": 219,
-  "integration_published_head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
-  "integration_published_tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
+  "integration_pr": 221,
+  "integration_published_head": "24b67bb2db7c74654b9a5b9496279b4d44380d28",
+  "integration_published_tree": "7ccc0514c8320314a04fab333d5ebf14294f69dc",
   "known_findings": [
     {
       "id": "PRIVACY-ATOMIC-GROUP-PRUNING",
@@ -4790,8 +4790,8 @@
     "external_owner_data_removed": false
   },
   "continuation_control": {
-    "status": "awaiting-final-candidate-current-target-hosted-gates",
-    "handoff": "CONTINUATION_GENERATION15_20261120.md",
+    "status": "source-merged-main-docs-pr222-qualification-and-review-pending",
+    "handoff": "CONTINUATION_GENERATION17_20261120.md",
     "active_workers": [],
     "completed_workers": [
       "branch_inventory",
@@ -4814,7 +4814,7 @@
     "automation_id": "Automation_ab68cc67e6ac8191bd31dc2d84a085e1",
     "automation_prompt_updated": true,
     "schedule_and_environment_unchanged": true,
-    "next_action": "Inspect completed PR219 exact-source logs, refresh refs and gates, then perform already-authorized expected-head merge; use fresh workers for concrete failures or newly actionable work.",
+    "next_action": "Inspect exact-head PR222 documentation/spec/JSON/link checks, obtain independent scoped review, and guard a docs-only main merge with current base/head/tree equality. Preserve the PR219 failure and original branches; continue only unblocked, separately reviewed optional, trust, Solana funding and device scopes. Do not rerun unchanged native financial gates.",
     "temporary_automation_notice_must_be_replaced_before_handoff": false
   },
   "generation11_core_composition": {
@@ -5423,7 +5423,7 @@
     "composition_new_cause_count": 0
   },
   "hosted_generation11_snapshot": "hosted-snapshot-generation11.json",
-  "current_hosted_snapshot_key": "hosted_generation15_snapshot",
+  "current_hosted_snapshot_key": "generation17_main_integration",
   "previous_generation11_top_level_checkpoint": {
     "generation": 11,
     "updated_at_utc": "2026-11-20T05:09:05.194802+00:00",
@@ -5457,7 +5457,7 @@
   "previous_root_native_workers_actually_launched": 44,
   "native_worker_count_scope": "current renewed owner request only; historical root retained separately",
   "hosted_generations12_13_snapshot": "generation12-13-hosted-snapshot.json",
-  "current_continuation_handoff": "CONTINUATION_GENERATION15_20261120.md",
+  "current_continuation_handoff": "CONTINUATION_GENERATION17_20261120.md",
   "continuation_generations12_13": {
     "request": "Continue source consolidation and useful unfinished features with fresh native workers through context renewal.",
     "reports": [
@@ -5557,7 +5557,7 @@
   },
   "integration_target": "main",
   "hosted_generation15_snapshot": "generation15-hosted-snapshot.json",
-  "current_verification_key": "generation15_final_qualification",
+  "current_verification_key": "generation17_main_integration",
   "generation15_final_core": {
     "head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
     "tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
