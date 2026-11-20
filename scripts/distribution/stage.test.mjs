@@ -5,6 +5,8 @@ import {tmpdir} from 'node:os';
 import {resolve,join} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {stageUnsignedDistribution,verifyDistribution} from './stage.mjs';
+import {inspectDocs} from '../docs/validate.mjs';
+import {createBoundDistributionFixture} from './test-fixture.mjs';
 import {FORMAT,APPROVAL,PUBLIC_COPIES,RECIPE_INPUTS,sha256,compare,validateManifest,manifestBytes,parseManifest,allowedAssetPath,allowedSourceInputPath,reviewPacket} from './manifest.mjs';
 
 const clone=value=>structuredClone(value);
@@ -61,6 +63,10 @@ test('the default distribution requires the exact offline and pinned QR artifact
   assert.throws(()=>validateManifest(duplicate));
  }
 });
+test('personalization source inventory admits only the exact reviewed favorites and templates pairs',()=>{
+ for(const path of ['packages/personalization/favorites.ts','packages/personalization/src/favorites.ts','packages/personalization/templates.ts','packages/personalization/src/trade-draft-store.ts'])assert.equal(allowedSourceInputPath(path),true,path);
+ for(const path of ['packages/personalization/index.ts','packages/personalization/src/other.ts','packages/personalization/test/favorites.test.mjs','packages/personalization/test/trade-draft-store.test.mjs','packages/personalization/src/future-template.ts'])assert.equal(allowedSourceInputPath(path),false,path);
+});
 test('existing, source-tree, traversal and symlink-parent destinations are preserved without building',async t=>{
  const parent=await mkdtemp(join(tmpdir(),'p2p-stage-path-'));t.after(()=>rm(parent,{recursive:true,force:true}));
  const existing=join(parent,'existing');await mkdir(existing);await writeFile(join(existing,'sentinel'),'keep');
@@ -69,16 +75,41 @@ test('existing, source-tree, traversal and symlink-parent destinations are prese
  await symlink(parent,join(parent,'linked'));await assert.rejects(stageUnsignedDistribution({outDir:join(parent,'linked','new')}),/DIRECTORY/);
  await assert.rejects(stageUnsignedDistribution({outDir:resolve('scripts/distribution/new-output')}),/OUTPUT/);
 });
-test('actual two-pass stage contains only validated public artifacts and equal repeat output; tampering is refused',async t=>{
+test('current unsigned staging binds matching evidence or refuses stale records without waiving them',async t=>{
+ const docs=await inspectDocs();assert.equal(docs.semanticApproval,false);assert.equal(docs.published,false);
+ const parent=await mkdtemp(join(tmpdir(),'p2p-stage-stale-'));t.after(()=>rm(parent,{recursive:true,force:true}));
+ const outDir=join(parent,'current');
+ if(docs.stale.length){
+  await assert.rejects(stageUnsignedDistribution({outDir}),{message:'DISTRIBUTION_SOURCE_CHANGED'});
+  await assert.rejects(lstat(outDir),{code:'ENOENT'});
+ }else{
+  const staged=await stageUnsignedDistribution({outDir});assert.equal(await verifyDistribution(staged.directory,staged.manifest),true);
+ }
+});
+test('draft record generation takes copy text from the selected immutable catalog, not later source edits',async t=>{
+ const fixture=await createBoundDistributionFixture();t.after(()=>fixture.dispose());
+ const registerPath=resolve(fixture.root,'docs/wiki-source/claims-register.json'),manifestPath=resolve(fixture.root,'docs/wiki-source/docs-manifest.json');
+ const before=await readFile(registerPath),manifest=await readFile(manifestPath),register=JSON.parse(before);
+ const path=resolve(fixture.root,register.copySource.path),source=await readFile(path,'utf8');
+ const changed=source.replace('Authenticated encryption observed','Later unapproved working-tree copy');assert.notEqual(changed,source);
+ await writeFile(path,changed);
+ execFileSync('python',['scripts/docs/generate.py','--allow-local',register.sourceCommit],{cwd:fixture.root,stdio:'pipe',timeout:30000});
+ assert.deepEqual(await readFile(registerPath),before);assert.deepEqual(await readFile(manifestPath),manifest);
+ const report=await inspectDocs(fixture.root);assert.deepEqual(report.stale,[register.copySource.path]);
+ assert.ok(report.claimsRegister.every(claim=>claim.evidenceCurrent===false));
+ assert.equal(report.semanticApproval,false);assert.equal(report.published,false);
+});
+test('historical bound client with current tooling stages twice exactly; current-source distribution remains separate',async t=>{
  const parent=await mkdtemp(join(tmpdir(),'p2p-stage-real-'));t.after(()=>rm(parent,{recursive:true,force:true}));
- const first=await stageUnsignedDistribution({outDir:join(parent,'first')}),second=await stageUnsignedDistribution({outDir:join(parent,'second')});
+ const fixture=await createBoundDistributionFixture();t.after(()=>fixture.dispose());
+ const first=await fixture.stage(join(parent,'first')),second=await fixture.stage(join(parent,'second'));
  assert.equal(await verifyDistribution(first.directory,first.manifest),true);assert.deepEqual(first.manifest,second.manifest);
  assert.equal(first.manifest.build.passes,2);assert.equal(first.manifest.build.independentWitnesses,0);assert.ok(Object.values(first.manifest.approval).every(value=>value===false));
  for(const asset of first.manifest.assets){
   const a=await readFile(resolve(first.directory,asset.path)),b=await readFile(resolve(second.directory,asset.path));assert.deepEqual(a,b);
   assert.equal((await lstat(resolve(first.directory,asset.path))).mode&0o111,0);
  }
- for(const[source,path]of PUBLIC_COPIES)assert.deepEqual(await readFile(resolve(first.directory,path)),await readFile(resolve(source)));
+ for(const[source,path]of PUBLIC_COPIES)assert.deepEqual(await readFile(resolve(first.directory,path)),await readFile(resolve(fixture.root,source)));
  const packet=JSON.parse(await readFile(resolve(first.directory,'review-packet.json'),'utf8'));assert.equal(packet.recovery.reason,'KEY_UNPINNED');
  assert.equal(first.manifest.assets.some(asset=>/recover\.mjs|\.jwk$|\.env|\.wasm$|\.node$/.test(asset.path)),false);
  const asset=first.manifest.assets.find(asset=>asset.path==='public/BasicEscrow.json'),path=resolve(first.directory,asset.path),saved=await readFile(path);
@@ -89,4 +120,6 @@ test('actual two-pass stage contains only validated public artifacts and equal r
  await mkdir(resolve(first.directory,'unexpected'));await assert.rejects(verifyDistribution(first.directory,first.manifest),/ASSET_SET/);await rm(resolve(first.directory,'unexpected'),{recursive:true});
  await writeFile(resolve(first.directory,'public/key.private.jwk'),'PRIVATE');await assert.rejects(verifyDistribution(first.directory,first.manifest),/ASSET_SET/);await rm(resolve(first.directory,'public/key.private.jwk'));
  assert.equal(await verifyDistribution(first.directory,first.manifest),true);
+ console.log(JSON.stringify({fixture:'historical-bound-client-current-tooling',sourceCommit:fixture.sourceCommit,sourceTree:fixture.sourceTree,
+  toolingHashes:fixture.toolingHashes,currentSourceDistributionQualified:false,semanticApproval:false,published:false}));
 });
