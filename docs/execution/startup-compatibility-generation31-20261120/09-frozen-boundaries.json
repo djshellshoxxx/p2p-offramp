@@ -1,0 +1,32 @@
+{
+  "label": "09-frozen-boundaries",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-g31",
+  "argv": [
+    "npm",
+    "run",
+    "check:boundaries"
+  ],
+  "head": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+  "headTree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+  "patch": "09-frozen-boundaries.patch",
+  "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "files": {
+    "apps/web/src/OfflineRoot.tsx": "7f2059b5c1e3c0392e22880a7a9d493b89be1fd855f70377a46d46ed6b8daba2",
+    "apps/web/src/ui/App.tsx": "fdb435b01ad3653fea46342b6866a8ea26cf016610cb80ac578a83614088352d",
+    "apps/web/src/main.tsx": "56d6f772c3fd335e2d07d7480d6ff497fa87a4e3c489e8c0c7ecdf88f5c0bf31",
+    "apps/web/src/ui/Pages.tsx": "5db3601177d38a826428ea475e60b18f3a13f00219a6da62f3721a89d5adc520",
+    "apps/web/src/compatibility/model.ts": "4408765efd7119d5afcdff28b07ae785750e5bf584c880c6b95b112fc550fa97",
+    "apps/web/src/compatibility/probe.ts": "e393f4dfadc098fdf74afd5a2c737142720280b12e92197f5f2b2b2b902b4793",
+    "apps/web/src/compatibility/startup.ts": "b258f8cecb4e5574b2bc3ec0e8d8212c32a132c55e9c8710a807693025a3907b",
+    "apps/web/src/ui/StartupCompatibilityNotice.tsx": "73e8f5d5c9b3cc16f19834255438dc5cbeece42688c0bb20c91829cb6c0efaf9",
+    "apps/web/test/startup-compatibility-composition.test.mjs": "216e22d37d6fbb93467a17b7542c63b0faa298be607aced063a2073553fb9f5f",
+    "apps/web/test/generic-app-share-composition.test.mjs": "b2781db9b3fa161e77d7b63a680a43eaaa96d08e2c01b58d269b46adf485b425"
+  },
+  "startedAt": "2026-11-20T19:02:46.197247+00:00",
+  "durationSeconds": 3.325,
+  "exitCode": 0,
+  "endedAt": "2026-11-20T19:02:49.522469+00:00",
+  "log": "09-frozen-boundaries.log",
+  "logBytes": 392,
+  "logSha256": "171459349881532fab298d83fadbd8a8f2a269b3197f7642193a31fe471deb39"
+}

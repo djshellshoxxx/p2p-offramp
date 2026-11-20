@@ -1,3 +1,40 @@
+# Current feature coverage — generation 31 (2026-11-20 UTC)
+
+Frozen combined source `8d566f0e46ee76ee35a957cab0a4358a3da4aeb3`, tree
+`99047cf4675fbc299d700eec51d9b388da6707fe`, passed **2,604/2,604 tests**
+with zero other outcomes plus all six additional qualification commands.
+Independent source and combined-provenance reviews accepted the exact source.
+G31 is a separate unpublished follow-up above published PR238 head
+`1c658181fb2bd04ffc4df0d0fbdf6735da3e7fce`; PR236 remains the frozen
+main-target aggregate containing PR233–235, with PR237 and PR238 as children.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| Startup compatibility composition | OfflineRoot captures the maintained local presence snapshot and uses its required-API guard; App renders the existing notice after startup. Missing/unavailable required APIs prevent initialization, while optional API absence does not. | Actual runtime checks remain authoritative. Presence is untested/uncertified and grants no storage, device, wallet or economic-action readiness. Wider cross-device and wallet-handoff acceptance remains separate. |
+| Startup lifecycle and presentation | Controlled maintained-source tests cover stable snapshots, selected-catalog updates, actual refusal/thrown errors, pagehide/unmount, late results and effect replay. Existing service cleanup, G30 address propagation and native entry branches remain intact. | Controlled hooks/ports and static graph evidence do not establish native event reachability, durable storage, physical-device or supported-translation acceptance. |
+| Source and evidence | Two production files and one adjacent fixture change; one new composition test is added. All 1,029 non-documentation entries equal reviewed source, with 1,025 parent entries preserved. Original baseline, wired-fixture, reviewer-setup and checker failures remain attributed and retained. | Publish with source/evidence mapping and proposed-merge readback; require applicable current-source/current-target hosted checks and D8 Tier B CodeRabbit-or-Qodo pass with findings answered. |
+| Artifact and release boundary | Default/demo graphs are 102/30/4 and 104/30/4. Four maintained compatibility modules join the document graph; the vault Worker remains identical. Native updater preparation reports strict 37-module compilation with nativeExecuted=false. | Native execution, trusted activation and release acceptance remain separate. Worker identity does not transfer parent acceptance. ReleaseEnabled remains 0 with empty connection origins. |
+| Solana funding continuation | Existing direct native funding and exit preparation remain unchanged by G31. | Separately owned G32 work plans an explicit prepared-funding capability in the native client while preserving the browser exit-only contract; no completion or native acceptance is claimed. |
+
+Preserve the PR236 aggregate plan and original PR233–235 heads/branches. Its
+qualified guarded merge and main/tree/ordered-parent/ancestry readback precede
+reconciliation of contained PRs. PR237 and PR238 remain separate published
+follow-ups. After parent merges, retarget/reconcile children to actual main and
+refresh target-specific gates. Optional PR224–232 and audits184–186 retain
+their independent owners.
+
+Read the [G31 continuation](CONTINUATION_GENERATION31_20261120.md),
+[qualification](qualification-generation31.json) and
+[independent composition supplement](INDEPENDENT_STARTUP_COMPOSITION_REVIEW_GENERATION31_20261120.md).
+The independent 53 maintained passes occurred within an initially failed mixed
+command; four original probes passed separately after retained fixture repairs.
+No single green 57-case command is claimed. Selections overlap the full suite
+and are not summed. The handoff records exact historical suffix hashes; all
+earlier bytes below remain unchanged, with older status labels kept as history.
+
+---
+
+
 # Current feature coverage — generation 30 (2026-11-20 UTC)
 
 Frozen combined source `3bfb7761b6ec430c8e437d117ec31007503f0d12`, tree

@@ -1,0 +1,46 @@
+{
+  "name": "04-independent-root-probes",
+  "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+  "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/independent-startup-probes.mjs"
+  ],
+  "startedAt": "2026-11-20T19:03:28.717231+00:00",
+  "completedAt": "2026-11-20T19:03:29.537816+00:00",
+  "exitCode": 1,
+  "sourceStatusAtStart": "",
+  "sourceUnchanged": true,
+  "sourceStatusAtEnd": "",
+  "scriptInputs": [
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/scripts/test-support/register-tsx.mjs",
+      "bytes": 86,
+      "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/independent-startup-probes.mjs",
+      "bytes": 10811,
+      "sha256": "94a7813d055fa90fba549d997c28646dda542e8ac51ecda45d58c3fe00e770ce"
+    }
+  ],
+  "rawBytes": 4723,
+  "rawSha256": "1d7ea73c60931ddf149bc6275bd8fbcea16e65dc8ee7ce1f0d0318144b5d1893",
+  "gzipBytes": 791,
+  "gzipSha256": "270d94659e7759a0a102716c34fe9e1aaf3260ad3efee66b4976f469d508d341",
+  "gzipMtime": 0,
+  "summary": [
+    "\u2139 tests 4",
+    "\u2139 suites 0",
+    "\u2139 pass 0",
+    "\u2139 fail 4",
+    "\u2139 cancelled 0",
+    "\u2139 skipped 0",
+    "\u2139 todo 0",
+    "\u2139 duration_ms 737.417841"
+  ]
+}

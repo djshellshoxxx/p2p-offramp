@@ -1,0 +1,35 @@
+{
+  "label": "02-wired-composition-and-sharing",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-g31",
+  "argv": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "apps/web/test/startup-compatibility-composition.test.mjs",
+    "apps/web/test/generic-app-share-composition.test.mjs"
+  ],
+  "head": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+  "headTree": "b46873509b64467338978820a6469de7fffdc619",
+  "patch": "02-wired-composition-and-sharing.patch",
+  "patchSha256": "6b9bc4625aa9d3b7c5d22440ab90c6a54d48b48b87d7722952bfc91580e7573c",
+  "files": {
+    "apps/web/src/OfflineRoot.tsx": "7f2059b5c1e3c0392e22880a7a9d493b89be1fd855f70377a46d46ed6b8daba2",
+    "apps/web/src/ui/App.tsx": "fdb435b01ad3653fea46342b6866a8ea26cf016610cb80ac578a83614088352d",
+    "apps/web/src/main.tsx": "56d6f772c3fd335e2d07d7480d6ff497fa87a4e3c489e8c0c7ecdf88f5c0bf31",
+    "apps/web/src/ui/Pages.tsx": "5db3601177d38a826428ea475e60b18f3a13f00219a6da62f3721a89d5adc520",
+    "apps/web/src/compatibility/model.ts": "4408765efd7119d5afcdff28b07ae785750e5bf584c880c6b95b112fc550fa97",
+    "apps/web/src/compatibility/probe.ts": "e393f4dfadc098fdf74afd5a2c737142720280b12e92197f5f2b2b2b902b4793",
+    "apps/web/src/compatibility/startup.ts": "b258f8cecb4e5574b2bc3ec0e8d8212c32a132c55e9c8710a807693025a3907b",
+    "apps/web/src/ui/StartupCompatibilityNotice.tsx": "73e8f5d5c9b3cc16f19834255438dc5cbeece42688c0bb20c91829cb6c0efaf9",
+    "apps/web/test/startup-compatibility-composition.test.mjs": "ca06deec6bbb4aaa163ef754ca633078f8d806c105e75aee3ec63c48277e546c",
+    "apps/web/test/generic-app-share-composition.test.mjs": "18e02f7be36405c4c8dd5d876e69f1e76333d7975c9f62b9c7bac1e9ae77b142"
+  },
+  "startedAt": "2026-11-20T19:00:04.953468+00:00",
+  "durationSeconds": 2.157,
+  "exitCode": 1,
+  "endedAt": "2026-11-20T19:00:07.110367+00:00",
+  "log": "02-wired-composition-and-sharing.log",
+  "logBytes": 12979,
+  "logSha256": "1088980de13e51602955d015c24af0cad8ae8c86005344f692440b14768c4fb3"
+}

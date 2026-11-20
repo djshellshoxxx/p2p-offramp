@@ -1,0 +1,165 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { pathToFileURL } from 'node:url';
+import { dirname, resolve } from 'node:path';
+import { runInNewContext } from 'node:vm';
+import { setImmediate as turn } from 'node:timers/promises';
+
+const repo = '/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31';
+const require = createRequire(import.meta.url);
+const { build } = await import(pathToFileURL(require.resolve('vite', { paths: [repo] })).href);
+const rootPath = resolve(repo, 'apps/web/src/OfflineRoot.tsx');
+const entry = resolve(repo, 'apps/web/test/independent-startup-review-fixture.ts');
+const virtualEntry = '\0independent-startup-review';
+const replacements = new Map([
+  [resolve(repo, 'apps/web/src/app-services.ts'), 'export const startAppServices = () => globalThis.reviewPorts.initialize();'],
+  [resolve(repo, 'apps/web/src/diagnostics.ts'), 'export const createLocalDiagnostics = () => null;'],
+  [resolve(repo, 'apps/web/src/ui/App.tsx'), 'export const App = () => null;'],
+  [resolve(repo, 'apps/web/src/trade/review-controller.ts'), 'export const noApprovedRegistry = () => null; export const createTradeReviewController = () => globalThis.reviewPorts.trade;'],
+]);
+
+// Independent root-ownership probes: actual maintained OfflineRoot, presence
+// probe, startup guard, schema failure and generic URL helper. React scheduling,
+// the eventual service result and unrelated child rendering are controlled.
+// These probes do not execute a browser, Worker, storage, or the App child.
+const bundle = await build({ configFile: false, logLevel: 'silent', define: {
+  __P2P_SYNTHETIC_DEMO__: 'false', __P2P_TESTNET__: 'false',
+}, plugins: [{
+  name: 'independent-startup-review', enforce: 'pre',
+  resolveId(id, importer) {
+    if (id === entry) return virtualEntry;
+    if (['react', 'react/jsx-runtime'].includes(id)) return '\0independent-startup-' + id;
+    const path = id.startsWith('.') && importer ? resolve(dirname(importer), id) : id;
+    if (replacements.has(path)) return '\0independent-startup-replacement:' + path;
+  },
+  load(id) {
+    if (id === virtualEntry) return `export { OfflineRoot } from ${JSON.stringify(rootPath)};`;
+    if (id.startsWith('\0independent-startup-replacement:')) return replacements.get(id.slice('\0independent-startup-replacement:'.length));
+    if (id === '\0independent-startup-react') return `
+      export const useState = value => globalThis.reviewHooks.useState(value);
+      export const useEffect = (callback, dependencies) => globalThis.reviewHooks.useEffect(callback, dependencies);`;
+    if (id === '\0independent-startup-react/jsx-runtime') return `
+      export const jsx = (type, props) => ({ type, props });
+      export const jsxs = jsx;
+      export const Fragment = 'fragment';`;
+  },
+}], build: { write: false, minify: false, lib: { entry, formats: ['iife'], name: 'IndependentStartup' } } });
+const output = Array.isArray(bundle) ? bundle[0].output : bundle.output;
+assert.equal(output.length, 1);
+const code = output[0].code;
+const deferred = () => { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; };
+
+function mount({ secure = true, optionalThrows = false } = {}) {
+  const states = [], effects = [], requests = [], forbiddenCalls = [], persistence = [], listeners = new Map();
+  let stateAt = 0, effectAt = 0, dirty = true, active = true, view, writes = 0, probeReads = 0;
+  const refused = name => () => { forbiddenCalls.push(name); throw Error('UNAUTHORIZED_PROBE_OPERATION'); };
+  function Worker() { refused('worker-construction')(); }
+  Worker.prototype.postMessage = refused('worker-message'); Worker.prototype.terminate = refused('worker-terminate');
+  function File() { refused('file-construction')(); }
+  function Blob() { refused('blob-construction')(); }
+  Blob.prototype.arrayBuffer = refused('blob-read');
+  class LocalURL extends URL {}
+  LocalURL.createObjectURL = refused('create-object-url'); LocalURL.revokeObjectURL = refused('revoke-object-url');
+  function Anchor() { refused('anchor-construction')(); }
+  Object.defineProperty(Anchor.prototype, 'download', { value: '' });
+  const navigator = { mediaDevices: { getUserMedia: refused('camera') }, permissions: { query: refused('permission') } };
+  for (const key of ['share', 'clipboard']) Object.defineProperty(navigator, key, { get() {
+    if (optionalThrows) throw Error('PRIVATE_OPTIONAL_PLATFORM_DETAIL');
+    return key === 'share' ? refused('share') : { writeText: refused('clipboard') };
+  } });
+  const context = {
+    TextEncoder, TextDecoder, URL: LocalURL, Worker, File, Blob, HTMLAnchorElement: Anchor, navigator,
+    crypto: { getRandomValues: refused('random'), subtle: Object.fromEntries(['digest', 'importKey', 'deriveKey', 'encrypt', 'decrypt'].map(name => [name, refused('crypto-' + name)])) },
+    indexedDB: { open: refused('storage-open') }, fetch: refused('fetch'),
+    window: {
+      addEventListener(name, handler) { if (!listeners.has(name)) listeners.set(name, new Set()); listeners.get(name).add(handler); },
+      removeEventListener(name, handler) { listeners.get(name)?.delete(handler); },
+    },
+    reviewPorts: {
+      initialize() { const request = deferred(); requests.push(request); return request.promise; },
+      trade: { loadRegistry() {}, setPersistence(value) { persistence.push(value); }, dispose() {} },
+    },
+    reviewHooks: {
+      useState(initial) {
+        const at = stateAt++;
+        if (!(at in states)) states[at] = typeof initial === 'function' ? initial() : initial;
+        return [states[at], value => { writes++; if (!active) return; const next = typeof value === 'function' ? value(states[at]) : value;
+          if (!Object.is(next, states[at])) { states[at] = next; dirty = true; } }];
+      },
+      useEffect(callback, dependencies) {
+        const at = effectAt++, previous = effects[at];
+        if (!previous || dependencies.some((value, i) => !Object.is(value, previous.dependencies[i])))
+          effects[at] = { callback, dependencies, stop: previous?.stop, pending: true };
+      },
+    },
+  };
+  Object.defineProperty(context, 'isSecureContext', { configurable: true, get() { probeReads++; return secure; } });
+  runInNewContext(code, context);
+  function flushEffects() {
+    for (const effect of effects) if (effect.pending) { effect.pending = false; effect.stop?.(); effect.stop = effect.callback(); }
+  }
+  function render(force = false) {
+    if (force) dirty = true;
+    for (let i = 0; dirty && i < 12; i++) {
+      dirty = false; stateAt = effectAt = 0;
+      view = context.IndependentStartup.OfflineRoot({ entryModuleUrl: 'https://app.example/subpath/assets/index-Abc12345.js' });
+      flushEffects();
+    }
+    assert.equal(dirty, false, 'controlled root settles'); return view.props;
+  }
+  return { requests, forbiddenCalls, persistence,
+    render, setSecure(value) { secure = value; },
+    get probeReads() { return probeReads; }, get writes() { return writes; },
+    pagehide(persisted) { for (const handler of [...listeners.get('pagehide') ?? []]) handler({ persisted }); },
+    replayEffects() { for (const effect of effects) { effect.stop?.(); effect.stop = undefined; effect.pending = true; } flushEffects(); },
+    unmount() { if (!active) return; active = false; for (const effect of effects) effect.stop?.(); },
+  };
+}
+
+test('independent: the mounted snapshot stays read-only after API presence changes; a fresh mount probes again', async t => {
+  const ui = mount({ secure: false }); t.after(() => ui.unmount());
+  const initial = ui.render(); assert.equal(initial.startupCapabilities.mode, 'read-only');
+  await turn(); const refused = ui.render();
+  assert.equal(refused.starting, false); assert.equal(refused.startupError, 'UNSUPPORTED_ENVIRONMENT');
+  ui.setSecure(true); const refreshed = ui.render(true);
+  assert.equal(refreshed.startupCapabilities, initial.startupCapabilities);
+  assert.equal(refreshed.appLink, 'https://app.example/subpath/');
+  assert.equal(ui.probeReads, 1); assert.equal(ui.requests.length, 0); assert.deepEqual(ui.forbiddenCalls, []);
+  const fresh = mount(); t.after(() => fresh.unmount()); fresh.render();
+  assert.equal(fresh.probeReads, 1); assert.equal(fresh.requests.length, 1); assert.deepEqual(fresh.forbiddenCalls, []);
+});
+
+test('independent: throwing optional presence getters preserve authoritative runtime refusal without platform detail', async t => {
+  const ui = mount({ optionalThrows: true }); t.after(() => ui.unmount());
+  const pending = ui.render(); assert.equal(pending.startupCapabilities.mode, 'runtime-candidate');
+  assert.equal(pending.startupCapabilities.optional.clipboard, 'unavailable');
+  assert.equal(pending.startupCapabilities.optional.share, 'unavailable');
+  assert.equal(ui.requests.length, 1); assert.deepEqual(ui.forbiddenCalls, []);
+  ui.requests[0].resolve({ ok: false, error: { code: 'STORAGE_UNAVAILABLE', message: 'PRIVATE_RUNTIME_DETAIL' } });
+  await turn(); const final = ui.render();
+  assert.equal(final.starting, false); assert.equal(final.startupError, 'STORAGE_UNAVAILABLE'); assert.equal(final.services, null);
+  assert.doesNotMatch(JSON.stringify(final), /PRIVATE_/); assert.equal(ui.probeReads, 1);
+});
+
+test('independent: effect cleanup replay retires the old startup while preserving the newer owned service', async t => {
+  const ui = mount(); t.after(() => ui.unmount()); ui.render(); ui.replayEffects();
+  assert.equal(ui.requests.length, 2); assert.equal(ui.probeReads, 1);
+  let oldDisposals = 0, newDisposals = 0;
+  const oldService = { dispose() { oldDisposals++; } }, newService = { dispose() { newDisposals++; } };
+  ui.requests[1].resolve({ ok: true, value: newService }); await turn();
+  assert.equal(ui.render().services, newService); const before = ui.writes;
+  ui.requests[0].resolve({ ok: true, value: oldService }); await turn();
+  assert.equal(ui.render().services, newService); assert.equal(ui.writes, before);
+  assert.equal(oldDisposals, 1); assert.equal(newDisposals, 0); assert.equal(ui.probeReads, 1);
+  ui.unmount(); assert.equal(newDisposals, 1); assert.deepEqual(ui.forbiddenCalls, []);
+});
+
+test('independent: persisted pagehide keeps pending ownership; final pagehide disposes a late success without publication', async t => {
+  const ui = mount(); t.after(() => ui.unmount()); ui.render();
+  ui.pagehide(true); assert.equal(ui.requests.length, 1);
+  ui.pagehide(false); const before = ui.writes; let disposals = 0;
+  ui.requests[0].resolve({ ok: true, value: { dispose() { disposals++; } } }); await turn();
+  assert.equal(disposals, 1); assert.equal(ui.writes, before); assert.equal(ui.render().services, null);
+  assert.equal(ui.probeReads, 1); assert.deepEqual(ui.forbiddenCalls, []);
+});

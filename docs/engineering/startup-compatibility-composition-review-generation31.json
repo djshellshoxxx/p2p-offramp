@@ -1,0 +1,588 @@
+{
+  "schema": "p2p-offramp.startup-compatibility-composition-review.v1",
+  "generation": 31,
+  "recordedAt": "2026-11-20T19:13:22.286789+00:00",
+  "sourceReviewCommit": "d1559e721d80eceb6fde94a02f6c903ce8311481",
+  "reviewedAuthorSource": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+  "combinedSource": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+  "combinedTree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+  "publishedParent": "1c658181fb2bd04ffc4df0d0fbdf6735da3e7fce",
+  "conclusion": "Combined source exactly preserves the reviewed non-documentation set; all completed root qualification logs and retained artifacts verified. No actionable composition finding.",
+  "verification": {
+    "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+    "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+    "publishedParent": "1c658181fb2bd04ffc4df0d0fbdf6735da3e7fce",
+    "authorSource": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+    "nonDocumentationEntries": 1029,
+    "allAuthorNonDocumentationEntriesExact": true,
+    "allParentEntriesOutsideFourPathDeltaExact": true,
+    "receipt_source_path": "/workspace/scratch/dcf03ef9bee8/p2p-g31-qualification/qualification.json",
+    "receipt": {
+      "log": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification.json.gz",
+      "raw_bytes": 67842,
+      "raw_sha256": "58088b5742383aeb067fc2bdeec31bc4fd25c6b18607bc3e59cc43105a848a52",
+      "gzip_bytes": 9804,
+      "gzip_sha256": "8ebd8b39ba9827c71770dbd144aad6051711cb23a616a2ab12c127705198bf6c",
+      "mtime": 0
+    },
+    "commands": [
+      {
+        "name": "full-node",
+        "command": [
+          "npm",
+          "test"
+        ],
+        "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+        "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+        "exit_code": 0,
+        "counts_from_raw_log": {
+          "tests": 2604,
+          "pass": 2604,
+          "fail": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0
+        },
+        "log": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-full-node.log.gz",
+        "raw_bytes": 264227,
+        "raw_sha256": "a069a1b3de4b56b14628764005a10ddef45eb1b9641464bc6041cf46c952f039",
+        "gzip_bytes": 87932,
+        "gzip_sha256": "713169eeafe7a997374f603220c4050c6ac77aedeadf356bf42b6fb61154e198",
+        "mtime": 0
+      },
+      {
+        "name": "typecheck",
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+        "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-typecheck.log.gz",
+        "raw_bytes": 341,
+        "raw_sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+        "gzip_bytes": 211,
+        "gzip_sha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+        "mtime": 0
+      },
+      {
+        "name": "build-policy",
+        "command": [
+          "npm",
+          "run",
+          "test:build-policy"
+        ],
+        "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+        "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+        "exit_code": 0,
+        "counts_from_raw_log": {
+          "tests": 58,
+          "pass": 58,
+          "fail": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0
+        },
+        "log": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-build-policy.log.gz",
+        "raw_bytes": 7631,
+        "raw_sha256": "9176f6e11285b5ae0d44ba5269a6587deef2e4901fbfddfdc9fc8cce0d991ecd",
+        "gzip_bytes": 3144,
+        "gzip_sha256": "1e32d1a6ea085b8d9f8294ab9e2973d30844bdcaa39d26faaee93fe5f50f9754",
+        "mtime": 0
+      },
+      {
+        "name": "boundaries",
+        "command": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+        "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-boundaries.log.gz",
+        "raw_bytes": 392,
+        "raw_sha256": "171459349881532fab298d83fadbd8a8f2a269b3197f7642193a31fe471deb39",
+        "gzip_bytes": 287,
+        "gzip_sha256": "4d73e145c5258e7e67d2b9185efeb6eda0122424a642fd702b009bc488c0bb31",
+        "mtime": 0
+      },
+      {
+        "name": "default-build",
+        "command": [
+          "node",
+          "apps/web/scripts/build.mjs"
+        ],
+        "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+        "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-default-build.log.gz",
+        "raw_bytes": 1027,
+        "raw_sha256": "24e8b2402c4e4fe675e27cb99a7dbc65e4ad2c1af16fe889e1b6b3ac9bf2071b",
+        "gzip_bytes": 498,
+        "gzip_sha256": "9885503f979589c8ac65e6c498e6fe10d832ec97aa4bfd88ad6a6643a55d06e2",
+        "mtime": 0
+      },
+      {
+        "name": "demo-build",
+        "command": [
+          "node",
+          "apps/web/scripts/build.mjs",
+          "demo"
+        ],
+        "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+        "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-demo-build.log.gz",
+        "raw_bytes": 1175,
+        "raw_sha256": "77607aaadaa418994069135075d2b732ec1f4260db2d8eba5655df40fafcc3d5",
+        "gzip_bytes": 521,
+        "gzip_sha256": "b28414bbeff56dc1c880bd982cacf946bf24af5b0492b4ec918acfddf61d583d",
+        "mtime": 0
+      },
+      {
+        "name": "native-fixture-preparation",
+        "command": [
+          "node",
+          "scripts/test-update-runtime-browser.mjs",
+          "--build-only"
+        ],
+        "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+        "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+        "exit_code": 0,
+        "counts_from_raw_log": {},
+        "log": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-native-fixture-preparation.log.gz",
+        "raw_bytes": 2196,
+        "raw_sha256": "4a6309ea3ce2390c768deccaed284a2bacd6590bfac8746f042f18e1d78172c5",
+        "gzip_bytes": 863,
+        "gzip_sha256": "379e47176a29935a4b710fb0a768e254374b63affb16d542228ad7e1d762b67c",
+        "mtime": 0
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "default",
+        "directory": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g31/apps/web/dist",
+        "assets": [
+          {
+            "path": "_headers",
+            "bytes": 342,
+            "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+          },
+          {
+            "path": "assets/OfflineRoot-KpNTfNjc.js",
+            "bytes": 312712,
+            "sha256": "4788669b1638bc7a7b8a93303999250708eb4a817f5cb943b10e922efc5d8f69"
+          },
+          {
+            "path": "assets/decode.worker-DGcSBxfL.js",
+            "bytes": 133927,
+            "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+          },
+          {
+            "path": "assets/index-6AlRBUfF.js",
+            "bytes": 220890,
+            "sha256": "bea32e4a4ac7775b0e13e840e4b7e84fb394bb915f40ce1253f8d77ee0a23dc1"
+          },
+          {
+            "path": "assets/index-rPDFZ4F5.css",
+            "bytes": 8414,
+            "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+          },
+          {
+            "path": "assets/vault.worker-yOnLqpF_.js",
+            "bytes": 102355,
+            "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+          },
+          {
+            "path": "content-policy.json",
+            "bytes": 1009,
+            "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+          },
+          {
+            "path": "core-graph-document.json",
+            "bytes": 15333,
+            "sha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367"
+          },
+          {
+            "path": "core-graph-worker.json",
+            "bytes": 4758,
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb"
+          },
+          {
+            "path": "index.html",
+            "bytes": 1283,
+            "sha256": "847a35d4bfbe9ca5794e65092e337cbdb561e7459a8d8a68aeba33fdd79f7736"
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "bytes": 905,
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          },
+          {
+            "path": "third-party-licenses.json",
+            "bytes": 15329,
+            "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+          }
+        ],
+        "all_actual_files_accounted_for": true,
+        "evidence_sha256": "318f9da44946d460600452df796056dbdffd1a19525f881600676dbdc16fbe8c",
+        "asset_count": 12,
+        "asset_bytes": 817257,
+        "graphs": [
+          {
+            "path": "core-graph-document.json",
+            "sha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367",
+            "modules": 102,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "core-graph-worker.json",
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+            "modules": 30,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+            "modules": 4,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          }
+        ],
+        "ReleaseEnabled": 0,
+        "connectOrigins": [],
+        "signedRelease": false,
+        "releaseAcceptance": false
+      },
+      {
+        "name": "demo",
+        "directory": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g31/apps/web/dist-demo",
+        "assets": [
+          {
+            "path": "_headers",
+            "bytes": 342,
+            "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+          },
+          {
+            "path": "assets/OfflineRoot-DZJg4sm1.js",
+            "bytes": 318756,
+            "sha256": "25d623ebc801b8b58f11c7902e811681ccbcf447b17b34fb9d8f479ad515ca23"
+          },
+          {
+            "path": "assets/decode.worker-DGcSBxfL.js",
+            "bytes": 133927,
+            "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+          },
+          {
+            "path": "assets/index-B4Z_yDNv.js",
+            "bytes": 220902,
+            "sha256": "72f94c14153646bcc7adb0f4ab4c0d45998b1e502c39d3be8fd99a4e91636e9f"
+          },
+          {
+            "path": "assets/index-rPDFZ4F5.css",
+            "bytes": 8414,
+            "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+          },
+          {
+            "path": "assets/synthetic-local-Crz7gj8D.js",
+            "bytes": 5743,
+            "sha256": "c28426d06b4b26a1715cef85c2ce35ff14cd63227db66cee60a69c69ab354d91"
+          },
+          {
+            "path": "assets/vault.worker-yOnLqpF_.js",
+            "bytes": 102355,
+            "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+          },
+          {
+            "path": "content-policy.json",
+            "bytes": 1009,
+            "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+          },
+          {
+            "path": "core-graph-document.json",
+            "bytes": 15632,
+            "sha256": "a888d9df61a623b3fb99f4f79cc3bd536c84b9b467f4583f0b331a950b31245a"
+          },
+          {
+            "path": "core-graph-worker.json",
+            "bytes": 4758,
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb"
+          },
+          {
+            "path": "index.html",
+            "bytes": 1283,
+            "sha256": "2459880fac514978acee76e97d749107670912b68ae95f670fa95f3e548314be"
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "bytes": 905,
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          },
+          {
+            "path": "third-party-licenses.json",
+            "bytes": 15329,
+            "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+          }
+        ],
+        "all_actual_files_accounted_for": true,
+        "evidence_sha256": "f7f748135b7f6fe44b6a3bcb40ba9ad6e88c2d709906c5113db1c946628b4124",
+        "asset_count": 13,
+        "asset_bytes": 829355,
+        "graphs": [
+          {
+            "path": "core-graph-document.json",
+            "sha256": "a888d9df61a623b3fb99f4f79cc3bd536c84b9b467f4583f0b331a950b31245a",
+            "modules": 104,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "core-graph-worker.json",
+            "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+            "modules": 30,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+            "modules": 4,
+            "all_module_hashes_match_actual_and_frozen_source": true,
+            "executable_updater_absent": true
+          }
+        ],
+        "ReleaseEnabled": 0,
+        "connectOrigins": [],
+        "signedRelease": false,
+        "releaseAcceptance": false
+      }
+    ],
+    "preparation": {
+      "fixture": "native-update-runtime-controlled-composition",
+      "nativeExecuted": false,
+      "strictFixtureCompilation": true,
+      "fixtureModules": 37,
+      "fixtureModuleSha256": "304fc08883179c4019bf7e0aab21fb3c4711345ce9e2dbcad75f3f0e615c0bad",
+      "emittedWorker": {
+        "path": "assets/vault.worker-yOnLqpF_.js",
+        "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+      },
+      "defaultGraphs": [
+        {
+          "path": "core-graph-document.json",
+          "sha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367",
+          "modules": 102
+        },
+        {
+          "path": "core-graph-worker.json",
+          "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+          "modules": 30
+        },
+        {
+          "path": "qr-graph-worker.json",
+          "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+          "modules": 4
+        }
+      ],
+      "publicCorpusSha256": "bad32abc7eae22c0de15db0d72e8b0003c18b4cc78e4c4787e12fb19409c6b9e",
+      "defaultUpdaterIncluded": false,
+      "ReleaseEnabled": 0
+    },
+    "limits": {
+      "reviewer_reran_complete_suite_or_builds": false,
+      "native_execution_qualified": false,
+      "temporary_fixture_modules_retained": false,
+      "fixture_preparation_log_and_current_default_worker_graphs_directly_verified": true
+    },
+    "total_retained_assets_verified": 25,
+    "total_graphs_verified": 6,
+    "total_graph_module_references_verified": 274
+  },
+  "verificationCommand": {
+    "name": "09-root-qualification",
+    "source": "d1559e721d80eceb6fde94a02f6c903ce8311481",
+    "tree": "26e99b944cc0cc92f3c53d84d8635e1b60c4813b",
+    "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+    "command": [
+      "python",
+      "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-root-qualification.py",
+      "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+      "99047cf4675fbc299d700eec51d9b388da6707fe",
+      "1c658181fb2bd04ffc4df0d0fbdf6735da3e7fce"
+    ],
+    "startedAt": "2026-11-20T19:12:05.645132+00:00",
+    "completedAt": "2026-11-20T19:12:06.404215+00:00",
+    "exitCode": 0,
+    "sourceStatusAtStart": "",
+    "sourceUnchanged": true,
+    "sourceStatusAtEnd": "",
+    "scriptInputs": [
+      {
+        "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-root-qualification.py",
+        "bytes": 11339,
+        "sha256": "f31fb1a386b9878781318120255bfc9b8d7c8652fc1adefb67935a1b0460a5c3"
+      }
+    ],
+    "rawBytes": 14524,
+    "rawSha256": "2cbcb07b62b76ee299a20edaa2adb0b5e2dc864540b026bb07e4f582a4dc52f2",
+    "gzipBytes": 3379,
+    "gzipSha256": "8ba3d980e2a36f12c1462131265c00692c8894baa853eae47a57397e6e3f104b",
+    "gzipMtime": 0,
+    "summary": []
+  },
+  "artifacts": [
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-full-node.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 264227,
+      "rawSha256": "a069a1b3de4b56b14628764005a10ddef45eb1b9641464bc6041cf46c952f039",
+      "retainedBytes": 87932,
+      "retainedSha256": "713169eeafe7a997374f603220c4050c6ac77aedeadf356bf42b6fb61154e198"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-typecheck.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 341,
+      "rawSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "retainedBytes": 211,
+      "retainedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-build-policy.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 7631,
+      "rawSha256": "9176f6e11285b5ae0d44ba5269a6587deef2e4901fbfddfdc9fc8cce0d991ecd",
+      "retainedBytes": 3144,
+      "retainedSha256": "1e32d1a6ea085b8d9f8294ab9e2973d30844bdcaa39d26faaee93fe5f50f9754"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-boundaries.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 392,
+      "rawSha256": "171459349881532fab298d83fadbd8a8f2a269b3197f7642193a31fe471deb39",
+      "retainedBytes": 287,
+      "retainedSha256": "4d73e145c5258e7e67d2b9185efeb6eda0122424a642fd702b009bc488c0bb31"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-default-build.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 1027,
+      "rawSha256": "24e8b2402c4e4fe675e27cb99a7dbc65e4ad2c1af16fe889e1b6b3ac9bf2071b",
+      "retainedBytes": 498,
+      "retainedSha256": "9885503f979589c8ac65e6c498e6fe10d832ec97aa4bfd88ad6a6643a55d06e2"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-demo-build.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 1175,
+      "rawSha256": "77607aaadaa418994069135075d2b732ec1f4260db2d8eba5655df40fafcc3d5",
+      "retainedBytes": 521,
+      "retainedSha256": "b28414bbeff56dc1c880bd982cacf946bf24af5b0492b4ec918acfddf61d583d"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-native-fixture-preparation.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 2196,
+      "rawSha256": "4a6309ea3ce2390c768deccaed284a2bacd6590bfac8746f042f18e1d78172c5",
+      "retainedBytes": 863,
+      "retainedSha256": "379e47176a29935a4b710fb0a768e254374b63affb16d542228ad7e1d762b67c"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification.json.gz",
+      "encoding": "gzip",
+      "rawBytes": 67842,
+      "rawSha256": "58088b5742383aeb067fc2bdeec31bc4fd25c6b18607bc3e59cc43105a848a52",
+      "retainedBytes": 9804,
+      "retainedSha256": "8ebd8b39ba9827c71770dbd144aad6051711cb23a616a2ab12c127705198bf6c"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification-verification.json",
+      "encoding": "identity",
+      "rawBytes": 14524,
+      "rawSha256": "2cbcb07b62b76ee299a20edaa2adb0b5e2dc864540b026bb07e4f582a4dc52f2",
+      "retainedBytes": 14524,
+      "retainedSha256": "2cbcb07b62b76ee299a20edaa2adb0b5e2dc864540b026bb07e4f582a4dc52f2"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/09-root-qualification.json",
+      "encoding": "identity",
+      "rawBytes": 1232,
+      "rawSha256": "b43fb99eba0614baaaccca0f565a57f05c216a9abc6c4fe26fb3b94c919fc390",
+      "retainedBytes": 1232,
+      "retainedSha256": "b43fb99eba0614baaaccca0f565a57f05c216a9abc6c4fe26fb3b94c919fc390"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/09-root-qualification.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 14524,
+      "rawSha256": "2cbcb07b62b76ee299a20edaa2adb0b5e2dc864540b026bb07e4f582a4dc52f2",
+      "retainedBytes": 3379,
+      "retainedSha256": "8ba3d980e2a36f12c1462131265c00692c8894baa853eae47a57397e6e3f104b"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-root-qualification.py.txt",
+      "encoding": "identity",
+      "rawBytes": 11339,
+      "rawSha256": "f31fb1a386b9878781318120255bfc9b8d7c8652fc1adefb67935a1b0460a5c3",
+      "retainedBytes": 11339,
+      "retainedSha256": "f31fb1a386b9878781318120255bfc9b8d7c8652fc1adefb67935a1b0460a5c3"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/10-supplement-whitespace.json",
+      "encoding": "identity",
+      "rawBytes": 3807,
+      "rawSha256": "1bf114e0c28661180f49ec64b766a5cf7c5f30f05851dad79fa3f859fc7832e1",
+      "retainedBytes": 3807,
+      "retainedSha256": "1bf114e0c28661180f49ec64b766a5cf7c5f30f05851dad79fa3f859fc7832e1"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/10-supplement-whitespace.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedBytes": 20,
+      "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    }
+  ],
+  "limits": [
+    "This supplements the frozen source review; original source-review files and author evidence remain unchanged.",
+    "The reviewer read and hashed completed root outputs without rerunning the full suite or builds.",
+    "Controlled source review and build-only fixture preparation do not establish native browser, physical-device, live financial, trust or release acceptance.",
+    "The 37 temporary fixture modules were removed by the maintained preparation command; their compilation is reported by the verified complete log, not independently rehashed here.",
+    "Applicable current-source/current-target hosted gates and the standalone D8 Tier B CodeRabbit-or-Qodo pass remain required before any guarded merge."
+  ],
+  "completeWhitespace": {
+    "name": "10-supplement-whitespace",
+    "source": "d1559e721d80eceb6fde94a02f6c903ce8311481",
+    "tree": "26e99b944cc0cc92f3c53d84d8635e1b60c4813b",
+    "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "8e836baa877b676a863c877003e277b638fc5061"
+    ],
+    "startedAt": "2026-11-20T19:13:22.613888+00:00",
+    "completedAt": "2026-11-20T19:13:22.651694+00:00",
+    "exitCode": 0,
+    "sourceStatusAtStart": "A  docs/engineering/INDEPENDENT_STARTUP_COMPOSITION_REVIEW_GENERATION31_20261120.md\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/09-root-qualification.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/09-root-qualification.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-root-qualification.py.txt\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-boundaries.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-build-policy.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-default-build.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-demo-build.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-full-node.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-native-fixture-preparation.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification-verification.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification.json.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-typecheck.log.gz\nA  docs/engineering/startup-compatibility-composition-review-generation31.json",
+    "sourceUnchanged": true,
+    "sourceStatusAtEnd": "A  docs/engineering/INDEPENDENT_STARTUP_COMPOSITION_REVIEW_GENERATION31_20261120.md\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/09-root-qualification.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/09-root-qualification.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-root-qualification.py.txt\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-boundaries.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-build-policy.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-default-build.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-demo-build.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-full-node.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-native-fixture-preparation.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification-verification.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification.json.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-typecheck.log.gz\nA  docs/engineering/startup-compatibility-composition-review-generation31.json",
+    "scriptInputs": [],
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzipBytes": 20,
+    "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "gzipMtime": 0,
+    "summary": []
+  }
+}

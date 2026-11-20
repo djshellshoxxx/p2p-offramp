@@ -1,0 +1,36 @@
+{
+  "name": "01-source-identity",
+  "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+  "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-source.py",
+    "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+    "apps/web/test/startup-compatibility-composition.test.mjs"
+  ],
+  "startedAt": "2026-11-20T19:02:59.363028+00:00",
+  "completedAt": "2026-11-20T19:02:59.528186+00:00",
+  "exitCode": 0,
+  "sourceStatusAtStart": "",
+  "sourceUnchanged": true,
+  "sourceStatusAtEnd": "",
+  "scriptInputs": [
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-source.py",
+      "bytes": 2715,
+      "sha256": "724c432496307dca5bddf045e263aac6e40782fd1cf453dd52cbd3244a798faa"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/startup-compatibility-composition.test.mjs",
+      "bytes": 19539,
+      "sha256": "216e22d37d6fbb93467a17b7542c63b0faa298be607aced063a2073553fb9f5f"
+    }
+  ],
+  "rawBytes": 3745,
+  "rawSha256": "978c01c98d01d8ead1b98aa75c349269fe3f45ac02f5d124cec611081ad5ad79",
+  "gzipBytes": 1484,
+  "gzipSha256": "fb3402338e515f1d06c6a5df81205c439492e728e0a4263020cecfa404fd3401",
+  "gzipMtime": 0,
+  "summary": []
+}

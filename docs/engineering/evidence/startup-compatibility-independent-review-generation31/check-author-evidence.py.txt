@@ -1,0 +1,114 @@
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+repo = Path('/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31')
+author = Path('/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-g31')
+source = '9c9b16b7e96737115f5fc61bddf8c31e277dd6f4'
+baseline = '3bfb7761b6ec430c8e437d117ec31007503f0d12'
+evidence = sys.argv[1]
+receipt_path = 'docs/execution/startup-compatibility-generation31-20261120/receipt.json'
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=repo)
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+def blob(path):
+    return git('show', evidence + ':' + path)
+
+def source_blob(path, ref=source):
+    return git('show', ref + ':' + path)
+
+subprocess.run(['git', 'merge-base', '--is-ancestor', source, evidence], cwd=repo, check=True)
+changed = git('diff', '--name-only', source, evidence).decode().splitlines()
+assert changed and all(path.startswith('docs/') for path in changed)
+raw_receipt = blob(receipt_path)
+receipt = json.loads(raw_receipt)
+assert receipt['source']['commit'] == source
+assert receipt['source']['tree'] == git('rev-parse', source + '^{tree}').decode().strip()
+assert receipt['baseline']['commit'] == baseline
+raw_by_path = {}
+for item in receipt['artifacts']:
+    retained = blob(item['path'])
+    assert len(retained) == item['retainedBytes'], item['path']
+    assert sha(retained) == item['retainedSha256'], item['path']
+    if item['encoding'] == 'gzip':
+        assert retained[4:8] == bytes(4), item['path']
+        raw = gzip.decompress(retained)
+    else:
+        assert item['encoding'] == 'identity'
+        raw = retained
+    assert len(raw) == item['rawBytes'] and sha(raw) == item['rawSha256'], item['path']
+    raw_by_path[item['path']] = raw
+
+command_rows = []
+for item in receipt['commands']:
+    metadata = json.loads(blob(item['metadata']))
+    raw = raw_by_path[item['log']]
+    patch = raw_by_path[item['patch']]
+    assert sha(raw) == metadata['logSha256'] and len(raw) == metadata['logBytes']
+    assert sha(patch) == metadata['patchSha256']
+    assert metadata['exitCode'] == item['exitCode']
+    if item['label'].startswith(('07-', '08-', '09-', '10-', '11-')):
+        assert metadata['head'] == source and not patch
+        for path, digest in metadata['files'].items():
+            assert sha(source_blob(path)) == digest, path
+    if item['label'] == '06-final-fixture-baseline':
+        assert metadata['head'] == baseline
+        for path in ['apps/web/src/OfflineRoot.tsx', 'apps/web/src/ui/App.tsx']:
+            assert metadata['files'][path] == sha(source_blob(path, baseline))
+        test_path = 'apps/web/test/startup-compatibility-composition.test.mjs'
+        assert metadata['files'][test_path] == sha(source_blob(test_path))
+        assert item['counts'] == {'tests': 23, 'pass': 4, 'fail': 19, 'cancelled': 0, 'skipped': 0, 'todo': 0}
+    command_rows.append({'label': item['label'], 'exitCode': item['exitCode'], 'counts': item.get('counts'), 'completeLogAndPatchVerified': True})
+
+build = receipt['qualification']['ordinaryBuild']
+dist = author / 'apps/web/dist'
+assert json.loads((dist / 'local-build-evidence.json').read_text()) == build
+assert build['ReleaseEnabled'] == 0 and not build['signedRelease'] and not build['releaseAcceptance']
+for asset in build['assets']:
+    raw = (dist / asset['path']).read_bytes()
+    assert len(raw) == asset['bytes'] and sha(raw) == asset['sha256'], asset['path']
+assert len(build['assets']) == build['inspection']['files']
+assert sum(asset['bytes'] for asset in build['assets']) == build['inspection']['bytes']
+graphs = {}
+references = 0
+for name, expected in receipt['qualification']['graphReadback'].items():
+    raw = (dist / name).read_bytes()
+    assert sha(raw) == expected['sha256'], name
+    graph = json.loads(raw)
+    assert len(graph['modules']) == expected['modules'], name
+    for module in graph['modules']:
+        if module['path'].startswith('node_modules/'):
+            module_bytes = (author / module['path']).read_bytes()
+            assert module_bytes == (repo / module['path']).read_bytes(), module['path']
+        else:
+            module_bytes = source_blob(module['path'])
+        assert sha(module_bytes) == module['sha256'], module['path']
+        references += 1
+    graphs[name] = {'modules': len(graph['modules']), 'sha256': sha(raw)}
+doc_modules = {item['path'] for item in json.loads((dist / 'core-graph-document.json').read_text())['modules']}
+compatibility = {'apps/web/src/compatibility/model.ts', 'apps/web/src/compatibility/probe.ts', 'apps/web/src/compatibility/startup.ts', 'apps/web/src/ui/StartupCompatibilityNotice.tsx'}
+assert compatibility <= doc_modules
+worker_modules = {item['path'] for item in json.loads((dist / 'core-graph-worker.json').read_text())['modules']}
+assert not compatibility & worker_modules
+worker = next(asset for asset in build['assets'] if asset['path'].startswith('assets/vault.worker-'))
+assert worker['sha256'] == 'd3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165'
+subprocess.run(['git', 'diff', '--check', '8e836baa877b676a863c877003e277b638fc5061..' + evidence], cwd=repo, check=True)
+print(json.dumps({
+    'source': source, 'evidence': evidence,
+    'evidenceTree': git('rev-parse', evidence + '^{tree}').decode().strip(),
+    'receipt': receipt_path, 'receiptSha256': sha(raw_receipt),
+    'evidenceOnlyChangedPaths': len(changed), 'artifactsVerified': len(receipt['artifacts']),
+    'commandsVerified': command_rows,
+    'buildAssetsVerified': len(build['assets']), 'buildBytesVerified': build['inspection']['bytes'],
+    'graphs': graphs, 'graphModuleReferencesVerified': references,
+    'compatibilityModulesInDocumentOnly': True, 'vaultWorkerUnchangedFromG29': worker,
+    'ReleaseEnabled': 0, 'completeWhitespacePassed': True,
+    'limits': 'Readback of retained author artifacts, not a second build or native browser execution.',
+}, indent=2))

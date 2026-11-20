@@ -1,0 +1,58 @@
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+repo = Path('/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31')
+baseline = '3bfb7761b6ec430c8e437d117ec31007503f0d12'
+source, new_test = sys.argv[1:]
+allowed = {
+    'apps/web/src/OfflineRoot.tsx',
+    'apps/web/src/ui/App.tsx',
+    'apps/web/test/generic-app-share-composition.test.mjs',
+    new_test,
+}
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=repo)
+
+def entries(ref):
+    result = {}
+    for row in git('ls-tree', '-r', '-z', ref).split(b'\0'):
+        if row:
+            meta, path = row.split(b'\t', 1)
+            result[path.decode()] = meta.decode()
+    return result
+
+assert git('rev-parse', 'HEAD').decode().strip() == source
+before, after = entries(baseline), entries(source)
+changed = sorted(path for path in before.keys() | after.keys() if before.get(path) != after.get(path))
+assert set(changed) == allowed, changed
+assert set(before) <= set(after), 'No baseline file may disappear'
+assert set(after) - set(before) == {new_test}
+assert [path for path in changed if path.startswith('apps/web/src/')] == sorted(allowed - {new_test, 'apps/web/test/generic-app-share-composition.test.mjs'})
+for path, entry in before.items():
+    if path not in allowed:
+        assert after[path] == entry, path
+protected = [
+    'apps/web/src/compatibility/model.ts', 'apps/web/src/compatibility/probe.ts',
+    'apps/web/src/compatibility/startup.ts', 'apps/web/src/ui/StartupCompatibilityNotice.tsx',
+    'apps/web/src/main.tsx', 'apps/web/src/sharing/generic-app-link.ts',
+    'apps/web/src/ui/GenericAppShare.tsx', 'apps/web/src/ui/Pages.tsx',
+    'apps/web/src/localnet/LocalnetRoot.tsx', 'apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx',
+    'apps/web/src/ui/locale/en.ts', 'package.json', 'package-lock.json',
+]
+rows = []
+for path in protected:
+    assert before[path] == after[path], path
+    content = git('show', source + ':' + path)
+    rows.append({'path': path, 'gitEntry': after[path], 'bytes': len(content), 'sha256': hashlib.sha256(content).hexdigest()})
+subprocess.run(['git', 'diff', '--check', '8e836baa877b676a863c877003e277b638fc5061..' + source], cwd=repo, check=True)
+print(json.dumps({
+    'baseline': baseline, 'source': source, 'tree': git('rev-parse', source + '^{tree}').decode().strip(),
+    'changedPaths': changed, 'baselineEntries': len(before), 'sourceEntries': len(after),
+    'preservedBaselineEntries': len(before) - len(allowed - {new_test}),
+    'nonDocumentationEntries': len([path for path in after if not path.startswith('docs/')]),
+    'allOtherEntriesExact': True, 'protectedEntries': rows, 'completeWhitespacePassed': True,
+}, indent=2))

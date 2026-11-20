@@ -1,0 +1,830 @@
+{
+  "schema": "p2p-offramp.startup-compatibility-independent-review.v1",
+  "generation": 31,
+  "recordedAt": "2026-11-20T19:08:36.650508+00:00",
+  "reviewerTask": "/root/startup_compatibility_review_g31",
+  "baseline": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+  "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+  "sourceTree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+  "authorEvidence": "faf70e3afadbeadd27106139ef2a5e3adf9197fb",
+  "authorEvidenceTree": "1a7030517f06cbdfba0be5aa87a1c2b2e3c9577e",
+  "conclusion": "No actionable Standards or Specification findings in the bounded source integration.",
+  "sourceScope": {
+    "baseline": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+    "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+    "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+    "changedPaths": [
+      "apps/web/src/OfflineRoot.tsx",
+      "apps/web/src/ui/App.tsx",
+      "apps/web/test/generic-app-share-composition.test.mjs",
+      "apps/web/test/startup-compatibility-composition.test.mjs"
+    ],
+    "baselineEntries": 2911,
+    "sourceEntries": 2912,
+    "preservedBaselineEntries": 2908,
+    "nonDocumentationEntries": 1029,
+    "allOtherEntriesExact": true,
+    "completeWhitespacePassed": true
+  },
+  "protectedEntries": [
+    {
+      "path": "apps/web/src/compatibility/model.ts",
+      "gitEntry": "100644 blob e927d9da1d2e829660ba41e2b9bb09d8ed97327a",
+      "bytes": 17145,
+      "sha256": "4408765efd7119d5afcdff28b07ae785750e5bf584c880c6b95b112fc550fa97"
+    },
+    {
+      "path": "apps/web/src/compatibility/probe.ts",
+      "gitEntry": "100644 blob 6da9f0c5686dc6aeb89250ff78ba2509e28b04c7",
+      "bytes": 6349,
+      "sha256": "e393f4dfadc098fdf74afd5a2c737142720280b12e92197f5f2b2b2b902b4793"
+    },
+    {
+      "path": "apps/web/src/compatibility/startup.ts",
+      "gitEntry": "100644 blob 68df68dd9f901025790db84c037765d4ff75f81c",
+      "bytes": 641,
+      "sha256": "b258f8cecb4e5574b2bc3ec0e8d8212c32a132c55e9c8710a807693025a3907b"
+    },
+    {
+      "path": "apps/web/src/ui/StartupCompatibilityNotice.tsx",
+      "gitEntry": "100644 blob 7df098913cff3f1b64688243655718a7a50ad7c7",
+      "bytes": 1495,
+      "sha256": "73e8f5d5c9b3cc16f19834255438dc5cbeece42688c0bb20c91829cb6c0efaf9"
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "gitEntry": "100644 blob 438fa5c037cae8f51f90cd0d3f80587eea63d119",
+      "bytes": 909,
+      "sha256": "56d6f772c3fd335e2d07d7480d6ff497fa87a4e3c489e8c0c7ecdf88f5c0bf31"
+    },
+    {
+      "path": "apps/web/src/sharing/generic-app-link.ts",
+      "gitEntry": "100644 blob ce007913c7697c614db293e323fddaabbb5bd571",
+      "bytes": 1425,
+      "sha256": "a6a0f81b2430d4d4c2d66712c9679f722f5b3aa707364d1bbfaad057972b7f71"
+    },
+    {
+      "path": "apps/web/src/ui/GenericAppShare.tsx",
+      "gitEntry": "100644 blob 615f9d2980c53c7fab4145188be80e0d0b5552ac",
+      "bytes": 3322,
+      "sha256": "3185010cbfa3070f7345d6ca316c6946400582b65f08a6b5466f6a4d3229db8d"
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "gitEntry": "100644 blob e4cddb844e883d8a28be31220b423bc640b4fee9",
+      "bytes": 8885,
+      "sha256": "5db3601177d38a826428ea475e60b18f3a13f00219a6da62f3721a89d5adc520"
+    },
+    {
+      "path": "apps/web/src/localnet/LocalnetRoot.tsx",
+      "gitEntry": "100644 blob 3103ce7f1bdd0226760c147f19313d8d2be74c75",
+      "bytes": 24765,
+      "sha256": "8dc708b7e2a72649f8842a2ae591334f681c11d40fd8b0dd96033732081a21be"
+    },
+    {
+      "path": "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+      "gitEntry": "100644 blob e0bacc230f4b254a7fcf7c644d50b399a9f5e467",
+      "bytes": 14872,
+      "sha256": "41ead2873bb899be7a167beb7fe18935f3bb9a2a0ac22e54079360861dfc0f56"
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "gitEntry": "100644 blob e461e2f8d5d301791a966a9a70f498ff8888468f",
+      "bytes": 71680,
+      "sha256": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18"
+    },
+    {
+      "path": "package.json",
+      "gitEntry": "100644 blob 9bb6a80bcea23db82555085914b96eb02dbd3487",
+      "bytes": 7915,
+      "sha256": "fa0c8282beaacf1bf59aa9e62489699cd2e7ecc9df201d6222a8581e7045f0dd"
+    },
+    {
+      "path": "package-lock.json",
+      "gitEntry": "100644 blob dd429efb353a01c1c25d5f6e96508e020ecb7eeb",
+      "bytes": 57692,
+      "sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72"
+    }
+  ],
+  "behaviorEvidence": {
+    "maintainedCasesPassed": 53,
+    "maintainedCases": "23 new startup composition, 6 probe, 5 guard/notice, 9 sharing composition, 10 shell locale cases.",
+    "initialMixedCommand": {
+      "reportedTests": 54,
+      "pass": 53,
+      "fail": 1,
+      "failureCause": "Reviewer module failed Vite virtual-entry resolution before its four probes registered."
+    },
+    "intermediateReviewerCommand": {
+      "reportedTests": 4,
+      "pass": 0,
+      "fail": 4,
+      "failureCause": "Reviewer VM lacked standard TextEncoder/TextDecoder globals; all four cases stopped before root rendering."
+    },
+    "correctedIndependentProbes": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "uiTypecheck": "passed",
+    "countInterpretation": "53 maintained cases passed in the mixed command and four independent cases passed after fixture repair. This is not a single 57-case green command or a full-suite rerun."
+  },
+  "authorReadback": {
+    "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+    "evidence": "faf70e3afadbeadd27106139ef2a5e3adf9197fb",
+    "evidenceTree": "1a7030517f06cbdfba0be5aa87a1c2b2e3c9577e",
+    "receipt": "docs/execution/startup-compatibility-generation31-20261120/receipt.json",
+    "receiptSha256": "d2787d31c092857e2128cf6d47a04efeda26917e74f7c08559ac00408c1e8362",
+    "evidenceOnlyChangedPaths": 47,
+    "artifactsVerified": 45,
+    "commandsVerified": [
+      {
+        "label": "01-baseline-composition",
+        "exitCode": 1,
+        "counts": {
+          "tests": 23,
+          "pass": 4,
+          "fail": 19,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "completeLogAndPatchVerified": true
+      },
+      {
+        "label": "02-wired-composition-and-sharing",
+        "exitCode": 1,
+        "counts": {
+          "tests": 32,
+          "pass": 21,
+          "fail": 11,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "completeLogAndPatchVerified": true
+      },
+      {
+        "label": "03-corrected-composition-and-sharing",
+        "exitCode": 1,
+        "counts": {
+          "tests": 32,
+          "pass": 26,
+          "fail": 6,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "completeLogAndPatchVerified": true
+      },
+      {
+        "label": "04-vm-global-diagnostic",
+        "exitCode": 0,
+        "counts": {},
+        "completeLogAndPatchVerified": true
+      },
+      {
+        "label": "05-green-composition-and-sharing",
+        "exitCode": 0,
+        "counts": {
+          "tests": 32,
+          "pass": 32,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "completeLogAndPatchVerified": true
+      },
+      {
+        "label": "06-final-fixture-baseline",
+        "exitCode": 1,
+        "counts": {
+          "tests": 23,
+          "pass": 4,
+          "fail": 19,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "completeLogAndPatchVerified": true
+      },
+      {
+        "label": "07-frozen-focused-and-adjacent",
+        "exitCode": 0,
+        "counts": {
+          "tests": 77,
+          "pass": 77,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "completeLogAndPatchVerified": true
+      },
+      {
+        "label": "08-frozen-ui-typecheck",
+        "exitCode": 0,
+        "counts": {},
+        "completeLogAndPatchVerified": true
+      },
+      {
+        "label": "09-frozen-boundaries",
+        "exitCode": 0,
+        "counts": {},
+        "completeLogAndPatchVerified": true
+      },
+      {
+        "label": "10-frozen-build-policy",
+        "exitCode": 0,
+        "counts": {
+          "tests": 58,
+          "pass": 58,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "completeLogAndPatchVerified": true
+      },
+      {
+        "label": "11-frozen-ordinary-build",
+        "exitCode": 0,
+        "counts": {},
+        "completeLogAndPatchVerified": true
+      }
+    ],
+    "buildAssetsVerified": 12,
+    "buildBytesVerified": 817257,
+    "graphs": {
+      "core-graph-document.json": {
+        "modules": 102,
+        "sha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367"
+      },
+      "core-graph-worker.json": {
+        "modules": 30,
+        "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb"
+      },
+      "qr-graph-worker.json": {
+        "modules": 4,
+        "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+      }
+    },
+    "graphModuleReferencesVerified": 136,
+    "compatibilityModulesInDocumentOnly": true,
+    "vaultWorkerUnchangedFromG29": {
+      "path": "assets/vault.worker-yOnLqpF_.js",
+      "bytes": 102355,
+      "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+    },
+    "ReleaseEnabled": 0,
+    "completeWhitespacePassed": true,
+    "limits": "Readback of retained author artifacts, not a second build or native browser execution."
+  },
+  "reviewerEvidenceCorrection": "The first author graph check attempted git show for ignored node_modules entries. The corrected checker hashes immutable author/reviewer dependency bytes directly and still binds tracked modules to frozen Git blobs. Original script and failed output retained.",
+  "checks": [
+    {
+      "name": "01-source-identity",
+      "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-source.py",
+        "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+        "apps/web/test/startup-compatibility-composition.test.mjs"
+      ],
+      "startedAt": "2026-11-20T19:02:59.363028+00:00",
+      "completedAt": "2026-11-20T19:02:59.528186+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-source.py",
+          "bytes": 2715,
+          "sha256": "724c432496307dca5bddf045e263aac6e40782fd1cf453dd52cbd3244a798faa"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/startup-compatibility-composition.test.mjs",
+          "bytes": 19539,
+          "sha256": "216e22d37d6fbb93467a17b7542c63b0faa298be607aced063a2073553fb9f5f"
+        }
+      ],
+      "rawBytes": 3745,
+      "rawSha256": "978c01c98d01d8ead1b98aa75c349269fe3f45ac02f5d124cec611081ad5ad79",
+      "gzipBytes": 1484,
+      "gzipSha256": "fb3402338e515f1d06c6a5df81205c439492e728e0a4263020cecfa404fd3401",
+      "gzipMtime": 0,
+      "summary": []
+    },
+    {
+      "name": "02-focused-composition",
+      "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/compatibility-probe.test.mjs",
+        "apps/web/test/compatibility-startup.test.mjs",
+        "apps/web/test/startup-compatibility-composition.test.mjs",
+        "apps/web/test/generic-app-share-composition.test.mjs",
+        "apps/web/test/app-shell-locale.test.mjs",
+        "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/independent-startup-probes.mjs"
+      ],
+      "startedAt": "2026-11-20T19:02:59.364322+00:00",
+      "completedAt": "2026-11-20T19:03:01.698149+00:00",
+      "exitCode": 1,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/scripts/test-support/register-tsx.mjs",
+          "bytes": 86,
+          "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/compatibility-probe.test.mjs",
+          "bytes": 5741,
+          "sha256": "6a933d0232fa761bb016cd958b836a867b08ecb8662eeac6414ad6bbaea37d17"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/compatibility-startup.test.mjs",
+          "bytes": 3471,
+          "sha256": "6d4460664df2ed881525a4a9524cc58e5b61f78d86dcb3e265cf5c1a61b0a263"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/startup-compatibility-composition.test.mjs",
+          "bytes": 19539,
+          "sha256": "216e22d37d6fbb93467a17b7542c63b0faa298be607aced063a2073553fb9f5f"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/generic-app-share-composition.test.mjs",
+          "bytes": 11283,
+          "sha256": "b2781db9b3fa161e77d7b63a680a43eaaa96d08e2c01b58d269b46adf485b425"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/app-shell-locale.test.mjs",
+          "bytes": 11996,
+          "sha256": "87e88ec8969e2ae90ea0c6e39f088355f4cd6ee0b0a16f1eaadf413d1c0601d1"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/independent-startup-probes.mjs",
+          "bytes": 10706,
+          "sha256": "a67c5ba0f238dd7fd9c657eeed02a2fbf5e8f5acc23b62665d8cd7d59b218a07"
+        }
+      ],
+      "rawBytes": 7477,
+      "rawSha256": "221ec2822761e665d23dd4e1cb5e1589088f23b175ec52021876d89b8454ae02",
+      "gzipBytes": 2543,
+      "gzipSha256": "3e08d3382dffb53abd7ce79a937151a2792e5a8ef1d75a9c8b4b19048e58f947",
+      "gzipMtime": 0,
+      "summary": [
+        "\u2139 tests 54",
+        "\u2139 suites 0",
+        "\u2139 pass 53",
+        "\u2139 fail 1",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 2254.79139"
+      ]
+    },
+    {
+      "name": "03-ui-typecheck",
+      "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+      "command": [
+        "./node_modules/.bin/tsc",
+        "-p",
+        "apps/web/tsconfig.ui.json",
+        "--noEmit"
+      ],
+      "startedAt": "2026-11-20T19:02:59.361172+00:00",
+      "completedAt": "2026-11-20T19:03:01.245108+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [],
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0,
+      "summary": []
+    },
+    {
+      "name": "04-independent-root-probes",
+      "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/independent-startup-probes.mjs"
+      ],
+      "startedAt": "2026-11-20T19:03:28.717231+00:00",
+      "completedAt": "2026-11-20T19:03:29.537816+00:00",
+      "exitCode": 1,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/scripts/test-support/register-tsx.mjs",
+          "bytes": 86,
+          "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/independent-startup-probes.mjs",
+          "bytes": 10811,
+          "sha256": "94a7813d055fa90fba549d997c28646dda542e8ac51ecda45d58c3fe00e770ce"
+        }
+      ],
+      "rawBytes": 4723,
+      "rawSha256": "1d7ea73c60931ddf149bc6275bd8fbcea16e65dc8ee7ce1f0d0318144b5d1893",
+      "gzipBytes": 791,
+      "gzipSha256": "270d94659e7759a0a102716c34fe9e1aaf3260ad3efee66b4976f469d508d341",
+      "gzipMtime": 0,
+      "summary": [
+        "\u2139 tests 4",
+        "\u2139 suites 0",
+        "\u2139 pass 0",
+        "\u2139 fail 4",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 737.417841"
+      ]
+    },
+    {
+      "name": "05-independent-root-probes",
+      "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/independent-startup-probes.mjs"
+      ],
+      "startedAt": "2026-11-20T19:03:48.105692+00:00",
+      "completedAt": "2026-11-20T19:03:48.610511+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/scripts/test-support/register-tsx.mjs",
+          "bytes": 86,
+          "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+        },
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/independent-startup-probes.mjs",
+          "bytes": 10837,
+          "sha256": "aab6c1864bd3facedad3446008e3173348d858b53dfc74cb9025213f579949e4"
+        }
+      ],
+      "rawBytes": 614,
+      "rawSha256": "b2e36d9ec0ab860d32a71949b6081d27a45dae59871845db01c976697e19eef1",
+      "gzipBytes": 373,
+      "gzipSha256": "0c468788fdd87c0b94c991009f87d10256d6fbb3600bab5fdcb2bbd4c767d0e1",
+      "gzipMtime": 0,
+      "summary": [
+        "\u2139 tests 4",
+        "\u2139 suites 0",
+        "\u2139 pass 4",
+        "\u2139 fail 0",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 428.657018"
+      ]
+    },
+    {
+      "name": "06-author-evidence",
+      "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-author-evidence.py",
+        "faf70e3afadbeadd27106139ef2a5e3adf9197fb"
+      ],
+      "startedAt": "2026-11-20T19:07:01.433326+00:00",
+      "completedAt": "2026-11-20T19:07:01.870241+00:00",
+      "exitCode": 1,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-author-evidence.py",
+          "bytes": 5699,
+          "sha256": "73334a44e8e4bab60749b85a4c8e1f1e3fbd7aee11bc6c760a73386b4d2f5063"
+        }
+      ],
+      "rawBytes": 1533,
+      "rawSha256": "004b39af89c6b7a1c5091ee7401c2b08507c2c511b68f1d614a9b7972ab98fad",
+      "gzipBytes": 575,
+      "gzipSha256": "bee5296099b120dd46694968449cae2ce59b466e5eeefd30ecc4d9820f2d9ffc",
+      "gzipMtime": 0,
+      "summary": []
+    },
+    {
+      "name": "07-author-evidence",
+      "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-author-evidence.py",
+        "faf70e3afadbeadd27106139ef2a5e3adf9197fb"
+      ],
+      "startedAt": "2026-11-20T19:07:19.268160+00:00",
+      "completedAt": "2026-11-20T19:07:19.864340+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "",
+      "scriptInputs": [
+        {
+          "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-author-evidence.py",
+          "bytes": 5962,
+          "sha256": "8d643341fa6595f3b9342de40fcb26c5f62c456a2ffcce93827ec073c9d6017e"
+        }
+      ],
+      "rawBytes": 3859,
+      "rawSha256": "f0479b60218d8b1d42d64b7492710558514c45ee3311ed7c7322e301fb3cb6c8",
+      "gzipBytes": 1088,
+      "gzipSha256": "0e533f0f4d22ab79fb5eed00ba122be441f4dc60e76ba166b79fd90474c04996",
+      "gzipMtime": 0,
+      "summary": []
+    },
+    {
+      "name": "08-complete-whitespace",
+      "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "startedAt": "2026-11-20T19:08:36.977557+00:00",
+      "completedAt": "2026-11-20T19:08:37.037464+00:00",
+      "exitCode": 0,
+      "sourceStatusAtStart": "A  docs/engineering/INDEPENDENT_STARTUP_COMPATIBILITY_REVIEW_GENERATION31_20261120.md\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/01-source-identity.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/01-source-identity.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/02-focused-composition.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/02-focused-composition.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/03-ui-typecheck.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/03-ui-typecheck.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/04-independent-root-probes.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/04-independent-root-probes.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/05-independent-root-probes.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/05-independent-root-probes.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/06-author-evidence.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/06-author-evidence.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/07-author-evidence.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/07-author-evidence.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/capture-check.py.txt\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-author-evidence-before-dependency-fix.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-author-evidence-before-dependency-fix.py.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-author-evidence.py.txt\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-source.py.txt\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/dependency-directory-provenance.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-codec-fix.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-codec-fix.mjs.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-entry-fix.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-entry-fix.mjs.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes.mjs.txt\nA  docs/engineering/startup-compatibility-independent-review-generation31.json",
+      "sourceUnchanged": true,
+      "sourceStatusAtEnd": "A  docs/engineering/INDEPENDENT_STARTUP_COMPATIBILITY_REVIEW_GENERATION31_20261120.md\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/01-source-identity.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/01-source-identity.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/02-focused-composition.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/02-focused-composition.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/03-ui-typecheck.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/03-ui-typecheck.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/04-independent-root-probes.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/04-independent-root-probes.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/05-independent-root-probes.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/05-independent-root-probes.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/06-author-evidence.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/06-author-evidence.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/07-author-evidence.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/07-author-evidence.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/capture-check.py.txt\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-author-evidence-before-dependency-fix.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-author-evidence-before-dependency-fix.py.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-author-evidence.py.txt\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-source.py.txt\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/dependency-directory-provenance.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-codec-fix.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-codec-fix.mjs.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-entry-fix.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-entry-fix.mjs.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes.mjs.txt\nA  docs/engineering/startup-compatibility-independent-review-generation31.json",
+      "scriptInputs": [],
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0,
+      "summary": []
+    }
+  ],
+  "limits": [
+    "Maintained root/App/probe/guard/notice execute with controlled React scheduling and service ports in maintained tests. Independent probes execute the maintained root/probe/guard/helper, with the App child explicitly inert.",
+    "No browser, physical device, native Worker/storage, financial journey, full suite or new build ran in this reviewer worktree.",
+    "The author build was independently read back; static graph membership and emitted bytes do not prove native reachability, storage durability, wallet compatibility or release acceptance.",
+    "Combined coordinator source/qualification is pending at this source-review checkpoint and requires a separate provenance supplement.",
+    "This standalone D8 Tier B change still requires CodeRabbit or Qodo pass with findings answered and applicable current-source/current-target checks. This review is separate.",
+    "ReleaseEnabled remains zero. No deployment, trust provisioning, deletion authority or optional activation follows."
+  ],
+  "artifacts": [
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/01-source-identity.json",
+      "encoding": "identity",
+      "rawBytes": 1432,
+      "rawSha256": "2d848f423feb1885d2614e90fbc6d6896785e74637f68acad5eb93348d641613",
+      "retainedBytes": 1432,
+      "retainedSha256": "2d848f423feb1885d2614e90fbc6d6896785e74637f68acad5eb93348d641613"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/01-source-identity.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 3745,
+      "rawSha256": "978c01c98d01d8ead1b98aa75c349269fe3f45ac02f5d124cec611081ad5ad79",
+      "retainedBytes": 1484,
+      "retainedSha256": "fb3402338e515f1d06c6a5df81205c439492e728e0a4263020cecfa404fd3401"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/02-focused-composition.json",
+      "encoding": "identity",
+      "rawBytes": 3136,
+      "rawSha256": "0ec37a2de4484854beba7592cb07afdbe53c8f2e5c9f3ee935d15bc546d3f84a",
+      "retainedBytes": 3136,
+      "retainedSha256": "0ec37a2de4484854beba7592cb07afdbe53c8f2e5c9f3ee935d15bc546d3f84a"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/02-focused-composition.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 7477,
+      "rawSha256": "221ec2822761e665d23dd4e1cb5e1589088f23b175ec52021876d89b8454ae02",
+      "retainedBytes": 2543,
+      "retainedSha256": "3e08d3382dffb53abd7ce79a937151a2792e5a8ef1d75a9c8b4b19048e58f947"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/03-ui-typecheck.json",
+      "encoding": "identity",
+      "rawBytes": 796,
+      "rawSha256": "7bf9ccd1940e33ec790bbbdbfd0e081aeb9598f5582d2d9c8ff141f1e56f2419",
+      "retainedBytes": 796,
+      "retainedSha256": "7bf9ccd1940e33ec790bbbdbfd0e081aeb9598f5582d2d9c8ff141f1e56f2419"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/03-ui-typecheck.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedBytes": 20,
+      "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/04-independent-root-probes.json",
+      "encoding": "identity",
+      "rawBytes": 1608,
+      "rawSha256": "029bc6a91007090695666e0184bf4746e68cbf154e1f54ae01796abbce3ed939",
+      "retainedBytes": 1608,
+      "retainedSha256": "029bc6a91007090695666e0184bf4746e68cbf154e1f54ae01796abbce3ed939"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/04-independent-root-probes.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 4723,
+      "rawSha256": "1d7ea73c60931ddf149bc6275bd8fbcea16e65dc8ee7ce1f0d0318144b5d1893",
+      "retainedBytes": 791,
+      "retainedSha256": "270d94659e7759a0a102716c34fe9e1aaf3260ad3efee66b4976f469d508d341"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/05-independent-root-probes.json",
+      "encoding": "identity",
+      "rawBytes": 1607,
+      "rawSha256": "61ba2b614d5f4cb939db00e14c118da73e9a58935b0c4f29b835675084cea211",
+      "retainedBytes": 1607,
+      "retainedSha256": "61ba2b614d5f4cb939db00e14c118da73e9a58935b0c4f29b835675084cea211"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/05-independent-root-probes.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 614,
+      "rawSha256": "b2e36d9ec0ab860d32a71949b6081d27a45dae59871845db01c976697e19eef1",
+      "retainedBytes": 373,
+      "retainedSha256": "0c468788fdd87c0b94c991009f87d10256d6fbb3600bab5fdcb2bbd4c767d0e1"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/06-author-evidence.json",
+      "encoding": "identity",
+      "rawBytes": 1124,
+      "rawSha256": "f838c7489683ab13b2dd4c88a8f12f2eeab820c264ea0afd06a599f4b9cc3d18",
+      "retainedBytes": 1124,
+      "retainedSha256": "f838c7489683ab13b2dd4c88a8f12f2eeab820c264ea0afd06a599f4b9cc3d18"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/06-author-evidence.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 1533,
+      "rawSha256": "004b39af89c6b7a1c5091ee7401c2b08507c2c511b68f1d614a9b7972ab98fad",
+      "retainedBytes": 575,
+      "retainedSha256": "bee5296099b120dd46694968449cae2ce59b466e5eeefd30ecc4d9820f2d9ffc"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/07-author-evidence.json",
+      "encoding": "identity",
+      "rawBytes": 1125,
+      "rawSha256": "ee8310ed9f431a90ca54cb62ca8d960517910b5a971b60cc5131eb8a34d9f5c9",
+      "retainedBytes": 1125,
+      "retainedSha256": "ee8310ed9f431a90ca54cb62ca8d960517910b5a971b60cc5131eb8a34d9f5c9"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/07-author-evidence.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 3859,
+      "rawSha256": "f0479b60218d8b1d42d64b7492710558514c45ee3311ed7c7322e301fb3cb6c8",
+      "retainedBytes": 1088,
+      "retainedSha256": "0e533f0f4d22ab79fb5eed00ba122be441f4dc60e76ba166b79fd90474c04996"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/08-complete-whitespace.json",
+      "encoding": "identity",
+      "rawBytes": 6979,
+      "rawSha256": "2c7b8a7a6b223a8150009f812e718ab3ddde7ace9ab9e68bfe3b0fe49e16a818",
+      "retainedBytes": 6979,
+      "retainedSha256": "2c7b8a7a6b223a8150009f812e718ab3ddde7ace9ab9e68bfe3b0fe49e16a818"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/08-complete-whitespace.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedBytes": 20,
+      "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/capture-check.py.txt",
+      "encoding": "identity",
+      "rawBytes": 2429,
+      "rawSha256": "e5cdfb41e519574de80f4d99561483cd476c4560a1200e2c185ee48d23b9d1d5",
+      "retainedBytes": 2429,
+      "retainedSha256": "e5cdfb41e519574de80f4d99561483cd476c4560a1200e2c185ee48d23b9d1d5"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-author-evidence-before-dependency-fix.json",
+      "encoding": "identity",
+      "rawBytes": 446,
+      "rawSha256": "6c4d37eb678f1eb5759e20bb184282879281af8bcb36c63051df7d275bd2fb43",
+      "retainedBytes": 446,
+      "retainedSha256": "6c4d37eb678f1eb5759e20bb184282879281af8bcb36c63051df7d275bd2fb43"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-author-evidence-before-dependency-fix.py.gz",
+      "encoding": "gzip",
+      "rawBytes": 5699,
+      "rawSha256": "73334a44e8e4bab60749b85a4c8e1f1e3fbd7aee11bc6c760a73386b4d2f5063",
+      "retainedBytes": 2041,
+      "retainedSha256": "cb60dad3a56a8415792384640ffed501ed61d5718bf515996a608224cebbbe5b"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-author-evidence.py.txt",
+      "encoding": "identity",
+      "rawBytes": 5962,
+      "rawSha256": "8d643341fa6595f3b9342de40fcb26c5f62c456a2ffcce93827ec073c9d6017e",
+      "retainedBytes": 5962,
+      "retainedSha256": "8d643341fa6595f3b9342de40fcb26c5f62c456a2ffcce93827ec073c9d6017e"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-source.py.txt",
+      "encoding": "identity",
+      "rawBytes": 2715,
+      "rawSha256": "724c432496307dca5bddf045e263aac6e40782fd1cf453dd52cbd3244a798faa",
+      "retainedBytes": 2715,
+      "retainedSha256": "724c432496307dca5bddf045e263aac6e40782fd1cf453dd52cbd3244a798faa"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/dependency-directory-provenance.json",
+      "encoding": "identity",
+      "rawBytes": 1227,
+      "rawSha256": "52482fa49940e53f71b9295b6ad68eb771210581d39ae64f2785746ac670611b",
+      "retainedBytes": 1227,
+      "retainedSha256": "52482fa49940e53f71b9295b6ad68eb771210581d39ae64f2785746ac670611b"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-codec-fix.json",
+      "encoding": "identity",
+      "rawBytes": 408,
+      "rawSha256": "30cf5d0184f364e1e811bad4e596e3d759d16bf5b42b2dc5deb1d97be4db3c04",
+      "retainedBytes": 408,
+      "retainedSha256": "30cf5d0184f364e1e811bad4e596e3d759d16bf5b42b2dc5deb1d97be4db3c04"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-codec-fix.mjs.gz",
+      "encoding": "gzip",
+      "rawBytes": 10811,
+      "rawSha256": "94a7813d055fa90fba549d997c28646dda542e8ac51ecda45d58c3fe00e770ce",
+      "retainedBytes": 3648,
+      "retainedSha256": "c36e8cf35ed667dddd6b8712412c8dd02fe0a82ae717f25736b4ddb476ba297f"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-entry-fix.json",
+      "encoding": "identity",
+      "rawBytes": 373,
+      "rawSha256": "74f94e4b30420b11171871f78236fb8acc801d62e87312c5ad0126ccc583827c",
+      "retainedBytes": 373,
+      "retainedSha256": "74f94e4b30420b11171871f78236fb8acc801d62e87312c5ad0126ccc583827c"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes-before-entry-fix.mjs.gz",
+      "encoding": "gzip",
+      "rawBytes": 10706,
+      "rawSha256": "a67c5ba0f238dd7fd9c657eeed02a2fbf5e8f5acc23b62665d8cd7d59b218a07",
+      "retainedBytes": 3622,
+      "retainedSha256": "3ead9cc8531117e7dcbd7c9937bbeb284a45e9a4f60fd6ed758e9e822005bbd7"
+    },
+    {
+      "path": "docs/engineering/evidence/startup-compatibility-independent-review-generation31/independent-startup-probes.mjs.txt",
+      "encoding": "identity",
+      "rawBytes": 10837,
+      "rawSha256": "aab6c1864bd3facedad3446008e3173348d858b53dfc74cb9025213f579949e4",
+      "retainedBytes": 10837,
+      "retainedSha256": "aab6c1864bd3facedad3446008e3173348d858b53dfc74cb9025213f579949e4"
+    }
+  ]
+}

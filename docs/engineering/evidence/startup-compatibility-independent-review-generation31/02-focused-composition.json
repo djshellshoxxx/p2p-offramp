@@ -1,0 +1,76 @@
+{
+  "name": "02-focused-composition",
+  "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+  "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "apps/web/test/compatibility-probe.test.mjs",
+    "apps/web/test/compatibility-startup.test.mjs",
+    "apps/web/test/startup-compatibility-composition.test.mjs",
+    "apps/web/test/generic-app-share-composition.test.mjs",
+    "apps/web/test/app-shell-locale.test.mjs",
+    "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/independent-startup-probes.mjs"
+  ],
+  "startedAt": "2026-11-20T19:02:59.364322+00:00",
+  "completedAt": "2026-11-20T19:03:01.698149+00:00",
+  "exitCode": 1,
+  "sourceStatusAtStart": "",
+  "sourceUnchanged": true,
+  "sourceStatusAtEnd": "",
+  "scriptInputs": [
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/scripts/test-support/register-tsx.mjs",
+      "bytes": 86,
+      "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/compatibility-probe.test.mjs",
+      "bytes": 5741,
+      "sha256": "6a933d0232fa761bb016cd958b836a867b08ecb8662eeac6414ad6bbaea37d17"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/compatibility-startup.test.mjs",
+      "bytes": 3471,
+      "sha256": "6d4460664df2ed881525a4a9524cc58e5b61f78d86dcb3e265cf5c1a61b0a263"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/startup-compatibility-composition.test.mjs",
+      "bytes": 19539,
+      "sha256": "216e22d37d6fbb93467a17b7542c63b0faa298be607aced063a2073553fb9f5f"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/generic-app-share-composition.test.mjs",
+      "bytes": 11283,
+      "sha256": "b2781db9b3fa161e77d7b63a680a43eaaa96d08e2c01b58d269b46adf485b425"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31/apps/web/test/app-shell-locale.test.mjs",
+      "bytes": 11996,
+      "sha256": "87e88ec8969e2ae90ea0c6e39f088355f4cd6ee0b0a16f1eaadf413d1c0601d1"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/independent-startup-probes.mjs",
+      "bytes": 10706,
+      "sha256": "a67c5ba0f238dd7fd9c657eeed02a2fbf5e8f5acc23b62665d8cd7d59b218a07"
+    }
+  ],
+  "rawBytes": 7477,
+  "rawSha256": "221ec2822761e665d23dd4e1cb5e1589088f23b175ec52021876d89b8454ae02",
+  "gzipBytes": 2543,
+  "gzipSha256": "3e08d3382dffb53abd7ce79a937151a2792e5a8ef1d75a9c8b4b19048e58f947",
+  "gzipMtime": 0,
+  "summary": [
+    "\u2139 tests 54",
+    "\u2139 suites 0",
+    "\u2139 pass 53",
+    "\u2139 fail 1",
+    "\u2139 cancelled 0",
+    "\u2139 skipped 0",
+    "\u2139 todo 0",
+    "\u2139 duration_ms 2254.79139"
+  ]
+}

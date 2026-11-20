@@ -1,0 +1,8 @@
+{
+  "rawBytes": 10811,
+  "rawSha256": "94a7813d055fa90fba549d997c28646dda542e8ac51ecda45d58c3fe00e770ce",
+  "gzipBytes": 3648,
+  "gzipSha256": "c36e8cf35ed667dddd6b8712412c8dd02fe0a82ae717f25736b4ddb476ba297f",
+  "gzipMtime": 0,
+  "cause": "Reviewer VM context omitted standard TextEncoder/TextDecoder globals required when maintained schema modules initialize. Four probes stopped before root rendering."
+}

@@ -1,0 +1,8 @@
+{
+  "rawBytes": 10706,
+  "rawSha256": "a67c5ba0f238dd7fd9c657eeed02a2fbf5e8f5acc23b62665d8cd7d59b218a07",
+  "gzipBytes": 3622,
+  "gzipSha256": "3ead9cc8531117e7dcbd7c9937bbeb284a45e9a4f60fd6ed758e9e822005bbd7",
+  "gzipMtime": 0,
+  "cause": "Reviewer fixture used a null-prefixed library entry rejected before plugin resolution. No product probe registered in that file."
+}

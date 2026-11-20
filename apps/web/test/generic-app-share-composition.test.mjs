@@ -18,6 +18,9 @@ const inert = names => names.map(name => `export function ${name}() { return nul
 const replacements = new Map([
   [localPath('../src/ui/app.css'), ''],
   [localPath('../src/app-services.ts'), 'export const startAppServices = () => globalThis.ports.unexpected("startup");'],
+  // Startup presence reads are outside this sharing-only fixture. The separate
+  // startup composition tests execute the real probe, guard, notice and effects.
+  [localPath('../src/compatibility/probe.ts'), 'export const probeStartupCapabilities = () => null;'],
   [localPath('../src/diagnostics.ts'), 'export const createLocalDiagnostics = () => null;'],
   [localPath('../src/trade/review-controller.ts'), 'export const noApprovedRegistry = () => null; export const createTradeReviewController = () => ({});'],
   [localPath('../src/trade/draft-controller.ts'), 'export const createTradeDraftController = () => globalThis.ports.unexpected("draft");'],

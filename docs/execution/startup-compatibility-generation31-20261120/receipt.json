@@ -1,0 +1,810 @@
+{
+  "schema": "p2p-offramp.startup-compatibility-author.v1",
+  "generation": 31,
+  "recordedAt": "2026-11-20T19:04:53.640882+00:00",
+  "baseline": {
+    "commit": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+    "tree": "b46873509b64467338978820a6469de7fffdc619"
+  },
+  "source": {
+    "commit": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+    "tree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+    "branch": "codex/startup-compatibility-g31-20261120"
+  },
+  "scope": {
+    "changedPaths": [
+      "apps/web/src/OfflineRoot.tsx",
+      "apps/web/src/ui/App.tsx",
+      "apps/web/test/generic-app-share-composition.test.mjs",
+      "apps/web/test/startup-compatibility-composition.test.mjs"
+    ],
+    "modifiedProductionFiles": 2,
+    "modifiedAdjacentFixtures": 1,
+    "addedCompositionTests": 1,
+    "baselineEntries": 2911,
+    "sourceEntries": 2912,
+    "unchangedBaselineEntries": 2908,
+    "nonDocumentationEntries": 1029,
+    "removedPaths": []
+  },
+  "dependencyPreparation": "Immutable physical hardlink copy of existing G30 node_modules into this isolated worktree. No package installation, dependency mutation or cross-worktree import symlink.",
+  "toolVersions": {
+    "node": "v24.22.3",
+    "typescript": "Version 7.0.2"
+  },
+  "commands": [
+    {
+      "label": "01-baseline-composition",
+      "exitCode": 1,
+      "startedAt": "2026-11-20T18:59:44.279357+00:00",
+      "endedAt": "2026-11-20T18:59:46.119947+00:00",
+      "executedHead": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+      "executedHeadTree": "b46873509b64467338978820a6469de7fffdc619",
+      "counts": {
+        "tests": 23,
+        "pass": 4,
+        "fail": 19,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/01-baseline-composition.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/01-baseline-composition.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/01-baseline-composition.patch.gz"
+    },
+    {
+      "label": "02-wired-composition-and-sharing",
+      "exitCode": 1,
+      "startedAt": "2026-11-20T19:00:04.953468+00:00",
+      "endedAt": "2026-11-20T19:00:07.110367+00:00",
+      "executedHead": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+      "executedHeadTree": "b46873509b64467338978820a6469de7fffdc619",
+      "counts": {
+        "tests": 32,
+        "pass": 21,
+        "fail": 11,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/02-wired-composition-and-sharing.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/02-wired-composition-and-sharing.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/02-wired-composition-and-sharing.patch.gz"
+    },
+    {
+      "label": "03-corrected-composition-and-sharing",
+      "exitCode": 1,
+      "startedAt": "2026-11-20T19:00:59.275429+00:00",
+      "endedAt": "2026-11-20T19:01:01.296772+00:00",
+      "executedHead": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+      "executedHeadTree": "b46873509b64467338978820a6469de7fffdc619",
+      "counts": {
+        "tests": 32,
+        "pass": 26,
+        "fail": 6,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/03-corrected-composition-and-sharing.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/03-corrected-composition-and-sharing.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/03-corrected-composition-and-sharing.patch.gz"
+    },
+    {
+      "label": "04-vm-global-diagnostic",
+      "exitCode": 0,
+      "startedAt": "2026-11-20T19:01:35.897325+00:00",
+      "endedAt": "2026-11-20T19:01:35.997380+00:00",
+      "executedHead": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+      "executedHeadTree": "b46873509b64467338978820a6469de7fffdc619",
+      "counts": {},
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/04-vm-global-diagnostic.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/04-vm-global-diagnostic.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/04-vm-global-diagnostic.patch.gz"
+    },
+    {
+      "label": "05-green-composition-and-sharing",
+      "exitCode": 0,
+      "startedAt": "2026-11-20T19:01:36.541811+00:00",
+      "endedAt": "2026-11-20T19:01:38.441750+00:00",
+      "executedHead": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+      "executedHeadTree": "b46873509b64467338978820a6469de7fffdc619",
+      "counts": {
+        "tests": 32,
+        "pass": 32,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/05-green-composition-and-sharing.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/05-green-composition-and-sharing.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/05-green-composition-and-sharing.patch.gz"
+    },
+    {
+      "label": "06-final-fixture-baseline",
+      "exitCode": 1,
+      "startedAt": "2026-11-20T19:02:12.194497+00:00",
+      "endedAt": "2026-11-20T19:02:13.884884+00:00",
+      "executedHead": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+      "executedHeadTree": "b46873509b64467338978820a6469de7fffdc619",
+      "counts": {
+        "tests": 23,
+        "pass": 4,
+        "fail": 19,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/06-final-fixture-baseline.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/06-final-fixture-baseline.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/06-final-fixture-baseline.patch.gz"
+    },
+    {
+      "label": "07-frozen-focused-and-adjacent",
+      "exitCode": 0,
+      "startedAt": "2026-11-20T19:02:46.184434+00:00",
+      "endedAt": "2026-11-20T19:02:50.221640+00:00",
+      "executedHead": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "executedHeadTree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "counts": {
+        "tests": 77,
+        "pass": 77,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/07-frozen-focused-and-adjacent.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/07-frozen-focused-and-adjacent.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/07-frozen-focused-and-adjacent.patch.gz"
+    },
+    {
+      "label": "08-frozen-ui-typecheck",
+      "exitCode": 0,
+      "startedAt": "2026-11-20T19:02:46.179851+00:00",
+      "endedAt": "2026-11-20T19:02:49.330188+00:00",
+      "executedHead": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "executedHeadTree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "counts": {},
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/08-frozen-ui-typecheck.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/08-frozen-ui-typecheck.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/08-frozen-ui-typecheck.patch.gz"
+    },
+    {
+      "label": "09-frozen-boundaries",
+      "exitCode": 0,
+      "startedAt": "2026-11-20T19:02:46.197247+00:00",
+      "endedAt": "2026-11-20T19:02:49.522469+00:00",
+      "executedHead": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "executedHeadTree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "counts": {},
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/09-frozen-boundaries.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/09-frozen-boundaries.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/09-frozen-boundaries.patch.gz"
+    },
+    {
+      "label": "10-frozen-build-policy",
+      "exitCode": 0,
+      "startedAt": "2026-11-20T19:02:46.188669+00:00",
+      "endedAt": "2026-11-20T19:02:53.669154+00:00",
+      "executedHead": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "executedHeadTree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "counts": {
+        "tests": 58,
+        "pass": 58,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/10-frozen-build-policy.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/10-frozen-build-policy.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/10-frozen-build-policy.patch.gz"
+    },
+    {
+      "label": "11-frozen-ordinary-build",
+      "exitCode": 0,
+      "startedAt": "2026-11-20T19:03:10.502041+00:00",
+      "endedAt": "2026-11-20T19:03:11.368715+00:00",
+      "executedHead": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+      "executedHeadTree": "9eb643f1871e2e257cfdb37e3cfe6c95e46e86bd",
+      "counts": {},
+      "metadata": "docs/execution/startup-compatibility-generation31-20261120/11-frozen-ordinary-build.json",
+      "log": "docs/execution/startup-compatibility-generation31-20261120/11-frozen-ordinary-build.log.gz",
+      "patch": "docs/execution/startup-compatibility-generation31-20261120/11-frozen-ordinary-build.patch.gz"
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/01-baseline-composition.log.gz",
+      "rawBytes": 19563,
+      "rawSha256": "ef1f10f91af3e937acd5e91ca63985cba7869c5653c770bcb8fddf2fb001161d",
+      "retainedBytes": 1685,
+      "retainedSha256": "628a647521514dbc9b1e2e4f09a0ce29614da661139fd09963518ba959d66e97",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/01-baseline-composition.patch.gz",
+      "rawBytes": 19762,
+      "rawSha256": "08ed3ccd722d3e149314046a68c864477ad4a59e611f97972fbf98b3170e5b26",
+      "retainedBytes": 5707,
+      "retainedSha256": "bbb55f5ad1388effd5f0a110d925e815e82ac99641a625b7a2f57baf205e4017",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/01-baseline-composition.json",
+      "rawBytes": 1949,
+      "rawSha256": "cd0f23985801e1db668b0fc6461ab135453269cd4ad08c71731675635c36d447",
+      "retainedBytes": 1949,
+      "retainedSha256": "cd0f23985801e1db668b0fc6461ab135453269cd4ad08c71731675635c36d447",
+      "encoding": "identity"
+    },
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/02-wired-composition-and-sharing.log.gz",
+      "rawBytes": 12979,
+      "rawSha256": "1088980de13e51602955d015c24af0cad8ae8c86005344f692440b14768c4fb3",
+      "retainedBytes": 1740,
+      "retainedSha256": "eeaf405a355a8ad1cee56b6be0adfbd49234ffd11c2c212a5d25321b23b87b98",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/02-wired-composition-and-sharing.patch.gz",
+      "rawBytes": 24760,
+      "rawSha256": "6b9bc4625aa9d3b7c5d22440ab90c6a54d48b48b87d7722952bfc91580e7573c",
+      "retainedBytes": 7079,
+      "retainedSha256": "ac11bc40c36cd220b812b393d3bf5ad0491bbf14d252d091bc9cb26b5c2b8029",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/02-wired-composition-and-sharing.json",
+      "rawBytes": 2036,
+      "rawSha256": "36377659a7e2e466d334a305b6020fc380893d28a09e35b3442dce041c36ec9f",
+      "retainedBytes": 2036,
+      "retainedSha256": "36377659a7e2e466d334a305b6020fc380893d28a09e35b3442dce041c36ec9f",
+      "encoding": "identity"
+    },
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/03-corrected-composition-and-sharing.log.gz",
+      "rawBytes": 8346,
+      "rawSha256": "8186bd5a1599f6530cd4466fc633c6d2e403fcb15d3e376fa0608f6f67b65410",
+      "retainedBytes": 1575,
+      "retainedSha256": "cd4f67e4dd029a686e02ea744777698f86f441a05f4d2ad33dd4e200da1974cb",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/03-corrected-composition-and-sharing.patch.gz",
+      "rawBytes": 26255,
+      "rawSha256": "10e51da3ae1ed08c5b6244a6281bc68a49e5e28b39e08b9af703d9714790f574",
+      "retainedBytes": 7398,
+      "retainedSha256": "0bed7a80b72e138e1b52d9158c95cc91068598c865fb1748c998966d59d9870f",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/03-corrected-composition-and-sharing.json",
+      "rawBytes": 2047,
+      "rawSha256": "1c452a3360b7569467222fcb220d3c16e07d0deba9926bd479776f61750054a9",
+      "retainedBytes": 2047,
+      "retainedSha256": "1c452a3360b7569467222fcb220d3c16e07d0deba9926bd479776f61750054a9",
+      "encoding": "identity"
+    },
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/04-vm-global-diagnostic.log.gz",
+      "rawBytes": 49,
+      "rawSha256": "de9fab66d2a6eb95c859f687e1da2cf630a6b9047b09859825f611d9fa148b75",
+      "retainedBytes": 60,
+      "retainedSha256": "0d37fc3cf6802720ad7d91c6f9ace771ae19ff6ec50c2da5f349254e3524e9ec",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/04-vm-global-diagnostic.patch.gz",
+      "rawBytes": 26255,
+      "rawSha256": "10e51da3ae1ed08c5b6244a6281bc68a49e5e28b39e08b9af703d9714790f574",
+      "retainedBytes": 7398,
+      "retainedSha256": "0bed7a80b72e138e1b52d9158c95cc91068598c865fb1748c998966d59d9870f",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/04-vm-global-diagnostic.json",
+      "rawBytes": 1871,
+      "rawSha256": "7e346a7f01b9be0cde4d39dc9a721530a08a94a85a4bb4515769be001f867b65",
+      "retainedBytes": 1871,
+      "retainedSha256": "7e346a7f01b9be0cde4d39dc9a721530a08a94a85a4bb4515769be001f867b65",
+      "encoding": "identity"
+    },
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/05-green-composition-and-sharing.log.gz",
+      "rawBytes": 3606,
+      "rawSha256": "c20f17c30140e7a4db1491e16532c486dffd9bf176fe2209d833ed12ed711bfa",
+      "retainedBytes": 1177,
+      "retainedSha256": "cb62eb381231a1ea89171032190b513328f513616df71d4c90b5e116ff4b6bc4",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/05-green-composition-and-sharing.patch.gz",
+      "rawBytes": 26318,
+      "rawSha256": "6f8ba4a0931fd5bf8d481e4e48de3af9c237860b99e6171b8b7defea1eefa66b",
+      "retainedBytes": 7423,
+      "retainedSha256": "092ff8526fd3707f61caaa4d889c45c3fcb4dd165705147c82b018fdbea124a1",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/05-green-composition-and-sharing.json",
+      "rawBytes": 2033,
+      "rawSha256": "237b8a7bf3447fb4fa8116c3b2d9d8e6658f872b0c5805985f243603ab591c7c",
+      "retainedBytes": 2033,
+      "retainedSha256": "237b8a7bf3447fb4fa8116c3b2d9d8e6658f872b0c5805985f243603ab591c7c",
+      "encoding": "identity"
+    },
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/06-final-fixture-baseline.log.gz",
+      "rawBytes": 19560,
+      "rawSha256": "72e1ccca4bd3bbeb65dc4779deca5a356341e4a3be40650e702cc0079cc9c5e7",
+      "retainedBytes": 1685,
+      "retainedSha256": "7b97d30e03dcb69b7fb074992758d63ebc3b257a740dbe97cc53fb522e7cd759",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/06-final-fixture-baseline.patch.gz",
+      "rawBytes": 21320,
+      "rawSha256": "e5af897832a2e40d16d7916ca335cf40145bf7bbd45bbcc60d9e88b4d3fc4fe4",
+      "retainedBytes": 6068,
+      "retainedSha256": "c27532a12007b797ccf820a9e45fc9864887f58b4400218ebe45873a033ca784",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/06-final-fixture-baseline.json",
+      "rawBytes": 1954,
+      "rawSha256": "a385744cf75e84a1ed55775c0e9fb8d58761135d289c861204d636274d4bd32b",
+      "retainedBytes": 1954,
+      "retainedSha256": "a385744cf75e84a1ed55775c0e9fb8d58761135d289c861204d636274d4bd32b",
+      "encoding": "identity"
+    },
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/07-frozen-focused-and-adjacent.log.gz",
+      "rawBytes": 8438,
+      "rawSha256": "502c4c84adab488689ccd79c691bc57f8e252dd38f059837a9e8c9855c889485",
+      "retainedBytes": 2905,
+      "retainedSha256": "8511a81d61ae7db843055dcd7505c09dc0021af46afb53fbf2031b2eb81ca84d",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/07-frozen-focused-and-adjacent.patch.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedBytes": 20,
+      "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/07-frozen-focused-and-adjacent.json",
+      "rawBytes": 2284,
+      "rawSha256": "6a313b744ca25a5ac58cec887a30c78fdc266bcf69aa03142c2811788f7f539e",
+      "retainedBytes": 2284,
+      "retainedSha256": "6a313b744ca25a5ac58cec887a30c78fdc266bcf69aa03142c2811788f7f539e",
+      "encoding": "identity"
+    },
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/08-frozen-ui-typecheck.log.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedBytes": 20,
+      "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/08-frozen-ui-typecheck.patch.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedBytes": 20,
+      "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/08-frozen-ui-typecheck.json",
+      "rawBytes": 1876,
+      "rawSha256": "687cb99f9d0cdb8ce2e759464ec60f77a59eaae80955c4cc604effe19f7a3642",
+      "retainedBytes": 1876,
+      "retainedSha256": "687cb99f9d0cdb8ce2e759464ec60f77a59eaae80955c4cc604effe19f7a3642",
+      "encoding": "identity"
+    },
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/09-frozen-boundaries.log.gz",
+      "rawBytes": 392,
+      "rawSha256": "171459349881532fab298d83fadbd8a8f2a269b3197f7642193a31fe471deb39",
+      "retainedBytes": 287,
+      "retainedSha256": "4d73e145c5258e7e67d2b9185efeb6eda0122424a642fd702b009bc488c0bb31",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/09-frozen-boundaries.patch.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedBytes": 20,
+      "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/09-frozen-boundaries.json",
+      "rawBytes": 1831,
+      "rawSha256": "bee72378fa42247e46cd150c8964b080bb28bcda8df75d803c72a821d398872d",
+      "retainedBytes": 1831,
+      "retainedSha256": "bee72378fa42247e46cd150c8964b080bb28bcda8df75d803c72a821d398872d",
+      "encoding": "identity"
+    },
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/10-frozen-build-policy.log.gz",
+      "rawBytes": 7621,
+      "rawSha256": "8c0fb971b41ba312255197460bc1c91afaf58ff40e51fe0e2964232d9445ffc1",
+      "retainedBytes": 3138,
+      "retainedSha256": "6b36253a4e145b59b08751026f21ffc1ea515885f308cd1a6cb0e1e6f2318591",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/10-frozen-build-policy.patch.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedBytes": 20,
+      "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/10-frozen-build-policy.json",
+      "rawBytes": 1838,
+      "rawSha256": "5ae98cbc587b8abe1332969c54fa09f5a9fcadba1588e591c095f200bdddaf54",
+      "retainedBytes": 1838,
+      "retainedSha256": "5ae98cbc587b8abe1332969c54fa09f5a9fcadba1588e591c095f200bdddaf54",
+      "encoding": "identity"
+    },
+    {
+      "kind": "command-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/11-frozen-ordinary-build.log.gz",
+      "rawBytes": 1027,
+      "rawSha256": "f34c82a41b8553ca3418ca28456a16db01c66373a5e1e4ed238d3113aef8bdfc",
+      "retainedBytes": 499,
+      "retainedSha256": "11f3b62adf32f4be7c00c4d6db78ac965f414566a6306e51404ef0dd6ca6d2ba",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "exact-source-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/11-frozen-ordinary-build.patch.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedBytes": 20,
+      "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "original-command-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/11-frozen-ordinary-build.json",
+      "rawBytes": 1844,
+      "rawSha256": "2d8e3c4d0f3eddcf444a3cda45d462428010fd3fb49a27eb1cf9ef696c82b868",
+      "retainedBytes": 1844,
+      "retainedSha256": "2d8e3c4d0f3eddcf444a3cda45d462428010fd3fb49a27eb1cf9ef696c82b868",
+      "encoding": "identity"
+    },
+    {
+      "kind": "fixture-diagnostic-source",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/vm-global-diagnostic.mjs.txt",
+      "rawBytes": 567,
+      "rawSha256": "9ac415f5cfba0dcab70de8ab4337b90731ac07c9192054099a51dfeeb22f91bf",
+      "retainedBytes": 567,
+      "retainedSha256": "9ac415f5cfba0dcab70de8ab4337b90731ac07c9192054099a51dfeeb22f91bf",
+      "encoding": "identity"
+    },
+    {
+      "kind": "capture-runner-source",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/capture-command.py.txt",
+      "rawBytes": 2349,
+      "rawSha256": "f5ece154fcd0a687db7ca1ee2f39d53151b92194099f0547785ac48cbc2b99ba",
+      "retainedBytes": 2349,
+      "retainedSha256": "f5ece154fcd0a687db7ca1ee2f39d53151b92194099f0547785ac48cbc2b99ba",
+      "encoding": "identity"
+    },
+    {
+      "kind": "emitted-module-graph",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/core-graph-document.json.gz",
+      "rawBytes": 15333,
+      "rawSha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367",
+      "retainedBytes": 5390,
+      "retainedSha256": "f096d0a3a161b91a79a0813fa5d9775d58fea65612ccd3bd9538faf6e986ff39",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "emitted-module-graph",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/core-graph-worker.json.gz",
+      "rawBytes": 4758,
+      "rawSha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb",
+      "retainedBytes": 1779,
+      "retainedSha256": "c831056490d4ccabe0af5002b85db42a2d174a322df79ac6c80ecc114f83d6bc",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "emitted-module-graph",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/qr-graph-worker.json.gz",
+      "rawBytes": 905,
+      "rawSha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+      "retainedBytes": 470,
+      "retainedSha256": "5d9d16721b7dad1aeec25f75365d3eb7c1c5c3ef08d6786d76ea165c8bd5b7b1",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "emitted-build-evidence",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/local-build-evidence.json.gz",
+      "rawBytes": 2526,
+      "rawSha256": "318f9da44946d460600452df796056dbdffd1a19525f881600676dbdc16fbe8c",
+      "retainedBytes": 1105,
+      "retainedSha256": "58f003a16dcb70f4e0755c5c5bccd206515d7e764b7eeb4f3e3556ec7d98681d",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "emitted-build-evidence",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/content-policy.json.gz",
+      "rawBytes": 1009,
+      "rawSha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+      "retainedBytes": 385,
+      "retainedSha256": "a998594b8ab93164f1916bae3ce19d95a62d8b58b371d74cbd0d0d28c119f3f2",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "emitted-application-code",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/OfflineRoot-KpNTfNjc.js.gz",
+      "rawBytes": 312712,
+      "rawSha256": "4788669b1638bc7a7b8a93303999250708eb4a817f5cb943b10e922efc5d8f69",
+      "retainedBytes": 88588,
+      "retainedSha256": "37cb3a2fa3b36209487376877e1c8fb295d5ce61f8afbc294808b4f9fda709ec",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "emitted-application-code",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/index-6AlRBUfF.js.gz",
+      "rawBytes": 220890,
+      "rawSha256": "bea32e4a4ac7775b0e13e840e4b7e84fb394bb915f40ce1253f8d77ee0a23dc1",
+      "retainedBytes": 68182,
+      "retainedSha256": "7309bb88bdc975ec17ed6f9c1d2f0dea281c45e457638f4ad28d448a82444d20",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "final-whitespace-output",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/12-source-and-evidence-whitespace.log.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedBytes": 20,
+      "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "final-whitespace-exact-patch",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/12-source-and-evidence-whitespace.patch.gz",
+      "rawBytes": 371647,
+      "rawSha256": "c0a40d783f016b3f709a3292f57971ba087cd5c0df2e3c5867c3a2099d1aafed",
+      "retainedBytes": 244464,
+      "retainedSha256": "969b528e296533965ae692fb331bff453fccf441570511adfd0b7b7ef0949b48",
+      "encoding": "gzip"
+    },
+    {
+      "kind": "final-whitespace-original-receipt",
+      "path": "docs/execution/startup-compatibility-generation31-20261120/12-source-and-evidence-whitespace.json",
+      "rawBytes": 1908,
+      "rawSha256": "fa0d29df11c376de57903faf68b831c3da38b4a0f4ab40fb8789a6f3ae45b705",
+      "retainedBytes": 1908,
+      "retainedSha256": "fa0d29df11c376de57903faf68b831c3da38b4a0f4ab40fb8789a6f3ae45b705",
+      "encoding": "identity"
+    }
+  ],
+  "qualification": {
+    "finalFocusedAndAdjacent": {
+      "tests": 77,
+      "pass": 77,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "newCompositionCases": 23,
+    "uiTypecheck": true,
+    "boundaries": {
+      "productionFiles": 242,
+      "coreModules": 155
+    },
+    "buildPolicy": {
+      "tests": 58,
+      "pass": 58
+    },
+    "ordinaryBuild": {
+      "version": 1,
+      "ReleaseEnabled": 0,
+      "syntheticDemo": false,
+      "testnet": false,
+      "signedRelease": false,
+      "releaseAcceptance": false,
+      "framingAttestation": false,
+      "inspection": {
+        "files": 12,
+        "bytes": 817257,
+        "bundledSinkTokensRequiringFrameworkReview": 18,
+        "completeXssProof": false
+      },
+      "assets": [
+        {
+          "path": "_headers",
+          "bytes": 342,
+          "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+        },
+        {
+          "path": "assets/OfflineRoot-KpNTfNjc.js",
+          "bytes": 312712,
+          "sha256": "4788669b1638bc7a7b8a93303999250708eb4a817f5cb943b10e922efc5d8f69"
+        },
+        {
+          "path": "assets/decode.worker-DGcSBxfL.js",
+          "bytes": 133927,
+          "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+        },
+        {
+          "path": "assets/index-6AlRBUfF.js",
+          "bytes": 220890,
+          "sha256": "bea32e4a4ac7775b0e13e840e4b7e84fb394bb915f40ce1253f8d77ee0a23dc1"
+        },
+        {
+          "path": "assets/index-rPDFZ4F5.css",
+          "bytes": 8414,
+          "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+        },
+        {
+          "path": "assets/vault.worker-yOnLqpF_.js",
+          "bytes": 102355,
+          "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+        },
+        {
+          "path": "content-policy.json",
+          "bytes": 1009,
+          "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+        },
+        {
+          "path": "core-graph-document.json",
+          "bytes": 15333,
+          "sha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367"
+        },
+        {
+          "path": "core-graph-worker.json",
+          "bytes": 4758,
+          "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb"
+        },
+        {
+          "path": "index.html",
+          "bytes": 1283,
+          "sha256": "847a35d4bfbe9ca5794e65092e337cbdb561e7459a8d8a68aeba33fdd79f7736"
+        },
+        {
+          "path": "qr-graph-worker.json",
+          "bytes": 905,
+          "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+        },
+        {
+          "path": "third-party-licenses.json",
+          "bytes": 15329,
+          "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+        }
+      ],
+      "qr": {
+        "decoderVersion": "1.4.0",
+        "dependencySha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859",
+        "graph": "qr-graph-worker.json",
+        "worker": "assets/decode.worker-DGcSBxfL.js",
+        "authority": "none",
+        "physicalDeviceQualification": false
+      }
+    },
+    "graphReadback": {
+      "core-graph-document.json": {
+        "modules": 102,
+        "sha256": "26ae7b6166c459f22e4fe653d9c070e416d4bbdd1ae59ef4280846afb6915367"
+      },
+      "core-graph-worker.json": {
+        "modules": 30,
+        "sha256": "2599af93d5e1fe6c5fae44e9a0b706e1ff0c21562bd5d6de9bcfb2f58737f2eb"
+      },
+      "qr-graph-worker.json": {
+        "modules": 4,
+        "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+      }
+    },
+    "graphModuleReferencesVerified": 136,
+    "unchangedVaultWorker": {
+      "path": "assets/vault.worker-yOnLqpF_.js",
+      "bytes": 102355,
+      "sha256": "d3bc5bf253cf1e30914a932e126d2d41bedc19d217d9baa94748975243c04165"
+    }
+  },
+  "attribution": [
+    "01 baseline: 23 cases, 4 lifecycle controls pass and 19 missing-integration assertions fail on original production.",
+    "02 wired selection: 32 cases, 21 pass and 11 fail. Five existing sharing fixtures reject newly legitimate optional API presence reads; six unavailable cases encounter Node context-global proxy behavior. These are fixture failures, not additional product defects.",
+    "03 first fixture correction: 32 cases, 26 pass and the same six Node VM global getter classification failures. Pointing globalThis at the context object does not avoid contextification.",
+    "04 minimal diagnostic records normal/self context globals as missing after a throwing host getter, and a separate descriptor-preserving object as unavailable.",
+    "05 corrected selection: 32/32 passed; its complete source patch is byte-identical to the final source commit diff.",
+    "06 final fixture baseline: original production restored temporarily in this isolated worktree gives 4 pass / 19 missing-integration failures; final production bytes restored before freezing.",
+    "07-11 execute on the clean frozen source. Focused selections overlap; counts are not added together or presented as full-suite qualification."
+  ],
+  "limits": [
+    "Actual OfflineRoot/App/probe/startup guard/notice and locale code execute in a controlled hook and service-port fixture; no native browser or physical-device acceptance follows.",
+    "Read-only presence checks construct no Worker, open no storage, invoke no clipboard/native share/camera/permission operation and contact no network in the controlled composition.",
+    "The existing owned-service disposal and pagehide semantics are preserved; no broader physical quiescence, exactly-once browser lifecycle or durable storage claim is made.",
+    "The fixture catalog is draft test data, not supported translation qualification.",
+    "Independent review and root combined/current-source/current-target qualification remain separate. Standalone D8 Tier B requires a CodeRabbit or Qodo pass with findings answered.",
+    "ReleaseEnabled remains zero; no deployment, release, trust input or default optional feature activation occurs."
+  ],
+  "finalWhitespace": {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "8e836baa877b676a863c877003e277b638fc5061"
+    ],
+    "exitCode": 0,
+    "startedAt": "2026-11-20T19:05:42.499820+00:00",
+    "endedAt": "2026-11-20T19:05:42.527308+00:00",
+    "source": "9c9b16b7e96737115f5fc61bddf8c31e277dd6f4",
+    "initialEvidenceCapture": [
+      {
+        "kind": "final-whitespace-output",
+        "path": "docs/execution/startup-compatibility-generation31-20261120/12-source-and-evidence-whitespace.log.gz",
+        "rawBytes": 0,
+        "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retainedBytes": 20,
+        "retainedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+        "encoding": "gzip"
+      },
+      {
+        "kind": "final-whitespace-exact-patch",
+        "path": "docs/execution/startup-compatibility-generation31-20261120/12-source-and-evidence-whitespace.patch.gz",
+        "rawBytes": 371647,
+        "rawSha256": "c0a40d783f016b3f709a3292f57971ba087cd5c0df2e3c5867c3a2099d1aafed",
+        "retainedBytes": 244464,
+        "retainedSha256": "969b528e296533965ae692fb331bff453fccf441570511adfd0b7b7ef0949b48",
+        "encoding": "gzip"
+      },
+      {
+        "kind": "final-whitespace-original-receipt",
+        "path": "docs/execution/startup-compatibility-generation31-20261120/12-source-and-evidence-whitespace.json",
+        "rawBytes": 1908,
+        "rawSha256": "fa0d29df11c376de57903faf68b831c3da38b4a0f4ab40fb8789a6f3ae45b705",
+        "retainedBytes": 1908,
+        "retainedSha256": "fa0d29df11c376de57903faf68b831c3da38b4a0f4ab40fb8789a6f3ae45b705",
+        "encoding": "identity"
+      }
+    ],
+    "scope": "Complete main-to-worktree diff with all initial source/evidence staged. The final receipt envelope is rechecked before commit; no path exclusions.",
+    "finalEnvelopeRecheckedBeforeCommit": true
+  }
+}
