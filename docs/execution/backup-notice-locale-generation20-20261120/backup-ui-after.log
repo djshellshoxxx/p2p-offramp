@@ -1,0 +1,34 @@
+✔ Recovery exposes explicit backup authentication and its limits without starting service calls (24.965785ms)
+✔ explicit file verification clears input and byte storage and displays only returned scalar receipt (13.372431ms)
+✔ explicit recheck needs no file and clears old display when the Worker has no current fact (7.59922ms)
+✔ missing or oversized backup selection does not read or authenticate a file (2.964008ms)
+✔ a wrong backup passphrase leaves no verification receipt (2.765077ms)
+✔ cancelling a file read prevents authentication and clears bytes when the read settles (4.072261ms)
+✔ cancelling pending authentication aborts its service request and ignores its late receipt (2.74726ms)
+✔ selection lock discards an old reply before a new render (2.541499ms)
+✔ selection replacement discards an old reply before a new render (2.172021ms)
+✔ a replacement facade with the same scope cannot show the prior facade result (3.388489ms)
+✔ unmount clears local inputs, aborts authentication, and does not publish its late result (2.582762ms)
+✔ two submit events before rendering make only one physical file read and service request (2.40974ms)
+✔ fresh recheck refusal clears the previously displayed receipt without retrying (3.332354ms)
+✔ editing either input clears the displayed check without another service operation (7.079224ms)
+✔ independent: profile selection changes during an ordinary delayed file read never dispatch authentication (2.361878ms)
+✔ independent: two explicit recheck events before rendering dispatch one request and no file read (3.141496ms)
+✔ independent: cancelled physical authentication retains file admission until its pending service drains (3.815343ms)
+✔ live locale selection updates the missing file notice without repeating its action (4.652478ms)
+✔ live locale selection updates the oversized file notice without repeating its action (3.5617ms)
+✔ live locale selection updates the revision mismatch notice without repeating its action (3.540799ms)
+✔ live locale selection updates the authentication refusal notice without repeating its action (3.096007ms)
+✔ live locale selection updates the absent verification notice without repeating its action (2.902745ms)
+✔ live locale selection updates the recheck refusal notice without repeating its action (3.232573ms)
+✔ live locale selection updates the ordinary I/O failure notice without repeating its action (3.23015ms)
+✔ a cancelled recheck notice follows locale selection and its late result remains discarded (2.870045ms)
+✔ changing locale during a recheck preserves that operation and the returned receipt identity (3.825929ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1899.7695

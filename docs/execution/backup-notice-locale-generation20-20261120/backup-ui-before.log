@@ -1,0 +1,188 @@
+✔ Recovery exposes explicit backup authentication and its limits without starting service calls (21.485883ms)
+✔ explicit file verification clears input and byte storage and displays only returned scalar receipt (30.115148ms)
+✔ explicit recheck needs no file and clears old display when the Worker has no current fact (10.020576ms)
+✔ missing or oversized backup selection does not read or authenticate a file (8.93119ms)
+✔ a wrong backup passphrase leaves no verification receipt (14.074328ms)
+✔ cancelling a file read prevents authentication and clears bytes when the read settles (5.096889ms)
+✔ cancelling pending authentication aborts its service request and ignores its late receipt (6.571286ms)
+✔ selection lock discards an old reply before a new render (10.434131ms)
+✔ selection replacement discards an old reply before a new render (21.397129ms)
+✔ a replacement facade with the same scope cannot show the prior facade result (13.508524ms)
+✔ unmount clears local inputs, aborts authentication, and does not publish its late result (6.143119ms)
+✔ two submit events before rendering make only one physical file read and service request (9.226655ms)
+✔ fresh recheck refusal clears the previously displayed receipt without retrying (22.935964ms)
+✔ editing either input clears the displayed check without another service operation (11.627432ms)
+✔ independent: profile selection changes during an ordinary delayed file read never dispatch authentication (7.745449ms)
+✔ independent: two explicit recheck events before rendering dispatch one request and no file read (3.99194ms)
+✔ independent: cancelled physical authentication retains file admission until its pending service drains (5.115116ms)
+✖ live locale selection updates the missing file notice without repeating its action (9.326177ms)
+✖ live locale selection updates the oversized file notice without repeating its action (5.295438ms)
+✖ live locale selection updates the revision mismatch notice without repeating its action (3.345623ms)
+✖ live locale selection updates the authentication refusal notice without repeating its action (6.643545ms)
+✖ live locale selection updates the absent verification notice without repeating its action (2.167935ms)
+✖ live locale selection updates the recheck refusal notice without repeating its action (7.510865ms)
+✖ live locale selection updates the ordinary I/O failure notice without repeating its action (7.058041ms)
+✖ a cancelled recheck notice follows locale selection and its late result remains discarded (2.39707ms)
+✔ changing locale during a recheck preserves that operation and the returned receipt identity (23.093582ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 18
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2626.010352
+
+✖ failing tests:
+
+test at apps/web/test/backup-verification-ui.test.mjs:258:37
+✖ live locale selection updates the missing file notice without repeating its action (9.326177ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'Choose the encrypted backup file to authenticate.'
+  - '[DRAFT Choose the encrypted backup file to authenticate.]'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-locale-g20/apps/web/test/backup-verification-ui.test.mjs:268:97)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Choose the encrypted backup file to authenticate.',
+    expected: '[DRAFT Choose the encrypted backup file to authenticate.]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/backup-verification-ui.test.mjs:258:37
+✖ live locale selection updates the oversized file notice without repeating its action (5.295438ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'A local safety limit was reached. Keep the original data and use recovery guidance.'
+  - '[DRAFT A local safety limit was reached. Keep the original data and use recovery guidance.]'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-locale-g20/apps/web/test/backup-verification-ui.test.mjs:268:97)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'A local safety limit was reached. Keep the original data and use recovery guidance.',
+    expected: '[DRAFT A local safety limit was reached. Keep the original data and use recovery guidance.]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/backup-verification-ui.test.mjs:258:37
+✖ live locale selection updates the revision mismatch notice without repeating its action (3.345623ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'The file does not match the open profile’s committed revision, or the stored profile changed. Export the latest profile and verify its file again.'
+  - '[DRAFT The file does not match the open profile’s committed revision, or the stored profile changed. Export the latest profile and verify its file again.]'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-locale-g20/apps/web/test/backup-verification-ui.test.mjs:268:97)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'The file does not match the open profile’s committed revision, or the stored profile changed. Export the latest profile and verify its file again.',
+    expected: '[DRAFT The file does not match the open profile’s committed revision, or the stored profile changed. Export the latest profile and verify its file again.]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/backup-verification-ui.test.mjs:258:37
+✖ live locale selection updates the authentication refusal notice without repeating its action (6.643545ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'The vault could not be authenticated. Check the passphrase and keep the original data.'
+  - '[DRAFT The vault could not be authenticated. Check the passphrase and keep the original data.]'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-locale-g20/apps/web/test/backup-verification-ui.test.mjs:268:97)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'The vault could not be authenticated. Check the passphrase and keep the original data.',
+    expected: '[DRAFT The vault could not be authenticated. Check the passphrase and keep the original data.]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/backup-verification-ui.test.mjs:258:37
+✖ live locale selection updates the absent verification notice without repeating its action (2.167935ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'No authenticated backup verification is held for this profile selection.'
+  - '[DRAFT No authenticated backup verification is held for this profile selection.]'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-locale-g20/apps/web/test/backup-verification-ui.test.mjs:268:97)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'No authenticated backup verification is held for this profile selection.',
+    expected: '[DRAFT No authenticated backup verification is held for this profile selection.]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/backup-verification-ui.test.mjs:258:37
+✖ live locale selection updates the recheck refusal notice without repeating its action (7.510865ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'Local data changed. Keep the original data and check its status before trying again.'
+  - '[DRAFT Local data changed. Keep the original data and check its status before trying again.]'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-locale-g20/apps/web/test/backup-verification-ui.test.mjs:268:97)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Local data changed. Keep the original data and check its status before trying again.',
+    expected: '[DRAFT Local data changed. Keep the original data and check its status before trying again.]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/backup-verification-ui.test.mjs:258:37
+✖ live locale selection updates the ordinary I/O failure notice without repeating its action (7.058041ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'Local storage is unavailable. Check browser storage permissions and keep your original data.'
+  - '[DRAFT Local storage is unavailable. Check browser storage permissions and keep your original data.]'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-locale-g20/apps/web/test/backup-verification-ui.test.mjs:268:97)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Local storage is unavailable. Check browser storage permissions and keep your original data.',
+    expected: '[DRAFT Local storage is unavailable. Check browser storage permissions and keep your original data.]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/backup-verification-ui.test.mjs:275:1
+✖ a cancelled recheck notice follows locale selection and its late result remains discarded (2.39707ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'Verification cancelled. No backup verification was established; profile data was not changed.'
+  - '[DRAFT Verification cancelled. No backup verification was established; profile data was not changed.]'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-locale-g20/apps/web/test/backup-verification-ui.test.mjs:284:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Verification cancelled. No backup verification was established; profile data was not changed.',
+    expected: '[DRAFT Verification cancelled. No backup verification was established; profile data was not changed.]',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
