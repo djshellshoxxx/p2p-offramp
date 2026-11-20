@@ -13,28 +13,66 @@ function download(bytes: Uint8Array): void {
 }
 export function SolanaLocalnetRoot() {
   const client = useRef<SolanaBrowserClient | null>(null);
+  const active = useRef(true), commandEpoch = useRef(0), pendingRequest = useRef(false), inputEpoch = useRef(0);
+  const backupInput = useRef<HTMLInputElement | null>(null), backupBytes = useRef<Uint8Array | null>(null);
   const [wallets, setWallets] = useState<readonly DiscoveredSolanaWallet[]>([]), [choice, setChoice] = useState('');
   const [snapshot, setSnapshot] = useState<SolanaSnapshot | null>(null), [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   const [passphrase, setPassphrase] = useState(''), [profile, setProfile] = useState('');
   const [recovery, setRecovery] = useState(''), [role, setRole] = useState<'seller' | 'buyer'>('seller');
   const [backup, setBackup] = useState<Uint8Array | null>(null), [sourcePass, setSourcePass] = useState(''), [newPass, setNewPass] = useState('');
   const [received, setReceived] = useState<Record<string, boolean>>({}), [topUp, setTopUp] = useState<Record<string, string>>({});
-  const busy = snapshot?.phase === 'working', open = !!snapshot?.profileId;
-  const clearPrivate = () => { setPassphrase(''); setSourcePass(''); setNewPass(''); setReceived({}); setRecovery(''); setBackup(null); setTopUp({}); };
+  const busy = pending || snapshot?.phase === 'working', open = !!snapshot?.profileId;
+  const clearPrivate = () => {
+    inputEpoch.current++; backupBytes.current?.fill(0); backupBytes.current = null;
+    if (backupInput.current) backupInput.current.value = '';
+    setPassphrase(''); setSourcePass(''); setNewPass(''); setReceived({}); setRecovery(''); setBackup(null); setTopUp({});
+  };
   async function request(command: SolanaCommand) {
-    setError(null);
+    const owned = client.current, interrupts = command.type === 'profile.lock' || command.type === 'review.cancel';
+    if (!active.current || !owned || pendingRequest.current && !interrupts) {
+      if (command.type === 'backup.restore') command.bytes.fill(0);
+      return null;
+    }
+    const generation = ++commandEpoch.current;
+    pendingRequest.current = true; setPending(true); setError(null);
     try {
-      const result = await client.current!.request(command);
+      const response = owned.request(command);
+      // postMessage has synchronously cloned the payload; the document retains no submitted bytes.
+      if (command.type === 'backup.restore') command.bytes.fill(0);
+      const result = await response;
+      if (!active.current || generation !== commandEpoch.current || client.current !== owned) return null;
       if (!result.ok) setError(result.code);
       else if (result.backupBytes) download(result.backupBytes);
       return result;
-    } catch { setError('UNAVAILABLE'); return null; }
+    } catch { if (active.current && generation === commandEpoch.current) setError('UNAVAILABLE'); return null; }
+    finally {
+      if (command.type === 'backup.restore') command.bytes.fill(0);
+      if (active.current && generation === commandEpoch.current) { pendingRequest.current = false; setPending(false); }
+    }
+  }
+  async function readBackup(file: File | undefined) {
+    const generation = ++inputEpoch.current, owned = client.current;
+    backupBytes.current?.fill(0); backupBytes.current = null; setBackup(null);
+    const current = () => active.current && generation === inputEpoch.current && client.current === owned &&
+      !pendingRequest.current && owned?.snapshot()?.profileId === null && owned.snapshot()?.phase !== 'working';
+    if (!current()) return;
+    if (!file || !file.size || file.size > MAX_BACKUP_BYTES) { setError('BACKUP_TOO_LARGE'); return; }
+    let bytes: Uint8Array | null = null;
+    try {
+      bytes = new Uint8Array(await file.arrayBuffer());
+      if (!current()) return;
+      if (bytes.byteLength !== file.size || bytes.byteLength > MAX_BACKUP_BYTES) { setError('BACKUP_TOO_LARGE'); return; }
+      backupBytes.current = bytes; setBackup(bytes); bytes = null;
+    } catch { if (current()) setError('UNAVAILABLE'); }
+    finally { bytes?.fill(0); }
   }
   useEffect(() => {
+    active.current = true;
     const stop = discoverSolanaWallets(setWallets);
-    const hide = () => { if (document.hidden) { clearPrivate(); void client.current?.request({ type: 'profile.lock' }); } };
+    const hide = () => { if (document.hidden) { clearPrivate(); void request({ type: 'profile.lock' }); } };
     document.addEventListener('visibilitychange', hide);
-    return () => { stop(); document.removeEventListener('visibilitychange', hide); client.current?.dispose(); };
+    return () => { active.current = false; commandEpoch.current++; clearPrivate(); stop(); document.removeEventListener('visibilitychange', hide); client.current?.dispose(); client.current = null; };
   }, []);
   async function selectWallet() {
     if (client.current) return;
@@ -42,8 +80,9 @@ export function SolanaLocalnetRoot() {
     if (!selected) { setError('Select a Wallet Standard wallet.'); return; }
     try {
       const config = await parseSolanaLocalnetConfig(__P2P_SOLANA_LOCALNET_CONFIG__);
+      if (!active.current || client.current) return;
       const created = createSolanaRecoveryClient(config, selected.wallet); client.current = created;
-      created.subscribe(next => { setSnapshot(next); if (next.profileId === null) clearPrivate(); });
+      created.subscribe(next => { if (active.current) { setSnapshot(next); if (next.profileId === null) clearPrivate(); } });
       await request({ type: 'status' });
     } catch { setError('This wallet does not support localnet sign-only transactions and change notifications.'); }
   }
@@ -63,9 +102,9 @@ export function SolanaLocalnetRoot() {
       <button type="button" onClick={() => void selectWallet()}>Use selected wallet</button>
       {!wallets.length && <p>No compatible wallet has registered with this page.</p>}</section>}
     {client.current && <section><h2>Your encrypted recovery profile</h2>
-      {!open ? <><div className="solana-field"><label htmlFor="solana-profile-choice">Profile</label><select id="solana-profile-choice" value={profile} onChange={e => setProfile(e.target.value)}><option value="">Choose an existing profile</option>
+      {!open ? <><div className="solana-field"><label htmlFor="solana-profile-choice">Profile</label><select id="solana-profile-choice" disabled={busy} value={profile} onChange={e => setProfile(e.target.value)}><option value="">Choose an existing profile</option>
         {snapshot?.profileIds.map(id => <option key={id} value={id}>{id}</option>)}</select></div>
-        <label>Profile passphrase<input type="password" value={passphrase} autoComplete="off" onChange={e => setPassphrase(e.target.value)} /></label>
+        <label>Profile passphrase<input type="password" disabled={busy} value={passphrase} autoComplete="off" onChange={e => setPassphrase(e.target.value)} /></label>
         <div className="solana-actions"><button disabled={busy || !passphrase} onClick={() => { const p = passphrase; clearPrivate(); void request({ type: 'profile.create', passphrase: p }); }}>Create recovery profile</button>
           <button disabled={busy || !profile || !passphrase} onClick={() => { const p = passphrase; clearPrivate(); void request({ type: 'profile.unlock', profileId: profile, passphrase: p }); }}>Unlock recovery profile</button></div></>
         : <><p>Profile: <code>{snapshot?.profileId}</code></p>{snapshot?.wallet && <p>Connected wallet: <code>{snapshot.wallet.address}</code></p>}<div className="solana-actions"><button onClick={() => { clearPrivate(); void request({ type: 'profile.lock' }); }}>Lock profile</button>
@@ -73,10 +112,10 @@ export function SolanaLocalnetRoot() {
           <button disabled={busy} onClick={() => void request({ type: 'refresh' })}>Refresh finalized state</button></div></>}
     </section>}
     {client.current && !open && <section><h2>Restore an encrypted backup</h2>
-      <label>Encrypted backup<input type="file" onChange={async e => { const file = e.target.files?.[0]; if (!file || file.size > MAX_BACKUP_BYTES) { setError('BACKUP_TOO_LARGE'); return; } setBackup(new Uint8Array(await file.arrayBuffer())); }} /></label>
-      <label>Backup passphrase<input type="password" value={sourcePass} autoComplete="off" onChange={e => setSourcePass(e.target.value)} /></label>
-      <label>New profile passphrase<input type="password" value={newPass} autoComplete="off" onChange={e => setNewPass(e.target.value)} /></label>
-      <button disabled={busy || !backup || !sourcePass || !newPass} onClick={() => { if (!backup) return; const bytes = backup, s = sourcePass, d = newPass; setBackup(null); clearPrivate(); void request({ type: 'backup.restore', bytes, sourcePassphrase: s, destinationPassphrase: d }); }}>Restore with a fresh key</button>
+      <label>Encrypted backup<input ref={backupInput} type="file" disabled={busy} onChange={e => readBackup(e.target.files?.[0])} /></label>
+      <label>Backup passphrase<input type="password" disabled={busy} value={sourcePass} autoComplete="off" onChange={e => setSourcePass(e.target.value)} /></label>
+      <label>New profile passphrase<input type="password" disabled={busy} value={newPass} autoComplete="off" onChange={e => setNewPass(e.target.value)} /></label>
+      <button disabled={busy || !backup || !sourcePass || !newPass} onClick={() => { if (!backup || pendingRequest.current) return; const bytes = backup, s = sourcePass, d = newPass; backupBytes.current = null; clearPrivate(); void request({ type: 'backup.restore', bytes, sourcePassphrase: s, destinationPassphrase: d }); }}>Restore with a fresh key</button>
       <p>Restored transactions are reconciled with finalized chain state. They are never resent automatically.</p>
     </section>}
     {open && <section><h2>Import the original recovery document</h2>
