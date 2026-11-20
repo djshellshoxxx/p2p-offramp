@@ -56,6 +56,12 @@ test('recovery inspection retains only the profile correlation, not its paginati
  assert.deepEqual(meta,{operation:'listRecoveryReferences',generation:3,profileId:PROFILE});assert.equal(Object.isFrozen(meta),true);
  assert.equal('offset'in meta,false);assert.equal('expectedRevision'in meta,false);
 });
+test('favorites retain profile correlation only, never preference IDs, booleans or revisions', () => {
+ for (const [operation, fields] of [['listFavoriteReviews', {}], ['setReviewFavorite', { recordId: 'b'.repeat(32), favorite: true, expectedRevision: 4 }]]) {
+  const meta = capture(build(operation, { profileId: PROFILE, ...fields }));
+  assert.deepEqual(meta, { operation, generation: 3, profileId: PROFILE }); assert.equal(Object.isFrozen(meta), true);
+ }
+});
 // Integration with the real AppRuntime through the existing public contract only. Fixed synthetic inputs.
 let oldSecure;
 beforeEach(()=>{oldSecure=Object.getOwnPropertyDescriptor(globalThis,'isSecureContext');Object.defineProperty(globalThis,'isSecureContext',{configurable:true,value:true});});

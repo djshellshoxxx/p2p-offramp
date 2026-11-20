@@ -466,5 +466,119 @@
       "candidate_prs": "",
       "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
     }
+  ],
+  "staging_overlay": {
+    "source_sha": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+    "scope": "Generation5 core locally qualified2217 full tests and independently reviewed; publication and hosted execution pending. Original27-capability main assessment remains immutable. Nine optional sources remain separate PR191-199.",
+    "updates": [
+      {
+        "feature_id": "F03",
+        "status": "Implemented on staging",
+        "change": "Actual-byte bounds from #187 applied before retaining review input."
+      },
+      {
+        "feature_id": "F08",
+        "status": "Implemented on staging",
+        "change": "#181 readiness correction retained; native relay and EVM browser paths passed at PR189."
+      },
+      {
+        "feature_id": "F16",
+        "status": "Partial",
+        "change": "Funded-exit source plus acknowledgment fixture and restore lifecycle repairs are composed and independently reviewed. Older native flows failed; current full hosted qualification remains pending. No discovery/funding parity added."
+      },
+      {
+        "feature_id": "F17",
+        "status": "Implemented on staging",
+        "change": "Grouping guard and typed JCS descriptor errors integrated."
+      },
+      {
+        "feature_id": "F18",
+        "status": "Implemented within public review scope",
+        "change": "PR189 exact source completed six actual Chromium journeys with synthetic camera; no physical-device or authenticated-invite claim."
+      },
+      {
+        "feature_id": "F24",
+        "status": "Partial",
+        "change": "Internal unexported updater and four storage lifecycle repairs recovered; no update UI or trust-root activation."
+      },
+      {
+        "feature_id": "F25",
+        "status": "Implemented within source-tooling scope",
+        "change": "Recovered tooling now verifies immutable copy text even with current locale drift. Current unsigned distribution stays refused; historical-client positive staging is explicitly separate."
+      },
+      {
+        "feature_id": "F22",
+        "status": "Nine reviewed source PRs; hosted qualification active",
+        "change": "PR191\u2013199 preserve one-package scope, native/custom gates and absent default imports. Combined source a2f90cbd passed2553 tests and all13 default files byte-match; current-head hosted qualification remains active."
+      }
+    ],
+    "published_head": null
+  },
+  "additional_staging_capabilities": [
+    {
+      "id": "F28",
+      "capability": "Encrypted favorites and reusable trade templates",
+      "main_status": "Missing package consumers",
+      "staging_status": "Partial",
+      "source": [
+        "packages/personalization/src/favorites.ts",
+        "packages/personalization/src/trade-draft-store.ts"
+      ],
+      "evidence": [
+        "packages/personalization/test/favorites.test.mjs",
+        "packages/personalization/test/trade-draft-store.test.mjs"
+      ],
+      "remaining": "Favorites PR201 Medium independently closed; PR204 adds maintained templates UI/Worker and tooling repair. Core2217 full and independent506 affected/38 policy/3 shared-revision/backup probes passed. Actual current-source hosted favorites/templates gates remain pending.",
+      "status": "Implemented in reviewed source; hosted qualification pending",
+      "source_prs": [
+        201,
+        204
+      ]
+    },
+    {
+      "id": "F29",
+      "capability": "Scriptless public source-reference portal",
+      "main_status": "Missing",
+      "staging_status": "Implemented source; actual hosted browser passed at PR190",
+      "source": [
+        "scripts/portal/build.mjs",
+        "apps/portal/index.html"
+      ],
+      "evidence": [
+        "scripts/portal/build.test.mjs",
+        "scripts/test-scriptless-portal-browser.mjs"
+      ],
+      "remaining": "No deployed-host, physical-print/device or release claim; preserve current source-bound qualification."
+    },
+    {
+      "id": "F30",
+      "capability": "Unsigned deterministic distribution staging",
+      "main_status": "Missing",
+      "staging_status": "Implemented local source; actual hosted browser passed at PR190",
+      "source": [
+        "scripts/distribution/stage.mjs",
+        "scripts/distribution/manifest.mjs"
+      ],
+      "evidence": [
+        "scripts/distribution/stage.test.mjs",
+        "scripts/distribution/browser.test.mjs"
+      ],
+      "remaining": "Current locale drift keeps unsigned staging refused. Historical-client/current-tooling fixture passes with currentSourceDistributionQualified:false; no signed-release or distribution approval."
+    },
+    {
+      "id": "F31",
+      "capability": "Inert governance and historical assurance checks",
+      "main_status": "Missing dedicated package",
+      "staging_status": "Implemented inert source",
+      "source": [
+        "packages/governance/src/records.ts",
+        "packages/governance/src/assurance.ts"
+      ],
+      "evidence": [
+        "packages/governance/test/records.test.mjs",
+        "packages/governance/test/assurance.test.mjs"
+      ],
+      "remaining": "Historical stale references remain explicit; this module grants no legal, release or economic authority."
+    }
   ]
 }
