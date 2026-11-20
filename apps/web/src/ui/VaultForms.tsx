@@ -57,7 +57,8 @@ export function UnlockForm({ services, onCancel, initialProfileId = '' }: { read
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy) return;
+    // Preserve the active controller even before the busy state rerenders.
+    if (busy || request.current !== null) return;
     const element = event.currentTarget;
     const profile = element.elements.namedItem('profile') as HTMLInputElement;
     const passphrase = element.elements.namedItem('passphrase') as HTMLInputElement;
