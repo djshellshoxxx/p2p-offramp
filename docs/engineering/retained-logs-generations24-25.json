@@ -1,0 +1,117 @@
+{
+  "schema": "p2p-offramp.generations24-25-retained-logs.v1",
+  "testedSource": "1a52c1c4f53a97cbbd0937f14a4379b88fd249b8",
+  "testedTree": "26938456c4924e4792a5671183a0879e86f8b7a2",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/full-node.log.gz",
+      "decodedBytes": 249887,
+      "compressedBytes": 84208,
+      "decodedSha256": "af8a94d0ffb79c6974287e394b4015426069e2795bbf7b959a154232e5b7f87f",
+      "compressedSha256": "d14dcf915d028063857bfdcfd38eb1bd8293054dce8eae5c550bbd664cba3da5"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/build-policy.log.gz",
+      "decodedBytes": 7614,
+      "compressedBytes": 3137,
+      "decodedSha256": "49f3a54d00a141d43ff226bac49429a2b7c8ff9b28b5e13ffeda9f9906854058",
+      "compressedSha256": "79fc4d08951949e28f63151bf0738eac2e33efa7b9138adc6ee24d44753ece56"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 288,
+      "decodedSha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "compressedSha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/default-build.log.gz",
+      "decodedBytes": 1026,
+      "compressedBytes": 495,
+      "decodedSha256": "51533028a5ac64a28db7b6495951afb04ed1e37ae27ea99c437d92a2aec994dd",
+      "compressedSha256": "4a9a8edb420826f73dbf872e16e5917f73ea2645b1245486a01d34a8b282f1b7"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/demo-build.log.gz",
+      "decodedBytes": 1174,
+      "compressedBytes": 520,
+      "decodedSha256": "1b8ff227a0737319600758d05f811f028de2effa68f826f03248ec5d74827371",
+      "compressedSha256": "3ddc5779d017bb52ef54dbb95c1f0211c13f5a9c282ebddc3fa7e9382bcee87a"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/native-fixture-preparation.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/native-fixture-preparation.log.gz",
+      "decodedBytes": 2194,
+      "compressedBytes": 864,
+      "decodedSha256": "64d1b2976369c3cf7896fa32f8c4043dfaa2db8c0d38f4efe63b77f8f4ec9c6c",
+      "compressedSha256": "ca97c82387f1534f60767cb5e6c73c786ca0d4e118b61ea15f56c164202c8a4a"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/tooling.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/tooling.log.gz",
+      "decodedBytes": 6304,
+      "compressedBytes": 3002,
+      "decodedSha256": "6a40c12acbc7e1c4e4b30d0f58524a7b7a0844ab8f77627e438353660a472646",
+      "compressedSha256": "74d579cbb3758511a4ebe747199067d6ba00eca5c70bc8d066c1d154f20dbca1"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/docs.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/docs.log.gz",
+      "decodedBytes": 37760,
+      "compressedBytes": 4416,
+      "decodedSha256": "4b3a71a89cacadaace85274f4f03e5ef1b519f0e61d7325cc6d8aad8c6cda327",
+      "compressedSha256": "d57876debd46a197bd397463b479eaddf43f5de99faced3bb663e372a07ad28a"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/governance.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/governance.log.gz",
+      "decodedBytes": 1118,
+      "compressedBytes": 575,
+      "decodedSha256": "42f9556636da25ed29969162b2b491dc3b013911d5d1488a709864b931dd7194",
+      "compressedSha256": "074485628ce7fc73874f5421afcb1da614b569a17c77aefae57c313ef9314350"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/specifications.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/specifications.log.gz",
+      "decodedBytes": 349,
+      "compressedBytes": 264,
+      "decodedSha256": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9",
+      "compressedSha256": "e8014356cada8f67d21e6bb898a1d91fb08d05a58eb50a16b343eed9c409519b"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g24-g25-qualification/python-specs.log",
+      "storedPath": "docs/execution/continuation-generations24-25-20261120/python-specs.log.gz",
+      "decodedBytes": 4721,
+      "compressedBytes": 1128,
+      "decodedSha256": "48abf568239ffbf2259febcf62815893d5f4eaf7c3257ae1912f104cd20eab99",
+      "compressedSha256": "d8e487bf06d6d6dc41a95afc08d172f08131a455cdf9885de9b2fee087d1c64d"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/engineering/native-update-runtime-generation24.json",
+    "docs/engineering/privacy-status-locale-generation25.json",
+    "docs/engineering/independent-native-update-runtime-review-generation24.json",
+    "docs/engineering/privacy-status-locale-independent-generation25.json"
+  ],
+  "limits": [
+    "Native scenarios are implemented but were not executed locally; current-source hosted Chromium remains required.",
+    "G25 locale fixtures are synthetic draft catalogs, not translation approval; resource assertions use fixed-clock rerenders.",
+    "Controlled HTTP, floor, wallet, gesture, destination, release clock and delivery scheduling do not qualify physical wallets, native accepted-floor durability, activation or actual origin transition.",
+    "Full-suite, tooling and independent selections overlap; their counts are not summed.",
+    "Document artifact hashes changed with the reviewed privacy UI repair; Worker and native fixture module identities remain exact.",
+    "Original G24 preparation failures retain labeled excerpts only; earlier G25 harness failures remain distinct from the authoritative eight-failure baseline."
+  ]
+}

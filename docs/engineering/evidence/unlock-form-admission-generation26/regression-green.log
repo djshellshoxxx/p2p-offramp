@@ -1,0 +1,16 @@
+✔ single unlock cancellation aborts the owned request and ignores a late valid reply (20.922374ms)
+✔ same-render duplicate preserves the original unlock for immediate Cancel and unmount (6.619315ms)
+✔ settled duplicate preserves busy ownership until cancel (6.947682ms)
+✔ settled duplicate preserves busy ownership until unmount (5.437139ms)
+✔ same-render duplicate preserves the pending UI and the original authentication notice (8.911299ms)
+✔ a rerender between unlock submissions retains the first cancellation target (103.888059ms)
+✔ a successful single unlock clears its passphrase and closes once (8.262268ms)
+✔ a completed authentication refusal clears ownership for a fresh explicit retry (4.911434ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 798.752243

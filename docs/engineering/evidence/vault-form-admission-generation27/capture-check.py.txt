@@ -1,0 +1,27 @@
+import datetime, hashlib, json, pathlib, shlex, subprocess, sys, time
+name = sys.argv[1]
+command = sys.argv[2:]
+if command and command[0] == '--':
+    command.pop(0)
+root = pathlib.Path('/workspace/scratch/dcf03ef9bee8/g27-author-raw')
+def utc():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+def git(*args):
+    return subprocess.check_output(['git', *args], text=True).strip()
+record = {'command': shlex.join(command), 'argv': command, 'cwd': str(pathlib.Path.cwd()), 'started_utc': utc(),
+          'head_before': git('rev-parse', 'HEAD'), 'tree_before': git('rev-parse', 'HEAD^{tree}'),
+          'status_before': git('status', '--short', '--untracked-files=normal')}
+start = time.monotonic()
+try:
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=45)
+    raw, code, timed_out = result.stdout, result.returncode, False
+except subprocess.TimeoutExpired as error:
+    raw, code, timed_out = error.stdout or b'', None, True
+record.update({'ended_utc': utc(), 'duration_seconds': round(time.monotonic()-start, 6), 'exit_code': code,
+               'timed_out': timed_out, 'raw_bytes': len(raw), 'raw_sha256': hashlib.sha256(raw).hexdigest(),
+               'head_after': git('rev-parse', 'HEAD'), 'tree_after': git('rev-parse', 'HEAD^{tree}'),
+               'status_after': git('status', '--short', '--untracked-files=normal')})
+(root / (name+'.log')).write_bytes(raw)
+(root / (name+'.json')).write_text(json.dumps(record, indent=2)+'\n')
+print(json.dumps(record, indent=2))
+print(raw.decode('utf-8', errors='replace')[-1600:])

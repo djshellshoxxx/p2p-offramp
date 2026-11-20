@@ -1,0 +1,360 @@
+{
+  "version": 1,
+  "date": "2026-11-20",
+  "feature": "F19",
+  "status": "selected-catalog-privacy-status-display-corrected",
+  "baseCommit": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+  "baselineTestCommit": "cc395f47cd4db5f5e15eba54fd1cce00b95c65af",
+  "implementationCommit": "ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+  "implementationTree": "a47ce1cb2d5803d799e82c8d54e71621a38559ce",
+  "sourceFrozenAtUtc": "2026-11-20T17:43:30Z",
+  "sourcePaths": [
+    "apps/web/src/ui/PrivacyStatusPanel.tsx",
+    "apps/web/test/privacy-status-locale.test.mjs"
+  ],
+  "sourceFileSha256": {
+    "apps/web/src/ui/PrivacyStatusPanel.tsx": "a90286d8688f040112d696eedb17ef6418ae902eea5c02b7aee49605e1f13ee9",
+    "apps/web/test/privacy-status-locale.test.mjs": "7f5732cbf6dd181569fb264f485f9f2d6f5c5334547ab26640d074060fabf61f"
+  },
+  "runtime": {
+    "node": "v24.22.3",
+    "physicalNodeModules": true,
+    "packageLockSha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72",
+    "dependencyCopySource": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g22/node_modules"
+  },
+  "fixture": {
+    "productionLocaleIds": [
+      "en"
+    ],
+    "testLocaleId": "fixture-rtl",
+    "testLocaleTag": "ar",
+    "text": "Complete English source marked [DRAFT ...]; synthetic fixture only",
+    "configurationReplacedOnlyInMemoryTestBuild": true,
+    "actualPanelImportsAndPrivacyReaderBundled": true,
+    "controlledPorts": [
+      "React lifecycle hooks",
+      "browser listeners and timers",
+      "monotonic clock",
+      "vault observations",
+      "broker inspection and invalidation subscription"
+    ],
+    "fundsLocaleEligible": false,
+    "translatedLocaleApproved": false
+  },
+  "checks": [
+    {
+      "name": "original-panel-locale",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/privacy-status-locale.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-g25",
+      "startedAtUtc": "2026-11-20T17:42:08.948726+00:00",
+      "finishedAtUtc": "2026-11-20T17:42:09.664389+00:00",
+      "exitCode": 1,
+      "sourceHead": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+      "logPath": "/tmp/p2p-privacy-locale-g25-20261120/01-original-panel-locale.log",
+      "logBytes": 8817,
+      "logSha256": "0d2ffe8a11c5da0b5058f17d0dabfce8d574c1bab0b585856e9d30422fbf2f6d",
+      "sourceFiles": {
+        "apps/web/src/ui/PrivacyStatusPanel.tsx": "c6ed6d93fa4f5096203c5acf347980140e57551c313e5450e46ae8f4422addf2",
+        "apps/web/test/privacy-status-locale.test.mjs": "5b2fe0a1db9faa4b005dfecb216e83d26a0490d49f549f699ab490685c972eb0"
+      },
+      "tests": 8,
+      "pass": 0,
+      "fail": 8,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "disposition": "harness-development-failure: React was bundled instead of the controlled hook module; no product-defect inference",
+      "retainedLog": {
+        "path": "docs/execution/privacy-status-locale-generation25-20261120/01-original-panel-locale.log.gz",
+        "encoding": "gzip",
+        "bytes": 1021,
+        "sha256": "34cd0bc2043c709c2111cbb74bdc93aceb041d6cbf60a2afba17db1102c1031e",
+        "decodedBytes": 8817,
+        "decodedSha256": "0d2ffe8a11c5da0b5058f17d0dabfce8d574c1bab0b585856e9d30422fbf2f6d"
+      }
+    },
+    {
+      "name": "original-panel-locale",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/privacy-status-locale.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-g25",
+      "startedAtUtc": "2026-11-20T17:42:20.714508+00:00",
+      "finishedAtUtc": "2026-11-20T17:42:21.836282+00:00",
+      "exitCode": 1,
+      "sourceHead": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+      "logPath": "/tmp/p2p-privacy-locale-g25-20261120/02-original-panel-locale.log",
+      "logBytes": 11764,
+      "logSha256": "8b9d9a861f7c2cccfc542a767e397c93264faa9a0126f91a53991f6fdd8a3a5a",
+      "sourceFiles": {
+        "apps/web/src/ui/PrivacyStatusPanel.tsx": "c6ed6d93fa4f5096203c5acf347980140e57551c313e5450e46ae8f4422addf2",
+        "apps/web/test/privacy-status-locale.test.mjs": "568332c4fa66e85eeaa0f671fbde364ac96f60c5a1926a481b81fd03c5322e77"
+      },
+      "tests": 8,
+      "pass": 0,
+      "fail": 8,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "disposition": "mixed-development-failure: six selected-catalog assertions and two cross-realm expected-message argument errors; not the authoritative baseline",
+      "retainedLog": {
+        "path": "docs/execution/privacy-status-locale-generation25-20261120/02-original-panel-locale.log.gz",
+        "encoding": "gzip",
+        "bytes": 1519,
+        "sha256": "ff03d367261aa87fcd62bbdd8f411af22f9ebb7a5fac5af7d929000fb1b5d63c",
+        "decodedBytes": 11764,
+        "decodedSha256": "8b9d9a861f7c2cccfc542a767e397c93264faa9a0126f91a53991f6fdd8a3a5a"
+      }
+    },
+    {
+      "name": "03-original-panel-locale",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/privacy-status-locale.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-g25",
+      "startedAtUtc": "2026-11-20T17:42:40.493342+00:00",
+      "finishedAtUtc": "2026-11-20T17:42:41.597433+00:00",
+      "exitCode": 1,
+      "sourceHead": "cc395f47cd4db5f5e15eba54fd1cce00b95c65af",
+      "sourceTree": "3a414901d2b324e6f32dee61d759d65a706cdf14",
+      "logPath": "/tmp/p2p-privacy-locale-g25-20261120/03-original-panel-locale.log",
+      "logBytes": 12173,
+      "logSha256": "a730dea0f11d596c9084beea007c94a528dcc6c27af898ca973df2a539ce1dd0",
+      "sourceFiles": {
+        "apps/web/src/ui/PrivacyStatusPanel.tsx": "c6ed6d93fa4f5096203c5acf347980140e57551c313e5450e46ae8f4422addf2",
+        "apps/web/test/privacy-status-locale.test.mjs": "7f5732cbf6dd181569fb264f485f9f2d6f5c5334547ab26640d074060fabf61f"
+      },
+      "tests": 8,
+      "pass": 0,
+      "fail": 8,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "disposition": "authoritative unchanged-production baseline with final test source; eight expected selected-catalog failures",
+      "retainedLog": {
+        "path": "docs/execution/privacy-status-locale-generation25-20261120/03-original-panel-locale.log.gz",
+        "encoding": "gzip",
+        "bytes": 1402,
+        "sha256": "fe9049094313eaf2a46da61177cedf8bbccd30fec463931f6f0685b3856f9f59",
+        "decodedBytes": 12173,
+        "decodedSha256": "a730dea0f11d596c9084beea007c94a528dcc6c27af898ca973df2a539ce1dd0"
+      }
+    },
+    {
+      "name": "04-corrected-panel-locale",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/privacy-status-locale.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-g25",
+      "startedAtUtc": "2026-11-20T17:43:19.296745+00:00",
+      "finishedAtUtc": "2026-11-20T17:43:20.302891+00:00",
+      "exitCode": 0,
+      "sourceHead": "cc395f47cd4db5f5e15eba54fd1cce00b95c65af",
+      "sourceTree": "3a414901d2b324e6f32dee61d759d65a706cdf14",
+      "logPath": "/tmp/p2p-privacy-locale-g25-20261120/04-corrected-panel-locale.log",
+      "logBytes": 2167,
+      "logSha256": "ce4531c06c09450f9651e32717a6086a6332379d338d891f4670467f81293006",
+      "sourceFiles": {
+        "apps/web/src/ui/PrivacyStatusPanel.tsx": "a90286d8688f040112d696eedb17ef6418ae902eea5c02b7aee49605e1f13ee9",
+        "apps/web/test/privacy-status-locale.test.mjs": "7f5732cbf6dd181569fb264f485f9f2d6f5c5334547ab26640d074060fabf61f"
+      },
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "disposition": "intermediate correction in working tree, bound by exact file hashes; sourceHead is the preceding test-only commit",
+      "retainedLog": {
+        "path": "docs/execution/privacy-status-locale-generation25-20261120/04-corrected-panel-locale.log.gz",
+        "encoding": "gzip",
+        "bytes": 642,
+        "sha256": "3225d59f752e387fd3acfd011a71025607facc5cbe523e944d1fb8df3eed38e2",
+        "decodedBytes": 2167,
+        "decodedSha256": "ce4531c06c09450f9651e32717a6086a6332379d338d891f4670467f81293006"
+      }
+    },
+    {
+      "name": "05-focused-frozen-source",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/privacy-status-locale.test.mjs",
+        "apps/web/test/privacy-status-panel.render.test.mjs",
+        "apps/web/test/privacy-status-transport.render.test.mjs",
+        "packages/domain/test/privacy-view.test.mjs",
+        "apps/web/test/locale-runtime.test.mjs",
+        "apps/web/test/locale-selector.render.test.mjs",
+        "apps/web/test/app-shell-locale.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-g25",
+      "startedAtUtc": "2026-11-20T17:43:46.414962+00:00",
+      "finishedAtUtc": "2026-11-20T17:43:48.415173+00:00",
+      "exitCode": 0,
+      "sourceHead": "ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+      "sourceTree": "a47ce1cb2d5803d799e82c8d54e71621a38559ce",
+      "logPath": "/tmp/p2p-privacy-locale-g25-20261120/05-focused-frozen-source.log",
+      "logBytes": 12924,
+      "logSha256": "0e006d38a241ef382448c3d4381df5e5ca659b50b6e29824e114e3f3649917be",
+      "sourceFiles": {
+        "apps/web/src/ui/PrivacyStatusPanel.tsx": "a90286d8688f040112d696eedb17ef6418ae902eea5c02b7aee49605e1f13ee9",
+        "apps/web/test/privacy-status-locale.test.mjs": "7f5732cbf6dd181569fb264f485f9f2d6f5c5334547ab26640d074060fabf61f"
+      },
+      "tests": 51,
+      "pass": 51,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "disposition": "final focused qualification on the exact frozen implementation source",
+      "retainedLog": {
+        "path": "docs/execution/privacy-status-locale-generation25-20261120/05-focused-frozen-source.log.gz",
+        "encoding": "gzip",
+        "bytes": 2885,
+        "sha256": "df99d56894a71cfd00d4152588e527def57595132122d170b69d6ce2af892142",
+        "decodedBytes": 12924,
+        "decodedSha256": "0e006d38a241ef382448c3d4381df5e5ca659b50b6e29824e114e3f3649917be"
+      }
+    },
+    {
+      "name": "06-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-g25",
+      "startedAtUtc": "2026-11-20T17:43:46.421677+00:00",
+      "finishedAtUtc": "2026-11-20T17:43:49.988169+00:00",
+      "exitCode": 0,
+      "sourceHead": "ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+      "sourceTree": "a47ce1cb2d5803d799e82c8d54e71621a38559ce",
+      "logPath": "/tmp/p2p-privacy-locale-g25-20261120/06-typecheck.log",
+      "logBytes": 341,
+      "logSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "sourceFiles": {
+        "apps/web/src/ui/PrivacyStatusPanel.tsx": "a90286d8688f040112d696eedb17ef6418ae902eea5c02b7aee49605e1f13ee9",
+        "apps/web/test/privacy-status-locale.test.mjs": "7f5732cbf6dd181569fb264f485f9f2d6f5c5334547ab26640d074060fabf61f"
+      },
+      "disposition": "four TypeScript projects on the exact frozen implementation source",
+      "retainedLog": {
+        "path": "docs/execution/privacy-status-locale-generation25-20261120/06-typecheck.log.gz",
+        "encoding": "gzip",
+        "bytes": 211,
+        "sha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+        "decodedBytes": 341,
+        "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53"
+      }
+    },
+    {
+      "name": "07-boundaries",
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-g25",
+      "startedAtUtc": "2026-11-20T17:43:46.414568+00:00",
+      "finishedAtUtc": "2026-11-20T17:43:48.472835+00:00",
+      "exitCode": 0,
+      "sourceHead": "ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+      "sourceTree": "a47ce1cb2d5803d799e82c8d54e71621a38559ce",
+      "logPath": "/tmp/p2p-privacy-locale-g25-20261120/07-boundaries.log",
+      "logBytes": 392,
+      "logSha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "sourceFiles": {
+        "apps/web/src/ui/PrivacyStatusPanel.tsx": "a90286d8688f040112d696eedb17ef6418ae902eea5c02b7aee49605e1f13ee9",
+        "apps/web/test/privacy-status-locale.test.mjs": "7f5732cbf6dd181569fb264f485f9f2d6f5c5334547ab26640d074060fabf61f"
+      },
+      "disposition": "import-boundary qualification on the exact frozen implementation source",
+      "retainedLog": {
+        "path": "docs/execution/privacy-status-locale-generation25-20261120/07-boundaries.log.gz",
+        "encoding": "gzip",
+        "bytes": 288,
+        "sha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446",
+        "decodedBytes": 392,
+        "decodedSha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a"
+      }
+    },
+    {
+      "name": "08-source-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "477777dc152cd3148ba7f25a75ce8f00dc1b03b5..ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-g25",
+      "startedAtUtc": "2026-11-20T17:45:07.847294+00:00",
+      "finishedAtUtc": "2026-11-20T17:45:07.853964+00:00",
+      "exitCode": 0,
+      "sourceHead": "ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+      "sourceTree": "a47ce1cb2d5803d799e82c8d54e71621a38559ce",
+      "logPath": "/tmp/p2p-privacy-locale-g25-20261120/08-source-whitespace.log",
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceFiles": {
+        "apps/web/src/ui/PrivacyStatusPanel.tsx": "a90286d8688f040112d696eedb17ef6418ae902eea5c02b7aee49605e1f13ee9",
+        "apps/web/test/privacy-status-locale.test.mjs": "7f5732cbf6dd181569fb264f485f9f2d6f5c5334547ab26640d074060fabf61f"
+      },
+      "disposition": "frozen-source whitespace comparison against published PR234 base",
+      "retainedLog": {
+        "path": "docs/execution/privacy-status-locale-generation25-20261120/08-source-whitespace.log.gz",
+        "encoding": "gzip",
+        "bytes": 20,
+        "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+        "decodedBytes": 0,
+        "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "scope": {
+    "implementationDefects": 1,
+    "newCases": 8,
+    "finalFocusedTests": 51,
+    "overlappingCountsNotAdded": true,
+    "sourceCatalogChanged": false,
+    "localeConfigurationChanged": false,
+    "domainOrTransportChanged": false,
+    "packageOrWorkflowChanged": false,
+    "g24FilesChanged": false,
+    "optionalPackagesChanged": false
+  },
+  "remaining": {
+    "independentReview": "separate coordinator/reviewer receipt; pending at this author checkpoint",
+    "combinedSourceQualification": "not claimed",
+    "browser": "not run; managed restriction preserved",
+    "fullRepositorySuite": "not run by this author",
+    "productionBuild": "not run by this author",
+    "financialJourneys": "not rerun",
+    "translationApproval": false,
+    "assistiveTechnologyAndPhysicalDevices": "not qualified",
+    "productionTrust": "unchanged and unset",
+    "releaseEnabled": 0,
+    "deploymentOrRemoteMutation": false
+  }
+}

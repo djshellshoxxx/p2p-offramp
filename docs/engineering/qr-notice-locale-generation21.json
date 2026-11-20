@@ -1,0 +1,123 @@
+{
+  "schema": "p2p-offramp/qr-notice-locale-qualification/v1",
+  "recorded_utc": "2026-11-20T16:18:22.324996+00:00",
+  "author": "native worker /root/qr_notices_locale_g21",
+  "base": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+  "regression_only_commit": "24bb5df89b06a136f7be53a8e9db2e7f9343bfaf",
+  "source_commit": "946c26a28822c4950cf69072d1d445042797c850",
+  "source_tree": "45a085c7e1065b2bb53126f2e3cad9962c9f2621",
+  "changed_source_paths": [
+    "apps/web/src/ui/QrPanel.tsx",
+    "apps/web/test/qr-notices-locale.test.mjs"
+  ],
+  "other_base_entries_identical": 2575,
+  "environment": {
+    "node": "v24.22.3",
+    "dependencies": "physical copy of unchanged pinned node_modules"
+  },
+  "checks": [
+    {
+      "name": "ordinary regression on unchanged base component",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/qr-notices-locale.test.mjs",
+      "source": "24bb5df89b06a136f7be53a8e9db2e7f9343bfaf",
+      "exit_code": 1,
+      "tests": 17,
+      "passed": 5,
+      "failed": 12,
+      "skipped": 0,
+      "cancelled": 0,
+      "log": "docs/execution/qr-notices-locale-generation21-20261120/qr-notices-before.log.gz"
+    },
+    {
+      "name": "same ordinary regression after repair",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/qr-notices-locale.test.mjs",
+      "source": "946c26a28822c4950cf69072d1d445042797c850",
+      "exit_code": 0,
+      "tests": 17,
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "log": "docs/execution/qr-notices-locale-generation21-20261120/qr-notices-after.log.gz"
+    },
+    {
+      "name": "seven focused QR UI and locale suites",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/qr-notices-locale.test.mjs apps/web/test/qr-ui.test.mjs apps/web/test/locale-runtime.test.mjs apps/web/test/locale-catalog.test.mjs apps/web/test/locale-source.test.mjs apps/web/test/locale-stress.test.mjs apps/web/test/locale-selector.render.test.mjs",
+      "source": "946c26a28822c4950cf69072d1d445042797c850",
+      "exit_code": 0,
+      "tests": 54,
+      "passed": 54,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "log": "docs/execution/qr-notices-locale-generation21-20261120/qr-locale-selection.log.gz"
+    },
+    {
+      "name": "four TypeScript projects",
+      "command": "npm run typecheck",
+      "source": "946c26a28822c4950cf69072d1d445042797c850",
+      "exit_code": 0,
+      "log": "docs/execution/qr-notices-locale-generation21-20261120/typecheck.log.gz"
+    },
+    {
+      "name": "static import boundaries",
+      "command": "npm run check:boundaries",
+      "source": "946c26a28822c4950cf69072d1d445042797c850",
+      "exit_code": 0,
+      "production_sources": 241,
+      "core_modules": 148,
+      "log": "docs/execution/qr-notices-locale-generation21-20261120/boundaries.log.gz"
+    }
+  ],
+  "logs": [
+    {
+      "path": "docs/execution/qr-notices-locale-generation21-20261120/qr-notices-before.log.gz",
+      "sha256": "7eb7b9f8d462a85451ecdbaf91f370e9479a045e6ffe9705f2097a14a1233a5e",
+      "bytes": 1712,
+      "format": "gzip",
+      "decoded_sha256": "5c8405bbc4bbb4f830d9861ba5743588891a6ead02b6f2d43a068ad7f0a48908",
+      "decoded_bytes": 16283
+    },
+    {
+      "path": "docs/execution/qr-notices-locale-generation21-20261120/qr-notices-after.log.gz",
+      "sha256": "190243c85234855eab5e813a1ac56850efc34329f650e1c4107d9c4969faac94",
+      "bytes": 712,
+      "format": "gzip",
+      "decoded_sha256": "9a7c3f15bf40cf64e49c2c4acbbc445bcb53b98b6aad943bf968265c11a2e123",
+      "decoded_bytes": 1746
+    },
+    {
+      "path": "docs/execution/qr-notices-locale-generation21-20261120/qr-locale-selection.log.gz",
+      "sha256": "65ca8aa11979bf2d0ccac73d2687cd4989cf4c7e0f88f65e785be6d20b4c59fa",
+      "bytes": 2471,
+      "format": "gzip",
+      "decoded_sha256": "5eca760861902239eda93dae70a32decc50f85537aa0809b02bb27ac01ba54c4",
+      "decoded_bytes": 5896
+    },
+    {
+      "path": "docs/execution/qr-notices-locale-generation21-20261120/typecheck.log.gz",
+      "sha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "bytes": 211,
+      "format": "gzip",
+      "decoded_sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "decoded_bytes": 341
+    },
+    {
+      "path": "docs/execution/qr-notices-locale-generation21-20261120/boundaries.log.gz",
+      "sha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446",
+      "bytes": 288,
+      "format": "gzip",
+      "decoded_sha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "decoded_bytes": 392
+    }
+  ],
+  "scope_limits": [
+    "Test counts overlap; the 17 new cases are included in the 54 focused tests.",
+    "Node handler/hook fixtures use actual catalog/runtime/error views and public protocol-generated sample bytes; camera/controller ports are controlled ordinary outcomes.",
+    "The alternate catalog is explicitly compiled draft fixture copy only. Production locale configuration, catalog and semantic evidence remain unchanged.",
+    "No local native browser, physical camera, full native financial suite, default build or independent review was performed by this author.",
+    "No QR protocol, controller, decoder, camera policy, expiry rule, trust, workflow, dependency, release or remote-ref change."
+  ],
+  "independent_review": "pending fresh combined review by coordinator",
+  "hosted_combined_source_qualification": "pending"
+}

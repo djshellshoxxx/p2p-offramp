@@ -1,0 +1,354 @@
+{
+  "schema": "p2p-offramp.consolidation-completion.v1",
+  "generation": 20,
+  "repository": "djshellshoxxx/p2p-offramp",
+  "pr": {
+    "number": 223,
+    "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/223",
+    "head": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+    "base": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+    "merged": true,
+    "mergedAt": "2026-11-20T16:25:14Z",
+    "mergeCommit": "8e836baa877b676a863c877003e277b638fc5061"
+  },
+  "mainReadBack": {
+    "sha": "8e836baa877b676a863c877003e277b638fc5061",
+    "tree": "9693f90d2ef73a06b3557d57ddc2239ae65065f5",
+    "orderedParents": [
+      "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+      "7f1c6d6b851926111accaaf3376320b44fcd138b"
+    ]
+  },
+  "testedProposedMerge": "c0609ccbf03c3195921f667c7ffda5c941351f4c",
+  "testedTree": "9693f90d2ef73a06b3557d57ddc2239ae65065f5",
+  "scope": {
+    "path": "docs/engineering/consolidation-state.json",
+    "changedTopLevelValues": 6,
+    "runtimeChanges": false,
+    "changedTopLevelKeys": [
+      "current_verification_key",
+      "generation",
+      "generation18_documentation_integration",
+      "main_sha",
+      "phase",
+      "updated_at_utc"
+    ]
+  },
+  "checkRuns": [
+    {
+      "id": 136407784734,
+      "name": "backup-verification-firefox",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:54:02Z",
+      "completedAt": "2026-11-20T15:54:56Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300435/job/136407784734"
+    },
+    {
+      "id": 136407776701,
+      "name": "docs-tooling",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:53:17Z",
+      "completedAt": "2026-11-20T15:54:00Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300435/job/136407776701"
+    },
+    {
+      "id": 136407772450,
+      "name": "browser",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:54:52Z",
+      "completedAt": "2026-11-20T15:58:22Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300435/job/136407772450"
+    },
+    {
+      "id": 136407764660,
+      "name": "specs",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:53:05Z",
+      "completedAt": "2026-11-20T15:53:18Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300435/job/136407764660"
+    },
+    {
+      "id": 136407693218,
+      "name": "local-evm",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:52:34Z",
+      "completedAt": "2026-11-20T15:53:03Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300435/job/136407693218"
+    },
+    {
+      "id": 136407692119,
+      "name": "schemas-and-crypto",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:54:34Z",
+      "completedAt": "2026-11-20T15:58:13Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300435/job/136407692119"
+    },
+    {
+      "id": 136407689664,
+      "name": "backup-verification-webkit",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T16:18:12Z",
+      "completedAt": "2026-11-20T16:22:18Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300435/job/136407689664"
+    },
+    {
+      "id": 136395867854,
+      "name": "CodeQL",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:51:32Z",
+      "completedAt": "2026-11-20T15:51:36Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/runs/136395867854"
+    },
+    {
+      "id": 136395241983,
+      "name": "inventory",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:50:52Z",
+      "completedAt": "2026-11-20T15:51:11Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300483/job/136395241983"
+    },
+    {
+      "id": 136395241584,
+      "name": "native-nostr-relay",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:51:44Z",
+      "completedAt": "2026-11-20T15:52:02Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300414/job/136395241584"
+    },
+    {
+      "id": 136395241321,
+      "name": "local-trade",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:51:00Z",
+      "completedAt": "2026-11-20T15:54:02Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300439/job/136395241321"
+    },
+    {
+      "id": 136395240803,
+      "name": "forge",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:52:47Z",
+      "completedAt": "2026-11-20T15:53:25Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767300439/job/136395240803"
+    },
+    {
+      "id": 136395209463,
+      "name": "Analyze (python)",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:50:53Z",
+      "completedAt": "2026-11-20T15:51:42Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767290164/job/136395209463"
+    },
+    {
+      "id": 136395209167,
+      "name": "Analyze (javascript-typescript)",
+      "headSha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-20T15:51:49Z",
+      "completedAt": "2026-11-20T15:53:15Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44767290164/job/136395209167"
+    }
+  ],
+  "externalStatuses": [
+    {
+      "context": "security/snyk (djshellshoxxx)",
+      "state": "success",
+      "sha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "targetUrl": "https://app.snyk.io/org/djshellshoxxx/pr-checks/5ba67df9-5a5b-4233-96b5-f46814cdacb6"
+    }
+  ],
+  "hostedExecution": {
+    "node": {
+      "tests": 2363,
+      "passed": 2362,
+      "failed": 0,
+      "skipped": 1,
+      "reasonForSkip": "Foundry-dependent oracle is separately enforced in the provisioned Foundry job."
+    },
+    "tooling": {
+      "passed": 44,
+      "failed": 0
+    },
+    "pythonSpecs": {
+      "passed": 32
+    },
+    "browserReceipts": {
+      "chromium": "158.0.8127.36",
+      "firefox": "157.0",
+      "webkit": "27.2",
+      "backups": "Actual Worker and encrypted IndexedDB selected-file authentication, digest match, fresh recheck, wrong-passphrase refusal, lock/reload clearing, and restored own-backup journey."
+    },
+    "actualBackupBrowserReceipts": [
+      {
+        "jobId": 136407784734,
+        "receipt": {
+          "fixture": "native-worker-backup-verification-ui",
+          "browserEngine": "firefox",
+          "browser": "157.0",
+          "platform": "linux",
+          "actualFileAuthenticated": true,
+          "displayedDigestMatched": true,
+          "explicitRecheck": true,
+          "wrongPassphraseRefused": true,
+          "lockAndReloadClear": true,
+          "restoredProfileRequiresOwnBackup": true,
+          "responsiveWidths": [
+            320,
+            768,
+            1440
+          ],
+          "ReleaseEnabled": 0,
+          "walletPrompts": 0
+        }
+      },
+      {
+        "jobId": 136407772450,
+        "receipt": {
+          "fixture": "native-worker-backup-verification-ui",
+          "browserEngine": "chromium",
+          "browser": "158.0.8127.36",
+          "platform": "linux",
+          "actualFileAuthenticated": true,
+          "displayedDigestMatched": true,
+          "explicitRecheck": true,
+          "wrongPassphraseRefused": true,
+          "lockAndReloadClear": true,
+          "restoredProfileRequiresOwnBackup": true,
+          "responsiveWidths": [
+            320,
+            768,
+            1440
+          ],
+          "ReleaseEnabled": 0,
+          "walletPrompts": 0
+        }
+      },
+      {
+        "jobId": 136407689664,
+        "receipt": {
+          "fixture": "native-worker-backup-verification-ui",
+          "browserEngine": "webkit",
+          "browser": "27.2",
+          "platform": "linux",
+          "actualFileAuthenticated": true,
+          "displayedDigestMatched": true,
+          "explicitRecheck": true,
+          "wrongPassphraseRefused": true,
+          "lockAndReloadClear": true,
+          "restoredProfileRequiresOwnBackup": true,
+          "responsiveWidths": [
+            320,
+            768,
+            1440
+          ],
+          "ReleaseEnabled": 0,
+          "walletPrompts": 0
+        }
+      }
+    ]
+  },
+  "webkitAttempts": {
+    "runId": 44767300435,
+    "initialJob": 136395242069,
+    "initialConclusion": "cancelled",
+    "initialCompletedAt": "2026-11-20T16:10:43Z",
+    "initialFailureScope": "15-minute job limit during slow Ubuntu package installation; browser test did not execute.",
+    "retryJob": 136407689664,
+    "retryStartedAt": "2026-11-20T16:18:12Z",
+    "retryCompletedAt": "2026-11-20T16:22:18Z",
+    "retryConclusion": "success",
+    "retryRequest": "Targeted same-head rerun; no source, timeout or assertion changes."
+  },
+  "interpretation": [
+    "Latest-attempt aliases for already-completed non-WebKit jobs retain their original execution timestamps and bytes. They are not claimed as new executions.",
+    "Initial cancelled WebKit evidence remains cancelled history.",
+    "Source-only guarded merge with exact expected head; no deployment or release. ReleaseEnabled remains 0.",
+    "This dated completion record does not transfer PR223 hosted approval to the later generation21 feature candidate.",
+    "consolidation-state.json remains a dated snapshot; do not create another state-only PR merely to stamp this merge SHA."
+  ],
+  "retainedLogs": [
+    {
+      "jobId": 136407776701,
+      "storedPath": "docs/execution/consolidation-state-pr223-20261120/136407776701.log.gz",
+      "decodedSha256": "a50dd5af30676c9c44ae16e1886f851166e46551b55a4ecb0fad5386ff41804e",
+      "compressedSha256": "acc2893aba120d80bc91ae9d6f1fe1b9dfbf0347df8b4fe19ddde1275f24a17b",
+      "decodedBytes": 91295,
+      "compressedBytes": 17285
+    },
+    {
+      "jobId": 136407764660,
+      "storedPath": "docs/execution/consolidation-state-pr223-20261120/136407764660.log.gz",
+      "decodedSha256": "dacda52e614bab5dab1512346c69e1f08f11e2c94c0ea1567ca073c613d94549",
+      "compressedSha256": "93c60d4eb4056c065d05f74816d147b1a272e9c5f9b68ba9b26ff5d505c0946f",
+      "decodedBytes": 22217,
+      "compressedBytes": 5698
+    },
+    {
+      "jobId": 136407784734,
+      "storedPath": "docs/execution/consolidation-state-pr223-20261120/136407784734.log.gz",
+      "decodedSha256": "0ea721499624039ee97c312408cc17a638d923f0a2a5c81fe6eed19ea47471ef",
+      "compressedSha256": "644bf7fabeee26a995a4a6f87586625a3416bc147b469e1c7d454beab14a2857",
+      "decodedBytes": 53282,
+      "compressedBytes": 11949
+    },
+    {
+      "jobId": 136407772450,
+      "storedPath": "docs/execution/consolidation-state-pr223-20261120/136407772450.log.gz",
+      "decodedSha256": "6586b3b110292facbd32d9ed43901f10e5a59fc3ae38d917a9628d2aaeb460d5",
+      "compressedSha256": "984893df75bd9e26fc5c7ebc0c4d5ae0fb5d6dfcd00e3f4b2bbdda511a350f7e",
+      "decodedBytes": 115871,
+      "compressedBytes": 24638
+    },
+    {
+      "jobId": 136407692119,
+      "storedPath": "docs/execution/consolidation-state-pr223-20261120/136407692119.log.gz",
+      "decodedSha256": "070cef28c668f571ea02186aec888614033a900ff892afc88c52bb4f3858e644",
+      "compressedSha256": "7f4da686d0847c54b17668acb64594b12a306ac67b2ed03b500f58b64fc9fff3",
+      "decodedBytes": 352693,
+      "compressedBytes": 110089
+    },
+    {
+      "jobId": 136395242069,
+      "storedPath": "docs/execution/consolidation-state-pr223-20261120/136395242069.log.gz",
+      "decodedSha256": "263e11dfdf5701f6a3f1b1c4987d06b7299cce6a977bb8ae00f05769fa0362cd",
+      "compressedSha256": "bb60019e0e580f859a286049afd56bd58414b45e797f2f00f02b19cbfb5d30fc",
+      "decodedBytes": 35876,
+      "compressedBytes": 9106
+    },
+    {
+      "jobId": 136407689664,
+      "storedPath": "docs/execution/consolidation-state-pr223-20261120/136407689664.log.gz",
+      "decodedSha256": "f4344ac9ced770c8aa6a6a02f9f04258946380ee58209d64fec2fcf1f93dfd1f",
+      "compressedSha256": "4554697c20c7693a6cd6417763299e615702cedf8f7f3765b33db2283dfa33b1",
+      "decodedBytes": 134377,
+      "compressedBytes": 27001
+    }
+  ]
+}

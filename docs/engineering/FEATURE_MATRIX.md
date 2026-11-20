@@ -1,4 +1,115 @@
+# Current feature coverage — generations 26–28 (2026-11-20 UTC)
+
+Frozen combined source `2a0b26f3392d86c1cd3e056771c59438ece92927`, tree
+`92beca7b34957889156260d1167df81ebcf4aa84`, passed **2,505/2,505 tests**
+with zero failures, skips, cancellations or todos and all five additional
+qualification commands. It contains the exact published PR233/234/235 ancestry;
+its final main-target publication and hosted acceptance remain pending.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| F01 / F02 vault-form request ownership | Unlock, export, create and restore retain the admitted controller or original pending read through duplicate handler calls. Four existing-ref guard changes and two regression files add 27 cases. Independent reviews reproduce the failures and pass the repaired cases without findings. Consent, secret clearing, original notices, accepted success and explicit retry remain covered. | Native browser event reachability and physical/native cryptographic acceptance are outside the controlled TSX/facade/runtime regressions. Cancellation does not roll back storage work; the covered Restore retry requires original-request settlement and complete reconciliation. No broader rate policy was added. |
+| F01 / F24 runtime and update composition | Published runtime backup-selection leases, direct updater binding and the six native-fixture scenarios are retained exactly. The emitted vault Worker remains byte-identical. | Native scenarios remain locally unexecuted. Current-target hosted execution, native accepted-floor durability, physical wallets, trusted activation, actual navigation/origin and configured application acceptance remain separate requirements. |
+| F19 / F20 locale and privacy presentation | Previously reviewed selected-catalog rendering remains in the aggregate; the four ownership guards preserve those source paths and G26 UnlockForm coverage. | English-only/draft production, supported-translation review, assistive technology and physical-device acceptance remain unchanged. No live Wiki publication is claimed. |
+| F25 evidence and consolidation | Combined local qualification and independent source/artifact review preserve all 55 earlier publication mappings, expected ancestry and unchanged workflows. Of 1,020 PR235 non-documentation entries, 1,019 remain exact; one UI file changes and two tests are added, for 1,022 tested entries. | Publish one aggregate against main and require every applicable current-source/current-main-target hosted browser/native/CodeQL gate. The local evidence does not supply remote completion. |
+
+**The single main-target aggregate supersedes the older sequential PR233 →
+PR234 → PR235 merge/retarget plan below.** Keep all three original heads frozen
+while it qualifies. After the guarded aggregate merge, read back main and prove
+all three exact frozen heads are ancestors before reconciling contained PRs;
+retain their branches. A changing main requires ordinary reconciliation and
+fresh qualification of the actual target.
+
+Read the [generations 26–28 continuation](CONTINUATION_GENERATIONS26_28_20261120.md),
+[combined qualification](qualification-generations26-28.json) and
+[independent composition review](INDEPENDENT_MAIN_COMPOSITION_REVIEW_GENERATION28_20261120.md).
+The branch is `codex/main-consolidation-g28-20261120`; last observed main is
+`8e836baa877b676a863c877003e277b638fc5061`. Optional PR224–232 and audits
+184–186 remain separately owned. Trust, default updater configuration and release
+approval remain absent; `ReleaseEnabled=0`. Earlier sections below retain their
+exact historical bytes and source scope, and do not override this plan or later
+source-bound publication receipts.
+
+---
+
+# Current feature coverage — generations 24–25
+
+Frozen source `1a52c1c4f53a97cbbd0937f14a4379b88fd249b8`, tree
+`26938456c4924e4792a5671183a0879e86f8b7a2`, passed **2,478/2,478 tests** with
+zero failures/skips/cancellations and all eleven additional commands. It is
+staged on `codex/native-update-locale-continuation-g24-20261120` above published
+[PR234](https://github.com/djshellshoxxx/p2p-offramp/pull/234), not merged into the
+observed main `8e836baa877b676a863c877003e277b638fc5061` at this dated checkpoint.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| F01 / F24 native update composition | Six native scenarios and an additive Chromium step bind the actual runtime backup-selection lease directly to the updater. Build preparation passes; independent review executes 46 distinct Node cases without findings. No production adapter is missing. | Native scenarios are locally unrun; `nativeExecuted: false`. Hosted Worker/IndexedDB execution, native accepted-floor durability, physical wallet, trusted activation, actual navigation/origin and configured application acceptance remain separate. |
+| F19 / F20 privacy observations | One production panel resolves runtime message views and semantic mappings through the selected catalog. Eight cases reproduce the original display failure and pass repaired; author and independent focused selections each pass 51/51. Independent review found no issues. Reader/effect/transport code remains unchanged. | Production remains English-only/draft. Synthetic catalog tests supply no translation approval, native-browser/device/assistive-technology acceptance or new privacy authority. |
+| F25 evidence and integration | Source-bound author/reviewer reports and completed combined qualification retain exact logs and failure provenance. Eight non-documentation paths change; only the privacy panel is production code. | Current-target hosted gates and guarded integration remain pending. Generation 24 preparation failures are retained as partial error excerpts, not complete original logs. |
+
+Read the [generations 24–25 continuation](CONTINUATION_GENERATIONS24_25_20261120.md)
+and [combined receipt](qualification-generations24-25.json). Keep PR233 and
+PR234 frozen; merge PR233 when qualified, retarget and requalify PR234 on main,
+then qualify this child against its current target. Optional PR224–232 and audits 184–186
+remain separately owned. Production trust, default updater configuration and
+release approval remain absent; `ReleaseEnabled=0`. Earlier sections below
+retain their historical source scope and do not override this checkpoint or
+later exact-source publication receipts.
+
+---
+
 # Feature coverage — dated pinned-main baseline and reviewed current main
+
+## Generations 22–23 staged runtime/update completion
+
+Child source `4cff269483e7372f607a8e994d35ca558d7cff00` builds on published
+[PR233](https://github.com/djshellshoxxx/p2p-offramp/pull/233) head
+`92663e46508b06645111d9c713beb82d3a6d1a0f` and passed **2,470/2,470 tests**,
+including forty new cases, plus ten additional commands. Main remains
+`8e836baa877b676a863c877003e277b638fc5061` at this dated snapshot. The child
+branch `codex/runtime-update-continuation-g22-20261120` is unpublished; parent
+and child hosted qualification remain pending.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| F01 / F24 runtime ownership | Opaque lease captures the current selection, performs fresh Worker-owned backup checks and recognizes only its exact acknowledged lock. Admitted openings, competing locks, cancellation and invalidation retire ownership. | Current-head integration gates and trusted full-application composition. |
+| F24 controller composition | Twelve new Node cases join the actual runtime, vault, updater, transport and signature verification. The facade binds directly; no extra production backup adapter is needed. | Native Worker/IndexedDB, physical wallet/device, activation, origin isolation and actual navigation qualification; controlled fixture ports provide none of those claims. |
+| F25 updater contract documentation | Reviewed README describes the four-method lease, direct binding and separate freshness/ownership contracts. Independent runtime and composition selections passed 88/88 and 59/59 without findings. | Preserve source-bound receipts and refresh live publication/gate status without changing historical evidence. |
+
+See the [generations 22–23 handoff](CONTINUATION_GENERATIONS22_23_20261120.md)
+and [combined qualification](qualification-generations22-23.json). Keep PR233
+frozen; publish the child against its branch, then revalidate source/tree/gates
+before retargeting to merged main. F24 remains partial: default updater
+construction, production trust and enabled release remain absent.
+`ReleaseEnabled=0`; older overlays below remain dated historical assessments.
+
+## Generation 21 staged feature completion and remaining scope
+
+Main was read back at `8e836baa877b676a863c877003e277b638fc5061` after
+[PR223](https://github.com/djshellshoxxx/p2p-offramp/pull/223) completed its
+14/14 checks plus Snyk and merged at 2026-11-20T16:25:14Z. The following new
+features are staged on `codex/continuation-g21-20261120`, not in that main
+snapshot. Their exact composed source
+`758936c54d0b823b96bad99ccfa93520ee175ae6` passed **2,430/2,430 tests**, including
+67 new cases, plus ten additional qualification commands. Final published-head
+hosted checks and guarded merge remain pending at this dated checkpoint.
+
+| Capability | Completed staging scope | Remaining scope |
+| --- | --- | --- |
+| F19 locale state | Six UI files retain message keys, error codes or exact restore-result values and resolve the selected catalog during rendering. Navigation and Lock presentation also follow semantic command state. | Production remains English-only/draft. Supported translations, semantic review and browser/assistive-technology/device acceptance remain. |
+| F01 / F24 backup and recovery presentation | Verification, fresh recheck, export, restore and reconciliation notices update without repeating operations; consent, receipt identity, cancellation and byte values remain intact. | Final combined-source hosted qualification and physical-device acceptance; trusted own-lock update composition remains unfinished. |
+| F18 QR presentation | Existing camera/read/copy/download notices update with the selected catalog while controller, expiry and public review behavior remain intact. | Actual current-candidate browser gates and physical camera/mobile qualification. |
+| F25 workflow documentation | Six version-controlled guides describe actual Recovery controls, new-profile versus restore states, explicit EVM resumption and separate public Solana recovery export. | Live Wiki publication, supported-locale semantics and existing source-pinned stale claims remain separate; integrity digest refresh supplies no approval. |
+| Consolidation | Eleven exact heads already contained in main were reconciled by closing their duplicate feature PRs; all eleven source branches were retained. | Preserve unique PR178/200 history, separate audit ownership and optional PR191–199; newer PR224–232 are separate optional staging. |
+
+Fresh independent reviews cover backup, shell/export, vault/QR composition and
+the documentation. The two Low documentation/evidence findings were corrected
+and rechecked. See the [generation 21 continuation](CONTINUATION_GENERATION21_20261120.md)
+and [qualification receipt](qualification-generation21.json) for exact scopes,
+source identities and remaining actions. `ReleaseEnabled=0`, optional default
+imports, trust configuration and release requirements remain unchanged. The
+earlier overlays and pinned-main rows below remain historical assessments;
+their present-tense labels do not override this dated checkpoint.
 
 
 ## Current generation 17 main source and remaining scope

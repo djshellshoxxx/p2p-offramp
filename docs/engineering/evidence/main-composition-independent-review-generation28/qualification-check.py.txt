@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+"""Verify the completed coordinator receipt and emitted bytes; run no tests."""
+import datetime
+import gzip
+import hashlib
+import json
+import pathlib
+import re
+import subprocess
+
+SOURCE = "2a0b26f3392d86c1cd3e056771c59438ece92927"
+TREE = "92beca7b34957889156260d1167df81ebcf4aa84"
+AUTHOR_ROOT = pathlib.Path("/workspace/scratch/dcf03ef9bee8/p2p-continuation-g26")
+RECEIPT = pathlib.Path("/workspace/scratch/dcf03ef9bee8/p2p-g26-g27-qualification/qualification.json")
+OUT = pathlib.Path("docs/engineering/evidence/main-composition-independent-review-generation28")
+CHECKS = []
+OPTIONAL = ["proof-inputs", "liquidity", "courier", "arbitration", "meetup", "privacy-policy", "privacy-controls", "stealth", "proof-jobs"]
+EXCLUDED_PREFIXES = ["packages/" + name + "/" for name in OPTIONAL] + ["apps/web/src/solana-localnet/", "packages/chain-solana/", "packages/security/src/release-update"]
+EXCLUDED_PATHS = ["packages/security/update-view.ts", "packages/security/src/release-manifest.ts", "packages/security/src/release-locator.ts"]
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+def check(name, actual, expected=True):
+    passed = actual == expected
+    CHECKS.append({"check": name, "passed": passed, "actual": actual, "expected": expected})
+    return passed
+
+def source_bytes(path):
+    pure = pathlib.PurePosixPath(path)
+    assert not pure.is_absolute() and ".." not in pure.parts
+    if path.startswith("node_modules/"):
+        return (AUTHOR_ROOT / path).read_bytes(), "installed dependency bytes"
+    return subprocess.check_output(["git", "show", SOURCE + ":" + path]), "frozen Git source"
+
+started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+receipt_bytes = RECEIPT.read_bytes()
+receipt = json.loads(receipt_bytes)
+check("receipt source", receipt["source"], SOURCE)
+check("receipt tree", receipt["tree"], TREE)
+check("coordinator qualification complete", bool(receipt.get("completedAt")))
+check("coordinator final source", receipt["finalSource"], SOURCE)
+check("coordinator tracked tree clean at completion", receipt["cleanTrackedWorktree"])
+check("native execution not claimed", receipt["nativeExecuted"], False)
+check("six expected command names", [row["name"] for row in receipt["commands"]], ["full-node", "typecheck", "build-policy", "boundaries", "default-build", "demo-build"])
+check("source tree still matches assigned object", subprocess.check_output(["git", "rev-parse", SOURCE + "^{tree}"]).decode().strip(), TREE)
+(OUT / "root-qualification.json").write_bytes(receipt_bytes)
+logs = []
+for row in receipt["commands"]:
+    name = row["name"]
+    raw = pathlib.Path(row["log"]).read_bytes()
+    check(name + " source binding", [row["source"], row["tree"]], [SOURCE, TREE])
+    check(name + " successful exit", row["exitCode"], 0)
+    check(name + " raw log bytes", len(raw), row["bytes"])
+    check(name + " raw log hash", digest(raw), row["sha256"])
+    decoded = raw.decode()
+    observed = {key: int(value) for key, value in re.findall(r"^ℹ (tests|pass|fail|cancelled|skipped|todo) ([0-9]+)$", decoded, re.M)}
+    if name in ["full-node", "build-policy"]:
+        expected = 2505 if name == "full-node" else 58
+        check(name + " directly observed counts", observed, {"tests": expected, "pass": expected, "fail": 0, "cancelled": 0, "skipped": 0, "todo": 0})
+        check(name + " receipt counts", observed, row["counts"])
+    if name == "typecheck":
+        check("four TypeScript projects in actual log", all(item in decoded for item in ["tsc --noEmit", "apps/web/tsconfig.runtime.json", "apps/web/tsconfig.worker.json", "apps/web/tsconfig.ui.json"]))
+    if name == "boundaries":
+        check("actual import-boundary count", "PASS: 241 production source files; core entry graph visited 148 module(s)." in decoded)
+    compressed = gzip.compress(raw, mtime=0)
+    stored_path = OUT / (name + ".log.gz")
+    stored_path.write_bytes(compressed)
+    check(name + " retained bytes round trip", gzip.decompress(compressed) == raw)
+    logs.append({"name": name, "command": row["command"], "source": row["source"], "tree": row["tree"], "startedAt": row["startedAt"], "completedAt": row["completedAt"], "exitCode": row["exitCode"], "rawBytes": len(raw), "rawSha256": digest(raw), "storedPath": str(stored_path), "storedBytes": len(compressed), "storedSha256": digest(compressed), "directlyObservedCounts": observed})
+
+parent = json.loads(subprocess.check_output(["git", "show", SOURCE + ":docs/engineering/qualification-generations24-25.json"]))
+artifacts = {}
+verified_module_entries = 0
+for mode, dirname in [("default", "dist"), ("demo", "dist-demo")]:
+    directory = AUTHOR_ROOT / "apps/web" / dirname
+    actual_files = {str(path.relative_to(directory)): path.read_bytes() for path in sorted(directory.rglob("*")) if path.is_file()}
+    file_map = {path: {"bytes": len(raw), "sha256": digest(raw)} for path, raw in actual_files.items()}
+    evidence = json.loads(actual_files["local-build-evidence.json"])
+    check(mode + " emitted evidence matches receipt", evidence, receipt["artifacts"][mode]["evidence"])
+    recorded_assets = {item["path"]: {"bytes": item["bytes"], "sha256": item["sha256"]} for item in evidence["assets"]}
+    emitted_assets = {path: value for path, value in file_map.items() if path != "local-build-evidence.json"}
+    check(mode + " every actual emitted asset matches evidence", emitted_assets, recorded_assets)
+    check(mode + " actual emitted asset count", len(emitted_assets), evidence["inspection"]["files"])
+    check(mode + " actual emitted byte total", sum(item["bytes"] for item in emitted_assets.values()), evidence["inspection"]["bytes"])
+    check(mode + " release settings", [evidence["ReleaseEnabled"], evidence["signedRelease"], evidence["releaseAcceptance"], evidence["testnet"]], [0, False, False, False])
+    check(mode + " correct synthetic-demo marker", evidence["syntheticDemo"], mode == "demo")
+    policy = json.loads(actual_files["content-policy.json"])
+    check(mode + " unchanged actual content policy", policy, parent["artifacts"][mode]["contentPolicy"])
+    check(mode + " empty connection origins", policy["manifest"]["connectOrigins"], [])
+    check(mode + " network-denying CSP", "connect-src 'none'" in policy["csp"])
+    check(mode + " policy release settings", [policy["ReleaseEnabled"], policy["releaseAcceptance"]], [0, False])
+    graph_results = []
+    for filename in ["core-graph-document.json", "core-graph-worker.json", "qr-graph-worker.json"]:
+        raw = actual_files[filename]
+        graph = json.loads(raw)
+        record = receipt["artifacts"][mode]["graphs"][filename]
+        check(mode + " actual graph hash " + filename, digest(raw), record["sha256"])
+        check(mode + " actual graph equals receipt " + filename, graph, record["graph"])
+        paths = [item["path"] for item in graph["modules"]]
+        parent_graph = parent["artifacts"][mode]["graphs"][filename]["graph"]
+        parent_paths = [item["path"] for item in parent_graph["modules"]]
+        check(mode + " graph paths preserved " + filename, paths, parent_paths)
+        excluded = [path for path in paths if path in EXCLUDED_PATHS or any(path.startswith(prefix) for prefix in EXCLUDED_PREFIXES)]
+        check(mode + " graph exclusions " + filename, excluded, [])
+        module_checks = []
+        for module in graph["modules"]:
+            data, provenance = source_bytes(module["path"])
+            actual = digest(data)
+            check(mode + " " + filename + " module " + module["path"], actual, module["sha256"])
+            verified_module_entries += 1
+            module_checks.append({"path": module["path"], "sha256": actual, "provenance": provenance})
+        prior = {item["path"]: item["sha256"] for item in parent_graph["modules"]}
+        changed = [module["path"] for module in graph["modules"] if prior[module["path"]] != module["sha256"]]
+        check(mode + " only expected graph-source hash changes " + filename, changed, ["apps/web/src/ui/VaultForms.tsx"] if filename == "core-graph-document.json" else [])
+        if filename != "core-graph-document.json":
+            check(mode + " Worker graph bytes unchanged " + filename, digest(raw), parent["artifacts"][mode]["graphs"][filename]["sha256"])
+        graph_results.append({"path": filename, "sha256": digest(raw), "moduleCount": len(paths), "pathsEqualParent": paths == parent_paths, "moduleHashChangesFromParent": changed, "excludedRuntimePaths": excluded, "verifiedModules": module_checks})
+    parent_assets = {item["path"]: item["sha256"] for item in parent["artifacts"][mode]["evidence"]["assets"]}
+    workers = [path for path in file_map if path.startswith("assets/") and ("vault.worker-" in path or "decode.worker-" in path)]
+    for path in workers:
+        check(mode + " actual Worker asset unchanged " + path, file_map[path]["sha256"], parent_assets[path])
+    artifacts[mode] = {"directory": str(directory), "actualFiles": file_map, "assetCountExcludingEvidence": len(emitted_assets), "assetBytesExcludingEvidence": sum(item["bytes"] for item in emitted_assets.values()), "evidenceSha256": digest(actual_files["local-build-evidence.json"]), "contentPolicySha256": digest(actual_files["content-policy.json"]), "contentPolicy": policy, "graphs": graph_results, "unchangedWorkerAssets": workers, "releaseEnabled": evidence["ReleaseEnabled"], "signedRelease": evidence["signedRelease"], "releaseAcceptance": evidence["releaseAcceptance"]}
+
+result = {"schema": "p2p-offramp.main-composition-qualification-review.v1", "source": SOURCE, "tree": TREE, "startedAt": started, "completedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(), "rootReceiptSha256": digest(receipt_bytes), "rootReceiptBytes": len(receipt_bytes), "rootStartedAt": receipt["startedAt"], "rootCompletedAt": receipt["completedAt"], "rootReceiptStored": str(OUT / "root-qualification.json"), "logs": logs, "artifacts": artifacts, "verifiedModuleEntries": verified_module_entries, "checks": CHECKS, "passed": all(item["passed"] for item in CHECKS), "limits": ["Receipt and actual-byte verification; the reviewer did not rerun the coordinator commands.", "No native browser, actual Worker/IndexedDB, financial journey or hosted acceptance is established by local Node/build results.", "Dependency module hashes refer to the actual installed bytes used by the coordinator; lockfiles are unchanged at the frozen source."]}
+print(json.dumps(result, indent=2) + "\n", end="")
+raise SystemExit(0 if result["passed"] else 1)
