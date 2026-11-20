@@ -72,7 +72,9 @@ export function SignedUpdatePanel({ controller = null }: { readonly controller?:
       if (document.visibilityState === 'hidden') { retire(); setNotice({ kind: 'cancelled' }); }
     };
     const leave = () => { retire(); setNotice({ kind: 'cancelled' }); };
-    document.addEventListener('visibilitychange', hide); window.addEventListener('pagehide', leave);
+    // The inert default has no request or candidate to retire. Do not claim a
+    // Settings visibility listener until an actual controller is injected.
+    if (controller) { document.addEventListener('visibilitychange', hide); window.addEventListener('pagehide', leave); }
     return () => {
       mounted.current = false; epoch.current++; request.current?.abort(); request.current = null; candidate.current = null;
       try { controller?.cancel(); } catch { /* The injected owner retains disposal responsibility. */ }
