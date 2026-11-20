@@ -1,0 +1,741 @@
+{
+  "provenance": "Python stdlib math; XYZ log(tan(pi/4+latitude/2)), explicit display-only clipping/wrapping; fixed seed41",
+  "vectors": [
+    {
+      "lat": 0,
+      "lon": 0,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 0,
+      "lon": 0,
+      "z": 1,
+      "x": 1,
+      "y": 1,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 0,
+      "lon": 0,
+      "z": 10,
+      "x": 512,
+      "y": 512,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 0,
+      "lon": 0,
+      "z": 14,
+      "x": 8192,
+      "y": 8192,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -90,
+      "lon": -180,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": true
+    },
+    {
+      "lat": -90,
+      "lon": -180,
+      "z": 14,
+      "x": 0,
+      "y": 16383,
+      "latitudeClipped": true
+    },
+    {
+      "lat": -90,
+      "lon": 180,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": true
+    },
+    {
+      "lat": -90,
+      "lon": 180,
+      "z": 14,
+      "x": 0,
+      "y": 16383,
+      "latitudeClipped": true
+    },
+    {
+      "lat": -90,
+      "lon": 540,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": true
+    },
+    {
+      "lat": -90,
+      "lon": 540,
+      "z": 14,
+      "x": 0,
+      "y": 16383,
+      "latitudeClipped": true
+    },
+    {
+      "lat": -85.05112878,
+      "lon": -180,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -85.05112878,
+      "lon": -180,
+      "z": 14,
+      "x": 0,
+      "y": 16383,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -85.05112878,
+      "lon": 180,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -85.05112878,
+      "lon": 180,
+      "z": 14,
+      "x": 0,
+      "y": 16383,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -85.05112878,
+      "lon": 540,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -85.05112878,
+      "lon": 540,
+      "z": 14,
+      "x": 0,
+      "y": 16383,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 85.05112878,
+      "lon": -180,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 85.05112878,
+      "lon": -180,
+      "z": 14,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 85.05112878,
+      "lon": 180,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 85.05112878,
+      "lon": 180,
+      "z": 14,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 85.05112878,
+      "lon": 540,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 85.05112878,
+      "lon": 540,
+      "z": 14,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 90,
+      "lon": -180,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": true
+    },
+    {
+      "lat": 90,
+      "lon": -180,
+      "z": 14,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": true
+    },
+    {
+      "lat": 90,
+      "lon": 180,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": true
+    },
+    {
+      "lat": 90,
+      "lon": 180,
+      "z": 14,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": true
+    },
+    {
+      "lat": 90,
+      "lon": 540,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": true
+    },
+    {
+      "lat": 90,
+      "lon": 540,
+      "z": 14,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": true
+    },
+    {
+      "lat": -20.22648270071886,
+      "lon": -290.8232787846868,
+      "z": 2,
+      "x": 2,
+      "y": 2,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 68.34095154219628,
+      "lon": -123.51988863815262,
+      "z": 14,
+      "x": 2570,
+      "y": 3879,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 32.322551743595426,
+      "lon": 57.30423375166288,
+      "z": 6,
+      "x": 42,
+      "y": 25,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 59.83378160280074,
+      "lon": 284.3136425505742,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 47.805626484319816,
+      "lon": 174.50745014601534,
+      "z": 13,
+      "x": 8067,
+      "y": 2854,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -81.8832673527519,
+      "lon": 484.7088346440596,
+      "z": 2,
+      "x": 3,
+      "y": 3,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 81.59506062372657,
+      "lon": -195.6050933829573,
+      "z": 4,
+      "x": 15,
+      "y": 1,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 26.291384156827547,
+      "lon": 130.4353141076142,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -64.63081707556971,
+      "lon": 94.77610257004733,
+      "z": 6,
+      "x": 48,
+      "y": 47,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 62.371588855327104,
+      "lon": 368.32953895342746,
+      "z": 3,
+      "x": 4,
+      "y": 2,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -72.63802995189684,
+      "lon": -150.97785956466703,
+      "z": 7,
+      "x": 10,
+      "y": 102,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -63.7493558645935,
+      "lon": 183.54848757401726,
+      "z": 1,
+      "x": 0,
+      "y": 1,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -68.22290729546796,
+      "lon": -384.9243439438967,
+      "z": 14,
+      "x": 7057,
+      "y": 12490,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 81.60083815616568,
+      "lon": -482.18810463036004,
+      "z": 5,
+      "x": 5,
+      "y": 2,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -46.696032990642,
+      "lon": -511.8379108841477,
+      "z": 9,
+      "x": 40,
+      "y": 331,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -54.0446248357559,
+      "lon": 418.80274787798135,
+      "z": 13,
+      "x": 5434,
+      "y": 5563,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -75.2435696777644,
+      "lon": -108.59104933157414,
+      "z": 1,
+      "x": 0,
+      "y": 1,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 28.502062975602897,
+      "lon": -100.23357403858103,
+      "z": 10,
+      "x": 226,
+      "y": 427,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 26.60237948488424,
+      "lon": 388.26072563536775,
+      "z": 3,
+      "x": 4,
+      "y": 3,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -81.31698798686912,
+      "lon": -394.2547830634094,
+      "z": 7,
+      "x": 51,
+      "y": 116,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 75.77458868768872,
+      "lon": -106.0099627098624,
+      "z": 8,
+      "x": 52,
+      "y": 43,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 41.555078458464294,
+      "lon": 42.9702278251948,
+      "z": 14,
+      "x": 10147,
+      "y": 6109,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -82.57780014447737,
+      "lon": -39.15123144075176,
+      "z": 2,
+      "x": 1,
+      "y": 3,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -61.40195423949229,
+      "lon": -469.01154001429734,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 37.44284232424383,
+      "lon": 196.62081140696068,
+      "z": 13,
+      "x": 378,
+      "y": 3175,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 42.7328171029242,
+      "lon": -421.92439835174946,
+      "z": 10,
+      "x": 335,
+      "y": 377,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 34.87746858374328,
+      "lon": 426.4101022496292,
+      "z": 6,
+      "x": 43,
+      "y": 25,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 26.424591099294148,
+      "lon": 269.5871041129642,
+      "z": 9,
+      "x": 127,
+      "y": 217,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 4.923862450754271,
+      "lon": 109.32359811868696,
+      "z": 1,
+      "x": 1,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 78.48521531148606,
+      "lon": -278.90623034344503,
+      "z": 6,
+      "x": 46,
+      "y": 8,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -23.256547267126884,
+      "lon": -43.576809060947255,
+      "z": 11,
+      "x": 776,
+      "y": 1160,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -15.195816799125694,
+      "lon": -53.983854579687204,
+      "z": 10,
+      "x": 358,
+      "y": 555,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -38.08986349283168,
+      "lon": -311.54497740131944,
+      "z": 10,
+      "x": 649,
+      "y": 629,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -42.69663656440786,
+      "lon": -132.57326685454274,
+      "z": 11,
+      "x": 269,
+      "y": 1293,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -29.624356945266165,
+      "lon": 458.59370345249977,
+      "z": 6,
+      "x": 49,
+      "y": 37,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 48.90070826165464,
+      "lon": -221.67852601995276,
+      "z": 7,
+      "x": 113,
+      "y": 44,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 39.44290454460234,
+      "lon": -308.53829386574125,
+      "z": 2,
+      "x": 2,
+      "y": 1,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -48.64701498095617,
+      "lon": -296.4096722373695,
+      "z": 7,
+      "x": 86,
+      "y": 83,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 28.314173377560024,
+      "lon": -470.4848028213193,
+      "z": 3,
+      "x": 1,
+      "y": 3,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 8.099624562234155,
+      "lon": 132.51353716523874,
+      "z": 7,
+      "x": 111,
+      "y": 61,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -29.058075467244464,
+      "lon": -293.3564342935217,
+      "z": 10,
+      "x": 701,
+      "y": 598,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 37.67133452108307,
+      "lon": 348.40862719211304,
+      "z": 7,
+      "x": 59,
+      "y": 49,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 16.785322843305124,
+      "lon": 230.0907591617214,
+      "z": 8,
+      "x": 35,
+      "y": 115,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 46.50945301822685,
+      "lon": -115.82916879399642,
+      "z": 5,
+      "x": 5,
+      "y": 11,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 66.93241824260465,
+      "lon": 347.7007843711235,
+      "z": 0,
+      "x": 0,
+      "y": 0,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -54.641074834634566,
+      "lon": 225.16877216875105,
+      "z": 2,
+      "x": 0,
+      "y": 2,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 23.512044146810425,
+      "lon": 14.026570615991204,
+      "z": 10,
+      "x": 551,
+      "y": 443,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 71.36505760320631,
+      "lon": -95.85689525371896,
+      "z": 12,
+      "x": 957,
+      "y": 869,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 78.45608243489494,
+      "lon": -494.71513188944806,
+      "z": 10,
+      "x": 128,
+      "y": 138,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 16.189233570785362,
+      "lon": -159.82142872180646,
+      "z": 10,
+      "x": 57,
+      "y": 465,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -17.120200568970745,
+      "lon": 466.6480173073155,
+      "z": 4,
+      "x": 12,
+      "y": 8,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -36.729568646858034,
+      "lon": -260.2955838870435,
+      "z": 6,
+      "x": 49,
+      "y": 39,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 19.03417199255911,
+      "lon": 355.8786178595616,
+      "z": 13,
+      "x": 4002,
+      "y": 3654,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 35.124283265364085,
+      "lon": 131.44427265510228,
+      "z": 6,
+      "x": 55,
+      "y": 25,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -33.451636220969434,
+      "lon": 321.29132904717164,
+      "z": 11,
+      "x": 803,
+      "y": 1226,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 59.65082586287022,
+      "lon": -434.6132008720733,
+      "z": 7,
+      "x": 37,
+      "y": 37,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 16.00477214907356,
+      "lon": -288.3240568450654,
+      "z": 2,
+      "x": 2,
+      "y": 1,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 68.60352449581276,
+      "lon": -225.25617452071066,
+      "z": 3,
+      "x": 6,
+      "y": 1,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -0.8227071898567004,
+      "lon": 475.1784450917004,
+      "z": 13,
+      "x": 6716,
+      "y": 4114,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -21.221953636154865,
+      "lon": 119.36651268461378,
+      "z": 11,
+      "x": 1703,
+      "y": 1147,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 53.894395011588216,
+      "lon": 37.90940634120932,
+      "z": 12,
+      "x": 2479,
+      "y": 1317,
+      "latitudeClipped": false
+    },
+    {
+      "lat": 44.18262904267095,
+      "lon": -328.9318757835923,
+      "z": 12,
+      "x": 2401,
+      "y": 1486,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -0.24376917767285988,
+      "lon": 451.87051114423,
+      "z": 9,
+      "x": 386,
+      "y": 256,
+      "latitudeClipped": false
+    },
+    {
+      "lat": -55.71590943106364,
+      "lon": 396.9939683202874,
+      "z": 3,
+      "x": 4,
+      "y": 5,
+      "latitudeClipped": false
+    }
+  ]
+}

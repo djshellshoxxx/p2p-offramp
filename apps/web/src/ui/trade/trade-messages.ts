@@ -14,6 +14,7 @@ export const tradePageMessages = mergeMessageViews(englishGroup('tradePage'), {
   sessionItem: (orderId: string, revision: string) => english('tradePage', 'sessionItem', { orderId, revision }),
   savedSkipped: (count: number) => english('tradePage', 'savedSkipped', { count }),
   unreviewableItem: (recordId: string) => english('tradePage', 'unreviewableItem', { record: recordId.slice(0, 8) }),
+  favoriteItem: (recordId: string) => english('tradePage', 'favoriteItem', { record: recordId.slice(0, 8) }),
   savedBusy: englishGroup('tradePageSavedBusy'), savedDone: englishGroup('tradePageSavedDone'),
   savedFailed: englishGroup('tradePageSavedFailed') as Readonly<Record<string, string>>,
   rejected: englishGroup('tradePageRejected'),

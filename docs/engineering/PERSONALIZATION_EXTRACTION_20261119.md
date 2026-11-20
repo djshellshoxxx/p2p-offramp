@@ -6,7 +6,7 @@
 - Initial recovered source/test checkpoint: `ff226f704346d5a7f7e7b4ea1c9fdfdbec5e2e3c`.
 - Returned-native-diagnostic regression checkpoint: `1420efc8dc8badefb363d53388b63abdb957efcb`; repaired source checkpoint: `38bfa82c6d21c9887a87b48676272b81863fe0d3`.
 - Historical source: PR #81, `claude/vibrant-cray-ny4gum` at `a45e932a37153590bc329c1e9012cf18e37fe12c`; its selective #42 extraction preserves the personalization work from the historical #26/#42 lineage.
-- Decision: `docs/adr/proposed/D7-optional-reference-packages.md` records accepted Option 2: personalization, claims and governance are in scope, while nine optional reference packages remain parked.
+- Decision: D7 includes personalization, claims and governance. The canonical `docs/adr/ACCEPTED-DECISIONS-2026-11-04.md` records that the earlier parking decision for nine optional packages was superseded on 2026-11-18: those packages are accepted for one-package-per-PR extraction with import-boundary checks. They remain separate from this extraction and must stay unwired until their own application gates are satisfied.
 - Six recovered files: package index, two consumers, two test files and an updated README. No vault schema, journal, retention, runtime Worker, App, build profile, dependency or workflow changed.
 
 This is recovery of two internal encrypted preference consumers, not completion of their user-facing application workflows. The package index exports their local APIs, but the current app/Worker does not import them. `ReleaseEnabled=0` remains unchanged.

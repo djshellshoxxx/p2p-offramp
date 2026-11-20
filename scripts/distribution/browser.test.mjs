@@ -7,16 +7,23 @@ import {tmpdir} from 'node:os';
 import {resolve,join} from 'node:path';
 import {chromium} from 'playwright-core';
 import {stageUnsignedDistribution} from './stage.mjs';
+import {inspectDocs} from '../docs/validate.mjs';
+import {createBoundDistributionFixture} from './test-fixture.mjs';
 import {PORTAL_HEADERS} from '../portal/policy.mjs';
 import {offlinePolicy} from '../../apps/web/scripts/static-build-plugin.mjs';
 import {resolveChromiumPath} from '../lib/chromium-path.mjs';
 
-await test('actual unsigned distribution loads, reloads and downloads from nested local paths', async () => {
+await test('distribution loads matching source or an explicit historical fixture while current stale evidence stays refused', async () => {
 const temporary=await mkdtemp(join(tmpdir(),'p2p-stage-browser-')),unexpected=[],checks=[];
-let browser,server;
+let browser,server,fixture;
 const pass=name=>{checks.push(name);console.log('ok - '+name);};
 try{
- const stage=await stageUnsignedDistribution({outDir:resolve(temporary,'stage')}),base='/nested/review/',allowed=new Set(stage.manifest.assets.map(asset=>asset.path));
+ const docs=await inspectDocs();let currentSourceRefused=false,stage;
+ if(docs.stale.length){
+  await assert.rejects(stageUnsignedDistribution({outDir:resolve(temporary,'current-refused')}),{message:'DISTRIBUTION_SOURCE_CHANGED'});currentSourceRefused=true;
+  fixture=await createBoundDistributionFixture();stage=await fixture.stage(resolve(temporary,'stage'));
+ }else stage=await stageUnsignedDistribution({outDir:resolve(temporary,'stage')});
+ const base='/nested/review/',allowed=new Set(stage.manifest.assets.map(asset=>asset.path));
  allowed.add('distribution-manifest.json');
  server=createServer((request,response)=>{
   const pathname=new URL(request.url??'/','http://127.0.0.1').pathname;
@@ -56,7 +63,8 @@ try{
  }
  await scriptless.close();assert.deepEqual(unexpected,[]);
  pass('unpublished wiki and public dependency records remain byte-exact downloadable review material');
- console.log(JSON.stringify({fixture:'unsigned-distribution-nested-smoke',checks:checks.length,browser:browser.version(),assets:stage.manifest.assets.length,
+ console.log(JSON.stringify({fixture:fixture?'historical-bound-distribution-nested-smoke':'unsigned-distribution-nested-smoke',checks:checks.length,browser:browser.version(),assets:stage.manifest.assets.length,
+  fixtureSourceCommit:fixture?.sourceCommit??null,fixtureSourceTree:fixture?.sourceTree??null,toolingHashes:fixture?.toolingHashes??null,currentSourceRefused,currentSourceDistributionQualified:!currentSourceRefused,
   buildPasses:2,localHeaderFixture:true,hostHeadersVerified:false,independentDistributionWitness:false,signedRelease:false,releaseEnabled:false,published:false,unexpectedRequests:unexpected.length}));
-}finally{await browser?.close();if(server)await new Promise(done=>server.close(done));await rm(temporary,{recursive:true,force:true});}
+}finally{await browser?.close();if(server)await new Promise(done=>server.close(done));await fixture?.dispose();await rm(temporary,{recursive:true,force:true});}
 });
