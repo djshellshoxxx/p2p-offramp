@@ -10,6 +10,11 @@ selections share the same two cleanup probes. It is a separate follow-up above f
 [PR236](https://github.com/djshellshoxxx/p2p-offramp/pull/236), with generation 29
 publication and current-target hosted acceptance still pending.
 
+This standalone G29 UI/runtime-count change is D8 Tier B. Preserve the accepted
+CodeRabbit-or-Qodo review condition with findings answered; the completed local
+independent review does not establish that named review pass. All applicable
+current-source/current-target hosted checks remain required.
+
 | Capability | Completed staged scope | Remaining scope |
 | --- | --- | --- |
 | F20 / DATA01 offline retention preview | An explicit timestamp that is a nonnegative safe integer passes through schema, runtime, Worker and AppServices to the real retention service. A validated scalar-only reply contains counts and revision. Disposal precedes a final persisted freshness check and selected-session/revision guard. Existing exact 30-day suggestions remain protected, with zero deletion eligibility, writes, network requests or native proof calls. | Native authority, closed dependency review, explicit retention deletion consent and the destructive UI workflow are separate unfinished scope. The snapshot is not continuous monitoring; request a new preview after changes. |

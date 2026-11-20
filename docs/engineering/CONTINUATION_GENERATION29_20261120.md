@@ -232,6 +232,16 @@ runtime isolation or deployment acceptance.
 
 ## Integration, remaining work and release boundary
 
+This standalone follow-up is **D8 Tier B**: it exposes non-custody product UI
+and read-only runtime counts while preserving storage algorithms and financial,
+recovery and deletion authority. The [accepted decision index](../adr/ACCEPTED-DECISIONS-2026-11-04.md)
+keeps the [detailed D8 packet](../adr/proposed/D8-merge-policy-and-branch-protection.md)
+authoritative where its table is shorter. Require the standalone CodeRabbit or
+Qodo review pass with findings answered, in addition to applicable green checks
+and the independent review. This local review and parent PR236's combined-source
+classification do not substitute for that named review. Its completion is not
+claimed at this pre-publication checkpoint.
+
 1. Preserve PR236's exact source and current main target while its applicable
    hosted browser, native financial and CodeQL checks complete. Do not amend,
    replace or supersede PR236 with generation 29. A change to main requires

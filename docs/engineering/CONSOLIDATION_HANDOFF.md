@@ -40,6 +40,12 @@ remain exact through evidence packaging and publication. Generation 29's actual
 publication and current-target hosted acceptance remain pending. Parent checks
 do not qualify this changed source or a later retarget.
 
+Treat this standalone non-custody UI/runtime-count follow-up as D8 Tier B.
+The accepted detailed packet requires a CodeRabbit or Qodo review pass with
+findings answered, alongside applicable green checks and independent review.
+The named review remains unclaimed; parent PR236's combined-source treatment
+does not waive it. See the generation 29 handoff for the policy references.
+
 Read the [generation 29 handoff](CONTINUATION_GENERATION29_20261120.md),
 [combined receipt](qualification-generation29.json) and
 [retained-log index](retained-logs-generation29.json).
