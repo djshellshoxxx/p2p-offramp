@@ -1,0 +1,32 @@
+{
+  "format": "local-liquidity-reference-decisions-v1",
+  "localScope": "Checked diagnostic accounting and reservation reference only",
+  "productionProfileApproved": false,
+  "economicAuthority": false,
+  "reviewers": [],
+  "approvedRelease": null,
+  "nativeScope": "BLOCKED_UNDEFINED_CONTRACT",
+  "missingContracts": [
+    {
+      "id": "quote-signature-profile",
+      "missing": ["Exact signed QuoteV1 field types/order and canonical bytes", "EIP-712 domain name/version/chainId/verifyingContract and immutable vault identity", "QuoteId and nonce encoding/reuse domain", "Maker EOA versus contract-account signature policy and bounded EIP-1271 semantics"],
+      "independentWork": "Local exact-fill/expiry/nonce accounting and hostile-input tests"
+    },
+    {
+      "id": "atomic-consume-fund",
+      "missing": ["Separate immutable vault ABI and authorization", "Exact same-transaction consume/fund entry point and return/revert behavior", "Maker-contract-as-seller compatibility with BasicEscrow msg.sender checks", "Taker acceptance/terms signature transport and verification", "Native versus token custody/approval and exact-transfer admission"],
+      "independentWork": "Failed funding must leave the simulated reservation and ledger unchanged"
+    },
+    {
+      "id": "terminal-return-authentication",
+      "missing": ["Native trade/quote/reservation identity mapping", "Canonical receipt/state proof and finality for returned custody", "Authenticated terminal refund amount and maker vault destination", "BasicEscrow deferred payout and pending withdrawal treatment"],
+      "independentWork": "Conservation math and exact claimed return checks; no off-chain refund credit"
+    },
+    {
+      "id": "native-intent-and-reorg",
+      "missing": ["Versioned standalone vault action identity and G12 intent profile", "Reserve/consume/withdraw unknown-broadcast reconciliation", "Canonical anchor/finality and reorg rewind rules", "Authenticated recovery proof before clearing uncertainty or resubmission"],
+      "independentWork": "Unknown/reorg latches cannot expire into availability or authorize a retry"
+    }
+  ],
+  "unsupported": ["Production custody", "Pooled LP shares/NAV", "Partial basic-escrow fills", "Fees or oracle pricing", "Automatic economic retries", "Solana parity", "Custodial PostgreSQL proposal integration"]
+}
