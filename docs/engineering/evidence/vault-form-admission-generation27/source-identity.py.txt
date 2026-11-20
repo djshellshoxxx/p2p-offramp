@@ -1,0 +1,39 @@
+import hashlib, json, subprocess
+BASE='f36a0a07dff55aa83b9d01a69501d049461d9b33'
+RED='515a7c945b6bef136c3ede436577635b17ccd4e2'
+GREEN='0df0e191e5829e66141d4ba9c028599ce9c91de2'
+SOURCE='apps/web/src/ui/VaultForms.tsx'
+TEST='apps/web/test/vault-form-admission.test.mjs'
+def git(*args):
+    return subprocess.check_output(['git', *args])
+def tree(commit):
+    rows={}
+    for row in git('ls-tree','-r','-z',commit).split(b'\0'):
+        if row:
+            metadata, path=row.split(b'\t',1)
+            rows[path.decode()]=metadata.decode()
+    return rows
+base, red, green = map(tree,[BASE,RED,GREEN])
+changed=lambda old,new: sorted(path for path in old.keys()|new.keys() if old.get(path)!=new.get(path))
+old_source=git('show',BASE+':'+SOURCE)
+new_source=git('show',GREEN+':'+SOURCE)
+checks={
+ 'red_adds_only_regression': changed(base,red)==[TEST] and TEST not in base,
+ 'red_preserves_every_base_entry': all(red.get(path)==entry for path,entry in base.items()),
+ 'green_changes_only_vault_forms': changed(red,green)==[SOURCE],
+ 'green_matches_exact_three_guard_replacements': old_source.count(b'    if (busy) return;')==3 and old_source.replace(b'    if (busy) return;', b'    if (busy || request.current !== null) return;')==new_source,
+ 'regression_blob_identical': red[TEST]==green[TEST],
+ 'g26_unlock_section_identical': old_source.split(b'export function ExportForm')[0]==new_source.split(b'export function ExportForm')[0],
+ 'green_preserves_every_other_base_entry': all(green.get(path)==entry for path,entry in base.items() if path!=SOURCE),
+ 'green_contains_no_extra_paths': set(green)==set(base)|{TEST},
+}
+report={'commits': {'base':BASE,'regression_red':RED,'source_green':GREEN},
+ 'trees': {key:git('rev-parse',commit+'^{tree}').decode().strip() for key,commit in [('base',BASE),('regression_red',RED),('source_green',GREEN)]},
+ 'entries':{'base':len(base),'red':len(red),'green':len(green),'unchanged_base_entries':sum(green.get(path)==entry for path,entry in base.items())},
+ 'base_to_red_paths':changed(base,red),'red_to_green_paths':changed(red,green),'base_to_green_paths':changed(base,green),
+ 'checks':checks,'source_files':[]}
+for path in [SOURCE,TEST]:
+    data=git('show',GREEN+':'+path)
+    report['source_files'].append({'path':path,'git_entry':green[path],'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+print(json.dumps(report,indent=2))
+assert all(checks.values())
