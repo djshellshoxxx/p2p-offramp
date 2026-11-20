@@ -134,6 +134,8 @@ export async function createDeletionEvent(crypto: Pick<EventCrypto, 'signEvent'>
  */
 export function validateAdEvent(event: NostrEvent, nowSeconds: number): { ok: true; value: VerifiedAd } | { ok: false; reason: AdRejection } {
   const bad = (reason: AdRejection) => ({ ok: false, reason }) as const;
+  // A broken caller clock must not make an expired or future ad appear actionable.
+  if (!Number.isSafeInteger(nowSeconds) || nowSeconds < 0) return bad('INVALID');
   if (event.kind !== AD_KIND || event.tags.length !== 3) return bad('INVALID');
   const [d, t, x] = event.tags;
   if (d?.length !== 2 || t?.length !== 2 || x?.length !== 2 || d[0] !== 'd' || t[0] !== 't' || x[0] !== 'expiration' || t[1] !== AD_TOPIC) return bad('INVALID');
@@ -177,6 +179,10 @@ export interface OrderBook {
 }
 export function createOrderBook(options: OrderBookOptions): OrderBook {
   const maxOrders = options.maxOrders ?? MAX_RETAINED_ORDERS;
+  // Nonfinite, fractional, zero and over-cap options must never bypass eviction.
+  if (!Number.isSafeInteger(maxOrders) || maxOrders < 1 || maxOrders > MAX_RETAINED_ORDERS) {
+    throw new RangeError('INVALID_ORDER_BOOK_CAPACITY');
+  }
   const entries = new Map<string, Entry>();
   const tombstones = new Map<string, number>();
   const now = (): number | null => { try { const v = options.nowSeconds(); return typeof v === 'number' && Number.isSafeInteger(v) && v >= 0 ? v : null; } catch { return null; } };

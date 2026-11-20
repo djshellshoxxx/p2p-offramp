@@ -1,11 +1,29 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AD_KIND, adKey, adTags, createAdEvent, createDeletionEvent, createOrderBook, parseAdContent, serializeAd, validateAdEvent, DELETION_KIND, MAX_AD_LIFETIME_SECONDS } from '../src/ad.ts';
+import { AD_KIND, adKey, adTags, createAdEvent, createDeletionEvent, createOrderBook, parseAdContent, serializeAd, validateAdEvent, DELETION_KIND, MAX_AD_LIFETIME_SECONDS, MAX_RETAINED_ORDERS } from '../src/ad.ts';
 import { adFor, makeKey, NOW, ORDER, seller, sellerCrypto, signedAd, signWith } from './support/harness.mjs';
 import { parseEvent, parseRelayFrame, FRAME_LIMITS } from '../src/nip01.ts';
 
 const book = (now = NOW, extra = {}) => { const clock = { now }; const b = createOrderBook({ nowSeconds: () => clock.now, verifier: sellerCrypto, ...extra }); return { b, clock }; };
 const KEY = adKey(seller.pubkey, ORDER);
+
+test('standalone ad validation fails closed on unavailable or malformed time', async () => {
+  const event = await signedAd();
+  for (const sample of [NaN, Infinity, -Infinity, -1, 1.5, undefined]) {
+    assert.deepEqual(validateAdEvent(event, sample), { ok: false, reason: 'INVALID' }, String(sample));
+  }
+  assert.equal(validateAdEvent(event, NOW).ok, true, 'a valid clock retains a valid advertisement');
+});
+
+test('book refuses invalid capacity options rather than silently defeating the 1000-order bound', () => {
+  for (const maxOrders of [0, -1, 1.5, NaN, Infinity, MAX_RETAINED_ORDERS + 1]) {
+    assert.throws(() => book(NOW, { maxOrders }), /^RangeError: INVALID_ORDER_BOOK_CAPACITY$/, String(maxOrders));
+  }
+  for (const maxOrders of [1, 5, MAX_RETAINED_ORDERS]) {
+    assert.equal(book(NOW, { maxOrders }).b.size, 0, 'valid finite bounds remain supported');
+  }
+});
+
 
 test('ad event carries only public metadata with fixed tags and the chosen kind', async () => {
   const event = await signedAd();
