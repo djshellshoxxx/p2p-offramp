@@ -1,3 +1,45 @@
+# Current feature coverage — generation 29 (2026-11-20 UTC)
+
+Frozen combined source `fa7c1a11ff990be4646053731f1030d09eb8f9b6`, tree
+`dc34c0065a6bc4d66b4195b16d573ef1ec7463a5`, adds an explicit Settings preview
+over the existing DATA01 retention service. It passed **2,555/2,555 tests**, with zero failures, skips, cancellations or
+todos, and all six additional qualification commands.
+Independent review accepted the bounded integration with no actionable
+Standards or Specification findings; its 21-case backend and 33-case combined
+selections share the same two cleanup probes. It is a separate follow-up above frozen published
+[PR236](https://github.com/djshellshoxxx/p2p-offramp/pull/236), with generation 29
+publication and current-target hosted acceptance still pending.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| F20 / DATA01 offline retention preview | An explicit timestamp that is a nonnegative safe integer passes through schema, runtime, Worker and AppServices to the real retention service. A validated scalar-only reply contains counts and revision. Disposal precedes a final persisted freshness check and selected-session/revision guard. Existing exact 30-day suggestions remain protected, with zero deletion eligibility, writes, network requests or native proof calls. | Native authority, closed dependency review, explicit retention deletion consent and the destructive UI workflow are separate unfinished scope. The snapshot is not continuous monitoring; request a new preview after changes. |
+| F01 / F02 selection and request lifecycle | The Settings panel owns the first request synchronously. Duplicate handlers, Cancel, unmount, service replacement, locks and same-profile reopen cannot preserve or publish a stale preview. Controlled real-facade/runtime cases cover actual correlation and cancellation. | Native browser event reachability and real-origin persistence acceptance are not established by controlled hook scheduling or synthetic Worker replies. Existing saved-review deletion behavior and its eight-review limit remain unchanged. |
+| F19 / F20 semantic locale and controls | Counts, revision, pending/cancelled state and fixed errors resolve through the selected catalog. Locale switches do not repeat inspection. Help explains overlapping protected counts and names the existing Offers deletion/session controls and interruption check. | Production remains English-only/draft. Synthetic selected-catalog fixtures do not approve translations, assistive technology or physical-device behavior. The preview grants no deletion authority. |
+| F25 evidence and integration | Combined source contains 1,026 non-documentation entries: 1,015 preserved from PR236, seven modified and four added, with no deletions. Source-bound author, reviewer and coordinator evidence retain actual execution and the UI harness failure separately. | Keep PR236 frozen and qualify its actual main target. Publish G29 as a separate follow-up with all tested entries preserved and require current-source/current-target hosted acceptance. |
+| F24 / F27 updater and release | Existing updater composition is retained; native fixture preparation is build-only with `nativeExecuted: false`. ReleaseEnabled remains 0. | Native/browser execution, trusted application/wallet/origin configuration, accepted-floor durability, activation/navigation and release acceptance remain separate requirements. |
+
+PR236 remains head `d9ddcf53d82100f05de7346143a0ad00d43c2c1a`, tree
+`437323a382952b9623a875c818f8af005a5d4563`, targeting observed main
+`8e836baa877b676a863c877003e277b638fc5061`. At 18:36:42 UTC on 2026-11-20, PR236 remained open and unmerged, with all
+14 current checks queued and Snyk successful. It was not merge-qualified.
+Generation 29 does not amend or supersede it. The existing one-aggregate plan
+still governs PR233–235: retain their exact frozen heads, qualify and guard the
+PR236 merge, read back main/tree/ordered parents, and prove containment before
+reconciling those PRs. Preserve all original branches; older sequential
+merge/retarget instructions below remain historical.
+
+Read the [generation 29 continuation](CONTINUATION_GENERATION29_20261120.md),
+[combined qualification](qualification-generation29.json) and
+[retained-log index](retained-logs-generation29.json). Author selections and
+independent checks overlap the full suite and are not extra full-suite cases.
+Optional PR224–232 and audits 184–186 remain independently owned. Production
+trust, default updater configuration and release authorization remain absent;
+`ReleaseEnabled=0`. The earlier feature overlays and pinned-main rows remain
+byte-for-byte historical assessments, superseded for current coordination by
+this checkpoint and later exact-source receipts.
+
+---
+
 # Current feature coverage — generations 26–28 (2026-11-20 UTC)
 
 Frozen combined source `2a0b26f3392d86c1cd3e056771c59438ece92927`, tree
