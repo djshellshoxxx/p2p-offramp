@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
-  "generation": 17,
-  "updated_at_utc": "2026-11-20T12:29:28Z",
-  "phase": "qualified-reviewed-core-merged-main-docs-only-followup-pending",
-  "main_sha": "1084a410676bc0658da97f33eba6a059493d74df",
+  "generation": 18,
+  "updated_at_utc": "2026-11-20T15:43:46Z",
+  "phase": "qualified-reviewed-core-and-canonical-docs-merged-main-release-disabled",
+  "main_sha": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
   "integration_branch": "codex/reviewed-main-consolidation-g17-20261120",
   "integration_source_sha": "24b67bb2db7c74654b9a5b9496279b4d44380d28",
   "integration_source_tree": "7ccc0514c8320314a04fab333d5ebf14294f69dc",
@@ -5602,7 +5602,7 @@
   },
   "integration_target": "main",
   "hosted_generation15_snapshot": "generation15-hosted-snapshot.json",
-  "current_verification_key": "generation17_main_integration",
+  "current_verification_key": "generation18_documentation_integration",
   "generation15_final_core": {
     "head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
     "tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
@@ -5714,5 +5714,26 @@
       "physical device validation",
       "current semantic distribution approval"
     ]
+  },
+  "generation18_documentation_integration": {
+    "observed_at_utc": "2026-11-20T15:43:46Z",
+    "pull_request": 222,
+    "merge_commit": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+    "previous_main": "1084a410676bc0658da97f33eba6a059493d74df",
+    "documentation_changed_files": 62,
+    "docs_only": true,
+    "runtime_changed": false,
+    "source_qualification": "preserved-generation17-main-merge",
+    "check_evidence": "qualified-current-source-PR222; historical financial suites not rerun",
+    "release_enabled": 0,
+    "release_or_deployment_authorized": false,
+    "remaining_scopes": [
+      "signed-update trust and own-lock composition",
+      "full Solana negotiation and funding",
+      "real-device qualification",
+      "current locale/distribution semantic approval",
+      "standalone optional PR191-199 qualification"
+    ],
+    "note": "This is a dated post-PR222 main snapshot. Subsequent main merges require a new source-bound checkpoint. Original generation17 evidence and earlier failures remain unchanged."
   }
 }
