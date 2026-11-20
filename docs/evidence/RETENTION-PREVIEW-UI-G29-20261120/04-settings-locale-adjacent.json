@@ -1,0 +1,30 @@
+{
+  "name": "04-settings-locale-adjacent",
+  "argv": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-reporter=tap",
+    "apps/web/test/locale-source.test.mjs",
+    "apps/web/test/locale-runtime.test.mjs",
+    "apps/web/test/panels-misc.render.test.mjs",
+    "apps/web/test/ui-routes.test.mjs"
+  ],
+  "head": "0d1d929d8bfb97b9772f84eb5fa3425de6fd3602",
+  "tree": "a9010c02a383346ab7041d5549b9cb09eb7f2471",
+  "files": {
+    "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+    "apps/web/src/ui/locale/en.ts": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18",
+    "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+    "apps/web/test/retention-preview-ui.test.mjs": "e93defa7ca008de72dbbbea58ed890ff69dff9cbfd8cd01954445e96d9199b27"
+  },
+  "started": "2026-11-20T18:30:53.941440+00:00",
+  "finished": "2026-11-20T18:30:55.929982+00:00",
+  "exitCode": 0,
+  "rawBytes": 5905,
+  "rawSha256": "043ed05997b980e9509941934d0d33b2731e8d72d01e5592b3307080163754b3",
+  "gzipBytes": 1539,
+  "gzipSha256": "3010a8a51ccac94cc38a489d7c37d667f917ccb284c8f3216199f3f9fda5526a",
+  "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/04-settings-locale-adjacent.log.gz"
+}
