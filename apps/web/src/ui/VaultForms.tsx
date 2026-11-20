@@ -125,7 +125,7 @@ export function ExportForm({ services, refresh = 0 }: { readonly services: AppSe
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy) return;
+    if (busy || request.current !== null) return;
     const element = event.currentTarget;
     const profile = element.elements.namedItem('profile') as HTMLInputElement;
     const consent = element.elements.namedItem('consent') as HTMLInputElement;
@@ -187,7 +187,7 @@ export function CreateForm({ services, onDone }: { readonly services: AppService
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy) return;
+    if (busy || request.current !== null) return;
     const element = event.currentTarget;
     const consent = element.elements.namedItem('consent') as HTMLInputElement;
     let [secret = '', repeat = ''] = takeSecrets(element, ['passphrase', 'confirm']);
@@ -273,7 +273,7 @@ export function RestoreForm({ services, onInventoryChanged, onOpenRestored }: { 
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy) return;
+    if (busy || request.current !== null) return;
     setConfirmedProfileId('');
     const element = event.currentTarget;
     const fileInput = element.elements.namedItem('file') as HTMLInputElement;
