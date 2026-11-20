@@ -1,0 +1,33 @@
+{
+  "recordedAt": "2026-11-20T19:43:27.060019+00:00",
+  "sourceWorktree": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g31",
+  "reviewWorktree": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+  "sourceDirectoryInode": 3619813,
+  "reviewDirectoryInode": 3175269,
+  "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+  "mode": "physical immutable hardlink reuse; no installation or dependency mutation",
+  "samples": [
+    {
+      "path": "node_modules/typescript/package.json",
+      "sourceInode": 4131963,
+      "reviewInode": 4131963,
+      "bytes": 3087,
+      "sha256": "3722b30210616a13a3213ded11575ba6b2dbab10c32a5ef67afca8513e27017e"
+    },
+    {
+      "path": "node_modules/typescript/bin/tsc",
+      "sourceInode": 4131967,
+      "reviewInode": 4131967,
+      "bytes": 44,
+      "sha256": "2219f428a7e55aaf1f7ad85b9b0f0cf5078aeb76ccc9a7c6036c92d48f492ffd"
+    },
+    {
+      "path": "node_modules/@noble/hashes/package.json",
+      "sourceInode": 4128446,
+      "reviewInode": 4128446,
+      "bytes": 2583,
+      "sha256": "3e361734f5269de162fa362483d7f45dee7efb533ec217157945338f7591baaf"
+    }
+  ],
+  "correctedDiagnostic": "The package manifest and actual compiler entry replace the absent legacy compiler API sample. Initial recovered diagnostic retained separately."
+}

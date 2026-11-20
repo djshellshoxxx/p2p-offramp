@@ -1,0 +1,48 @@
+import json, subprocess
+from pathlib import Path
+repo=Path('/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33')
+source='31ae6627a6b14a4ef40f7d81c98b04470a30aa1a'
+feature='b8792ac4088f75603be8e0b40ba1506f2fb137f2'
+base='5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031'
+main='8e836baa877b676a863c877003e277b638fc5061'
+def git(*args): return subprocess.check_output(['git',*args],cwd=repo)
+def entries(ref):
+ out={}
+ for row in git('ls-tree','-r','-z',ref).split(b'\0'):
+  if row:
+   meta,path=row.split(b'\t',1);out[path.decode()]=meta.decode()
+ return out
+assert git('rev-parse','HEAD').decode().strip()==source
+assert git('rev-parse','HEAD^{tree}').decode().strip()=='44d8e88b8880f2f971aeafa8e64d3887463db4be'
+assert not git('status','--porcelain').strip()
+assert git('show','-s','--format=%P',source).decode().split()==[feature]
+assert git('show','-s','--format=%P',feature).decode().split()==[base]
+b,s,f=entries(base),entries(source),entries(feature)
+approved={'packages/chain-solana/src/funding-review.ts','packages/chain-solana/test/funding-review.test.mjs',
+ 'packages/chain-solana/test/boundary.test.mjs','packages/chain-solana/README.md'}
+changed={p for p in b.keys()|s.keys() if b.get(p)!=s.get(p)}
+assert changed==approved
+assert not b.keys()-s.keys()
+for path, entry in b.items():
+ if path not in approved: assert s[path]==entry,path
+fixture='packages/chain-solana/test/funding-review.test.mjs'
+assert {p for p in s.keys()|f.keys() if s.get(p)!=f.get(p)}=={fixture}
+before=git('show',feature+':'+fixture).decode()
+after=git('show',source+':'+fixture).decode()
+old="test('consistent copied bytes and height metadata may display but cannot prove original handle provenance', async () => {"
+new="test('consistent copied bytes and height metadata may display but cannot prove original handle provenance',\n  async () => {"
+assert before.count(old)==1 and before.replace(old,new)==after
+boundary='packages/chain-solana/test/boundary.test.mjs'
+old_boundary=git('show',base+':'+boundary).decode()
+new_boundary=git('show',source+':'+boundary).decode()
+assert new_boundary.count("    'funding-review.ts',\n")==1
+assert new_boundary.replace("    'funding-review.ts',\n",'')==old_boundary
+subprocess.run(['git','diff','--check',main+'..'+source],cwd=repo,check=True)
+result={'source':source,'tree':git('rev-parse','HEAD^{tree}').decode().strip(),'base':base,'feature':feature,
+ 'changedPaths':sorted(changed),'preservedBaselineEntries':len(b)-len(approved&b.keys()),
+ 'addedPaths':sorted(s.keys()-b.keys()),'deletedPaths':[],
+ 'nonDocumentationEntries':len([p for p in s if not p.startswith('docs/')]),
+ 'correction':'Exactly one test declaration line wrap; all other entries exact.',
+ 'boundaryChange':'Exactly one new source filename; all existing guard assertions and exceptions unchanged.',
+ 'fullMainWhitespace':'passed','clean':True}
+print(json.dumps(result,indent=2))

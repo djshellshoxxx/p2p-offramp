@@ -1,0 +1,8 @@
+{
+  "rawBytes": 4841,
+  "rawSha256": "fc1497f6de5658170ba78d7f47f62664477b994dd668679aa35f93f46f5bf12e",
+  "gzipBytes": 1947,
+  "gzipSha256": "55f499d9eaa4dd6649ef6f9943dfa001541ab91f86400ffb5eb72583d03d2107",
+  "gzipMtime": 0,
+  "cause": "The initial checker incorrectly assumed the first wired uncommitted snapshot exactly matched the later feature commit. The retained snapshot differs only by two line wraps and accurate metadata wording, verified explicitly by the corrected checker."
+}

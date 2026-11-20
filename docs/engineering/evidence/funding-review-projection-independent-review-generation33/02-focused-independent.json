@@ -1,0 +1,65 @@
+{
+  "name": "02-focused-independent",
+  "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+  "tree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "packages/chain-solana/test/funding-review.test.mjs",
+    "packages/chain-solana/test/prepared-funding.test.mjs",
+    "packages/chain-solana/test/boundary.test.mjs",
+    "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/independent-probes.mjs"
+  ],
+  "startedAt": "2026-11-20T19:44:19.408008+00:00",
+  "completedAt": "2026-11-20T19:44:23.156205+00:00",
+  "exitCode": 0,
+  "sourceStatusAtStart": "",
+  "sourceUnchanged": true,
+  "sourceStatusAtEnd": "",
+  "scriptInputs": [
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/scripts/test-support/register-tsx.mjs",
+      "bytes": 86,
+      "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/packages/chain-solana/test/funding-review.test.mjs",
+      "bytes": 15904,
+      "sha256": "796bca4a5bd98997a2a770b39b7e32ac5e7a7615276886409184b01089e461e4"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/packages/chain-solana/test/prepared-funding.test.mjs",
+      "bytes": 21266,
+      "sha256": "fec56fa82e3e26f643ca01195b24db3ce136d6cc5534001beb488ccdfdd52608"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/packages/chain-solana/test/boundary.test.mjs",
+      "bytes": 5896,
+      "sha256": "b7eeeeb4189e1c8049a3ae1edb49fddb326ffab5ac5efd66ebaf0fe05d68042d"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/independent-probes.mjs",
+      "bytes": 4700,
+      "sha256": "2d91a50fa3425a47865e1a9d93e9137d24dcc55b584fb4b0064e1b3b217400df"
+    }
+  ],
+  "rawBytes": 7971,
+  "rawSha256": "3eb9536053ca121422918564febeea872c01e7c76268622aaf1c96bab779e254",
+  "gzipBytes": 2711,
+  "gzipSha256": "538bdda08432e3b279de64b67e2402863882e6dc90f10b75362473422efa5f9d",
+  "gzipMtime": 0,
+  "summary": [
+    "\u2139 tests 107",
+    "\u2139 suites 0",
+    "\u2139 pass 107",
+    "\u2139 fail 0",
+    "\u2139 cancelled 0",
+    "\u2139 skipped 0",
+    "\u2139 todo 0",
+    "\u2139 duration_ms 3631.387467"
+  ]
+}

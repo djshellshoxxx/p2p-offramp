@@ -1,0 +1,21 @@
+{
+  "recordedAt": "2026-11-20T19:37:59.725167+00:00",
+  "baseline": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+  "scope": "Read-only design review; no G33 source frozen or test execution yet.",
+  "constraints": [
+    "Native SOL only; package internal; no facade or browser activation.",
+    "Bound trade brand before field access; maintained exact plan/message verifier.",
+    "Fixed-code failures without generated operation identifiers.",
+    "Display consistency does not establish original private prepared capability, active intent, peer acceptance, finality, or current chain state.",
+    "lastValidBlockHeight is format-checked supplied metadata, absent from message encoding.",
+    "ProgramData/artifact hashes originate in supplied bound trade, absent from the prepared display view; same-binding alternative registry pins cannot be authenticated as the original preparation pins.",
+    "No claim that arbitrary JavaScript Proxy traps are side-effect free.",
+    "Unknown fees and rent remain null and principal is separate."
+  ],
+  "plannedIndependentProbes": [
+    "Same-binding trade with alternate registry pins documents supplied-metadata provenance rather than original-handle authentication.",
+    "Display after cancellation/profile change remains non-authoritative and performs no I/O.",
+    "Projection output and consistently copied prepared values cannot confirm; original handle remains usable until independently revoked.",
+    "Relevant nested own accessors and metadata changes do not bypass promised data-binding checks."
+  ]
+}

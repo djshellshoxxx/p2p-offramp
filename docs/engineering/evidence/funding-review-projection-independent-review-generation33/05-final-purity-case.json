@@ -1,0 +1,47 @@
+{
+  "name": "05-final-purity-case",
+  "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+  "tree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-name-pattern=^projection and fixed refusals perform no additional port, clock, random or network operation$",
+    "packages/chain-solana/test/funding-review.test.mjs"
+  ],
+  "startedAt": "2026-11-20T19:45:49.705614+00:00",
+  "completedAt": "2026-11-20T19:45:50.440845+00:00",
+  "exitCode": 0,
+  "sourceStatusAtStart": "",
+  "sourceUnchanged": true,
+  "sourceStatusAtEnd": "",
+  "scriptInputs": [
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/scripts/test-support/register-tsx.mjs",
+      "bytes": 86,
+      "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33/packages/chain-solana/test/funding-review.test.mjs",
+      "bytes": 15971,
+      "sha256": "21441f4e800767198927e6896626b7c065c444b186326a9c868c5e3b925afd8f"
+    }
+  ],
+  "rawBytes": 226,
+  "rawSha256": "8e837732bce8e355287ee21ae6bd0938a4a083fb4266a2e41e5df67a5b5156d3",
+  "gzipBytes": 181,
+  "gzipSha256": "1bce79642dd75030114038c1417fdea413231ce0a1f251e2b0c132a4fe591751",
+  "gzipMtime": 0,
+  "summary": [
+    "\u2139 tests 1",
+    "\u2139 suites 0",
+    "\u2139 pass 1",
+    "\u2139 fail 0",
+    "\u2139 cancelled 0",
+    "\u2139 skipped 0",
+    "\u2139 todo 0",
+    "\u2139 duration_ms 624.553139"
+  ]
+}

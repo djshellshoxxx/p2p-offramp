@@ -1,0 +1,91 @@
+{
+  "authorEvidence": "29939815306494ca13a09741eb97c004b0dab781",
+  "authorTree": "d0e50bc890d84f49972ee006f97358362900426d",
+  "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+  "sourceTree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+  "documentationPaths": 30,
+  "verifiedArtifacts": 26,
+  "sourceFiles": 4,
+  "nonDocumentationEntriesExact": 1032,
+  "executionSnapshots": [
+    {
+      "label": "01-baseline",
+      "source": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+      "executionTree": "15cc2d67e3d12e916fa2714f73c8bb8a3ff54399",
+      "exitCode": 1,
+      "counts": {
+        "tests": 48,
+        "pass": 1,
+        "fail": 47,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "label": "02-projection-and-boundaries",
+      "source": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+      "executionTree": "1d3d104f16ce51bf2caf57934afebbfebc7f3046",
+      "exitCode": 1,
+      "counts": {
+        "tests": 53,
+        "pass": 52,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "label": "03-frozen-focused-adjacent",
+      "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+      "executionTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+      "exitCode": 0,
+      "counts": {
+        "tests": 103,
+        "pass": 103,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "label": "04-frozen-package-types",
+      "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+      "executionTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+      "exitCode": 0,
+      "counts": {}
+    },
+    {
+      "label": "05-frozen-import-boundaries",
+      "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+      "executionTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+      "exitCode": 0,
+      "counts": {}
+    },
+    {
+      "label": "06-frozen-whitespace",
+      "source": "31ae6627a6b14a4ef40f7d81c98b04470a30aa1a",
+      "executionTree": "44d8e88b8880f2f971aeafa8e64d3887463db4be",
+      "exitCode": 0,
+      "counts": {}
+    },
+    {
+      "label": "07-final-projection-boundaries",
+      "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "executionTree": "93412d5a9c5badae03ab3a239fc5b44d7042a21d",
+      "exitCode": 0,
+      "counts": {
+        "tests": 53,
+        "pass": 53,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    }
+  ],
+  "separateEvidenceWhitespaceVerified": true,
+  "completeWhitespace": "passed"
+}

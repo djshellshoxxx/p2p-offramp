@@ -1,0 +1,57 @@
+import datetime
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import sys
+
+root = Path('/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33')
+repo = Path('/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33')
+name, expected_source, *command = sys.argv[1:]
+assert command
+root.mkdir(parents=True, exist_ok=True)
+raw_path = root / (name + '.log')
+json_path = root / (name + '.json')
+assert not raw_path.exists() and not json_path.exists(), 'Do not overwrite an earlier run'
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=repo, text=True).strip()
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+source = git('rev-parse', 'HEAD')
+assert source == expected_source
+tree = git('rev-parse', 'HEAD^{tree}')
+status = git('status', '--porcelain')
+input_hashes = []
+for argument in command:
+    path = Path(argument)
+    if not path.is_absolute():
+        path = repo / path
+    if path.is_file() and path.suffix in {'.py', '.mjs', '.ts', '.tsx'}:
+        data = path.read_bytes()
+        input_hashes.append({'path': str(path), 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()})
+started = now()
+with raw_path.open('xb') as output:
+    run = subprocess.run(command, cwd=repo, stdout=output, stderr=subprocess.STDOUT)
+raw = raw_path.read_bytes()
+compressed = gzip.compress(raw, mtime=0)
+(root / (name + '.log.gz')).write_bytes(compressed)
+summary = [line for line in raw.decode('utf-8', errors='replace').splitlines()
+           if re.match(r'^[#ℹ]\s+(?:tests|suites|pass|fail|cancelled|skipped|todo|duration_ms)\s', line)]
+receipt = {
+    'name': name, 'source': source, 'tree': tree, 'cwd': str(repo),
+    'command': command, 'startedAt': started, 'completedAt': now(),
+    'exitCode': run.returncode, 'sourceStatusAtStart': status,
+    'sourceUnchanged': source == git('rev-parse', 'HEAD'),
+    'sourceStatusAtEnd': git('status', '--porcelain'), 'scriptInputs': input_hashes,
+    'rawBytes': len(raw), 'rawSha256': hashlib.sha256(raw).hexdigest(),
+    'gzipBytes': len(compressed), 'gzipSha256': hashlib.sha256(compressed).hexdigest(),
+    'gzipMtime': 0, 'summary': summary,
+}
+json_path.write_text(json.dumps(receipt, indent=2) + '\n')
+print(json.dumps({'receipt': str(json_path), 'exitCode': run.returncode, 'summary': summary}), flush=True)
+raise SystemExit(run.returncode)
