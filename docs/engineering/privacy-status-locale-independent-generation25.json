@@ -1,0 +1,357 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-privacy-status-locale-review",
+  "generation": 25,
+  "recordedAt": "2026-11-20T17:49:48.976510+00:00",
+  "reviewer": "/root/privacy_locale_review_g25",
+  "reviewBranch": "codex/privacy-status-locale-independent-review-g25-20261120",
+  "worktree": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-review-g25",
+  "redWorktree": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-review-red-g25",
+  "report": "docs/engineering/INDEPENDENT_PRIVACY_STATUS_LOCALE_REVIEW_GENERATION25_20261120.md",
+  "reportSha256": "3e13293fa8f573129239b742b24d6417c99da287e6d15bee030fdef6db93369b",
+  "sourceScope": {
+    "checkedAt": "2026-11-20T17:47:52.285526+00:00",
+    "baseCommit": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+    "baseTree": "7a474d82db7668b0ebbff26ae7a9d75d5030db7a",
+    "redCommit": "cc395f47cd4db5f5e15eba54fd1cce00b95c65af",
+    "redTree": "3a414901d2b324e6f32dee61d759d65a706cdf14",
+    "sourceCommit": "ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+    "sourceTree": "a47ce1cb2d5803d799e82c8d54e71621a38559ce",
+    "baseEntries": 2704,
+    "sourceEntries": 2705,
+    "unchangedExistingEntries": 2703,
+    "changedEntries": [
+      {
+        "path": "apps/web/src/ui/PrivacyStatusPanel.tsx",
+        "baseEntry": "100644 blob 9d04ae799869a8b5cae709c093839111ffd37187",
+        "sourceEntry": "100644 blob 5ecc366a0bd39a63f52a0e3dafb6c98bc4724246",
+        "sha256": "a90286d8688f040112d696eedb17ef6418ae902eea5c02b7aee49605e1f13ee9"
+      },
+      {
+        "path": "apps/web/test/privacy-status-locale.test.mjs",
+        "baseEntry": null,
+        "sourceEntry": "100644 blob c4291eec6942aea868ab18fca62be6a6be5a2528",
+        "sha256": "7f5732cbf6dd181569fb264f485f9f2d6f5c5334547ab26640d074060fabf61f"
+      }
+    ],
+    "redIsTestOnlyChildOfBase": true,
+    "repairIsDirectChildOfRed": true,
+    "redPanelExactlyEqualsBase": true,
+    "redAndGreenTestExactlyEqual": true,
+    "unchangedLifecycleBlock": {
+      "from": "export type PrivacyStatusTransport",
+      "untilExclusive": "  function indicator(",
+      "bytes": 4149,
+      "sha256": "ef3b6469a6282ed12c87ecf537e909fa5738f0f9f38de58e1d85191272a2ee58"
+    },
+    "nonDocumentationEntries": 1016,
+    "nonDocumentationEntriesSha256": "10d6e3acd029489cd12a1e72a44989e8e91bf94449074f48d75d867ddb43e18d",
+    "dependencyCopy": {
+      "mode": "physical copies",
+      "source": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-g25/node_modules",
+      "reviewRootIsSymlink": false,
+      "redRootIsSymlink": false
+    },
+    "nodeVersion": "v24.22.3",
+    "pythonVersion": "Python 3.12.14",
+    "packageLockSha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72",
+    "installedVersions": {
+      "react": "19.3.1",
+      "react-dom": "19.3.1",
+      "vite": "8.3.5",
+      "typescript": "7.0.2"
+    },
+    "trackedWorktreeMatchesSource": true
+  },
+  "reviewedReferences": [
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.3_localization/spec-natural-language-localization-tooltips-and-accessibility.md",
+      "sha256": "70dfc4c6ce7d578ccfda95377ce09d8718226e3dbc43629ee58591ca8fa57921"
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.10_security_modes/module_5.10.2_privacy_indicators/spec-ui-privacy-status-indicators.md",
+      "sha256": "a937345385c89d447b42cf827754fe1d5f747a7c2d0ec6eabaea34f6bd36201a"
+    },
+    {
+      "path": "apps/web/src/ui/PrivacyStatusPanel.tsx",
+      "sha256": "a90286d8688f040112d696eedb17ef6418ae902eea5c02b7aee49605e1f13ee9"
+    },
+    {
+      "path": "apps/web/src/ui/App.tsx",
+      "sha256": "fdc09f3c336388e7cbececad27446d4ab2d5660e08e3d065585f63101f441d17"
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "sha256": "dc318a21179b6a8fa64f8decd171964c3acac27abfab67e135cb3350ea767487"
+    },
+    {
+      "path": "apps/web/src/ui/locale/runtime.ts",
+      "sha256": "d957c067945fb439455b1747c4edb79eff9223ac385412a75911434784ff3bcd"
+    },
+    {
+      "path": "apps/web/src/ui/locale/bundled.ts",
+      "sha256": "50cd19e37c7190e914e21fd5431dd32636b4cabe06d18e6bb0002fb477f452d0"
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "sha256": "aa5be2732df1c73a57f85809fb7bc5289036ae4f4dc2d8fda6b6d04ea4de86c7"
+    },
+    {
+      "path": "packages/domain/src/privacy-view.ts",
+      "sha256": "78f87e101f3b73e4bec7a19451d59063daca9c33245a65cf9dda1f89ae78e715"
+    },
+    {
+      "path": "apps/web/test/privacy-status-locale.test.mjs",
+      "sha256": "7f5732cbf6dd181569fb264f485f9f2d6f5c5334547ab26640d074060fabf61f"
+    },
+    {
+      "path": "apps/web/test/privacy-status-panel.render.test.mjs",
+      "sha256": "81ea403a3c5750c9ca677bd85a97c3a0a7369be8764581260155ae155b04b4f2"
+    },
+    {
+      "path": "apps/web/test/privacy-status-transport.render.test.mjs",
+      "sha256": "ea0eacb24ef02cccf88f4105a2213a858338a7b88a00895f403fc3f1c8e662a1"
+    },
+    {
+      "path": "docs/engineering/CONTINUATION_GENERATION21_20261120.md",
+      "sha256": "c5531a8ac37c31dba7cdcadf27389dc10a49be29cb370590ce379edd4c1e07a4"
+    },
+    {
+      "path": "docs/engineering/CONTINUATION_GENERATIONS22_23_20261120.md",
+      "sha256": "f72e4795ac5d88a9df1c348d56134c9bf3a67fcfc365059ea89da59d1fca5cf7"
+    },
+    {
+      "path": "docs/engineering/INDEPENDENT_VAULT_QR_LOCALE_REVIEW_GENERATION21_20261120.md",
+      "sha256": "884053b7df9a1f78ecdcdb778419f1762f1017501b5ebf87be5346df91e704ff"
+    },
+    {
+      "path": "docs/engineering/INDEPENDENT_RUNTIME_BACKUP_SELECTION_REVIEW_GENERATION22_20261120.md",
+      "sha256": "5ee2172195f1396dfd85b46a17affe2c040be818a3b8af6a4386cbcce747af59"
+    }
+  ],
+  "findings": {
+    "standards": [],
+    "spec": []
+  },
+  "decision": "No actionable finding in the assigned frozen G25 display repair.",
+  "executions": [
+    {
+      "label": "red",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-review-red-g25",
+      "sourceCommit": "cc395f47cd4db5f5e15eba54fd1cce00b95c65af",
+      "sourceTree": "3a414901d2b324e6f32dee61d759d65a706cdf14",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=1",
+        "apps/web/test/privacy-status-locale.test.mjs"
+      ],
+      "shellCommand": "node --import ./scripts/test-support/register-tsx.mjs --test --test-concurrency=1 apps/web/test/privacy-status-locale.test.mjs",
+      "startedAt": "2026-11-20T17:46:12.385518+00:00",
+      "endedAt": "2026-11-20T17:46:13.907221+00:00",
+      "elapsedSeconds": 1.52171,
+      "timeoutSeconds": 120.0,
+      "timedOut": false,
+      "expectedExitCode": 1,
+      "exitCode": 1,
+      "expectationMet": true,
+      "summary": {
+        "tests": 8,
+        "suites": 0,
+        "pass": 0,
+        "fail": 8,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "docs/execution/privacy-status-locale-independent-generation25-20261120/red.log.gz",
+      "rawBytes": 12425,
+      "compressedBytes": 1365,
+      "decodedSha256": "971c35d50c8be0b9dabbe9540ab5ad091b87db255125911023e26ea87f48b5c3",
+      "compressedSha256": "56fc6d648a09700cc94171d8cd1c1e2b95bfad0f125617908f43bc181bece327"
+    },
+    {
+      "label": "focused",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-review-g25",
+      "sourceCommit": "ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+      "sourceTree": "a47ce1cb2d5803d799e82c8d54e71621a38559ce",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=2",
+        "apps/web/test/privacy-status-locale.test.mjs",
+        "apps/web/test/privacy-status-panel.render.test.mjs",
+        "apps/web/test/privacy-status-transport.render.test.mjs",
+        "apps/web/test/locale-runtime.test.mjs",
+        "apps/web/test/locale-selector.render.test.mjs",
+        "apps/web/test/app-shell-locale.test.mjs",
+        "packages/domain/test/privacy-view.test.mjs"
+      ],
+      "shellCommand": "node --import ./scripts/test-support/register-tsx.mjs --test --test-concurrency=2 apps/web/test/privacy-status-locale.test.mjs apps/web/test/privacy-status-panel.render.test.mjs apps/web/test/privacy-status-transport.render.test.mjs apps/web/test/locale-runtime.test.mjs apps/web/test/locale-selector.render.test.mjs apps/web/test/app-shell-locale.test.mjs packages/domain/test/privacy-view.test.mjs",
+      "startedAt": "2026-11-20T17:46:12.391726+00:00",
+      "endedAt": "2026-11-20T17:46:15.094805+00:00",
+      "elapsedSeconds": 2.703092,
+      "timeoutSeconds": 180.0,
+      "timedOut": false,
+      "expectedExitCode": 0,
+      "exitCode": 0,
+      "expectationMet": true,
+      "summary": {
+        "tests": 51,
+        "suites": 0,
+        "pass": 51,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": "docs/execution/privacy-status-locale-independent-generation25-20261120/focused.log.gz",
+      "rawBytes": 5607,
+      "compressedBytes": 2316,
+      "decodedSha256": "83705d909c83af467dc72721c757dfd4c405b92ba88b05a3ae5dee2424c4df8e",
+      "compressedSha256": "5345ac1fc4ac3584bf133f4d57290f2d2d3f21f80129bcbfb2a615fbc39d0c44"
+    },
+    {
+      "label": "ui-typecheck",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-review-g25",
+      "sourceCommit": "ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+      "sourceTree": "a47ce1cb2d5803d799e82c8d54e71621a38559ce",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.ui.json",
+        "--noEmit"
+      ],
+      "shellCommand": "node node_modules/typescript/bin/tsc -p apps/web/tsconfig.ui.json --noEmit",
+      "startedAt": "2026-11-20T17:46:18.510910+00:00",
+      "endedAt": "2026-11-20T17:46:20.075991+00:00",
+      "elapsedSeconds": 1.565091,
+      "timeoutSeconds": 90.0,
+      "timedOut": false,
+      "expectedExitCode": 0,
+      "exitCode": 0,
+      "expectationMet": true,
+      "summary": {},
+      "log": "docs/execution/privacy-status-locale-independent-generation25-20261120/ui-typecheck.log.gz",
+      "rawBytes": 0,
+      "compressedBytes": 20,
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "label": "source-scope",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-review-g25",
+      "sourceCommit": "ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+      "sourceTree": "a47ce1cb2d5803d799e82c8d54e71621a38559ce",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/privacy_locale_review_g25_scope.py"
+      ],
+      "shellCommand": "python /workspace/scratch/dcf03ef9bee8/privacy_locale_review_g25_scope.py",
+      "startedAt": "2026-11-20T17:47:52.144176+00:00",
+      "endedAt": "2026-11-20T17:47:52.317658+00:00",
+      "elapsedSeconds": 0.173487,
+      "timeoutSeconds": 30.0,
+      "timedOut": false,
+      "expectedExitCode": 0,
+      "exitCode": 0,
+      "expectationMet": true,
+      "summary": {},
+      "log": "docs/execution/privacy-status-locale-independent-generation25-20261120/source-scope.log.gz",
+      "rawBytes": 2134,
+      "compressedBytes": 1123,
+      "decodedSha256": "0b16e072c79f1fecdf425ed02a38ad2e0498b4d9c12dacd396f8c875543322b7",
+      "compressedSha256": "e52122acef130d2e70356241d2cb81b82e8e8b3bd7b8b205bc3b7c8a7c62325e"
+    },
+    {
+      "label": "source-whitespace",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-privacy-locale-review-g25",
+      "sourceCommit": "ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+      "sourceTree": "a47ce1cb2d5803d799e82c8d54e71621a38559ce",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "477777dc152cd3148ba7f25a75ce8f00dc1b03b5...ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b"
+      ],
+      "shellCommand": "git diff --check 477777dc152cd3148ba7f25a75ce8f00dc1b03b5...ad7d5bb1487f6ce612a8ac2a69058e21b27aec1b",
+      "startedAt": "2026-11-20T17:47:52.145976+00:00",
+      "endedAt": "2026-11-20T17:47:52.163853+00:00",
+      "elapsedSeconds": 0.01788,
+      "timeoutSeconds": 30.0,
+      "timedOut": false,
+      "expectedExitCode": 0,
+      "exitCode": 0,
+      "expectationMet": true,
+      "summary": {},
+      "log": "docs/execution/privacy-status-locale-independent-generation25-20261120/source-whitespace.log.gz",
+      "rawBytes": 0,
+      "compressedBytes": 20,
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    }
+  ],
+  "focusedTestCounts": {
+    "apps/web/test/privacy-status-locale.test.mjs": 8,
+    "apps/web/test/privacy-status-panel.render.test.mjs": 4,
+    "apps/web/test/privacy-status-transport.render.test.mjs": 1,
+    "apps/web/test/locale-runtime.test.mjs": 7,
+    "apps/web/test/locale-selector.render.test.mjs": 5,
+    "apps/web/test/app-shell-locale.test.mjs": 10,
+    "packages/domain/test/privacy-view.test.mjs": 16
+  },
+  "countInterpretation": "51 is one focused repaired-source invocation including the eight new cases. It overlaps author and coordinator selections; counts are not additive. Eight expected failures are a separate exact RED execution.",
+  "typecheckScope": "apps/web/tsconfig.ui.json only",
+  "lifecycleConclusion": "The 4149-byte reader/resource block is unchanged. Locale switches retain resources at the fixed clock tested. Existing per-render observation reads and deadline renewal when fresh observation time advances remain; zero reads or renewal under advancing time is not claimed.",
+  "fixtureScope": {
+    "catalog": "complete synthetic draft fixture-rtl",
+    "productionAlternateLocaleAdded": false,
+    "fundsLocaleEligible": false,
+    "nativeBrowserExecuted": false,
+    "translationReviewClaimed": false,
+    "rtlLayoutAcceptanceClaimed": false
+  },
+  "releaseEnabled": 0,
+  "excluded": [
+    "full suite",
+    "build",
+    "hosted checks",
+    "native browser",
+    "1800-second financial journeys",
+    "remote mutations",
+    "production trust",
+    "deployment",
+    "release",
+    "separate UI rate-limit idea"
+  ],
+  "packaging": {
+    "evidenceOnly": true,
+    "logCount": 5,
+    "compression": "gzip with mtime 0",
+    "rawLogDirectory": "/workspace/scratch/dcf03ef9bee8/privacy-locale-review-g25-raw",
+    "allCompressedLogsRoundTripToOriginalRawBytes": true
+  },
+  "supportingArtifacts": [
+    {
+      "path": "docs/execution/privacy-status-locale-independent-generation25-20261120/source-scope.py.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/privacy_locale_review_g25_scope.py",
+      "decodedBytes": 4048,
+      "compressedBytes": 1599,
+      "decodedSha256": "00b6a4ae6d046c6c8a79c272afa5f0f0b42dc19827796bb72f84fc303bcb730d",
+      "compressedSha256": "3463aa9dd46ae1c2b3fa751861bfdc0a10f00127cf270c74fe95ec6f885c0197"
+    },
+    {
+      "path": "docs/execution/privacy-status-locale-independent-generation25-20261120/execution-wrapper.py.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/privacy_locale_review_g25_run.py",
+      "decodedBytes": 2425,
+      "compressedBytes": 1131,
+      "decodedSha256": "e753ba31a8b0367bc32512bb6f87a374a652f4cfdd3e08e8efc35cff64b9bdc6",
+      "compressedSha256": "20b2ca5ffb0ec3ae81f6e9121de7a319ad68b4ff215384c1f8befc9b7f20bff6"
+    }
+  ]
+}
