@@ -1,0 +1,41 @@
+{
+  "label": "06-frozen-boundaries",
+  "command": [
+    "npm",
+    "run",
+    "check:boundaries"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-solana-prepared-funding-g32",
+  "source": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+  "tree": "1ed7fc7a7181e0ee964183642e01319468316fce",
+  "statusBefore": "",
+  "sourceFiles": {
+    "packages/chain-solana/src/compose.ts": {
+      "bytes": 27107,
+      "sha256": "969ef26ac76c464d86c8269ed47a3fd2d0402320607299f498a0ff42eb97722a"
+    },
+    "packages/chain-solana/test/prepared-funding.test.mjs": {
+      "bytes": 21251,
+      "sha256": "06f4b947e5caf718003af442f8ae984f6a1a543000f69103b89b8ab34cad6a9d"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 17475,
+      "sha256": "07e57c9a4db863ca06596affa4c0748bfd96aa4cb785fa5fdb97b1ac02db4abd"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/06-frozen-boundaries.patch",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "startedAt": "2026-11-20T19:17:40.823734+00:00",
+  "completedAt": "2026-11-20T19:17:42.229613+00:00",
+  "exitCode": 0,
+  "counts": {},
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/06-frozen-boundaries.log",
+    "bytes": 392,
+    "sha256": "171459349881532fab298d83fadbd8a8f2a269b3197f7642193a31fe471deb39"
+  },
+  "statusAfter": ""
+}

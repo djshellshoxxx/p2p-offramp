@@ -1,0 +1,697 @@
+{
+  "version": 1,
+  "generation": 32,
+  "recordedAt": "2026-11-20T19:22:34.127979+00:00",
+  "base": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+  "baseTree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+  "initialSource": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+  "initialSourceTree": "1ed7fc7a7181e0ee964183642e01319468316fce",
+  "source": "252dd1603f12eab69313ef25b538be1b040bc508",
+  "sourceTree": "65667d0089b986250b5f8697518863069368d855",
+  "sourceParent": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+  "sourceFiles": [
+    {
+      "path": "packages/chain-solana/README.md",
+      "bytes": 17475,
+      "sha256": "07e57c9a4db863ca06596affa4c0748bfd96aa4cb785fa5fdb97b1ac02db4abd",
+      "gitEntry": "100644 blob fac5bfaa2e67e91357e2fc2f3716a53ee038e4b1"
+    },
+    {
+      "path": "packages/chain-solana/src/compose.ts",
+      "bytes": 27107,
+      "sha256": "969ef26ac76c464d86c8269ed47a3fd2d0402320607299f498a0ff42eb97722a",
+      "gitEntry": "100644 blob b74aab8da470fe7cf62f058a36d8303fc9f44cb7"
+    },
+    {
+      "path": "packages/chain-solana/test/prepared-funding.test.mjs",
+      "bytes": 21266,
+      "sha256": "fec56fa82e3e26f643ca01195b24db3ce136d6cc5534001beb488ccdfdd52608",
+      "gitEntry": "100644 blob 201e13bd9b7d8a44094c5e729eae326d23753748"
+    }
+  ],
+  "sourcePatchSha256": "b507141eacee5005041a26ac3632515af57f903ba6c77350feb9d219c54c3f99",
+  "composition": {
+    "baselineEntries": 2995,
+    "sourceEntries": 2996,
+    "nonDocsEntries": 1030,
+    "unchangedBaselineEntries": 2993,
+    "modifiedPaths": [
+      "packages/chain-solana/README.md",
+      "packages/chain-solana/src/compose.ts"
+    ],
+    "addedPaths": [
+      "packages/chain-solana/test/prepared-funding.test.mjs"
+    ],
+    "deletedPaths": [],
+    "allOtherBaselineEntriesExact": true
+  },
+  "commands": [
+    {
+      "label": "01-missing-capability-baseline",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "packages/chain-solana/test/prepared-funding.test.mjs"
+      ],
+      "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+      "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+      "startedAt": "2026-11-20T19:15:11.108731+00:00",
+      "completedAt": "2026-11-20T19:15:12.049424+00:00",
+      "exitCode": 1,
+      "counts": {
+        "tests": 50,
+        "pass": 1,
+        "fail": 49,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/solana-prepared-funding-generation32-20261120/01-missing-capability-baseline.json",
+      "output": "docs/execution/solana-prepared-funding-generation32-20261120/01-missing-capability-baseline.log.gz",
+      "sourcePatch": "docs/execution/solana-prepared-funding-generation32-20261120/01-missing-capability-baseline.patch.gz"
+    },
+    {
+      "label": "02-prepared-funding-initial",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "packages/chain-solana/test/prepared-funding.test.mjs"
+      ],
+      "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+      "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+      "startedAt": "2026-11-20T19:16:12.881147+00:00",
+      "completedAt": "2026-11-20T19:16:14.430743+00:00",
+      "exitCode": 0,
+      "counts": {
+        "tests": 50,
+        "pass": 50,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/solana-prepared-funding-generation32-20261120/02-prepared-funding-initial.json",
+      "output": "docs/execution/solana-prepared-funding-generation32-20261120/02-prepared-funding-initial.log.gz",
+      "sourcePatch": "docs/execution/solana-prepared-funding-generation32-20261120/02-prepared-funding-initial.patch.gz"
+    },
+    {
+      "label": "03-typecheck-initial",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+      "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+      "startedAt": "2026-11-20T19:16:49.057087+00:00",
+      "completedAt": "2026-11-20T19:16:52.024549+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "receipt": "docs/execution/solana-prepared-funding-generation32-20261120/03-typecheck-initial.json",
+      "output": "docs/execution/solana-prepared-funding-generation32-20261120/03-typecheck-initial.log.gz",
+      "sourcePatch": "docs/execution/solana-prepared-funding-generation32-20261120/03-typecheck-initial.patch.gz"
+    },
+    {
+      "label": "04-source-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+      "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+      "startedAt": "2026-11-20T19:17:20.305191+00:00",
+      "completedAt": "2026-11-20T19:17:20.339749+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "receipt": "docs/execution/solana-prepared-funding-generation32-20261120/04-source-whitespace.json",
+      "output": "docs/execution/solana-prepared-funding-generation32-20261120/04-source-whitespace.log.gz",
+      "sourcePatch": "docs/execution/solana-prepared-funding-generation32-20261120/04-source-whitespace.patch.gz"
+    },
+    {
+      "label": "05-frozen-solana-suite",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=4",
+        "packages/chain-solana/test/acceptance-vectors.test.mjs",
+        "packages/chain-solana/test/acceptance.test.mjs",
+        "packages/chain-solana/test/adapter.test.mjs",
+        "packages/chain-solana/test/address.test.mjs",
+        "packages/chain-solana/test/bind.test.mjs",
+        "packages/chain-solana/test/boundary.test.mjs",
+        "packages/chain-solana/test/codec.test.mjs",
+        "packages/chain-solana/test/fixture.test.mjs",
+        "packages/chain-solana/test/identity.test.mjs",
+        "packages/chain-solana/test/independent-expiry-context.test.mjs",
+        "packages/chain-solana/test/independent-recovery-compatibility.test.mjs",
+        "packages/chain-solana/test/independent-review-regressions.test.mjs",
+        "packages/chain-solana/test/independent-vault-dispatch.test.mjs",
+        "packages/chain-solana/test/instructions.test.mjs",
+        "packages/chain-solana/test/intent.test.mjs",
+        "packages/chain-solana/test/layout.test.mjs",
+        "packages/chain-solana/test/lifecycle.test.mjs",
+        "packages/chain-solana/test/message.test.mjs",
+        "packages/chain-solana/test/offchain.test.mjs",
+        "packages/chain-solana/test/payout.test.mjs",
+        "packages/chain-solana/test/plan.test.mjs",
+        "packages/chain-solana/test/policy.test.mjs",
+        "packages/chain-solana/test/prepared-actions.test.mjs",
+        "packages/chain-solana/test/prepared-funding.test.mjs",
+        "packages/chain-solana/test/reader.test.mjs",
+        "packages/chain-solana/test/reconciliation-context.test.mjs",
+        "packages/chain-solana/test/recovery.test.mjs",
+        "packages/chain-solana/test/replay.test.mjs",
+        "packages/chain-solana/test/settlement.test.mjs",
+        "packages/chain-solana/test/vaultjournal.test.mjs",
+        "packages/chain-solana/test/wallet.test.mjs",
+        "packages/chain-solana/test/window.test.mjs"
+      ],
+      "source": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+      "tree": "1ed7fc7a7181e0ee964183642e01319468316fce",
+      "startedAt": "2026-11-20T19:17:20.681011+00:00",
+      "completedAt": "2026-11-20T19:17:37.594482+00:00",
+      "exitCode": 1,
+      "counts": {
+        "tests": 367,
+        "pass": 366,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/solana-prepared-funding-generation32-20261120/05-frozen-solana-suite.json",
+      "output": "docs/execution/solana-prepared-funding-generation32-20261120/05-frozen-solana-suite.log.gz",
+      "sourcePatch": "docs/execution/solana-prepared-funding-generation32-20261120/05-frozen-solana-suite.patch.gz"
+    },
+    {
+      "label": "06-frozen-boundaries",
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "source": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+      "tree": "1ed7fc7a7181e0ee964183642e01319468316fce",
+      "startedAt": "2026-11-20T19:17:40.823734+00:00",
+      "completedAt": "2026-11-20T19:17:42.229613+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "receipt": "docs/execution/solana-prepared-funding-generation32-20261120/06-frozen-boundaries.json",
+      "output": "docs/execution/solana-prepared-funding-generation32-20261120/06-frozen-boundaries.log.gz",
+      "sourcePatch": "docs/execution/solana-prepared-funding-generation32-20261120/06-frozen-boundaries.patch.gz"
+    },
+    {
+      "label": "07-corrected-package-boundary",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "packages/chain-solana/test/boundary.test.mjs",
+        "packages/chain-solana/test/prepared-funding.test.mjs"
+      ],
+      "source": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+      "tree": "1ed7fc7a7181e0ee964183642e01319468316fce",
+      "startedAt": "2026-11-20T19:19:46.974665+00:00",
+      "completedAt": "2026-11-20T19:19:48.470517+00:00",
+      "exitCode": 0,
+      "counts": {
+        "tests": 55,
+        "pass": 55,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/solana-prepared-funding-generation32-20261120/07-corrected-package-boundary.json",
+      "output": "docs/execution/solana-prepared-funding-generation32-20261120/07-corrected-package-boundary.log.gz",
+      "sourcePatch": "docs/execution/solana-prepared-funding-generation32-20261120/07-corrected-package-boundary.patch.gz"
+    },
+    {
+      "label": "08-corrected-source-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "source": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+      "tree": "1ed7fc7a7181e0ee964183642e01319468316fce",
+      "startedAt": "2026-11-20T19:20:14.732378+00:00",
+      "completedAt": "2026-11-20T19:20:14.777186+00:00",
+      "exitCode": 0,
+      "counts": {},
+      "receipt": "docs/execution/solana-prepared-funding-generation32-20261120/08-corrected-source-whitespace.json",
+      "output": "docs/execution/solana-prepared-funding-generation32-20261120/08-corrected-source-whitespace.log.gz",
+      "sourcePatch": "docs/execution/solana-prepared-funding-generation32-20261120/08-corrected-source-whitespace.patch.gz"
+    },
+    {
+      "label": "09-final-frozen-solana-suite",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=4",
+        "packages/chain-solana/test/acceptance-vectors.test.mjs",
+        "packages/chain-solana/test/acceptance.test.mjs",
+        "packages/chain-solana/test/adapter.test.mjs",
+        "packages/chain-solana/test/address.test.mjs",
+        "packages/chain-solana/test/bind.test.mjs",
+        "packages/chain-solana/test/boundary.test.mjs",
+        "packages/chain-solana/test/codec.test.mjs",
+        "packages/chain-solana/test/fixture.test.mjs",
+        "packages/chain-solana/test/identity.test.mjs",
+        "packages/chain-solana/test/independent-expiry-context.test.mjs",
+        "packages/chain-solana/test/independent-recovery-compatibility.test.mjs",
+        "packages/chain-solana/test/independent-review-regressions.test.mjs",
+        "packages/chain-solana/test/independent-vault-dispatch.test.mjs",
+        "packages/chain-solana/test/instructions.test.mjs",
+        "packages/chain-solana/test/intent.test.mjs",
+        "packages/chain-solana/test/layout.test.mjs",
+        "packages/chain-solana/test/lifecycle.test.mjs",
+        "packages/chain-solana/test/message.test.mjs",
+        "packages/chain-solana/test/offchain.test.mjs",
+        "packages/chain-solana/test/payout.test.mjs",
+        "packages/chain-solana/test/plan.test.mjs",
+        "packages/chain-solana/test/policy.test.mjs",
+        "packages/chain-solana/test/prepared-actions.test.mjs",
+        "packages/chain-solana/test/prepared-funding.test.mjs",
+        "packages/chain-solana/test/reader.test.mjs",
+        "packages/chain-solana/test/reconciliation-context.test.mjs",
+        "packages/chain-solana/test/recovery.test.mjs",
+        "packages/chain-solana/test/replay.test.mjs",
+        "packages/chain-solana/test/settlement.test.mjs",
+        "packages/chain-solana/test/vaultjournal.test.mjs",
+        "packages/chain-solana/test/wallet.test.mjs",
+        "packages/chain-solana/test/window.test.mjs"
+      ],
+      "source": "252dd1603f12eab69313ef25b538be1b040bc508",
+      "tree": "65667d0089b986250b5f8697518863069368d855",
+      "startedAt": "2026-11-20T19:20:34.927117+00:00",
+      "completedAt": "2026-11-20T19:20:52.986692+00:00",
+      "exitCode": 0,
+      "counts": {
+        "tests": 367,
+        "pass": 367,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt": "docs/execution/solana-prepared-funding-generation32-20261120/09-final-frozen-solana-suite.json",
+      "output": "docs/execution/solana-prepared-funding-generation32-20261120/09-final-frozen-solana-suite.log.gz",
+      "sourcePatch": "docs/execution/solana-prepared-funding-generation32-20261120/09-final-frozen-solana-suite.patch.gz"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/01-missing-capability-baseline.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/01-missing-capability-baseline.json",
+      "bytes": 1759,
+      "sha256": "aca73e8623aff28956f08a5020404b83e253a74b3b81f44a0742db4df436a3ad"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/01-missing-capability-baseline.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/01-missing-capability-baseline.log",
+      "rawBytes": 56242,
+      "rawSha256": "f52987379c32ecd93b82241ae1291b92691c3dea3791f7053f629139fffc66ee",
+      "gzipBytes": 2997,
+      "gzipSha256": "a9194cf8802c827a71ac9db91f9a305bac4487cf3feaa550de384cc72ebb0421",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/01-missing-capability-baseline.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/01-missing-capability-baseline.patch",
+      "rawBytes": 21894,
+      "rawSha256": "90a731b4ead2ec390da270f29547eb7272e7b9578381a1b3aa9c4bda151bfe5b",
+      "gzipBytes": 5290,
+      "gzipSha256": "8ed3b3cf4f461266491cddafd8403a5b5a765da3d425489e6a131ddb25129edf",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/02-prepared-funding-initial.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/02-prepared-funding-initial.json",
+      "bytes": 1903,
+      "sha256": "c212e9d0a3ec7a1da13ca0ea59c536a7c1869c9bb35fdf179c3541a8fe8ca61b"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/02-prepared-funding-initial.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/02-prepared-funding-initial.log",
+      "rawBytes": 3556,
+      "rawSha256": "aadd933e326eeb38970225f1d7875357c22aa8e16c7f5beff258e691cbe06f47",
+      "gzipBytes": 1424,
+      "gzipSha256": "c5bf1f7db8180b28f5f456de5e25f08da3e948437ce407aaec25aa820357b47d",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/02-prepared-funding-initial.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/02-prepared-funding-initial.patch",
+      "rawBytes": 34263,
+      "rawSha256": "4b9942c6e0ff1a5fdacdd86da2fb11d0ccac9a5e8396dc42665dcea177487845",
+      "gzipBytes": 8688,
+      "gzipSha256": "e85f105f04db0175091fe55dbe924c896fda6fb2a0e007b62d56eb0903359368",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/03-typecheck-initial.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/03-typecheck-initial.json",
+      "bytes": 1668,
+      "sha256": "391a71b62ac67321167c9dfc4448f080f493d8310e4eff66577187d43bcb9f9a"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/03-typecheck-initial.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/03-typecheck-initial.log",
+      "rawBytes": 341,
+      "rawSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "gzipBytes": 211,
+      "gzipSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/03-typecheck-initial.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/03-typecheck-initial.patch",
+      "rawBytes": 34263,
+      "rawSha256": "4b9942c6e0ff1a5fdacdd86da2fb11d0ccac9a5e8396dc42665dcea177487845",
+      "gzipBytes": 8688,
+      "gzipSha256": "e85f105f04db0175091fe55dbe924c896fda6fb2a0e007b62d56eb0903359368",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/04-source-whitespace.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/04-source-whitespace.json",
+      "bytes": 1713,
+      "sha256": "42c2e5b96ea33ce127e99fbc4d4e3bf7537961fc016da367033ff9b55931ae6f"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/04-source-whitespace.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/04-source-whitespace.log",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/04-source-whitespace.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/04-source-whitespace.patch",
+      "rawBytes": 34341,
+      "rawSha256": "ea56476ba19c86301767ab0e21ef2d7671245433e077af8f81e35b5878bf1886",
+      "gzipBytes": 8712,
+      "gzipSha256": "1660bcc32305eedb586292a50d40db4971371a0b52d758e45a59b3f200a52fda",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/05-frozen-solana-suite.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/05-frozen-solana-suite.json",
+      "bytes": 3357,
+      "sha256": "a073a1b71619a9653d70d1e9c1237a9f2805e878166eadda8250edb467fd5845"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/05-frozen-solana-suite.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/05-frozen-solana-suite.log",
+      "rawBytes": 27481,
+      "rawSha256": "4c2c8078b972733e876ab65bfb48357706f92b8f35aac46e456f23165c0fabd7",
+      "gzipBytes": 10655,
+      "gzipSha256": "89ae826e7361f585975f0722b9f2435cf0d486a614622c002342505355a84aa2",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/05-frozen-solana-suite.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/05-frozen-solana-suite.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/06-frozen-boundaries.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/06-frozen-boundaries.json",
+      "bytes": 1403,
+      "sha256": "5ee7d231bff9765f96318a49f90f06ddfbf588d2562a6c6af5dd260e4f6226bd"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/06-frozen-boundaries.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/06-frozen-boundaries.log",
+      "rawBytes": 392,
+      "rawSha256": "171459349881532fab298d83fadbd8a8f2a269b3197f7642193a31fe471deb39",
+      "gzipBytes": 287,
+      "gzipSha256": "4d73e145c5258e7e67d2b9185efeb6eda0122424a642fd702b009bc488c0bb31",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/06-frozen-boundaries.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/06-frozen-boundaries.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/07-corrected-package-boundary.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/07-corrected-package-boundary.json",
+      "bytes": 1806,
+      "sha256": "f3d1985a673b420a0d5c87e922d875d2857ce343d9339663878baf9ad7a02d3f"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/07-corrected-package-boundary.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/07-corrected-package-boundary.log",
+      "rawBytes": 3804,
+      "rawSha256": "ec3229f741aebaff5f84b2cef45517b1738d046b5a173d34460cb4a3985f069a",
+      "gzipBytes": 1569,
+      "gzipSha256": "54e79ef55a76afa1deacca6491663554a5acb91d4d833aa47b428c11b6672f04",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/07-corrected-package-boundary.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/07-corrected-package-boundary.patch",
+      "rawBytes": 3373,
+      "rawSha256": "3c2864301db4d3280c78194bd419de367c4cc59b9286b16d123ed3790b4ee4a8",
+      "gzipBytes": 1127,
+      "gzipSha256": "0d9e18a061d8a5b58ea6987f02a0810d0847ae87459c2b8687b92da84aa2d4b4",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/08-corrected-source-whitespace.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/08-corrected-source-whitespace.json",
+      "bytes": 1588,
+      "sha256": "3b55dd9d6b1f253dbb0b873fe54dc02e07ba6b4c770ccb5e04dacc59701b4d51"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/08-corrected-source-whitespace.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/08-corrected-source-whitespace.log",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/08-corrected-source-whitespace.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/08-corrected-source-whitespace.patch",
+      "rawBytes": 3373,
+      "rawSha256": "3c2864301db4d3280c78194bd419de367c4cc59b9286b16d123ed3790b4ee4a8",
+      "gzipBytes": 1127,
+      "gzipSha256": "0d9e18a061d8a5b58ea6987f02a0810d0847ae87459c2b8687b92da84aa2d4b4",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/09-final-frozen-solana-suite.json",
+      "kind": "original-command-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/09-final-frozen-solana-suite.json",
+      "bytes": 3375,
+      "sha256": "cb1ab52c3195ca1e0197dbdebe1516b35d46d8ff92063d51a239006f395ae40d"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/09-final-frozen-solana-suite.log.gz",
+      "kind": "complete-command-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/09-final-frozen-solana-suite.log",
+      "rawBytes": 26437,
+      "rawSha256": "01f45b105dab8d10802a13184ed75be68bdf9e440e5765cefd26d7a8a3e3ef57",
+      "gzipBytes": 10286,
+      "gzipSha256": "bc537945a1befed6ee31208e4c3d69aff08f052075b7175ce5e578ad01966fe9",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/09-final-frozen-solana-suite.patch.gz",
+      "kind": "exact-pre-command-source-patch",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/09-final-frozen-solana-suite.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/source-freeze.json",
+      "kind": "original-source-identity-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/source-freeze.json",
+      "bytes": 329,
+      "sha256": "b33cbd45339ecdaa645a761c27be340ccac8ed18df29e328ed65b7825d4870cc"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/corrected-source-freeze.json",
+      "kind": "original-source-identity-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/corrected-source-freeze.json",
+      "bytes": 399,
+      "sha256": "50254318cf4cbceba29c84bf1ad2b810777881c51da280a5033831ee60912e3c"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/formatting-equivalence.json",
+      "kind": "original-source-identity-receipt",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/formatting-equivalence.json",
+      "bytes": 2674,
+      "sha256": "18ae1109f9746e20a680187980c0c0658e838550f34952bdd0746c71f3308927"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/formatting-only.patch.gz",
+      "kind": "exhaustive-formatting-only-correction",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/formatting-only.patch",
+      "rawBytes": 3373,
+      "rawSha256": "3c2864301db4d3280c78194bd419de367c4cc59b9286b16d123ed3790b4ee4a8",
+      "gzipBytes": 1127,
+      "gzipSha256": "0d9e18a061d8a5b58ea6987f02a0810d0847ae87459c2b8687b92da84aa2d4b4",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/formatting-equivalence-initial.log.gz",
+      "kind": "recovered-tool-error-transcript-not-an-original-command-capture",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/formatting-equivalence-initial.log",
+      "rawBytes": 939,
+      "rawSha256": "9e9921d60a2d96eda76c3bd8b192dd3f9bbc7d1ba84b9706d21922f2222fcc7b",
+      "gzipBytes": 454,
+      "gzipSha256": "1d99dc5c12f5c887823f2fed8010b6cf1edb26c9e68cfb2cc6e7738e2219ad9b",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/formatting-equivalence-second.log.gz",
+      "kind": "recovered-tool-error-transcript-not-an-original-command-capture",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/formatting-equivalence-second.log",
+      "rawBytes": 1050,
+      "rawSha256": "da6a9f2abe7e1aa8427a9c2ec73150dc8de0e8b07182c1964d2658025beb4e43",
+      "gzipBytes": 463,
+      "gzipSha256": "870ab72f1f24ee604b1648848de26429f216668730f19a285d3b4a945977407c",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/source/base-to-final.patch.gz",
+      "kind": "complete-baseline-to-source-patch",
+      "origin": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3..252dd1603f12eab69313ef25b538be1b040bc508",
+      "rawBytes": 34362,
+      "rawSha256": "b507141eacee5005041a26ac3632515af57f903ba6c77350feb9d219c54c3f99",
+      "gzipBytes": 8728,
+      "gzipSha256": "97a2aba8f8c37186d8b2580071a3e39a427bd98a3ce5b1f810b8b72b7bbeb810",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/source/non-docs-tree.json",
+      "kind": "exact-non-docs-source-tree",
+      "origin": "252dd1603f12eab69313ef25b538be1b040bc508",
+      "bytes": 120147,
+      "sha256": "0f4faedea0fce176ab883d2b7892fe3cb72ab3c6b68ee2805e92bf89a1ccda16"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/capture-command.py.txt",
+      "kind": "original-command-capture-runner",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-run.py",
+      "bytes": 2965,
+      "sha256": "560e938200e0681837bed3f336b2a182e7426278451ac8c1080a0294d3e0a273"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/package-evidence.py.txt",
+      "kind": "evidence-packager-and-verifier",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-package.py",
+      "bytes": 13089,
+      "sha256": "51ce2ee39e2ad26cb0033dff09cfc299fd0ab17ec045b1f149eec202389b44f1"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-generation32-20261120/packaging-output.log.gz",
+      "kind": "complete-evidence-packager-output",
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/packaging-output.log",
+      "rawBytes": 574,
+      "rawSha256": "e7db956532068a4d7c58e0d443114bac0dd6728748bf6b04d6143e9950611967",
+      "gzipBytes": 343,
+      "gzipSha256": "ed0a91dc5b454f468b9eea725445b83b6d7614491eea8fb8b1f6cb825e57198e",
+      "gzipMtime": 0
+    }
+  ],
+  "qualification": {
+    "baseline": "The absent dedicated prepareFunding method fails 46 explicit availability assertions plus three nested aggregate failures; the intentional exit-only prepare rejection control passes. Production source is exactly the G31 baseline.",
+    "initialChecks": "Initial focused funding and all four TypeScript projects pass before a README-only clarification. Their compose.ts bytes equal the final source; the test differs only by five later line wraps.",
+    "retainedPackageFailure": "Initial frozen package selection is 366/367: its only failure is package-lines-at-most-120 in the new test. No assertion, test name, string literal or production byte was changed by the correction.",
+    "correctedChecks": "The boundary plus funding selection passes 55/55 on the exact corrected source patch. A fresh complete Solana package selection passes 367/367 at clean final source252dd160. Test selections overlap; counts are not additive.",
+    "formattingDiagnostics": "Two optional equivalence probes failed before comparison: the installed TypeScript 7 compiler has no ScriptTarget API, and esbuild is not installed as a direct dependency. Recovered error transcripts are explicitly labeled rather than presented as original runner receipts. The final equivalence proof exhaustively applies five recorded whitespace replacements to produce the complete final fixture.",
+    "dependencies": {
+      "origin": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g31/node_modules",
+      "method": "cp -al; physical immutable hardlinks",
+      "nodeModulesIsSymlink": false,
+      "noInstallOrDependencyMutation": true,
+      "samples": [
+        {
+          "path": "typescript/package.json",
+          "sameDeviceAndInode": true,
+          "linkCountAtCapture": 9,
+          "sha256": "3722b30210616a13a3213ded11575ba6b2dbab10c32a5ef67afca8513e27017e"
+        },
+        {
+          "path": "@noble/curves/package.json",
+          "sameDeviceAndInode": true,
+          "linkCountAtCapture": 9,
+          "sha256": "63d976a6ee72f2dcdc81e6c8bf907edff54eb20e8423218578fbfaf29cff96e6"
+        },
+        {
+          "path": "vite/package.json",
+          "sameDeviceAndInode": true,
+          "linkCountAtCapture": 9,
+          "sha256": "c9586ac07b42763a8a7f6aac6b4a805d70f057bd8c67c43da81c0cc4e5da8293"
+        }
+      ]
+    },
+    "runtime": {
+      "node": "v24.22.3",
+      "npm": "11.19.1",
+      "typescript": "7.0.2"
+    },
+    "independentReview": "Separate reviewer-owned evidence is required and is not claimed by this author receipt.",
+    "limits": [
+      "Local implementation authorization does not approve Tier C merge; root must record authority and current applicable hosted and actual-source/current-target gates.",
+      "Controlled RPC, Wallet Standard, journal and encrypted-vault tests do not establish native browser/validator execution of prepareFunding.",
+      "No browser funding protocol/controller, native driver, mint policy, deployment, endpoint, trust, workflow or default activation was changed.",
+      "No artifact build, browser, validator, financial flow, remote write, full repository suite, package install or real-fund operation ran in this author task."
+    ]
+  }
+}

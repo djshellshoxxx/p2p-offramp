@@ -1,0 +1,215 @@
+from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import json
+import re
+import subprocess
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8/p2p-solana-prepared-funding-g32')
+INPUT = Path('/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence')
+OUT = ROOT / 'docs/execution/solana-prepared-funding-generation32-20261120'
+BASE = '8d566f0e46ee76ee35a957cab0a4358a3da4aeb3'
+INITIAL = '800e633dc47c3bd24065093b50bdc78fa709d3ab'
+SOURCE = '252dd1603f12eab69313ef25b538be1b040bc508'
+TREE = '65667d0089b986250b5f8697518863069368d855'
+PATHS = ['packages/chain-solana/README.md', 'packages/chain-solana/src/compose.ts',
+         'packages/chain-solana/test/prepared-funding.test.mjs']
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def entries(ref):
+    result = {}
+    for row in git('ls-tree', '-r', '-z', ref).split(b'\0'):
+        if row:
+            metadata, name = row.split(b'\t', 1)
+            result[name.decode()] = metadata.decode()
+    return result
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert git('rev-parse', 'HEAD^{tree}').decode().strip() == TREE
+assert not git('diff', '--name-only', SOURCE)
+assert git('diff', '--name-only', BASE, SOURCE).decode().splitlines() == PATHS
+assert not OUT.exists(), 'Original evidence package must not be overwritten'
+OUT.mkdir(parents=True)
+artifacts = []
+
+
+def retain(raw, name, kind, origin):
+    target = OUT / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(raw)
+    row = {'path': str(target.relative_to(ROOT)), 'kind': kind, 'origin': origin,
+           'bytes': len(raw), 'sha256': sha(raw)}
+    artifacts.append(row)
+    return row
+
+
+def compress(raw, name, kind, origin):
+    packed = gzip.compress(raw, mtime=0)
+    target = OUT / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(packed)
+    assert gzip.decompress(target.read_bytes()) == raw
+    assert int.from_bytes(packed[4:8], 'little') == 0
+    row = {'path': str(target.relative_to(ROOT)), 'kind': kind, 'origin': origin,
+           'rawBytes': len(raw), 'rawSha256': sha(raw), 'gzipBytes': len(packed),
+           'gzipSha256': sha(packed), 'gzipMtime': 0}
+    artifacts.append(row)
+    return row
+
+
+expected_counts = {
+    '01-missing-capability-baseline': (50, 1, 49),
+    '02-prepared-funding-initial': (50, 50, 0),
+    '05-frozen-solana-suite': (367, 366, 1),
+    '07-corrected-package-boundary': (55, 55, 0),
+    '09-final-frozen-solana-suite': (367, 367, 0),
+}
+commands = []
+original = {}
+for path in sorted(INPUT.glob('[0-9][0-9]-*.json')):
+    raw = path.read_bytes()
+    data = json.loads(raw)
+    original[data['label']] = data
+    log = Path(data['log']['path']).read_bytes()
+    patch = Path(data['patch']['path']).read_bytes()
+    assert len(log) == data['log']['bytes'] and sha(log) == data['log']['sha256']
+    assert len(patch) == data['patch']['bytes'] and sha(patch) == data['patch']['sha256']
+    counts = {key: int(value) for key, value in re.findall(
+        r'^[#ℹ]\s+(tests|pass|fail|cancelled|skipped|todo)\s+(\d+)', log.decode(), re.M)}
+    assert counts == data['counts']
+    if data['label'] in expected_counts:
+        assert tuple(counts[key] for key in ['tests', 'pass', 'fail']) == expected_counts[data['label']]
+        assert all(counts[key] == 0 for key in ['cancelled', 'skipped', 'todo'])
+    assert data['exitCode'] == (1 if data['label'] in [
+        '01-missing-capability-baseline', '05-frozen-solana-suite'] else 0)
+    receipt = retain(raw, path.name, 'original-command-receipt', str(path))
+    output = compress(log, Path(data['log']['path']).name + '.gz',
+                      'complete-command-output', data['log']['path'])
+    source_patch = compress(patch, Path(data['patch']['path']).name + '.gz',
+                            'exact-pre-command-source-patch', data['patch']['path'])
+    commands.append({'label': data['label'], 'command': data['command'], 'source': data['source'],
+                     'tree': data['tree'], 'startedAt': data['startedAt'], 'completedAt': data['completedAt'],
+                     'exitCode': data['exitCode'], 'counts': counts, 'receipt': receipt['path'],
+                     'output': output['path'], 'sourcePatch': source_patch['path']})
+
+assert len(commands) == 9
+baseline = original['01-missing-capability-baseline']
+assert baseline['source'] == BASE
+assert baseline['statusBefore'] == '?? packages/chain-solana/test/prepared-funding.test.mjs\n'
+for path in PATHS[:2]:
+    assert sha(git('show', BASE + ':' + path)) == baseline['sourceFiles'][path]['sha256']
+assert baseline['sourceFiles'][PATHS[2]]['sha256'] == sha(git('show', INITIAL + ':' + PATHS[2]))
+for label in ['02-prepared-funding-initial', '03-typecheck-initial', '04-source-whitespace']:
+    data = original[label]
+    assert data['sourceFiles'][PATHS[1]]['sha256'] == sha(git('show', SOURCE + ':' + PATHS[1]))
+    assert data['sourceFiles'][PATHS[2]]['sha256'] == sha(git('show', INITIAL + ':' + PATHS[2]))
+for label in ['05-frozen-solana-suite', '06-frozen-boundaries']:
+    data = original[label]
+    assert data['source'] == INITIAL and not data['statusBefore']
+    assert not Path(data['patch']['path']).read_bytes()
+for label in ['07-corrected-package-boundary', '08-corrected-source-whitespace']:
+    data = original[label]
+    assert data['source'] == INITIAL
+    assert Path(data['patch']['path']).read_bytes() == git('diff', '--binary', INITIAL, SOURCE)
+    for path in PATHS:
+        assert data['sourceFiles'][path]['sha256'] == sha(git('show', SOURCE + ':' + path))
+final = original['09-final-frozen-solana-suite']
+assert final['source'] == SOURCE and final['tree'] == TREE and not final['statusBefore']
+assert not Path(final['patch']['path']).read_bytes()
+
+for name in ['source-freeze.json', 'corrected-source-freeze.json', 'formatting-equivalence.json']:
+    retain((INPUT / name).read_bytes(), name, 'original-source-identity-receipt', str(INPUT / name))
+equivalence = json.loads((INPUT / 'formatting-equivalence.json').read_bytes())
+before_fixture = git('show', INITIAL + ':' + PATHS[2]).decode()
+after_fixture = git('show', SOURCE + ':' + PATHS[2]).decode()
+expected_fixture = before_fixture
+for change in equivalence['replacements']:
+    old, new = change['before'], change['after']
+    assert expected_fixture.count(old) == 1
+    assert ''.join(old.split()) == ''.join(new.split())
+    expected_fixture = expected_fixture.replace(old, new)
+assert expected_fixture == after_fixture
+assert equivalence['originalSha256'] == sha(before_fixture.encode())
+assert equivalence['finalSha256'] == sha(after_fixture.encode())
+assert (INPUT / 'formatting-only.patch').read_bytes() == git('diff', '--binary', INITIAL, SOURCE)
+compress((INPUT / 'formatting-only.patch').read_bytes(), 'formatting-only.patch.gz',
+         'exhaustive-formatting-only-correction', str(INPUT / 'formatting-only.patch'))
+for name in ['formatting-equivalence-initial.log', 'formatting-equivalence-second.log']:
+    compress((INPUT / name).read_bytes(), name + '.gz',
+             'recovered-tool-error-transcript-not-an-original-command-capture', str(INPUT / name))
+
+source_patch = git('diff', '--binary', BASE, SOURCE)
+compress(source_patch, 'source/base-to-final.patch.gz', 'complete-baseline-to-source-patch', BASE + '..' + SOURCE)
+before_entries, source_entries = entries(BASE), entries(SOURCE)
+unchanged = [path for path in before_entries if path not in PATHS]
+assert all(before_entries[path] == source_entries[path] for path in unchanged)
+assert not set(before_entries) - set(source_entries)
+non_docs = {path: metadata for path, metadata in source_entries.items() if not path.startswith('docs/')}
+retain((json.dumps(non_docs, indent=2) + '\n').encode(), 'source/non-docs-tree.json',
+       'exact-non-docs-source-tree', SOURCE)
+source_files = []
+for path in PATHS:
+    raw = git('show', SOURCE + ':' + path)
+    assert (ROOT / path).read_bytes() == raw
+    source_files.append({'path': path, 'bytes': len(raw), 'sha256': sha(raw),
+                         'gitEntry': source_entries[path]})
+
+dependencies = ROOT / 'node_modules'
+dependency_origin = Path('/workspace/scratch/dcf03ef9bee8/p2p-continuation-g31/node_modules')
+assert dependencies.is_dir() and not dependencies.is_symlink()
+samples = []
+for name in ['typescript/package.json', '@noble/curves/package.json', 'vite/package.json']:
+    local, source = dependencies / name, dependency_origin / name
+    a, b = local.stat(), source.stat()
+    assert not local.is_symlink()
+    assert (a.st_dev, a.st_ino) == (b.st_dev, b.st_ino)
+    samples.append({'path': name, 'sameDeviceAndInode': True, 'linkCountAtCapture': a.st_nlink,
+                    'sha256': sha(local.read_bytes())})
+
+runner = Path('/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-run.py')
+retain(runner.read_bytes(), 'capture-command.py.txt', 'original-command-capture-runner', str(runner))
+retain(Path(__file__).read_bytes(), 'package-evidence.py.txt', 'evidence-packager-and-verifier', __file__)
+manifest = {
+    'version': 1, 'generation': 32,
+    'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'base': BASE, 'baseTree': git('rev-parse', BASE + '^{tree}').decode().strip(),
+    'initialSource': INITIAL, 'initialSourceTree': git('rev-parse', INITIAL + '^{tree}').decode().strip(),
+    'source': SOURCE, 'sourceTree': TREE, 'sourceParent': INITIAL,
+    'sourceFiles': source_files, 'sourcePatchSha256': sha(source_patch),
+    'composition': {'baselineEntries': len(before_entries), 'sourceEntries': len(source_entries),
+                    'nonDocsEntries': len(non_docs), 'unchangedBaselineEntries': len(unchanged),
+                    'modifiedPaths': [path for path in PATHS if path in before_entries],
+                    'addedPaths': [path for path in PATHS if path not in before_entries],
+                    'deletedPaths': [], 'allOtherBaselineEntriesExact': True},
+    'commands': commands, 'artifacts': artifacts,
+    'qualification': {
+        'baseline': 'The absent dedicated prepareFunding method fails 46 explicit availability assertions plus three nested aggregate failures; the intentional exit-only prepare rejection control passes. Production source is exactly the G31 baseline.',
+        'initialChecks': 'Initial focused funding and all four TypeScript projects pass before a README-only clarification. Their compose.ts bytes equal the final source; the test differs only by five later line wraps.',
+        'retainedPackageFailure': 'Initial frozen package selection is 366/367: its only failure is package-lines-at-most-120 in the new test. No assertion, test name, string literal or production byte was changed by the correction.',
+        'correctedChecks': 'The boundary plus funding selection passes 55/55 on the exact corrected source patch. A fresh complete Solana package selection passes 367/367 at clean final source252dd160. Test selections overlap; counts are not additive.',
+        'formattingDiagnostics': 'Two optional equivalence probes failed before comparison: the installed TypeScript 7 compiler has no ScriptTarget API, and esbuild is not installed as a direct dependency. Recovered error transcripts are explicitly labeled rather than presented as original runner receipts. The final equivalence proof exhaustively applies five recorded whitespace replacements to produce the complete final fixture.',
+        'dependencies': {'origin': str(dependency_origin), 'method': 'cp -al; physical immutable hardlinks',
+                         'nodeModulesIsSymlink': False, 'noInstallOrDependencyMutation': True, 'samples': samples},
+        'runtime': {'node': subprocess.check_output(['node', '--version'], text=True).strip(),
+                    'npm': subprocess.check_output(['npm', '--version'], text=True).strip(),
+                    'typescript': json.loads((dependencies / 'typescript/package.json').read_bytes())['version']},
+        'independentReview': 'Separate reviewer-owned evidence is required and is not claimed by this author receipt.',
+        'limits': ['Local implementation authorization does not approve Tier C merge; root must record authority and current applicable hosted and actual-source/current-target gates.',
+                   'Controlled RPC, Wallet Standard, journal and encrypted-vault tests do not establish native browser/validator execution of prepareFunding.',
+                   'No browser funding protocol/controller, native driver, mint policy, deployment, endpoint, trust, workflow or default activation was changed.',
+                   'No artifact build, browser, validator, financial flow, remote write, full repository suite, package install or real-fund operation ran in this author task.'],
+    },
+}
+(OUT / 'receipt.json').write_text(json.dumps(manifest, indent=2) + '\n')
+print(json.dumps({'source': SOURCE, 'tree': TREE, 'commands': len(commands), 'artifacts': len(artifacts),
+                  'composition': manifest['composition'], 'receipt': str((OUT / 'receipt.json').relative_to(ROOT))}))
