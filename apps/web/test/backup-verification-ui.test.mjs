@@ -196,3 +196,28 @@ test('editing either input clears the displayed check without another service op
     assert.equal(words(ui.render()).includes(receipt.backupSha256), false); assert.equal(ui.calls.length, before);
   }
 });
+
+test('independent: profile selection changes during an ordinary delayed file read never dispatch authentication', async t => {
+  const ui = mounted(t), read = deferred(); ui.selectFile({ reader: () => read.promise }); ui.submit();
+  ui.retire('unlocked'); const bytes = new Uint8Array([11, 22, 33]); read.resolve(bytes.buffer); await turn();
+  assert.equal(ui.calls.length, 0); assert.ok(bytes.every(byte => byte === 0));
+  assert.equal(words(ui.render()).includes(receipt.backupSha256), false);
+});
+
+test('independent: two explicit recheck events before rendering dispatch one request and no file read', async t => {
+  const ui = mounted(t), reply = ui.hold();
+  const handler = nodes(ui.render(), node => node.type === 'button' && words(node) === m.backupVerifyCheck)[0].props.onClick;
+  handler(); handler(); await turn(); assert.equal(ui.calls.length, 1); assert.equal(ui.calls[0].kind, 'check');
+  assert.equal(ui.reads, 0); reply.resolve(ok({ verification: receipt })); await turn();
+  assert.ok(words(ui.render()).includes(receipt.backupSha256));
+});
+
+test('independent: cancelled physical authentication retains file admission until its pending service drains', async t => {
+  const ui = mounted(t), reply = ui.hold(); ui.selectFile(); ui.submit(); await turn();
+  ui.click(m.backupVerifyCancel); ui.selectFile(); ui.submit(); await turn();
+  assert.equal(ui.reads, 1); assert.equal(ui.calls.length, 1);
+  assert.ok(words(ui.render()).includes(errorMessage('BUSY')));
+  reply.resolve(ok(receipt)); await turn(); ui.selectFile(); ui.submit(); await turn();
+  assert.equal(ui.reads, 2); assert.equal(ui.calls.length, 2);
+  assert.ok(words(ui.render()).includes(receipt.backupSha256));
+});
