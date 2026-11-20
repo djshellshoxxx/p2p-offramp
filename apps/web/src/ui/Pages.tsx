@@ -10,6 +10,7 @@ import { BackupVerificationForm } from './BackupVerificationForm.tsx';
 import { RetentionPreviewPanel } from './RetentionPreviewPanel.tsx';
 import { PrivacyStatusPanel } from './PrivacyStatusPanel.tsx';
 import { SignedUpdatePanel } from './SignedUpdatePanel.tsx';
+import { GenericAppShare } from './GenericAppShare.tsx';
 import type { AssetUpdateController } from '../../../../packages/security/update-view.ts';
 import { localeStore, type BundledLocaleStore } from './locale/runtime.ts';
 
@@ -87,7 +88,10 @@ export function Recovery({ services, onOpenRestored }: { readonly services: AppS
   </>;
 }
 
-export function Settings({ diagnostics = null, services = null, scope, updates = null }: { readonly diagnostics?: Diagnostics | null; readonly services?: AppServices | null; readonly scope?: number; readonly updates?: AssetUpdateController | null }) {
+export function Settings({ diagnostics = null, services = null, scope, updates = null, appLink = null }: {
+  readonly diagnostics?: Diagnostics | null; readonly services?: AppServices | null; readonly scope?: number;
+  readonly updates?: AssetUpdateController | null; readonly appLink?: string | null;
+}) {
   return <><p className="lead">{m.settingsIntro}</p>
     <section className="plain-section" aria-labelledby="privacy-title"><h2 id="privacy-title">{m.privacyTitle}</h2><p>{m.privacyHelp}</p></section>
     <PrivacyStatusPanel services={services} {...(scope === undefined ? {} : { scope })} />
@@ -96,6 +100,7 @@ export function Settings({ diagnostics = null, services = null, scope, updates =
     <SignedUpdatePanel controller={updates} />
     <section className="warning" aria-labelledby="framing-title"><h2 id="framing-title">{m.framingTitle}</h2><p>{m.framingHelp}</p></section>
     <section className="plain-section" aria-labelledby="locale-title"><h2 id="locale-title">{m.localeTitle}</h2><p>{m.localeHelp}</p><LocaleSelector /></section>
+    <GenericAppShare appLink={appLink} />
     <DiagnosticsPanel service={diagnostics} />
   </>;
 }

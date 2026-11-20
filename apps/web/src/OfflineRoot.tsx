@@ -3,6 +3,7 @@ import { startAppServices, type AppServices } from './app-services.ts';
 import { App } from './ui/App.tsx';
 import { createTradeReviewController, noApprovedRegistry, type RegistrySource, type TradeReviewController } from './trade/review-controller.ts';
 import { createLocalDiagnostics } from './diagnostics.ts';
+import { deriveGenericAppLink } from './sharing/generic-app-link.ts';
 
 /**
  * Compile-time constants from vite.config.ts: `__P2P_SYNTHETIC_DEMO__` is true only for the `demo` build and
@@ -30,7 +31,8 @@ function useTradeReviewController(): TradeReviewController {
   return trade;
 }
 
-export function OfflineRoot() {
+export function OfflineRoot({ entryModuleUrl }: { readonly entryModuleUrl: string }) {
+  const appLink = deriveGenericAppLink(entryModuleUrl);
   const [diagnostics] = useState(() => createLocalDiagnostics());
   const trade = useTradeReviewController();
   const [services, setServices] = useState<AppServices | null>(null);
@@ -57,6 +59,6 @@ export function OfflineRoot() {
     })();
     return () => { window.removeEventListener('pagehide', pagehide); dispose(); };
   }, []);
-  return <App services={services} starting={starting} startupError={startupError} trade={trade} diagnostics={diagnostics} />;
+  return <App services={services} starting={starting} startupError={startupError} trade={trade} diagnostics={diagnostics} appLink={appLink} />;
 }
 
