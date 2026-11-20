@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "observed_at_utc": "2026-11-20T02:32:36.517681+00:00",
+  "source": "813f9192a64f95028a755f167bb6ab888cfa392d",
+  "tree": "65d567546d93640358be842a71b31fcb445a3851",
+  "core_parent": "cd7d54ba075118a7ec043788c17718be842ee405",
+  "core_parent_tree": "ce3c69ddc36245f756005c540e521a26a3ce59b8",
+  "packages": [
+    {
+      "package": "proof-inputs",
+      "pr": 191,
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "source_package_tree": "8ce13a63a8df82b00cea3405d246babfe7f89746",
+      "composition_package_tree": "8ce13a63a8df82b00cea3405d246babfe7f89746",
+      "equal": true
+    },
+    {
+      "package": "liquidity",
+      "pr": 192,
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "source_package_tree": "ef4dace6c26423b61d98c6012e54ab56d714428e",
+      "composition_package_tree": "ef4dace6c26423b61d98c6012e54ab56d714428e",
+      "equal": true
+    },
+    {
+      "package": "arbitration",
+      "pr": 193,
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "source_package_tree": "f6a8051adf0c1adeb5b655240ad478c58fac1ac6",
+      "composition_package_tree": "f6a8051adf0c1adeb5b655240ad478c58fac1ac6",
+      "equal": true
+    },
+    {
+      "package": "privacy-policy",
+      "pr": 194,
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "source_package_tree": "5ab375b6f3b5520bd6059ff858f48699edf53aca",
+      "composition_package_tree": "5ab375b6f3b5520bd6059ff858f48699edf53aca",
+      "equal": true
+    },
+    {
+      "package": "courier",
+      "pr": 195,
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "source_package_tree": "276211811104349ad9431dae3f64f3ea83c299b6",
+      "composition_package_tree": "276211811104349ad9431dae3f64f3ea83c299b6",
+      "equal": true
+    },
+    {
+      "package": "meetup",
+      "pr": 196,
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "source_package_tree": "a3fd556fb78cfbf8c0546068db657c4c69a7c9c7",
+      "composition_package_tree": "a3fd556fb78cfbf8c0546068db657c4c69a7c9c7",
+      "equal": true
+    },
+    {
+      "package": "privacy-controls",
+      "pr": 197,
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "source_package_tree": "21480b1081bf720b21afa8277f2bfe99208790cc",
+      "composition_package_tree": "21480b1081bf720b21afa8277f2bfe99208790cc",
+      "equal": true
+    },
+    {
+      "package": "stealth",
+      "pr": 198,
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "source_package_tree": "0a24172c193fc3f7c2f7fd8967f107e2e37b5f73",
+      "composition_package_tree": "0a24172c193fc3f7c2f7fd8967f107e2e37b5f73",
+      "equal": true
+    },
+    {
+      "package": "proof-jobs",
+      "pr": 199,
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "source_package_tree": "4be7a4564974f96d8396f4901fbeb63789eaed75",
+      "composition_package_tree": "4be7a4564974f96d8396f4901fbeb63789eaed75",
+      "equal": true
+    }
+  ],
+  "commands": {
+    "preserved": 56,
+    "current": 62,
+    "added": {
+      "typecheck:proof-inputs": "tsc --noEmit -p packages/proof-inputs/tsconfig.json",
+      "test:meetup:browser": "node packages/meetup/test/origin-ledger-browser.mjs",
+      "test:privacy-controls:browser": "node packages/privacy-controls/test/native-browser.mjs",
+      "test:proof:memory": "node packages/proof-jobs/test/node-wasm-memory.mjs",
+      "test:proof:browser": "node --import ./scripts/test-support/register-tsx.mjs packages/proof-jobs/test/browser.mjs",
+      "typecheck:proof-jobs": "tsc --noEmit -p packages/proof-jobs/tsconfig.worker.json && tsc --noEmit -p packages/proof-jobs/tsconfig.fixture.json"
+    }
+  },
+  "all_other_package_metadata_identical": true,
+  "workflow_changes": [
+    "A\t.github/workflows/optional-proof-jobs.yml",
+    "M\t.github/workflows/vault-foundation.yml"
+  ],
+  "default_artifact": {
+    "baseline_directory": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation5-core/apps/web/dist",
+    "composition_directory": "/workspace/scratch/6eace968c0df/p2p-optional-successor/apps/web/dist",
+    "files": 13,
+    "byte_identical": true,
+    "sha256": {
+      "_headers": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+      "assets/OfflineRoot-CI-0s1SD.js": "4a4e9eb20263f06b281a8381e08de9795bba16b593426e54128d8ee1df662ddd",
+      "assets/decode.worker-DGcSBxfL.js": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+      "assets/index-UYZE6vVq.js": "f25e6b2ab11df75bd8e801c6e188c3ea3a929168ecb3f79daddbbde341b8007b",
+      "assets/index-rPDFZ4F5.css": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+      "assets/vault.worker-uetr2n_F.js": "2b9bee52821468861799082b17ef5f2234f0474c3ef35ae7b18c909337000a4f",
+      "content-policy.json": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+      "core-graph-document.json": "eb6631374400424ee96682cbdf2d5d1cc664800d23ec829a5c82ddd293dce6cd",
+      "core-graph-worker.json": "1c9b0e6dc747b83832fc1df85037f950e4af44fe9c80ad17b109d630d3f4ef4e",
+      "index.html": "b3071253d601880911c585d4e74191038465521aae19b5378b6815cd278ddd09",
+      "local-build-evidence.json": "48fdb1bb94c8ce49743ecb194eb8e8d53835a34e679eff7fba87a5258cdd5ab9",
+      "qr-graph-worker.json": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+      "third-party-licenses.json": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+    }
+  },
+  "logs": {
+    "optional-full.log": "423617e3cc95072d51ea2ba00d80dc777311308eb96b52ff476fb53f718e8388",
+    "optional-types.log": "07e91222408f5500385211a728191c2890970175eb937bfdb71c9eafa8c8e156",
+    "optional-types-retry.log": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+    "proof-inputs-types.log": "1e305eb1bfb14f1b5f68a29cd70d3d9dd040f5dd119fbbc45d75ca92a7e97e00",
+    "proof-jobs-types.log": "01003589ca24dff5de5e5b62865f20ccb201f4b2a147d91fe1299cd36dfacfb0",
+    "optional-build-policy.log": "7a6cfcc07436447ee002c7dcbf5ddac877c7c3ea686ab4c12fd6e6c1fd0dacdf",
+    "optional-boundaries.log": "62ff0a9ff83e69b28299389c00aed569fc8ea560697e46cfee47bdbd60734adc",
+    "proof-memory.log": "c23b861046b8c4db97b176c6021d6defd6cc8163dd0f3a89be90a2536e8cf805",
+    "optional-build.log": "1225fa234ed769b46b078dca3dc4a5083fa408e0ba175879f60d6112dcc4d785"
+  },
+  "limitations": [
+    "Precedes generations6-8 runtime repairs.",
+    "No hosted or physical-device result is implied.",
+    "Current-source signed distribution remains unqualified."
+  ],
+  "published_evidence": {
+    "commit": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+    "branch": "codex/optional-composition-evidence-g8-20261120",
+    "tree": "65d567546d93640358be842a71b31fcb445a3851",
+    "exact_tree_match": true
+  }
+}

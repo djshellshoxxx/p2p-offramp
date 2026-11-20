@@ -16,6 +16,7 @@ import { createSolanaEscrowClient } from '../../packages/chain-solana/src/compos
 import { createRecoveryDocument } from '../../packages/chain-solana/src/recovery.ts';
 import { programDataSha256FromElf } from '../../packages/chain-solana/src/layout.ts';
 import { encodeSolanaTerms } from '../../packages/domain/index.ts';
+import { rejectWithheldSolanaSend } from './solana-localnet-withheld-send.mjs';
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const CHAIN = 'solana:localnet';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -123,7 +124,7 @@ export async function startSolanaLocalnetFixture() {
           const proof = await beforeSend(raw.params[0]);
           assert.deepEqual(raw.params[1], { encoding: 'base64', skipPreflight: true, maxRetries: 0 });
           const withheld = withhold; withhold = false; observed.push({ ...proof, withheld });
-          if (withheld) { response.destroy(); return; }
+          if (withheld) { rejectWithheldSolanaSend(response, cors); return; }
         }
         const answer = await fetch(validatorUrl, { method: 'POST', body, headers: { 'Content-Type': 'application/json' } });
         const result = await answer.text(); response.writeHead(answer.status, { ...cors, 'Content-Type': 'application/json' }).end(result);

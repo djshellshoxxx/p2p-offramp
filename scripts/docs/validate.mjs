@@ -5,9 +5,9 @@ import{execFileSync}from'node:child_process';
 import{createHash}from'node:crypto';
 import{resolve,dirname}from'node:path';
 import{fileURLToPath}from'node:url';
-import{parseClaimsBytes,safeClaimPath,projectClaimsRegister,CLAIM_CATALOG,CLAIM_COPY_BINDINGS,claimCopyText}from'../../packages/claims/index.ts';
+import{parseClaimsBytes,safeClaimPath,projectClaimsRegister,CLAIM_CATALOG,CLAIM_COPY_BINDINGS}from'../../packages/claims/index.ts';
 import{parseStrictJsonBytes}from'../../packages/schemas/index.ts';
-import{sourceCatalog}from'../../apps/web/src/ui/locale/en.ts';
+import{claimCopyTextsFromSource}from'./copy-source.mjs';
 import{isMain}from'../lib/is-main.mjs';
 import{resolveTool}from'../lib/tool-path.mjs';
 /** Global link bound across all pages; per-page extraction stays at 128. */
@@ -84,7 +84,8 @@ export async function inspectDocs(root=ROOT ) {
   const paths=new Set(),stale=new Set();
   // Evidence rows bind the bytes at the immutable sourceCommit (strict). Current bytes that drifted since
   // then, for example a later edit by another owner, are reported stale and never presented as current.
-  const committedHash=(path)=>sha(execFileSync(resolveTool('git'),['show',`${register.sourceCommit}:${path}`],{cwd:root,maxBuffer:1048576,stdio:['ignore','pipe','pipe']}));
+  const committedBytes=(path)=>execFileSync(resolveTool('git'),['show',`${register.sourceCommit}:${path}`],{cwd:root,maxBuffer:1048576,stdio:['ignore','pipe','pipe']});
+  const committedHash=(path)=>sha(committedBytes(path));
   const currentHash=async(path)=>{try{return sha(await file(root,path));}catch{return null;}};
   for(const item of register.evidence ) {
     exact(item,['path','sha256']);
@@ -97,7 +98,9 @@ export async function inspectDocs(root=ROOT ) {
   for(const claim of claims)if(claim.evidencePaths.some(p=>!paths.has(p)))refuse();
   exact(register.copySource,['path','sha256']);
   if(register.copySource.path!=='apps/web/src/ui/locale/en.ts'||typeof register.copySource.sha256!=='string'||! /^[0-9a-f]{64}$/.test(register.copySource.sha256))refuse();
-  if(committedHash(register.copySource.path)!==register.copySource.sha256)refuse();
+  const copyBytes=committedBytes(register.copySource.path);
+  if(sha(copyBytes)!==register.copySource.sha256)refuse();
+  const copyTexts=claimCopyTextsFromSource(copyBytes);
   const copyStale=await currentHash(register.copySource.path)!==register.copySource.sha256;
   if(copyStale)stale.add(register.copySource.path);
 
@@ -106,10 +109,8 @@ export async function inspectDocs(root=ROOT ) {
     exact(item,['key','claimId','sourceTextSha256']);
     if(typeof item.key!=='string'||! /^[A-Za-z0-9._-]{1,64}$/.test(item.key)||keys.has(item.key)||!ids.has(item.claimId)||CLAIM_COPY_BINDINGS[item.key]!==item.claimId||typeof item.sourceTextSha256!=='string'||! /^[0-9a-f]{64}$/.test(item.sourceTextSha256))refuse();
     keys.add(item.key);
-    let textHash=null;
-    try{textHash=sha(claimCopyText(sourceCatalog,item.key));}catch{}
-    // A copy text that no longer matches is only tolerable when the source file itself is reported stale.
-    if(textHash!==item.sourceTextSha256&&!copyStale)refuse();
+    // Recorded text always binds the immutable catalog, even when current source has legitimately drifted.
+    if(sha(copyTexts[item.key])!==item.sourceTextSha256)refuse();
     // Every claim bound to a copy source that drifted from its recorded bytes is not current.
     if(copyStale)staleClaimIds.add(item.claimId);
   }
