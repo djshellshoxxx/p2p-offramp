@@ -28,7 +28,7 @@
       "locale": "en",
       "topic": "Privacy-and-Recovery",
       "sourcePath": "docs/wiki-source/Privacy-and-Recovery.md",
-      "sha256": "6d6f20ecaaac502f3e58ab89a4f49ebb6701289185ac1c56b744aa175d63a1d6",
+      "sha256": "bc257f0882404e5527878223db91253fcb34a84c0d8d401c8ce2c4d7de9ab097",
       "implementedCapabilities": [
         "vault",
         "messaging",
@@ -73,5 +73,5 @@
       "lastVerifiedRelease": null
     }
   ],
-  "linkReportDigest": "799c688f5ab3f53eb44105e237777c51eb0162619b2b9ef3bf9a30b8371feb89"
+  "linkReportDigest": "4b22f3d4bb2a50a83c82c5bf988a9a92cdf67d2472684f61b24d7e9477b9e7d6"
 }
