@@ -79,7 +79,9 @@ function serialize(value: unknown, depth: number, maxDepth: number): string {
   try { isArray = Array.isArray(value); prototype = Object.getPrototypeOf(value); } catch { return fail('UNSUPPORTED_VALUE'); }
   if (isArray) {
     if (prototype !== Array.prototype) return fail('UNSUPPORTED_VALUE');
-    const lengthValue = Object.getOwnPropertyDescriptor(value, 'length')?.value;
+    let lengthValue: unknown;
+    try { lengthValue = Object.getOwnPropertyDescriptor(value, 'length')?.value; }
+    catch { return fail('UNSUPPORTED_VALUE'); }
     if (typeof lengthValue !== 'number') return fail('UNSUPPORTED_VALUE');
     if (ownKeys(value).length !== lengthValue + 1) return fail('UNSUPPORTED_VALUE');
     const parts: string[] = [];

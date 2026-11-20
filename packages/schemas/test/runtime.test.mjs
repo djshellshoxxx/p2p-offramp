@@ -96,6 +96,42 @@ test('review commands and replies use strict bounded copies and unique plain ent
  const hostile=[];Object.defineProperty(hostile,'0',{get(){invoked++;return{recordId:id,source:'file',bytes};},enumerable:true});assert.throws(()=>api.parseRuntimeMessage(reply({items:hostile,skipped:0})));assert.equal(invoked,0);
 });
 
+test('favorite commands require exact profile, record, boolean and observed native revision fields', () => {
+ const profileId = 'a'.repeat(32), recordId = 'b'.repeat(32);
+ const fields = { profileId, recordId, favorite: true, expectedRevision: 7 };
+ assert.deepEqual(api.parseRuntimeCommand(command('listFavoriteReviews', { profileId })), command('listFavoriteReviews', { profileId }));
+ assert.deepEqual(api.parseRuntimeCommand(command('setReviewFavorite', fields)), command('setReviewFavorite', fields));
+ for (const change of [{ profileId: 'BAD' }, { recordId: 'BAD' }, { favorite: 1 }, { favorite: 'true' }, { expectedRevision: -1 },
+   { expectedRevision: 1.5 }, { expectedRevision: Number.MAX_SAFE_INTEGER + 1 }, { expectedRevision: null }, { terms: 'SECRET' }, { sessionId: 'SECRET' }]) {
+   invalid(() => api.parseRuntimeCommand(command('setReviewFavorite', { ...fields, ...change })));
+ }
+ invalid(() => api.parseRuntimeCommand(command('listFavoriteReviews', { profileId, recordId })));
+ let invoked = 0;
+ const hostile = Object.defineProperty(command('setReviewFavorite', fields), 'favorite', { get() { invoked++; return true; } });
+ invalid(() => api.parseRuntimeCommand(hostile)); assert.equal(invoked, 0);
+});
+
+test('favorite replies are bounded frozen ID copies; hostile arrays, diagnostic extras and malformed receipts fail closed', () => {
+ const id = n => n.toString(16).padStart(32, '0');
+ const reply = (operation, value) => ({ ...command(operation), kind: 'response', result: { ok: true, value } });
+ const recordIds = Array.from({ length: 8 }, (_, n) => id(n));
+ const parsed = api.parseRuntimeMessage(reply('listFavoriteReviews', { revision: 0, recordIds })).result.value;
+ assert.deepEqual(parsed.recordIds, recordIds); assert.notEqual(parsed.recordIds, recordIds);
+ assert.equal(Object.isFrozen(parsed), true); assert.equal(Object.isFrozen(parsed.recordIds), true);
+ let invoked = 0; const hostile = [];
+ Object.defineProperty(hostile, '0', { enumerable: true, get() { invoked++; return id(1); } });
+ for (const value of [{ revision: -1, recordIds: [] }, { revision: 1.2, recordIds: [] }, { revision: 0, recordIds: [id(1), id(1)] },
+   { revision: 0, recordIds: [...recordIds, id(9)] }, { revision: 0, recordIds: new Array(1) }, { revision: 0, recordIds: hostile },
+   { revision: 0, recordIds: Object.assign([id(1)], { secret: 'SECRET' }) }, { revision: 0, recordIds: ['SECRET'] },
+   { revision: 0, recordIds: [], profileId: id(1) }]) invalid(() => api.parseRuntimeMessage(reply('listFavoriteReviews', value)));
+ assert.equal(invoked, 0);
+ const receipt = { recordId: id(1), favorite: false, revision: 1 };
+ assert.deepEqual(api.parseRuntimeMessage(reply('setReviewFavorite', receipt)).result.value, receipt);
+ for (const change of [{ favorite: 0 }, { recordId: 'SECRET' }, { revision: 0 }, { revision: Infinity }, { sessionCurrent: true }, { persisted: true }]) {
+   invalid(() => api.parseRuntimeMessage(reply('setReviewFavorite', { ...receipt, ...change })));
+ }
+});
+
 test('runtime response rejects a changing result discriminator in both branches',()=>{
  const parse=fn('parseRuntimeMessage');
  for(const first of [true,false]){

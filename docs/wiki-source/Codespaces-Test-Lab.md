@@ -8,17 +8,15 @@
 
 A local checkout or manually configured Codespace can use the commands below after installing **Node 24+**, npm from the lockfile, **Python 3.11+** for specification checks, and a local Chromium for browser tests. EVM contract testing additionally requires the Foundry toolchain. See the [operator guide](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/OPERATOR.md) for prerequisites and expected failure gates.
 
-```sh
-npm ci --ignore-scripts
-npm run typecheck
-npm test
-npm run check:boundaries
-npm run check:specs
-npm run test:build-policy
-npm run test:browser
-npm run test:web:browser
-npm run test:evm
-```
+- `npm ci --ignore-scripts`
+- `npm run typecheck`
+- `npm test`
+- `npm run check:boundaries`
+- `npm run check:specs`
+- `npm run test:build-policy`
+- `npm run test:browser`
+- `npm run test:web:browser`
+- `npm run test:evm`
 
 These script names are present in merged main `package.json`. **This wiki change has not executed the commands**; they are instructions, not new pass evidence. Browser scripts require an installed Chromium discovered by the operator guide's documented path configuration. `npm run test:evm` requires Foundry. A passing synthetic/local test does not authorize peer trading or mainnet activity.
 

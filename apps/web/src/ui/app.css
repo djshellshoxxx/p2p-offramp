@@ -96,3 +96,30 @@ pre.instructions { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; pa
 .session-list li { margin: 0.5rem 0; overflow-wrap: anywhere; }
 .demo-badge { background: var(--warning); color: #5d400d; border: 1px solid #d5b371; border-radius: 4px; padding: 0.125rem 0.5rem; }
 @media (min-width: 800px) { dl.terms { grid-template-columns: minmax(10rem, 16rem) minmax(0, 1fr); } dl.terms dt { margin-top: 0; } }
+
+/* Public QR display has an unbroken quiet zone, exact text wrapping and no inline styles. */
+.qr-panel { min-width: 0; }
+.qr-panel h3 { margin-top: 1.8rem; }
+.qr-panel label { display: grid; gap: .5rem; margin-block: 1rem; }
+.qr-panel input, .qr-panel select, .qr-panel textarea { max-width: 100%; min-width: 0; }
+.qr-panel textarea { min-height: 7rem; overflow-wrap: anywhere; }
+.qr-input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 1.2rem; }
+.qr-camera { width: min(100%, 32rem); height: auto; background: #000; }
+.qr-symbol { display: block; width: min(100%, 24rem); height: auto; margin-block: 1rem; shape-rendering: crispEdges; }
+.qr-fields { display: grid; gap: .85rem; }
+.qr-fields dt { font-weight: 600; }
+.qr-fields dd { margin: .25rem 0 0; overflow-wrap: anywhere; font-family: ui-monospace, monospace; }
+.qr-review { border-top: 1px solid currentColor; margin-top: 1.5rem; padding-top: .5rem; }
+.qr-compare { padding-block: .75rem; }
+
+/* Private draft controls follow the existing offline shell and keep full exact values readable. */
+.trade-draft-panel .draft-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 0.5rem 1rem; }
+.trade-draft-panel textarea, .trade-draft-panel select { font: inherit; max-width: 100%; min-width: 0; min-height: 44px; padding: 0.625rem; color: var(--text); background: var(--surface); border: 1px solid #869995; border-radius: 4px; }
+.trade-draft-panel textarea { display: block; width: 100%; min-height: 7rem; }
+.trade-draft-panel fieldset { min-width: 0; margin-top: 1.5rem; border: 1px solid var(--line); }
+.trade-draft-panel dd, .trade-draft-panel li { min-width: 0; overflow-wrap: anywhere; }
+.template-defaults { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 0.75rem 1rem; }
+.template-defaults dt { font-weight: 650; }
+.template-defaults dd { margin: 0; }
+.templates-list { list-style: none; padding: 0; }
+.templates-list > li { padding: 1rem 0; border-top: 1px solid var(--line); }

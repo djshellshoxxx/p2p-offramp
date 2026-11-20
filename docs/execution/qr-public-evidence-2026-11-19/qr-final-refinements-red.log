@@ -1,0 +1,43 @@
+✖ a decoder graph cannot claim private runtime or network authority (3.382194ms)
+✖ owned camera pixels are wiped even when admission refuses before decoder work starts (3.175396ms)
+✔ all five public reviews label every full display field, including release sequence (51.719883ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2257.030468
+
+✖ failing tests:
+
+test at apps/web/scripts/qr-build-policy.test.mjs:44:1
+✖ a decoder graph cannot claim private runtime or network authority (3.382194ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception: authority
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/scripts/qr-build-policy.test.mjs:47:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /QR_DECODER_GRAPH/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at apps/web/test/qr-review.test.mjs:128:1
+✖ owned camera pixels are wiped even when admission refuses before decoder work starts (3.175396ms)
+  AssertionError [ERR_ASSERTION]: CANCELLED
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-review.test.mjs:136:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

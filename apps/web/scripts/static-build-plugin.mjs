@@ -1,8 +1,9 @@
 import { readFile } from 'node:fs/promises';
 import { relative, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
-import { buildLocalnetContentPolicy, buildOfflineContentPolicy } from '../../../packages/security/src/content-policy.ts';
+import { buildLocalnetContentPolicy, buildSolanaLocalnetContentPolicy, buildOfflineContentPolicy } from '../../../packages/security/src/content-policy.ts';
 import { inspectApplicationSource, inspectArtifactFiles, safeArtifactPath } from './artifact-policy.mjs';
+import { QR_DECODER_ENTRY, QR_DECODER_GRAPH, assertQrDecoderModule, assertNotQrDecoderModule, qrDecoderGraph } from './qr-build-policy.mjs';
 
 const escapeAttribute = value => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 export function offlinePolicy(delivery) {
@@ -27,8 +28,25 @@ const LOCALNET_WALLET_MODULES = /^packages\/wallet\/src\/evm-(?:adapter|terms|su
 const LOCALNET_ONLY_MODULES = [LOCALNET_WALLET_MODULES, /^packages\/(?:wallet|domain|chain-evm)\/localnet\.ts$/, /^packages\/(?:chain-evm|relay|exchange)\//, /^apps\/web\/src\/localnet\//];
 const LOCALNET_DEPENDENCIES = /^node_modules\/@noble\/(?:curves|hashes|ciphers)\//;
 export const LOCALNET_WEBSOCKET_MODULE = 'packages/relay/src/pool.ts';
+const PERSONALIZATION_WORKER_MODULES = new Set(['packages/personalization/favorites.ts', 'packages/personalization/src/favorites.ts',
+  'packages/personalization/templates.ts', 'packages/personalization/src/trade-draft-store.ts']);
 /** Throws NON_CORE_MODULE / UNREVIEWED_DEPENDENCY for a repository-relative module path the profile does not admit. */
-export function assertModuleAdmitted(path, localnet = false) {
+export function assertModuleAdmitted(path, localnet = false, solanaLocalnet = false, privateWorker = false) {
+  assertNotQrDecoderModule(path);
+  if (localnet && solanaLocalnet) throw new Error('LOCALNET_PROFILE_EXCLUSIVE');
+  // Exactly the reviewed favorites/templates facades and native consumers are Worker-only.
+  // The broad package barrel and nested/look-alike paths never acquire this permission.
+  if (/(?:^|\/)packages\/personalization(?:\/|$)/.test(path) && (!privateWorker || !PERSONALIZATION_WORKER_MODULES.has(path))) throw new Error('NON_CORE_MODULE');
+  if (solanaLocalnet) {
+    if (path.startsWith('../') || /(?:^|\/)(?:test|tests|fixtures)(?:\/|$)/.test(path) ||
+        /(?:^|\/)packages\/(?:extensions|chain-evm|relay|exchange|wallet)(?:\/|$)|(?:^|\/)(?:05_ADVANCED|06_)/i.test(path) ||
+        /^apps\/web\/src\/localnet\//.test(path)) throw new Error('NON_CORE_MODULE');
+    if (/(?:^|\/)packages\/chain-solana\//.test(path) && !/^packages\/chain-solana\//.test(path)) throw new Error('NON_CORE_MODULE');
+    if (/^packages\/[^/]+\/localnet\.ts$/.test(path) && path !== 'packages/chain-solana/localnet.ts') throw new Error('NON_CORE_MODULE');
+    if (path.startsWith('node_modules/') && !/^node_modules\/(?:react|react-dom|scheduler)\//.test(path) && !LOCALNET_DEPENDENCIES.test(path)) throw new Error(`UNREVIEWED_DEPENDENCY: ${path}`);
+    return;
+  }
+  if (/^apps\/web\/src\/solana-localnet\//.test(path)) throw new Error('NON_CORE_MODULE');
   if (localnet) {
     if (/^packages\/wallet\/src\/evm-/.test(path) && !LOCALNET_WALLET_MODULES.test(path)) throw new Error('NON_CORE_MODULE');
     // chain-evm and relay are admitted only at their own top-level package roots, never as nested look-alike paths.
@@ -52,9 +70,12 @@ function localnetProfile(localnet) {
  * Runs for document and native Worker builds; records real bundler module graphs. `localnet` ({ relayOrigin }) is set
  * only by the library-only localnet build (apps/web/vite.config.ts createViteConfig); every other build omits it.
  */
-export function staticBuildPlugin(repositoryRoot, delivery = 'meta', worker = false, localnet = null) {
+export function staticBuildPlugin(repositoryRoot, delivery = 'meta', worker = false, localnet = null, solanaLocalnet = null) {
   const profile = localnetProfile(localnet);
-  const policy = profile ? localnetPolicy(delivery, profile.relayOrigin) : offlinePolicy(delivery);
+  if (profile && solanaLocalnet) throw new Error('LOCALNET_PROFILE_EXCLUSIVE');
+  if (solanaLocalnet !== null && (typeof solanaLocalnet !== 'object' || Object.getPrototypeOf(solanaLocalnet) !== Object.prototype || Object.keys(solanaLocalnet).join() !== 'rpcOrigin')) throw new Error('SOLANA_LOCALNET_PROFILE_INVALID');
+  const solanaPolicy = level => buildSolanaLocalnetContentPolicy({ version: 1, releaseId: 'local-development', delivery: level, rpcOrigin: solanaLocalnet.rpcOrigin });
+  const policy = solanaLocalnet ? solanaPolicy(delivery) : profile ? localnetPolicy(delivery, profile.relayOrigin) : offlinePolicy(delivery);
   return {
     name: `p2p-offline-static-${worker ? 'worker' : 'document'}`,
     apply: 'build',
@@ -70,25 +91,31 @@ export function staticBuildPlugin(repositoryRoot, delivery = 'meta', worker = fa
     },
     async generateBundle(_options, bundle) {
       const modules = [];
+      const repositoryPath = id => typeof id === 'string' ? relative(repositoryRoot, id.split('?')[0]).replaceAll('\\', '/') : '';
+      const qrDecoder = worker && [...this.getModuleIds()].some(id => repositoryPath(id) === QR_DECODER_ENTRY);
+      if (qrDecoder && (profile !== null || solanaLocalnet !== null)) throw new Error('QR_DECODER_SCOPE');
       for (const id of this.getModuleIds()) {
         const info = this.getModuleInfo(id);
         if (!info || info.isExternal) throw new Error('EXTERNAL_MODULE');
         if (id.startsWith('\0') || id.startsWith('vite/') || id.startsWith('rolldown:')) continue;
         const clean = id.split('?')[0];
         const path = relative(repositoryRoot, clean).replaceAll('\\', '/');
-        assertModuleAdmitted(path, profile !== null);
+        if (qrDecoder) assertQrDecoderModule(path); else assertModuleAdmitted(path, profile !== null, solanaLocalnet !== null, worker);
         if (!/\.(?:[cm]?[jt]sx?|css|html)$/.test(clean)) throw new Error('UNREVIEWED_MODULE_TYPE');
         const source = await readFile(clean, 'utf8');
-        if (!path.startsWith('node_modules/') && /\.[jt]sx?$/.test(clean)) inspectApplicationSource(path, source, { allowWebSocketConstructor: profile !== null && path === LOCALNET_WEBSOCKET_MODULE });
+        if ((!path.startsWith('node_modules/') || qrDecoder) && /\.[jt]sx?$/.test(clean)) inspectApplicationSource(path, source, {
+          allowWebSocketConstructor: profile !== null && path === LOCALNET_WEBSOCKET_MODULE,
+          allowFetch: solanaLocalnet !== null && worker && path === 'apps/web/src/solana-localnet/rpc.ts',
+        });
         modules.push({ path, sha256: createHash('sha256').update(source).digest('hex') });
       }
       modules.sort((a, b) => a.path.localeCompare(b.path, 'en'));
-      const graph = { version: 1, scope: worker ? 'native-worker' : 'document', modules,
+      const graph = qrDecoder ? qrDecoderGraph(modules, bundle, repositoryPath) : { version: 1, scope: worker ? 'native-worker' : 'document', modules,
         frameworkDomInternals: 'React DOM contains internal HTML sink code. Application token checks and browser hostile-text probes are separate evidence.', completeXssProof: false };
-      this.emitFile({ type: 'asset', fileName: worker ? 'core-graph-worker.json' : 'core-graph-document.json', source: JSON.stringify(graph, null, 2) + '\n' });
+      this.emitFile({ type: 'asset', fileName: qrDecoder ? QR_DECODER_GRAPH : worker ? 'core-graph-worker.json' : 'core-graph-document.json', source: JSON.stringify(graph, null, 2) + '\n' });
       if (!worker) {
         this.emitFile({ type: 'asset', fileName: 'content-policy.json', source: JSON.stringify({ ...policy, releaseAcceptance: false, ReleaseEnabled: 0 }, null, 2) + '\n' });
-        const headerPolicy = profile ? localnetPolicy('header', profile.relayOrigin) : offlinePolicy('header');
+        const headerPolicy = solanaLocalnet ? solanaPolicy('header') : profile ? localnetPolicy('header', profile.relayOrigin) : offlinePolicy('header');
         this.emitFile({ type: 'asset', fileName: '_headers', source: '/*\n' + Object.entries(headerPolicy.headers).map(([name, value]) => `  ${name}: ${value}`).join('\n') + '\n' });
       }
       // This first scan runs before final HTML emission. The build CLI scans the on-disk final set.

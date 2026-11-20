@@ -1,0 +1,27 @@
+✔ RPC transport preserves actual genesis and fences allowed methods, replies and disposal (68.825655ms)
+✔ Worker command parser refuses funding, generic signing, hidden fields and malformed recovery input (2.358062ms)
+✖ restore input is bounded before copying and cannot invoke a caller-owned iterator (0.473378ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 979.902535
+
+✖ failing tests:
+
+test at apps/web/test/solana-localnet-rpc.test.mjs:32:1
+✖ restore input is bounded before copying and cannot invoke a caller-owned iterator (0.473378ms)
+  Error: caller iterator
+      at Uint8Array.value (file:///workspace/scratch/29ec534d969d/review-solana-browser/apps/web/test/solana-localnet-rpc.test.mjs:35:79)
+      at Uint8Array.from (<anonymous>)
+      at parseSolanaCommand (file:///workspace/scratch/29ec534d969d/review-solana-browser/apps/web/src/solana-localnet/validation.ts:31:30)
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-browser/apps/web/test/solana-localnet-rpc.test.mjs:37:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

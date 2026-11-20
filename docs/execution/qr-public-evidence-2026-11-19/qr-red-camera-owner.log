@@ -1,0 +1,33 @@
+✔ permission is an explicit action; cancellation holds physical admission across new owners and stops late tracks (35.617477ms)
+✔ active cancellation stops every track, detaches preview and requires a new gesture (7.357328ms)
+✖ a second mounted owner cannot open another camera while the original stream is live (24.825567ms)
+✔ provider failures and attach failures are fixed errors and cannot leak a live stream (25.497356ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 157468.85564
+
+✖ failing tests:
+
+test at apps/web/test/qr-camera.test.mjs:30:1
+✖ a second mounted owner cannot open another camera while the original stream is live (24.825567ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + undefined
+  - 'BUSY'
+
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-camera.test.mjs:33:58)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'BUSY',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

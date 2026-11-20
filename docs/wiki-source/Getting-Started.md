@@ -6,10 +6,8 @@ The earlier claim that the application was entirely unimplemented is obsolete. *
 
 Use Node 24+ from the repository root:
 
-```sh
-npm ci --ignore-scripts
-npm run build:demo
-```
+- `npm ci --ignore-scripts`
+- `npm run build:demo`
 
 The generated synthetic demo files are under `apps/web/dist-demo`. They are for local/test use only. The default artifact (`npm run build`) has no approved trust registry and must not be described as an enabled off-ramp.
 

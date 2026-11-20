@@ -27,8 +27,13 @@ const CORE_PACKAGES = new Set(['domain', 'schemas']);
 // a dynamic import (main.tsx's `__P2P_LOCALNET__` branch); no package may import them. The localnet build profile is the
 // only build that admits their modules (apps/web/scripts/static-build-plugin.mjs).
 const LOCALNET_FACADES = new Set(['packages/wallet/localnet.ts', 'packages/domain/localnet.ts', 'packages/chain-evm/localnet.ts']);
-const PUBLIC_SIDE_ENTRIES = new Set(['packages/security/release-context.ts', ...LOCALNET_FACADES]);
+const PERSONALIZATION_FACADES = new Set(['packages/personalization/favorites.ts', 'packages/personalization/templates.ts']);
+const PERSONALIZATION_COMPOSITION = 'apps/web/src/runtime/worker-endpoint.ts';
+const PUBLIC_SIDE_ENTRIES = new Set(['packages/security/release-context.ts', 'packages/security/update-view.ts', ...PERSONALIZATION_FACADES, ...LOCALNET_FACADES]);
 const LOCALNET_APP_ROOT = 'apps/web/src/localnet/';
+const SOLANA_LOCALNET_FACADE = 'packages/chain-solana/localnet.ts';
+const SOLANA_LOCALNET_APP_ROOT = 'apps/web/src/solana-localnet/';
+PUBLIC_SIDE_ENTRIES.add(SOLANA_LOCALNET_FACADE);
 const BROWSER_GLOBALS = new Set([
   'window', 'document', 'navigator', 'localStorage', 'sessionStorage', 'indexedDB',
   'Worker', 'SharedWorker', 'WebSocket', 'fetch', 'XMLHttpRequest', 'EventSource',
@@ -238,11 +243,23 @@ export async function inspectImportBoundaries(rootDir = process.cwd()) {
         }
         const targetPackage = packageForPath(root, resolved.path);
         const targetRel = posix(relative(root, resolved.path)), importerRel = posix(relative(root, path));
+        if ((kind?.kind === 'app' && targetPackage === 'personalization' &&
+            (!PERSONALIZATION_FACADES.has(targetRel) || importerRel !== PERSONALIZATION_COMPOSITION)) ||
+            (kind?.kind === 'package' && kind.name !== 'personalization' && PERSONALIZATION_FACADES.has(targetRel))) {
+          addFinding(findings, parsed, imported.node, 'PERSONALIZATION_OUTSIDE_VAULT_WORKER', imported.value);
+        }
         if (LOCALNET_FACADES.has(targetRel)) {
           if (kind?.kind === 'package') addFinding(findings, parsed, imported.node, 'PACKAGE_IMPORT_LOCALNET_FACADE', imported.value);
           else if (kind?.kind === 'app' && !importerRel.startsWith(LOCALNET_APP_ROOT)) addFinding(findings, parsed, imported.node, 'APP_LOCALNET_FACADE_OUTSIDE_LOCALNET', imported.value);
         }
         if (kind?.kind === 'app' && targetRel.startsWith(LOCALNET_APP_ROOT) && !importerRel.startsWith(LOCALNET_APP_ROOT) && imported.dynamic !== true) {
+          addFinding(findings, parsed, imported.node, 'APP_LOCALNET_STATIC_IMPORT', imported.value);
+        }
+        if (targetRel === SOLANA_LOCALNET_FACADE) {
+          if (kind?.kind === 'package') addFinding(findings, parsed, imported.node, 'PACKAGE_IMPORT_LOCALNET_FACADE', imported.value);
+          else if (kind?.kind === 'app' && !importerRel.startsWith(SOLANA_LOCALNET_APP_ROOT)) addFinding(findings, parsed, imported.node, 'APP_LOCALNET_FACADE_OUTSIDE_LOCALNET', imported.value);
+        }
+        if (kind?.kind === 'app' && targetRel.startsWith(SOLANA_LOCALNET_APP_ROOT) && !importerRel.startsWith(SOLANA_LOCALNET_APP_ROOT) && imported.dynamic !== true) {
           addFinding(findings, parsed, imported.node, 'APP_LOCALNET_STATIC_IMPORT', imported.value);
         }
         if (kind?.kind === 'app') {

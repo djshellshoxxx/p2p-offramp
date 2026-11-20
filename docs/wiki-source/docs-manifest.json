@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "releaseId": "local-unapproved-draft",
+  "sourceCommit": "84814328f5534d6fceb2bbe74509fe37c5b48689",
+  "dirtyDraft": true,
+  "reviewers": [],
+  "approvedRelease": null,
+  "documents": [
+    {
+      "locale": "en",
+      "topic": "Home",
+      "sourcePath": "docs/wiki-source/Home.md",
+      "sha256": "41bffb07e4c32bd02db12aea830be3620d400c8dadaf6fa0fc7c3e3b8621fc9a",
+      "implementedCapabilities": [],
+      "lastVerifiedRelease": null
+    },
+    {
+      "locale": "en",
+      "topic": "Getting-Started",
+      "sourcePath": "docs/wiki-source/Getting-Started.md",
+      "sha256": "c797e59909415adcc331be9726f3c262ffc7e9128400a930d2517ffd1831c6cb",
+      "implementedCapabilities": [
+        "vault"
+      ],
+      "lastVerifiedRelease": null
+    },
+    {
+      "locale": "en",
+      "topic": "Privacy-and-Recovery",
+      "sourcePath": "docs/wiki-source/Privacy-and-Recovery.md",
+      "sha256": "6d6f20ecaaac502f3e58ab89a4f49ebb6701289185ac1c56b744aa175d63a1d6",
+      "implementedCapabilities": [
+        "vault",
+        "messaging",
+        "routing"
+      ],
+      "lastVerifiedRelease": null
+    },
+    {
+      "locale": "en",
+      "topic": "Wallet-and-QR-Safety",
+      "sourcePath": "docs/wiki-source/Wallet-and-QR-Safety.md",
+      "sha256": "c8fa2b14362467ee53b97896b53a44843150cd00965199ff7df02d6064fefd94",
+      "implementedCapabilities": [],
+      "lastVerifiedRelease": null
+    },
+    {
+      "locale": "en",
+      "topic": "Architecture-and-Development",
+      "sourcePath": "docs/wiki-source/Architecture-and-Development.md",
+      "sha256": "593199d191a4355fb5cab3791e155e8d8e0a78ba07caee3b744b65023f177879",
+      "implementedCapabilities": [
+        "vault",
+        "messaging",
+        "routing"
+      ],
+      "lastVerifiedRelease": null
+    },
+    {
+      "locale": "en",
+      "topic": "Codespaces-Test-Lab",
+      "sourcePath": "docs/wiki-source/Codespaces-Test-Lab.md",
+      "sha256": "9070b89ea6af178d33e5437e8683ee098789196c095491876cf5b55a45d151cd",
+      "implementedCapabilities": [],
+      "lastVerifiedRelease": null
+    },
+    {
+      "locale": "en",
+      "topic": "Security-and-Release",
+      "sourcePath": "docs/wiki-source/Security-and-Release.md",
+      "sha256": "ed4447d993f5d7182039b3da139c7b68c715113316ed38ccf58dfa93ddf7fc0e",
+      "implementedCapabilities": [],
+      "lastVerifiedRelease": null
+    }
+  ],
+  "linkReportDigest": "799c688f5ab3f53eb44105e237777c51eb0162619b2b9ef3bf9a30b8371feb89"
+}
