@@ -30,6 +30,7 @@
     "abi:evm": "bash contracts/evm/script/export-abi.sh",
     "check:specs": "python scripts/spec_audit.py --check",
     "typecheck": "tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit && tsc -p apps/web/tsconfig.ui.json --noEmit",
+    "typecheck:proof-inputs": "tsc --noEmit -p packages/proof-inputs/tsconfig.json",
     "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs && node scripts/test-reseal-crash-browser.mjs && node scripts/test-lifecycle-tabs-browser.mjs",
     "build": "npm run typecheck && node apps/web/scripts/build.mjs",
     "build:demo": "npm run typecheck && node apps/web/scripts/build.mjs demo",
@@ -41,6 +42,8 @@
     "test:distribution:browser": "node scripts/distribution/browser.test.mjs",
     "check:governance": "node --import ./scripts/test-support/register-tsx.mjs scripts/governance/check-all.mjs && node scripts/governance/refresh-evidence-manifest.mjs --check",
     "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs && node scripts/test-saved-reviews-browser.mjs && node scripts/test-testnet-build-browser.mjs && npm run test:qr:browser",
+    "test:templates:browser": "node scripts/test-trade-templates-browser.mjs",
+    "test:favorites:browser": "node scripts/test-saved-review-favorites-browser.mjs",
     "check:boundaries": "node scripts/check-import-boundaries.mjs",
     "test:build-policy": "node --test apps/web/scripts/artifact-policy.test.mjs apps/web/scripts/scan-build.test.mjs apps/web/scripts/source-locale.test.mjs scripts/tests/import-boundaries.test.mjs scripts/tests/verify-web-artifact.test.mjs apps/web/scripts/qr-build-policy.test.mjs",
     "test:diagnostics": "node --test scripts/tests/capture-labels.test.mjs",
@@ -58,7 +61,9 @@
     "test:localnet:erc20:browser": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-erc20-browser.mjs",
     "test:formal:unit": "node --test scripts/tests/formal-evm.test.mjs",
     "test:qr:browser": "node scripts/test-qr-browser.mjs",
-    "test:solana:browser": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-solana-localnet-browser.mjs"
+    "test:solana:browser": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-solana-localnet-browser.mjs",
+    "test:solana:ack:browser": "node scripts/test-solana-withheld-send-browser.mjs",
+    "test:solana:restore:browser": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-solana-restore-browser.mjs"
   },
   "devDependencies": {
     "@types/react": "19.3.0",
