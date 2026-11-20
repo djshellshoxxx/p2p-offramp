@@ -12,7 +12,7 @@ const body = source.slice(source.indexOf('function download')).replace('export f
 const emitted = (await transformWithOxc(body, 'SolanaLocalnetRoot.tsx', { lang: 'tsx', jsx: { runtime: 'classic', pragma: 'jsx' } })).code;
 const PROFILE = 'a'.repeat(32), TRADE = 'b'.repeat(64), PUBLIC_JSON = '{"format":"ordinary-public-recovery-fixture"}\n';
 const terms = makeTerms(), proposalText = JSON.stringify({ format: 'p2p-offramp/solana-local-funding-proposal/v1', terms });
-const proposalView = { id: 'd'.repeat(32), binding: { chain: 'solana', networkId: 'local', deploymentId: 'original', tradeId: TRADE }, terms, escrow: 'original-escrow', restored: true, bindingStatus: 'configuration-mismatch', recoveryRetained: true, escrowConflict: true };
+const proposalView = { id: 'd'.repeat(32), binding: { chain: 'solana', networkId: 'local', deploymentId: 'original', tradeId: TRADE }, terms, escrow: 'original-escrow', restored: true, bindingStatus: 'configuration-mismatch', recoveryRetained: true, escrowConflict: true, state: 'unverified', chainTimeSeconds: null, walletConnected: false, intents: [] };
 const deferred = () => { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; };
 const nodes = (node, predicate) => Array.isArray(node) ? node.flatMap(child => nodes(child, predicate)) :
   !node || typeof node !== 'object' ? [] : [...(predicate(node) ? [node] : []), ...nodes(node.props?.children, predicate)];

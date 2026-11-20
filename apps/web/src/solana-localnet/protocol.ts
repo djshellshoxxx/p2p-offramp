@@ -1,4 +1,4 @@
-/** Purpose-bound local proposals and funded recovery. No funding, generic RPC, secret read or acceptance command. */
+/** Purpose-bound seller funding and recovery. No generic RPC, secret read or acceptance command. */
 import type { NativeSolanaFundingTerms, SolanaFundingProposalRecord } from './funding-proposal.ts';
 export type RecoveryAction = 'release' | 'refund' | 'payout';
 export type SolanaCommand =
@@ -7,6 +7,8 @@ export type SolanaCommand =
   | { readonly type: 'profile.unlock'; readonly profileId: string; readonly passphrase: string }
   | { readonly type: 'backup.restore'; readonly bytes: Uint8Array; readonly sourcePassphrase: string; readonly destinationPassphrase: string }
   | { readonly type: 'funding.proposal.import'; readonly text: string }
+  | { readonly type: 'funding.wallet.connect'; readonly proposalId: string }
+  | { readonly type: 'funding.prepare'; readonly proposalId: string; readonly rebuildOf?: string }
   | { readonly type: 'recovery.import'; readonly text: string; readonly role: 'seller' | 'buyer' }
   | { readonly type: 'recovery.export'; readonly tradeId: string }
   | { readonly type: 'wallet.connect'; readonly tradeId: string }
@@ -16,11 +18,13 @@ export type SolanaCommand =
 export type SolanaWalletRequest = { readonly method: 'connect' } | {
   readonly method: 'signTransaction'; readonly account: string; readonly chain: 'solana:localnet'; readonly transaction: string;
 };
-export interface SolanaReview {
-  readonly id: string; readonly action: RecoveryAction; readonly expiresAtMs: number;
+interface SolanaReviewBase {
+  readonly id: string; readonly expiresAtMs: number;
   readonly fields: readonly { readonly label: string; readonly value: string }[];
   readonly walletRequest: Extract<SolanaWalletRequest, { method: 'signTransaction' }>;
 }
+export type SolanaReview = (SolanaReviewBase & { readonly action: RecoveryAction })
+  | (SolanaReviewBase & { readonly action: 'fund'; readonly proposalId: string });
 export interface SolanaTradeView {
   readonly id: string; readonly role: 'seller' | 'buyer'; readonly seller: string; readonly buyer: string;
   readonly amountBaseUnits: string; readonly deadlineSeconds: string; readonly escrow: string;
@@ -36,6 +40,10 @@ export interface SolanaFundingProposalView {
   /** Binding availability is data compatibility, never funding eligibility or acceptance. */
   readonly bindingStatus: 'available' | 'configuration-mismatch' | 'unsupported';
   readonly recoveryRetained: boolean; readonly escrowConflict: boolean;
+  readonly state: 'unverified' | 'absent' | 'funded' | 'released' | 'refunded';
+  readonly chainTimeSeconds: string | null; readonly walletConnected: boolean;
+  readonly intents: readonly { readonly id: string; readonly action: string; readonly state: string;
+    readonly signature: string | null; readonly replacementOf: string | null }[];
 }
 export interface SolanaSnapshot {
   readonly version: 1; readonly phase: 'locked' | 'ready' | 'working'; readonly profileIds: readonly string[];

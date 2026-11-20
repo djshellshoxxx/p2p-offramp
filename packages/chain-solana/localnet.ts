@@ -1,8 +1,9 @@
-/** Explicit local recovery facade. App imports are confined to the separate Solana localnet profile. */
+/** Explicit local funding and recovery facade. App imports are confined to the separate Solana localnet profile. */
 export { createSolanaEscrowClient } from './src/compose.ts';
-export type { SolanaEscrowClient, SolanaSubmission, PreparedSolanaAction } from './src/compose.ts';
+export type { SolanaEscrowClient, SolanaSubmission, PreparedSolanaAction, PreparedSolanaFunding } from './src/compose.ts';
 export { SolanaVaultJournal } from './src/vaultjournal.ts';
-export { parseRecoveryDocument, recoveryBinding, recoveryExits } from './src/recovery.ts';
+export { projectNativeFundingReview } from './src/funding-review.ts';
+export { createRecoveryDocument, parseRecoveryDocument, recoveryBinding, recoveryExits } from './src/recovery.ts';
 export type { SolanaRecoveryDocument } from './src/recovery.ts';
 export type { BoundSolanaTrade } from './src/bind.ts';
 export type { SolanaWalletPort, SolanaWalletSession } from './src/wallet.ts';

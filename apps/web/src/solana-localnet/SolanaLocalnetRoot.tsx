@@ -104,7 +104,7 @@ export function SolanaLocalnetRoot() {
   return <main className="solana-recovery" aria-busy={busy} data-release-enabled="0" data-profile-id={snapshot?.profileId ?? ''}
     data-phase={snapshot?.phase ?? 'locked'} data-wallet-account={snapshot?.wallet?.address ?? ''} data-wallet-trade={snapshot?.wallet?.tradeId ?? ''}>
     <header><p className="solana-banner">{SOLANA_LOCALNET_BANNER}</p><h1>Local Solana proposals and recovery</h1>
-      <p>Save fixed seller proposals, or import the original recovery document to review finalized escrow settlement with your wallet.</p></header>
+      <p>Save fixed seller proposals, explicitly review native SOL funding, or import the original recovery document for finalized escrow settlement.</p></header>
     {!client.current && <section><h2>Choose your wallet</h2><div className="solana-field"><label htmlFor="solana-wallet-choice">Wallet Standard wallet</label><select id="solana-wallet-choice" value={choice} onChange={e => setChoice(e.target.value)}>
       <option value="">Select wallet</option>{wallets.map(w => <option key={w.id} value={String(w.id)}>{w.name}</option>)}</select></div>
       <button type="button" onClick={() => void selectWallet()}>Use selected wallet</button>
@@ -132,8 +132,10 @@ export function SolanaLocalnetRoot() {
       <button disabled={busy || !proposal} onClick={() => { if (pendingRequest.current) return; const text = proposal; setProposal(''); void request({ type: 'funding.proposal.import', text }); }}>Save seller funding proposal</button>
       <p>Retained trade bindings: {snapshot?.tradeCapacity.used} of {snapshot?.tradeCapacity.limit}. Existing recovery remains available when a restored profile exceeds this admission limit.</p>
     </section>}
-    {snapshot?.proposals.map(proposal => <section key={proposal.id} data-proposal-id={proposal.id} data-binding-status={proposal.bindingStatus}>
+    {snapshot?.proposals.map(proposal => <section key={proposal.id} data-proposal-id={proposal.id} data-binding-status={proposal.bindingStatus}
+      data-proposal-state={proposal.state} data-wallet-connected={String(proposal.walletConnected)}>
       <h2>Saved proposal</h2><p>Peer acceptance has not been established. Saving these terms does not prepare or send a transaction.</p>
+      <p>Finalized escrow observation: {proposal.state}. Chain time: {proposal.chainTimeSeconds ?? 'Unavailable'}.</p>
       {proposal.restored && <p>Original provenance preserved after restore</p>}
       {proposal.bindingStatus === 'configuration-mismatch' && <p>Saved with a different local configuration</p>}
       {proposal.bindingStatus === 'unsupported' && <p>These terms are unsupported by this build</p>}
@@ -148,6 +150,20 @@ export function SolanaLocalnetRoot() {
           ['Seller nonce', proposal.terms.sellerNonce], ['Revision', proposal.terms.revision], ['Principal (lamports)', proposal.terms.amountBaseUnits],
           ['Acceptance deadline (chain seconds)', proposal.terms.acceptBeforeSeconds], ['Escrow expiry (chain seconds)', proposal.terms.escrowExpirySeconds],
         ].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+      {proposal.bindingStatus === 'available' && !proposal.recoveryRetained && !proposal.escrowConflict && <div className="solana-actions">
+        <button disabled={busy} onClick={() => void request({ type: 'funding.wallet.connect', proposalId: proposal.id })}>Connect seller wallet</button>
+        <button disabled={busy || !proposal.walletConnected || proposal.state !== 'absent' ||
+          proposal.intents.some(intent => !['finalized', 'failed', 'dropped', 'cancelled'].includes(intent.state)) ||
+          proposal.intents.some(intent => intent.action === 'fund' && intent.state === 'dropped' && !proposal.intents.some(next => next.replacementOf === intent.id))}
+          onClick={() => void request({ type: 'funding.prepare', proposalId: proposal.id })}>Review funding</button>
+      </div>}
+      <ul>{proposal.intents.map(intent => <li key={intent.id}>{intent.action}: {intent.state} {intent.signature && <code>{intent.signature}</code>}
+        {intent.action === 'fund' && intent.state === 'dropped' && !proposal.intents.some(next => next.replacementOf === intent.id) &&
+          proposal.bindingStatus === 'available' && !proposal.recoveryRetained && !proposal.escrowConflict &&
+          <button disabled={busy || !proposal.walletConnected || proposal.state !== 'absent' ||
+            proposal.intents.some(record => !['finalized', 'failed', 'dropped', 'cancelled'].includes(record.state))}
+            onClick={() => void request({ type: 'funding.prepare', proposalId: proposal.id, rebuildOf: intent.id })}>Review new funding after this definitive drop</button>}
+      </li>)}</ul>
     </section>)}
     {open && <section><h2>Import the original recovery document</h2>
       <div className="solana-field"><label htmlFor="solana-recovery-json">Recovery JSON</label><textarea id="solana-recovery-json" rows={5} value={recovery} maxLength={16384} onChange={e => setRecovery(e.target.value)} /></div>

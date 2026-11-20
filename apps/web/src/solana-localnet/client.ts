@@ -16,6 +16,7 @@ export function createSolanaRecoveryClient(config: SolanaLocalnetConfig, wallet:
     if (next.profileId === null) { privateBlocked = true; bridge.revoke(); }
     snapshot = privateBlocked ? { ...blank(next.error), phase: next.phase === 'working' ? 'working' : 'locked', profileIds: next.profileIds } : { ...next,
       wallet: walletBlocked ? null : next.wallet, review: reviewBlocked ? null : next.review,
+      proposals: walletBlocked ? next.proposals.map(p => ({ ...p, walletConnected: false })) : next.proposals,
       trades: walletBlocked ? next.trades.map(t => ({ ...t, canRelease: false, canRefund: false, canPayout: false })) : next.trades };
     for (const listener of [...listeners]) { try { listener(snapshot); } catch { /* Display only. */ } }
   }
@@ -49,8 +50,8 @@ export function createSolanaRecoveryClient(config: SolanaLocalnetConfig, wallet:
     if (job.epoch !== epoch) { job.resolve({ ok: false, code: 'LOCKED', snapshot: snapshot ?? blank() }); return; }
     if (message.result.ok) {
       if (['profile.create', 'profile.unlock', 'backup.restore'].includes(job.type) && message.result.snapshot.profileId !== null) privateBlocked = false;
-      if (job.type === 'wallet.connect') walletBlocked = false;
-      if (job.type === 'review.prepare') reviewBlocked = false;
+      if (job.type === 'wallet.connect' || job.type === 'funding.wallet.connect') walletBlocked = false;
+      if (job.type === 'review.prepare' || job.type === 'funding.prepare') reviewBlocked = false;
     }
     notify(message.result.snapshot); job.resolve({ ...message.result, snapshot: snapshot! });
   }
@@ -65,7 +66,7 @@ export function createSolanaRecoveryClient(config: SolanaLocalnetConfig, wallet:
       if (command.type === 'review.cancel') { epoch++; reviewBlocked = true; bridge.revoke(); cancelJobs(); }
       let end = () => {};
       try {
-        if (command.type === 'wallet.connect') end = bridge.beginConnect();
+        if (command.type === 'wallet.connect' || command.type === 'funding.wallet.connect') end = bridge.beginConnect();
         if (command.type === 'review.confirm') {
           if (!snapshot?.review || snapshot.review.id !== command.reviewId || reviewBlocked) throw Error();
           end = bridge.beginReview(snapshot.review);
