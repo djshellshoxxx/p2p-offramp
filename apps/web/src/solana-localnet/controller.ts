@@ -1,12 +1,15 @@
 /** One local recovery owner per Worker. Canonical receipts and all native intents remain in the encrypted vault. */
+import { TermsError } from '../../../../packages/domain/index.ts';
 import { EncryptedVaultService, EncryptedBackupService, type VaultStore } from '../../../../packages/storage/index.ts';
-import { decodeBase64url, encodeBase64url, parseStrictJsonBytes, type VaultSession, type VaultSessionLease } from '../../../../packages/schemas/index.ts';
+import { decodeBase64url, encodeBase64url, parseStrictJsonBytes, ValidationError, type PrivateRecordV1, type TradeBinding, type VaultSession, type VaultSessionLease } from '../../../../packages/schemas/index.ts';
 import { createSolanaEscrowClient, SolanaVaultJournal, parseRecoveryDocument, recoveryBinding, recoveryExits, decodeBase64,
   encodeBase64, unsignedTransaction, type SolanaEscrowClient, type PreparedSolanaAction, type SolanaRecoveryDocument,
   type BoundSolanaTrade, type SolanaWalletPort, type SolanaWalletSession, type SolanaReadRpc, type SolanaEscrowSnapshot,
   type SolanaIntentRecord } from '../../../../packages/chain-solana/localnet.ts';
+import { parseSolanaFundingProposal, createSolanaFundingProposalRecord, decodeSolanaFundingProposalRecord,
+  SOLANA_FUNDING_PROPOSAL_RECORD_FORMAT, type NativeSolanaFundingTerms, type SolanaFundingProposalRecord } from './funding-proposal.ts';
 import type { SolanaLocalnetConfig } from './config.ts';
-import type { SolanaCommand, SolanaResult, SolanaReview, SolanaSnapshot, SolanaTradeView } from './protocol.ts';
+import type { SolanaCommand, SolanaResult, SolanaReview, SolanaSnapshot, SolanaTradeView, SolanaFundingProposalView } from './protocol.ts';
 import { fields, fail, parseSolanaCommand, SolanaUiFailure } from './validation.ts';
 
 const RECORD_FORMAT = 'p2p-offramp/solana-local-recovery/v1';
@@ -21,6 +24,15 @@ interface Trade {
   readonly document: SolanaRecoveryDocument; readonly bound: BoundSolanaTrade; readonly role: 'seller' | 'buyer'; readonly restored: boolean;
   snapshot: SolanaEscrowSnapshot | null; observedAt: number; intents: readonly SolanaIntentRecord[];
 }
+interface Proposal {
+  readonly record: PrivateRecordV1; readonly value: SolanaFundingProposalRecord; readonly bound: BoundSolanaTrade | null;
+  readonly bindingStatus: SolanaFundingProposalView['bindingStatus'];
+}
+const bindingId = (binding: TradeBinding): string => JSON.stringify([binding.chain, binding.networkId, binding.deploymentId, binding.tradeId]);
+function reservations(terms: Pick<NativeSolanaFundingTerms, 'genesisHash' | 'programId' | 'seller' | 'sellerNonce'>, escrow: string | null): string[] {
+  return [`seed:${JSON.stringify([terms.genesisHash, terms.programId, terms.seller, terms.sellerNonce])}`,
+    ...(escrow === null ? [] : [`address:${JSON.stringify([terms.genesisHash, escrow])}`])];
+}
 interface Review { readonly public: SolanaReview; readonly prepared: PreparedSolanaAction; readonly wallet: SolanaWalletSession; readonly epoch: number }
 export interface SolanaControllerOptions {
   readonly store?: VaultStore; readonly onSnapshot?: (snapshot: SolanaSnapshot) => void;
@@ -31,7 +43,7 @@ export class SolanaRecoveryController {
   readonly #options: SolanaControllerOptions; readonly #vault: EncryptedVaultService; readonly #backup: EncryptedBackupService;
   #session: VaultSession | null = null; #lease: VaultSessionLease | null = null; #journal: SolanaVaultJournal | null = null;
   #client: SolanaEscrowClient | null = null; #wallet: SolanaWalletSession | null = null; #review: Review | null = null;
-  #trades = new Map<string, Trade>(); #profiles: readonly string[] = []; #epoch = 0; #busy = false; #closed = false;
+  #trades = new Map<string, Trade>(); #proposals = new Map<string, Proposal>(); #profiles: readonly string[] = []; #epoch = 0; #busy = false; #closed = false;
   #dropping = false; #error: string | null = null; #abort = new AbortController(); #deadline = 0; #lastMono = 0;
   #idle: ReturnType<typeof setTimeout> | undefined; #reviewTimer: ReturnType<typeof setTimeout> | undefined;
   constructor(config: SolanaLocalnetConfig, wallet: SolanaWalletPort, rpc: SolanaReadRpc, options: SolanaControllerOptions = {}) {
@@ -59,7 +71,7 @@ export class SolanaRecoveryController {
     this.#epoch++; this.#abort.abort(); this.#abort = new AbortController(); clearTimeout(this.#idle); this.#clearReview();
     this.#client?.dispose(); this.#client = null; this.#journal?.dispose(); this.#journal = null;
     this.#wallet = null; this.#lease?.dispose(); this.#lease = null; this.#session = null;
-    this.#vault.lockAll(); this.#trades.clear(); this.#dropping = false;
+    this.#vault.lockAll(); this.#trades.clear(); this.#proposals.clear(); this.#dropping = false;
   }
   /** Called synchronously by the Worker event handler. No existing prepared handle survives a wallet change. */
   walletChanged(): void {
@@ -72,6 +84,28 @@ export class SolanaRecoveryController {
     this.#client ??= createSolanaEscrowClient({ rpc: this.#rpc, wallet: this.#walletPort, journal: this.#journal!, registry: this.#config.registry,
       clock: { now: this.#now }, margins: this.#config.margins, walletChain: 'solana:localnet' });
     return this.#client;
+  }
+  #inventory(): readonly { readonly identity: string; readonly reservations: readonly string[] }[] {
+    return [...[...this.#trades.values()].map(trade => ({ identity: bindingId(trade.bound.binding),
+      reservations: reservations(trade.document.terms, trade.bound.escrow.address) })),
+    ...[...this.#proposals.values()].map(proposal => ({ identity: bindingId(proposal.value.binding),
+      reservations: reservations(proposal.value.proposal.terms, proposal.bound?.escrow.address ?? null) }))];
+  }
+  #capacity(binding: TradeBinding): void {
+    const identities = new Set(this.#inventory().map(item => item.identity));
+    if (!identities.has(bindingId(binding)) && identities.size >= MAX_TRADES) fail('LIMIT_EXCEEDED');
+  }
+  #retainedProposal(record: PrivateRecordV1, data: SolanaFundingProposalRecord): Proposal {
+    const config = this.#config, network = config.network, deployment = network.deployments[0]!, pins = data.configuration;
+    const compatible = data.binding.networkId === network.id && data.binding.deploymentId === deployment.id &&
+      data.proposal.terms.genesisHash === network.genesisHash && data.proposal.terms.programId === deployment.address &&
+      pins.registrySha256 === config.registrySha256 && deployment.runtime.kind === 'solana-program' &&
+      pins.programDataSha256 === deployment.runtime.programDataSha256 && pins.artifactSha256 === deployment.artifactSha256 &&
+      pins.assetId === network.assets[0]!.id && pins.rpcUrl === config.rpcUrl &&
+      pins.margins.submitMarginSeconds === config.margins.submitMarginSeconds && pins.margins.releaseMarginSeconds === config.margins.releaseMarginSeconds;
+    const bound = compatible ? this.#native().bind(data.binding, data.proposal.terms) : null;
+    return Object.freeze({ record: Object.freeze({ ...record }), value: data, bound: bound?.ok ? bound.value : null,
+      bindingStatus: !compatible ? 'configuration-mismatch' : bound?.ok ? 'available' : 'unsupported' });
   }
   #emit(): void { try { this.#options.onSnapshot?.(this.snapshot()); } catch { /* Display observers have no authority. */ } }
   snapshot(): SolanaSnapshot {
@@ -91,9 +125,21 @@ export class SolanaRecoveryController {
         payoutBlockedBy: blockers, rentTopUpLamports: topUp, canRelease: eligible('release'), canRefund: eligible('refund'),
         canPayout: eligible('payout') && !blockers.includes('rent-unknown') };
     }) : [];
+    const inventory = open ? this.#inventory() : [], groups = new Map<string, Set<string>>();
+    for (const item of inventory) for (const key of item.reservations) {
+      const identities = groups.get(key) ?? new Set<string>(); identities.add(item.identity); groups.set(key, identities);
+    }
+    const recovered = new Set(open ? [...this.#trades.values()].map(trade => bindingId(trade.bound.binding)) : []);
+    const proposals: SolanaFundingProposalView[] = open ? [...this.#proposals.values()].map(proposal => {
+      const data = proposal.value, escrow = proposal.bound?.escrow.address ?? null;
+      return { id: proposal.record.id, binding: data.binding, terms: data.proposal.terms, escrow,
+        restored: data.originProfileId !== this.#session!.profileId, bindingStatus: proposal.bindingStatus,
+        recoveryRetained: recovered.has(bindingId(data.binding)),
+        escrowConflict: reservations(data.proposal.terms, escrow).some(key => (groups.get(key)?.size ?? 0) > 1) };
+    }) : [];
     return { version: 1, phase: this.#busy ? 'working' : !open ? 'locked' : 'ready', profileIds: this.#profiles,
       profileId: open ? this.#session!.profileId : null, wallet: open && wallet ? { address: wallet.address, tradeId: wallet.tradeId } : null,
-      trades, review: open ? this.#review?.public ?? null : null, error: this.#error };
+      trades, proposals, tradeCapacity: { used: new Set(inventory.map(item => item.identity)).size, limit: MAX_TRADES }, review: open ? this.#review?.public ?? null : null, error: this.#error };
   }
   #bind(document: SolanaRecoveryDocument): BoundSolanaTrade {
     const network = this.#config.network, deployment = network.deployments[0]!;
@@ -113,17 +159,25 @@ export class SolanaRecoveryController {
     this.#lease = value(this.#vault.captureSession(session, () => { this.#drop(); this.#emit(); }));
     this.#journal = new SolanaVaultJournal(this.#vault, session);
     const records = value(await this.#vault.list(session.sessionId, 'trade')); this.#guard(epoch);
+    const trades = new Map<string, Trade>(), proposals = new Map<string, Proposal>(), proposalBindings = new Set<string>();
     for (const record of records) {
       const raw = parseStrictJsonBytes(decodeBase64url(record.payload, 1, 16384), 16384) as Record<string, unknown>;
+      if (raw?.format === SOLANA_FUNDING_PROPOSAL_RECORD_FORMAT) {
+        const data = await decodeSolanaFundingProposalRecord(record); this.#guard(epoch);
+        const identity = bindingId(data.binding);
+        if (proposalBindings.has(identity) || proposals.has(record.id)) fail('INTEGRITY_FAILURE');
+        proposalBindings.add(identity); proposals.set(record.id, this.#retainedProposal(record, data)); continue;
+      }
       if (!raw || raw.format !== RECORD_FORMAT) continue;
       const data = fields(raw, ['format', 'document', 'role', 'originProfileId']);
       if (record.schemaVersion !== 1 || !['seller', 'buyer'].includes(data.role as string) || typeof data.originProfileId !== 'string' || !/^[0-9a-f]{32}$/.test(data.originProfileId)) fail('INTEGRITY_FAILURE');
       const document = parseRecoveryDocument(data.document), bound = this.#bind(document);
-      if (record.id !== await this.#recordId(document.termsHash) || this.#trades.has(document.termsHash) || this.#trades.size >= MAX_TRADES) fail('INTEGRITY_FAILURE');
+      if (record.id !== await this.#recordId(document.termsHash) || trades.has(document.termsHash)) fail('INTEGRITY_FAILURE');
       this.#guard(epoch);
-      this.#trades.set(document.termsHash, { document, bound, role: data.role as 'seller' | 'buyer', restored: data.originProfileId !== session.profileId,
+      trades.set(document.termsHash, { document, bound, role: data.role as 'seller' | 'buyer', restored: data.originProfileId !== session.profileId,
         snapshot: null, observedAt: 0, intents: [] });
     }
+    this.#guard(epoch); this.#trades = trades; this.#proposals = proposals;
     await this.#refresh(true);
   }
   async #refresh(recover = false): Promise<void> {
@@ -139,10 +193,10 @@ export class SolanaRecoveryController {
     }
   }
   async #import(text: string, role: 'seller' | 'buyer'): Promise<void> {
-    if (this.#trades.size >= MAX_TRADES) fail('LIMIT_EXCEEDED');
     const epoch = this.#epoch, document = parseRecoveryDocument(parseStrictJsonBytes(new TextEncoder().encode(text), 16384));
     if (this.#trades.has(document.termsHash)) fail('CONFLICT');
-    const bound = this.#bind(document), client = this.#native(), read = value(await client.read(bound)); this.#guard(epoch);
+    const bound = this.#bind(document); this.#capacity(bound.binding);
+    const client = this.#native(), read = value(await client.read(bound)); this.#guard(epoch);
     if (!read.escrow || read.custody?.kind !== 'native') fail('FUNDED_ESCROW_REQUIRED');
     const id = await this.#recordId(document.termsHash); this.#guard(epoch);
     const payload = encodeBase64url(new TextEncoder().encode(JSON.stringify({ format: RECORD_FORMAT, document, role, originProfileId: this.#session!.profileId })));
@@ -150,6 +204,31 @@ export class SolanaRecoveryController {
     this.#guard(epoch);
     this.#trades.set(document.termsHash, { document, bound, role, restored: false, snapshot: read, observedAt: this.#now(), intents: [] });
     await this.#refresh(true);
+  }
+  async #importProposal(text: string): Promise<void> {
+    const epoch = this.#epoch, session = this.#session!, signal = this.#abort.signal, bytes = new TextEncoder().encode(text);
+    let parsed: Awaited<ReturnType<typeof parseSolanaFundingProposal>>;
+    try { parsed = await parseSolanaFundingProposal(bytes); }
+    catch (error) { if (error instanceof TermsError || error instanceof ValidationError) fail(error.code); throw error; }
+    this.#guard(epoch);
+    const binding: TradeBinding = { chain: 'solana', networkId: this.#config.network.id,
+      deploymentId: this.#config.network.deployments[0]!.id, tradeId: parsed.termsHash }, identity = bindingId(binding);
+    if ([...this.#trades.values()].some(trade => bindingId(trade.bound.binding) === identity)) fail('CONFLICT');
+    const retained = [...this.#proposals.values()].find(proposal => bindingId(proposal.value.binding) === identity);
+    if (retained) {
+      if (JSON.stringify(retained.value.proposal) !== JSON.stringify(parsed.document)) fail('CONFLICT');
+      return;
+    }
+    const candidate = await createSolanaFundingProposalRecord(bytes, this.#config, session.profileId); this.#guard(epoch);
+    const bound = value(this.#native().bind(candidate.value.binding, candidate.value.proposal.terms));
+    const occupied = reservations(bound.terms, bound.escrow.address);
+    if (this.#inventory().some(item => item.identity !== identity && item.reservations.some(key => occupied.includes(key)))) fail('CONFLICT');
+    this.#capacity(bound.binding);
+    const existing = value(await this.#vault.read(session.sessionId, candidate.record.id)); this.#guard(epoch);
+    if (existing !== null) fail('CONFLICT');
+    value(await this.#vault.commit(session.sessionId, this.#lease!.current()!.revision, [{ op: 'put', record: candidate.record }],
+      signal, () => this.#guard(epoch))); this.#guard(epoch);
+    this.#proposals.set(candidate.record.id, Object.freeze({ ...candidate, bound, bindingStatus: 'available' }));
   }
   async #cancel(): Promise<void> {
     const review = this.#review; this.#clearReview();
@@ -214,7 +293,8 @@ export class SolanaRecoveryController {
         this.#guard(); const epoch = this.#epoch;
         value(await this.#vault.assertFresh(this.#session!.sessionId, this.#abort.signal)); this.#guard(epoch);
         if (command.type !== 'refresh') this.#touch();
-        if (command.type === 'recovery.import') await this.#import(command.text, command.role);
+        if (command.type === 'funding.proposal.import') await this.#importProposal(command.text);
+        else if (command.type === 'recovery.import') await this.#import(command.text, command.role);
         else if (command.type === 'recovery.export') {
           const trade = this.#trades.get(command.tradeId); if (!trade) fail('TRADE_NOT_FOUND');
           // The retained document passed the canonical parser on import/unlock. Export no profile or journal wrapper.

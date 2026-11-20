@@ -10,7 +10,7 @@ export function createSolanaRecoveryClient(config: SolanaLocalnetConfig, wallet:
   const listeners = new Set<(snapshot: SolanaSnapshot) => void>();
   const jobs = new Map<number, { resolve: (r: SolanaResult) => void; end: () => void; timer: ReturnType<typeof setTimeout>; epoch: number; type: SolanaCommand['type'] }>();
   const blank = (error: string | null = null): SolanaSnapshot => ({ version: 1, phase: 'locked', profileIds: snapshot?.profileIds ?? [],
-    profileId: null, wallet: null, trades: [], review: null, error });
+    profileId: null, wallet: null, trades: [], proposals: [], tradeCapacity: { used: 0, limit: 8 }, review: null, error });
   const post = (value: SolanaWorkerInput) => { if (!closed) worker.postMessage(value); };
   function notify(next: SolanaSnapshot): void {
     if (next.profileId === null) { privateBlocked = true; bridge.revoke(); }

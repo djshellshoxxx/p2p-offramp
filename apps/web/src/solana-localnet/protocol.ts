@@ -1,10 +1,12 @@
-/** Purpose-bound local recovery messages. No funding, generic RPC, secret read or acceptance command. */
+/** Purpose-bound local proposals and funded recovery. No funding, generic RPC, secret read or acceptance command. */
+import type { NativeSolanaFundingTerms, SolanaFundingProposalRecord } from './funding-proposal.ts';
 export type RecoveryAction = 'release' | 'refund' | 'payout';
 export type SolanaCommand =
   | { readonly type: 'status' | 'profile.lock' | 'refresh' | 'review.cancel' | 'backup.export' }
   | { readonly type: 'profile.create'; readonly passphrase: string }
   | { readonly type: 'profile.unlock'; readonly profileId: string; readonly passphrase: string }
   | { readonly type: 'backup.restore'; readonly bytes: Uint8Array; readonly sourcePassphrase: string; readonly destinationPassphrase: string }
+  | { readonly type: 'funding.proposal.import'; readonly text: string }
   | { readonly type: 'recovery.import'; readonly text: string; readonly role: 'seller' | 'buyer' }
   | { readonly type: 'recovery.export'; readonly tradeId: string }
   | { readonly type: 'wallet.connect'; readonly tradeId: string }
@@ -28,9 +30,17 @@ export interface SolanaTradeView {
   readonly payoutBlockedBy: readonly string[]; readonly rentTopUpLamports: string | null;
   readonly canRelease: boolean; readonly canRefund: boolean; readonly canPayout: boolean;
 }
+export interface SolanaFundingProposalView {
+  readonly id: string; readonly binding: SolanaFundingProposalRecord['binding'];
+  readonly terms: NativeSolanaFundingTerms; readonly escrow: string | null; readonly restored: boolean;
+  /** Binding availability is data compatibility, never funding eligibility or acceptance. */
+  readonly bindingStatus: 'available' | 'configuration-mismatch' | 'unsupported';
+  readonly recoveryRetained: boolean; readonly escrowConflict: boolean;
+}
 export interface SolanaSnapshot {
   readonly version: 1; readonly phase: 'locked' | 'ready' | 'working'; readonly profileIds: readonly string[];
   readonly profileId: string | null; readonly wallet: { readonly address: string; readonly tradeId: string } | null;
+  readonly proposals: readonly SolanaFundingProposalView[]; readonly tradeCapacity: { readonly used: number; readonly limit: 8 };
   readonly trades: readonly SolanaTradeView[]; readonly review: SolanaReview | null; readonly error: string | null;
 }
 export type SolanaResult = { readonly ok: true; readonly snapshot: SolanaSnapshot; readonly backupBytes?: Uint8Array;

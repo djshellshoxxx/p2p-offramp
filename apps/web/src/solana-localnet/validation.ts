@@ -40,6 +40,7 @@ export function parseSolanaCommand(input: unknown): SolanaCommand {
     const bytes = backupBytes(raw.bytes);
     return { type, bytes, sourcePassphrase: text(raw.sourcePassphrase, 1024), destinationPassphrase: text(raw.destinationPassphrase, 1024) };
   }
+  if (type === 'funding.proposal.import') return { type, text: text(fields(input, ['type', 'text']).text, 4096) };
   if (type === 'recovery.import') {
     const raw = fields(input, ['type', 'text', 'role']);
     if (raw.role !== 'seller' && raw.role !== 'buyer') return fail();
