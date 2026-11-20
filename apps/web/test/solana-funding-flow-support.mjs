@@ -32,6 +32,7 @@ function store() {
 }
 async function fixture(t, options = {}) {
   const env = setupClient('native', { clusterOptions: { absent: true }, ...options }), data = store(); let mono = 0, wall = Date.now();
+  let monotonic = () => mono;
   const option = configOption(network => {
     network.genesisHash = network.chainIdentity = env.terms.genesisHash;
     network.deployments[0].artifactSha256 = env.trade.deployment.artifactSha256;
@@ -39,7 +40,7 @@ async function fixture(t, options = {}) {
   });
   const config = await parseSolanaLocalnetConfig(solanaLocalnetConfigDocument(option));
   const controller = new SolanaRecoveryController(config, env.walletFake.wallet, env.cluster.rpc,
-    { store: data, monotonicNow: () => mono, now: () => wall });
+    { store: data, monotonicNow: () => monotonic(), now: () => wall });
   t.after(() => { controller.dispose(); env.client.dispose(); });
   const created = success(await controller.dispatch({ type: 'profile.create', passphrase: PASS }));
   assert.ok(Array.isArray(created.snapshot.proposals), 'missing proposal inventory');
@@ -61,7 +62,7 @@ async function fixture(t, options = {}) {
   };
   const recovery = value(createRecoveryDocument(env.trade));
   const importRecovery = () => controller.dispatch({ type: 'recovery.import', text: JSON.stringify(recovery), role: 'seller' });
-  return { env, data, controller, config, id, proposal, save, read, reopen, seed, recovery, importRecovery, expire() { mono += 300001; }, advanceNow(ms) { wall += ms; } };
+  return { env, data, controller, config, id, proposal, save, read, reopen, seed, recovery, importRecovery, expire() { mono += 300001; }, advanceNow(ms) { wall += ms; }, setMonotonic(read) { monotonic = read; } };
 }
 
 export { fixture, success, value, deferred, PASS, DEST };

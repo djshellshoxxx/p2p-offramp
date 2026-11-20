@@ -196,3 +196,23 @@ test('stale and failed finalized observations cannot appear current or establish
   f.env.cluster.handle = () => { throw Error('controlled offline RPC'); }; success(await f.refresh());
   assert.equal(f.controller.snapshot().proposals[0].state, 'unverified'); assert.equal((await records(f)).documents.length, 0);
 });
+
+test('idle expiry between snapshot ownership checks keeps each projection coherent and subsequent actions locked', async t => {
+  const f = await ready(t), calls = f.env.cluster.calls.length; let reads = 0;
+  f.setMonotonic(() => reads++ === 0 ? 299999 : 300000);
+  const first = f.controller.snapshot();
+  const assertLocked = snapshot => {
+    assert.equal(snapshot.phase, 'locked'); assert.equal(snapshot.profileId, null); assert.equal(snapshot.wallet, null);
+    assert.deepEqual(snapshot.proposals, []); assert.deepEqual(snapshot.trades, []); assert.equal(snapshot.review, null);
+    assert.deepEqual(snapshot.tradeCapacity, { used: 0, limit: 8 });
+  };
+  if (first.phase === 'ready') {
+    assert.equal(first.profileId, f.id); assert.notEqual(first.wallet, null); assert.equal(first.proposals.length, 1);
+    assert.equal(first.proposals[0].id, f.proposalId); assert.equal(first.proposals[0].walletConnected, true);
+    assert.deepEqual(first.tradeCapacity, { used: 1, limit: 8 });
+  } else assertLocked(first);
+  assertLocked(f.controller.snapshot());
+  const denied = await f.prepare(); assert.equal(denied.ok, false); assert.equal(denied.code, 'LOCKED'); assertLocked(denied.snapshot);
+  assert.equal(f.env.cluster.calls.length, calls); assert.equal(f.env.walletFake.calls.sign.length, 0);
+  assert.equal(f.env.cluster.sent.length, 0); assert.equal((await records(f)).intents.length, 0);
+});

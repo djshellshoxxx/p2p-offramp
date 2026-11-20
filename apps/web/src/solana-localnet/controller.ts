@@ -168,7 +168,7 @@ export class SolanaRecoveryController {
         restored: data.originProfileId !== this.#session!.profileId, bindingStatus: proposal.bindingStatus,
         recoveryRetained: recovered.has(bindingId(data.binding)),
         state: fresh ? read.escrow?.state ?? 'absent' : 'unverified', chainTimeSeconds: fresh ? read.live.timestampSeconds : null,
-        walletConnected: this.#fundingWallet?.proposal === proposal && this.#ownsFunding(this.#fundingWallet),
+        walletConnected: this.#fundingWallet?.proposal === proposal && this.#fundingReferences(this.#fundingWallet),
         intents: observation.intents.map(r => ({ id: r.intentId, action: r.action, state: r.state, signature: r.signature, replacementOf: r.replacementOf })),
         escrowConflict: reservations(data.proposal.terms, escrow).some(key => (groups.get(key)?.size ?? 0) > 1) };
     }) : [];
@@ -273,10 +273,14 @@ export class SolanaRecoveryController {
     const trade = this.#trades.get(proposal.value.binding.tradeId);
     return trade && bindingId(trade.bound.binding) === bindingId(proposal.value.binding) ? trade : null;
   }
-  #ownsFunding(owner: FundingWalletOwner): boolean {
-    return this.#current(owner.epoch) && this.#fundingWallet === owner && this.#client === owner.client && this.#wallet === owner.wallet &&
-      this.#session!.profileId === owner.profileId && this.#session!.sessionId === owner.sessionId &&
+  /** Pure projection after snapshot's currentness admission; never revoke a session midway through its view. */
+  #fundingReferences(owner: FundingWalletOwner): boolean {
+    return this.#epoch === owner.epoch && this.#fundingWallet === owner && this.#client === owner.client && this.#wallet === owner.wallet &&
+      this.#session?.profileId === owner.profileId && this.#session?.sessionId === owner.sessionId &&
       this.#proposals.get(owner.proposalId) === owner.proposal && owner.proposal.bound === owner.bound;
+  }
+  #ownsFunding(owner: FundingWalletOwner): boolean {
+    return this.#current(owner.epoch) && this.#fundingReferences(owner);
   }
   #fundingProposal(id: string): Proposal {
     const proposal = this.#proposals.get(id); if (!proposal) fail('PROPOSAL_NOT_FOUND');
