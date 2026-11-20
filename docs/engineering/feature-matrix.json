@@ -469,7 +469,7 @@
   ],
   "staging_overlay": {
     "source_sha": "de5bb8aadadd9b76099110262b2f7beb123f9421",
-    "scope": "Generation5 core locally qualified2217 full tests and independently reviewed; publication and hosted execution pending. Original27-capability main assessment remains immutable. Nine optional sources remain separate PR191-199.",
+    "scope": "Published generation5 core PR205, locally qualified2217 full and independently reviewed. Hosted execution queued; original27-capability main baseline remains immutable. Nine optional packages remain separate.",
     "updates": [
       {
         "feature_id": "F03",
@@ -512,7 +512,8 @@
         "change": "PR191\u2013199 preserve one-package scope, native/custom gates and absent default imports. Combined source a2f90cbd passed2553 tests and all13 default files byte-match; current-head hosted qualification remains active."
       }
     ],
-    "published_head": null
+    "published_head": "cd7d54ba075118a7ec043788c17718be842ee405",
+    "integration_pr": 205
   },
   "additional_staging_capabilities": [
     {
@@ -580,5 +581,119 @@
       ],
       "remaining": "Historical stale references remain explicit; this module grants no legal, release or economic authority."
     }
-  ]
+  ],
+  "successor_overlay": {
+    "core": {
+      "generation": 8,
+      "source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "tree": "b330e1ca3a8a22598197bdd5de9532a0c56a917b",
+      "state": "published-local-qualified-current-hosted-pending",
+      "parent_pr": 205,
+      "full_suite": {
+        "tests": 2259,
+        "passed": 2259,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "build_policy_passed": 57,
+      "tooling_passed": 44,
+      "typescript_projects": 4,
+      "production_files": 238,
+      "core_modules": 142,
+      "high_medium_open": 0,
+      "commands_preserved": 56,
+      "optional_packages_included": false,
+      "report": "SUCCESSOR_CONSOLIDATION_GENERATIONS6_8_20261120.md",
+      "verification": "core-qualification-generation8.json",
+      "pr": 207,
+      "published_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "published_tree": "4b694124197ae8ce271f14307d12abc43c719406"
+    },
+    "backup_prerequisite": {
+      "pr": 208,
+      "branch": "codex/generation9-backup-verification-20261120",
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "tree": "6a4417741c0b399dde894773f29854f7a2d36228",
+      "tested_source": "2e2cf4ddefa56ad1df1e4b41f8d6bd66080a52d0",
+      "tested_tree": "e7f140d25550e29c9716a0f37c3a364ce2bb6604",
+      "full_passed": 2277,
+      "zero_fail_skip_cancel": true,
+      "typescript_projects": 4,
+      "policy_passed": 57,
+      "default_demo_passed": true,
+      "high_medium_open_in_reviewed_scope": 0,
+      "native_browser_qualified": false,
+      "report": "BACKUP_VERIFICATION_COMPOSITION_GENERATION9_20261120.md"
+    },
+    "relay": {
+      "pr": 206,
+      "branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "tree": "243d178ac6a3822f71ddf3ad3073cc1d8020b864",
+      "parent_heads": [
+        "e848ae19574e8b7f4cb040082df5255ee5a63f1e",
+        "df10fe26a308407237f9ccbc636c8bb61f55b84f"
+      ],
+      "tested_source": "46727d2a8ee1fd58cde15dcc252e1692408830f4",
+      "tested_tree": "6745c3b148aed3e13c092cc1d917541c24a9a482",
+      "full_passed": 2265,
+      "typescript_projects": 4,
+      "policy_passed": 57,
+      "boundaries": [
+        238,
+        142
+      ],
+      "default_build_passed": true,
+      "original_regression_passed": 15,
+      "original_regression_total": 17,
+      "corrected_regression_passed": 17,
+      "independent_relay_passed": 98,
+      "native_nak_available": false,
+      "independent_high_medium_open": 0,
+      "report": "RELAY_CORE_COMPOSITION_GENERATION11_20261120.md"
+    },
+    "updater_composition": {
+      "state": "incomplete-screened-author-stopped-review-report-only",
+      "recovered_local_checkpoint": "01f40b3e009d77b520ba0b6d7881fa24fc6301f9",
+      "historical_files_unchanged": true,
+      "requirements": [
+        "Exact own-lock lifecycle ownership beyond selection identity",
+        "Fresh per-attempt browser result oracle",
+        "Actual permitted native browser composition",
+        "Owner trust and explicit production integration"
+      ],
+      "report": "SECURITY_REVIEW_UPDATER_COMPOSITION_GENERATION10_20261120.md",
+      "product_defect_count_added": 0,
+      "default_activation": false,
+      "screening_handling": "No takeover or rephrased restart of blocked implementation."
+    },
+    "main_unchanged": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+    "source_status_not_main_or_release_approval": true,
+    "dependency": {
+      "owner": "parallel consolidation stream; preserve active work",
+      "pr": 209,
+      "branch": "codex/ctutils-remediation-20261119",
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "tree": "e7aba3833fa52c6eda7a23cd6d1301cadc610355",
+      "base_pr": 207,
+      "state": "compatible-lock-remediation-published-separate-native-qualification-pending",
+      "author_reported_upstream_tests_passed": 150,
+      "author_and_independent_audit_clean": false,
+      "remaining_reported_match": "crypto-bigint0.5.5 / RUSTSEC-2026-0387",
+      "maintenance_warnings_reported": 5,
+      "source_claim": "Source-bound external author/reviewer evidence; this successor did not rerun Cargo or qualify an SBPF artifact.",
+      "product_defect_count_added": 0,
+      "merge_gate": "Preserve remaining finding and native checks; no ignore, forced incompatible upgrade or owner waiver invented."
+    },
+    "hosted_metadata": {
+      "file": "hosted-published-status-generation11.json",
+      "observed_at_utc": "2026-11-20T03:05:14.328Z",
+      "pr207": "specification inventory passed; other four workflows queued",
+      "pr208": "five workflows queued",
+      "pr206": "four current triggered workflows queued; four preceding attempts cancelled following head/base update; no cancellation relabeled pass",
+      "pr209": "five workflows queued",
+      "scope": "Workflow metadata only; no execution checkout or missing workflow inferred as qualified"
+    }
+  }
 }

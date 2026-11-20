@@ -1,6 +1,26 @@
 # P2P-Offramp consolidation handoff
 
-## Current generations 6–9 checkpoint
+## Current published successor checkpoint — generation 11
+
+Read this checkpoint with live PR200, whose other active owner and dependency work are preserved. This successor publishes `codex/successor-handoff-20261120` separately, without changing that active branch. The code tree here is the already published backup prerequisite plus documentation; this is a coordination/evidence checkpoint, not an additional merge or release candidate.
+
+| Candidate | Published head | Actual local qualification |
+| --- | --- | --- |
+| Core PR207, targeting main | df10fe26a308407237f9ccbc636c8bb61f55b84f |2,259/2,259; four TS; 57 policy; 44 tooling; both builds |
+| Backup prerequisite PR208, targeting 207 |0e148564743b1ee353abdbdf8931fec464f09870 |2,277/2,277; four TS; 57 policy; both builds |
+| Relay/core PR206, now targeting 207 |825a85a55a1e0a43d6f416696fabee94913a2f18 |2,265/2,265; four TS; 57 policy; default build |
+
+Each completed full suite has zero failures/skips/cancellations. Exact final local/remote trees were fetched and matched. Independent publication review verified the source unions, all 17 core/backup log hashes, post-test documentation-only changes and emitted graph boundaries. These are different source compositions, with their own results. `SUCCESSOR_HANDOFF_GENERATION11_20261120.md` and JSON state summarize sources, limitations and ownership.
+
+PR205 remains draft/held. At 03:05UTC,207's specification inventory passed and four other workflows were queued;208 had five queued. Updated206 had four current triggered workflows queued and four earlier cancelled attempts. Cancellation is not a pass, and path-filtered workflow absence is not native qualification. PR202's two native Solana gates finally passed, with actual receipts and real waits verified. PR203/205 passed their first native gate and were still running the second. Ancestor success never qualifies a later tree. Preserve both actual 1,800-second refund waits and every strict financial assertion.
+
+Four core causes plus two Low relay API/configuration causes are independently closed: 31 recorded causes including the previous 25. F24's backup verification prerequisite is complete at its stated scope; full update UI/native composition is incomplete. The historical adapter's exact own-lock and stale-result oracle requirements remain open. Automatic screening stopped its author; no takeover or rephrased retry is authorized by this handoff. Keep the incomplete fixture outside qualified candidates.
+
+The separate dependency stream published PR209 c8695278c3b85ac75fc2ad3318830aa8a08f4d50, also based on207. Its source-bound reports describe one compatible Cargo lock update and a retained advisory match; its audit is not clean and native cross-target qualification remains pending. Do not duplicate or overwrite its active owner. Live PR200 at the latest observation is 0b6533cd553e453a0a12aa0e089cf45db9e078c2.
+
+Main remains 5c5a84ef6300330700c8b0ca54d074ac113f08be. No main merge, deployment, release or funds operation occurred. ReleaseEnabled=0. The existing hourly task continues bounded useful fresh-worker generations from live refs; remaining credits are unobservable. Earlier sections below are dated history, not newer authority.
+
+## Historical generations 6–9 checkpoint
 
 The corrected core is independently reviewed and locally qualified at `7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390`, tree `b330e1ca3a8a22598197bdd5de9532a0c56a917b`: **2,259/2,259 tests**, four TS projects, 57 policy,44 tooling,32 specs, boundaries238/142, docs/governance/default/demo passed. Only documentation follows that source. Publish and resolve `codex/generation8-core-20261120` plus live PR200 for exact remote identity and hosted state. PR205 is draft: it lacks four reviewed repairs and must not merge as the final candidate.
 
@@ -140,7 +160,7 @@ Local Chromium cannot launch under the managed Unix-socket restriction. Do not b
 
 PR202's merge checkout32f7353551660a6c1e3e9302eecf3647b482c0c3 equals its head tree25d637fa and has verified PR190/202 parents. Its short diagnostic is scoped to the controlled failed acknowledgment. Earlier duplicate transport replay is an inference supported by current Chromium source, not a pinned-build trace or a general arbitrary-reset guarantee.
 
-Preserve both real1,800-second native refund minima, signature uniqueness, send counts, durable markers, exact principal/fees, explicit expired replacement and zero fixture errors. Do not merge a failing ancestor because unrelated contexts passed. The current descendant must qualify its actual source/tree and checkout parents.
+Preserve both real 1,800-second native refund minima, signature uniqueness, send counts, durable markers, exact principal/fees, explicit expired replacement and zero fixture errors. Do not merge a failing ancestor because unrelated contexts passed. The current descendant must qualify its actual source/tree and checkout parents.
 
 `HOSTED_QUALIFICATION_20261119.md`, `GENERATION2_HOSTED_QUALIFICATION_20261119.md` and `HOSTED_PROGRESS_GENERATION4_20261119.md` preserve dated exact checkout evidence. Dedicated meetup/privacy-controls/proof-jobs browser receipts passed with their stated limits; they do not qualify physical location, instant cross-document privacy revocation, arbitrary providers, browser WASM under unchanged CSP or standard-browser physical termination deadlines.
 

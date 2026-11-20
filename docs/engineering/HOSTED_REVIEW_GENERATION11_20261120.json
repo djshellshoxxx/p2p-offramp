@@ -1,0 +1,972 @@
+{
+  "schema": 1,
+  "observed_at_utc": "2026-11-20T02:53:45Z",
+  "log_inspection_completed_at_utc": "2026-11-20T02:55:39Z",
+  "reviewer": "hosted_review_g11",
+  "review_base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+  "review_base_tree": "4b694124197ae8ce271f14307d12abc43c719406",
+  "scope": "Bounded connected GitHub read-only review; wrappers return latest/first page; no reruns or remote writes.",
+  "pull_requests": [
+    {
+      "pr": 202,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/202",
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "tree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+      "base": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "merge_checkout": "32f7353551660a6c1e3e9302eecf3647b482c0c3",
+      "draft": false,
+      "state": "open",
+      "workflows": [
+        {
+          "id": 44652103846,
+          "name": "Specification inventory",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 824,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44652103846/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44652103846/logs",
+          "workflow_id": 392674119
+        },
+        {
+          "id": 44652103772,
+          "name": "Vault foundation",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 822,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44652103772/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44652103772/logs",
+          "workflow_id": 392685056
+        },
+        {
+          "id": 44652103806,
+          "name": "Nostr relay interoperability",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 29,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44652103806/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44652103806/logs",
+          "workflow_id": 423552885
+        },
+        {
+          "id": 44652103985,
+          "name": "EVM escrow",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 733,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44652103985/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44652103985/logs",
+          "workflow_id": 398780995
+        },
+        {
+          "id": 44652103777,
+          "name": "Solana escrow",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 69,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44652103777/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44652103777/logs",
+          "workflow_id": 406663930
+        }
+      ]
+    },
+    {
+      "pr": 203,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/203",
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "tree": "412efa7b9534cc182d05d2b97830d5f6ff09944e",
+      "base": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "base_branch": "codex/solana-browser-send-repair-20261119",
+      "merge_checkout": "8e2cd7b6ed1c907127b2e35e8b8826f59c039d90",
+      "draft": false,
+      "state": "open",
+      "workflows": [
+        {
+          "id": 44656212063,
+          "name": "Specification inventory",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 826,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44656212063/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44656212063/logs",
+          "workflow_id": 392674119
+        },
+        {
+          "id": 44656212245,
+          "name": "Solana escrow",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_number": 70,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44656212245/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44656212245/logs",
+          "workflow_id": 406663930
+        },
+        {
+          "id": 44656212072,
+          "name": "Nostr relay interoperability",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 31,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44656212072/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44656212072/logs",
+          "workflow_id": 423552885
+        },
+        {
+          "id": 44656212104,
+          "name": "EVM escrow",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 735,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44656212104/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44656212104/logs",
+          "workflow_id": 398780995
+        },
+        {
+          "id": 44656212078,
+          "name": "Vault foundation",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 824,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44656212078/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44656212078/logs",
+          "workflow_id": 392685056
+        }
+      ]
+    },
+    {
+      "pr": 205,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/205",
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "tree": "ce3c69ddc36245f756005c540e521a26a3ce59b8",
+      "base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main",
+      "merge_checkout": "3dbe6ac3994c56bf2e6424676c6dc034ecc9a9b4",
+      "draft": true,
+      "state": "open",
+      "workflows": [
+        {
+          "id": 44657477515,
+          "name": "Specification inventory",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 828,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44657477515/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44657477515/logs",
+          "workflow_id": 392674119
+        },
+        {
+          "id": 44657477383,
+          "name": "Nostr relay interoperability",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 33,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44657477383/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44657477383/logs",
+          "workflow_id": 423552885
+        },
+        {
+          "id": 44657477232,
+          "name": "Solana escrow",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_number": 72,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44657477232/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44657477232/logs",
+          "workflow_id": 406663930
+        },
+        {
+          "id": 44657477341,
+          "name": "Vault foundation",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 826,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44657477341/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44657477341/logs",
+          "workflow_id": 392685056
+        },
+        {
+          "id": 44657477306,
+          "name": "EVM escrow",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 737,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44657477306/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44657477306/logs",
+          "workflow_id": 398780995
+        }
+      ]
+    },
+    {
+      "pr": 207,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/207",
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "tree": "4b694124197ae8ce271f14307d12abc43c719406",
+      "base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main",
+      "merge_checkout": "0aba9abd40c39920b8c1cfe9a94fd5870d01f1f9",
+      "draft": true,
+      "state": "open",
+      "workflows": [
+        {
+          "id": 44662758038,
+          "name": "Nostr relay interoperability",
+          "status": "queued",
+          "conclusion": null,
+          "run_number": 36,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44662758038/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44662758038/logs",
+          "workflow_id": 423552885
+        },
+        {
+          "id": 44662758194,
+          "name": "EVM escrow",
+          "status": "queued",
+          "conclusion": null,
+          "run_number": 740,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44662758194/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44662758194/logs",
+          "workflow_id": 398780995
+        },
+        {
+          "id": 44662758173,
+          "name": "Vault foundation",
+          "status": "queued",
+          "conclusion": null,
+          "run_number": 829,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44662758173/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44662758173/logs",
+          "workflow_id": 392685056
+        },
+        {
+          "id": 44662758124,
+          "name": "Solana escrow",
+          "status": "queued",
+          "conclusion": null,
+          "run_number": 73,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44662758124/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44662758124/logs",
+          "workflow_id": 406663930
+        },
+        {
+          "id": 44662758164,
+          "name": "Specification inventory",
+          "status": "queued",
+          "conclusion": null,
+          "run_number": 831,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44662758164/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44662758164/logs",
+          "workflow_id": 392674119
+        }
+      ]
+    },
+    {
+      "pr": 208,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/208",
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "tree": "6a4417741c0b399dde894773f29854f7a2d36228",
+      "base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120",
+      "merge_checkout": "300c33b9dcfae050e5a4c816513176c5eac65a5d",
+      "draft": true,
+      "state": "open",
+      "workflows": [
+        {
+          "id": 44663854118,
+          "name": "Solana escrow",
+          "status": "queued",
+          "conclusion": null,
+          "run_number": 74,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44663854118/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44663854118/logs",
+          "workflow_id": 406663930
+        },
+        {
+          "id": 44663854033,
+          "name": "Specification inventory",
+          "status": "queued",
+          "conclusion": null,
+          "run_number": 832,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44663854033/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44663854033/logs",
+          "workflow_id": 392674119
+        },
+        {
+          "id": 44663854059,
+          "name": "EVM escrow",
+          "status": "queued",
+          "conclusion": null,
+          "run_number": 741,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44663854059/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44663854059/logs",
+          "workflow_id": 398780995
+        },
+        {
+          "id": 44663854039,
+          "name": "Nostr relay interoperability",
+          "status": "queued",
+          "conclusion": null,
+          "run_number": 37,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44663854039/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44663854039/logs",
+          "workflow_id": 423552885
+        },
+        {
+          "id": 44663854050,
+          "name": "Vault foundation",
+          "status": "queued",
+          "conclusion": null,
+          "run_number": 830,
+          "jobs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44663854050/jobs",
+          "logs_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/actions/runs/44663854050/logs",
+          "workflow_id": 392685056
+        }
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "pr": 202,
+      "run": 44652103777,
+      "jobs": [
+        {
+          "id": 136009253374,
+          "name": "program",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 44652103777,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run npm ci --ignore-scripts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Independent JavaScript vectors",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Run actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Install pinned Agave and Anchor CLI",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Rust toolchain from rust-toolchain.toml",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Format",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Build program (SBPF v3, platform-tools v1.54)",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Lint",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "LiteSVM tests (original SPL Token 3.5.0 and p-token)",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Verify committed IDL is current",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 13
+            },
+            {
+              "name": "Real validator client acceptance including refund and recovery",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 14
+            },
+            {
+              "name": "Chromium for actual native browser composition",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Actual Worker encrypted Solana recovery and real-time refund",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 16
+            },
+            {
+              "name": "Save dependency cache (push to main only)",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 17
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 33
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 34
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 35
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pr": 203,
+      "run": 44656212245,
+      "jobs": [
+        {
+          "id": 136022950914,
+          "name": "program",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 44656212245,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run npm ci --ignore-scripts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Independent JavaScript vectors",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Run actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Install pinned Agave and Anchor CLI",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Rust toolchain from rust-toolchain.toml",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Format",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Build program (SBPF v3, platform-tools v1.54)",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Lint",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "LiteSVM tests (original SPL Token 3.5.0 and p-token)",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Verify committed IDL is current",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 13
+            },
+            {
+              "name": "Real validator client acceptance including refund and recovery",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 14
+            },
+            {
+              "name": "Chromium for actual native browser composition",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Actual Worker encrypted Solana recovery and real-time refund",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 16
+            },
+            {
+              "name": "Save dependency cache (push to main only)",
+              "status": "pending",
+              "conclusion": null,
+              "number": 17
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "pending",
+              "conclusion": null,
+              "number": 33
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "pending",
+              "conclusion": null,
+              "number": 34
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pr": 205,
+      "run": 44657477232,
+      "jobs": [
+        {
+          "id": 136027174510,
+          "name": "program",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 44657477232,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run npm ci --ignore-scripts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Independent JavaScript vectors",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Run actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Install pinned Agave and Anchor CLI",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Rust toolchain from rust-toolchain.toml",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Format",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Build program (SBPF v3, platform-tools v1.54)",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Lint",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "LiteSVM tests (original SPL Token 3.5.0 and p-token)",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Verify committed IDL is current",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 13
+            },
+            {
+              "name": "Real validator client acceptance including refund and recovery",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 14
+            },
+            {
+              "name": "Chromium for actual native browser composition",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Actual Worker encrypted Solana recovery and real-time refund",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 16
+            },
+            {
+              "name": "Save dependency cache (push to main only)",
+              "status": "pending",
+              "conclusion": null,
+              "number": 17
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "pending",
+              "conclusion": null,
+              "number": 33
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "pending",
+              "conclusion": null,
+              "number": 34
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pr": 207,
+      "run": 44662758173,
+      "jobs": [
+        {
+          "id": 136044687707,
+          "name": "browser",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44662758173,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 136044687928,
+          "name": "local-evm",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44662758173,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 136044687974,
+          "name": "specs",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44662758173,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 136044688023,
+          "name": "schemas-and-crypto",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44662758173,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 136044688041,
+          "name": "docs-tooling",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44662758173,
+          "logs_url": null,
+          "steps": null
+        }
+      ]
+    },
+    {
+      "pr": 207,
+      "run": 44662758124,
+      "jobs": [
+        {
+          "id": 136044687282,
+          "name": "program",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44662758124,
+          "logs_url": null,
+          "steps": null
+        }
+      ]
+    },
+    {
+      "pr": 208,
+      "run": 44663854050,
+      "jobs": [
+        {
+          "id": 136048284604,
+          "name": "specs",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44663854050,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 136048284909,
+          "name": "browser",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44663854050,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 136048284942,
+          "name": "schemas-and-crypto",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44663854050,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 136048284948,
+          "name": "docs-tooling",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44663854050,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 136048285000,
+          "name": "local-evm",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44663854050,
+          "logs_url": null,
+          "steps": null
+        }
+      ]
+    },
+    {
+      "pr": 208,
+      "run": 44663854118,
+      "jobs": [
+        {
+          "id": 136048284590,
+          "name": "program",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 44663854118,
+          "logs_url": null,
+          "steps": null
+        }
+      ]
+    }
+  ],
+  "bindings": [
+    {
+      "pr": 202,
+      "source": "completed native job log git log -1 --format=%H",
+      "checkout": "32f7353551660a6c1e3e9302eecf3647b482c0c3",
+      "tree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+      "parents": [
+        "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+        "d753c0af23ff43743e34679e6b778b9ac0370da2"
+      ],
+      "head_tree_equal": true
+    },
+    {
+      "pr": 207,
+      "source": "fetched proposed merge object only; jobs remain queued, no execution checkout claimed",
+      "checkout": "0aba9abd40c39920b8c1cfe9a94fd5870d01f1f9",
+      "tree": "4b694124197ae8ce271f14307d12abc43c719406",
+      "parents": [
+        "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+        "df10fe26a308407237f9ccbc636c8bb61f55b84f"
+      ],
+      "head_tree_equal": true
+    },
+    {
+      "pr": 208,
+      "source": "fetched proposed merge object only; jobs remain queued, no execution checkout claimed",
+      "checkout": "300c33b9dcfae050e5a4c816513176c5eac65a5d",
+      "tree": "6a4417741c0b399dde894773f29854f7a2d36228",
+      "parents": [
+        "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+        "0e148564743b1ee353abdbdf8931fec464f09870"
+      ],
+      "head_tree_equal": true
+    }
+  ],
+  "native202": {
+    "run": 44652103777,
+    "job": 136009253374,
+    "job_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103777/job/136009253374",
+    "conclusion": "success",
+    "logged_checkout": "32f7353551660a6c1e3e9302eecf3647b482c0c3",
+    "log_sha256": "50782a16cac9dd9a79c17151364e23714f9fa867b24bc0718aca84a0f41abdf7",
+    "local_log": "/workspace/scratch/6eace968c0df/verification-hosted-g11/native-pr202.log",
+    "client": {
+      "ok": true,
+      "checks": 62,
+      "passed": 62,
+      "failed": 0,
+      "sendTransaction": 13,
+      "refund_waited_seconds": 1851,
+      "duration_seconds": 1908,
+      "started_at": "2026-11-20T01:33:40.903Z",
+      "finished_at": "2026-11-20T02:05:28.505Z",
+      "validator_version": "4.1.2",
+      "declared_deviation": "getGenesisHash answered with compiled synthetic genesis constant; localnet-only shim"
+    },
+    "browser": {
+      "ok": true,
+      "checks": 5,
+      "duration_seconds": 2045,
+      "receipt_logged_at": "2026-11-20T02:39:42Z",
+      "actual_module_worker": true,
+      "encrypted_indexeddb": true,
+      "actual_genesis_rpc": true,
+      "genesis_rpc_rewritten": false,
+      "real_clock": true,
+      "clock_warped": false,
+      "wallet_connects": 5,
+      "wallet_prompts": 8,
+      "app_sends": 7,
+      "unique_signatures": 7,
+      "send_marked_records": 7,
+      "withheld_sends": 1,
+      "explicit_replacement_records": 1,
+      "fixture_errors": 0,
+      "fresh_profile": true,
+      "release_enabled": 0,
+      "public_network_qualification": false,
+      "fresh_negotiation_qualification": false,
+      "strict_oracles_preserved": [
+        "both actual 1800-second refund minima",
+        "separate reviewed release and payout",
+        "exact buyer principal",
+        "no physical send during export/lock/restore",
+        "unknown marker retained",
+        "explicit reviewed replacement",
+        "separate reviewed refund and payout",
+        "seller principal minus actual native fees"
+      ]
+    }
+  },
+  "running_native": [
+    {
+      "pr": 203,
+      "run": 44656212245,
+      "job": 136022950914,
+      "first_native_gate": "success",
+      "browser_refund_gate": "in_progress",
+      "log_result": "HTTP404 BlobNotFound at02:55:39UTC; no completed native receipt inspected"
+    },
+    {
+      "pr": 205,
+      "run": 44657477232,
+      "job": 136027174510,
+      "first_native_gate": "success",
+      "browser_refund_gate": "in_progress",
+      "log_result": "HTTP404 BlobNotFound at02:55:39UTC; no completed native receipt inspected"
+    }
+  ],
+  "limitations": [
+    "PR202 native success qualifies only its actual logged source, not corrected PR207/208.",
+    "PR205 remains draft and lacks successor repairs; no merge recommendation.",
+    "Queued207/208 merge objects are proposed source only, not observed execution.",
+    "No local broad/native/browser tests, deployment, funds, settings or release changes.",
+    "No new failure found in this bounded snapshot; no justification for weakened assertions, shorter waits or reruns."
+  ]
+}

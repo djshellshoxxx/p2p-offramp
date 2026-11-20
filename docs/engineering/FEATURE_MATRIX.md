@@ -59,6 +59,10 @@ The immutable main assessment and previous dated overlays remain above. The revi
 
 F24 now also has a separately reviewed current-runtime backup-verification prerequisite at 74d4143; final composed qualification/publication remains pending. Update UI/current trust/native browser composition remains incomplete. F22's newer nine-package composition passed 2617/2617 and seven TS with 13 identical default artifacts, but predates the four repairs; intake stays one package per PR. Current-source unsigned distribution remains refused for stale immutable evidence. See current handoff/state and generation 6–9 reports for exact source limits.
 
+## Published successor overlay — generation 11
+
+Core 207, backup prerequisite 208 and corrected relay 206 are independently reviewed and published, with respective full-suite results 2,259/2,259,2,277/2,277 and2,265/2,265. Their own hosted/native qualification remains pending. F24 backup authentication/fresh-check composition is complete; update UI/native transition and owner trust remain incomplete. F22 optional intake stays one package per PR; the older all-nine evidence is not the corrected final source. PR209 preserves the separate dependency remediation and retained audit finding. Main and ReleaseEnabled remain unchanged. The live successor handoff and parallel PR200 govern current ownership and source-specific gates.
+
 ## Source and regression evidence
 
 ### F01 — Encrypted profiles, backup, fresh-key restore
