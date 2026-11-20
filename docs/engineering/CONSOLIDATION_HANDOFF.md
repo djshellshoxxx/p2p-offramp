@@ -1,27 +1,29 @@
 # P2P-Offramp consolidation handoff
 
-## Current source and authority
+## Current generation 5 source and authority
 
-Read this file and `consolidation-state.json` before changing code. The current user authorizes autonomous source engineering, qualified integration and successive native-worker generations. Keep `ReleaseEnabled=0`; deployment, releases, real funds, credentials and settings changes are outside this task.
+Read this file and `consolidation-state.json` before changing code. The user authorizes autonomous engineering, qualified source integration and successive native-worker generations. Deployment, release, real funds, credentials and settings changes remain outside this task. Keep `ReleaseEnabled=0`.
 
-| Reference | Exact value |
-|---|---|
-| Starting and latest observed main | `5c5a84ef6300330700c8b0ca54d074ac113f08be` |
-| Primary consolidation PR | #188, `codex/max-consolidation-20261119`, observed head `a728ce290eb2fcbe9b4a9e857cc84ced401da70f` |
-| Generation 1 source | `84814328f5534d6fceb2bbe74509fe37c5b48689`, tree `0d6d70bb4465c2ce6e9395b602dc3e59a91869b2` |
-| Qualified QR browser repair | #189, head `9611d6a5cb404fed5d41eeb176dafb31c01de640`, tree `938b76f923df166717ef522666575e37a0623825` |
-| Generation 2 initial source | `ac9a4b0ffc3ca50a299398e72554e7964a634cd4`, tree `f3ee86ab68eb60e4ab516037c58c9c498fc30ff4` |
-| Generation 2 final source | `ef9d74258de63e98917c7a34a9392076ff86c35c`, tree `0fadc2154399d6bd70f6d988fa2670a84fa8c74b` |
-| Generation 2 published PR | [#190](https://github.com/djshellshoxxx/p2p-offramp/pull/190), `codex/historical-recovery-20261119`, head `2b23ee614ff2dd05bd3a6e79f1278658c30a3909`, tree `a3701267756596e833247f50614c5ddc32f2cce0` |
-| Local tree-identical final source | `f29422b6afdf7973e102edaed3a83bd48671bbde` |
-| All-nine optional local composition | `a2f90cbdac973843e1dc71fe078e9433d66cfa75`, tree `aa285f9a8546b1c78bb0bca51c2bc350874b063b`; local qualification only |
-| Reviewed favorites composition | [#201](https://github.com/djshellshoxxx/p2p-offramp/pull/201), head `f5241c09f268a7a6841a5760ed0faa90b5b7f005`, tree `2e88aa8eec7a6e609ca113d35a36177c40bf156d`; local qualification passed, hosted pending |
-| Reviewed Solana acknowledgment repair | [#202](https://github.com/djshellshoxxx/p2p-offramp/pull/202), head `d753c0af23ff43743e34679e6b778b9ac0370da2`, tree `25d637fa5d6596e44cdae060ccc407f0c23186ee`; hosted pending |
-| Current coordination PR | [#200](https://github.com/djshellshoxxx/p2p-offramp/pull/200), `codex/consolidation-handoff-20261119`; resolve its live ref |
+**The current core candidate is locally qualified and independently reviewed. Its exact published composition still requires hosted execution. No main merge has occurred.** The coordinator published [PR205](https://github.com/djshellshoxxx/p2p-offramp/pull/205), `codex/generation5-core-20261119`, toward `main`: head `cd7d54ba075118a7ec043788c17718be842ee405`, tree `ce3c69ddc36245f756005c540e521a26a3ce59b8`. Remote parent/tree equality is verified; actual merge checkout is `3dbe6ac3994c56bf2e6424676c6dc034ecc9a9b4`. Resolve live heads before acting; keep the core source head stable while checks run.
 
-Resolve live branch heads and open PRs before continuing. PR #190 includes the generation 2 source and later report-only metadata. The nine optional source children are #191–#199. This newer coordination handoff is maintained separately to preserve the running source heads. **No main merge has been performed by this operation.**
+| Reference | Exact identity |
+| --- | --- |
+| Starting/latest observed main | `5c5a84ef6300330700c8b0ca54d074ac113f08be` |
+| Historical generation1 PR188 | `a728ce290eb2fcbe9b4a9e857cc84ced401da70f` |
+| QR repair PR189 | `9611d6a5cb404fed5d41eeb176dafb31c01de640` |
+| Historical generation2 PR190 | `2b23ee614ff2dd05bd3a6e79f1278658c30a3909`, tree `a3701267756596e833247f50614c5ddc32f2cce0` |
+| Favorites PR201 | `f5241c09f268a7a6841a5760ed0faa90b5b7f005` |
+| Solana acknowledgment PR202 | `d753c0af23ff43743e34679e6b778b9ac0370da2` |
+| Reviewed restore PR203 | `2245b3bfb462eca468b4cf759fdc12fa49c5cd3a`, tree `412efa7b9534cc182d05d2b97830d5f6ff09944e` |
+| Reviewed templates/tooling PR204 | `98d33db64622eab3f5f4ece6141d445d255245e7`, tree `f5c5bb060732a892ba4eb91532e82ed79f64f2c4` |
+| **Generation5 tested core source** | **`de5bb8aadadd9b76099110262b2f7beb123f9421`, tree `ff1028ddc6c90119e38be7ca8fe3e007fb525b06`** |
+| Core author report | `e3098d9b420b1982f715d5a6de11af59ee0609ec` |
+| Core independent report | `468a7a3d7451ad8be065cc790ebe2fca127b9e28` |
+| Prior durable coordination checkpoint | PR200 `f0773c2c91ec271b86c84baf3745c9cd56d1cf36`, tree `a3c94e992597a84a5603a16527156c0c934a762e`; resolve live ref |
 
-The generation 2 source commit retains generation 1, the complete historical audit stack `06c6b9ab3728fcf743b2c003dd69b0310078b0ad`, and QR repair `9611d6a` as parents. Selective historical extractions preserve original source IDs and exact blob comparisons in their reports; whole obsolete runtime stacks were not merged.
+Generation5 combines reviewed templates/favorites/tooling and Solana acknowledgment/restore onto PR190. Both source merges were conflict-free. It **excludes the nine optional package extractions**. The exact source union preserves46 nonshared template paths,11 nonshared restore paths, all52 baseline commands, all125 baseline foundation lines and five other workflows. It has56 commands and16 browser groups, each addition with its own Chromium environment. Independent review found no open High/Medium.
+
+Reports and coordination files appended after the tested source change no runtime code. Publish with traceable source parents PR204/203 and coordination ancestry; verify full local/remote tree equality. Preserve the nine separate optional PRs. The prior generation1/2 ancestry retains all original source IDs and historical audit records; obsolete runtime stacks were not wholesale merged.
 
 ## Inventory and completed source
 
@@ -52,7 +54,11 @@ Generation 2 adds the following scoped work:
 | Peer vector reproduction | #159 `1d3f59a9…` | Exact independent viem generator plus frozen-SHA and complete-byte regression for the already maintained v1 fixture. No protocol or fixture change. |
 | Historical audit records | `06c6b9ab…` | Six dated audit entries retained as historical observations, without turning them into new execution or instructions. |
 
-Stable completed IDs and full SHAs are in the state file. **Twenty newly reproduced repair cases** are tracked separately from recovered upstream fixes: the previous eighteen cases, the favorites completed-load reopening defect, and the Solana withheld-acknowledgment fixture. The separate QR/Solana profile isolation row is an integration check, so the state contains 21 repair/check rows. The five adapter diagnostic sites are defensive returned-data boundaries; their native vault already returns plain data. These are not demonstrated peer exploits. The newly observed Solana restore-button timeout is under investigation and is not counted as repaired.
+Stable completed IDs and exact source SHAs remain in state. **Twenty-five reproduced repair cases** are now recorded: the prior twenty plus immutable copy hash, exact personalization distribution admission, restore acknowledgment admission, restore byte ownership and template accepted-review retirement. Late-read variants are grouped as one ownership cause. Two additional rows are integration/qualification checks: QR/Solana policy and preservation of the favorites Chromium environment beside the template gate. New test-fixture mistakes and adjusted stale aggregate assertions are not counted as product defects. Defensive returned-diagnostic cases are not demonstrated peer exploits.
+
+Generation5 adds current-runtime favorites and templates UI/Worker composition, completed-503 acknowledgment withholding, restore acknowledgment/byte ownership and immutable copy-text validation. Templates persist only seven defaults in eight bounded slots; explicit preview/consent/native expiry/CAS remain. Applying defaults clears parties/instructions/deadlines and prior consent, creates fresh identity, and requires current registry review. No wallet or funding authority is added. Restore preserves immediate private redaction while awaiting actual acknowledgment and clones intact Worker bytes before zeroing the document buffer.
+
+Fresh generation5 rediscovery at **01:50:42 UTC November20 / November19 Pacific** observed **209 branches and201 PRs:58 open,105 merged,38 closed-unmerged**. All original192 heads are unchanged/present; new refs since generation4 are owned PR203/204. CLI tags and API releases remain empty. Preserve the dated overlays; core publication will add another owned branch/PR.
 
 ## Executed verification
 
@@ -83,41 +89,54 @@ Environment: Node 24.22.3, npm 11.19.1, Python 3.12.14. Foundry 1.5.1 and solc 0
 | Actual independent ERC-20 recovery proof | 4 checks, 8 signatures, 3 sends, 3 exact durable markers |
 | Specifications / agreement fuzz / formal harness | 32/32, 26/26 and 22/22 passed respectively |
 
+### Current qualified source executions
+
+| Source | Actual result |
+| --- | --- |
+| Corrected generation4 optional/favorites/ack source `86a2b93` | 2,580/2,580 full;42/42 tooling;seven TS;56 policy; independent tooling RED0/2 then GREEN4/4 and42/42 |
+| Templates source `45a4905` | 2,210/2,210 full;32/32 focused;42/42 tooling;57/57 policy;four TS; default/demo and boundaries238/142 |
+| Independent templates | 80/80 affected;38/38 policy;four TS;both builds;final9/9 distribution |
+| Independent restore source `6207d14` | RED0/4 then same GREEN4/4;focused5/5;affected339/339;three extra probes;54/54 policy;four TS |
+| **Core source `de5bb8a`** | **2,217/2,217 full**, zero failures/skips/cancellations;**42/42 tooling**, **57/57 policy**, four TS |
+| **Independent core composition** | **506/506 affected**, **38/38 policy**, **3/3 new cross-feature probes**, boundaries and builds |
+| Core specs/builds | 238 production/142 core modules; default/demo;173 spec documents;Python specs32/32 |
+
+The new independent probes verify reciprocal stale-revision refusal between favorites and templates, and actual encrypted backup restoration of both records plus the saved-review reference at revision zero into a fresh profile without changing original ciphertext. All13 default and14 demo files, including evidence, match independently built final templates artifacts. Exactly four personalization modules occur only in the private Worker; document/QR and all nine optional graphs remain clear. Release flags remain false/0 and external connection origins empty.
+
+Core's actual eleven-asset Solana artifact digest is `ba257e8b5178c52014e4eb4c00a3047cb71cb63d33ed395add6dc7754497a7a4`. It differs from standalone restore because shared schema/style source changed. Do not transfer artifact identity or browser results. Full commands, RED evidence, log digests and portable independent probes appear in `GENERATION5_CORE_COMPOSITION_20261119.md`, `INDEPENDENT_GENERATION5_CORE_REVIEW_20261119.md`, component reports and `INDEPENDENT_GENERATION4_COMPOSITION_REVIEW_20261119.md`. Counts are actual combined executions, not summed old results.
+
 The full final command was `FOUNDRY_BIN=<verified-toolchain> FOUNDRY_SOLC=<verified-solc-0.8.30> npm test`. Use physical dependencies within each checkout: a symlink to another checkout's node_modules violates the maintained source-bound build policy. Source-specific reports include reproduction commands and log digests; the state file also retains main verification-log hashes.
 
-Independent review documents include `INDEPENDENT_SECURITY_REVIEW_20261119.md`, `INDEPENDENT_TOOLING_REVIEW_20261119.md`, `INDEPENDENT_INTEGRATION_REVIEW_20261119.md`, `INDEPENDENT_EXTRACTION_REVIEW_20261119.md`, `INDEPENDENT_HISTORICAL_TOOLING_REVIEW_20261119.md`, `INDEPENDENT_PERSONALIZATION_REVIEW_20261119.md` and `GENERATION2_INTEGRATION_REVIEW_20261119.md`. No open High or Medium finding remains in generation 1/2, the nine optional source scopes, favorites #201 or the acknowledgment repair #202. Their independent reports bind exact source commits. The separately observed restore timeout is under investigation; no severity or cause is inferred from its symptom alone.
+Independent review documents include `INDEPENDENT_SECURITY_REVIEW_20261119.md`, `INDEPENDENT_TOOLING_REVIEW_20261119.md`, `INDEPENDENT_INTEGRATION_REVIEW_20261119.md`, `INDEPENDENT_EXTRACTION_REVIEW_20261119.md`, `INDEPENDENT_HISTORICAL_TOOLING_REVIEW_20261119.md`, `INDEPENDENT_PERSONALIZATION_REVIEW_20261119.md` and `GENERATION2_INTEGRATION_REVIEW_20261119.md`. No open High or Medium finding remains in the reviewed source scopes of generations1-5, the nine optional extractions, favorites/templates or the two Solana corrections. Exact source-bound reports establish the review; they do not override a failed or pending hosted gate.
 
 ## Hosted qualification and current gates
 
-`HOSTED_QUALIFICATION_20261119.md` records actual hosted evidence, not a local-browser claim. PR #189 at `9611d6a` passed all seven original required contexts plus docs-tooling and native Nostr. Browser run `44640970749`, job `135971620360`, completed all ten maintained browser command groups. Its QR receipt records six journeys, real module Workers and bitmap decoding, real stream capture/cleanup using a synthetic camera source, actual encrypted vault lock clearing, and zero unexpected requests. It does not qualify a physical camera. Native EVM and ERC-20 browser steps also passed.
+Local Chromium cannot launch under the managed Unix-socket restriction. Do not bypass it or label source/build checks as browser executions. Hosted jobs are actually executing; issue130's zero-job November11 history is not the current runner state.
 
-The hosted checkout `0b4567e88048d52a8ae4bd0c7d8ca4b23006f079` and head `9611d6a` have the exact same tree `938b76f9…`. Their identity was checked through GitHub Git-commit responses.
+| PR/source | Actual observed result |
+| --- | --- |
+| PR189 | Ten foundation browser groups and six QR journeys passed; native EVM/ERC20/Nostr passed. Native Solana later failed duplicate physical signature and final fixtureErrors after the real wait. |
+| PR190 | Twelve foundation browser groups, including portal and42-asset/two-pass distribution, passed on exact treea3701267. Native job135982126950 failed: duplicate00:53:27, restore/replacement passed00:55:01, final fixtureErrors01:25:17 after real wait. |
+| PR191/196/199 | Fresh rediscovery read completed old-baseline native failures: duplicate, successful restore/replacement, then final fixtureErrors. Other checks passed. |
+| PR197 | Duplicate01:11:38 then disabled restore timeout01:12:23; other checks passed. |
+| PR192/193/194/195/198 | All nine triggered old-source checks passed; unchanged Solana path filters did not trigger on those package-only paths. |
+| PR201 | Docs/tooling32/36 with four failures; distribution browser failed SOURCE_PATH; Favorites step skipped. Repairs are in PR204/core. |
+| PR202 | **All13 foundation browser groups passed**, job136009252921. Early receipt proves one application call/fetch/physical POST on a warmed connection, complete503, zero forwarding/unexpected requests. Native job136009253374 remained in progress at01:52 UTC; last observed validator step14. |
+| PR203 | Reviewed restore source published; all10 contexts queued at01:52 UTC. Browser136022950072/native136022950914. |
+| PR204 | Reviewed templates/tooling source published; all10 contexts queued at01:52 UTC. Browser136023879924/native136023880105. |
+| Core generation5 PR205 | Twelve contexts queued at02:02 UTC, including both CodeQL analyses. Foundation run44657477341/browser136027175362; native run44657477232/program136027174510. All16 browser groups and complete native flows must execute. |
 
-`GENERATION2_HOSTED_QUALIFICATION_20261119.md` records PR #190's actual **twelve passed browser groups**, including five portal checks and three unsigned-distribution journeys over 42 assets and two build passes. QR's six journeys passed again. The head and actual merge checkout `966fa1bc6d0ec840dde5f529183763bbc8d4a1f5` have the same `a3701267…` tree. All seven original required contexts plus docs-tooling and native Nostr passed; actual EVM and ERC-20 browser flows passed. Deployed-host, physical-device, signed-release and independent-distribution-witness claims remain false.
+PR202's merge checkout32f7353551660a6c1e3e9302eecf3647b482c0c3 equals its head tree25d637fa and has verified PR190/202 parents. Its short diagnostic is scoped to the controlled failed acknowledgment. Earlier duplicate transport replay is an inference supported by current Chromium source, not a pinned-build trace or a general arbitrary-reset guarantee.
 
-`NATIVE_AND_OPTIONAL_CI_20261119.md` preserves its earlier 00:31 UTC snapshot. The subsequent observations are:
+Preserve both real1,800-second native refund minima, signature uniqueness, send counts, durable markers, exact principal/fees, explicit expired replacement and zero fixture errors. Do not merge a failing ancestor because unrelated contexts passed. The current descendant must qualify its actual source/tree and checkout parents.
 
-| PR | Actual native Solana status | Exact job |
-| --- | --- | --- |
-| #188 | Validator passed; browser failed after duplicate physical signature and final fixture-error assertion, 00:47:57 UTC | `135965138780` |
-| #189 | Validator passed; browser failed with the same duplicate-signature assertion, 01:00:54 UTC | `135971622812` |
-| #190 | Validator passed; actual encrypted Worker/browser step 16 still running at the 01:12 UTC read | `135982126950` |
-| #197 | Validator passed; duplicate-signature assertion at 01:11:38, then disabled restore-button timeout at 01:12:23 UTC | `135987836079` |
-| #202 | Reviewed fixture correction published; early Chromium diagnostic and complete native/browser qualification pending | Read live exact head `d753c0af…` |
+`HOSTED_QUALIFICATION_20261119.md`, `GENERATION2_HOSTED_QUALIFICATION_20261119.md` and `HOSTED_PROGRESS_GENERATION4_20261119.md` preserve dated exact checkout evidence. Dedicated meetup/privacy-controls/proof-jobs browser receipts passed with their stated limits; they do not qualify physical location, instant cross-document privacy revocation, arbitrary providers, browser WASM under unchanged CSP or standard-browser physical termination deadlines.
 
-The old camera/QR browser failure remains repaired on #189/#190. The new Solana failures remain failures. Each native workflow retains two real 1,800-second minimum-duration refund cases. Never shorten them or replace actual validator/browser proof with unit results.
-
-The #202 fixture now completes HTTP 503 after the unchanged marker/signature observation and before validator forwarding. Actual production RPC refuses it and preserves a durable unknown intent. Independent RED/GREEN tests verify no resend during fresh-profile recovery/reconciliation and a fresh signature only after expiry and a separate explicit operation. Current Chromium networking source supports transport replay as the old duplicate-POST explanation; it is an inference, not a trace or verified source mapping for exact hosted Chrome 158. The fixture does not claim a general no-retransmission guarantee for arbitrary connection resets. See `SOLANA_WITHHELD_ACK_REPAIR_20261119.md` and `INDEPENDENT_SOLANA_SEND_REVIEW_20261119.md`.
-
-Optional source heads parent `ac9a4b0…`, while their target is #190 at `2b23ee6…`; their hosted merge trees differ from the source-head trees. Preserve the ordered-parent/merge-checkout bindings. At the 01:16 UTC observation, all nine optional PRs passed their foundation browser jobs. All triggered checks passed for #192, #193, #194, #195 and #198; their package-only paths do not trigger the unchanged Solana workflow. #191/#196/#199 native Solana remained running, and #197 failed as recorded above. The actual dedicated meetup, privacy-controls and proof-jobs browser receipts also passed. The latter qualifies real public native Workers and actual vault responsiveness; its unchanged CSP still does not qualify browser WASM or standard-browser physical termination deadlines. `HOSTED_PROGRESS_GENERATION4_20261119.md` records those boundaries and exact checkout trees.
-
-Favorites #201's ten jobs were still queued at this observation. Its new browser gate has not yet run. No main merge is authorized by a queue state; source integration remains authorized once the applicable qualification and review gates pass.
-
-Local Chromium cannot launch because the execution environment forbids the required Unix socket behavior. Do not bypass that control or relabel source tests as browser passes. Issue #130's zero-job November 11 runs are historical; actual hosted jobs are executing now. No deployment or release workflow was added or invoked.
+Current locale drift and all six draft claims remain stale with semantic approval false. Production staging and both maintained evidence records are unchanged. **Current unsigned staging remains refused.** The historical-client/current-tooling positive fixture names PR190's exact client tree and reports `currentSourceDistributionQualified:false`; it does not qualify this new client.
 
 ## Policy and historical evidence
 
-Use the canonical accepted-decision index with the current user directive. Both combined integrations contain Tier C recovery/release-verification paths. Current source-integration authorization is already provided; do not ask for it again. Required exact-head checks, applicable native/browser qualification and independent review with no open High/Medium finding remain mandatory. The accepted Tier C text does not separately establish the older Tier B named-bot condition as an additional gate for these combined PRs; assess any standalone Tier B change and actual server-enforced rules on their own terms.
+Use the canonical accepted-decision index with the current user directive. The combined integrations, including generation5, contain Tier C recovery/release-verification paths. Current source-integration authorization is already provided; do not ask for it again. Required exact-head checks, applicable native/browser qualification and independent review with no open High/Medium finding remain mandatory. The accepted Tier C text does not separately establish the older Tier B named-bot condition as an additional gate for these combined PRs; assess any standalone Tier B change and actual server-enforced rules on their own terms.
 
 **D7 parking was superseded on November 18.** The nine optional packages are accepted for independent, one-package-per-PR source extraction with import-boundary checks. They are not rejected merely because their default app composition remains incomplete. No source acceptance activates financial, network, device or release authority.
 
@@ -143,38 +162,32 @@ Privacy-policy's Medium planning defect is fixed and independently closed: atomi
 
 `OPTIONAL_COMPOSITION_20261119.md` now preserves the completed author report at `27fba745…`. The local all-nine composition preserves every reviewed package subtree, all 52 existing npm commands and five unchanged workflows. It adds exactly six commands, three foundation steps and the original dedicated proof-jobs workflow. Only two append conflicts in `package.json` required a script union. `OPTIONAL_COMPOSITION_INDEPENDENT_REVIEW_20261119.md` records the coordinator's independent immutable-source checks. The actual combined full suite passed **2,553/2,553 tests with zero failures, skips or cancellations** in 245,457 ms. Seven TypeScript projects, native WASM cap, boundaries (300 production files / 140 core modules), 54 build-policy tests, 36 tooling tests, docs, governance and specs passed. All 13 default output files are byte-identical to the generation 2 reference, with zero optional-package graph hits. These are actual combined executions; individual package totals were not used as a substitute. Keep this local qualification branch separate from the nine reviewable package PRs.
 
-## Active successor work and remaining functionality
+## Active workers and remaining functionality
 
-**Twenty-two distinct native workers have actually been launched.** Resuming an existing worker for a follow-up does not increase that count. Optional source extraction/composition and favorites author/review work are complete. The current isolated ownership is:
+**Twenty-eight distinct native workers have actually launched in this coordination tree.** Resuming a worker does not increase the count. Authors/reviewers of all components, generation5 core and rediscovery are complete. The coordinator owns PR200 and CI/integration sequencing. Generation6 optional-stack preparation owns new isolated local layers atop205, with no remote mutation. Generation6 dependency audit and its bounded Cargo/action/toolchain subreviewer are active in separate owned scopes. Read their exact ownership in state.
 
-| Current owner | Isolated branch | Responsibility |
-| --- | --- | --- |
-| personalization_templates_ui | `codex/personalization-templates-ui-20261119` | Explicit encrypted template preview/consent/commit and fresh local drafts; source not frozen |
-| templates_browser_harness | `codex/templates-browser-harness-20261119` | Completed script-only commit `fc74d0b6…`; author integration and actual hosted execution pending |
-| solana_browser_send_repair | `codex/solana-restore-ack-20261119` | #202 work complete; now separately reproduce the observed #197 restore-button timeout |
-| generation4_composition | `codex/generation4-composition-20261119` | Actual 2,580-test combined run passed; tooling 32/36 with four reproduced failures under repair; frozen source `5ebeaa64…`; templates excluded |
-| coordinator | `codex/consolidation-handoff-20261119` | Durable state, exact remote publication, CI observation and integration sequencing |
+The detailed accepted D8 packet has a named CodeRabbit/Qodo condition for standalone Tier B PRs. Fresh rediscovery found no named review on the nine optional PRs and is documenting applicability separately from server rules. Do not impose that condition on the combined Tier C core, silently remove an applicable standalone rule, or infer inaccessible protection settings. Optional source integration remains one package per PR with absent default imports.
 
-Favorites #201 implements explicit load, add, remove, and open-and-recheck in Saved Reviews. Its Medium finding is **independently closed**: a fresh registry load must publish a positive completed-load generation before opening; an aborted fresh load cannot fall back to an older cached accepted route. RED commit `d5ca7f1e…` reproduced two cases; correction `67758041…` and review `dbe43aca…` close them. Final full suite `ed2f19ed…` passed 2,178/2,178 with pinned tools. Earlier three new static-render fixture failures and an interrupted incomplete run are retained as historical nonqualification, not relabeled as passes or counted as new product defects.
+Favorites' cached-reopening Medium is independently closed. Templates now have maintained UI/Worker composition and local independent qualification; their actual hosted browser gate remains pending. Restore's acknowledgment and stale-read races are deterministically reproduced, repaired and independently closed; hosted execution remains pending. Generation4 tooling is repaired and independently closed, preserving current stale-evidence refusal.
 
-Preserve revision zero for fresh/restore profiles. Adding a favorite validates the current compatible review; explicitly removing a loaded dangling favorite may succeed after review deletion. A dangling entry has no open authority. Lock, profile change, cancellation and disposal suppress late UI projections; an acknowledged timeout does not imply a durable write was rolled back. Exactly `personalization/favorites.ts` and `personalization/src/favorites.ts` enter the private Worker graph; neither appears in the document or QR graph. New locale wording and six changed claims remain draft/stale with semantic approval false. Do not rebind historical receipts.
+The updater remains internal/unexported with no active update UI or owner-selected trust roots. Full Solana discovery/negotiation/funding parity, physical wallets/cameras/print/devices, authenticated QR invite keys and owner trust inputs remain separate. BasicEscrow has no arbitration settlement; diagnostic arbitration cannot create it. Preserve PR155's Waku signed64-bit regression, mobile-wallet roundtrip failure, incoherent XMTP snapshot and unexecuted pinned-container qualification as concrete limits.
 
-Templates are active, not completed. Their seven-field reusable defaults cannot persist counterparties, payment instructions, deadlines, salts, signatures or accepted terms. The author composes explicit load/preview/consent/commit, bounded eight slots, native CAS, five-minute expiry and lock/profile disposal into a fresh ephemeral draft and current registry review. The separate browser script uses the actual emitted App, real Workers and IndexedDB; only its syntax has run locally. No wallet, negotiation, signing or funding authority follows from applying a template.
 
-The new restore investigation must distinguish the immediate blank lock projection from the later actual Worker acknowledgment. A late null-profile snapshot may clear inputs entered between them; this is a source hypothesis until deterministic reproduction. Keep running #202 unchanged while the separate worker investigates. Never replace lock clearing or a strict send assertion with a weaker expectation.
+### Newly refreshed dependency and external ownership evidence
 
-The updater remains internal source without active update UI or owner-selected trust roots. Solana funded exits remain separate from full discovery/negotiation/funding parity. BasicEscrow has no arbitration settlement; diagnostic arbitration cannot create it. QR decoding does not authenticate an invite. Physical wallets, camera/print/device coverage and owner-controlled trust inputs remain separate.
+Fresh audits on exact PR205 lock report zero npm findings for the full root, production subset and isolated escrow tool. GitHub withdrew GHSA-fc5q-39xc-vjpf on November18; its live primary page updated November19 explicitly says it is not a security issue. Preserve the earlier Picomatch assessment as historical evidence and its bounded slow-pattern observation as a configuration/input constraint. This is an upstream advisory-status change, not a code fix; no pin changed. Cargo/action/toolchain review is still underway.
 
-#155 intake remains preserved at its immutable source with its Waku signed-64-bit regression, mobile-wallet roundtrip failure, incoherent XMTP snapshot and unexecuted pinned-container qualification. These are concrete limits, not reasons to drop supported optional source packages.
+Separate active local worktrees were observed under `/workspace/scratch/6eace968c0df`, outside this collaboration tree: `p2p-bug-hunt-g6` modifies TradeDraftPanel navigation lifetime/tests; `p2p-code-audit-g6` has RED commit e657488a0bbcc059c11dce07de2fb70f51d10dd8 and an active portal output-cleanup ownership repair; `p2p-security-audit-g6` is also on core205. Their ownership is recorded in state; do not overwrite, duplicate, reset or incorporate uncommitted changes. Assess finished source/review evidence independently before integration. These external workers are not counted as launched by this coordinator.
 
 ## Exact continuation
 
-1. Read the live handoff/state, source refs, PR heads and current isolated ownership. Preserve original inventory and dated overlays; append deltas without changing historical evidence.
-2. Inspect #202's actual early browser diagnostic and full native Solana qualification. Preserve source heads and both real refund waits. Continue the separately assigned restore-timeout reproduction, and independently review any correction before publication.
-3. Preserve all-nine 2,553-test qualification and the passed custom optional browser receipts. Integrate packages in their separate accepted PR scopes after the baseline and exact integration tree qualify. Do not transfer old-head checks to changed source.
-4. Qualify #201's actual favorites browser gate. Favorites' Medium is already closed. Complete the template author's isolated source plus script-only browser commit, then assign independent review and run actual hosted App/Worker/IndexedDB qualification.
-5. Preserve the actual 2,580/2,580 combined pass at `5ebeaa64…` and repair the separate tooling failures: stale-locale test assumptions, a suppressed source-text hash mismatch and the missing exact favorites distribution paths. Independently review corrected source and the additive gate union. Do not substitute a sum of old test counts for the new execution or include unfrozen template changes.
-6. Once a current consolidated descendant satisfies exact-head checks, applicable browser/native proof, independent review and actual server gates, integrate the authorized source into main. Recheck base/merge tree identity and preserve separate optional PR policy. Do not merge known-failing ancestors merely because other contexts passed.
-7. Update exact commits, tests, open findings, current CI and ownership; continue safely actionable accepted feature gaps with fresh native workers. Do not restart solved D9/retention work, alter release authority, or manufacture work.
+1. Resolve live core/coordination refs, main, PRs and ownership; read newest handoff/state. Preserve original inventory and dated overlays. Do not modify the active external worktrees listed below.
+2. Keep published core205 head stable; inspect all16 hosted browser groups, complete native validator/browser refund flow and required contexts. Bind results to actual checkout tree and parents.
+3. Investigate new concrete failures without weakening assertions. Keep old PR188/189/190/191/196/197/199/201 failures historical. Do not transfer PR202's early pass to PR203/core.
+4. Keep nine optional sources separate. Use fresh rediscovery to prepare conflict-safe one-package integration, satisfy applicable written/server review gates and qualify exact current integration trees. Preserve absent default imports.
+5. Once current combined core satisfies its applicable gates, integrate the already authorized source into main after expected head/base/tree checks. No force push, branch deletion or deployment.
+6. Update PR200 with actual published identities, CI evidence, feature overlay, stable repair IDs and ownership. Continue accepted actionable gaps with fresh native workers; do not redo D9/retention, invent trust inputs or manufacture work.
 
-Existing hourly continuation automation `Automation_ab68cc67e6ac8191bd31dc2d84a085e1` remains enabled; its last confirmed prompt refresh was `2026-11-20T00:55:33Z`. Refresh it again after publishing this newer checkpoint with #201/#202, closed findings, actual failures and current isolated ownership. Its 00:30 UTC run completed actual source/check inspection without changing source. Scheduled resumption is not an assertion that completed workers run permanently. Keep its prompt aligned with live source/PR heads without duplicating the schedule. Native agents and GitHub tools are available; do not invoke paid OpenAI/Codex services. If shell push lacks authentication, create Git blobs/trees/commits through the connector and verify exact local/remote tree equality before updating only the owned ref with an expected-head lease.
+Hourly automation `Automation_ab68cc67e6ac8191bd31dc2d84a085e1` remains enabled with unchanged schedule/environment. Its01:30 UTC run completed read-only source/check inspection and a PR200 coordination comment. Prompt refresh01:33:15 UTC needs this newer checkpoint after publication. Do not duplicate the schedule or claim completed workers run permanently.
+
+Use native agents and existing GitHub tools; no paid OpenAI/Codex services. If shell push lacks authentication, create exact Git blobs/trees/commits through the connector, verify full tree equality and update only owned refs with expected-head leases.

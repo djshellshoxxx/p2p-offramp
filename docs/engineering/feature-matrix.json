@@ -468,8 +468,8 @@
     }
   ],
   "staging_overlay": {
-    "source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
-    "scope": "Generation2 source at PR190; optional PR191\u2013199 have independent source review and combined local qualification passed2553 tests. Main remains unchanged.",
+    "source_sha": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+    "scope": "Published generation5 core PR205, locally qualified2217 full and independently reviewed. Hosted execution queued; original27-capability main baseline remains immutable. Nine optional packages remain separate.",
     "updates": [
       {
         "feature_id": "F03",
@@ -484,7 +484,7 @@
       {
         "feature_id": "F16",
         "status": "Partial",
-        "change": "Funded-exit browser source and stable labels integrated. Exact-head Solana validator/browser refund workflow remains running; discovery/negotiation/funding UI is not added."
+        "change": "Funded-exit source plus acknowledgment fixture and restore lifecycle repairs are composed and independently reviewed. Older native flows failed; current full hosted qualification remains pending. No discovery/funding parity added."
       },
       {
         "feature_id": "F17",
@@ -504,7 +504,7 @@
       {
         "feature_id": "F25",
         "status": "Implemented within source-tooling scope",
-        "change": "Docs/lab/claims, portal, unsigned staging and inert governance recovered; actual PR190 hosted portal/distribution browser groups passed."
+        "change": "Recovered tooling now verifies immutable copy text even with current locale drift. Current unsigned distribution stays refused; historical-client positive staging is explicitly separate."
       },
       {
         "feature_id": "F22",
@@ -512,7 +512,8 @@
         "change": "PR191\u2013199 preserve one-package scope, native/custom gates and absent default imports. Combined source a2f90cbd passed2553 tests and all13 default files byte-match; current-head hosted qualification remains active."
       }
     ],
-    "published_head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909"
+    "published_head": "cd7d54ba075118a7ec043788c17718be842ee405",
+    "integration_pr": 205
   },
   "additional_staging_capabilities": [
     {
@@ -528,7 +529,12 @@
         "packages/personalization/test/favorites.test.mjs",
         "packages/personalization/test/trade-draft-store.test.mjs"
       ],
-      "remaining": "Current favorites UI/Worker composition is under independent review; two cached-review reopening regressions are held for correction. Template UI remains unimplemented."
+      "remaining": "Favorites PR201 Medium independently closed; PR204 adds maintained templates UI/Worker and tooling repair. Core2217 full and independent506 affected/38 policy/3 shared-revision/backup probes passed. Actual current-source hosted favorites/templates gates remain pending.",
+      "status": "Implemented in reviewed source; hosted qualification pending",
+      "source_prs": [
+        201,
+        204
+      ]
     },
     {
       "id": "F29",
@@ -558,7 +564,7 @@
         "scripts/distribution/stage.test.mjs",
         "scripts/distribution/browser.test.mjs"
       ],
-      "remaining": "Independent distribution witness, signing, publication and release approval remain absent."
+      "remaining": "Current locale drift keeps unsigned staging refused. Historical-client/current-tooling fixture passes with currentSourceDistributionQualified:false; no signed-release or distribution approval."
     },
     {
       "id": "F31",
