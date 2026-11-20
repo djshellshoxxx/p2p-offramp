@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPrivacyViewReader, type PrivacyIndicator, type PrivacyReason, type PrivacyTransportPort } from '../../../../packages/domain/index.ts';
 import type { AppServices } from '../app-services.ts';
-import { english, englishGroup } from './locale/en.ts';
+import { message, messageGroup } from './locale/runtime.ts';
 
-const p = englishGroup('privacy');
+const p = messageGroup('privacy');
 const clock = () => Math.floor(performance.now());
-const states: Readonly<Record<string, string>> = { unknown: p.unknown, unavailable: p.unavailable, unsupported: p.unsupported, direct: p.direct, 'verified-private': p.privateRoute, blocked: p.blocked, locked: p.locked, unlocked: p.unlocked, 'authenticated-encryption': p.authenticated, available: p.available };
-const reasons: Readonly<Record<PrivacyReason, string>> = { 'not-observed': p.notObserved, observed: p.observedReason, expired: p.expired, 'invalid-observation': p.invalid, 'scope-changed': p.scopeChanged, 'clock-reversed': p.clockReversed, 'policy-blocked': p.policyBlocked, unavailable: p.unavailable };
-const sources = { none: p.none, 'local-vault': p.localVault, 'transport-policy': p.transport, 'messaging-provider': p.messagingProvider, 'proof-provider': p.proofProvider };
-const channels = { rpc: p.rpc, relay: p.relay, map: p.map, proof: p.proofChannel, update: p.update, wallet: p.wallet };
+// Keep semantic keys: resolving the live message view here would freeze a catalog.
+type PrivacyMessage = keyof typeof p;
+const states: Readonly<Record<string, PrivacyMessage>> = { unknown: 'unknown', unavailable: 'unavailable', unsupported: 'unsupported', direct: 'direct', 'verified-private': 'privateRoute', blocked: 'blocked', locked: 'locked', unlocked: 'unlocked', 'authenticated-encryption': 'authenticated', available: 'available' };
+const reasons: Readonly<Record<PrivacyReason, PrivacyMessage>> = { 'not-observed': 'notObserved', observed: 'observedReason', expired: 'expired', 'invalid-observation': 'invalid', 'scope-changed': 'scopeChanged', 'clock-reversed': 'clockReversed', 'policy-blocked': 'policyBlocked', unavailable: 'unavailable' };
+const sources = { none: 'none', 'local-vault': 'localVault', 'transport-policy': 'transport', 'messaging-provider': 'messagingProvider', 'proof-provider': 'proofProvider' } as const;
+const channels = { rpc: 'rpc', relay: 'relay', map: 'map', proof: 'proofChannel', update: 'update', wallet: 'wallet' } as const;
 
 /** Bundled composition supplies the same real broker it uses for transport.
  * A subscription is an invalidation hint; only a fresh coherent inspection is evidence. */
@@ -90,15 +92,15 @@ export function PrivacyStatusPanel({ services = null, scope, transport = null }:
   function indicator(label: string, item: PrivacyIndicator<string>, selected?: string) {
     return <li key={label}><h3>{label}</h3><dl>
       {selected ? <><dt>{p.selected}</dt><dd>{selected}</dd></> : null}
-      <dt>{p.observed}</dt><dd>{states[item.state] ?? p.unknown}</dd>
-      <dt>{p.source}</dt><dd>{sources[item.source]}</dd>
-      <dt>{p.reason}</dt><dd>{reasons[item.reason]}</dd>
-    </dl><p>{item.observedAt === null ? p.noTime : english('privacy', 'time', { milliseconds: String(item.observedAt) })}</p></li>;
+      <dt>{p.observed}</dt><dd>{p[states[item.state] ?? 'unknown']}</dd>
+      <dt>{p.source}</dt><dd>{p[sources[item.source]]}</dd>
+      <dt>{p.reason}</dt><dd>{p[reasons[item.reason]]}</dd>
+    </dl><p>{item.observedAt === null ? p.noTime : message('privacy', 'time', { milliseconds: String(item.observedAt) })}</p></li>;
   }
   return <section className="plain-section" aria-labelledby="privacy-observations-title">
     <h2 id="privacy-observations-title">{p.title}</h2><p>{p.intro}</p><p>{p.refresh}</p>
     {transportError ? <p role="status">{p.error}</p> : null}
-    {result.ok ? <ul>{result.value.routes.map(item => indicator(channels[item.channel], item, item.selectedPolicy === 'ordinary' ? p.ordinary : item.selectedPolicy === 'strict' ? p.strict : p.noPolicy))}
+    {result.ok ? <ul>{result.value.routes.map(item => indicator(p[channels[item.channel]], item, item.selectedPolicy === 'ordinary' ? p.ordinary : item.selectedPolicy === 'strict' ? p.strict : p.noPolicy))}
       {indicator(p.vault, result.value.vault)}{indicator(p.messaging, result.value.messaging)}{indicator(p.proof, result.value.proof)}</ul> : <p role="status">{p.error}</p>}
     <h3>{p.chainTitle}</h3><p>{p.chainWarning}</p><h3>{p.fiatTitle}</h3><p>{p.fiatWarning}</p><p className="warning">{p.authorityWarning}</p>
   </section>;
