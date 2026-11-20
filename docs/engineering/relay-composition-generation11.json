@@ -1,0 +1,125 @@
+{
+  "source": "46727d2a8ee1fd58cde15dcc252e1692408830f4",
+  "tree": "6745c3b148aed3e13c092cc1d917541c24a9a482",
+  "steps": [
+    {
+      "name": "full",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 121.825,
+      "log": "/workspace/scratch/6eace968c0df/verification-relay-composition-g11/full.log",
+      "sha256": "9b87a3b14cf90fdabb0f8218712ff1583bdf3fe64c918d3d4f08653eb259cfd5",
+      "test_totals": {
+        "tests": 2265,
+        "pass": 2265,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.84,
+      "log": "/workspace/scratch/6eace968c0df/verification-relay-composition-g11/types.log",
+      "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53"
+    },
+    {
+      "name": "policy",
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.572,
+      "log": "/workspace/scratch/6eace968c0df/verification-relay-composition-g11/policy.log",
+      "sha256": "b77f54ff573a1283414b85e2074d57bdad07c2102fcff82867d28ad56a0e6fad",
+      "test_totals": {
+        "tests": 57,
+        "pass": 57,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "boundaries",
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.28,
+      "log": "/workspace/scratch/6eace968c0df/verification-relay-composition-g11/boundaries.log",
+      "sha256": "a2afff1ba06119367082cb0aec36223a649eae2fcc0580855c50a042cf9f7684",
+      "summary": "PASS: 238 production source files; core entry graph visited 142 module(s). Static boundary checks do not prove runtime isolation or complete the bundler graph."
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.159,
+      "log": "/workspace/scratch/6eace968c0df/verification-relay-composition-g11/build.log",
+      "sha256": "02609a6036277487deca77ea31e772f7784f21805a8b1b4f053f71d135184e1d",
+      "summary": {
+        "localStaticBuild": true,
+        "syntheticDemo": false,
+        "files": 12,
+        "bytes": 772636,
+        "bundledSinkTokensRequiringFrameworkReview": 18,
+        "completeXssProof": false,
+        "signedRelease": false,
+        "releaseAcceptance": false
+      }
+    }
+  ],
+  "recorded_at_utc": "2026-11-20T02:57:17.309074+00:00",
+  "source_union": {
+    "merge_commit": "4d498e1f8456e493e1db6684ec9ba5355fd2b3bd",
+    "merge_parents": [
+      "e848ae19574e8b7f4cb040082df5255ee5a63f1e",
+      "df10fe26a308407237f9ccbc636c8bb61f55b84f"
+    ],
+    "tested_source": "46727d2a8ee1fd58cde15dcc252e1692408830f4",
+    "tested_tree": "6745c3b148aed3e13c092cc1d917541c24a9a482",
+    "relay_changed_paths": [
+      "docs/engineering/RELAY_FRESHNESS_CAPACITY_20261120.md",
+      "packages/relay/src/ad.ts",
+      "packages/relay/test/ad.test.mjs"
+    ],
+    "core_changed_paths_count": 34,
+    "shared_changed_paths": [],
+    "final_exact_source_union": true,
+    "independent_additions": {
+      "packages/relay/test/ad-input-boundaries-independent.test.mjs": "6a6030cd3df9b770f0db3adcf90997dccbedaa96",
+      "docs/engineering/INDEPENDENT_RELAY_INPUT_REVIEW_GENERATION10_20261120.md": "14ab05b57ff84160b8ada310c17fa53402338ac9"
+    },
+    "commands_preserved": 56,
+    "workflows_preserved": 6,
+    "contract_entries_preserved": 65,
+    "core_script_entries_preserved": 157,
+    "package_metadata_and_lockfile_unchanged": true,
+    "relay_production_blob": "514578ee28454f368157ba22eaccadbb1c61cfe4"
+  },
+  "independent_union_reviewer": "publication_audit_g11",
+  "native_nostr_executed": false,
+  "native_prerequisite": "Pinned nak/Khatru unavailable; no download or workaround attempted.",
+  "hosted_or_browser_qualification_claimed": false,
+  "deployment_or_release": false
+}

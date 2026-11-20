@@ -4,6 +4,7 @@ import { messages as m } from './messages.ts';
 import { localeStore } from './locale/runtime.ts';
 import { errorMessage, isProfileId, parseRoute } from './routes.ts';
 import { Home, Recovery, Settings, UnavailablePage, pageTitle } from './Pages.tsx';
+import { createTradeDraftController, type TradeDraftController } from '../trade/draft-controller.ts';
 import type { TradeReviewController } from '../trade/review-controller.ts';
 import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
 import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
@@ -24,6 +25,12 @@ export interface AppProps {
 
 export function App({ services, starting = false, startupError, trade = null, diagnostics = null }: AppProps) {
   const tradeSnapshot = useTradeReview(trade);
+  const [drafts, setDrafts] = useState<TradeDraftController | null>(null);
+  useEffect(() => {
+    if (!services || !trade) { setDrafts(null); return; }
+    const controller = createTradeDraftController(services, trade); setDrafts(controller);
+    return () => { controller.dispose(); };
+  }, [services, trade]);
   const syntheticDemo = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'synthetic-demo';
   const testnet = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'sepolia-testnet';
   const testnetLocalProof = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'sepolia-local-proof';
@@ -41,6 +48,7 @@ export function App({ services, starting = false, startupError, trade = null, di
   // Reviews loaded from a profile belong to that selection only: any lock, unlock or switch clears them.
   // Layout effect: a locked or switched profile's loaded reviews are dropped before the browser paints, not one frame later.
   useLayoutEffect(() => { trade?.forgetSaved(); }, [trade, scope]);
+  useLayoutEffect(() => { drafts?.syncSelection(); }, [drafts, scope]);
   const store = services && current.state === 'unlocked' ? services : null;
   const main = useRef<HTMLElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -113,7 +121,7 @@ export function App({ services, starting = false, startupError, trade = null, di
             if (!isProfileId(id)) return;
             setRestoredProfileId(id); window.location.hash = '#/home';
           }} /><QrPanel services={services} trade={trade} scope={scope} /></> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} /> :
-          route.page === 'offers' ? <OffersPage trade={trade} store={store} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
+          route.page === 'offers' ? <OffersPage trade={trade} store={store} drafts={drafts} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
           <UnavailablePage page={route.page} />}
       </main>
       <footer>{m.footer}</footer>
