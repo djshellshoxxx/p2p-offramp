@@ -5,6 +5,7 @@
  */
 import { decodeBase64url, encodePassphrase, MAX_RECORDS, MAX_VAULT_PROFILES, ValidationError } from './vault.ts';
 import { MAX_BACKUP_BYTES, parseBackupBytes } from './backup.ts';
+import { parseBackupVerificationReceipt, type BackupVerificationReceipt, type RuntimeBackupVerification } from './backup-verification.ts';
 import { isSavedReviewSource, MAX_SAVED_REVIEW_BYTES, MAX_SAVED_REVIEWS, type SavedReviewSource } from './saved-review.ts';
 import { parseRecoveryReferences, parseRecoveryOffset, parseRecoveryRevision, type RuntimeRecoveryReferences } from './recovery-reference.ts';
 import { parseTradeDraftLibrary, parseTradeDraftChange, type TradeDraftLibraryV1, type TradeDraftChangeV1, MAX_TRADE_TEMPLATES } from './trade-drafts.ts';
@@ -54,17 +55,19 @@ export interface RuntimeTradeTemplatePreview {
 export interface RuntimeTradeTemplateConsent { readonly reviewed: true; readonly logicalOnly: true; readonly backupAndRemoteLimitsAcknowledged: true; }
 export interface RuntimeTradeTemplateReceipt { readonly revision: number; readonly changed: boolean; readonly persisted: true; readonly sessionCurrent: boolean; }
 export interface RuntimeTradeTemplateCancelled { readonly cancelled: true; }
-export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore | RuntimeSavedReviewRef | RuntimeSavedReviews | RuntimeRecoveryReferences | RuntimeSavedReviewFavorites | RuntimeSavedReviewFavorite | RuntimeTradeTemplates | RuntimeTradeTemplatePreview | RuntimeTradeTemplateReceipt | RuntimeTradeTemplateCancelled;
+export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore | RuntimeSavedReviewRef | RuntimeSavedReviews | RuntimeRecoveryReferences | RuntimeSavedReviewFavorites | RuntimeSavedReviewFavorite | RuntimeTradeTemplates | RuntimeTradeTemplatePreview | RuntimeTradeTemplateReceipt | RuntimeTradeTemplateCancelled | BackupVerificationReceipt | RuntimeBackupVerification;
 export type RuntimeOperation = 'init' | 'status' | 'unlock' | 'create' | 'restore' | 'listProfiles' | 'lock' | 'exportEncrypted' | 'dispose' | 'activity' |
-  'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange';
+  'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification';
 const OPERATIONS: readonly RuntimeOperation[] = ['init', 'status', 'unlock', 'create', 'restore', 'listProfiles', 'lock', 'exportEncrypted', 'dispose', 'activity',
-  'saveTermsReview', 'listTermsReviews', 'deleteTermsReview', 'listRecoveryReferences', 'listFavoriteReviews', 'setReviewFavorite', 'loadTradeTemplates', 'previewTradeTemplateChange', 'commitTradeTemplateChange', 'cancelTradeTemplateChange'];
+  'saveTermsReview', 'listTermsReviews', 'deleteTermsReview', 'listRecoveryReferences', 'listFavoriteReviews', 'setReviewFavorite', 'loadTradeTemplates', 'previewTradeTemplateChange', 'commitTradeTemplateChange', 'cancelTradeTemplateChange', 'verifyBackup', 'checkBackupVerification'];
 interface Header { readonly version: 1; readonly requestId: number; readonly generation: number; }
 export type RuntimeCommand = Header & (
   { readonly operation: 'init'; readonly config: RuntimeConfig } |
   { readonly operation: 'unlock'; readonly profileId: string; readonly passphrase: string } |
   { readonly operation: 'create'; readonly passphrase: string } |
   { readonly operation: 'restore'; readonly bytes: Uint8Array; readonly sourcePassphrase: string; readonly destinationPassphrase: string } |
+  { readonly operation: 'verifyBackup'; readonly profileId: string; readonly bytes: Uint8Array; readonly passphrase: string } |
+  { readonly operation: 'checkBackupVerification'; readonly profileId: string } |
   { readonly operation: 'exportEncrypted'; readonly profileId: string } |
   { readonly operation: 'saveTermsReview'; readonly profileId: string; readonly source: SavedReviewSource; readonly bytes: Uint8Array } |
   { readonly operation: 'listTermsReviews'; readonly profileId: string } |
@@ -82,6 +85,8 @@ export type RuntimeResponse = Header & { readonly kind: 'response'; readonly ope
   { readonly operation: 'exportEncrypted'; readonly result: { readonly ok: true; readonly value: RuntimeExport } } |
   { readonly operation: 'listProfiles'; readonly result: { readonly ok: true; readonly value: RuntimeInventory } } |
   { readonly operation: 'restore'; readonly result: { readonly ok: true; readonly value: RuntimeRestore } } |
+  { readonly operation: 'verifyBackup'; readonly result: { readonly ok: true; readonly value: BackupVerificationReceipt } } |
+  { readonly operation: 'checkBackupVerification'; readonly result: { readonly ok: true; readonly value: RuntimeBackupVerification } } |
   { readonly operation: 'saveTermsReview'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviewRef } } |
   { readonly operation: 'deleteTermsReview'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviewRef } } |
   { readonly operation: 'listTermsReviews'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviews } } |
@@ -92,7 +97,7 @@ export type RuntimeResponse = Header & { readonly kind: 'response'; readonly ope
   { readonly operation: 'previewTradeTemplateChange'; readonly result: { readonly ok: true; readonly value: RuntimeTradeTemplatePreview } } |
   { readonly operation: 'commitTradeTemplateChange'; readonly result: { readonly ok: true; readonly value: RuntimeTradeTemplateReceipt } } |
   { readonly operation: 'cancelTradeTemplateChange'; readonly result: { readonly ok: true; readonly value: RuntimeTradeTemplateCancelled } } |
-  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'deleteTermsReview' | 'listTermsReviews' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
+  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'deleteTermsReview' | 'listTermsReviews' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
 export type RuntimeMessage = RuntimeResponse | { readonly version: 1; readonly kind: 'locked'; readonly generation: number } |
   { readonly version: 1; readonly kind: 'closed'; readonly generation: number; readonly code: RuntimeErrorCode };
 
@@ -161,7 +166,7 @@ export function parseRuntimeConfig(input: unknown): RuntimeConfig {
 export function parseRuntimeCommand(input: unknown): RuntimeCommand {
   const op = operation(own(input, 'operation'));
   const extra = op === 'init' ? ['config'] : op === 'unlock' ? ['profileId', 'passphrase'] : op === 'create' ? ['passphrase'] :
-    op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'listFavoriteReviews' || op === 'loadTradeTemplates' || op === 'cancelTradeTemplateChange' ? ['profileId'] :
+    op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'verifyBackup' ? ['profileId', 'bytes', 'passphrase'] : op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'listFavoriteReviews' || op === 'loadTradeTemplates' || op === 'cancelTradeTemplateChange' || op === 'checkBackupVerification' ? ['profileId'] :
     op === 'saveTermsReview' ? ['profileId', 'source', 'bytes'] : op === 'deleteTermsReview' ? ['profileId', 'recordId'] : op === 'listRecoveryReferences' ? ['profileId', 'offset', 'expectedRevision'] :
     op === 'setReviewFavorite' ? ['profileId', 'recordId', 'favorite', 'expectedRevision'] :
     op === 'previewTradeTemplateChange' ? ['profileId', 'expectedRevision', 'change'] :
@@ -175,7 +180,12 @@ export function parseRuntimeCommand(input: unknown): RuntimeCommand {
     return Object.freeze({ ...base, operation: op, bytes: boundedBytes(raw.bytes, MAX_BACKUP_BYTES),
       sourcePassphrase: passphrase(raw.sourcePassphrase), destinationPassphrase: passphrase(raw.destinationPassphrase) });
   }
-  if (op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'listFavoriteReviews' || op === 'loadTradeTemplates' || op === 'cancelTradeTemplateChange') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId) });
+  if (op === 'verifyBackup') {
+    // Validate scalars before retaining the bounded owned file copy.
+    const profileId = profile(raw.profileId), password = passphrase(raw.passphrase);
+    return Object.freeze({ ...base, operation: op, profileId, passphrase: password, bytes: boundedBytes(raw.bytes, MAX_BACKUP_BYTES) });
+  }
+  if (op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'listFavoriteReviews' || op === 'loadTradeTemplates' || op === 'cancelTradeTemplateChange' || op === 'checkBackupVerification') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId) });
   if (op === 'saveTermsReview') {
     const bytes = boundedBytes(raw.bytes, MAX_SAVED_REVIEW_BYTES); if (bytes.byteLength === 0) return fail();
     return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), source: source(raw.source), bytes });
@@ -320,6 +330,13 @@ export function parseRuntimeMessage(input: unknown): RuntimeMessage {
     return Object.freeze({ ...base, result: runtimeFailure(value) });
   }
   const result = exact(raw.result, ['ok', 'value']); if (ok !== true || result.ok !== true) return fail();
+  if (base.operation === 'verifyBackup') {
+    try { return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: parseBackupVerificationReceipt(result.value) }) }); } catch { return fail(); }
+  }
+  if (base.operation === 'checkBackupVerification') {
+    const value = exact(result.value, ['verification']);
+    try { return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: Object.freeze({ verification: value.verification === null ? null : parseBackupVerificationReceipt(value.verification) }) }) }); } catch { return fail(); }
+  }
   if (base.operation === 'exportEncrypted') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: encryptedExport(result.value) }) });
   if (base.operation === 'listProfiles') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: inventory(result.value) }) });
   if (base.operation === 'restore') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: restored(result.value) }) });

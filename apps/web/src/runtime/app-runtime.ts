@@ -4,6 +4,7 @@ import {
   parseRuntimeCommand, parseRuntimeConfig, parseTradeDraftChange, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeExport, type RuntimeHandle, type RuntimeInventory, type RuntimeMessage,
   type RuntimeOperation, type RuntimeRestore, type RuntimeResult, type RuntimeStatus, type RuntimeValue,
+  type BackupVerificationReceipt, type RuntimeBackupVerification,
   type RuntimeTradeTemplates, type RuntimeTradeTemplatePreview, type RuntimeTradeTemplateReceipt, type RuntimeTradeTemplateCancelled, type RuntimeTradeTemplateConsent, type TradeDraftChangeV1,
   type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeSavedReviewFavorites, type RuntimeSavedReviewFavorite,
 } from '../../../../packages/schemas/index.ts';
@@ -171,7 +172,8 @@ export class AppRuntime {
     if (message.result.ok && message.operation !== 'exportEncrypted' && message.operation !== 'listProfiles' && message.operation !== 'restore' &&
         message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview' && message.operation !== 'listRecoveryReferences' &&
         message.operation !== 'listFavoriteReviews' && message.operation !== 'setReviewFavorite' && message.operation !== 'loadTradeTemplates' && message.operation !== 'previewTradeTemplateChange' &&
-        message.operation !== 'commitTradeTemplateChange' && message.operation !== 'cancelTradeTemplateChange') {
+        message.operation !== 'commitTradeTemplateChange' && message.operation !== 'cancelTradeTemplateChange' &&
+        message.operation !== 'verifyBackup' && message.operation !== 'checkBackupVerification') {
       if (!this.#acceptStatus(message, message.result.value, pending)) { this.#close('PROTOCOL_ERROR'); return; }
       this.#settle(message.requestId, Object.freeze({ ok: true, value: this.#current }));
     } else {
@@ -179,9 +181,14 @@ export class AppRuntime {
       // Saved-review replies belong to the profile the command named; it must still be the open profile.
       if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview' || message.operation === 'listRecoveryReferences' ||
           message.operation === 'listFavoriteReviews' || message.operation === 'setReviewFavorite' || message.operation === 'loadTradeTemplates' || message.operation === 'previewTradeTemplateChange' ||
-          message.operation === 'commitTradeTemplateChange' || message.operation === 'cancelTradeTemplateChange') &&
+          message.operation === 'commitTradeTemplateChange' || message.operation === 'cancelTradeTemplateChange' ||
+          message.operation === 'verifyBackup' || message.operation === 'checkBackupVerification') &&
           (!('profileId' in pending.metadata) || this.#current.state !== 'unlocked' || this.#current.handle.profileId !== pending.metadata.profileId)) {
         this.#settle(message.requestId, runtimeFailure('LOCKED')); return;
+      }
+      if (message.result.ok && (message.operation === 'verifyBackup' || message.operation === 'checkBackupVerification')) {
+        const receipt = message.operation === 'verifyBackup' ? message.result.value : message.result.value.verification;
+        if (receipt && (!('profileId' in pending.metadata) || receipt.profileId !== pending.metadata.profileId)) { this.#close('PROTOCOL_ERROR'); return; }
       }
       if (message.result.ok && message.operation === 'exportEncrypted') {
         if (pending.metadata.operation !== 'exportEncrypted' || parseBackupBytes(message.result.value.bytes).envelope.profileId !== pending.metadata.profileId) { this.#close('PROTOCOL_ERROR'); return; }
@@ -211,8 +218,11 @@ export class AppRuntime {
       const timer = setTimeout(() => this.#close('TIMEOUT'), operation === 'dispose' ? RUNTIME_DISPOSE_TIMEOUT_MS : RUNTIME_REQUEST_TIMEOUT_MS);
       const pending: Pending = { metadata: capturePendingMetadata(command), resolve, timer, removeAbort: () => signal?.removeEventListener('abort', abort) };
       this.#pending.set(command.requestId, pending); signal?.addEventListener('abort', abort, { once: true });
-      if (signal?.aborted) { abort(); return; }
-      try { this.#worker.postMessage(command); } catch { this.#close('STORAGE_UNAVAILABLE'); }
+      try {
+        if (signal?.aborted) { abort(); return; }
+        this.#worker.postMessage(command);
+      } catch { this.#close('STORAGE_UNAVAILABLE'); }
+      finally { if (command.operation === 'verifyBackup') command.bytes.fill(0); }
     });
   }
   get current(): RuntimeStatus { this.#checkIdle(); return this.#current; }
@@ -268,7 +278,7 @@ export class AppRuntime {
     return !result.ok ? result : 'bytes' in result.value ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
   }
   /** Purpose-bound open-profile commands. Replies after lock or profile switch are refused. */
-  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange', fields: Record<string, unknown>,
+  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification', fields: Record<string, unknown>,
     accept: (value: RuntimeValue) => value is T, signal?: AbortSignal): Promise<RuntimeResult<T>> {
     this.#checkIdle();
     const current = this.#current;
@@ -278,6 +288,15 @@ export class AppRuntime {
     this.#checkIdle();
     if (result.ok && (this.#closed || this.#disposing || this.#generation !== generation || !this.isCurrent(current.handle))) return runtimeFailure('LOCKED');
     return !result.ok ? result : accept(result.value) ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
+  }
+  /** Authenticate the supplied complete file in the current Worker selection; this never restores or writes. */
+  verifyBackup(bytes: Uint8Array, passphrase: string, signal?: AbortSignal): Promise<RuntimeResult<BackupVerificationReceipt>> {
+    return this.#profileCommand('verifyBackup', { bytes, passphrase },
+      (value): value is BackupVerificationReceipt => 'scope' in value && value.scope === 'complete-profile-v1', signal);
+  }
+  /** Revalidate the Worker-owned fact against the persisted current revision on every call. */
+  checkBackupVerification(signal?: AbortSignal): Promise<RuntimeResult<RuntimeBackupVerification>> {
+    return this.#profileCommand('checkBackupVerification', {}, (value): value is RuntimeBackupVerification => 'verification' in value, signal);
   }
   saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>> {
     return this.#profileCommand('saveTermsReview', { source, bytes }, (value): value is RuntimeSavedReviewRef => 'recordId' in value, signal);
