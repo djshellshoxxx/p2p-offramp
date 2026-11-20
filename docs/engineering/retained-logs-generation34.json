@@ -1,0 +1,82 @@
+{
+  "schema": "p2p-offramp.generation34-retained-logs.v1",
+  "testedSource": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+  "testedTree": "78de2de3db335147d8261ad5ab9b116976faf986",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g34-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generation34-20261120/full-node.log.gz",
+      "decodedBytes": 274443,
+      "compressedBytes": 90408,
+      "decodedSha256": "5f5d9ed956851e64c842c960bfc933fa0eef53f343a42023eca61c9570ca0940",
+      "compressedSha256": "6cadcee989a3dbd753ef73538f4dfd9447fa2fb773f82d2902a0fb6443982612"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g34-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generation34-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g34-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generation34-20261120/build-policy.log.gz",
+      "decodedBytes": 7611,
+      "compressedBytes": 3135,
+      "decodedSha256": "f41ed933d683bc0956427c42eb71550b0bfdced22a22724b452f6426681bf3a8",
+      "compressedSha256": "3ac4fd67a1572fc9f2a7bdc09600997c32ee4a7029adde734d9b680b85230c5b"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g34-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generation34-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 288,
+      "decodedSha256": "b460f1c640842daae2ad9cc06e4760d7947d23a24226953417652dd33b5032b8",
+      "compressedSha256": "98f5e0eb711f2510a3764442d254b68d1d8531c6dd4e7acf3a919fdcbab49cb1"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g34-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generation34-20261120/default-build.log.gz",
+      "decodedBytes": 1027,
+      "compressedBytes": 498,
+      "decodedSha256": "b5b59ffdb859e9cdbd17ab52836304600de6a6e291bdb4b43ee156a90d2ff7d0",
+      "compressedSha256": "1b89618d284d9322a9c465a7a8719bb55450cb7bf9a926bf9edc86f4c38fcf49"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g34-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generation34-20261120/demo-build.log.gz",
+      "decodedBytes": 1175,
+      "compressedBytes": 521,
+      "decodedSha256": "053793f0254588d2e23e3f3c1989f23964692d2109f75f077c4330617b06814e",
+      "compressedSha256": "486ba705c7c65e6143a09a23ea144ec436027d121417365eb9291b82fed11f52"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g34-qualification/native-fixture-preparation.log",
+      "storedPath": "docs/execution/continuation-generation34-20261120/native-fixture-preparation.log.gz",
+      "decodedBytes": 2196,
+      "compressedBytes": 861,
+      "decodedSha256": "a160f5a599c47f157611860baa192597ce8648c77e44c00c86a97e000d8c5c36",
+      "compressedSha256": "f452dc6d4fd9e2a5fdf39f8359c9a851c617018480dffd49b6329e300e48b19a"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/execution/solana-core-capability-generation34-20261120/receipt.json",
+    "docs/engineering/solana-core-capability-guard-independent-review-generation34.json",
+    "docs/engineering/solana-core-capability-composition-review-generation34.json",
+    "docs/engineering/qualification-generation32.json",
+    "docs/engineering/qualification-generation33.json"
+  ],
+  "limits": [
+    "The accepted D4 guard derives SHA256 of maintained encodeCapabilities([]) at the shared planFund boundary. Direct funding, prepared funding and confirmation revalidation reject other commitments before intent preparation, blockhash acquisition, wallet signing or send.",
+    "Binding, unsigned instruction codecs, historical exact-message verification, journal decoding, recovery and funded release/refund/payout remain unchanged. Historical commitments can still be inspected and recovered without granting new funding authority.",
+    "The core-policy omission predates G32. The final guard baseline has 15 passing controls and 18 expected missing-policy failures. Initial fixture error-code assumptions and intermediate historical-repreparation expectation failures remain preserved separately; no production adjustment weakened the guard.",
+    "Author package 448/448 and independent source 100/100 are separate overlapping controlled selections. Exact source, command and failure attribution remain in their receipts.",
+    "G33 display establishes only data consistency, with no confirmation authority, current chain claim or authenticated original pin/height metadata. It remains an inactive internal native-SOL helper; unknown fees/rent remain unknown.",
+    "G32 actual native driver admissions use prepareFunding and confirm, with review/journal/one-sign/one-send checks. Crash/refund retain direct funding and original real-time waits. Build-only compilation and controlled helper probes do not establish native execution.",
+    "The nine-path consolidated source union preserves actual frozen PR240 ancestry above PR239. All non-documentation entries equal reviewed G34 source, which includes the reviewed G32/G33 components.",
+    "All original source corrections, fixture failures, optional-tooling diagnostics, recovered command outputs and artifact-checker corrections remain retained with exact hashes and snapshots. No unchanged suite was rerun for independent provenance review.",
+    "Default/demo assets and graphs remain identical to the retained parent artifacts. The full Node suite compiles the maintained configured Solana-localnet artifact; native updater preparation compiles 37 modules and removes them. No browser, validator or financial flow ran locally.",
+    "This source closes the local accepted D4 policy gap but actual current-source/current-target hosted execution and matching recorded Tier C owner authorization remain pending. Browser seller-direct admission, bilateral acceptance, production trust and release are separate. ReleaseEnabled remains zero."
+  ]
+}
