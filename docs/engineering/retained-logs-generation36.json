@@ -1,0 +1,83 @@
+{
+  "schema": "p2p-offramp.generation36-retained-logs.v1",
+  "testedSource": "b785a01ffc54a75d497641d0e758d077adff41d0",
+  "testedTree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g36-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generation36-20261120/full-node.log.gz",
+      "decodedBytes": 283891,
+      "compressedBytes": 93191,
+      "decodedSha256": "d7848eb158610f183e7be22060490860ae940ff4d292b47c349b584e627244c1",
+      "compressedSha256": "d1dc5b79441d425303568f90db18216c46bcda61cace4226e253900ed0435e0e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g36-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generation36-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g36-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generation36-20261120/build-policy.log.gz",
+      "decodedBytes": 7625,
+      "compressedBytes": 3133,
+      "decodedSha256": "68d59f1ee05f3082c0fbedbe3b49d8f90d688459ba7e4f55d153515f268b4349",
+      "compressedSha256": "e44c8b2f2c36ce2fbe9a60f0b3ab4ec71e132c11f32aa7a6d440d38fe76b6dd0"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g36-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generation36-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 288,
+      "decodedSha256": "12c40248b08325299d1256b441c41b43708180d4164d231fa28d7b782a5eeca4",
+      "compressedSha256": "2f4f991f57e25fb0a7412712e194bd2b633c4f1847d3a898a37d3d2a93f80bab"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g36-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generation36-20261120/default-build.log.gz",
+      "decodedBytes": 1027,
+      "compressedBytes": 497,
+      "decodedSha256": "5085a82dd50f2d1a7a0075aa6d4a8208a3515ae12f5b7a528fc851a93ad97cd7",
+      "compressedSha256": "5476247f905af6df543b37a2b7d85767d6f21caaeb4c8a9390bb1fb661cb79e4"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g36-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generation36-20261120/demo-build.log.gz",
+      "decodedBytes": 1175,
+      "compressedBytes": 521,
+      "decodedSha256": "8e82cb386aa40813511173cb928fc5377a965f4f8b4370eedceac3ffaa60113d",
+      "compressedSha256": "9e00e283198733be3eefa6c2f21931b36357ab2e68a50e226827a958b9bb83a6"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g36-qualification/native-fixture-preparation.log",
+      "storedPath": "docs/execution/continuation-generation36-20261120/native-fixture-preparation.log.gz",
+      "decodedBytes": 2196,
+      "compressedBytes": 865,
+      "decodedSha256": "03632fa6206e2b35b23e41972295033cf1ad8a3e54afdec7b84c47cd48d816ac",
+      "compressedSha256": "67180b46a96fb2b60fe5cea8c585c438984cafc127bcbf1abd73a55c9cad932b"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/execution/solana-funding-admission-generation36-20261120/receipt.json",
+    "docs/execution/solana-funding-admission-browser-generation36-20261120/receipt.json",
+    "docs/engineering/funding-admission-independent-review-generation36.json",
+    "docs/engineering/solana-funding-admission-composition-review-generation36.json",
+    "docs/engineering/qualification-generation35.json"
+  ],
+  "limits": [
+    "The explicit funding.proposal.import command saves a complete G35 proposal with one encrypted vault CAS and no RPC refresh, wallet request, intent preparation or send. Existing funded recovery import and exit-only review actions remain restricted.",
+    "Separate proposal and recovery inventories share an eight-distinct-full-binding admission quota. Exact duplicate public documents return the original private payload/provenance without writing; paired recovery/proposal records count once. Historical mixed-version overflow stays readable with funded exits available.",
+    "Actual bound escrow addresses and canonical genesis/program/seller/nonce reservations refuse conflicting new proposals. Unexpected occupied record IDs of every kind are not overwritten. Finalized recovery can take precedence over a conflicting unfunded proposal when capacity permits.",
+    "Installed configuration is compared with immutable retained provenance; historical mismatch and unsupported terms remain readable without installing stored pins/endpoints/margins. Staged activation maps and post-await epoch/session/lease/abort/CAS guards protect admission ownership.",
+    "The maintained UI exposes an explicit save form and fixed-term inventory, with truthful saved-only, restore, configuration and collision status. Document blank snapshots redact proposals/capacity immediately; form request ownership clears private input and suppresses stale results.",
+    "The browser companion reuses absent-escrow terms, actual selectors and existing backup/restore/idle journeys. It adds encrypted-record, one-revision and zero-wallet/intent/send assertions while retaining every original financial assertion, amount and real-time wait. Its proposal-aware reader strictly validates known proposal records before passing remaining records through unchanged legacy oracles.",
+    "Author source selection 153/153, companion 8/8 and independent combined 168/168 are separate overlapping selections. The reviewer executed the combined d36 source, not a separate rerun on328. Initial 26 missing-command/inventory failures and the companion corrected baseline 1/7 remain source-attributed; the original faulty negative-test baseline 4/7 is retained and explained.",
+    "Native browser-driver build-only compilation processes 70 repository modules into 3 chunks totaling 417221 raw bytes with zero warnings. Generated output was never evaluated. No local browser, validator or financial flow ran.",
+    "All 1038 non-documentation entries match the reviewed combined author source; actual PR241/PR240 ancestry is preserved. The aggregate delta versus PR241 is 14 source paths, including the earlier G35 codec; G36 alone changes 12 paths versus its qualified component parent.",
+    "Default/demo assets and graphs remain identical to G35. The full suite compiles the maintained configured Solana profile, and native updater preparation strictly compiles 37 modules then removes them; neither establishes actual native/browser acceptance.",
+    "Explicit seller wallet connection, original bound/prepared/session/epoch ownership, funding review/confirmation and finalized-only recovery record addition remain subsequent work. No standalone component PR, peer acceptance, production trust, deployment, release or optional activation is established. ReleaseEnabled remains zero."
+  ]
+}
