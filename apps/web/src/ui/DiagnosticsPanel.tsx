@@ -13,11 +13,11 @@ export function DiagnosticsPanel({ service }: { readonly service: Diagnostics | 
   const [collection, setCollection] = useState<DiagnosticCollection | null>(null);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [preview, setPreview] = useState<DiagnosticPreview | null>(null);
-  const [notice, setNotice] = useState('');
+  const [notice, setNotice] = useState<'downloaded' | 'cleared' | null>(null);
   const [error, setError] = useState<DiagnosticErrorCode | null>(null);
   function discardPreview() { setPreview(previous => { previous?.bytes.fill(0); return null; }); }
   function refresh() {
-    discardPreview(); setSelected([]); setNotice(''); setError(null);
+    discardPreview(); setSelected([]); setNotice(null); setError(null);
     if (!service) { setCollection(null); return; }
     const result = service.collectDiagnostics();
     if (result.ok) setCollection(result.value); else { setCollection(null); setError(result.error.code); }
@@ -26,27 +26,27 @@ export function DiagnosticsPanel({ service }: { readonly service: Diagnostics | 
   useEffect(() => () => { preview?.bytes.fill(0); }, [preview]);
   function showPreview() {
     if (!service || !collection) return;
-    discardPreview(); setError(null); setNotice('');
+    discardPreview(); setError(null); setNotice(null);
     const result = service.previewExport(collection, selected);
     if (result.ok) setPreview(result.value); else setError(result.error.code);
   }
   function savePreview() {
     if (!service || !preview) return;
-    setNotice(''); setError(null);
+    setNotice(null); setError(null);
     const result = service.confirmExport(preview);
     if (!result.ok) {
       discardPreview(); setError(result.error.code);
       refreshButton.current?.focus();
       return;
     }
-    try { download(result.value); setNotice(m.downloaded); }
+    try { download(result.value); setNotice('downloaded'); }
     catch { setError('REDACTION_FAILED'); }
     finally { result.value.fill(0); }
   }
   function clear() {
-    discardPreview(); setSelected([]); setCollection(null); setError(null); setNotice('');
+    discardPreview(); setSelected([]); setCollection(null); setError(null); setNotice(null);
     const result = service?.clearDiagnostics();
-    if (result?.ok) { refresh(); setNotice(m.cleared); } else setError(result?.error.code ?? 'STORAGE_UNAVAILABLE');
+    if (result?.ok) { refresh(); setNotice('cleared'); } else setError(result?.error.code ?? 'STORAGE_UNAVAILABLE');
   }
   return <section className="panel" aria-labelledby="diagnostics-title">
     <h2 id="diagnostics-title">{m.title}</h2><p>{m.help}</p><p className="helper">{m.privacy}</p>
@@ -54,7 +54,7 @@ export function DiagnosticsPanel({ service }: { readonly service: Diagnostics | 
     <div className="actions"><button type="button" ref={refreshButton} onClick={refresh}>{m.refresh}</button>
       <button type="button" disabled={!service} onClick={clear}>{m.clear}</button></div>
     {error ? <p className="notice error" role="alert">{m.errors[error]}</p> : null}
-    {notice ? <p className="notice" role="status">{notice}</p> : null}
+    {notice ? <p className="notice" role="status">{m[notice]}</p> : null}
     {collection?.configured && collection.events.length === 0 ? <p role="status">{m.empty}</p> : null}
     {collection?.warnings.map(warning => <p className="notice" key={warning}>{m.warnings[warning]}</p>)}
     {collection?.configured && collection.events.length ? <>
@@ -62,7 +62,7 @@ export function DiagnosticsPanel({ service }: { readonly service: Diagnostics | 
         {collection.events.map((event, index) => <label key={index} className="checkbox-label">
           <input type="checkbox" checked={selected.includes(index)} onChange={change => {
             const checked = change.currentTarget.checked;
-            discardPreview(); setNotice(''); setSelected(old => checked ? [...old, index] : old.filter(value => value !== index));
+            discardPreview(); setNotice(null); setSelected(old => checked ? [...old, index] : old.filter(value => value !== index));
           }} />
           <span>{m.event(index + 1)} <code>{event.timeBucket}</code> · {event.module} · {event.operation} · {event.errorCode}</span>
         </label>)}
