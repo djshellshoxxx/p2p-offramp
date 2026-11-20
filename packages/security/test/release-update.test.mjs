@@ -9,7 +9,7 @@ import {locatorFixture} from './lib/locator-fixture.mjs';
 import {SessionTransportPolicy} from '../../transport/src/policy.ts';
 import {UpdateHttpReader} from '../src/release-update-http.ts';
 import {canonical,encode} from './lib/release-fixture.mjs';
-import {acceptedRelease} from '../src/release-update-store.ts';
+import {acceptedRelease,IndexedDbAcceptedReleaseStore} from '../src/release-update-store.ts';
 const turn=()=>new Promise(done=>setImmediate(done));
 const deferred=()=>{let resolve;const promise=new Promise(done=>resolve=done);return{promise,resolve};};
 function world(edit=()=>{}){
@@ -92,6 +92,33 @@ test('cancelled ignored native fetch retains shared admission until actual drain
   const pending=s.controller.checkForUpdate();await turn();assert.equal(started,true);s.controller.cancel();assert.equal((await pending).reason,'CANCELLED');assert.equal((await other.controller.checkForUpdate()).reason,'BUSY');
   held.resolve({ok:false,redirected:false,url:'https://updates.fixture.test/locator',headers:new Headers(),body:null});await s.close();
   assert.equal((await other.controller.checkForUpdate()).kind,'candidate');await other.close();
+});
+
+test('cancelled storage open retires its read and allows a later explicit check on the shared connection',async()=>{
+  const secure=Object.getOwnPropertyDescriptor(globalThis,'isSecureContext');
+  Object.defineProperty(globalThis,'isSecureContext',{configurable:true,value:true});
+  const requests=[];let transactions=0;
+  const factory={open(){const request={};requests.push(request);return request;}};
+  const s=world(({options,corpus})=>{options.acceptedStore=new IndexedDbAcceptedReleaseStore('fixture-beta',corpus.release.keyId,factory);});
+  try{
+    const first=s.controller.checkForUpdate();await turn();assert.equal(requests.length,1);
+    s.controller.cancel();assert.deepEqual(await first,{kind:'unreachable',reason:'CANCELLED'});
+    await turn();assert.equal(s.metrics.fetches,0);assert.equal(transactions,0);
+    const retry=s.controller.checkForUpdate();await turn();assert.equal(requests.length,1,'retry shares the still-pending open');
+    requests[0].result={close(){},transaction(){
+      transactions++;const tx={abort(){queueMicrotask(()=>tx.onabort?.());},objectStore(){return{get(){
+        const request={result:undefined,transaction:tx};queueMicrotask(()=>{request.onsuccess?.();queueMicrotask(()=>tx.oncomplete?.());});return request;
+      }};}};return tx;
+    }};
+    requests[0].onsuccess();
+    const retried=await retry;
+    assert.equal(retried.kind,'candidate','retired storage waiters cannot strand global update admission: '+JSON.stringify(retried));
+    assert.equal(transactions,1,'only the new explicit operation can start a transaction');
+    assert.equal(s.metrics.writes,0);assert.equal(s.metrics.opens,0);assert.equal(s.metrics.locks,0);assert.equal(s.metrics.disconnects,0);
+  }finally{
+    await s.close();
+    if(secure)Object.defineProperty(globalThis,'isSecureContext',secure);else Reflect.deleteProperty(globalThis,'isSecureContext');
+  }
 });
 
 test('aggregate deadline and owner callback reentry fail without new I/O or stale publication',async()=>{

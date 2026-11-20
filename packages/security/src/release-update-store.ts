@@ -35,8 +35,20 @@ export class IndexedDbAcceptedReleaseStore implements AcceptedReleaseStore {
       if(this.#database===opening){this.#database=undefined;this.#cancelOpen=undefined;}
     });return opening;
   }
+  #waitForOpen(signal:AbortSignal):Promise<IDBDatabase>{
+    // Retire only this operation. Other callers and later explicit operations share the native open.
+    const opening=this.#open();
+    return new Promise<IDBDatabase>((resolve,reject)=>{
+      const abort=()=>{signal.removeEventListener('abort',abort);reject(Error('CANCELLED'));};
+      signal.addEventListener('abort',abort,{once:true});
+      void opening.then(db=>{signal.removeEventListener('abort',abort);resolve(db);},error=>{
+        signal.removeEventListener('abort',abort);reject(error);
+      });
+      if(signal.aborted)abort();
+    });
+  }
   async #run<T>(mode:IDBTransactionMode,signal:AbortSignal,work:(store:IDBObjectStore,finish:(value:T)=>void)=>void):Promise<T>{
-    if(signal.aborted||this.#closed)throw Error('CANCELLED');const db=await this.#open();if(signal.aborted||this.#closed)throw Error('CANCELLED');
+    if(signal.aborted||this.#closed)throw Error('CANCELLED');const db=await this.#waitForOpen(signal);if(signal.aborted||this.#closed)throw Error('CANCELLED');
     return new Promise<T>((resolve,reject)=>{const tx=db.transaction('accepted',mode,{durability:'strict'});this.#transactions.add(tx);let output:T,done=false;
       const abort=()=>{try{tx.abort();}catch{}};signal.addEventListener('abort',abort,{once:true});
       const end=()=>{this.#transactions.delete(tx);signal.removeEventListener('abort',abort);};
