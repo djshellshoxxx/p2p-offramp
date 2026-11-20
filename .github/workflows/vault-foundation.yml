@@ -64,6 +64,10 @@ jobs:
         run: npm run test:solana:ack:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - name: Verify acknowledged Solana restore with the actual encrypted Worker
+        run: npm run test:solana:restore:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
