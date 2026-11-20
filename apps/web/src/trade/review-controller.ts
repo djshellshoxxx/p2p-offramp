@@ -11,7 +11,7 @@
  */
 import { MAX_TERMS_REVIEW_BYTES, reviewTermsBytes, type RegistryLookup, type ReviewedEvmTerms, type TermsReviewRejection, type TermsReviewResult } from '../../../../packages/domain/index.ts';
 import type { AppServices } from '../app-services.ts';
-import type { RuntimeErrorCode, RuntimeResult, RuntimeSavedReviewRef, RuntimeSavedReviews } from '../../../../packages/schemas/index.ts';
+import type { RuntimeErrorCode, RuntimeResult, RuntimeSavedReviewRef, RuntimeSavedReviews, RuntimeSavedReviewFavorites, RuntimeSavedReviewFavorite } from '../../../../packages/schemas/index.ts';
 
 export const MAX_SESSION_REVIEWS = 8;
 
@@ -56,13 +56,18 @@ export interface StoredReview {
 /** Saved bytes that no longer pass review against the current registry (for example an expired deadline). */
 export interface UnreviewableSaved { readonly recordId: string; readonly code: ImportRejection; }
 export type SavedErrorCode = RuntimeErrorCode | 'REGISTRY_NOT_READY' | 'INVALID_SAVED_REVIEW' | 'REVIEW_MISSING' | 'UNKNOWN_OUTCOME';
-export type ReviewPersistencePort = Pick<AppServices, 'getSnapshot' | 'subscribe' | 'selectionScope' | 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview'>;
+export type ReviewPersistencePort = Pick<AppServices, 'getSnapshot' | 'subscribe' | 'selectionScope' | 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listFavoriteReviews' | 'setReviewFavorite'>;
 export interface PersistenceState { readonly unlocked: boolean; readonly kind: 'idle' | 'busy' | 'saved' | 'loaded' | 'failed'; readonly code?: string; }
 export type SavedState =
   | { readonly kind: 'idle' }
   | { readonly kind: 'busy'; readonly action: 'save' | 'load' | 'delete' }
   | { readonly kind: 'done'; readonly action: 'save' | 'load' | 'delete'; readonly skipped: number }
   | { readonly kind: 'failed'; readonly action: 'save' | 'load' | 'delete'; readonly code: SavedErrorCode };
+export type FavoriteState =
+  | { readonly kind: 'idle' }
+  | { readonly kind: 'busy'; readonly action: 'load' | 'set' }
+  | ({ readonly kind: 'ready' } & RuntimeSavedReviewFavorites)
+  | { readonly kind: 'failed'; readonly code: SavedErrorCode };
 export interface TradeReviewSnapshot {
   readonly registry: RegistryState;
   readonly job: ImportState;
@@ -70,12 +75,17 @@ export interface TradeReviewSnapshot {
   readonly saved: SavedState;
   readonly unreviewable: readonly UnreviewableSaved[];
   readonly persistence: PersistenceState;
+  readonly favorites: FavoriteState;
 }
 /** The open profile's saved-review commands (AppServices). Results are bound to that profile by the runtime. */
 export interface SavedReviewStore {
   saveTermsReview(source: ReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>>;
   listTermsReviews(signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviews>>;
   deleteTermsReview(recordId: string, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>>;
+}
+export interface SavedReviewFavoriteStore extends SavedReviewStore {
+  listFavoriteReviews(signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewFavorites>>;
+  setReviewFavorite(recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewFavorite>>;
 }
 /** `stale` means a newer import, cancel() or dispose() superseded this call; its result was discarded. */
 export type ImportOutcome = ImportState | { readonly kind: 'stale' };
@@ -104,6 +114,10 @@ export interface TradeReviewController {
   setPersistence(port: ReviewPersistencePort | null): void;
   save(localId: string): Promise<void>;
   deleteSaved(recordId: string, store: SavedReviewStore): Promise<void>;
+  loadFavorites(store?: SavedReviewFavoriteStore): Promise<void>;
+  setReviewFavorite(recordId: string, favorite: boolean, store: SavedReviewFavoriteStore): Promise<void>;
+  /** Reloads the profile's saved bytes through the current registry before returning a session route ID. */
+  openFavorite(recordId: string, store: SavedReviewFavoriteStore): Promise<string | null>;
   /** Call when the profile locks or changes: drops loaded reviews and discards in-flight saved-review results. */
   forgetSaved(): void;
   nowSeconds(): string;
@@ -130,6 +144,7 @@ function bounded(reviews: readonly StoredReview[]): readonly StoredReview[] {
   return Object.freeze(reviews.filter(item => item.savedId !== null || keep.has(item)));
 }
 const IDLE_SAVED: SavedState = Object.freeze({ kind: 'idle' });
+const IDLE_FAVORITES: FavoriteState = Object.freeze({ kind: 'idle' });
 
 export function createTradeReviewController(options: TradeReviewOptions): TradeReviewController {
   const now = options.nowSeconds ?? (() => BigInt(Math.floor(Date.now() / 1000)));
@@ -139,13 +154,17 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
   let registry: RegistryLookup | null = null;
   let samples: readonly TermsSample[] = [];
   let snapshot: TradeReviewSnapshot = Object.freeze({ registry: Object.freeze({ kind: 'loading' }), job: Object.freeze({ kind: 'idle' }), reviews: Object.freeze([]),
-    saved: IDLE_SAVED, unreviewable: Object.freeze([]), persistence: Object.freeze({unlocked:false,kind:'idle'}) });
+    saved: IDLE_SAVED, unreviewable: Object.freeze([]), persistence: Object.freeze({unlocked:false,kind:'idle'}), favorites: IDLE_FAVORITES });
   let generation = 0;
   let savedGeneration = 0;
+  // A failed load can retain older session projections. Only a fully checked and published load can authorize
+  // opening a favorite; the public INVALID_SAVED_REVIEW status also describes incomplete infrastructure failures.
+  let completedSavedLoad: number | null = null;
   let disposed = false;
   let loading: Promise<void> | undefined;
   let port: ReviewPersistencePort | null = null, unsubscribe: (() => void) | undefined;
   let identity: number | null = null, savedAbort: AbortController | undefined;
+  let favoriteGeneration = 0, favoriteAbort: AbortController | undefined;
   const transient = new Set<Uint8Array>();
 
   const publish = (next: Partial<TradeReviewSnapshot>) => {
@@ -157,7 +176,11 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
   };
   const setJob = (job: ImportState) => publish({ job: Object.freeze(job) });
   const wipe = (items: readonly StoredReview[]) => { for (const item of items) item.bytes.fill(0); };
-  const clearSession = () => { generation++; savedGeneration++; savedAbort?.abort(); savedAbort=undefined; wipe(snapshot.reviews); for(const bytes of transient) bytes.fill(0); transient.clear(); publish({reviews:Object.freeze([]),job:Object.freeze({kind:'idle'}),saved:IDLE_SAVED,unreviewable:Object.freeze([])}); };
+  const retireFavorites = () => { favoriteGeneration++; favoriteAbort?.abort(); favoriteAbort = undefined; };
+  const favoriteCurrent = (mine: number, scope: number | null) => !disposed && mine === favoriteGeneration &&
+    (!port || port.getSnapshot().state === 'unlocked' && port.selectionScope() === scope);
+  const favoriteFailure = (code: SavedErrorCode) => publish({ favorites: Object.freeze({ kind: 'failed', code }) });
+  const clearSession = () => { generation++; savedGeneration++; completedSavedLoad = null; savedAbort?.abort(); savedAbort=undefined; retireFavorites(); wipe(snapshot.reviews); for(const bytes of transient) bytes.fill(0); transient.clear(); publish({reviews:Object.freeze([]),job:Object.freeze({kind:'idle'}),saved:IDLE_SAVED,unreviewable:Object.freeze([]),favorites:IDLE_FAVORITES}); };
   const unavailable = (action: 'save'|'load'|'delete', code: SavedErrorCode) => publish({saved:Object.freeze({kind:'failed',action,code})});
 
   async function run(source: ReviewSource, read: () => Promise<Uint8Array | ImportRejection>): Promise<ImportOutcome> {
@@ -227,6 +250,7 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
     },
     cancel() {
       if(snapshot.saved.kind === 'busy'){ const action=snapshot.saved.action; savedGeneration++; savedAbort?.abort(); savedAbort=undefined; unavailable(action,'UNKNOWN_OUTCOME'); }
+      if (snapshot.favorites.kind === 'busy') { retireFavorites(); favoriteFailure('UNKNOWN_OUTCOME'); }
       if (snapshot.job.kind !== 'busy') return;
       generation++;
       setJob({ kind: 'cancelled' });
@@ -244,11 +268,12 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       if(!registry){unavailable('save','REGISTRY_NOT_READY');return;}
       if(port && port.getSnapshot().state!=='unlocked'){unavailable('save','LOCKED');return;}
       const item = snapshot.reviews.find(entry => entry.localId === localId);
-      if(disposed || snapshot.saved.kind==='busy')return;
+      if(disposed || snapshot.saved.kind==='busy' || snapshot.favorites.kind === 'busy')return;
       if(!item){unavailable('save','REVIEW_MISSING');return;}
       if(item.savedId!==null){publish({saved:Object.freeze({kind:'done',action:'save',skipped:0})});return;}
       const mine = ++savedGeneration;
-      publish({ saved: Object.freeze({ kind: 'busy', action: 'save' }) });
+      retireFavorites();
+      publish({ saved: Object.freeze({ kind: 'busy', action: 'save' }), favorites: IDLE_FAVORITES });
       let result: RuntimeResult<RuntimeSavedReviewRef>;
       const abort=new AbortController(); savedAbort=abort; const copy=item.bytes.slice(); transient.add(copy);
       try { result = await store.saveTermsReview(item.source, copy, abort.signal); } catch { result = { ok: false, error: { code: 'PROTOCOL_ERROR', messageKey: 'runtime.error.protocol_error' } }; }
@@ -262,8 +287,9 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
     },
     async loadSaved(store: SavedReviewStore | undefined = port ?? undefined) {
       if(!store || port && port.getSnapshot().state!=='unlocked'){unavailable('load','LOCKED');return;}
-      if (disposed || snapshot.saved.kind === 'busy') return;
+      if (disposed || snapshot.saved.kind === 'busy' || snapshot.favorites.kind === 'busy') return;
       const mine = ++savedGeneration;
+      completedSavedLoad = null;
       if (!registry) { publish({ saved: Object.freeze({ kind: 'failed', action: 'load', code: 'REGISTRY_NOT_READY' }) }); return; }
       const lookup = registry;
       publish({ saved: Object.freeze({ kind: 'busy', action: 'load' }) });
@@ -320,6 +346,7 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       const job = currentJob.kind === 'accepted' && !kept.some(entry => entry.localId === currentJob.localId) ? Object.freeze({ kind: 'idle' } as const) : currentJob;
       wipe(snapshot.reviews.filter(item=>!kept.some(entry=>entry.bytes===item.bytes)));
       publish({ reviews: kept, job, unreviewable: Object.freeze(unreviewable), saved: unreviewable.length ? Object.freeze({kind:'failed',action:'load',code:'INVALID_SAVED_REVIEW'}) : Object.freeze({ kind: 'done', action: 'load', skipped: listed.value.skipped }) });
+      if (mine === savedGeneration && !disposed) completedSavedLoad = mine;
       } catch {if(mine===savedGeneration&&!disposed)unavailable('load','INVALID_SAVED_REVIEW');}
       finally {
         for (const bytes of owned) {
@@ -330,9 +357,10 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       }
     },
     async deleteSaved(recordId: string, store: SavedReviewStore) {
-      if (disposed || snapshot.saved.kind === 'busy') return;
+      if (disposed || snapshot.saved.kind === 'busy' || snapshot.favorites.kind === 'busy') return;
       const mine = ++savedGeneration;
-      publish({ saved: Object.freeze({ kind: 'busy', action: 'delete' }) });
+      retireFavorites();
+      publish({ saved: Object.freeze({ kind: 'busy', action: 'delete' }), favorites: IDLE_FAVORITES });
       let result: RuntimeResult<RuntimeSavedReviewRef>;
       try { result = await store.deleteTermsReview(recordId); } catch { result = { ok: false, error: { code: 'PROTOCOL_ERROR', messageKey: 'runtime.error.protocol_error' } }; }
       if (mine !== savedGeneration || disposed) return;
@@ -346,14 +374,68 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       publish({ reviews, job, unreviewable: Object.freeze(snapshot.unreviewable.filter(entry => entry.recordId !== recordId)),
         saved: Object.freeze({ kind: 'done', action: 'delete', skipped: 0 }) });
     },
+    async loadFavorites(store: SavedReviewFavoriteStore | undefined = port ?? undefined) {
+      if (disposed || snapshot.saved.kind === 'busy' || snapshot.favorites.kind === 'busy') return;
+      if (!store || port && port.getSnapshot().state !== 'unlocked') { favoriteFailure('LOCKED'); return; }
+      const mine = ++favoriteGeneration, scope = port?.selectionScope() ?? null;
+      const abort = new AbortController(); favoriteAbort = abort;
+      publish({ favorites: Object.freeze({ kind: 'busy', action: 'load' }) });
+      try {
+        const result = await store.listFavoriteReviews(abort.signal);
+        if (!favoriteCurrent(mine, scope)) return;
+        if (!result.ok) { favoriteFailure(result.error.code); return; }
+        const { revision, recordIds } = result.value;
+        if (!Number.isSafeInteger(revision) || revision < 0 || !Array.isArray(recordIds) || recordIds.length > MAX_SESSION_REVIEWS ||
+            recordIds.some(id => typeof id !== 'string' || !/^[0-9a-f]{32}$/.test(id)) || new Set(recordIds).size !== recordIds.length) {
+          favoriteFailure('PROTOCOL_ERROR'); return;
+        }
+        publish({ favorites: Object.freeze({ kind: 'ready', revision, recordIds: Object.freeze([...recordIds]) }) });
+      } catch { if (favoriteCurrent(mine, scope)) favoriteFailure('PROTOCOL_ERROR'); }
+      finally { if (favoriteAbort === abort) favoriteAbort = undefined; }
+    },
+    async setReviewFavorite(recordId: string, favorite: boolean, store: SavedReviewFavoriteStore) {
+      if (disposed || snapshot.saved.kind === 'busy' || snapshot.favorites.kind === 'busy') return;
+      if (port && port.getSnapshot().state !== 'unlocked') { favoriteFailure('LOCKED'); return; }
+      const observed = snapshot.favorites;
+      if (observed.kind !== 'ready') { favoriteFailure('CONFLICT'); return; }
+      if (typeof favorite !== 'boolean' || !/^[0-9a-f]{32}$/.test(recordId) ||
+          (favorite ? !snapshot.reviews.some(item => item.savedId === recordId) : !observed.recordIds.includes(recordId))) {
+        favoriteFailure('REVIEW_MISSING'); return;
+      }
+      if (observed.recordIds.includes(recordId) === favorite) return;
+      if (favorite && observed.recordIds.length >= MAX_SESSION_REVIEWS) { favoriteFailure('LIMIT_EXCEEDED'); return; }
+      const mine = ++favoriteGeneration, scope = port?.selectionScope() ?? null;
+      const abort = new AbortController(); favoriteAbort = abort;
+      publish({ favorites: Object.freeze({ kind: 'busy', action: 'set' }) });
+      try {
+        const result = await store.setReviewFavorite(recordId, favorite, observed.revision, abort.signal);
+        if (!favoriteCurrent(mine, scope)) return;
+        if (!result.ok) { favoriteFailure(result.error.code); return; }
+        if (result.value.recordId !== recordId || result.value.favorite !== favorite || result.value.revision !== observed.revision + 1) {
+          favoriteFailure('PROTOCOL_ERROR'); return;
+        }
+        const recordIds = favorite ? [...observed.recordIds, recordId] : observed.recordIds.filter(id => id !== recordId);
+        publish({ favorites: Object.freeze({ kind: 'ready', revision: result.value.revision, recordIds: Object.freeze(recordIds) }) });
+      } catch { if (favoriteCurrent(mine, scope)) favoriteFailure('PROTOCOL_ERROR'); }
+      finally { if (favoriteAbort === abort) favoriteAbort = undefined; }
+    },
+    async openFavorite(recordId: string, store: SavedReviewFavoriteStore) {
+      if (disposed || snapshot.saved.kind === 'busy' || snapshot.favorites.kind !== 'ready' || !snapshot.favorites.recordIds.includes(recordId)) return null;
+      const mine = favoriteGeneration, scope = port?.selectionScope() ?? null, before = savedGeneration;
+      await this.loadSaved(store);
+      if (!favoriteCurrent(mine, scope) || savedGeneration !== before + 1 || completedSavedLoad !== before + 1) return null;
+      const item = snapshot.reviews.find(entry => entry.savedId === recordId);
+      if (!item) { unavailable('load', snapshot.unreviewable.some(entry => entry.recordId === recordId) ? 'INVALID_SAVED_REVIEW' : 'REVIEW_MISSING'); return null; }
+      return item.localId;
+    },
     forgetSaved() {
       if(port){clearSession();return;}
-      savedGeneration++; savedAbort?.abort(); savedAbort=undefined; for(const bytes of transient)bytes.fill(0);transient.clear();
+      savedGeneration++; completedSavedLoad = null; savedAbort?.abort(); savedAbort=undefined; retireFavorites(); for(const bytes of transient)bytes.fill(0);transient.clear();
       const gone = snapshot.reviews.filter(entry => entry.loaded).map(entry => entry.localId);
       const reviews = bounded(snapshot.reviews.filter(entry => !entry.loaded).map(entry => entry.savedId === null ? entry : Object.freeze({ ...entry, savedId: null })));
       const job = snapshot.job.kind === 'accepted' && gone.includes(snapshot.job.localId) ? Object.freeze({ kind: 'idle' } as const) : snapshot.job;
       wipe(snapshot.reviews.filter(item=>!reviews.some(entry=>entry.bytes===item.bytes)));
-      publish({ reviews, job, unreviewable: Object.freeze([]), saved: IDLE_SAVED });
+      publish({ reviews, job, unreviewable: Object.freeze([]), saved: IDLE_SAVED, favorites: IDLE_FAVORITES });
     },
     setPersistence(next: ReviewPersistencePort | null) {
       if(disposed || port===next)return; unsubscribe?.(); clearSession();port=next;identity=next?.selectionScope()??null;

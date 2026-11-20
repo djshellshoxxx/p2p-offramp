@@ -103,6 +103,30 @@ test('G07 permits only the explicit read-only release side entry and follows its
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
+test('favorites facade belongs only to the native vault endpoint; document, QR, barrel and private imports fail closed', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-favorites-'));
+  try {
+    await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true, allowImportingTsExtensions: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+    await put(root, 'packages/personalization/favorites.ts', "export * from './src/favorites.ts';\n");
+    await put(root, 'packages/personalization/src/favorites.ts', 'export const favorites = true;\n');
+    await put(root, 'packages/personalization/index.ts', "export * from './src/favorites.ts';\n");
+    await put(root, 'apps/web/src/runtime/worker-endpoint.ts', "import '../../../../packages/personalization/favorites.ts';\n");
+    await put(root, 'apps/web/src/main.ts', 'export const document = true;\n');
+    let result = await inspectImportBoundaries(root); assert.deepEqual(result.findings, []);
+    await put(root, 'apps/web/src/main.ts', "import '../../../packages/personalization/favorites.ts'; import '../../../packages/personalization/index.ts'; import '../../../packages/personalization/src/favorites.ts';\n");
+    await put(root, 'apps/web/src/qr/decode.worker.ts', "import '../../../../packages/personalization/favorites.ts';\n");
+    await put(root, 'packages/other/src/consumer.ts', "import '../../personalization/favorites.ts';\n");
+    result = await inspectImportBoundaries(root);
+    assert.equal(result.findings.filter(finding => finding.code === 'PERSONALIZATION_OUTSIDE_VAULT_WORKER').length, 5);
+    assert.ok(result.findings.some(finding => finding.code === 'APP_PACKAGE_PRIVATE_IMPORT'));
+    assert.equal(result.findings.some(finding => finding.file.endsWith('/runtime/worker-endpoint.ts')), false);
+    await put(root, 'packages/proof-jobs/index.ts', 'export const optional = true;\n');
+    await put(root, 'packages/personalization/src/favorites.ts', "export * from '../../proof-jobs/index.ts';\n");
+    result = await inspectImportBoundaries(root);
+    assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === 'packages/proof-jobs/index.ts'), 'favorites never exempt transitive optional modules');
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test('G07 permits only the existing release side entry and excludes parked optional dependencies', async () => {
   const root = await mkdtemp(join(tmpdir(), 'p2p-import-acceptance-context-'));
   try {

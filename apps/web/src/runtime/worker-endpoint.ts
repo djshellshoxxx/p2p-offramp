@@ -1,8 +1,10 @@
 /**
  * Worker-private composition root. The narrow protocol cannot read, mutate or return private records, except the
- * purpose-bound saved terms reviews (G07) and unverified scalar recovery references (G12), in the selected profile only.
+ * purpose-bound saved terms reviews and their bounded favorites (G07) and unverified scalar recovery references (G12),
+ * in the selected profile only.
  */
 import { EncryptedVaultService, EncryptedBackupService, BackupError } from '../../../../packages/storage/index.ts';
+import { createSavedReviewFavorites } from '../../../../packages/personalization/favorites.ts';
 import {
   decodeBase64url, parseStrictJsonBytes, MAX_SAVED_REVIEW_BYTES, encodeBase64url, encodeSavedReviewPayload, parseSavedReviewPayload, parseRuntimeCommand, MAX_SAVED_REVIEWS, SAVED_REVIEW_SCHEMA_VERSION, parseRuntimeMessage, runtimeFailure, RuntimeBoundaryError, projectRecoveryReferences,
   RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
@@ -208,6 +210,26 @@ class VaultWorkerEndpoint {
         } else if (command.operation === 'exportEncrypted') {
           const value = await this.#services.backup.exportWithStatus(command.profileId, job.controller.signal); this.#guard(job);
           this.#reply(command, { ok: true, value });
+        } else if (command.operation === 'listFavoriteReviews' || command.operation === 'setReviewFavorite') {
+          const session = this.#selected(command.profileId), selection = this.#selection;
+          const favorites = vaultValue(createSavedReviewFavorites({ vault: this.#services.vault, session, isCurrent: () => {
+            this.#guard(job);
+            return this.#selection === selection && this.#selected(command.profileId).sessionId === session.sessionId;
+          } }));
+          try {
+            if (command.operation === 'listFavoriteReviews') {
+              const value = vaultValue(await favorites.list(job.controller.signal));
+              this.#guard(job); this.#selected(command.profileId);
+              this.#reply(command, { ok: true, value });
+            } else {
+              const receipt = vaultValue(await favorites.set(command.recordId, command.favorite, command.expectedRevision, job.controller.signal));
+              // Native durable receipts survive retirement. The document acknowledgement remains selection-bound;
+              // a committed write after cancellation is reconciled by an explicit reload, never an automatic retry.
+              this.#guard(job); this.#selected(command.profileId);
+              if (!receipt.sessionCurrent) throw new RuntimeBoundaryError('LOCKED');
+              this.#reply(command, { ok: true, value: Object.freeze({ recordId: receipt.recordId, favorite: receipt.favorite, revision: receipt.revision }) });
+            }
+          } finally { favorites.dispose(); }
         } else if (command.operation === 'listRecoveryReferences') {
           const vault = this.#services.vault, session = this.#selected(command.profileId);
           vaultValue(await vault.assertFresh(session.sessionId, job.controller.signal)); this.#guard(job);

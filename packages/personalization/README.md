@@ -2,8 +2,9 @@
 
 These source modules implement local encrypted preferences using the maintained
 vault/session APIs. They are recovered under accepted D7 Option 2. The current
-application and Worker do not import them; this extraction does not enable a
-favorites or template editor, change the vault schema, or add wallet authority.
+application composes saved-review favorites through the narrow `favorites.ts`
+entry in its native vault Worker. Templates remain uncomposed. Neither consumer
+changes the vault schema or adds wallet authority.
 
 ## Saved-review favorites
 
@@ -19,6 +20,11 @@ cannot be starred; their IDs can be unstarred. The read-only legacy saved-review
 wrapper recognized by the existing Worker is also accepted without rewriting it.
 Opening a favorite must run the existing current-registry saved-review load and
 resolve its ID only in that fresh result; this preference never grants validity.
+The document receives only bounded IDs and the observed revision. Its explicit
+star/unstar commands bind that revision to the active profile and generation.
+Opening requires a completed fresh load; an interrupted or malformed load cannot
+reuse a previously accepted session route. Lock and profile changes clear the
+projection. Deleting a saved review does not automatically prune the preference.
 
 G03 full-profile backup already preserves this encrypted row and restores it
 under fresh keys. Retention deliberately continues treating preferences as
@@ -47,11 +53,15 @@ Current retention keeps preferences outside its known deletion purposes. Do not
 import the historical retention implementation over the current union of intent
 versions; it contains no distinct runtime improvement.
 
-## Remaining application integration
+## Remaining application qualification
 
-Future UI/Worker composition must expose narrow purpose-specific commands, bind
-requests to the active profile/epoch, clear private projections on retirement,
-and use freshly revalidated saved reviews when opening a favorite. Applying a
-template is only pre-filling reusable inputs: it must require a new bilateral
-agreement and an explicit current transaction review. No source recovery here
-qualifies that user-facing flow or physical-browser behavior.
+The favorites application integration and its exact qualification status are
+recorded in `docs/engineering/PERSONALIZATION_FAVORITES_UI_20261119.md`. Its hosted
+browser gate exercises the emitted UI, actual Worker and encrypted IndexedDB;
+the existence of that harness is not evidence that it has run.
+
+Any future template UI/Worker composition must separately bind requests to the
+active profile/epoch and clear private projections on retirement. Applying a
+template only pre-fills reusable inputs: it must require a new bilateral agreement
+and an explicit current transaction review. Templates remain outside the emitted
+application and Worker graphs.

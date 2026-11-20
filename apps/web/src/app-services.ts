@@ -1,6 +1,6 @@
 /** Offline document composition boundary. UI receives state and commands, never a vault handle or record. */
 import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore,
-  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences } from '../../../packages/schemas/index.ts';
+  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeSavedReviewFavorites, type RuntimeSavedReviewFavorite } from '../../../packages/schemas/index.ts';
 import { AppRuntime, type AppRuntimeOptions } from './runtime/app-runtime.ts';
 
 export type AppResult<T> = RuntimeResult<T>;
@@ -28,11 +28,14 @@ export interface AppServices {
   saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>>;
   listTermsReviews(signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviews>>;
   deleteTermsReview(recordId: string, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>>;
+  /** Bounded IDs and revision only; opening a favorite still requires current-registry review. */
+  listFavoriteReviews(signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewFavorites>>;
+  setReviewFavorite(recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewFavorite>>;
   /** Read-only unverified scalar journal references; no calldata, native truth or resend capability. */
   listRecoveryReferences(offset?: number, expectedRevision?: number | null, signal?: AbortSignal): Promise<AppResult<RuntimeRecoveryReferences>>;
   dispose(): Promise<void>;
 }
-export type { RuntimeErrorCode, RuntimeInventory, RuntimeRestore, RuntimeSavedReviewRef, RuntimeSavedReviews, SavedReviewSource };
+export type { RuntimeErrorCode, RuntimeInventory, RuntimeRestore, RuntimeSavedReviewRef, RuntimeSavedReviews, SavedReviewSource, RuntimeSavedReviewFavorites, RuntimeSavedReviewFavorite };
 export { MAX_BACKUP_BYTES, MAX_VAULT_PROFILES } from '../../../packages/schemas/index.ts';
 const LOCKED: PublicStatus = Object.freeze({ state: 'locked' });
 const UNLOCKED: PublicStatus = Object.freeze({ state: 'unlocked' });
@@ -86,6 +89,12 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     },
     deleteTermsReview: async (recordId: string, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>> => {
       try { return await runtime.deleteTermsReview(recordId, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    listFavoriteReviews: async (signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewFavorites>> => {
+      try { return await runtime.listFavoriteReviews(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    setReviewFavorite: async (recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewFavorite>> => {
+      try { return await runtime.setReviewFavorite(recordId, favorite, expectedRevision, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     listRecoveryReferences: async (offset = 0, expectedRevision: number | null = null, signal?: AbortSignal): Promise<AppResult<RuntimeRecoveryReferences>> => {
       try { return await runtime.listRecoveryReferences(offset, expectedRevision, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
