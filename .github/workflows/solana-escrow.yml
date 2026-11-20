@@ -7,6 +7,12 @@ on:
       - 'packages/chain-solana/**'
       - 'packages/domain/**'
       - 'packages/schemas/**'
+      - 'packages/storage/**'
+      - 'packages/security/**'
+      - 'apps/web/**'
+      - 'scripts/lib/solana-localnet-*.mjs'
+      - 'scripts/lib/chromium-path.mjs'
+      - 'scripts/test-solana-localnet-browser.mjs'
       - 'scripts/test-support/register-tsx.mjs'
       - 'package.json'
       - 'package-lock.json'
@@ -18,6 +24,12 @@ on:
       - 'packages/chain-solana/**'
       - 'packages/domain/**'
       - 'packages/schemas/**'
+      - 'packages/storage/**'
+      - 'packages/security/**'
+      - 'apps/web/**'
+      - 'scripts/lib/solana-localnet-*.mjs'
+      - 'scripts/lib/chromium-path.mjs'
+      - 'scripts/test-solana-localnet-browser.mjs'
       - 'scripts/test-support/register-tsx.mjs'
       - 'package.json'
       - 'package-lock.json'
@@ -31,8 +43,8 @@ concurrency:
 jobs:
   program:
     runs-on: ubuntu-latest
-    # The real validator acceptance waits through the contract's 1800-second refund minimum.
-    timeout-minutes: 90
+    # Both independent validator gates wait through the contract's 1800-second refund minimum.
+    timeout-minutes: 150
     env:
       AGAVE_VERSION: v4.1.2
       # SHA-256 of solana-release-x86_64-unknown-linux-gnu.tar.bz2 recorded at first download (2026-11-04).
@@ -102,6 +114,16 @@ jobs:
         env:
           SOLANA_LOCALNET_DIR: ${{ github.workspace }}/contracts/solana/target/client-localnet
         run: node --import ./scripts/test-support/register-tsx.mjs contracts/solana/localnet/client-run.mjs
+      - name: Chromium for actual native browser composition
+        id: solana-chrome
+        uses: browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce # Same pinned revision as the existing browser gate.
+        with:
+          chrome-version: stable
+      - name: Actual Worker encrypted Solana recovery and real-time refund
+        timeout-minutes: 60
+        env:
+          P2P_CHROMIUM: ${{ steps.solana-chrome.outputs.chrome-path }}
+        run: npm run test:solana:browser
       - name: Save dependency cache (push to main only)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.solana-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0, tag resolved 2026-11-04

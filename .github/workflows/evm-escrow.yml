@@ -46,6 +46,10 @@ jobs:
         with:
           version: v1.5.1
       - run: npm ci --ignore-scripts
+      - name: Verify wallet calldata against the independent Foundry oracle
+        run: |
+          cast --version
+          node --import ./scripts/test-support/register-tsx.mjs --test packages/wallet/test/evm-escrow.test.mjs
       - run: npm run test:evm:local
       - run: npm run test:exchange:evm
       - run: npm run test:evm:viem

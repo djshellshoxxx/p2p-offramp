@@ -2,13 +2,15 @@
 //! G16 terms to a compiled genesis constant (spec-signed-trade-terms.md). The mint allowlist is also
 //! compiled in: a first-caller initializer would be an operator (D5).
 //!
-//! Only the synthetic `localnet` profile exists. Devnet/mainnet genesis constants, program IDs and
-//! mint lists are deployment decisions that need verified chain evidence; none is invented here.
+//! `localnet` is synthetic. The separate opt-in `browser-localnet` fixture compiles the actual genesis
+//! of its already running disposable validator and permits native SOL only. No public-network profile exists.
 
 use anchor_lang::prelude::Pubkey;
 
-#[cfg(not(feature = "localnet"))]
-compile_error!("select a network profile feature: only `localnet` is defined");
+#[cfg(not(any(feature = "localnet", feature = "browser-localnet")))]
+compile_error!("select an explicit local test profile; no production network profile is defined");
+#[cfg(all(feature = "localnet", feature = "browser-localnet"))]
+compile_error!("local test profiles are mutually exclusive");
 
 /// One allowlisted mint with the decimals the program requires at funding and payout.
 pub struct AllowedMint {
@@ -29,6 +31,14 @@ mod profile {
 
     pub const MINT_ALLOWLIST: &[AllowedMint] =
         &[AllowedMint { mint: TEST_MINT_OPEN, decimals: 6 }, AllowedMint { mint: TEST_MINT_FREEZABLE, decimals: 6 }];
+}
+
+#[cfg(feature = "browser-localnet")]
+mod profile {
+    use super::AllowedMint;
+    // Generated solely by the explicitly enabled fixture build script. RPC answers are never rewritten.
+    include!(concat!(env!("OUT_DIR"), "/browser_genesis.rs"));
+    pub const MINT_ALLOWLIST: &[AllowedMint] = &[];
 }
 
 pub use profile::*;

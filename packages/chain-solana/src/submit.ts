@@ -21,8 +21,9 @@
  * getLatestBlockhash docs): a blockhash is usable while the block height is at most lastValidBlockHeight. A
  * signed transaction is `dropped` only when the finalized block height exceeds it, the RPC also reports the
  * blockhash invalid, its ledger history reaches back to the blockhash slot (getFirstAvailableBlock), and
- * getSignatureStatuses (searchTransactionHistory) still has no status afterwards (spec-transaction-lifecycle-journal
- * §4 step 5).
+ * getSignatureStatuses (searchTransactionHistory) still has no status afterwards at a context at least as new as
+ * the finalized expiry block. A context-free block height alone cannot bind a cached absence to that block
+ * (spec-transaction-lifecycle-journal §4 step 5).
  * Durable-nonce transactions cannot be expressed (plan.ts) and are refused on restore.
  */
 import type { CoreErrorCode, TradeBinding } from '../../schemas/index.ts';
@@ -209,7 +210,40 @@ export async function prepareIntent(
   });
   verifyIntentForTrade(record, trade);
   admitIntent(loaded.records, record);
+  context.assertActive?.();
+  if (checkedProfileId(context.journal) !== profile) return fail('LOCKED');
   return { record, revision: await storeIntent(context.journal, trade, loaded.revision, record, signal) };
+}
+
+/**
+ * Validity of the ORIGINAL reviewed blockhash; this never requests a replacement blockhash or edits a message.
+ * Bracket the fresh finalized height and processed validity with genesis checks, and reject stale contexts.
+ */
+export async function recheckPreparedBlockhash(
+  context: SolanaSubmitContext, trade: BoundSolanaTrade, record: SolanaIntentRecord, plan: SolanaMessagePlan,
+): Promise<void> {
+  if ((record.state !== 'prepared' && record.state !== 'signed') || record.sendMarkedAt !== null) {
+    return fail('CONFLICT');
+  }
+  const genesis = async () => {
+    if ((await call(context, 'getGenesisHash', [])).value !== trade.network.genesisHash) return fail('WRONG_CHAIN');
+  };
+  await genesis();
+  const height = safeInt((await call(context, 'getBlockHeight', [{ commitment: 'finalized' }])).value);
+  const originalHeight = Number(record.lastValidBlockHeight) - MAX_PROCESSING_AGE;
+  if (height < originalHeight || height < Number(plan.snapshotBlockHeight) ||
+      height < (context.floors.get(trade.binding.networkId) ?? 0)) return fail('INTEGRITY_FAILURE');
+  if (height > Number(record.lastValidBlockHeight)) return fail('EXPIRED');
+  const minimumSlot = Math.max(Number(record.blockhashSlot), Number(plan.snapshotSlot));
+  const validity = (await call(context, 'isBlockhashValid', [record.blockhash,
+    { commitment: 'processed', minContextSlot: minimumSlot }])).value;
+  if (safeInt(own(own(validity, 'context'), 'slot')) < minimumSlot) return fail('INTEGRITY_FAILURE');
+  const valid = own(validity, 'value');
+  if (typeof valid !== 'boolean') return fail('INTEGRITY_FAILURE');
+  await genesis();
+  if (!valid) return fail('EXPIRED');
+  context.assertActive?.();
+  raiseFloor(context, trade.binding, height);
 }
 
 const MESSAGE_BASE64_CAP = Math.ceil(MAX_TRANSACTION_BYTES / 3) * 4;
@@ -224,6 +258,8 @@ export async function signIntent(
       session.tradeId !== trade.binding.tradeId) return fail('UNAUTHORIZED');
   const result = await signWithWallet(session, messageOf(record), context.assertActive);
   if (!result.ok) return fail(result.error.code);
+  // Cancellation/lock can win while the physical prompt is open. Do not persist a late signature as authority.
+  context.assertActive?.();
   // transitionIntent re-parses the record, which verifies the signature over the journaled message again.
   const next = transitionIntent(record, 'signed', clockNow(context), { signature: result.value.signature });
   const revision = await storeIntent(context.journal, trade, stored.revision, next);
@@ -268,11 +304,12 @@ export async function markAndSend(
 interface Status { readonly finalized: boolean; readonly slot: number; readonly err: string | null }
 async function signatureStatus(
   context: SolanaSubmitContext, record: SolanaIntentRecord, signal?: AbortSignal,
+  minimumSlot = Number(record.blockhashSlot),
 ): Promise<Status | null> {
   const params = [[record.signature], { searchTransactionHistory: true }];
   const raw = (await call(context, 'getSignatureStatuses', params, signal)).value;
   const contextSlot = safeInt(own(own(raw, 'context'), 'slot')), list = ownArray(own(raw, 'value'), 1);
-  if (list.length !== 1) return fail();
+  if (list.length !== 1 || contextSlot < minimumSlot) return fail();
   const entry = list[0];
   if (entry === null) return null;
   const slot = safeInt(own(entry, 'slot')), confirmations = own(entry, 'confirmations');
@@ -300,17 +337,30 @@ async function observeEvidence(
   }
   const height = safeInt((await call(context, 'getBlockHeight', [{ commitment: 'finalized' }], signal)).value);
   if (height < (context.floors.get(record.binding.networkId) ?? 0)) return fail('INTEGRITY_FAILURE');
-  const observed = (observation: SolanaObservation): ObservedEvidence => ({ observation, height });
+  let evidenceHeight = height;
+  const observed = (observation: SolanaObservation): ObservedEvidence => ({ observation, height: evidenceHeight });
   if (BigInt(height) <= BigInt(record.lastValidBlockHeight)) return observed({ kind: 'open' });
-  const valid = own((await call(context, 'isBlockhashValid', [record.blockhash, { commitment: 'processed' }],
-    signal)).value, 'value');
+  // Bind expiry to one finalized block, rather than combining a fresh height with an older absent status.
+  // isBlockhashValid supplies the finalized context; getBlock binds that exact slot to its block height.
+  const finalized = (await call(context, 'isBlockhashValid', [record.blockhash,
+    { commitment: 'finalized', minContextSlot: Number(record.blockhashSlot) }], signal)).value;
+  const finalizedSlot = safeInt(own(own(finalized, 'context'), 'slot'));
+  if (finalizedSlot < Number(record.blockhashSlot) || own(finalized, 'value') !== false) return fail();
+  const block = (await call(context, 'getBlock', [finalizedSlot,
+    { commitment: 'finalized', transactionDetails: 'none', rewards: false }], signal)).value;
+  evidenceHeight = safeInt(own(block, 'blockHeight'));
+  if (evidenceHeight < height || BigInt(evidenceHeight) <= BigInt(record.lastValidBlockHeight)) return fail();
+  const validity = (await call(context, 'isBlockhashValid', [record.blockhash,
+    { commitment: 'processed', minContextSlot: finalizedSlot }], signal)).value;
+  if (safeInt(own(own(validity, 'context'), 'slot')) < finalizedSlot) return fail();
+  const valid = own(validity, 'value');
   if (valid !== false) return fail();
   // A node whose ledger starts after the blockhash slot cannot show the history: the outcome stays open.
   const first = safeInt((await call(context, 'getFirstAvailableBlock', [], signal)).value);
   if (first > Number(record.blockhashSlot)) return observed({ kind: 'open' });
   if (record.signature !== null) {
-    // Height first, then status: anything that could still land would have to be in a block at or below it.
-    const status = await signatureStatus(context, record, signal);
+    // Absence must cover the finalized expiry block even if successive requests hit different RPC caches.
+    const status = await signatureStatus(context, record, signal, finalizedSlot);
     if (status !== null) return observed(fromStatus(status));
   }
   return observed({ kind: 'dropped' });
@@ -327,7 +377,9 @@ export async function observeIntent(
     if ((await call(context, 'getGenesisHash', [], signal)).value !== trade.network.genesisHash) fail('WRONG_CHAIN');
   };
   await identity();
-  const evidence = await observeEvidence(context, record, signal);
+  let evidence: ObservedEvidence;
+  try { evidence = await observeEvidence(context, record, signal); }
+  catch (error) { await identity(); throw error; }
   await identity();
   if (evidence.height !== null) raiseFloor(context, trade.binding, evidence.height);
   return evidence.observation;

@@ -1,0 +1,45 @@
+vite v8.3.5 building client environment for meta...
+transforming...
+✓ 93 modules transformed.
+rendering chunks...
+apps/web/dist/_headers                            0.34 kB
+apps/web/dist/qr-graph-worker.json                0.90 kB
+apps/web/dist/content-policy.json                 1.00 kB
+apps/web/dist/index.html                          1.28 kB
+apps/web/dist/third-party-licenses.json           3.62 kB
+apps/web/dist/core-graph-worker.json              4.13 kB
+apps/web/dist/core-graph-document.json           13.65 kB
+apps/web/dist/assets/vault.worker-DeA1P_KX.js    69.45 kB
+apps/web/dist/assets/decode.worker-DGcSBxfL.js  133.92 kB
+apps/web/dist/assets/index-MQunfNpA.css           7.54 kB
+apps/web/dist/assets/index-Wy_2yRGI.js          220.80 kB
+apps/web/dist/assets/OfflineRoot-D-1wzC30.js    246.38 kB
+
+✓ built in 3.76s
+[PLUGIN_TIMINGS] JavaScript callbacks ran for 1.4s of this 3.7s build (36%).
+2 callbacks are listed without a time. Their calls overlapped, so the time inside one call includes work from other calls. To find their cost, profile the build with `node --cpu-prof`:
+  - plugin vite:css transform (2 calls)
+  - plugin vite:worker-import-meta-url transform (3 calls)
+See https://rolldown.rs/reference/InputOptions.checks#bundlertimings for more details.
+
+{"localStaticBuild":true,"syntheticDemo":false,"files":12,"bytes":714778,"bundledSinkTokensRequiringFrameworkReview":18,"completeXssProof":false,"signedRelease":false,"releaseAcceptance":false}
+vite v8.3.5 building client environment for demo...
+transforming...
+✓ 95 modules transformed.
+rendering chunks...
+apps/web/dist-demo/_headers                              0.34 kB
+apps/web/dist-demo/qr-graph-worker.json                  0.90 kB
+apps/web/dist-demo/content-policy.json                   1.00 kB
+apps/web/dist-demo/index.html                            1.28 kB
+apps/web/dist-demo/third-party-licenses.json             3.62 kB
+apps/web/dist-demo/core-graph-worker.json                4.13 kB
+apps/web/dist-demo/core-graph-document.json             13.95 kB
+apps/web/dist-demo/assets/vault.worker-DeA1P_KX.js      69.45 kB
+apps/web/dist-demo/assets/decode.worker-DGcSBxfL.js    133.92 kB
+apps/web/dist-demo/assets/index-MQunfNpA.css             7.54 kB
+apps/web/dist-demo/assets/synthetic-local-DilZCC46.js    5.74 kB
+apps/web/dist-demo/assets/index-oYgRsU3L.js            220.82 kB
+apps/web/dist-demo/assets/OfflineRoot-BhtDmJAn.js      252.40 kB
+
+✓ built in 738ms
+{"localStaticBuild":true,"syntheticDemo":true,"files":13,"bytes":726850,"bundledSinkTokensRequiringFrameworkReview":18,"completeXssProof":false,"signedRelease":false,"releaseAcceptance":false}

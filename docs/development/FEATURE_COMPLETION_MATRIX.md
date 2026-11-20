@@ -1,4 +1,6 @@
-# Feature completion matrix
+# Feature completion matrix — historical November 18 checkpoint
+
+For current source scope, use [the November 19 feature coverage matrix](../engineering/FEATURE_MATRIX.md) and [the consolidation handoff](../engineering/CONSOLIDATION_HANDOFF.md). The draft/merge states below are preserved as historical evidence at their stated source SHA.
 
 Updated: November 18, 2026; source `main@6c38e641e24abcfdcf645f864bd64c9645836d75`.
 

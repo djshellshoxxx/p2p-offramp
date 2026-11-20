@@ -1,0 +1,2495 @@
+{
+  "schema": 1,
+  "repository": "djshellshoxxx/p2p-offramp",
+  "generation": 8,
+  "updated_at_utc": "2026-11-20T02:39:46.678294+00:00",
+  "phase": "corrected-core-reviewed-local-qualified-publication-pending",
+  "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+  "integration_branch": "codex/generation8-core-20261120",
+  "integration_source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+  "integration_source_tree": "b330e1ca3a8a22598197bdd5de9532a0c56a917b",
+  "scope": {
+    "deployment_authorized": false,
+    "release_enabled": 0,
+    "custody": "noncustodial",
+    "source_integration_authorized": true
+  },
+  "inventory": {
+    "file": "branch-inventory.json",
+    "baseline_main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+    "branches_examined": 192,
+    "pull_requests_examined": 184,
+    "classification_counts": {
+      "A": 108,
+      "B": 20,
+      "C": 41,
+      "D": 5,
+      "E": 2,
+      "F": 11,
+      "G": 5,
+      "H": 0
+    },
+    "rediscovery": {
+      "report": "REDISCOVERY_20261119.md",
+      "branches_observed": 194,
+      "prs_observed": 186,
+      "open_prs": 43,
+      "merged_prs": 105,
+      "closed_unmerged_prs": 38,
+      "original_heads_moved": 0,
+      "original_heads_removed": 0,
+      "subsequent_owned_branch": "codex/historical-recovery-20261119",
+      "note": "Immutable 192-branch inventory is retained; overlay counts are dated observations, not future live counts."
+    },
+    "generation3_delta": {
+      "file": "inventory-delta-generation3.json",
+      "observed_at_utc": "2026-11-20T00:37:12.673296+00:00",
+      "branches_observed": 204,
+      "prs_observed": 196,
+      "open_prs": 53,
+      "merged_prs": 105,
+      "closed_unmerged_prs": 38,
+      "added_owned_branches": 12,
+      "original_heads_moved": 0,
+      "original_heads_removed": 0
+    },
+    "generation4_delta": {
+      "observed_at_utc": "2026-11-20T01:16:13.483Z",
+      "branches_observed": 207,
+      "prs_observed": 199,
+      "open_prs": 56,
+      "merged_prs": 105,
+      "closed_unmerged_prs": 38,
+      "file": "inventory-delta-generation4.json",
+      "added_owned_branches": 15,
+      "new_since_generation3": 3,
+      "original_heads_moved": 0,
+      "original_heads_removed": 0
+    },
+    "generation5_delta": {
+      "observed_at_utc": "2026-11-20T01:50:42Z",
+      "branches": 209,
+      "pull_requests": 201,
+      "open": 58,
+      "merged": 105,
+      "closed_unmerged": 38,
+      "original_192_heads_unchanged": true,
+      "original_heads_missing": 0,
+      "new_since_generation4": [
+        "codex/solana-restore-ack-20261119",
+        "codex/personalization-templates-ui-20261119"
+      ],
+      "tags": 0,
+      "releases": 0,
+      "owner": "generation5_rediscovery",
+      "scope": "Dated pre-publication observation; subsequent source publication requires another overlay."
+    },
+    "generation8_delta": {
+      "file": "inventory-delta-generation8.json",
+      "branches_observed": 210,
+      "prs_observed": 200,
+      "scope": "Connector-observed200 records;59open105merged36closed-unmerged; previous dated counts retained",
+      "original192_unchanged": true
+    }
+  },
+  "completed": [
+    {
+      "id": "CONSOLIDATE-PR-171",
+      "source_sha": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/171"
+    },
+    {
+      "id": "CONSOLIDATE-PR-172",
+      "source_sha": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/172"
+    },
+    {
+      "id": "CONSOLIDATE-PR-174",
+      "source_sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/174"
+    },
+    {
+      "id": "CONSOLIDATE-PR-179",
+      "source_sha": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/179"
+    },
+    {
+      "id": "CONSOLIDATE-PR-181",
+      "source_sha": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/181"
+    },
+    {
+      "id": "CONSOLIDATE-PR-183",
+      "source_sha": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/183"
+    },
+    {
+      "id": "CONSOLIDATE-PR-187",
+      "source_sha": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/187"
+    },
+    {
+      "id": "RECOVER-HISTORICAL-AUDITS-109-114",
+      "source_sha": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "state": "integrated-on-staging",
+      "scope": "Six dated audit commits retained as historical evidence"
+    },
+    {
+      "id": "EXTRACT-ASSET-UPDATE",
+      "source_sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "state": "integrated-on-staging",
+      "scope": "Internal unexported updater; later malformed-envelope fix retained; four IndexedDB lifecycle repairs"
+    },
+    {
+      "id": "EXTRACT-PERSONALIZATION",
+      "source_sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "state": "integrated-on-staging",
+      "scope": "Encrypted favorites and templates; returned diagnostic boundary repaired; app and Worker remain unwired"
+    },
+    {
+      "id": "EXTRACT-SCRIPTLESS-PORTAL",
+      "source_sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "state": "integrated-on-staging",
+      "scope": "Scriptless source-reference portal with local header qualification harness"
+    },
+    {
+      "id": "EXTRACT-UNSIGNED-DISTRIBUTION",
+      "source_sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "state": "integrated-on-staging",
+      "scope": "Two-pass unsigned staging with strict current QR/OfflineRoot artifact roles"
+    },
+    {
+      "id": "EXTRACT-INERT-GOVERNANCE",
+      "source_sha": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "state": "integrated-on-staging",
+      "scope": "Inert historical records; status getter and inconsistent second-read defects repaired"
+    },
+    {
+      "id": "RECOVER-PEER-V1-GENERATOR",
+      "source_sha": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "state": "integrated-on-staging",
+      "scope": "Independent viem generator restores exact unchanged frozen-vector reproduction"
+    },
+    {
+      "id": "QUALIFY-QR-BROWSER",
+      "source_sha": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "state": "integrated-on-staging",
+      "scope": "Synthetic camera producer and strict trusted-activity oracle; actual hosted browser passed"
+    }
+  ],
+  "repairs": [
+    {
+      "id": "FIX-QR-STABLE-LABELS",
+      "state": "implemented",
+      "source": "apps/web/src/ui/QrPanel.tsx",
+      "kind": "reproduced-defect"
+    },
+    {
+      "id": "FIX-SOLANA-STABLE-LABELS",
+      "state": "implemented",
+      "source": "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+      "kind": "reproduced-defect"
+    },
+    {
+      "id": "INTEGRATE-QR-SOLANA-POLICY",
+      "state": "implemented-tested",
+      "source": "apps/web/scripts/qr-build-policy.test.mjs",
+      "kind": "integration-boundary"
+    },
+    {
+      "id": "FIX-UPDATER-OPEN-RETRY",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/security/src/release-update-store.ts"
+    },
+    {
+      "id": "FIX-UPDATER-LATE-BLOCKED-OPEN",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/security/src/release-update-store.ts"
+    },
+    {
+      "id": "FIX-UPDATER-SYNC-OPEN-ERROR",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/security/src/release-update-store.ts"
+    },
+    {
+      "id": "FIX-UPDATER-PENDING-CLOSE",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/security/src/release-update-store.ts"
+    },
+    {
+      "id": "FIX-GOVERNANCE-STATUS-GETTER",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/governance/src/records.ts"
+    },
+    {
+      "id": "FIX-GOVERNANCE-STATUS-SNAPSHOT",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/governance/src/records.ts"
+    },
+    {
+      "id": "FIX-DISTRIBUTION-CURRENT-ASSET-ROLES",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "scripts/distribution/manifest.mjs"
+    },
+    {
+      "id": "FIX-TEMPLATE-RETURNED-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/personalization/src/trade-draft-store.ts"
+    },
+    {
+      "id": "FIX-QR-CAMERA-FRAMES",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "scripts/lib/qr-browser-fixture.mjs"
+    },
+    {
+      "id": "FIX-QR-TRUSTED-ACTIVITY-ORACLE",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "scripts/lib/qr-browser-fixture.mjs"
+    },
+    {
+      "id": "FIX-PRIVACY-ATOMIC-GROUP-PRUNING",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/privacy-policy/src/plan.ts",
+      "repair_sha": "599fb729d4c02b7a50746268454ec9208bd8e2a8",
+      "severity": "Medium",
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-COURIER-RETURNED-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/courier/src/secrets.ts",
+      "repair_sha": "b987113452d644aa1f0ed72ba709ddaa1767c3e2",
+      "severity": null,
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-MEETUP-DISCLOSURE-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/meetup/src/disclosure-budget.ts",
+      "repair_sha": "c5808fa4b028b00681d6322a30782b7610dab0fb",
+      "severity": null,
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-MEETUP-POLICY-STORE-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/meetup/src/policy-data.ts",
+      "repair_sha": "c5808fa4b028b00681d6322a30782b7610dab0fb",
+      "severity": null,
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-PRIVACY-CONTROLS-RETURNED-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/privacy-controls/src/shared.ts",
+      "repair_sha": "c53410eaf3f4b46b6428063bc539f2dbe4f0721e",
+      "severity": null,
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-STEALTH-RETURNED-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "packages/stealth/src/store.ts",
+      "repair_sha": "19792ad333a93db6e21cc5147234cc4e22629c5a",
+      "severity": null,
+      "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-FAVORITES-COMPLETED-LOAD",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "apps/web/src/trade/review-controller.ts",
+      "repair_sha": "677580418fc3dee473702680c29ebb7c2c756e2a",
+      "severity": "Medium",
+      "scope": "Fresh current-registry review completion under trusted-port/infrastructure faults; no demonstrated peer or funds exploit."
+    },
+    {
+      "id": "FIX-SOLANA-WITHHELD-ACK",
+      "kind": "reproduced-fixture-defect",
+      "state": "independently-closed-early-hosted-passed-full-native-pending",
+      "source": "scripts/lib/solana-localnet-withheld-send.mjs",
+      "repair_sha": "493a6ea55b2eb332dfc8999b117fd7e817428497",
+      "severity": null,
+      "scope": "Controlled failed-acknowledgment fixture; production RPC and strict physical-send oracle unchanged; no general raw-reset retransmission guarantee."
+    },
+    {
+      "id": "FIX-IMMUTABLE-COPY-TEXT-HASH",
+      "kind": "reproduced-defect",
+      "state": "independently-closed",
+      "source": "scripts/docs/validate.mjs",
+      "repair_sha": "86a2b93666b029ea3bfc3a5e9c1ee3b89bdb6d28",
+      "scope": "Recorded copy text always checked against hash-verified immutable catalog; no semantic approval or receipt rebinding."
+    },
+    {
+      "id": "FIX-PERSONALIZATION-DISTRIBUTION-PATHS",
+      "kind": "reproduced-defect",
+      "state": "independently-closed",
+      "source": "scripts/distribution/manifest.mjs",
+      "repair_sha": "86a2b93666b029ea3bfc3a5e9c1ee3b89bdb6d28",
+      "scope": "Exact favorites pair repaired; final templates source adds only its exact pair. Current stale-evidence staging remains refused."
+    },
+    {
+      "id": "FIX-SOLANA-RESTORE-ACK-ADMISSION",
+      "kind": "reproduced-defect",
+      "state": "independently-closed-hosted-pending",
+      "source": "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+      "repair_sha": "6207d14bf83213847620b0dd1541f2c7d2e3b893",
+      "scope": "Immediate redaction remains; restore inputs stay disabled through actual lock acknowledgment."
+    },
+    {
+      "id": "FIX-SOLANA-RESTORE-BUFFER-OWNERSHIP",
+      "kind": "reproduced-defect",
+      "state": "independently-closed-hosted-pending",
+      "source": "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+      "repair_sha": "6207d14bf83213847620b0dd1541f2c7d2e3b893",
+      "scope": "Late/overlapping file reads cannot retain or replace active bytes; Worker receives intact clone before document zeroing."
+    },
+    {
+      "id": "FIX-TEMPLATE-ACCEPTED-REVIEW-RETIREMENT",
+      "kind": "reproduced-defect",
+      "state": "independently-closed-hosted-pending",
+      "source": "apps/web/src/trade/draft-controller.ts",
+      "repair_sha": "3a933c256f2ad14055e2dc2dfe6e2cf2bd2db2fb",
+      "scope": "Retire newly accepted private local-draft projection even before outer controller receives its route identity."
+    },
+    {
+      "id": "FIX-TEMPLATE-FAVORITES-WORKFLOW-ENV",
+      "kind": "qualification-gate-correction",
+      "state": "independently-closed",
+      "source": ".github/workflows/vault-foundation.yml",
+      "repair_sha": "88c39c92d93722d65bcfb5c3b0eb2b0e62e24823",
+      "scope": "Restore original favorites Chromium environment and attach a separate environment to the added template gate; no original step removed."
+    },
+    {
+      "id": "PORTAL-CLEANUP-OWNERSHIP",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "4966938d1f5803048c55f7d698b3ad76f9be4ec0",
+      "review_report": "CODE_AUDIT_GENERATION7_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "kind": "reproduced-defect"
+    },
+    {
+      "id": "REVIEW-NAVIGATION-OWNERSHIP",
+      "severity": "Low",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "7517fe457ac8110e5e21b2944074f3c84317d554",
+      "review_report": "INDEPENDENT_NAVIGATION_REVIEW_GENERATION7_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "kind": "reproduced-defect"
+    },
+    {
+      "id": "INDEXEDDB-OPEN-CANCELLATION",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "8a7e5e539cd33e398daa987ddc7c5256bac8be8f",
+      "review_report": "CODE_AUDIT_GENERATION8_20261120.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "kind": "reproduced-defect"
+    },
+    {
+      "id": "SOLANA-EXPIRY-CONTEXT",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "dde7345e1ee2e722344d6f27dd8bd952c285d520",
+      "review_report": "INDEPENDENT_SOLANA_EXPIRY_REVIEW_GENERATION8_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "kind": "reproduced-defect"
+    }
+  ],
+  "verification": {
+    "baseline_unit": {
+      "tests": 1965,
+      "passed": 1964,
+      "failed": 0,
+      "skipped": 1
+    },
+    "integration_unit": {
+      "tests": 2073,
+      "passed": 2072,
+      "failed": 0,
+      "skipped": 1
+    },
+    "integration_build_policy": {
+      "tests": 54,
+      "passed": 54,
+      "failed": 0
+    },
+    "integration_solana_focus": {
+      "tests": 63,
+      "passed": 63,
+      "failed": 0
+    },
+    "integration_qr_bounds": {
+      "tests": 129,
+      "passed": 129,
+      "failed": 0
+    },
+    "specification_unit": {
+      "tests": 32,
+      "passed": 32,
+      "failed": 0
+    },
+    "agreement_fuzz": {
+      "tests": 26,
+      "passed": 26,
+      "failed": 0
+    },
+    "actual_browser": "PR189 exact merge/head tree passed10 groups; PR190 exact merge/head tree passed12 groups including portal/distribution. Local Chromium remains blocked by Unix socket policy.",
+    "hosted_exact_head": "PR190 foundation/docs/native Nostr passed; real validator passed and actual encrypted Solana browser step remains running at01:12UTC. PR188/189 native browser failed. Reviewed correction PR202 requires its own hosted gates.",
+    "foundry_ci_profile": {
+      "version": "1.5.1",
+      "solc": "0.8.30",
+      "tests": 92,
+      "passed": 92,
+      "failed": 0,
+      "skipped": 0,
+      "fuzz_runs": 4096,
+      "invariant_runs": 256,
+      "invariant_depth": 100
+    },
+    "formal_harness_unit": {
+      "tests": 22,
+      "passed": 22,
+      "failed": 0
+    },
+    "default_and_demo_builds": "passed-with-four-TypeScript-projects",
+    "cast_followup": {
+      "tests": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "note": "Separate run resolves original cast-dependent skip; original suite counts remain historical."
+    },
+    "generation_two_initial_full": {
+      "tests": 2152,
+      "passed": 2152,
+      "failed": 0,
+      "skipped": 0,
+      "source_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4"
+    },
+    "generation_two_final_full": {
+      "tests": 2153,
+      "passed": 2153,
+      "failed": 0,
+      "skipped": 0,
+      "source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
+      "tree": "0fadc2154399d6bd70f6d988fa2670a84fa8c74b",
+      "command": "FOUNDRY_BIN=<pinned-toolchain> FOUNDRY_SOLC=<pinned-solc-0.8.30> npm test"
+    },
+    "generation_two_tooling": {
+      "tests": 36,
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0
+    },
+    "generation_two_build_policy": {
+      "tests": 54,
+      "passed": 54,
+      "failed": 0,
+      "skipped": 0
+    },
+    "generation_two_types_build_boundaries": {
+      "typescript_projects": 4,
+      "default_build": "passed",
+      "production_files": 234,
+      "core_modules": 140,
+      "core_modules_activated_by_extractions": 0
+    },
+    "generation_two_module_reviews": {
+      "asset_update_tests": 94,
+      "historical_tooling_tests": 31,
+      "personalization_tests": 65,
+      "independent_integration_review": "no-open-High-or-Medium-finding",
+      "reports": [
+        "INDEPENDENT_EXTRACTION_REVIEW_20261119.md",
+        "INDEPENDENT_HISTORICAL_TOOLING_REVIEW_20261119.md",
+        "INDEPENDENT_PERSONALIZATION_REVIEW_20261119.md",
+        "GENERATION2_INTEGRATION_REVIEW_20261119.md"
+      ]
+    },
+    "local_evm_controller": {
+      "checks": 12,
+      "wallet_prompts": 12,
+      "sends": 4,
+      "durable_markers": 4,
+      "backend": "actual pinned Anvil"
+    },
+    "local_erc20_independent": {
+      "checks": 4,
+      "signatures": 8,
+      "sends": 3,
+      "exact_durable_markers": 3
+    },
+    "generation_three_combined_full": {
+      "source_sha": "a2f90cbdac973843e1dc71fe078e9433d66cfa75",
+      "tree": "aa285f9a8546b1c78bb0bca51c2bc350874b063b",
+      "tests": 2553,
+      "passed": 2553,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "command": "FOUNDRY_BIN=<pinned-toolchain> FOUNDRY_SOLC=<pinned-solc-0.8.30> npm test",
+      "executor": "optional_source_b",
+      "coordinator_checked_actual_log_summary": true
+    },
+    "favorites_final_full": {
+      "source_sha": "ed2f19ed27083da9c3411ea74fcd471f07c44c0f",
+      "tree": "9c084e77b4ed8605d5e9d98fc4d6ca996f859494",
+      "tests": 2178,
+      "passed": 2178,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "observed_at_utc": "2026-11-20T00:59:53Z",
+      "command": "FOUNDRY_BIN=<pinned-toolchain> FOUNDRY_SOLC=<pinned-solc-0.8.30> npm test"
+    },
+    "solana_ack_independent": {
+      "source_sha": "493a6ea55b2eb332dfc8999b117fd7e817428497",
+      "tree": "3a1e9583b29db88ca73015e2ca35953e41378e0a",
+      "red": {
+        "passed": 0,
+        "failed": 2
+      },
+      "green": {
+        "passed": 2,
+        "failed": 0
+      },
+      "affected_tests": 334,
+      "passed": 334,
+      "failed": 0,
+      "skipped": 0,
+      "build_policy_passed": 54,
+      "typescript_projects": 4,
+      "production_files": 234,
+      "core_modules": 140,
+      "hosted_browser": "pending"
+    },
+    "generation5_core_full": {
+      "tests": 2217,
+      "passed": 2217,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "duration_ms": 114779.278434
+    },
+    "generation5_core_tooling": {
+      "tests": 42,
+      "passed": 42,
+      "failed": 0,
+      "skipped": 0
+    },
+    "generation5_independent": {
+      "affected_passed": 506,
+      "policy_passed": 38,
+      "supplemental_passed": 3,
+      "report": "INDEPENDENT_GENERATION5_CORE_REVIEW_20261119.md"
+    },
+    "generation8_core": {
+      "generation": 8,
+      "source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "tree": "b330e1ca3a8a22598197bdd5de9532a0c56a917b",
+      "state": "independently-reviewed-local-qualified-publication-pending",
+      "parent_pr": 205,
+      "full_suite": {
+        "tests": 2259,
+        "passed": 2259,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "build_policy_passed": 57,
+      "tooling_passed": 44,
+      "typescript_projects": 4,
+      "production_files": 238,
+      "core_modules": 142,
+      "high_medium_open": 0,
+      "commands_preserved": 56,
+      "optional_packages_included": false,
+      "report": "SUCCESSOR_CONSOLIDATION_GENERATIONS6_8_20261120.md",
+      "verification": "core-qualification-generation8.json"
+    }
+  },
+  "workers": [
+    {
+      "generation": 1,
+      "worker": "branch_inventory",
+      "state": "complete",
+      "scope": "all-branch inventory and feature matrix"
+    },
+    {
+      "generation": 1,
+      "worker": "bounded_security",
+      "state": "complete",
+      "scope": "PR187/181 independent red-green review"
+    },
+    {
+      "generation": 1,
+      "worker": "ci_recon",
+      "state": "complete",
+      "scope": "QR labels, CI diagnosis, Solana label review"
+    },
+    {
+      "generation": 1,
+      "worker": "tooling_qualification",
+      "state": "complete",
+      "scope": "PR174 source and tooling verification"
+    },
+    {
+      "generation": 2,
+      "worker": "successor_integration_audit",
+      "state": "complete",
+      "scope": "independent combined build/runtime security audit"
+    },
+    {
+      "generation": 2,
+      "worker": "successor_historical_tooling",
+      "state": "complete",
+      "scope": "portal/distribution and inert intake/governance extraction"
+    },
+    {
+      "generation": 2,
+      "worker": "successor_asset_update",
+      "state": "complete",
+      "scope": "signed asset-update selective extraction"
+    },
+    {
+      "generation": 2,
+      "worker": "successor_personalization",
+      "state": "complete",
+      "scope": "encrypted favorites/templates extraction and diagnostic repair"
+    },
+    {
+      "generation": 2,
+      "worker": "successor_extraction_audit",
+      "state": "complete",
+      "scope": "three extraction reviews and reproduced regressions"
+    },
+    {
+      "generation": 3,
+      "worker": "generation3_rediscovery",
+      "state": "complete",
+      "scope": "ref delta, peer-vector reproduction and optional queue"
+    },
+    {
+      "generation": 3,
+      "worker": "generation3_integration_review",
+      "state": "complete",
+      "scope": "generation2 review and independent proof-inputs/liquidity/privacy-policy reviews complete"
+    },
+    {
+      "generation": 3,
+      "worker": "generation3_ci",
+      "state": "complete",
+      "scope": "actual PR189/190 hosted browser evidence, native progress and tested optional merge-tree bindings"
+    },
+    {
+      "generation": 3,
+      "worker": "optional_source_a",
+      "state": "complete",
+      "scope": "three published source extractions; independent privacy-policy repair closure complete"
+    },
+    {
+      "generation": 3,
+      "worker": "optional_source_b",
+      "state": "complete",
+      "scope": "All-nine local2553-test qualification and source-bound report complete"
+    },
+    {
+      "generation": 3,
+      "worker": "optional_source_c",
+      "state": "complete",
+      "scope": "privacy-controls/stealth/proof-jobs source and independent review of arbitration/courier/meetup complete"
+    },
+    {
+      "generation": 4,
+      "worker": "personalization_favorites_ui",
+      "state": "complete",
+      "scope": "PR201 published; fresh-load Medium independently closed;2178-test final local qualification complete",
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "source_checkpoint": "ed2f19ed27083da9c3411ea74fcd471f07c44c0f"
+    },
+    {
+      "generation": 4,
+      "worker": "favorites_independent_review",
+      "state": "complete",
+      "scope": "Independent favorites Medium closed;39 affected tests and4 real-registry probes passed",
+      "branch": "codex/favorites-independent-review-20261119"
+    },
+    {
+      "generation": 4,
+      "worker": "solana_browser_send_repair",
+      "state": "complete",
+      "scope": "PR202 fixture and PR203 restore acknowledgment/byte ownership source published and independently reviewed",
+      "branch": "codex/solana-restore-ack-20261119"
+    },
+    {
+      "generation": 4,
+      "worker": "solana_send_independent_review",
+      "state": "complete",
+      "scope": "Independent acknowledgment334 and restore339 affected checks, RED/GREEN and three additional restore probes closed",
+      "branch": "codex/solana-restore-independent-20261119"
+    },
+    {
+      "generation": 4,
+      "worker": "personalization_templates_ui",
+      "state": "complete",
+      "scope": "PR204 published; final2210 full,32 focused,42 tooling,57 policy,4TS; independent review closed",
+      "branch": "codex/personalization-templates-ui-20261119"
+    },
+    {
+      "generation": 4,
+      "worker": "templates_browser_harness",
+      "state": "complete",
+      "scope": "Isolated emitted-App/real-Worker template browser script; syntax passed, hosted execution pending",
+      "branch": "codex/templates-browser-harness-20261119",
+      "source_checkpoint": "fc74d0b63486c524d32912682c303951387b7ae8"
+    },
+    {
+      "generation": 4,
+      "worker": "generation4_composition",
+      "state": "complete",
+      "scope": "Final optional/favorites/ack composition2580 full and42 tooling; source86a2b93 independently reviewed",
+      "branch": "codex/generation4-composition-20261119",
+      "source_checkpoint": "5ebeaa646d0b6e09a09a9a5852ff2905653f1841"
+    },
+    {
+      "generation": 5,
+      "worker": "generation5_core_composition",
+      "state": "complete",
+      "scope": "Core-only exact composition2217 full42 tooling57 policy4TS; source frozen and reports committed",
+      "branch": "codex/generation5-core-20261119",
+      "source_checkpoint": "de5bb8aadadd9b76099110262b2f7beb123f9421"
+    },
+    {
+      "generation": 5,
+      "worker": "generation5_core_independent_review",
+      "state": "complete",
+      "scope": "506 affected,38 policy,three independent cross-feature revision/backup probes, artifact comparison; no open High/Medium",
+      "branch": "codex/generation5-core-independent-20261119",
+      "report_commit": "468a7a3d7451ad8be065cc790ebe2fca127b9e28"
+    },
+    {
+      "generation": 5,
+      "worker": "generation5_rediscovery",
+      "state": "running",
+      "scope": "Fresh refs/issues/CI and standalone optional integration sequencing; no source or remote mutations",
+      "branch": "codex/generation5-rediscovery-20261119"
+    },
+    {
+      "id": "code_audit_g6",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "bug_hunt_g6",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "security_audit_g6",
+      "state": "automatic-screening-blocked-unverified-lead-only",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "code_audit_g7",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "security_review_g7",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "bug_hunt_g7",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "security_review_g8",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "code_audit_g8",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "bug_hunt_g8",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "hosted_review_g9",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "feature_completion_g9",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "security_completion_g9",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "bug_hunt_g9",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    }
+  ],
+  "remaining": [
+    {
+      "id": "GATE-COMBINED-HOSTED",
+      "priority": 1,
+      "state": "generation8-local-qualified-publication-pending",
+      "next_action": "Publish exact corrected tree and qualify hosted/native source. PR205 draft hold remains; preserve both actual1800-second waits."
+    },
+    {
+      "id": "GATE-PR189-SOLANA",
+      "priority": 1,
+      "state": "historical-failures-preserved-repairs203-composed-in-core",
+      "next_action": "Do not merge failing ancestors. Qualify current composed descendant; preserve failure evidence and strict oracle."
+    },
+    {
+      "id": "OPTIONAL-SOURCE-EXTRACTIONS",
+      "priority": 2,
+      "state": "nine-reviewed-source-PRs-requalification-and-policy-check-pending",
+      "next_action": "Keep one package per PR and default unwired. Old191/196/197/199 native jobs failed on inherited baseline. Read fresh rediscovery and applicable standalone TierB named-review condition; do not transfer old checks or bypass policy."
+    },
+    {
+      "id": "COMPOSE-PERSONALIZATION-UI",
+      "priority": 2,
+      "state": "ancestor-PR204-205-browser-passed-corrected-descendant-pending",
+      "next_action": "PR204 and core contain tooling repair and both UI gates. Inspect actual hosted favorites/templates journeys; do not infer execution from local tests."
+    },
+    {
+      "id": "COMPOSE-ASSET-UPDATE-UI",
+      "priority": 2,
+      "state": "generation9-backup-verification-prerequisite-reviewed-separate-qualification-pending",
+      "next_action": "Integrate independent backup verification tests, qualify and publish separately; native updater browser composition and current trust remain separate. No default activation."
+    },
+    {
+      "id": "EXPERIMENTAL-INTAKE",
+      "priority": 3,
+      "state": "preserved-at-source",
+      "next_action": "Keep #155 separate: retained Waku/mobile roundtrip failures, incoherent XMTP snapshot and unexecuted pinned-container qualification are explicit."
+    },
+    {
+      "id": "REAL-DEVICE-QUALIFICATION",
+      "priority": 3,
+      "state": "external",
+      "next_action": "Physical wallets/cameras/print/mobile/device matrix and owner-controlled trust inputs remain separate."
+    },
+    {
+      "id": "INVESTIGATE-SOLANA-RESTORE-ACK",
+      "priority": 1,
+      "state": "source-fixed-and-independent-review-closed-PR203",
+      "next_action": "Observe early real-Worker restore diagnostic and full native recovery/refund on published source."
+    },
+    {
+      "id": "FIX-GENERATION4-TOOLING-COMPOSITION",
+      "priority": 1,
+      "state": "independently-closed-in-PR204-and-core",
+      "owner": "generation4_composition",
+      "next_action": "Preserve original32/36 failure, independentRED0/2\u2192GREEN4/4 and42/42. Current distribution remains intentionally refused for stale immutable evidence."
+    }
+  ],
+  "successor_generation": 9,
+  "integration_local_source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+  "parent_integration_pr": 205,
+  "parent_integration_branch": "codex/generation5-core-20261119",
+  "parent_integration_head": "cd7d54ba075118a7ec043788c17718be842ee405",
+  "pull_request_resolution": "Resolve codex/generation8-core-20261120 and live PR200. PR205 is held as draft because it lacks four reviewed repairs. Corrected descendant requires exact-source hosted qualification. No main merge.",
+  "main_merges_performed": 0,
+  "published_generations": [
+    {
+      "generation": 1,
+      "source_sha": "84814328f5534d6fceb2bbe74509fe37c5b48689",
+      "source_tree": "0d6d70bb4465c2ce6e9395b602dc3e59a91869b2",
+      "pr": 188,
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f"
+    },
+    {
+      "generation": 2,
+      "source_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "source_tree": "f3ee86ab68eb60e4ab516037c58c9c498fc30ff4",
+      "final_source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
+      "final_source_tree": "0fadc2154399d6bd70f6d988fa2670a84fa8c74b",
+      "pr": 190,
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "head_tree": "a3701267756596e833247f50614c5ddc32f2cce0"
+    },
+    {
+      "generation": 5,
+      "pr": 205,
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "head_tree": "ce3c69ddc36245f756005c540e521a26a3ce59b8",
+      "state": "draft-held-for-four-successor-repairs"
+    }
+  ],
+  "repair_counting": "29 reproduced causes: prior25 plus portal cleanup ownership, late review navigation (four entry points, one cause), IndexedDB opening cancellation, Solana expiry context. Formatting/resource failures are not product defects.",
+  "hosted": [
+    {
+      "pr": 188,
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "browser": "failed-before-PR189-repair",
+      "program_run": 44639090596,
+      "program_job": 135965138780,
+      "program_observed_step": 16,
+      "program_state": "completed",
+      "other_original_required_contexts": "passed",
+      "validator_acceptance": "passed",
+      "observed_at_utc": "2026-11-20T01:18:09.063801+00:00",
+      "program_conclusion": "failure",
+      "program_failure": "Strict duplicate physical signature assertion at withheld-acknowledgment fixture; final fixtureErrors failure after real wait."
+    },
+    {
+      "pr": 189,
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "merge_checkout": "0b4567e88048d52a8ae4bd0c7d8ca4b23006f079",
+      "head_and_merge_tree": "938b76f923df166717ef522666575e37a0623825",
+      "passed_contexts": [
+        "forge",
+        "local-trade",
+        "local-evm",
+        "schemas-and-crypto",
+        "browser",
+        "specs",
+        "inventory",
+        "docs-tooling",
+        "native-nostr-relay"
+      ],
+      "browser_run": 44640970749,
+      "browser_job": 135971620360,
+      "browser_groups": 10,
+      "qr_journeys": 6,
+      "unexpected_qr_requests": 0,
+      "physical_camera_qualified": false,
+      "program_run": 44640971208,
+      "program_job": 135971622812,
+      "program_observed_step": 16,
+      "program_state": "completed",
+      "observed_at_utc": "2026-11-20T01:18:09.063801+00:00",
+      "validator_acceptance": "passed",
+      "program_conclusion": "failure",
+      "program_failure": "Strict duplicate physical signature assertion at withheld-acknowledgment fixture; final fixtureErrors failure after real wait."
+    },
+    {
+      "pr": 190,
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "merge_checkout": "966fa1bc6d0ec840dde5f529183763bbc8d4a1f5",
+      "head_and_merge_tree": "a3701267756596e833247f50614c5ddc32f2cce0",
+      "passed_contexts": [
+        "forge",
+        "local-trade",
+        "local-evm",
+        "schemas-and-crypto",
+        "browser",
+        "specs",
+        "inventory",
+        "docs-tooling",
+        "native-nostr-relay"
+      ],
+      "browser_run": 44644082347,
+      "browser_job": 135982130788,
+      "browser_groups": 12,
+      "qr_journeys": 6,
+      "portal_checks": 5,
+      "distribution_journeys": 3,
+      "distribution_assets": 42,
+      "distribution_build_passes": 2,
+      "unexpected_distribution_requests": 0,
+      "program_run": 44644082116,
+      "program_job": 135982126950,
+      "program_observed_step": 16,
+      "program_state": "completed",
+      "observed_at_utc": "2026-11-20T01:44:00Z",
+      "deployed_host_qualified": false,
+      "signed_release_qualified": false,
+      "physical_device_qualified": false,
+      "independent_distribution_witness": false,
+      "validator_acceptance": "passed",
+      "program_conclusion": "failure",
+      "program_failure": "Duplicate physical-send assertion00:53:27; restore/replacement passed00:55:01; real refund wait completed before final fixtureErrors failure01:25:17."
+    },
+    {
+      "pr": 201,
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "tree": "2e88aa8eec7a6e609ca113d35a36177c40bf156d",
+      "observed_at_utc": "2026-11-20T01:16:13.483Z",
+      "checks": "all10queued",
+      "browser_job": 136005796688,
+      "program_job": 136005795997,
+      "browser": "failed-distribution-before-favorites-step",
+      "favorites_gate": "skipped",
+      "tooling": "32 passed /4 failed",
+      "repair_in_pr": 204
+    },
+    {
+      "pr": 202,
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "tree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+      "published_at_utc": "2026-11-20T01:14:14Z",
+      "checks": "all-five-triggered-workflows-queued",
+      "early_browser_diagnostic": "pending",
+      "native_full_browser": "pending",
+      "foundation_run": 44652103772,
+      "program_run": 44652103777,
+      "browser": "13-groups-passed",
+      "browser_job": 136009252921,
+      "program_state": "in_progress",
+      "program_observed_step": 14,
+      "observed_at_utc": "2026-11-20T01:52:00Z"
+    },
+    {
+      "pr": 203,
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "browser_job": 136022950072,
+      "program_job": 136022950914,
+      "browser": "queued",
+      "program_state": "queued",
+      "observed_at_utc": "2026-11-20T01:52:00Z"
+    },
+    {
+      "pr": 204,
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "browser_job": 136023879924,
+      "program_job": 136023880105,
+      "browser": "queued",
+      "program_state": "queued",
+      "observed_at_utc": "2026-11-20T01:52:00Z"
+    }
+  ],
+  "policy": {
+    "canonical_index": "docs/adr/ACCEPTED-DECISIONS-2026-11-04.md",
+    "combined_tier": "C",
+    "owner_source_integration_authorization": "current user directive; no repeated permission needed",
+    "merge_gate": "green exact-head CI, applicable native/browser qualification, independent review with no open High/Medium finding",
+    "named_bot_gate": "not separately established for these Tier C combined PRs; assess standalone Tier B changes under their applicable policy",
+    "D7": "Nov18 supersedes parking; nine source packages accepted one package per PR with import-boundary checks; default composition has its own gate"
+  },
+  "optional_queue": [
+    {
+      "id": "EXTRACT-OPTIONAL-PROOF-INPUTS",
+      "package": "proof-inputs",
+      "original_pr": 144,
+      "source_sha": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "worker": "optional_source_a",
+      "local_head": "023fae1c951979f00ed91ece632d976283adf488",
+      "state": "published-source-reviewed-hosted-qualification-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false,
+      "pr": 191,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/191",
+      "branch": "codex/optional-proof-inputs-20261119",
+      "published_head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "published_tree": "be88b287938122c319b62ee7462bf3a5003dfd9a",
+      "package_tree": "8ce13a63a8df82b00cea3405d246babfe7f89746",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "generation3_integration_review",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_PROOF_INPUTS_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_PROOF_INPUTS_20261119.md",
+      "unit_tests": {
+        "passed": 21,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "typecheck:proof-inputs"
+      ]
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-LIQUIDITY",
+      "package": "liquidity",
+      "original_pr": 145,
+      "source_sha": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "worker": "optional_source_a",
+      "local_head": "e61cb9cb869f69861d43eb21cca70365991fc7f5",
+      "state": "published-source-reviewed-hosted-qualification-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false,
+      "pr": 192,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/192",
+      "branch": "codex/optional-liquidity-20261119",
+      "published_head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "published_tree": "3ab9817bec3b4e62cab92b9ce0d9ef2f53435a02",
+      "package_tree": "ef4dace6c26423b61d98c6012e54ab56d714428e",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "generation3_integration_review",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_LIQUIDITY_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_LIQUIDITY_20261119.md",
+      "unit_tests": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "all-triggered-workflows-passed",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "independent Python4 scenarios/160 transitions"
+      ],
+      "hosted_observed_at_utc": "2026-11-20T00:45:00Z",
+      "hosted_workflows": {
+        "Vault foundation": 44644603490,
+        "EVM escrow": 44644603569,
+        "Nostr relay interoperability": 44644603641,
+        "Specification inventory": 44644603434
+      },
+      "hosted_browser_job": 135983875037,
+      "hosted_browser_groups": 12,
+      "integration_sequence": "Qualified child remains unmerged while PR190 runs its native gate; merging into that parent now would change its source head."
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-ARBITRATION",
+      "package": "arbitration",
+      "original_pr": 147,
+      "source_sha": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "worker": "optional_source_b",
+      "local_head": "5bde63c00ba9adb3522fdaf3d4ef97915d92b895",
+      "state": "published-source-reviewed-hosted-qualification-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false,
+      "pr": 193,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/193",
+      "branch": "codex/optional-arbitration-20261119",
+      "published_head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "published_tree": "66d18800ca406996513eaa1eec97567d95d226b3",
+      "package_tree": "f6a8051adf0c1adeb5b655240ad478c58fac1ac6",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_c",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_ARBITRATION_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_ARBITRATION_20261119.md",
+      "unit_tests": {
+        "passed": 38,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "independent cast3 Vote vectors"
+      ]
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-PRIVACY-POLICY",
+      "package": "privacy-policy",
+      "original_pr": 148,
+      "source_sha": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "worker": "optional_source_a",
+      "local_head": "09cb40813c894f0a900690792060cb8164d5fa0e",
+      "state": "published-source-reviewed-hosted-qualification-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false,
+      "pr": 194,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/194",
+      "branch": "codex/optional-privacy-policy-20261119",
+      "published_head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "published_tree": "946ad1109e5a586439f43983de10e9fa8cd1e43d",
+      "package_tree": "5ab375b6f3b5520bd6059ff858f48699edf53aca",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "generation3_integration_review",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_PRIVACY_POLICY_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_PRIVACY_POLICY_20261119.md",
+      "unit_tests": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "atomic-group native replay required/optional/complete pair"
+      ]
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-COURIER",
+      "package": "courier",
+      "original_pr": 146,
+      "source_sha": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "worker": "optional_source_b",
+      "local_head": "d3b543d62b5da267d075f49fae530b6d05071777",
+      "state": "published-source-reviewed-hosted-qualification-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false,
+      "pr": 195,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/195",
+      "branch": "codex/optional-courier-20261119",
+      "published_head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "published_tree": "cff27fd7b907474a3d25d9144755eee733c812d9",
+      "package_tree": "276211811104349ad9431dae3f64f3ea83c299b6",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_c",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_COURIER_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_COURIER_20261119.md",
+      "unit_tests": {
+        "passed": 61,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "independent Python278-byte container preimage"
+      ]
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-MEETUP",
+      "package": "meetup",
+      "original_pr": 163,
+      "source_sha": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "worker": "optional_source_b",
+      "local_head": "f0145d869444a2346e9c81bf3889cdacb52f621e",
+      "state": "published-source-reviewed-hosted-qualification-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false,
+      "pr": 196,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/196",
+      "branch": "codex/optional-meetup-20261119",
+      "published_head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "published_tree": "9feb9bdbe77edbd6f11e486bf1785ab76c43a5ca",
+      "package_tree": "a3fd556fb78cfbf8c0546068db657c4c69a7c9c7",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_c",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_MEETUP_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_MEETUP_20261119.md",
+      "unit_tests": {
+        "passed": 95,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "test:meetup:browser",
+        "Python1024 geohash/4096 comparisons",
+        "Python92 XYZ vectors"
+      ]
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-PRIVACY-CONTROLS",
+      "package": "privacy-controls",
+      "original_pr": 160,
+      "source_sha": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "worker": "optional_source_c",
+      "local_head": "5385470e282b6bd44c9e229bb85b816b81c90cd2",
+      "state": "published-source-reviewed-hosted-qualification-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false,
+      "pr": 197,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/197",
+      "branch": "codex/optional-privacy-controls-20261119",
+      "published_head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "published_tree": "22d7b4e2ab6756a33eed3598115dab7ca1a9c24f",
+      "package_tree": "21480b1081bf720b21afa8277f2bfe99208790cc",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_b",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_PRIVACY_CONTROLS_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_PRIVACY_CONTROLS_20261119.md",
+      "unit_tests": {
+        "passed": 47,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "test:privacy-controls:browser"
+      ]
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-STEALTH",
+      "package": "stealth",
+      "original_pr": 161,
+      "source_sha": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "worker": "optional_source_c",
+      "local_head": "5f52bc054550f3cf9dc25c41a376565d80ee4f60",
+      "state": "published-source-reviewed-hosted-qualification-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false,
+      "pr": 198,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/198",
+      "branch": "codex/optional-stealth-20261119",
+      "published_head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "published_tree": "8feb969703a3fc6eecfc976f5eba550feccf240d",
+      "package_tree": "0a24172c193fc3f7c2f7fd8967f107e2e37b5f73",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_b",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_STEALTH_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_STEALTH_20261119.md",
+      "unit_tests": {
+        "passed": 55,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "independent cast3 public fixture hashes"
+      ]
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-PROOF-JOBS",
+      "package": "proof-jobs",
+      "original_pr": 162,
+      "source_sha": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "worker": "optional_source_c",
+      "local_head": "8fbffb4077dab8ecc09af05c1e5b5296e4debb41",
+      "state": "published-source-reviewed-hosted-qualification-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false,
+      "pr": 199,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/199",
+      "branch": "codex/optional-proof-jobs-20261119",
+      "published_head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "published_tree": "498f47b8d4ee8d79baab7a100c0ef2dec85377c9",
+      "package_tree": "4be7a4564974f96d8396f4901fbeb63789eaed75",
+      "target_branch": "codex/historical-recovery-20261119",
+      "target_head_at_publication": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "independent_reviewer": "optional_source_b",
+      "independent_review": "no-open-High-or-Medium-in-isolated-source-scope",
+      "author_report": "OPTIONAL_PROOF_JOBS_20261119.md",
+      "review_report": "INDEPENDENT_OPTIONAL_PROOF_JOBS_20261119.md",
+      "unit_tests": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0
+      },
+      "default_artifact": {
+        "files": 13,
+        "byte_identical_to_generation2": true
+      },
+      "hosted_state": "unfinished-at-latest-recorded-snapshot",
+      "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
+      "native_or_custom_gates": [
+        "typecheck:proof-jobs",
+        "test:proof:memory",
+        "test:proof:browser",
+        "optional-proof-jobs.yml"
+      ]
+    }
+  ],
+  "automation": {
+    "id": "Automation_ab68cc67e6ac8191bd31dc2d84a085e1",
+    "enabled": true,
+    "cadence": "hourly existing schedule",
+    "semantics": "durable scheduled continuation; not a claim that completed native workers run continuously",
+    "prompt_updated_at_utc": "2026-11-20T01:33:15.888076+00:00",
+    "last_observed_run": "2026-11-20T01:30:00Z",
+    "last_observed_run_state": "completed",
+    "last_result_scope": "Read-only source/check inspection and PR200 coordination comment; no active source branch mutation.",
+    "prompt_refresh_required": true
+  },
+  "verification_log_sha256": {
+    "generation2-full.tap": "3affa64cd3bdc9562dd5d08eb803a4c8764814332e23b574184c97c6c876d392",
+    "generation2-final-full.tap": "d6fdb84a0f32578b6e74b8272cdbf8c916d31c0f9910e2220eead224f41a2077",
+    "generation2-typecheck.log": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+    "generation2-boundaries.log": "59a6aa06bcd62b7c1e9f0529431e1941bd12f845e9d8884c86a9deee74ff3e91",
+    "generation2-build-policy.tap": "ac4628d5e2bec4f02b115364d7626f5aaa950a6273da1f8c6d390035e8c70b9a",
+    "generation2-build.log": "db93cafb803272649a30d9dfde5e415505ffd58bb3c401111ee952eb66958fc8",
+    "historical-combined-tooling.tap": "f606770e092b40604ce7330aa014f3d2e61d94b9dba07806e3780cf49c88e25f",
+    "historical-governance.log": "42f9556636da25ed29969162b2b491dc3b013911d5d1488a709864b931dd7194",
+    "historical-docs.log": "ac8481319318f368052ce8cb10fe5d9c1bff19aae21e0bb7fdbadd898fb68c47",
+    "integration-foundry.log": "dce1861e770f5f8dc9a7f67ad315e34a6c1eed8e269f6354ee7081c94ee22b68",
+    "integration-evm-escrow-oracle.tap": "aa441258948dd18ee1c5afc79400994bb1a0ae584685b2cef38dd87759efb4a2",
+    "integration-evm-controller.log": "9dfef677e924d9ae514adc4e01c67cfbc17297e000ab65dc36185aa297e85866",
+    "integration-erc20.log": "14c07ea72fd257ec390f6eb7650d52134aa4ec0f312b6196b8ef76d263601457",
+    "generation2-final-docs.log": "ac8481319318f368052ce8cb10fe5d9c1bff19aae21e0bb7fdbadd898fb68c47",
+    "generation2-final-specs.log": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9",
+    "optional-composition-full.tap": "d80cb2293a85b22e3618dce1e48ed797394bc8a1e8ab32a9dcd8c8abfd842903",
+    "optional-composition-build-policy.tap": "4263e77d6f024ef15fffbca476fe3682b93b14ea4488374e2c5e6b58390b3b55",
+    "optional-composition-tooling.tap": "92bf3d7d77eab4715c19796ad2b14af59f9ffb4d411bcb1cba34a0938567a299",
+    "optional-composition-typecheck.log": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+    "optional-composition-proof-inputs-typecheck.log": "1e305eb1bfb14f1b5f68a29cd70d3d9dd040f5dd119fbbc45d75ca92a7e97e00",
+    "optional-composition-proof-jobs-typecheck.log": "01003589ca24dff5de5e5b62865f20ccb201f4b2a147d91fe1299cd36dfacfb0",
+    "optional-composition-proof-memory.log": "c23b861046b8c4db97b176c6021d6defd6cc8163dd0f3a89be90a2536e8cf805",
+    "optional-composition-boundaries.log": "a944fc8a95ecff4212e15f25f2fd2640826b9181bb575537268ac67c0b29ed90",
+    "optional-composition-artifact-comparison.json": "f5ba73d4cdcbb6c8f6e20880db1009b22aba8d0a2ba6354ce402e1f8c2db1e52",
+    "optional-composition-source-audit.json": "fa50af9204c3168e9da269824e2ab9f8e2deabbcb986961b098526ab6adb41cd",
+    "optional-composition-root-audit.json": "756734fd4866b669896767c4c6dbbef4b11c3dda5ce6407a2cd6d7b5fcdf5891",
+    "generation5-core-full.log": "36626a89af28233901be3550f2ffb7c1e74743968b38b39b02f1e7a3977961af",
+    "generation5-core-tooling.log": "4f121ba387f78be9502e3e0b47083f5b6cd238fa43c9ffddd922ff64f4a467a4"
+  },
+  "integration_pr": null,
+  "integration_published_head": null,
+  "integration_published_tree": null,
+  "known_findings": [
+    {
+      "id": "PRIVACY-ATOMIC-GROUP-PRUNING",
+      "severity": "Medium",
+      "state": "independently-closed",
+      "pr": 194,
+      "repair_sha": "599fb729d4c02b7a50746268454ec9208bd8e2a8",
+      "scope": "Native planning under dependency pruning; optional source only."
+    },
+    {
+      "id": "FAVORITES-STALE-REVIEW-REOPEN",
+      "severity": "Medium",
+      "state": "independently-closed",
+      "reviewed_source": "6a01b49b04d9d49f80ea1c32579f050bfd5f61cc",
+      "red_test_commit": "d5ca7f1e72667331e73cef8376e0799cbb29f3df",
+      "reproduced_failures": 2,
+      "scope": "Fresh-review UI guarantee under trusted-port/infrastructure faults; not a demonstrated peer/funds exploit.",
+      "pr": 201,
+      "repair_sha": "677580418fc3dee473702680c29ebb7c2c756e2a",
+      "review_commit": "dbe43aca456683c8885bf1632c3d3cf9e3753ba1",
+      "green_affected_tests": 39
+    },
+    {
+      "id": "SOLANA-RESTORE-BUTTON-TIMEOUT",
+      "severity": null,
+      "state": "deterministically-reproduced-repaired-independently-closed-hosted-pending",
+      "pr": 197,
+      "job": 135987836079,
+      "observed_at_utc": "2026-11-20T01:12:23Z",
+      "scope": "Immediate redaction preceded actual Worker acknowledgment; deterministic UI tests reproduce premature admission. Separately repaired stale backup byte ownership.",
+      "owner": "solana_browser_send_repair",
+      "branch": "codex/solana-restore-ack-20261119",
+      "repair_sha": "6207d14bf83213847620b0dd1541f2c7d2e3b893",
+      "repair_pr": 203,
+      "review_commit": "3f08da66c9acaecfbc7a23a14edd4786e7cb1be9"
+    },
+    {
+      "id": "PORTAL-CLEANUP-OWNERSHIP",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "4966938d1f5803048c55f7d698b3ad76f9be4ec0",
+      "review_report": "CODE_AUDIT_GENERATION7_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390"
+    },
+    {
+      "id": "REVIEW-NAVIGATION-OWNERSHIP",
+      "severity": "Low",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "7517fe457ac8110e5e21b2944074f3c84317d554",
+      "review_report": "INDEPENDENT_NAVIGATION_REVIEW_GENERATION7_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390"
+    },
+    {
+      "id": "INDEXEDDB-OPEN-CANCELLATION",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "8a7e5e539cd33e398daa987ddc7c5256bac8be8f",
+      "review_report": "CODE_AUDIT_GENERATION8_20261120.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390"
+    },
+    {
+      "id": "SOLANA-EXPIRY-CONTEXT",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "dde7345e1ee2e722344d6f27dd8bd952c285d520",
+      "review_report": "INDEPENDENT_SOLANA_EXPIRY_REVIEW_GENERATION8_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390"
+    }
+  ],
+  "optional_composition": {
+    "branch": "codex/optional-composition-20261119",
+    "published": false,
+    "owner": "optional_source_b",
+    "base": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+    "source": "a2f90cbdac973843e1dc71fe078e9433d66cfa75",
+    "tree": "aa285f9a8546b1c78bb0bca51c2bc350874b063b",
+    "state": "local-qualification-passed-hosted-package-checks-pending",
+    "package_subtrees_match_all_nine_reviewed_heads": true,
+    "base_commands_preserved": 52,
+    "added_commands": 6,
+    "other_workflows_unchanged": 5,
+    "independent_integration_review": "OPTIONAL_COMPOSITION_INDEPENDENT_REVIEW_20261119.md",
+    "independent_review_result": "no-open-High-or-Medium-in-shared-integration-delta",
+    "completed_checks": {
+      "typescript_projects": 7,
+      "native_WASM_memory_probe": "passed",
+      "boundaries_production_files": 300,
+      "core_modules": 140,
+      "spec_audit": 173,
+      "spec_tests_passed": 32,
+      "docs_claims": 6,
+      "docs_pages": 7,
+      "governance_historical": 12,
+      "governance_pending": 0,
+      "governance_rows": 57,
+      "governance_stale_references": 13,
+      "full_suite": {
+        "tests": 2553,
+        "passed": 2553,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "duration_ms": 245457.647485
+      },
+      "build_policy_tests": 54,
+      "tooling_tests": 36,
+      "default_artifact_files": 13,
+      "default_artifact_byte_identical": true,
+      "optional_package_hits_in_default_graphs": 0
+    },
+    "author_report": "OPTIONAL_COMPOSITION_20261119.md",
+    "author_report_commit": "27fba7450600836b5edc131ae1f4f1744ae96248"
+  },
+  "native_workers_actually_launched": 38,
+  "optional_hosted_snapshot": {
+    "observed_at_utc": "2026-11-20T01:16:13.483Z",
+    "checks": {
+      "191": [
+        {
+          "name": "local-trade",
+          "id": 135983838780,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135983838368,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135983838247,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135983838200,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "program",
+          "id": 135983838195,
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135983838192,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135983838080,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135983838066,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135983838037,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135983837798,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "192": [
+        {
+          "name": "local-trade",
+          "id": 135983875235,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135983875084,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135983875037,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135983874927,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135983874886,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135983874880,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135983874777,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135983874742,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135983874633,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "193": [
+        {
+          "name": "forge",
+          "id": 135983936139,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135983936025,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-trade",
+          "id": 135983935657,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135983935530,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135983935526,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135983935473,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135983935445,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135983935302,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135983935073,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "194": [
+        {
+          "name": "browser",
+          "id": 135987637963,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135987637957,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135987637942,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135987637934,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135987637906,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135987637821,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135987637690,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135987637568,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-trade",
+          "id": 135987637285,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "195": [
+        {
+          "name": "local-trade",
+          "id": 135987698297,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135987697837,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135987696358,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135987696354,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135987696311,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135987696253,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135987696209,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135987696039,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135987695612,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "196": [
+        {
+          "name": "local-evm",
+          "id": 135987784952,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135987784812,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135987784734,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135987784678,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135987784419,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135987784236,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135987783958,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "program",
+          "id": 135987783703,
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "local-trade",
+          "id": 135987783579,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135987783552,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "197": [
+        {
+          "name": "forge",
+          "id": 135987836903,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135987836751,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135987836712,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135987836650,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135987836645,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-trade",
+          "id": 135987836305,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135987836265,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135987836250,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "program",
+          "id": 135987836079,
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "name": "inventory",
+          "id": 135987835889,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "198": [
+        {
+          "name": "local-trade",
+          "id": 135990859794,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135990859400,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135990858853,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135990858779,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135990858747,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135990858696,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135990858400,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135990857832,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135990857314,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "199": [
+        {
+          "name": "forge",
+          "id": 135990907097,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "program",
+          "id": 135990906563,
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "local-evm",
+          "id": 135990906482,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-trade",
+          "id": 135990906460,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135990906329,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135990906301,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135990906205,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135990906146,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "proof-jobs",
+          "id": 135990906144,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135990905888,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135990905869,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "201": [
+        {
+          "name": "forge",
+          "id": 136005796881,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 136005796749,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "specs",
+          "id": 136005796709,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "browser",
+          "id": 136005796688,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "docs-tooling",
+          "id": 136005796681,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "local-trade",
+          "id": 136005796502,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "local-evm",
+          "id": 136005796300,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 136005796031,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "program",
+          "id": 136005795997,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "inventory",
+          "id": 136005795834,
+          "status": "queued",
+          "conclusion": null
+        }
+      ]
+    },
+    "identities": [
+      {
+        "job": 135987784678,
+        "sha": "864477c124a6f064270ffcdb08e5bf9391f22946",
+        "tree": "1fae0bcf2f2263b6164930a4a56ebd5803764185",
+        "parents": [
+          "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+          "4bc4c7e2833b6b8540b8586624fb1697817e02e2"
+        ]
+      },
+      {
+        "job": 135987836712,
+        "sha": "3847e6f49337317a2c402e2f4eb94730959fcf12",
+        "tree": "97712823a475470b48564f48745b4ab5852db8c9",
+        "parents": [
+          "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+          "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84"
+        ]
+      },
+      {
+        "job": 135990906144,
+        "sha": "bf7b71cf2aa680dbd54829abe8bcb07e3a043065",
+        "tree": "b64bcc27a3e35cd7cafb26a020f43e49359f7c28",
+        "parents": [
+          "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+          "e7e1aa90072f4b0376820f0e9b28e609707de74f"
+        ]
+      }
+    ]
+  },
+  "favorites_ui": {
+    "pr": 201,
+    "branch": "codex/personalization-favorites-ui-20261119",
+    "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+    "tree": "2e88aa8eec7a6e609ca113d35a36177c40bf156d",
+    "tested_source": "ed2f19ed27083da9c3411ea74fcd471f07c44c0f",
+    "independent_review": "dbe43aca456683c8885bf1632c3d3cf9e3753ba1",
+    "state": "source-reviewed-published-old-hosted-tooling-failed-repaired-in-PR204-core-hosted-pending",
+    "medium_findings_open": 0,
+    "private_worker_allowance": [
+      "packages/personalization/favorites.ts",
+      "packages/personalization/src/favorites.ts"
+    ],
+    "revision_zero_valid": true,
+    "dangling_loaded_remove_allowed": true,
+    "fresh_completed_current_registry_review_required": true,
+    "catalog_semantic_approval": false,
+    "catalog_and_six_claims_draft_stale": true,
+    "old_hosted": {
+      "foundation_run": 44651072999,
+      "docs_job": 136005796681,
+      "tooling_passed": 32,
+      "tooling_failed": 4,
+      "browser_job": 136005796688,
+      "distribution": "failed-SOURCE_PATH",
+      "favorites_step": "skipped",
+      "repair_in_pr": 204
+    }
+  },
+  "solana_ack_repair": {
+    "pr": 202,
+    "branch": "codex/solana-browser-send-repair-20261119",
+    "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+    "tree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+    "tested_source": "493a6ea55b2eb332dfc8999b117fd7e817428497",
+    "local_publication": "499bccd8f621217f1f8d3d2671625d51c3d19709",
+    "independent_review": "e0317a4a6cb4201298a1637b245571610b16db0d",
+    "state": "early-hosted-passed-full-native-running",
+    "medium_findings_open": 0,
+    "production_code_unchanged": true,
+    "strict_send_oracle_unchanged": true,
+    "native_harness_and_real_waits_unchanged": true,
+    "general_transport_retransmission_guarantee": false,
+    "hosted_early": {
+      "run": 44652103772,
+      "job": 136009252921,
+      "merge_commit": "32f7353551660a6c1e3e9302eecf3647b482c0c3",
+      "tree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+      "groups_passed": 13,
+      "application_calls": 1,
+      "fetch_calls": 1,
+      "physical_send_posts": 1,
+      "http_status": 503,
+      "validator_forwards": 0,
+      "unexpected_requests": 0,
+      "artifact_digest": "8e1d06fb99e221589dfdd888a8b120ac45195dc63535a39de1f000f7b835cb0a"
+    },
+    "full_native": {
+      "run": 44652103777,
+      "job": 136009253374,
+      "state": "in_progress",
+      "last_observed_step": 14,
+      "observed_at_utc": "2026-11-20T01:52:00Z"
+    }
+  },
+  "generation4_composition": {
+    "branch": "codex/generation4-composition-20261119",
+    "source": "86a2b93666b029ea3bfc3a5e9c1ee3b89bdb6d28",
+    "tree": "ef66dcdfe3db18ddd9d28a2b61a571fe2b65ef16",
+    "state": "locally-qualified-independent-review-closed-not-published",
+    "published": false,
+    "includes": [
+      "nine optional sources",
+      "favorites201",
+      "Solana acknowledgment202"
+    ],
+    "excludes_unfrozen_templates": true,
+    "base_commands_preserved": 52,
+    "total_commands": 60,
+    "full_suite": {
+      "tests": 2580,
+      "passed": 2580,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "observed_at_utc": "2026-11-20T01:18:53Z"
+    },
+    "tooling": {
+      "tests": 42,
+      "passed": 42,
+      "failed": 0,
+      "skipped": 0
+    },
+    "typescript_projects": 7,
+    "build_policy_tests": 56,
+    "production_files": 301,
+    "core_modules": 140,
+    "initial_source": "5ebeaa646d0b6e09a09a9a5852ff2905653f1841",
+    "initial_tree": "cbf4e03186906f8ccf0c8e23ec1737700dd19952",
+    "initial_tooling": {
+      "tests": 36,
+      "passed": 32,
+      "failed": 4,
+      "state": "investigating-and-repairing",
+      "defects": [
+        "stale locale aggregate assertions",
+        "copyKeys.sourceTextSha256 mismatch suppressed when copyStale",
+        "distribution source allowlist missing exact favorites Worker modules",
+        "After source-path repair, current unsigned distribution remains intentionally blocked by stale immutable locale binding; preserve guard and qualify expected refusal separately."
+      ]
+    },
+    "independent_report": "38536886cb08066ee8679325a2bceae65d4cd366",
+    "author_report": "4e5ea0ffe27f031e77297c8119d2c1a36177e012"
+  },
+  "reproduced_repairs_count": 29,
+  "non_defect_integration_checks_count": 2,
+  "solana_restore_repair": {
+    "pr": 203,
+    "branch": "codex/solana-restore-ack-20261119",
+    "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+    "tree": "412efa7b9534cc182d05d2b97830d5f6ff09944e",
+    "tested_source": "6207d14bf83213847620b0dd1541f2c7d2e3b893",
+    "tested_tree": "75d068cc66e3138c89542550d2d6909600f1f68a",
+    "independent_review": "3f08da66c9acaecfbc7a23a14edd4786e7cb1be9",
+    "state": "reviewed-published-hosted-queued",
+    "high_medium_open": 0,
+    "red_failures": 4,
+    "green_same_cases": 4,
+    "affected_passed": 339,
+    "supplemental_probes_passed": 3,
+    "strict_send_oracle_preserved": true,
+    "real_refund_waits_preserved": true,
+    "standalone_artifact_digest": "54937986dbf48ed92cb1ebf72ad1a003ba95f7283514f1ecd8f21de58201a946"
+  },
+  "templates_ui": {
+    "pr": 204,
+    "branch": "codex/personalization-templates-ui-20261119",
+    "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+    "tree": "f5c5bb060732a892ba4eb91532e82ed79f64f2c4",
+    "tested_source": "45a4905368bc3acb2c87d9f9c5d33fee4197e3e1",
+    "tested_tree": "8cfb5b137a4797d5089ffa2204347f9e4358fe27",
+    "independent_review": "07ab922ca6fc6e2a68707cefdad4af16551e8209",
+    "state": "reviewed-published-hosted-queued",
+    "high_medium_open": 0,
+    "full_tests_passed": 2210,
+    "focused_passed": 32,
+    "tooling_passed": 42,
+    "policy_passed": 57,
+    "typescript_projects": 4,
+    "independent_affected": 80,
+    "independent_policy": 38,
+    "independent_final_distribution": 9,
+    "native_store_unchanged": true,
+    "slots": 8,
+    "reusable_fields": 7,
+    "automatic_write_retry": false,
+    "fresh_current_review_required": true,
+    "default_artifact_files": 13,
+    "demo_artifact_files": 14,
+    "current_distribution_qualified": false
+  },
+  "core_composition": {
+    "generation": 8,
+    "source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+    "tree": "b330e1ca3a8a22598197bdd5de9532a0c56a917b",
+    "state": "independently-reviewed-local-qualified-publication-pending",
+    "parent_pr": 205,
+    "full_suite": {
+      "tests": 2259,
+      "passed": 2259,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "build_policy_passed": 57,
+    "tooling_passed": 44,
+    "typescript_projects": 4,
+    "production_files": 238,
+    "core_modules": 142,
+    "high_medium_open": 0,
+    "commands_preserved": 56,
+    "optional_packages_included": false,
+    "report": "SUCCESSOR_CONSOLIDATION_GENERATIONS6_8_20261120.md",
+    "verification": "core-qualification-generation8.json"
+  },
+  "generation5_core_composition": {
+    "generation": 5,
+    "branch": "codex/generation5-core-20261119",
+    "source": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+    "tree": "ff1028ddc6c90119e38be7ca8fe3e007fb525b06",
+    "state": "independently-reviewed-local-qualified-publication-pending",
+    "target": "main",
+    "optional_packages_included": false,
+    "components": [
+      {
+        "pr": 204,
+        "head": "98d33db64622eab3f5f4ece6141d445d255245e7"
+      },
+      {
+        "pr": 203,
+        "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a"
+      }
+    ],
+    "author_report": "e3098d9b420b1982f715d5a6de11af59ee0609ec",
+    "independent_report": "468a7a3d7451ad8be065cc790ebe2fca127b9e28",
+    "high_medium_open": 0,
+    "full_suite": {
+      "tests": 2217,
+      "passed": 2217,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "duration_ms": 114779.278434
+    },
+    "tooling": {
+      "tests": 42,
+      "passed": 42,
+      "failed": 0,
+      "skipped": 0
+    },
+    "build_policy_passed": 57,
+    "typescript_projects": 4,
+    "production_files": 238,
+    "core_modules": 142,
+    "independent_affected_passed": 506,
+    "independent_policy_passed": 38,
+    "independent_cross_feature_probes_passed": 3,
+    "base_commands_preserved": 52,
+    "total_commands": 56,
+    "baseline_foundation_lines_preserved": 125,
+    "browser_groups": 16,
+    "nonshared_templates_paths_preserved": 46,
+    "nonshared_restore_paths_preserved": 11,
+    "default_artifact_files": 13,
+    "demo_artifact_files": 14,
+    "artifact_reference": "final templates",
+    "solana_artifact_digest": "ba257e8b5178c52014e4eb4c00a3047cb71cb63d33ed395add6dc7754497a7a4",
+    "hosted_qualification": "pending-publication"
+  },
+  "hosted_generation9": {
+    "file": "HOSTED_REVIEW_GENERATION9_20261119.json",
+    "observed_at_utc": "2026-11-20T02:30:30Z",
+    "pr205_foundation": "success-16-browser-groups",
+    "pr205_solana": "in-progress",
+    "corrected_descendant_qualified": false
+  },
+  "optional_generation8": {
+    "source": "813f9192a64f95028a755f167bb6ab888cfa392d",
+    "published_head": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+    "tree": "65d567546d93640358be842a71b31fcb445a3851",
+    "branch": "codex/optional-composition-evidence-g8-20261120",
+    "full_passed": 2617,
+    "types_projects": 7,
+    "default_files_identical": 13,
+    "report": "OPTIONAL_COMPOSITION_GENERATION8_20261120.md",
+    "predates_current_repairs": true,
+    "merge_candidate": false
+  }
+}

@@ -52,7 +52,8 @@ host.addEventListener('message', event => {
   lastCommandId = message.id;
   void controller.then(async value => {
     const result = await value.dispatch(message.command);
-    post({ kind: 'result', id: message.id, result });
+    // dispatch's finally may start relay work after capturing its result. Never overwrite a newer projection.
+    post({ kind: 'result', id: message.id, result: { ...result, snapshot: value.snapshot() } });
   }, shutdown);
 });
 host.addEventListener('messageerror', shutdown);

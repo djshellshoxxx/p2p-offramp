@@ -1,0 +1,24 @@
+✔ permission is an explicit action; cancellation holds physical admission across new owners and stops late tracks (3.897252ms)
+✔ active cancellation stops every track, detaches preview and requires a new gesture (0.780755ms)
+✔ a second mounted owner cannot open another camera while the original stream is live (0.505207ms)
+✔ provider failures and attach failures are fixed errors and cannot leak a live stream (0.753183ms)
+✔ synchronous revocation by a requesting-state observer prevents the native permission side effect (0.742263ms)
+✔ image preflight bounds dimensions and complete container before native decompression (5.174418ms)
+✔ decoder physical job is terminated on timeout/cancel and late replies cannot cross generations (1.659624ms)
+✔ decoder refuses inconsistent pixel dimensions before posting and validates reply identifiers (0.876945ms)
+✔ revocation inside Worker creation terminates the late returned physical Worker without posting (0.519775ms)
+✔ revocation in input access and scheduling cannot start a stale decode (1.943036ms)
+✔ all five public QR types get complete unauthenticated review and explicit no-authority confirmation (173.664835ms)
+✔ default context rejects chain-bound codes; unsupported inputs never produce a review (4.633453ms)
+✔ file admission precedes reads, exact text is never trimmed and all bytes are wiped after use (20.577166ms)
+✔ cancel retains the physical file slot across remounts and suppresses every late result (17.830754ms)
+✔ late hash, context change, expiry and local replay cannot revive a reviewed selection (44.078046ms)
+✔ backup fingerprint is exact opaque bytes, compares only after review, never decrypts or restores (29.329647ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2595.632597

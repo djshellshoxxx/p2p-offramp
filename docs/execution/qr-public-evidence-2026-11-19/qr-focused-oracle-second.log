@@ -1,0 +1,36 @@
+✔ decoder module scope is exact and unavailable to the document or private native Worker (6.847994ms)
+✔ emitted decoder asset is bound to exactly its dedicated graph and pinned dependency bytes (6.528814ms)
+✔ a decoder graph cannot claim private runtime or network authority (0.461286ms)
+✔ permission is an explicit action; cancellation holds physical admission across new owners and stops late tracks (4.127961ms)
+✔ active cancellation stops every track, detaches preview and requires a new gesture (0.798769ms)
+✔ a second mounted owner cannot open another camera while the original stream is live (0.523852ms)
+✔ provider failures and attach failures are fixed errors and cannot leak a live stream (0.846697ms)
+✔ synchronous revocation by a requesting-state observer prevents the native permission side effect (0.543329ms)
+✔ independent pinned upstream decoder reads all 25 frozen symbols, including the 2048-byte envelope (1778.119282ms)
+✔ rotation, inversion and a bounded damaged module recover exact public text; unreadable partial input does not select a code (377.311225ms)
+✔ two clear symbols never silently select the first candidate (10.994259ms)
+✔ installed decoder bytes are the reviewed upstream artifact and expose no external capabilities (171.446327ms)
+✔ image preflight bounds dimensions and complete container before native decompression (3.450531ms)
+✔ decoder physical job is terminated on timeout/cancel and late replies cannot cross generations (1.1678ms)
+✔ decoder refuses inconsistent pixel dimensions before posting and validates reply identifiers (0.737824ms)
+✔ revocation inside Worker creation terminates the late returned physical Worker without posting (0.377879ms)
+✔ revocation in input access and scheduling cannot start a stale decode (0.583484ms)
+✔ all five public QR types get complete unauthenticated review and explicit no-authority confirmation (117.573502ms)
+✔ default context rejects chain-bound codes; unsupported inputs never produce a review (3.333382ms)
+✔ file admission precedes reads, exact text is never trimmed and all bytes are wiped after use (16.038759ms)
+✔ cancel retains the physical file slot across remounts and suppresses every late result (14.950279ms)
+✔ late hash, context change, expiry and local replay cannot revive a reviewed selection (42.332893ms)
+✔ backup fingerprint is exact opaque bytes, compares only after review, never decrypts or restores (22.865944ms)
+✔ owned camera pixels are wiped even when admission refuses before decoder work starts (1.734985ms)
+✔ display uses static SVG geometry with a full four-module quiet zone and escaped accessible text (17.261234ms)
+✔ full exact payment identities and unauthenticated state remain visible without links or action controls (25.175375ms)
+✔ all five public reviews label every full display field, including release sequence (27.713694ms)
+✔ every public QR failure and critical authority statement is catalog-backed (2.15953ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8231.902181
