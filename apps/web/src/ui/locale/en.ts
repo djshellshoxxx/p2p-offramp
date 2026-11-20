@@ -2,6 +2,55 @@
 import { createMessage, formatMessage, type MessageEntry, type MessageVariables, type MessageValues } from './catalog.ts';
 
 const definitions = {
+  "updates": {
+    "title": "Signed asset updates",
+    "intro": "A release check prepares a review of signed public assets. Opening a different origin is a separate, explicit confirmation.",
+    "unconfigured": "Update checking is not configured in this build. No distribution key, discovery source or destination is selected by this page.",
+    "configuredScope": "This page uses the update controller supplied by this build. Its trust, transport, backup and wallet checks must all succeed before an origin transition.",
+    "check": "Check for a signed update",
+    "cancel": "Discard update review",
+    "backupAction": "Open backup and recovery tools",
+    "checking": "Checking the configured signed release and its assets…",
+    "accepting": "Rechecking the candidate, current backup and wallet before the origin transition…",
+    "none": "No newer verified candidate was found for the configured release.",
+    "untrusted": "The update could not be authenticated against this build’s trusted release identities.",
+    "stale": "The release is expired or older than the accepted release sequence. The installed client remains available.",
+    "unreachable": "The update check is unavailable or timed out. The installed client remains available; no automatic retry is scheduled.",
+    "cancelled": "The local update review was discarded. Start a new check before confirming a transition.",
+    "accepted": "The origin transition was requested. This page cannot confirm that the destination loaded; recovery there requires an explicit restore.",
+    "failed": "The update check did not complete. No candidate is available to confirm.",
+    "acceptFailed": "The origin transition was not confirmed. Its accepted sequence may already be stored. A new check is required before another confirmation.",
+    "backupRequired": "Verify the current unlocked profile’s backup file in the recovery tools. Acceptance checks the current persisted revision again; a displayed receipt alone is insufficient.",
+    "busy": "Another update or wallet operation is still pending. Finish or cancel it, then request a new check.",
+    "routeBlocked": "The configured transport policy does not allow this update operation. This page does not choose a fallback route or gateway.",
+    "schemaBlocked": "The candidate does not support this build’s storage schema.",
+    "storageBlocked": "The accepted release sequence could not be safely read or committed. The stored record is not reset by this page.",
+    "originBlocked": "The candidate destination does not match the supported configured origin profile.",
+    "limitExceeded": "The update exceeded the supported size or operation limits.",
+    "reviewTitle": "Review the verified public release identities",
+    "currentTitle": "Installed release",
+    "candidateTitle": "Candidate release",
+    "releaseId": "Release ID",
+    "sequence": "Release sequence",
+    "manifestDigest": "Manifest SHA-256",
+    "keyFingerprint": "Distribution key fingerprint",
+    "sourceCommit": "Source commit",
+    "predecessor": "Predecessor manifest SHA-256",
+    "noPredecessor": "No predecessor declared",
+    "minSchema": "Minimum supported storage schema",
+    "maxSchema": "Maximum supported storage schema",
+    "destination": "Full destination origin",
+    "changesAbsent": "The signed manifest supplies asset identities. It does not supply signed human release notes or a description of changes.",
+    "freshOrigin": "No accepted release record was present on this origin. Local state cannot establish a maximum sequence accepted on another origin or before storage was cleared.",
+    "assetsSummary": { "source": "Inspect {count} verified {count|asset|assets}", "variables": { "count": "count" } },
+    "assetPath": "Asset path",
+    "assetBytes": "Exact byte length",
+    "assetDigest": "Asset SHA-256",
+    "recoveryRequired": "The new origin has separate local storage. Keep a verified current backup and restore it explicitly there with fresh vault keys. No profile, passphrase, session or backup is transferred by this transition.",
+    "disabled": "This review does not enable trading, approve deployments or qualify a production release.",
+    "consent": "I reviewed the destination, release identities, assets, schema range and recovery requirement. I want a fresh backup check, wallet disconnection and profile lock before opening this destination.",
+    "accept": "Confirm this reviewed origin transition"
+  },
   "qr": {
     "title": "Public QR tools",
     "intro": "Display or inspect a public code locally. Confirming a review does not connect a wallet, negotiate a trade, prepare a payment or restore a backup.",
@@ -471,7 +520,7 @@ const definitions = {
     "privacyTitle": "Privacy and connectivity",
     "privacyHelp": "RPC, relay, wallet, update discovery, and analytics connections are disabled. No service worker is installed by this client. Offline use is limited to an already loaded shell; fresh chain state is unavailable.",
     "trustTitle": "Executable trust",
-    "trustHelp": "Static hosting and IPFS content addressing do not authenticate a first visit. Verify release artifacts and the distribution key through an independent trusted channel. This shell does not verify releases or switch origins.",
+    "trustHelp": "Static hosting and IPFS content addressing do not authenticate a first visit. Verify release artifacts and the distribution key through an independent trusted channel. The default shell has no configured release trust or origin-transition controller.",
     "framingTitle": "Framing protection unverified",
     "framingHelp": "A CSP meta tag cannot enforce frame-ancestors. Host response headers require a separate deployment check; this shell does not claim clickjacking protection.",
     "localeTitle": "Language and compatibility",
@@ -877,6 +926,7 @@ export type SourceKey<G extends SourceGroup> = keyof Definitions[G];
 export type SourceVariables<G extends SourceGroup, K extends SourceKey<G>> = Variables<Definitions[G][K]>;
 export type SourceStaticGroup<G extends SourceGroup> = StaticGroup<G>;
 const contexts: Record<Group, string> = {
+  updates: 'Optional signed public-asset review and explicit origin transition; no default trust or navigation authority',
   qr: 'Explicit local public QR capture and complete review; no authentication, negotiation, wallet or recovery authority',
   qrTypes: 'Five public QR envelope type labels', qrFields: 'Exact public QR identities, amounts, hashes and expiry labels',
   qrWarnings: 'Unauthenticated public QR interpretation limits and required external verification', qrErrors: 'Fixed bounded local QR input and capture refusal reasons',
@@ -899,6 +949,7 @@ const contexts: Record<Group, string> = {
 };
 const docsAnchor = '00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.3_localization/spec-natural-language-localization-tooltips-and-accessibility.md';
 const critical = new Set(['shell.createConsent', 'shell.restoreConsent', 'shell.uncheckedHelp', 'shell.backupVerifyScope', 'shell.retentionConsent', 'shell.retentionLimits', 'shell.retentionRestoreWarning', 'trade.risk', 'recovery.unverified', 'recovery.private', 'diagnostics.privacy', 'privacy.policyRelaxConsent', 'privacy.policyUnknownCoverage', 'drafts.confirmAmounts', 'drafts.confirmIdentities', 'drafts.confirmEmptyInstructions', 'drafts.backupLimits', 'analytics.help', 'shell.shareAppHelp']);
+for (const key of ['updates.consent', 'updates.recoveryRequired', 'updates.freshOrigin', 'updates.disabled', 'updates.acceptFailed']) critical.add(key);
 for (const key of ['qr.intro', 'qr.chainScope', 'qr.fingerprintHelp', 'qr.unauthenticated', 'qr.inviteOpen', 'qr.confirmed', 'qr.compareHelp', 'qr.match']) critical.add(key);
 const groups: Record<string, Record<string, MessageEntry>> = Object.create(null), catalog: Record<string, MessageEntry> = Object.create(null);
 for (const group of Object.keys(definitions) as Group[]) {

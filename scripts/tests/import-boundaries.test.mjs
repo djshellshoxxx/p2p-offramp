@@ -103,6 +103,20 @@ test('G07 permits only the explicit read-only release side entry and follows its
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
+test('update view types have a narrow facade while updater construction remains a private package path', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-update-view-'));
+  try {
+    await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true, allowImportingTsExtensions: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+    await put(root, 'packages/security/src/release-update.ts', 'export interface AssetUpdateController { cancel(): void; }\nexport function createAssetUpdateController() {}\n');
+    await put(root, 'packages/security/update-view.ts', "export type { AssetUpdateController } from './src/release-update.ts';\n");
+    await put(root, 'apps/web/src/main.ts', "import type { AssetUpdateController } from '../../../packages/security/update-view.ts';\n");
+    assert.equal((await inspectImportBoundaries(root)).findings.length, 0);
+    await put(root, 'apps/web/src/main.ts', "import type { AssetUpdateController } from '../../../packages/security/update-view.ts';\nimport { createAssetUpdateController } from '../../../packages/security/src/release-update.ts';\n");
+    const findings = (await inspectImportBoundaries(root)).findings.filter(finding => finding.code === 'APP_PACKAGE_PRIVATE_IMPORT');
+    assert.equal(findings.length, 1); assert.equal(findings[0].detail, '../../../packages/security/src/release-update.ts');
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test('favorites facade belongs only to the native vault endpoint; document, QR, barrel and private imports fail closed', async () => {
   const root = await mkdtemp(join(tmpdir(), 'p2p-import-favorites-'));
   try {

@@ -33,10 +33,49 @@ This prerequisite adds no update UI, trust configuration, transport grant,
 navigation adapter or wallet owner. The historical browser harness still needs
 selective recovery and qualification against the current runtime.
 
+## Optional review interface
+
+Generation 13 adds `apps/web/src/ui/SignedUpdatePanel.tsx` and an optional
+`AppProps.updates` injection. Settings displays the panel with `controller:null`
+by default: it shows an unconfigured explanation and a disabled check button.
+There is no default updater construction, discovery, trust configuration or
+navigation. `packages/security/update-view.ts` exports only the existing
+controller/review types, with no executable export. Actual default document,
+vault-Worker and QR-Worker build graphs contain no updater constructor, HTTP
+reader or accepted-release store.
+
+An explicitly supplied, trusted controller supports a user-requested check,
+complete public identity review, consent and a separate confirmation click. The
+panel retains the exact opaque candidate; it does not reconstruct one from the
+displayed manifest, import JSON, accept a backup receipt or create a wallet lease.
+It shows current/candidate manifest and key fingerprints, release sequence,
+source commit, predecessor, schema range, every asset identity, the full
+destination as text, absent signed human release notes and origin recovery
+requirements. No candidate destination becomes a link.
+
+Explicit discard, document hiding, pagehide, controller replacement and unmount
+retire the UI request and call the supplied controller's cancellation method.
+Late results cannot repopulate that review. The caller owns controller disposal
+and must supply an exclusive consumer. The UI does not cancel merely because a
+profile becomes locked: acceptance intentionally locks its own selection, whose
+exact ownership must be established by the controller's runtime lease. Real
+gesture, fresh backup, exclusive physical wallet, transport and navigation
+authority remain the constructor composition's responsibilities.
+
+Ordinary synthetic-controller UI checks and the default static build qualify
+only this interface. The generation 10 report's missing exact-own-lock runtime
+capability remains unresolved; its historical adapter was not revived. No
+configured signed-update operation or native origin transition is qualified.
+See `docs/engineering/SIGNED_UPDATE_UI_GENERATION13_20261120.md` for exact source,
+commands and limits. F24 remains partial and trading remains disabled.
+
+## Internal controller
+
 This internal G15 controller implements local update discovery and explicit origin
-transition for the existing asset-only manifest/locator profile. It is absent from
-the security facade, default App, public runtime protocol and enabled trading
-configuration. Default `trust:null` returns `untrusted/UNCONFIGURED` without
+transition for the existing asset-only manifest/locator profile. Its constructor
+remains absent from the public security facade, default application graph,
+public runtime protocol and enabled trading configuration. Default `trust:null`
+returns `untrusted/UNCONFIGURED` without
 inspecting source ports, fetching, requesting a route or opening accepted storage.
 There is no trust/route registration setter.
 
@@ -134,6 +173,7 @@ Reconciliation never automatically submits a transaction.
 
 ```sh
 node --import ./scripts/test-support/register-tsx.mjs --test packages/security/test/release-update*.test.mjs packages/security/test/release-manifest.test.mjs packages/security/test/release-locator.test.mjs packages/security/test/release-registry.test.mjs
+node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/signed-update-ui.test.mjs
 npm run typecheck
 npm run check:boundaries
 npm run build
@@ -153,5 +193,5 @@ its earlier results are not new evidence for this extraction.
 
 Distinct exact-source review remains required. No first hostile visit, production
 trust/source/route/wallet integration, nonempty deployment wire, archive,
-rotation, actual IPFS pin/retrieval, supported physical device or default update
-UI is qualified. Trading stays disabled.
+rotation, actual IPFS pin/retrieval, supported physical device or configured
+application update operation is qualified. Trading stays disabled.

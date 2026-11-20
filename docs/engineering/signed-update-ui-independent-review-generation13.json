@@ -1,0 +1,371 @@
+{
+  "schema": 1,
+  "recorded_at_utc": "2026-11-20T06:39:37.015928+00:00",
+  "reviewer": "signed_update_ui_review_g13",
+  "scope": "Independent ordinary source/UI review of optional signed-update view; configured update runtime is outside scope.",
+  "base": "bad3b708bb6528cfdc7b1e65e8f29727ad4bbe6e",
+  "author_source": "723b8d105a185f3c84130d1ccd5c9a907ff13153",
+  "author_tree": "5813c5bbc09900698ce7a79ca44383adb149c8e8",
+  "independent_test_commit": "12729ba1e895d68a0a5417c96b83673eea14b9c6",
+  "independent_test_tree": "92a10d92ee70d9246e0dfd12e626e8c277448577",
+  "standards_findings": [],
+  "bounded_spec_findings": [],
+  "production_source_changed_by_reviewer": false,
+  "new_ordinary_ui_cases": 3,
+  "test_counts": {
+    "ui": {
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0
+    },
+    "ui_and_locale": {
+      "passed": 55,
+      "failed": 0,
+      "skipped": 0,
+      "includes_ui_cases": true
+    },
+    "import_boundaries": {
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "full_repository_suite_run": false,
+  "executions": [
+    {
+      "name": "ui",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/signed-update-ui.test.mjs"
+      ],
+      "exit": 0,
+      "seconds": 0.97,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/update-ui-review-g13/ui.log",
+      "sha256": "5ac1c0ba53f54aa0bb3e2042a98f622c3db4116bf4692f2117597464400e0181"
+    },
+    {
+      "name": "locale-and-ui",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/signed-update-ui.test.mjs",
+        "apps/web/test/locale-source.test.mjs",
+        "apps/web/test/locale-runtime.test.mjs",
+        "apps/web/test/locale-stress.test.mjs",
+        "apps/web/test/locale-selector.render.test.mjs",
+        "apps/web/test/locale-catalog.test.mjs"
+      ],
+      "exit": 0,
+      "seconds": 1.662,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/update-ui-review-g13/locale-and-ui.log",
+      "sha256": "1e32b56ae3b60702ab280c5062401386514ef5fb683f496c7230c974413194e2"
+    },
+    {
+      "name": "boundary",
+      "argv": [
+        "node",
+        "--test",
+        "scripts/tests/import-boundaries.test.mjs"
+      ],
+      "exit": 0,
+      "seconds": 3.797,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/update-ui-review-g13/boundary.log",
+      "sha256": "88d08fc7b124b4f570c4c6a0c0bdce38100c3154d9a0ef52bea6ac3b60cc4f7c"
+    },
+    {
+      "name": "build",
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit": 0,
+      "seconds": 4.595,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/update-ui-review-g13/build.log",
+      "sha256": "5dd6381c64f1d9e8e520b6bc0b4b5bee928d47fb78eb93a7940b1c3ed10fb907"
+    },
+    {
+      "name": "source-boundaries",
+      "argv": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "exit": 0,
+      "seconds": 1.131,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/update-ui-review-g13/source-boundaries.log",
+      "sha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a"
+    },
+    {
+      "name": "docs",
+      "argv": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exit": 0,
+      "seconds": 0.71,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/update-ui-review-g13/docs-final.log",
+      "sha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4",
+      "summary": {
+        "engineeringConsistency": true,
+        "semanticApproval": false,
+        "published": false
+      }
+    }
+  ],
+  "source_boundaries": {
+    "production_files": 241,
+    "visited_core_modules": 148
+  },
+  "default_graphs": {
+    "core-graph-document.json": {
+      "modules": 95,
+      "panel_modules": [
+        "apps/web/src/ui/SignedUpdatePanel.tsx"
+      ],
+      "updater_runtime_modules": [],
+      "sha256": "6bab9f039c39415e064c4ea9c4bff47665e1d4f00e855fcb7b486ed34acd7807"
+    },
+    "core-graph-worker.json": {
+      "modules": 30,
+      "panel_modules": [],
+      "updater_runtime_modules": [],
+      "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+    },
+    "qr-graph-worker.json": {
+      "modules": 4,
+      "panel_modules": [],
+      "updater_runtime_modules": [],
+      "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+    }
+  },
+  "default_build_evidence": {
+    "version": 1,
+    "ReleaseEnabled": 0,
+    "syntheticDemo": false,
+    "testnet": false,
+    "signedRelease": false,
+    "releaseAcceptance": false,
+    "framingAttestation": false,
+    "inspection": {
+      "files": 12,
+      "bytes": 794354,
+      "bundledSinkTokensRequiringFrameworkReview": 18,
+      "completeXssProof": false
+    },
+    "assets": [
+      {
+        "path": "_headers",
+        "bytes": 342,
+        "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+      },
+      {
+        "path": "assets/OfflineRoot-CWCMjvRo.js",
+        "bytes": 299778,
+        "sha256": "1b83251b7b2d25613ce397dad8a3e77bebd6bd9dff206da495c06e12500105f7"
+      },
+      {
+        "path": "assets/decode.worker-DGcSBxfL.js",
+        "bytes": 133927,
+        "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+      },
+      {
+        "path": "assets/index-CjAuCTBm.js",
+        "bytes": 220808,
+        "sha256": "ee9029de1d5374849dd0febef12e8113a4727bfa209c2967f14c42c1dd14381f"
+      },
+      {
+        "path": "assets/index-rPDFZ4F5.css",
+        "bytes": 8414,
+        "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+      },
+      {
+        "path": "assets/vault.worker-BFynfgnx.js",
+        "bytes": 93535,
+        "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+      },
+      {
+        "path": "content-policy.json",
+        "bytes": 1009,
+        "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+      },
+      {
+        "path": "core-graph-document.json",
+        "bytes": 14266,
+        "sha256": "6bab9f039c39415e064c4ea9c4bff47665e1d4f00e855fcb7b486ed34acd7807"
+      },
+      {
+        "path": "core-graph-worker.json",
+        "bytes": 4758,
+        "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+      },
+      {
+        "path": "index.html",
+        "bytes": 1283,
+        "sha256": "f52ebdd8abdd1a84ed73d94d4b0f78c367d400373e0c024aebe39d6b566e7485"
+      },
+      {
+        "path": "qr-graph-worker.json",
+        "bytes": 905,
+        "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+      },
+      {
+        "path": "third-party-licenses.json",
+        "bytes": 15329,
+        "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+      }
+    ],
+    "qr": {
+      "decoderVersion": "1.4.0",
+      "dependencySha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859",
+      "graph": "qr-graph-worker.json",
+      "worker": "assets/decode.worker-DGcSBxfL.js",
+      "authority": "none",
+      "physicalDeviceQualification": false
+    }
+  },
+  "default_content_policy": {
+    "manifest": {
+      "version": 1,
+      "releaseId": "local-development",
+      "connectOrigins": [],
+      "delivery": "meta",
+      "framingProtected": false
+    },
+    "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'",
+    "headers": {},
+    "meta": [
+      {
+        "httpEquiv": "Content-Security-Policy",
+        "content": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+      },
+      {
+        "name": "referrer",
+        "content": "no-referrer"
+      }
+    ],
+    "notices": [
+      "content.policy.deployment-unverified",
+      "content.policy.framing-unverified",
+      "content.policy.meta-before-resources-required"
+    ],
+    "releaseAcceptance": false,
+    "ReleaseEnabled": 0
+  },
+  "artifact_files": {
+    "_headers": {
+      "bytes": 342,
+      "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+    },
+    "assets/OfflineRoot-CWCMjvRo.js": {
+      "bytes": 299778,
+      "sha256": "1b83251b7b2d25613ce397dad8a3e77bebd6bd9dff206da495c06e12500105f7"
+    },
+    "assets/decode.worker-DGcSBxfL.js": {
+      "bytes": 133927,
+      "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+    },
+    "assets/index-CjAuCTBm.js": {
+      "bytes": 220808,
+      "sha256": "ee9029de1d5374849dd0febef12e8113a4727bfa209c2967f14c42c1dd14381f"
+    },
+    "assets/index-rPDFZ4F5.css": {
+      "bytes": 8414,
+      "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+    },
+    "assets/vault.worker-BFynfgnx.js": {
+      "bytes": 93535,
+      "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+    },
+    "content-policy.json": {
+      "bytes": 1009,
+      "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+    },
+    "core-graph-document.json": {
+      "bytes": 14266,
+      "sha256": "6bab9f039c39415e064c4ea9c4bff47665e1d4f00e855fcb7b486ed34acd7807"
+    },
+    "core-graph-worker.json": {
+      "bytes": 4758,
+      "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+    },
+    "index.html": {
+      "bytes": 1283,
+      "sha256": "f52ebdd8abdd1a84ed73d94d4b0f78c367d400373e0c024aebe39d6b566e7485"
+    },
+    "local-build-evidence.json": {
+      "bytes": 2525,
+      "sha256": "35004699c4b0298dae407b8c21b0a364d9e1810718c48d64d1c3c82ec162aac9"
+    },
+    "qr-graph-worker.json": {
+      "bytes": 905,
+      "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+    },
+    "third-party-licenses.json": {
+      "bytes": 15329,
+      "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+    }
+  },
+  "unchanged_runtime_and_default_composition": {
+    "packages/security/src/release-update.ts": {
+      "base_blob": "cb0548c59b2e2e46755636e47ab32e2b6bd5266e",
+      "source_blob": "cb0548c59b2e2e46755636e47ab32e2b6bd5266e",
+      "unchanged": true
+    },
+    "packages/security/src/release-update-http.ts": {
+      "base_blob": "5d6bb399774a7cdeb86d61e34f914c6b1e38b534",
+      "source_blob": "5d6bb399774a7cdeb86d61e34f914c6b1e38b534",
+      "unchanged": true
+    },
+    "packages/security/src/release-update-store.ts": {
+      "base_blob": "3685b61d0a3ae9c0b0ab22f9396ec30282cebb11",
+      "source_blob": "3685b61d0a3ae9c0b0ab22f9396ec30282cebb11",
+      "unchanged": true
+    },
+    "packages/security/index.ts": {
+      "base_blob": "91a2d4818e944e51764a8a9107cac657b2041396",
+      "source_blob": "91a2d4818e944e51764a8a9107cac657b2041396",
+      "unchanged": true
+    },
+    "apps/web/src/OfflineRoot.tsx": {
+      "base_blob": "b8bddc40cf0121c4ac8f8dc1061406c8f3a451f7",
+      "source_blob": "b8bddc40cf0121c4ac8f8dc1061406c8f3a451f7",
+      "unchanged": true
+    },
+    "apps/web/src/app-services.ts": {
+      "base_blob": "e9363d458523ca79ec8cb652b7f17144eeede20e",
+      "source_blob": "e9363d458523ca79ec8cb652b7f17144eeede20e",
+      "unchanged": true
+    },
+    "apps/web/src/runtime/app-runtime.ts": {
+      "base_blob": "e3ab5a53316611ce2032879306ba371219ee1aee",
+      "source_blob": "e3ab5a53316611ce2032879306ba371219ee1aee",
+      "unchanged": true
+    },
+    "apps/web/src/runtime/worker-endpoint.ts": {
+      "base_blob": "3de5bd379d3c1360bf5292e2153d39d8b2efd288",
+      "source_blob": "3de5bd379d3c1360bf5292e2153d39d8b2efd288",
+      "unchanged": true
+    }
+  },
+  "qualification": {
+    "browser_executed": false,
+    "configured_update_executed": false,
+    "physical_device_qualified": false,
+    "real_user_gesture_qualified": false,
+    "backup_lock_adapter_qualified": false,
+    "full_F24_complete": false,
+    "release_enabled": 0
+  },
+  "remaining": [
+    "Generation10 exact-own-lock backup adapter remains unresolved.",
+    "Trusted composition, release roots, endpoints, backup/wallet adapters and configured browser transitions remain outstanding.",
+    "Applicable exact-source hosted checks remain required before integration."
+  ]
+}
