@@ -242,6 +242,14 @@ const definitions = {
     "settings": "Settings"
   },
   drafts: {
+    "previewPut": "Store or replace reusable template defaults",
+    "previewDefault": "Change repeat default selection",
+    "previewExpires": "This preview expires after five minutes. Confirm only the change shown here.",
+    "none": "None",
+    "chainId": "EVM chain ID",
+    "nativeAsset": "Native asset",
+    "assetDecimals": "Asset decimals",
+    "repeatSelected": "Repeat default",
     "title": "New local draft",
     "help": "Reuse amounts only. Enter parties, instructions and deadlines again, then review exact current terms. Trading remains disabled.",
     "locked": "Unlock a profile to edit a private draft or manage encrypted templates.",
@@ -648,6 +656,20 @@ const definitions = {
     "saveToProfile": "Save to profile",
     "deleteFromProfile": "Delete from profile",
     "savedBadge": "Saved in profile",
+    "favoritesTitle": "Favorite saved reviews",
+    "favoritesHelp": "Load favorites to add or remove stars on saved reviews. Up to 8 references are encrypted in this profile. Opening a favorite loads the saved terms and checks them against the current registry again. Deleting a review leaves its favorite reference until you remove it.",
+    "loadFavorites": "Load favorites",
+    "addFavorite": "Add favorite",
+    "removeFavorite": "Remove favorite",
+    "openFavorite": "Open and recheck favorite",
+    "favoritesBusy": "Working with encrypted favorites…",
+    "cancelFavorites": "Cancel favorite operation",
+    "favoritesEmpty": "No favorite saved reviews in this profile.",
+    "favoritesFailed": "The favorite operation was not confirmed. The profile may have changed, or the change may have committed before interruption. Unlock if needed and load favorites before trying again. No automatic retry was made.",
+    "favoriteItem": {
+      "source": "Favorite saved record {record}…",
+      "variables": { "record": "identifier" }
+    },
     "savedFailedOther": "The saved-review operation did not complete with a confirmed result. A save or deletion may have committed. Unlock and load saved reviews before retrying.",
     "unreviewableTitle": "Saved files that no longer pass review",
     "testnetLocalProofBanner": {

@@ -150,14 +150,26 @@ export async function buildPortal({ outDir = resolve(ROOT,'apps/portal/dist') } 
   for (const path of INPUTS) if (!sources[path].equals(await readPortalSource(path))) fail('PORTAL_SOURCE_CHANGED');
   if (commit !== await git(['rev-parse','HEAD']) || status !== await git(['status','--porcelain=v1','--untracked-files=all'])) fail('PORTAL_SOURCE_CHANGED');
   files['portal-build.json'] = Buffer.from(JSON.stringify(report,null,2)+'\n');
-  const directory = resolve(outDir); let created = false;
+  const directory = resolve(outDir); let created;
   try {
     // Never replace an existing output, follow an output symlink, or delete a caller's existing directory.
-    await mkdir(directory); created = true;
+    await mkdir(directory); created = await lstat(directory,{bigint:true});
     for (const [path,bytes] of Object.entries(files)) { await mkdir(dirname(resolve(directory,path)),{recursive:true}); await writeFile(resolve(directory,path),bytes,{flag:'wx'}); }
     await verifyPortalDirectory(directory,report);
     return { directory, report };
-  } catch (error) { if (created) await rm(directory,{recursive:true,force:true}); throw error; }
+  } catch (error) {
+    // Another operation may rename our incomplete output and replace this path before a write fails.
+    // Cleanup belongs only to the directory we created, not to whichever entry now occupies its name.
+    if (created) {
+      try {
+        const current = await lstat(directory,{bigint:true});
+        if (current.isDirectory() && !current.isSymbolicLink() && current.dev === created.dev && current.ino === created.ino) {
+          await rm(directory,{recursive:true,force:true});
+        }
+      } catch (cleanupError) { if (cleanupError.code !== 'ENOENT') throw cleanupError; }
+    }
+    throw error;
+  }
 }
 if (isMain(import.meta.url)) {
   try {

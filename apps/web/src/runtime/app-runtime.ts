@@ -1,10 +1,11 @@
 /** Partial G07 document composition root. Public commands never expose a provider, record payload or key. */
 import {
   MAX_RUNTIME_SEQUENCE, RUNTIME_DISPOSE_TIMEOUT_MS, RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
-  parseRuntimeCommand, parseRuntimeConfig, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
+  parseRuntimeCommand, parseRuntimeConfig, parseTradeDraftChange, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeExport, type RuntimeHandle, type RuntimeInventory, type RuntimeMessage,
   type RuntimeOperation, type RuntimeRestore, type RuntimeResult, type RuntimeStatus, type RuntimeValue,
-  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences,
+  type RuntimeTradeTemplates, type RuntimeTradeTemplatePreview, type RuntimeTradeTemplateReceipt, type RuntimeTradeTemplateCancelled, type RuntimeTradeTemplateConsent, type TradeDraftChangeV1,
+  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeSavedReviewFavorites, type RuntimeSavedReviewFavorite,
 } from '../../../../packages/schemas/index.ts';
 import { capturePendingMetadata, type PendingMetadata } from './pending-metadata.ts';
 
@@ -168,13 +169,17 @@ export class AppRuntime {
     if (pending.metadata.operation !== message.operation || pending.metadata.generation !== message.generation) { this.#close('PROTOCOL_ERROR'); return; }
     this.#checkIdle(); if (!this.#pending.has(message.requestId)) return;
     if (message.result.ok && message.operation !== 'exportEncrypted' && message.operation !== 'listProfiles' && message.operation !== 'restore' &&
-        message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview' && message.operation !== 'listRecoveryReferences') {
+        message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview' && message.operation !== 'listRecoveryReferences' &&
+        message.operation !== 'listFavoriteReviews' && message.operation !== 'setReviewFavorite' && message.operation !== 'loadTradeTemplates' && message.operation !== 'previewTradeTemplateChange' &&
+        message.operation !== 'commitTradeTemplateChange' && message.operation !== 'cancelTradeTemplateChange') {
       if (!this.#acceptStatus(message, message.result.value, pending)) { this.#close('PROTOCOL_ERROR'); return; }
       this.#settle(message.requestId, Object.freeze({ ok: true, value: this.#current }));
     } else {
       if (!message.result.ok && (pending.metadata.operation === 'unlock' || pending.metadata.operation === 'create')) this.#resetStatus();
       // Saved-review replies belong to the profile the command named; it must still be the open profile.
-      if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview' || message.operation === 'listRecoveryReferences') &&
+      if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview' || message.operation === 'listRecoveryReferences' ||
+          message.operation === 'listFavoriteReviews' || message.operation === 'setReviewFavorite' || message.operation === 'loadTradeTemplates' || message.operation === 'previewTradeTemplateChange' ||
+          message.operation === 'commitTradeTemplateChange' || message.operation === 'cancelTradeTemplateChange') &&
           (!('profileId' in pending.metadata) || this.#current.state !== 'unlocked' || this.#current.handle.profileId !== pending.metadata.profileId)) {
         this.#settle(message.requestId, runtimeFailure('LOCKED')); return;
       }
@@ -263,7 +268,7 @@ export class AppRuntime {
     return !result.ok ? result : 'bytes' in result.value ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
   }
   /** Purpose-bound open-profile commands. Replies after lock or profile switch are refused. */
-  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences', fields: Record<string, unknown>,
+  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange', fields: Record<string, unknown>,
     accept: (value: RuntimeValue) => value is T, signal?: AbortSignal): Promise<RuntimeResult<T>> {
     this.#checkIdle();
     const current = this.#current;
@@ -282,6 +287,28 @@ export class AppRuntime {
   }
   deleteTermsReview(recordId: string, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>> {
     return this.#profileCommand('deleteTermsReview', { recordId }, (value): value is RuntimeSavedReviewRef => 'recordId' in value && value.recordId === recordId, signal);
+  }
+  listFavoriteReviews(signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewFavorites>> {
+    return this.#profileCommand('listFavoriteReviews', {}, (value): value is RuntimeSavedReviewFavorites => 'recordIds' in value, signal);
+  }
+  setReviewFavorite(recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewFavorite>> {
+    return this.#profileCommand('setReviewFavorite', { recordId, favorite, expectedRevision }, (value): value is RuntimeSavedReviewFavorite =>
+      'favorite' in value && value.recordId === recordId && value.favorite === favorite && value.revision === expectedRevision + 1, signal);
+  }
+  loadTradeTemplates(signal?: AbortSignal): Promise<RuntimeResult<RuntimeTradeTemplates>> {
+    return this.#profileCommand('loadTradeTemplates', {}, (value): value is RuntimeTradeTemplates => 'library' in value, signal);
+  }
+  previewTradeTemplateChange(expectedRevision: number, change: TradeDraftChangeV1, signal?: AbortSignal): Promise<RuntimeResult<RuntimeTradeTemplatePreview>> {
+    try { change = parseTradeDraftChange(change); } catch { return Promise.resolve(runtimeFailure('INVALID_INPUT')); }
+    return this.#profileCommand('previewTradeTemplateChange', { expectedRevision, change }, (value): value is RuntimeTradeTemplatePreview =>
+      'previewId' in value && value.revision === expectedRevision && JSON.stringify(value.change) === JSON.stringify(change), signal);
+  }
+  commitTradeTemplateChange(previewId: string, expectedRevision: number, consent: RuntimeTradeTemplateConsent, signal?: AbortSignal): Promise<RuntimeResult<RuntimeTradeTemplateReceipt>> {
+    return this.#profileCommand('commitTradeTemplateChange', { previewId, expectedRevision, consent }, (value): value is RuntimeTradeTemplateReceipt =>
+      'persisted' in value && value.sessionCurrent && value.revision === expectedRevision + (value.changed ? 1 : 0), signal);
+  }
+  cancelTradeTemplateChange(signal?: AbortSignal): Promise<RuntimeResult<RuntimeTradeTemplateCancelled>> {
+    return this.#profileCommand('cancelTradeTemplateChange', {}, (value): value is RuntimeTradeTemplateCancelled => 'cancelled' in value, signal);
   }
   listRecoveryReferences(offset = 0, expectedRevision: number | null = null, signal?: AbortSignal): Promise<RuntimeResult<RuntimeRecoveryReferences>> {
     return this.#profileCommand('listRecoveryReferences', { offset, expectedRevision }, (value): value is RuntimeRecoveryReferences => 'authority' in value && value.offset === offset &&
