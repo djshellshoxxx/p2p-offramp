@@ -1,0 +1,32 @@
+{
+  "name": "09-root-qualification",
+  "source": "6d3dc0437d525c6068bc7b67669cbc2e2fa7821d",
+  "tree": "478c7e386dc62cc6d58b281264d2945230c5eef0",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-g33",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-root-qualification.py",
+    "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+    "ac680be624aae21eac610f51157da49f1b3238cb",
+    "7bd5cf595bddadaa204e51e418d0060a1d43a1bc"
+  ],
+  "startedAt": "2026-11-20T19:53:04.194563+00:00",
+  "completedAt": "2026-11-20T19:53:05.153227+00:00",
+  "exitCode": 0,
+  "sourceStatusAtStart": "",
+  "sourceUnchanged": true,
+  "sourceStatusAtEnd": "",
+  "scriptInputs": [
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-funding-review-projection-review-evidence-g33/check-root-qualification.py",
+      "bytes": 13445,
+      "sha256": "903470fab05b7dbf4e57fed20ad5adbdc4a32e84b8609bba5259a1cb8f84903b"
+    }
+  ],
+  "rawBytes": 15491,
+  "rawSha256": "e94bbd4ac435e7836252ba333e7ae67763bd790d359d98a680e9813c2e1729ed",
+  "gzipBytes": 3720,
+  "gzipSha256": "dc0b7f924f5e3b53d2d6cd31a6024668c9e3a2c72686cd0e3683a7c87421cf0b",
+  "gzipMtime": 0,
+  "summary": []
+}
