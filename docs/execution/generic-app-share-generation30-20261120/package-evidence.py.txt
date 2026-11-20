@@ -1,0 +1,167 @@
+from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import json
+import re
+import subprocess
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-g30')
+INPUT = Path('/workspace/scratch/dcf03ef9bee8/p2p-g30-evidence')
+BUILD = Path('/workspace/scratch/dcf03ef9bee8/p2p-g30-build')
+OUT = ROOT / 'docs/execution/generic-app-share-generation30-20261120'
+BASE = 'fa7c1a11ff990be4646053731f1030d09eb8f9b6'
+SOURCE = 'a2d69851430971ce51588c22c571e48b30b4ca01'
+TREE = 'c484a9c5da4617667d9486d8c3bd4131db1ca8d6'
+OUT.mkdir(parents=True, exist_ok=True)
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+def relative(path):
+    return str(path.relative_to(ROOT))
+
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert git('rev-parse', 'HEAD^{tree}').decode().strip() == TREE
+assert not git('diff', '--name-only', SOURCE)
+artifacts = []
+
+def retain(raw, name, kind, origin):
+    target = OUT / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(raw)
+    row = {'path': relative(target), 'kind': kind, 'origin': origin, 'bytes': len(raw), 'sha256': sha(raw)}
+    artifacts.append(row)
+    return row
+
+def compress(raw, name, kind, origin):
+    packed = gzip.compress(raw, mtime=0)
+    target = OUT / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(packed)
+    assert gzip.decompress(target.read_bytes()) == raw
+    row = {'path': relative(target), 'kind': kind, 'origin': origin, 'rawBytes': len(raw), 'rawSha256': sha(raw),
+           'gzipBytes': len(packed), 'gzipSha256': sha(packed), 'gzipMtime': 0}
+    artifacts.append(row)
+    return row
+
+source_patch = git('diff', '--binary', BASE, SOURCE)
+commands = []
+for path in sorted(INPUT.glob('*.json')):
+    raw = path.read_bytes()
+    data = json.loads(raw)
+    log = (INPUT / data['log']).read_bytes()
+    patch = (INPUT / data['patch']).read_bytes()
+    assert len(log) == data['logBytes'] and sha(log) == data['logSha256']
+    assert sha(patch) == data['patchSha256']
+    if data['label'] >= '04':
+        for name, digest in data['files'].items():
+            assert sha((ROOT / name).read_bytes()) == digest, (data['label'], name)
+    if data['label'] in ['04-focused-composition', '05-ui-typecheck', '06-source-whitespace']:
+        assert patch == source_patch
+    if data['label'] >= '07':
+        assert data['head'] == SOURCE and data['headTree'] == TREE and not patch
+    counts = {key: int(value) for key, value in re.findall(r'^[ℹ#] (tests|suites|pass|fail|cancelled|skipped|todo) (\d+)$', log.decode(), re.M)}
+    receipt = retain(raw, path.name, 'original-command-receipt', str(path))
+    log_row = compress(log, data['log'] + '.gz', 'complete-command-output', str(INPUT / data['log']))
+    patch_row = compress(patch, data['patch'] + '.gz', 'exact-pre-command-source-patch', str(INPUT / data['patch']))
+    commands.append({'label': data['label'], 'argv': data['argv'], 'head': data['head'], 'headTree': data['headTree'],
+                     'startedAt': data['startedAt'], 'endedAt': data['endedAt'], 'durationSeconds': data['durationSeconds'],
+                     'exitCode': data['exitCode'], 'counts': counts, 'receipt': receipt['path'],
+                     'output': log_row['path'], 'sourcePatch': patch_row['path']})
+
+expected_counts = {
+    '01-baseline-composition': (9, 2, 7), '02-baseline-leaf': (23, 23, 0),
+    '03-baseline-final-fixtures': (33, 26, 7), '04-focused-composition': (74, 74, 0),
+    '08-frozen-build-policy': (58, 58, 0), '10-frozen-focused-sharing': (33, 33, 0),
+}
+for command in commands:
+    if command['label'] in expected_counts:
+        assert tuple(command['counts'][key] for key in ['tests', 'pass', 'fail']) == expected_counts[command['label']]
+        assert all(command['counts'][key] == 0 for key in ['cancelled', 'skipped', 'todo'])
+    assert command['exitCode'] == (1 if command['label'] in ['01-baseline-composition', '03-baseline-final-fixtures'] else 0)
+
+baseline = json.loads((INPUT / '03-baseline-final-fixtures.json').read_bytes())
+for name, digest in baseline['files'].items():
+    data = (ROOT / name).read_bytes() if name in ['apps/web/test/generic-app-share-composition.test.mjs', 'apps/web/test/generic-app-share-lifecycle.test.mjs'] else git('show', BASE + ':' + name)
+    assert sha(data) == digest
+
+changed = git('diff', '--name-only', BASE, SOURCE).decode().splitlines()
+expected = ['apps/web/src/OfflineRoot.tsx', 'apps/web/src/main.tsx', 'apps/web/src/ui/App.tsx', 'apps/web/src/ui/Pages.tsx',
+            'apps/web/test/generic-app-share-composition.test.mjs', 'apps/web/test/generic-app-share-lifecycle.test.mjs']
+assert changed == expected
+source_files = [{'path': name, 'sha256': sha((ROOT / name).read_bytes()),
+                 'gitBlob': git('rev-parse', SOURCE + ':' + name).decode().strip()} for name in changed]
+
+def entries(ref):
+    result = {}
+    for line in git('ls-tree', '-r', '-z', ref).split(b'\0'):
+        if line:
+            metadata, name = line.split(b'\t')
+            result[name.decode()] = metadata.decode()
+    return result
+
+before, after = entries(BASE), entries(SOURCE)
+unchanged = [name for name in before if name not in changed]
+assert all(before[name] == after[name] for name in unchanged)
+assert not set(before) - set(after)
+
+evidence = json.loads((BUILD / 'local-build-evidence.json').read_bytes())
+assert evidence['ReleaseEnabled'] == 0 and evidence['inspection']['files'] == 12 and evidence['inspection']['bytes'] == 812179
+for asset in evidence['assets']:
+    raw = (BUILD / asset['path']).read_bytes()
+    assert len(raw) == asset['bytes'] and sha(raw) == asset['sha256'], asset['path']
+graph_counts = {}
+for filename in ['core-graph-document.json', 'core-graph-worker.json', 'qr-graph-worker.json']:
+    raw = (BUILD / filename).read_bytes()
+    data = json.loads(raw)
+    for module in data['modules']:
+        assert sha((ROOT / module['path']).read_bytes()) == module['sha256'], module['path']
+    graph_counts[filename] = len(data['modules'])
+    retain(raw, 'build/' + filename, 'ordinary-build-module-graph', str(BUILD / filename))
+retain((BUILD / 'local-build-evidence.json').read_bytes(), 'build/local-build-evidence.json', 'ordinary-build-evidence', str(BUILD / 'local-build-evidence.json'))
+retain((BUILD / 'content-policy.json').read_bytes(), 'build/content-policy.json', 'ordinary-build-content-policy', str(BUILD / 'content-policy.json'))
+main_asset = next(asset for asset in evidence['assets'] if re.fullmatch(r'assets/index-[A-Za-z0-9_-]+\.js', asset['path']))
+offline_asset = next(asset for asset in evidence['assets'] if re.fullmatch(r'assets/OfflineRoot-[A-Za-z0-9_-]+\.js', asset['path']))
+main_bytes = (BUILD / main_asset['path']).read_bytes()
+main_text = main_bytes.decode()
+assert 'b=import.meta.url' in main_text and 'entryModuleUrl:b' in main_text
+assert './' + Path(offline_asset['path']).name in main_text
+for asset in [main_asset, offline_asset]:
+    compress((BUILD / asset['path']).read_bytes(), 'build/' + asset['path'] + '.gz', 'ordinary-emitted-javascript', str(BUILD / asset['path']))
+runner = Path('/workspace/scratch/dcf03ef9bee8/p2p-g30-run.py')
+retain(runner.read_bytes(), 'capture-command.py.txt', 'original-command-recorder', str(runner))
+retain(Path(__file__).read_bytes(), 'package-evidence.py.txt', 'evidence-packager-and-verifier', __file__)
+
+manifest = {
+    'version': 1, 'generation': 30, 'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'base': BASE, 'baseTree': git('rev-parse', BASE + '^{tree}').decode().strip(), 'source': SOURCE, 'sourceTree': TREE,
+    'sourceFiles': source_files, 'sourcePatchSha256': sha(source_patch),
+    'composition': {'baselineEntries': len(before), 'sourceEntries': len(after), 'unchangedBaselineEntries': len(unchanged),
+                    'modifiedPaths': [name for name in changed if name in before], 'addedPaths': [name for name in changed if name not in before],
+                    'deletedPaths': [], 'otherBaselineEntriesExact': True},
+    'commands': commands, 'artifacts': artifacts,
+    'qualification': {
+        'baseline': 'The final maintained test bytes at baseline source fail seven missing-composition assertions; both native branch controls pass. The earlier baseline and earlier fixture bytes are retained independently.',
+        'preFreezeChecks': 'Commands 04, 05 and 06 carry a source patch byte-identical to the complete baseline-to-frozen-source diff; all recorded affected source and test hashes agree.',
+        'frozenChecks': 'Commands 07 through 10 ran at the clean frozen source commit, with empty pre-command patches.',
+        'ordinaryBuild': {'files': 12, 'bytes': 812179, 'graphs': graph_counts, 'assetsVerified': len(evidence['assets']),
+                          'entry': main_asset, 'offlineChunk': offline_asset,
+                          'vaultWorker': next(asset for asset in evidence['assets'] if asset['path'].startswith('assets/vault.worker-')),
+                          'emittedEntryCaptureObserved': True, 'ReleaseEnabled': 0},
+        'dependencies': 'Existing physical node_modules directory with immutable hardlinked package files. No package installation or dependency mutation was performed in this task.',
+        'runtime': {'node': 'v24.22.3', 'npm': '11.19.1', 'typescript': '7.0.2'},
+        'independentReview': 'Separate reviewer evidence and root combined qualification are recorded by their owners, not claimed by this author receipt.',
+        'limitations': ['Controlled VM, hook, handler and port tests do not establish native clipboard permission or actual browser event delivery.',
+                       'The ordinary build proves static artifact composition only; it is not native Worker or browser execution.',
+                       'The composition fixture suppresses effects and unrelated startup ports; it does not qualify startup lifecycle.',
+                       'Generic hosting-address sharing does not authenticate a release or implement referrals, share targets, recipient selection or financial actions.',
+                       'Standalone Tier B still requires the accepted named CodeRabbit-or-Qodo review and current applicable hosted checks before merge.'],
+    },
+}
+(OUT / 'receipt.json').write_text(json.dumps(manifest, indent=2) + '\n')
+print(json.dumps({'source': SOURCE, 'tree': TREE, 'commands': len(commands), 'artifacts': len(artifacts), 'composition': manifest['composition'],
+                  'graphs': graph_counts, 'receipt': relative(OUT / 'receipt.json')}, indent=2))

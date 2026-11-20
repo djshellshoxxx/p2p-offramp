@@ -1,0 +1,28 @@
+{
+  "manifest": {
+    "version": 1,
+    "releaseId": "local-development",
+    "connectOrigins": [],
+    "delivery": "meta",
+    "framingProtected": false
+  },
+  "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'",
+  "headers": {},
+  "meta": [
+    {
+      "httpEquiv": "Content-Security-Policy",
+      "content": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+    },
+    {
+      "name": "referrer",
+      "content": "no-referrer"
+    }
+  ],
+  "notices": [
+    "content.policy.deployment-unverified",
+    "content.policy.framing-unverified",
+    "content.policy.meta-before-resources-required"
+  ],
+  "releaseAcceptance": false,
+  "ReleaseEnabled": 0
+}

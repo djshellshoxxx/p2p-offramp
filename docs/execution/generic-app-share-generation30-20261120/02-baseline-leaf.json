@@ -1,0 +1,34 @@
+{
+  "label": "02-baseline-leaf",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-g30",
+  "argv": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "apps/web/test/generic-app-share.test.mjs",
+    "apps/web/test/generic-app-share-lifecycle.test.mjs"
+  ],
+  "head": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+  "headTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+  "patch": "02-baseline-leaf.patch",
+  "patchSha256": "94be27d46ca2c8ae5fda2494b1db00d87eebc433db820d1064a0ccf7f6abaa13",
+  "files": {
+    "apps/web/src/main.tsx": "38d5da490887e6f4a5e6b9589cebe344e4eb4488521420fbd1aa3281144fd2e6",
+    "apps/web/src/OfflineRoot.tsx": "fd454f13eebc15aae89155c8e754499df628a0f8800a020a704c32d7e401212b",
+    "apps/web/src/ui/App.tsx": "fdc09f3c336388e7cbececad27446d4ab2d5660e08e3d065585f63101f441d17",
+    "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+    "apps/web/src/ui/GenericAppShare.tsx": "3185010cbfa3070f7345d6ca316c6946400582b65f08a6b5466f6a4d3229db8d",
+    "apps/web/src/sharing/generic-app-link.ts": "a6a0f81b2430d4d4c2d66712c9679f722f5b3aa707364d1bbfaad057972b7f71",
+    "apps/web/test/generic-app-share.test.mjs": "8c4e9dff4afcbc42f4e5d93a1db6fdce18069c83e58c723a773f313c5d434eee",
+    "apps/web/test/generic-app-share-composition.test.mjs": "8c712caf7e94809bd5f5aaf1ffe0e3b022eddec9f36ee141c39073b3151f613e",
+    "apps/web/test/generic-app-share-lifecycle.test.mjs": "3ac67f023f855fcb94c03037d2c7e41ec333436d57af53e005e001029d7dfdbb"
+  },
+  "startedAt": "2026-11-20T18:44:33.043211+00:00",
+  "durationSeconds": 1.686,
+  "exitCode": 0,
+  "endedAt": "2026-11-20T18:44:34.729430+00:00",
+  "log": "02-baseline-leaf.log",
+  "logBytes": 2543,
+  "logSha256": "283cf13c143b737ef3de2e90e7f483c473edeffa2fd64acc366e8be960998595"
+}

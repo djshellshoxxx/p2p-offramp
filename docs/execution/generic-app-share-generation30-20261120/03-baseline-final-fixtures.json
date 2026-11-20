@@ -1,0 +1,35 @@
+{
+  "label": "03-baseline-final-fixtures",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-g30",
+  "argv": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "apps/web/test/generic-app-share.test.mjs",
+    "apps/web/test/generic-app-share-composition.test.mjs",
+    "apps/web/test/generic-app-share-lifecycle.test.mjs"
+  ],
+  "head": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+  "headTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+  "patch": "03-baseline-final-fixtures.patch",
+  "patchSha256": "8d6d1eaf3697df4ec85c3dbce18e6d09b9aa74d9b5fa79531d1049ff78054f52",
+  "files": {
+    "apps/web/src/main.tsx": "38d5da490887e6f4a5e6b9589cebe344e4eb4488521420fbd1aa3281144fd2e6",
+    "apps/web/src/OfflineRoot.tsx": "fd454f13eebc15aae89155c8e754499df628a0f8800a020a704c32d7e401212b",
+    "apps/web/src/ui/App.tsx": "fdc09f3c336388e7cbececad27446d4ab2d5660e08e3d065585f63101f441d17",
+    "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+    "apps/web/src/ui/GenericAppShare.tsx": "3185010cbfa3070f7345d6ca316c6946400582b65f08a6b5466f6a4d3229db8d",
+    "apps/web/src/sharing/generic-app-link.ts": "a6a0f81b2430d4d4c2d66712c9679f722f5b3aa707364d1bbfaad057972b7f71",
+    "apps/web/test/generic-app-share.test.mjs": "8c4e9dff4afcbc42f4e5d93a1db6fdce18069c83e58c723a773f313c5d434eee",
+    "apps/web/test/generic-app-share-composition.test.mjs": "18e02f7be36405c4c8dd5d876e69f1e76333d7975c9f62b9c7bac1e9ae77b142",
+    "apps/web/test/generic-app-share-lifecycle.test.mjs": "54ae61122554642e8996094c2af7de450923fbb4c948d9d80b2dd4788a610251"
+  },
+  "startedAt": "2026-11-20T18:45:14.567563+00:00",
+  "durationSeconds": 1.877,
+  "exitCode": 1,
+  "endedAt": "2026-11-20T18:45:16.444807+00:00",
+  "log": "03-baseline-final-fixtures.log",
+  "logBytes": 45315,
+  "logSha256": "e8d1bb052116fbbd05b8066d1b948fec8172a2ee8de38f6bb6a3003d8c7f340a"
+}

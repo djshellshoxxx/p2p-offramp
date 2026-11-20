@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "scope": "public-qr-decoder",
+  "entry": "apps/web/src/qr/decode.worker.ts",
+  "asset": {
+    "path": "assets/decode.worker-DGcSBxfL.js",
+    "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+  },
+  "modules": [
+    {
+      "path": "apps/web/src/qr/decode.worker.ts",
+      "sha256": "f6c61d744ecbe367a7e0c35b0e0c08733bd24f006302df8c3b2aba77ee21a2d2"
+    },
+    {
+      "path": "apps/web/src/qr/decoder.ts",
+      "sha256": "f7bc1e055be4d043781d802f038e036cdb969f44e7d3c94c30dcef11263a67b2"
+    },
+    {
+      "path": "apps/web/src/qr/protocol.ts",
+      "sha256": "a2589f11f8190b094f83f1593426acc5c219c0b4ae4a355038fdf551be5475e9"
+    },
+    {
+      "path": "node_modules/jsqr/dist/jsQR.js",
+      "sha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859"
+    }
+  ],
+  "authority": "none",
+  "privateRuntime": false,
+  "network": false
+}

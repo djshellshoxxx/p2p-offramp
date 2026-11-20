@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "source": "a2d69851430971ce51588c22c571e48b30b4ca01",
+  "sourceTree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+  "stagedTreeBeforeThisReceipt": "5b0c0d907c9a3edef679666eb661818e5f20e8a7",
+  "startedAt": "2026-11-20T18:54:19.678727+00:00",
+  "endedAt": "2026-11-20T18:54:19.725174+00:00",
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "exitCode": 0,
+      "outputBytes": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "exitCode": 0,
+      "outputBytes": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "scope": "All staged source/evidence and the complete diff from recorded main, with no path exclusions. This receipt and its empty output archive were added afterward; the final commit is checked again after creation.",
+  "rawBytes": 0,
+  "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "gzipBytes": 20,
+  "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+  "gzipMtime": 0
+}
