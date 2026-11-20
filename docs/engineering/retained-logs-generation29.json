@@ -1,0 +1,79 @@
+{
+  "schema": "p2p-offramp.generation29-retained-logs.v1",
+  "testedSource": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+  "testedTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g29-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generation29-20261120/full-node.log.gz",
+      "decodedBytes": 259041,
+      "compressedBytes": 86571,
+      "decodedSha256": "79afae0244aea64cf116024c7bf36828ebff3f97804b035366ddfb52d66f4af6",
+      "compressedSha256": "a214d0de9a5eb2ca54a07654e203cbef96b7cf10e87a5c592a7369436ba88773"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g29-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generation29-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g29-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generation29-20261120/build-policy.log.gz",
+      "decodedBytes": 7609,
+      "compressedBytes": 3124,
+      "decodedSha256": "b65420ae917d33d7d7818695218d452db1a1d676961c8b452b4f942878a28de3",
+      "compressedSha256": "5bbdd4bf6bedc62281666724df91759be85ff7c6bdef32b9dda0381a09a90bff"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g29-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generation29-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 287,
+      "decodedSha256": "bef0c01f4de842792a36a2922e50db303ab36dc18048f5b17f36de7145bd732d",
+      "compressedSha256": "6b954a92a710db9ad2a9b4d035fef69f03b729d5d206321e1612d4dd76ed71a9"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g29-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generation29-20261120/default-build.log.gz",
+      "decodedBytes": 1026,
+      "compressedBytes": 495,
+      "decodedSha256": "16c41fdfeb3d1ba7c2770f686b04022540ac007576ac1b5ec0ed033a6656a3d1",
+      "compressedSha256": "c521998010c024535e5f61e16df28afff2f1acd85d937f82c5f01995851bdf9c"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g29-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generation29-20261120/demo-build.log.gz",
+      "decodedBytes": 1175,
+      "compressedBytes": 523,
+      "decodedSha256": "2bca8887f669d4bc934b3f30e4d5e819ceb577a1922265a4d454b2b962147caa",
+      "compressedSha256": "9bca7fa479caccbde0e7ede0c426e76fdc2c9ee5151516595f246e9825a853e2"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g29-qualification/native-fixture-preparation.log",
+      "storedPath": "docs/execution/continuation-generation29-20261120/native-fixture-preparation.log.gz",
+      "decodedBytes": 2194,
+      "compressedBytes": 862,
+      "decodedSha256": "e076f6dff56a5e2ddac1b591e8b29033f1931a36bfbdbf29c54a3ec68cb9687d",
+      "compressedSha256": "450544ce484a7f48361d47f765233dbe5b6393a8e8f9dac0ba6e094c9e38ebfb"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/execution/retention-preview-backend-generation29-20261120/receipt.json",
+    "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/manifest.json",
+    "docs/engineering/retention-preview-independent-review-generation29.json"
+  ],
+  "limits": [
+    "Explicit read-only DATA01 preview with the existing 30-day rule. All records remain protected and reviewedDeleteCount is zero; no native review, deletion authority, storage mutation or network operation is exposed.",
+    "Counts describe one selected profile revision. Archive suggestions are included in protectedCount; they are not disjoint totals or native closure proof.",
+    "Backend missing-operation baseline: 3 pass/2 expected fail. UI initial 13 pass/18 fail is a retained host/VM expected-message harness mismatch, not product RED.",
+    "UI tests use maintained handlers, controlled hooks and synthetic Worker replies; backend composition uses the real endpoint, vault and retention service with controlled storage/transport. Neither establishes native browser event reachability.",
+    "Native update fixture compilation and emitted Worker/graph identities were checked. Its temporary compiled fixture was removed by the maintained preparation command; native scenarios did not execute locally.",
+    "Worker and native-fixture hashes changed with the new operation. Prior byte identity or hosted results do not qualify this source; all applicable hosted gates remain required on the actual target.",
+    "Author, independent, adjacent and full-suite selections overlap and must not be summed.",
+    "Saved-review deletion, storage retention algorithms, workflows, dependencies, release/trust settings, prior admission guards and optional/audit ownership remain unchanged.",
+    "No deployment, production trust provisioning, live Wiki, supported translation, physical-device acceptance or release activation follows. ReleaseEnabled remains zero."
+  ]
+}

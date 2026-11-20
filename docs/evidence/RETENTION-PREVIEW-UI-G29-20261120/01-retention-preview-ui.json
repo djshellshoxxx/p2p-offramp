@@ -1,0 +1,20 @@
+{
+  "name": "01-retention-preview-ui",
+  "argv": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-reporter=tap",
+    "apps/web/test/retention-preview-ui.test.mjs"
+  ],
+  "head": "26c91f1408800e75ed50443a0bb9ee04d7c95d89",
+  "started": "2026-11-20T18:29:21.762996+00:00",
+  "finished": "2026-11-20T18:29:24.301205+00:00",
+  "exitCode": 1,
+  "rawBytes": 23541,
+  "rawSha256": "d3e131e75a6a0d9b37729b258ca7c1782e0f0dd59e7c1cd67486f8b0bd0ce7c6",
+  "gzipBytes": 2271,
+  "gzipSha256": "7345c42173690823802e6891cc6013651c0e1cd53fb036fcd28cfe75366296b7",
+  "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/01-retention-preview-ui.log.gz"
+}

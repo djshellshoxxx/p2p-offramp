@@ -1,0 +1,57 @@
+import gzip
+import hashlib
+import json
+import re
+import subprocess
+
+COMMIT = '3fbad18399f57f559572f5ceb8a2dbb941df2be3'
+SOURCE = '0d1d929d8bfb97b9772f84eb5fa3425de6fd3602'
+DIRECTORY = 'docs/evidence/RETENTION-PREVIEW-UI-G29-20261120'
+MANIFEST = DIRECTORY + '/manifest.json'
+
+def blob(commit, path):
+    return subprocess.check_output(['git', 'show', commit + ':' + path])
+
+def sha(value):
+    return hashlib.sha256(value).hexdigest()
+
+manifest_bytes = blob(COMMIT, MANIFEST)
+manifest = json.loads(manifest_bytes)
+assert manifest['uiSourceCommit'] == SOURCE
+assert subprocess.check_output(['git', 'rev-parse', COMMIT + '^'], text=True).strip() == SOURCE
+assert subprocess.check_output(['git', 'rev-parse', SOURCE + '^{tree}'], text=True).strip() == manifest['uiSourceTree']
+artifacts = []
+for row in manifest['artifacts']:
+    path = row.get('log') or DIRECTORY + '/' + row['file']
+    compressed = blob(COMMIT, path)
+    raw = gzip.decompress(compressed)
+    assert len(compressed) == row['gzipBytes'] and sha(compressed) == row['gzipSha256']
+    assert len(raw) == row['rawBytes'] and sha(raw) == row['rawSha256']
+    assert int.from_bytes(compressed[4:8], 'little') == 0
+    counts = {}
+    decoded = raw.decode()
+    for label in ['tests', 'pass', 'fail', 'skipped', 'cancelled', 'todo']:
+        matches = re.findall(r'(?m)^(?:#|\u2139)\s+' + label + r'\s+(\d+)\s*$', decoded)
+        if matches:
+            assert len(matches) == 1
+            counts[label] = int(matches[0])
+    if row.get('head') == SOURCE:
+        for source_path, digest in row.get('files', {}).items():
+            assert sha(blob(SOURCE, source_path)) == digest
+            assert blob(SOURCE, source_path) == blob(COMMIT, source_path)
+    metadata = json.loads(blob(COMMIT, DIRECTORY + '/' + row['metadata']))
+    for key in ['rawSha256', 'gzipSha256', 'rawBytes', 'gzipBytes']:
+        assert row[key] == metadata[key]
+    artifacts.append({'path': path, 'exit_code': row.get('exitCode'), 'raw_bytes': len(raw),
+        'raw_sha256': sha(raw), 'gzip_bytes': len(compressed), 'gzip_sha256': sha(compressed),
+        'mtime': 0, 'counts_from_raw_log': counts,
+        'frozen_source_hashes_checked': row.get('head') == SOURCE,
+        'failed_cases': re.findall(r'(?m)^not ok \d+ - (.+)$', decoded)})
+changed = subprocess.check_output(['git', 'diff', '--name-only', SOURCE, COMMIT], text=True).splitlines()
+assert changed and all(path.startswith(DIRECTORY + '/') for path in changed)
+assert len(artifacts) == 9
+assert artifacts[0]['counts_from_raw_log'] == {'tests': 31, 'pass': 13, 'fail': 18, 'skipped': 0, 'cancelled': 0, 'todo': 0}
+print(json.dumps({'evidence_commit': COMMIT, 'source_commit': SOURCE,
+    'manifest_path': MANIFEST, 'manifest_sha256': sha(manifest_bytes), 'artifacts': artifacts,
+    'artifact_count': len(artifacts), 'evidence_only_changed_paths': changed,
+    'interpretation': 'Nine full compressed artifacts independently rehashed, including the 13-pass/18-fail expectation-harness run and its pre-correction patch. This was not treated as a production regression baseline.'}, indent=2))

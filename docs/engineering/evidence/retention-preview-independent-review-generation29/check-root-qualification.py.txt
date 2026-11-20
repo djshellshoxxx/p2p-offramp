@@ -1,0 +1,136 @@
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import re
+import subprocess
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8/p2p-continuation-g29')
+REVIEW = Path('/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-review-g29')
+OUT = Path('/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-review-evidence-g29')
+INPUT = Path('/workspace/scratch/dcf03ef9bee8/p2p-g29-qualification/qualification.json')
+EVIDENCE = 'docs/engineering/evidence/retention-preview-independent-review-generation29'
+SOURCE = 'fa7c1a11ff990be4646053731f1030d09eb8f9b6'
+TREE = 'dc34c0065a6bc4d66b4195b16d573ef1ec7463a5'
+
+def sha(value):
+    return hashlib.sha256(value).hexdigest()
+
+def preserve(name, raw):
+    compressed = gzip.compress(raw, mtime=0)
+    (OUT / name).write_bytes(compressed)
+    assert gzip.decompress(compressed) == raw and int.from_bytes(compressed[4:8], 'little') == 0
+    return {'log': EVIDENCE + '/' + name, 'raw_bytes': len(raw), 'raw_sha256': sha(raw),
+        'gzip_bytes': len(compressed), 'gzip_sha256': sha(compressed), 'mtime': 0}
+
+receipt_bytes = INPUT.read_bytes()
+receipt = json.loads(receipt_bytes)
+assert receipt['source'] == receipt['finalSource'] == SOURCE and receipt['tree'] == TREE
+assert receipt['cleanTrackedWorktree'] is True and receipt['nativeExecuted'] is False
+assert subprocess.check_output(['git', 'rev-parse', SOURCE + '^{tree}'], cwd=REVIEW, text=True).strip() == TREE
+names = ['full-node', 'typecheck', 'build-policy', 'boundaries', 'default-build', 'demo-build', 'native-fixture-preparation']
+assert [row['name'] for row in receipt['commands']] == names
+commands = []
+for row in receipt['commands']:
+    assert row['source'] == SOURCE and row['tree'] == TREE and row['exitCode'] == 0
+    raw = Path(row['log']).read_bytes()
+    assert len(raw) == row['bytes'] and sha(raw) == row['sha256']
+    decoded = raw.decode()
+    counts = {}
+    for label in ['tests', 'pass', 'fail', 'skipped', 'cancelled', 'todo']:
+        matches = re.findall(r'(?m)^(?:#|\u2139)\s+' + label + r'\s+(\d+)\s*$', decoded)
+        if matches:
+            assert len(matches) == 1
+            counts[label] = int(matches[0])
+    assert counts == row['counts']
+    if counts:
+        assert counts['tests'] == counts['pass']
+        assert all(counts[label] == 0 for label in ['fail', 'skipped', 'cancelled', 'todo'])
+    commands.append({'name': row['name'], 'command': row['command'], 'source': SOURCE, 'tree': TREE,
+        'exit_code': row['exitCode'], 'counts_from_raw_log': counts,
+        **preserve('root-' + row['name'] + '.log.gz', raw)})
+assert commands[0]['counts_from_raw_log']['tests'] == 2555
+assert commands[2]['counts_from_raw_log']['tests'] == 58
+
+artifacts = []
+for name, recorded in receipt['artifacts'].items():
+    directory = ROOT / 'apps/web' / ('dist' if name == 'default' else 'dist-demo')
+    evidence_path = directory / 'local-build-evidence.json'
+    evidence_bytes = evidence_path.read_bytes()
+    evidence = json.loads(evidence_bytes)
+    assert evidence == recorded['evidence']
+    assert evidence['ReleaseEnabled'] == 0
+    assert all(evidence[key] is False for key in ['signedRelease', 'releaseAcceptance', 'testnet', 'framingAttestation'])
+    assert 'testnetTrust' not in evidence
+    listed = set()
+    assets = []
+    for asset in evidence['assets']:
+        relative = Path(asset['path'])
+        assert not relative.is_absolute() and '..' not in relative.parts and asset['path'] not in listed
+        listed.add(asset['path'])
+        raw = (directory / relative).read_bytes()
+        assert len(raw) == asset['bytes'] and sha(raw) == asset['sha256']
+        assets.append(asset)
+    actual = {str(p.relative_to(directory)) for p in directory.rglob('*') if p.is_file()}
+    assert actual == listed | {'local-build-evidence.json'}
+    assert len(assets) == evidence['inspection']['files']
+    assert sum(row['bytes'] for row in assets) == evidence['inspection']['bytes']
+    policy = json.loads((directory / 'content-policy.json').read_bytes())
+    assert policy['ReleaseEnabled'] == 0 and policy['releaseAcceptance'] is False
+    assert policy['manifest']['connectOrigins'] == [] and "connect-src 'none'" in policy['csp']
+    graphs = []
+    for path, recorded_graph in recorded['graphs'].items():
+        raw = (directory / path).read_bytes()
+        graph = json.loads(raw)
+        assert sha(raw) == recorded_graph['sha256'] and graph == recorded_graph['graph']
+        modules = graph['modules']
+        assert len(modules) == len({row['path'] for row in modules})
+        for module in modules:
+            relative = Path(module['path'])
+            assert not relative.is_absolute() and '..' not in relative.parts
+            actual_module = (ROOT / relative).read_bytes()
+            assert sha(actual_module) == module['sha256']
+            assert sha((REVIEW / relative).read_bytes()) == module['sha256']
+            if not module['path'].startswith('node_modules/'):
+                frozen = subprocess.check_output(['git', 'show', SOURCE + ':' + module['path']], cwd=REVIEW)
+                assert frozen == actual_module
+        paths = {row['path'] for row in modules}
+        assert not any(re.search(r'packages/security/src/release-update(?:-http|-store)?\.ts$', path) for path in paths)
+        if path == 'core-graph-document.json':
+            assert 'apps/web/src/ui/RetentionPreviewPanel.tsx' in paths
+            assert 'packages/storage/src/retention-service.ts' not in paths
+        if path == 'core-graph-worker.json':
+            assert 'packages/storage/src/retention-service.ts' in paths
+        graphs.append({'path': path, 'sha256': sha(raw), 'modules': len(modules),
+            'all_module_hashes_match_actual_and_frozen_source': True,
+            'executable_updater_absent': True})
+    artifacts.append({'name': name, 'directory': str(directory), 'assets': assets,
+        'all_actual_files_accounted_for': True, 'evidence_sha256': sha(evidence_bytes),
+        'asset_count': len(assets), 'asset_bytes': sum(row['bytes'] for row in assets), 'graphs': graphs,
+        'ReleaseEnabled': 0, 'connectOrigins': [], 'signedRelease': False, 'releaseAcceptance': False})
+
+preparation_row = receipt['commands'][-1]
+log_preparations = [json.loads(line) for line in Path(preparation_row['log']).read_text().splitlines() if line.startswith('{"fixture":')]
+assert len(log_preparations) == 1 and log_preparations[0] == preparation_row['preparation']
+preparation = log_preparations[0]
+assert preparation['nativeExecuted'] is False and preparation['strictFixtureCompilation'] is True
+assert preparation['defaultUpdaterIncluded'] is False and preparation['ReleaseEnabled'] == 0
+assert preparation['fixtureModules'] == 37
+default = receipt['artifacts']['default']
+worker = next(row for row in default['evidence']['assets'] if row['path'] == preparation['emittedWorker']['path'])
+assert worker['sha256'] == preparation['emittedWorker']['sha256']
+for graph in preparation['defaultGraphs']:
+    actual = default['graphs'][graph['path']]
+    assert graph['sha256'] == actual['sha256'] and graph['modules'] == len(actual['graph']['modules'])
+
+report = {'source': SOURCE, 'tree': TREE, 'receipt_source_path': str(INPUT),
+    'receipt': preserve('root-qualification.json.gz', receipt_bytes),
+    'commands': commands, 'artifacts': artifacts, 'preparation': preparation,
+    'limits': {'reviewer_reran_complete_suite_or_builds': False, 'native_execution_qualified': False,
+        'temporary_fixture_modules_retained': False,
+        'fixture_preparation_log_and_current_default_worker_graphs_directly_verified': True},
+    'total_retained_assets_verified': sum(row['asset_count'] for row in artifacts),
+    'total_graphs_verified': sum(len(row['graphs']) for row in artifacts),
+    'total_graph_module_references_verified': sum(graph['modules'] for row in artifacts for graph in row['graphs'])}
+(OUT / 'root-qualification-verification.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(report, indent=2))

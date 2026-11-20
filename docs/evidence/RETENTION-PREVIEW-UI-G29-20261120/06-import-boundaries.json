@@ -1,0 +1,23 @@
+{
+  "name": "06-import-boundaries",
+  "argv": [
+    "node",
+    "scripts/check-import-boundaries.mjs"
+  ],
+  "head": "0d1d929d8bfb97b9772f84eb5fa3425de6fd3602",
+  "tree": "a9010c02a383346ab7041d5549b9cb09eb7f2471",
+  "files": {
+    "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+    "apps/web/src/ui/locale/en.ts": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18",
+    "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+    "apps/web/test/retention-preview-ui.test.mjs": "e93defa7ca008de72dbbbea58ed890ff69dff9cbfd8cd01954445e96d9199b27"
+  },
+  "started": "2026-11-20T18:30:53.962157+00:00",
+  "finished": "2026-11-20T18:30:55.993537+00:00",
+  "exitCode": 0,
+  "rawBytes": 160,
+  "rawSha256": "0b2551a58aa1f3a155b21de2e4771b9b2c5e2cee91e0fd866c5fffaa158a9cbd",
+  "gzipBytes": 146,
+  "gzipSha256": "f3b98c6f6522852ed46d8c9e94ad8ce0d31f10990c876a0aa42f4eb79c1ca093",
+  "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/06-import-boundaries.log.gz"
+}

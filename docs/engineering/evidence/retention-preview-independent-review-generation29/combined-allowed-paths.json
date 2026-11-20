@@ -1,0 +1,23 @@
+[
+  "apps/web/src/app-services.ts",
+  "apps/web/src/runtime/app-runtime.ts",
+  "apps/web/src/runtime/pending-metadata.ts",
+  "apps/web/src/runtime/worker-endpoint.ts",
+  "apps/web/src/ui/Pages.tsx",
+  "apps/web/src/ui/RetentionPreviewPanel.tsx",
+  "apps/web/src/ui/locale/en.ts",
+  "apps/web/test/retention-preview-runtime.test.mjs",
+  "apps/web/test/retention-preview-ui.test.mjs",
+  "docs/engineering/RETENTION_PREVIEW_BACKEND_GENERATION29_20261120.md",
+  "docs/execution/retention-preview-backend-generation29-20261120/01-red-protocol.log.gz",
+  "docs/execution/retention-preview-backend-generation29-20261120/02-green-protocol.log.gz",
+  "docs/execution/retention-preview-backend-generation29-20261120/03-typecheck-initial.log.gz",
+  "docs/execution/retention-preview-backend-generation29-20261120/04-composition-initial.log.gz",
+  "docs/execution/retention-preview-backend-generation29-20261120/05-adjacent-focused.log.gz",
+  "docs/execution/retention-preview-backend-generation29-20261120/06-typecheck-final.log.gz",
+  "docs/execution/retention-preview-backend-generation29-20261120/07-boundaries.log.gz",
+  "docs/execution/retention-preview-backend-generation29-20261120/08-source-whitespace.log.gz",
+  "docs/execution/retention-preview-backend-generation29-20261120/receipt.json",
+  "packages/schemas/src/runtime.ts",
+  "packages/schemas/test/runtime-retention-preview.test.mjs"
+]

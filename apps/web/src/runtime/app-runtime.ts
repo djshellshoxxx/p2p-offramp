@@ -4,7 +4,7 @@ import {
   parseRuntimeCommand, parseRuntimeConfig, parseTradeDraftChange, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeExport, type RuntimeHandle, type RuntimeInventory, type RuntimeMessage,
   type RuntimeOperation, type RuntimeRestore, type RuntimeResult, type RuntimeStatus, type RuntimeValue,
-  type BackupVerificationReceipt, type RuntimeBackupVerification,
+  type BackupVerificationReceipt, type RuntimeBackupVerification, type RuntimeRetentionPreview,
   type RuntimeTradeTemplates, type RuntimeTradeTemplatePreview, type RuntimeTradeTemplateReceipt, type RuntimeTradeTemplateCancelled, type RuntimeTradeTemplateConsent, type TradeDraftChangeV1,
   type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeSavedReviewFavorites, type RuntimeSavedReviewFavorite,
 } from '../../../../packages/schemas/index.ts';
@@ -185,7 +185,7 @@ export class AppRuntime {
         message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview' && message.operation !== 'listRecoveryReferences' &&
         message.operation !== 'listFavoriteReviews' && message.operation !== 'setReviewFavorite' && message.operation !== 'loadTradeTemplates' && message.operation !== 'previewTradeTemplateChange' &&
         message.operation !== 'commitTradeTemplateChange' && message.operation !== 'cancelTradeTemplateChange' &&
-        message.operation !== 'verifyBackup' && message.operation !== 'checkBackupVerification') {
+        message.operation !== 'verifyBackup' && message.operation !== 'checkBackupVerification' && message.operation !== 'planRetention') {
       if (!this.#acceptStatus(message, message.result.value, pending)) { this.#close('PROTOCOL_ERROR'); return; }
       this.#settle(message.requestId, Object.freeze({ ok: true, value: this.#current }));
     } else {
@@ -194,7 +194,7 @@ export class AppRuntime {
       if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview' || message.operation === 'listRecoveryReferences' ||
           message.operation === 'listFavoriteReviews' || message.operation === 'setReviewFavorite' || message.operation === 'loadTradeTemplates' || message.operation === 'previewTradeTemplateChange' ||
           message.operation === 'commitTradeTemplateChange' || message.operation === 'cancelTradeTemplateChange' ||
-          message.operation === 'verifyBackup' || message.operation === 'checkBackupVerification') &&
+          message.operation === 'verifyBackup' || message.operation === 'checkBackupVerification' || message.operation === 'planRetention') &&
           (!('profileId' in pending.metadata) || this.#current.state !== 'unlocked' || this.#current.handle.profileId !== pending.metadata.profileId)) {
         this.#settle(message.requestId, runtimeFailure('LOCKED')); return;
       }
@@ -347,7 +347,7 @@ export class AppRuntime {
     return !result.ok ? result : 'bytes' in result.value ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
   }
   /** Purpose-bound open-profile commands. Replies after lock or profile switch are refused. */
-  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification', fields: Record<string, unknown>,
+  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification' | 'planRetention', fields: Record<string, unknown>,
     accept: (value: RuntimeValue) => value is T, signal?: AbortSignal): Promise<RuntimeResult<T>> {
     this.#checkIdle();
     const current = this.#current;
@@ -366,6 +366,10 @@ export class AppRuntime {
   /** Revalidate the Worker-owned fact against the persisted current revision on every call. */
   checkBackupVerification(signal?: AbortSignal): Promise<RuntimeResult<RuntimeBackupVerification>> {
     return this.#profileCommand('checkBackupVerification', {}, (value): value is RuntimeBackupVerification => 'verification' in value, signal);
+  }
+  /** Explicit offline age/count preview; the Worker retains every record and all plan identity. */
+  planRetention(nowMs: number, signal?: AbortSignal): Promise<RuntimeResult<RuntimeRetentionPreview>> {
+    return this.#profileCommand('planRetention', { nowMs }, (value): value is RuntimeRetentionPreview => 'archiveReviewCount' in value, signal);
   }
   saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>> {
     return this.#profileCommand('saveTermsReview', { source, bytes }, (value): value is RuntimeSavedReviewRef => 'recordId' in value, signal);

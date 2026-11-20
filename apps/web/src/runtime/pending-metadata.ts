@@ -5,7 +5,7 @@
 import type { RuntimeCommand, RuntimeOperation } from '../../../../packages/schemas/index.ts';
 
 /** Operations whose reply must belong to the profile named in the command. */
-export type ProfileBoundOperation = 'unlock' | 'exportEncrypted' | 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification';
+export type ProfileBoundOperation = 'unlock' | 'exportEncrypted' | 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification' | 'planRetention';
 export type PendingMetadata =
   | Readonly<{ operation: ProfileBoundOperation; generation: number; profileId: string }>
   | Readonly<{ operation: Exclude<RuntimeOperation, ProfileBoundOperation>; generation: number }>;
@@ -13,7 +13,7 @@ export type PendingMetadata =
 export function capturePendingMetadata(command: RuntimeCommand): PendingMetadata {
   switch (command.operation) {
     case 'unlock': return Object.freeze({ operation: 'unlock', generation: command.generation, profileId: command.profileId });
-    case 'exportEncrypted': case 'saveTermsReview': case 'listTermsReviews': case 'deleteTermsReview': case 'listRecoveryReferences': case 'listFavoriteReviews': case 'setReviewFavorite': case 'loadTradeTemplates': case 'previewTradeTemplateChange': case 'commitTradeTemplateChange': case 'cancelTradeTemplateChange': case 'verifyBackup': case 'checkBackupVerification':
+    case 'exportEncrypted': case 'saveTermsReview': case 'listTermsReviews': case 'deleteTermsReview': case 'listRecoveryReferences': case 'listFavoriteReviews': case 'setReviewFavorite': case 'loadTradeTemplates': case 'previewTradeTemplateChange': case 'commitTradeTemplateChange': case 'cancelTradeTemplateChange': case 'verifyBackup': case 'checkBackupVerification': case 'planRetention':
       return Object.freeze({ operation: command.operation, generation: command.generation, profileId: command.profileId });
     case 'init': case 'create': case 'restore': case 'status': case 'listProfiles': case 'lock': case 'dispose': case 'activity':
       return Object.freeze({ operation: command.operation, generation: command.generation });
