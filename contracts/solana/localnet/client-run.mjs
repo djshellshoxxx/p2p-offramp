@@ -24,6 +24,7 @@ import { closeSync, existsSync, mkdirSync, mkdtempSync, openSync, readFileSync, 
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isDeepStrictEqual } from 'node:util';
 import { ed25519 } from '@noble/curves/ed25519.js';
 import * as d from './driver.mjs';
 import { confinedPath, resolveTool } from './tool-path.mjs';
@@ -140,7 +141,7 @@ async function finalizeProgram() {
 }
 
 // ---- injected ports: RPC adapter, Wallet Standard keypair wallet, CAS journal ----
-const sendLog = [];
+const sendLog = [], signLog = [];
 const rpcPort = {
   async request({ method, params = [], signal }) {
     if (method === 'getGenesisHash') return COMPILED_GENESIS;
@@ -160,6 +161,7 @@ function keypairWallet(pairs) {
     'solana:signTransaction': { version: '1.0.0', supportedTransactionVersions: ['legacy'],
       async signTransaction(input) {
         const wire = input.transaction, message = wire.slice(1 + 64 * wire[0]);
+        signLog.push({ address: input.account.address, message: encodeBase64(message) });
         const pair = pairs.find(p => p.address === input.account.address);
         return [{ signedTransaction: Uint8Array.from([1, ...ed25519.sign(message, pair.seed), ...message]) }];
       } },
@@ -250,12 +252,58 @@ const snapshot = async (client, trade, label) => unwrap(`${label} read`, await c
 const sendsFor = signature => sendLog.filter(w => d.base58Encode(Buffer.from(w, 'base64').subarray(1, 65)) === signature)
   .length;
 
+/** Reviews one funding message before confirming it through the existing finalized reconciliation path. */
+async function reviewedFund(client, trade, session, label, sellerTokenAccount = null) {
+  const signsBefore = signLog.length, sendsBefore = sendLog.length;
+  const options = sellerTokenAccount === null ? undefined : { sellerTokenAccount };
+  const prepared = unwrap(`${label} prepare`, await client.prepareFunding(trade, session, options));
+  must(`${label}: preparation never signs or sends`, signLog.length === signsBefore && sendLog.length === sendsBefore);
+  must(`${label}: reviewed data is immutable`, Object.isFrozen(prepared) && Object.isFrozen(prepared.binding) &&
+    Object.isFrozen(prepared.shape));
+  must(`${label}: review binds seller funding to this absent escrow`, prepared.action === 'fund' &&
+    prepared.role === 'seller' && prepared.feePayer === session.address && prepared.programId === trade.terms.programId &&
+    prepared.escrow === trade.escrow.address && prepared.expectedEscrowState === 'absent' &&
+    isDeepStrictEqual(prepared.binding, trade.binding));
+  const shape = { action: 'fund', sellerTokenAccount };
+  must(`${label}: review names the exact funding source`, isDeepStrictEqual(prepared.shape, shape));
+  const message = Uint8Array.from(Buffer.from(prepared.message, 'base64'));
+  must(`${label}: reviewed bytes encode the exact funding source and original blockhash`,
+    isDeepStrictEqual(verifyPlanMessage(trade, 'fund', 'absent', session.address, message), shape) &&
+    parseLegacyMessage(message).recentBlockhash === prepared.blockhash && encodeBase64(message) === prepared.message);
+  const records = unwrap(`${label} prepared journal`, await client.intents(trade));
+  must(`${label}: preparation durably journals one reviewed intent`,
+    records.length === 1 && records[0].intentId === prepared.intentId);
+  const record = records[0];
+  must(`${label}: durable intent is prepared without a signature, send marker or outcome`, record.state === 'prepared' &&
+    record.signature === null && record.sendMarkedAt === null && record.outcome === null);
+  const reviewFields = ['intentId', 'action', 'role', 'feePayer', 'programId', 'escrow', 'expectedEscrowState',
+    'message', 'blockhash', 'lastValidBlockHeight'];
+  const matchesReview = value => reviewFields.every(field => value[field] === prepared[field]) &&
+    isDeepStrictEqual(value.binding, prepared.binding);
+  must(`${label}: durable intent exactly matches the reviewed data`, matchesReview(record));
+  must(`${label}: preparation remains unsigned and unsent before confirmation`,
+    signLog.length === signsBefore && sendLog.length === sendsBefore);
+
+  const funded = await act(client, trade, label, () => client.confirm(prepared, session));
+  must(`${label}: confirmation preserves the same intent and reviewed message`,
+    funded.submission.intentId === prepared.intentId && matchesReview(funded.record));
+  const signs = signLog.slice(signsBefore), sends = sendLog.slice(sendsBefore);
+  must(`${label}: confirmation signs once with the reviewed seller and message`, signs.length === 1 &&
+    signs[0].address === prepared.feePayer && signs[0].message === prepared.message);
+  must(`${label}: confirmation sends the reviewed intent once`,
+    sends.length === 1 && sendsFor(funded.submission.signature) === 1);
+  const sentWire = Uint8Array.from(Buffer.from(sends[0], 'base64'));
+  must(`${label}: broadcast contains the exact reviewed message`,
+    sentWire[0] === 1 && encodeBase64(sentWire.slice(65)) === prepared.message);
+  return funded;
+}
+
 async function nativeFlow() {
   const client = makeClient(casJournal('1'.repeat(32)).journal);
   const terms = await newTerms(keys.seller.address, keys.buyer.address, { amount: AMOUNTS.native, expiryOffset: 3600 });
   const trade = unwrap('bind', client.bind(bindingOf(terms), terms));
   const seller = unwrap('connect seller', await client.connect(trade, 'seller'));
-  const fund = await act(client, trade, 'native fund', () => client.fund(trade, seller));
+  const fund = await reviewedFund(client, trade, seller, 'native fund');
   eq('native fund finalized', fund.record.state, 'finalized');
   eq('native: escrow Funded at finalized', (await snapshot(client, trade, 'native')).escrow.state, 'funded');
   const release = await act(client, trade, 'native release', () => client.release(trade, seller));
@@ -307,7 +355,7 @@ async function splHazardFlow() {
   const terms = await newTerms(seller, buyer, { mint, amount: AMOUNTS.spl, expiryOffset: 3600 });
   const trade = unwrap('bind spl', client.bind(bindingOf(terms), terms));
   const session = unwrap('connect seller', await client.connect(trade, 'seller'));
-  const fund = await act(client, trade, 'spl fund', () => client.fund(trade, session));
+  const fund = await reviewedFund(client, trade, session, 'spl fund', sellerAta.ata);
   eq('spl fund finalized', fund.record.state, 'finalized');
 
   // (i) The hazard: one transaction [release, payout_spl] whose payout leg fails rolls the release back.
