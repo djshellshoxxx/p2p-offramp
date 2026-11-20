@@ -9,9 +9,12 @@ The client starts with the local vault locked. The default build supports encryp
 | Create a profile | Home (`#/home`) | Choose **Create new profile**, enter and confirm a passphrase, accept the notice, then choose **Create encrypted profile**. Success opens the empty profile and displays its ID. Keep the ID and passphrase for later. |
 | Open a profile | Home (`#/home`) | Choose **Unlock existing profile**. Select an ID from the local list or enter its 32 lowercase hexadecimal characters, then enter the passphrase. Choosing an ID fills the field. Unlocking requires the passphrase. |
 | Back up a profile | Recovery (`#/recovery`) | Under **Export an encrypted file**, select or enter the profile ID, acknowledge the notice and choose **Download unchecked encrypted backup**. The download works while locked. Check that the browser saved the file and keep the passphrase separately. |
+| Authenticate a saved backup | Recovery (`#/recovery`) | Unlock the matching source profile, then under **Authenticate a backup file against this profile**, select the saved file, enter its passphrase and choose **Verify this backup file**. **Recheck verified revision** asks the Worker to check its current stored verification fact. |
 | Restore a backup | Recovery (`#/recovery`) | Under **Restore an encrypted file**, select the encrypted JSON, supply its original passphrase, enter and confirm the destination passphrase and choose **Restore as new profile** after accepting the notice. The Worker authenticates the backup and writes a separate profile with fresh keys. A successful restore reports a new, locked profile ID and the record count. |
 
-Every backup download is labelled **Authentication not checked**, including exports made while a profile is unlocked. Export copies the stored ciphertext. To verify a backup, restore it and unlock the new profile with the destination passphrase. **Open restored profile** takes you to Home with the confirmed ID selected. If another profile is open, use **Lock vault** before unlocking the restored one.
+Every backup download is labelled **Authentication not checked**, including exports made while a profile is unlocked. Export copies the stored ciphertext. Explicit backup verification authenticates the complete selected file against the open profile's committed revision without writing or restoring data. Its displayed file and envelope digests describe that point-in-time check. Recheck before relying on the revision; profile changes, lock, cancellation or a replacement selection retire the verification fact. A checksum or an exported file does not establish this fact.
+
+Restoring and unlocking a separate profile exercises fresh-key recovery. **Open restored profile** takes you to Home with the confirmed ID selected. If another profile is open, use **Lock vault** before unlocking the restored one. The restored profile needs its own exported file and verification; the original file does not match its new key and profile identity. Neither verification nor restore covers external-wallet spending keys, complete relay history or on-chain truth.
 
 **If creation or restore is interrupted**, a profile may have been written before the page received the result. After an interrupted creation, reopen **Unlock existing profile** on the same origin and inspect its list before creating again. After an interrupted restore, choose **Check local profiles**. The form keeps retry disabled while the inventory is unavailable, busy or incomplete. A fresh list shows which IDs exist. It cannot establish which operation created an unfamiliar ID.
 
@@ -19,7 +22,7 @@ Profiles live in this browser's IndexedDB. A different origin can show an empty 
 
 ## Developer guide
 
-`src/app-services.ts` starts `AppRuntime` with `{ version: 1, ReleaseEnabled: 0, connectOrigins: [] }` and a same-origin dedicated module Worker. The Worker owns IndexedDB access and the authenticated vault session. The React UI uses the services interface for profile inventory, creation, unlock, encrypted export and restore. Profile IDs are public selection metadata. The UI keeps them out of route URLs.
+`src/app-services.ts` starts `AppRuntime` with `{ version: 1, ReleaseEnabled: 0, connectOrigins: [] }` and a same-origin dedicated module Worker. The Worker owns IndexedDB access and the authenticated vault session. The React UI uses the services interface for profile inventory, creation, unlock, encrypted export, explicit backup verification and restore. Profile IDs are public selection metadata. The UI keeps them out of route URLs.
 
 The document revokes its current handle on lock or `pagehide`. The Worker also enforces a five-minute idle deadline. Status polling does not extend it. Requests and replies carry a generation and request ID so the document can ignore a late result after cancellation or lock. That revocation can occur after a durable profile write, which is why an interrupted operation needs a fresh inventory check.
 
@@ -30,6 +33,7 @@ npm ci --ignore-scripts
 npm run build
 node scripts/test-runtime-browser.mjs
 node scripts/test-web-build-browser.mjs
+npm run test:backup:browser
 ```
 
 The build type-checks the project and emits the default static app in `apps/web/dist/`. The runtime fixture exercises native Worker and IndexedDB operations. The web fixture drives the emitted UI through profile creation, export, restore, explicit unlock and interrupted-restore reconciliation. Both run locally. Hosted Pages checks and the two-party trading workflow require separate qualification.

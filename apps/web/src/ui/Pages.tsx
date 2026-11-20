@@ -6,6 +6,7 @@ import type { Route } from './routes.ts';
 import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
 import { DiagnosticsPanel } from './DiagnosticsPanel.tsx';
 import { RecoveryReferencesPanel } from './RecoveryReferencesPanel.tsx';
+import { BackupVerificationForm } from './BackupVerificationForm.tsx';
 import { PrivacyStatusPanel } from './PrivacyStatusPanel.tsx';
 import { localeStore, type BundledLocaleStore } from './locale/runtime.ts';
 
@@ -70,6 +71,10 @@ export function Recovery({ services, onOpenRestored }: { readonly services: AppS
       <h2 id="backup-title">{m.backupTitle}</h2><p>{m.backupHelp}</p>
       <div className="warning"><strong>{m.unchecked}</strong><p>{m.uncheckedHelp}</p></div>
       {services ? <ExportForm services={services} refresh={inventoryVersion} /> : <p>{m.unavailable}</p>}
+    </section>
+    <section className="panel" aria-labelledby="verification-title">
+      <h2 id="verification-title">{m.backupVerifyTitle}</h2><p>{m.backupVerifyHelp}</p><p className="helper">{m.backupVerifyScope}</p>
+      {services ? <BackupVerificationForm services={services} /> : <p>{m.unavailable}</p>}
     </section>
     <section className="panel" aria-labelledby="restore-title">
       <h2 id="restore-title">{m.restoreTitle}</h2><p>{m.restoreHelp}</p><p>{m.recoveryRisk}</p>
