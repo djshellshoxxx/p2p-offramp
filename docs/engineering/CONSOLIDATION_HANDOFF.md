@@ -1,6 +1,157 @@
 # P2P-Offramp consolidation handoff
 
-## Current generation 9 coordination checkpoint
+## Current generation 10 checkpoint and generation 11 ownership
+
+**The combined reviewed core and all nine preserved optional layers are locally
+qualified, independently reviewed and published.** Main remains
+5c5a84ef6300330700c8b0ca54d074ac113f08be; this coordinator has performed **zero main
+merges**. A later candidate from the scheduled continuation is now owned by two
+fresh generation11 workers. **43 distinct native workers have actually launched
+in this root tree**: workers39–41 completed generation10; workers42/43 are active.
+The external coordinator's workers remain separately attributed.
+
+### Published source and evidence
+
+| Checkpoint | Commit | Tree |
+| --- | --- | --- |
+| Tested combined core | 49bcb0f2c63b20ac7878ba4aebd6bc433d44925f | 81845317f8c1cfe7c76846aa54403fb49cc141b0 |
+| Published equivalent core source | 7819b88d32375905c12681e297773c712dabe94a | 81845317f8c1cfe7c76846aa54403fb49cc141b0 |
+| Current PR210 / final core report base | 701f3866e60978c945c5a0148dcda5b65f58fdbc | 976a729bc359d331214924abab617969aa066950 |
+| Tested complete optional source | 7dc8f486791f8f4a2fa0b9182181354e6b72f188 | e0826f1f8824f8f1f044e161311432ace6e06254 |
+| Published equivalent optional source | f96d439b66775a5cc86dbefd02dba45fdc90c072 | e0826f1f8824f8f1f044e161311432ace6e06254 |
+| Published optional report checkpoint | cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3 | 08c42c12a1cdb1dc81fc0c8422ec58a923e05733 |
+
+[PR210](https://github.com/djshellshoxxx/p2p-offramp/pull/210) remains draft and based
+on externally owned corrected207. It now includes reviewed206 relay guards,208
+backup verification,209 ctutils, the210 strict transport qualification correction
+and211 QR timing correction. The complete union has37 paths versus207; all
+unaffected baseline source,56 commands and six workflows remain exact. Remote
+source7819 has ordered parents old210,206,208,209,211. Only three reports follow
+it to701f. Local final core cc178fc653611ae8b6875fa8da371b096d71ba74 has the same
+976a729b tree and is the optional preparation base. Connector commit metadata
+changes commit IDs; complete source and report trees are verified equal.
+
+The [new optional evidence branch](https://github.com/djshellshoxxx/p2p-offramp/tree/codex/optional-complete-evidence-g10-20261120)
+retains nine separate source layers, followed by three report files. Every layer
+has its original optional PR head as first parent and the preceding published
+layer, or701f, as second parent. All nine trees and ordered parents were fetched
+and verified. Original component and optional refs remain unchanged; there is
+no bulk optional PR or default activation. Exact local-to-published mappings are
+in [generation10-published-checkpoints.json](generation10-published-checkpoints.json).
+
+### Actual qualification and independent review
+
+| Executed scope | Combined core | Complete optional source |
+| --- | ---: | ---: |
+| Full suite, one invocation per frozen source | 2,309/2,309 | 2,709/2,709 |
+| Tooling / policy | 44/44 and57/57 | 44/44 and57/57 |
+| TypeScript configurations | 4 | 7 |
+| Python specification tests | 32 | 32 |
+| Production files / core modules | 238/142 | 304/142 |
+| Independent focused tests | 54/54 | 16/16 |
+
+Both full suites had zero failures, skips, cancellations and todos. These are
+separate executions and are not summed. Earlier2681/2617 optional results remain
+historical. Core author39 ran12 serialized commands. Optional qualification ran18
+commands plus two fresh core reference builds. Root hash-verified all12 core logs
+and all20 optional/reference logs plus two report checks. Independent40 verified
+all logs,27 core outputs,54 optional/reference outputs and exact graph records.
+No open High/Medium integration finding remains in either review scope.
+
+Optional preparation preserves172 nonshared original blobs, all2487 protected
+core entries at every layer, the56-to62 command union and139 foundation lines plus
+seven reviewed additions. Every one of13 default and14 demo files equals a fresh
+final-core build. The document/private-worker/QR graphs contain zero optional
+imports. Node-WASM linear memory reached256MiB and refused further growth; its
+browser/provider/device qualification fields remain false. Browser harness syntax
+checks are not browser executions. All financial assertions and real1800-second
+refund waits remain intact.
+
+Read the [core author report](GENERATION10_COMBINED_CORE_20261120.md),
+[core independent review](INDEPENDENT_GENERATION10_CORE_REVIEW_20261120.md),
+[core plan](generation10-core-plan.json),
+[optional author report](GENERATION10_OPTIONAL_COMPLETE_STACK_20261120.md),
+[optional independent review](INDEPENDENT_GENERATION10_OPTIONAL_REVIEW_20261120.md)
+and [optional plan](generation10-optional-stack-plan.json).
+
+### Complete census and source-bound hosted observations
+
+The fresh complete census at04:13:15–04:13:45 UTC found **219 branches and208 PRs**:
+65 open,105 merged and38 closed unmerged; zero tags/releases. All original192
+branch heads and184 PR records remain unchanged. Original classification is
+A108/B20/C41/D5/E2/F11/G5/H0. Seven new branches since the prior212/203 census were
+known derivatives; five new PRs were207–211. The only other PR changes were the
+known handoff200 advance and206 recomposition. No additional unowned source work
+was identified at that snapshot. Later212 and the new optional evidence branch
+are individually observed additions, not a relabelled complete census.
+
+Worker41 read complete browser logs for206/208/209: each24 workflow steps,
+16 browser command groups and23 structured receipts. The actual executed trees
+were verified against ordered base/source parents. It also read206's completed
+native Nostr log:3/3 tests. Root checked all four raw-log hashes. These executions
+use pre210 diagnostics and do not qualify new701f, laterQR211, or financial refund.
+The [rediscovery report](GENERATION10_REDISCOVERY_AND_GATES_20261120.md),
+[inventory delta](inventory-delta-generation10.json) and
+[hosted snapshot](hosted-snapshot-generation10.json) retain exact identities.
+Three whitespace errors in the worker report's job URLs were corrected by root;
+its machine evidence remains byte-identical and no product cause was added.
+
+The final single observation at04:40:36 UTC verified current701f and unchanged
+main, with **ten queued checks**. Browser136083554377, native Nostr136083554245
+and native program136083640534 had no completed execution evidence; the native
+step list was empty. Read [the dated record](generation10-final-current-gates.json).
+Source parent metadata is not an executed checkout. Historical203/205 complete
+financial receipts remain source-bound;205 still lacks the four corrected207
+repairs. Applicable current-source browser/native/SBPF gates remain required.
+
+### New work, accounting and continuation
+
+The existing04:30 scheduled run completed at04:40:11.519165 UTC and published
+[PR212](https://github.com/djshellshoxxx/p2p-offramp/pull/212), head
+540e1fe2660e0a6084600726d5f6f75fd5c1ee05, tree
+e54743e3dd8cd7f1c8115d8692974ebe34d67405. It follows test-first56e1ae0fd50c40109aea3f40ce8505e85fc1a5c2
+on701f and changes only transport HTTP driver cleanup, two regression tests and
+an author report. Fresh worker42 independently reproduced original0/2, fixed2/2
+and passed44 maintained tests including those two. It identified oneLow temporary
+POST-copy cleanup cause with two refusal variants, with no demonstrated network
+leak or financial effect. Worker43 is performing new full source qualification;
+its exact outputs and independent report must precede publication or ledger count.
+
+The current completed ledger remains **32 reproduced corrections:31 implementation
+defects and one historical acknowledgment-fixture defect**. Two other ledger rows
+are an integration-boundary check and a workflow correction. Compatible dependency
+remediation and the later transport qualification correction remain separate.
+Pure composition, report corrections and resource management add no defect cause.
+The exact ctutils lock update is composed; crypto-bigint0.5.5/RUSTSEC-2026-0387 and
+five maintenance warnings remain without incompatible upgrade or waiver.
+
+Worker42 owns independent212 and subsequent composition evidence review. Worker43
+owns new isolated core/optional checkouts and the serialized full-test slot. Root
+alone may normally advance its210 and200 branches after review and exact tree/ref
+checks. Preserve external212,207,208,209,206 and all original optional refs. Do not
+repeat completed audits, bypass managed Chromium, resume the screened updater
+adaptation, invent trust inputs, or waive standalone named optional review.
+
+The hourly automation remains enabled with schedule, environment and triggers
+unchanged. Its prompt was refreshed at04:44:51 UTC with generation11 ownership and
+all newer external addenda preserved; root will append this durable checkpoint's
+published pointer. Completed workers are not permanently active. After the
+concrete212 work and its necessary source preservation finish, inspect genuinely
+new source or completed-gate evidence. If none creates safely actionable work,
+leave a verified restartable state rather than manufacture another audit cycle.
+
+Generation10 recovered space by moving one completed matching dependency cache
+for review and removing one verified ignored completed cache. Source, logs,
+artifacts, toolchains and external-owner data were preserved. Worker43's later
+physical cache transfer is recorded separately; old graph receipts can resolve
+that identical dependency tree at its new owned location.
+
+## Historical generation 9 coordination checkpoint
+
+The section below is retained as dated evidence. Current source, qualification,
+ownership and counts are given above; earlier present-tense statements do not
+supersede the current checkpoint.
+
 
 **The nine optional packages are now independently reviewed and locally qualified on corrected PR210, and the separate QR211 correction has completed focused independent validation.** Main remains `5c5a84ef6300330700c8b0ca54d074ac113f08be`; this coordinator has performed **zero main merges**. Exact-source hosted/native/browser gates remain open. All three generation9 workers completed their assigned scopes; **38 distinct native workers** have actually launched in this root tree. The external coordinator's workers remain separately attributed.
 

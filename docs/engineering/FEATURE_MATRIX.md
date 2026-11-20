@@ -34,7 +34,39 @@ Baseline: `5c5a84ef6300330700c8b0ca54d074ac113f08be`. Classifications describe a
 | F26 | Duplicate historical regression stack | Duplicate | D9 #69–75/#91–93 tests, isolated #78–80 tests, and #168 effective browser delta are already represented on current main. | No reimplementation. Exact normalized whole-file preservation and merge-tree proof are in branch-inventory.json.  |
 | F27 | Production release and live-funds qualification | Blocked | Release-disabled architecture, explicit build modes and signed trust primitives exist; no deployment/release is authorized in this task. | Owner-controlled trust roots/pins, physical wallets/public testnet, required independent reviews and explicit release authorization remain separate. Preserve ReleaseEnabled=0.  |
 
-## Generation 9 updates: corrected optional source and QR review
+## Generation 10 current staging overlay
+
+The 27 pinned-main rows above remain unchanged. Current combined staging is
+[PR210](https://github.com/djshellshoxxx/p2p-offramp/pull/210), published at
+701f3866e60978c945c5a0148dcda5b65f58fdbc, tree
+976a729bc359d331214924abab617969aa066950. It now combines relay206,
+backup-verification208, dependency209, transport-qualification210 and QR211 on
+corrected207. Its exact tested source passed **2,309/2,309**; independent review
+passed **54/54** focused tests. Four later core corrections, all strict financial
+assertions, both real refund waits and release-disabled settings are preserved.
+Current-head hosted browser/native checks remain queued in the dated observation.
+
+Nine separate optional layers are qualified on this exact final core. Evidence
+cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3 has tree
+08c42c12a1cdb1dc81fc0c8422ec58a923e05733 and adds only three reports after the
+new **2,709/2,709** tested source. Independent boundaries passed **16/16**.
+All 172 original nonshared blobs and 2,487 protected core entries remain exact;
+13 default and 14 demo outputs equal fresh core builds, with zero optional imports.
+Original PR191–199 refs remain unchanged. Applicable standalone named review and
+source-bound hosted/native/browser checks remain separate.
+
+Backup verification completes a prerequisite; signed-update UI remains partial.
+Full Solana discovery/negotiation/funding parity, authenticated invite policy,
+physical devices, owner trust inputs and production release remain incomplete or
+externally gated. The default application gains no optional functionality.
+
+A later transport-cleanup candidate, PR212, is assigned to fresh workers42/43.
+Its scoped review passed44 maintained tests, including two reproduced regressions;
+new full qualification is active. No new correction is added to the ledger before
+accepted-source qualification. See the [current handoff](CONSOLIDATION_HANDOFF.md),
+[source mapping](generation10-published-checkpoints.json) and machine matrix.
+
+## Historical generation 9 updates: corrected optional source and QR review
 
 The pinned-main table above remains unchanged. Nine reviewed optional packages
 are now prepared as separate layers on exact210 and published as evidence at
