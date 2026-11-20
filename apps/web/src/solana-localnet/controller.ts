@@ -198,7 +198,7 @@ export class SolanaRecoveryController {
     if (this.#busy) return { ok: false, code: 'BUSY', snapshot: this.snapshot() };
     this.#busy = true; this.#error = null; this.#emit();
     try {
-      let extra: { backupBytes?: Uint8Array; restoredProfileId?: string } = {};
+      let extra: { backupBytes?: Uint8Array; recoveryJson?: string; restoredProfileId?: string } = {};
       if (command.type === 'profile.create' || command.type === 'profile.unlock' || command.type === 'backup.restore') {
         this.#drop(); const epoch = this.#epoch;
         const opening = () => { if (this.#closed || epoch !== this.#epoch) fail('LOCKED'); };
@@ -215,6 +215,13 @@ export class SolanaRecoveryController {
         value(await this.#vault.assertFresh(this.#session!.sessionId, this.#abort.signal)); this.#guard(epoch);
         if (command.type !== 'refresh') this.#touch();
         if (command.type === 'recovery.import') await this.#import(command.text, command.role);
+        else if (command.type === 'recovery.export') {
+          const trade = this.#trades.get(command.tradeId); if (!trade) fail('TRADE_NOT_FOUND');
+          // The retained document passed the canonical parser on import/unlock. Export no profile or journal wrapper.
+          const json = JSON.stringify(trade.document, null, 2) + '\n';
+          if (new TextEncoder().encode(json).byteLength > 16384) fail('LIMIT_EXCEEDED');
+          extra.recoveryJson = json;
+        }
         else if (command.type === 'wallet.connect') {
           await this.#cancel(); const trade = this.#trades.get(command.tradeId); if (!trade) fail('TRADE_NOT_FOUND');
           this.#wallet = value(await this.#native().connect(trade.bound, trade.role)); this.#guard(epoch); await this.#refresh(true);

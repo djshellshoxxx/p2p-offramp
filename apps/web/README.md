@@ -17,6 +17,23 @@ Every backup download is labelled **Authentication not checked**, including expo
 
 Profiles live in this browser's IndexedDB. A different origin can show an empty list even when the source profile still exists. With a profile unlocked, the **Offline transaction recovery references** section lets you inspect and export selected journal references. Keep the full encrypted backup for profile recovery. For historical chain inspection using those references, see the [canonical EVM recovery guide](../../docs/recovery/CANONICAL-EVM.md).
 
+## Public Solana recovery document in the local validator profile
+
+In the separate Solana localnet recovery app, unlock the profile containing an
+imported funded escrow and choose **Export public recovery JSON** on that escrow.
+The file preserves its original validated recovery document: deployment and
+genesis identity, public terms, seller and buyer addresses, and derived escrow
+addresses. The filename includes the terms hash. The export reads the selected
+profile and makes no additional RPC, wallet connection, signature or transaction.
+
+This public document and the encrypted profile backup serve separate purposes.
+Keep the encrypted backup for the private profile and transaction journal; the
+public JSON can be used with the existing
+[portable Solana recovery tooling](../../contracts/solana/RECOVERY.md). It fixes
+which deployment and terms to inspect and does not establish current chain state.
+The localnet profile remains limited to funded native-SOL exits, with
+`ReleaseEnabled=0`; discovery, negotiation and new funding are not added.
+
 ## Developer guide
 
 `src/app-services.ts` starts `AppRuntime` with `{ version: 1, ReleaseEnabled: 0, connectOrigins: [] }` and a same-origin dedicated module Worker. The Worker owns IndexedDB access and the authenticated vault session. The React UI uses the services interface for profile inventory, creation, unlock, encrypted export and restore. Profile IDs are public selection metadata. The UI keeps them out of route URLs.

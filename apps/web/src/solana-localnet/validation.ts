@@ -45,7 +45,7 @@ export function parseSolanaCommand(input: unknown): SolanaCommand {
     if (raw.role !== 'seller' && raw.role !== 'buyer') return fail();
     return { type, text: text(raw.text, 16384), role: raw.role };
   }
-  if (type === 'wallet.connect') return { type, tradeId: id(fields(input, ['type', 'tradeId']).tradeId) };
+  if (type === 'wallet.connect' || type === 'recovery.export') return { type, tradeId: id(fields(input, ['type', 'tradeId']).tradeId) };
   if (type === 'review.confirm') return { type, reviewId: text(fields(input, ['type', 'reviewId']).reviewId, 32, /^[0-9a-f]{32}$/) };
   if (type === 'review.prepare') {
     const raw = fields(input, ['type', 'tradeId', 'action'], ['fiatReceiptConfirmed', 'maxRentTopUpLamports', 'rebuildOf']);

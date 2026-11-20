@@ -24,6 +24,16 @@ It holds **no** private key, seed, mnemonic, signature, wallet data, journal rec
 recomputes everything derived: the terms bytes and hash, both PDAs and bumps, the ProgramData address, the genesis
 and program inside the terms, the roles and the asset. A document that disagrees with itself is refused.
 
+The separate Solana localnet browser recovery app can export a document it has
+already imported and retained in an encrypted profile. Unlock that profile and
+select **Export public recovery JSON** on the matching escrow. The download uses
+the original validated document, stays within the 16 KiB import bound, and does
+not add a profile, journal or current chain-state wrapper. A fresh-key profile
+restore retains the same public document. Exporting does not connect a wallet or
+read or submit to an RPC. Keep the full encrypted backup for private profile and
+journal recovery. The browser profile currently supports native SOL on its
+configured local validator; this export adds no new network or funding mode.
+
 ## Steps
 
 1. `parseRecoveryDocument(json)`; then `bindRecoveryTrade(document)` binds the terms to a one-network registry

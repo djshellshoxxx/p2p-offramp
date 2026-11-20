@@ -82,6 +82,58 @@ test('the complete canonical recovery document is encrypted and survives lock/re
   assert.equal(reopened.snapshot.trades[0].id, f.document.termsHash); assert.equal(reopened.snapshot.trades[0].restored, false);
   assert.equal(reopened.snapshot.trades[0].canRelease, false, 'reopening never reconnects a wallet or grants transaction consent');
 });
+test('explicit public recovery export returns only the retained document without RPC, wallet or durable writes', async t => {
+  const f = await composed(t), imported = await f.importTrade();
+  assert.equal(imported.recoveryJson, undefined, 'public file data is returned only for its explicit command');
+  const row = structuredClone(f.data.rows.get(f.id)), calls = f.env.cluster.calls.length;
+  f.env.cluster.handle = () => { throw Error('ordinary offline export must not request chain state'); };
+  const exported = success(await f.controller.dispatch({ type: 'recovery.export', tradeId: f.document.termsHash }));
+  assert.deepEqual(JSON.parse(exported.recoveryJson), f.document);
+  assert.ok(new TextEncoder().encode(exported.recoveryJson).byteLength <= 16384);
+  assert.equal(exported.backupBytes, undefined); assert.equal(exported.restoredProfileId, undefined);
+  assert.deepEqual(f.data.rows.get(f.id), row); assert.equal(f.env.cluster.calls.length, calls);
+  assert.equal(f.env.walletFake.calls.connect, 0); assert.equal(f.env.walletFake.calls.sign.length, 0); assert.equal(f.env.cluster.sent.length, 0);
+});
+test('public export keeps an existing review unchanged and requires the selected trade in an unlocked profile', async t => {
+  const f = await composed(t); await f.importTrade(); await f.connect();
+  const prepared = await f.prepare(), calls = f.env.cluster.calls.length;
+  const exported = success(await f.controller.dispatch({ type: 'recovery.export', tradeId: f.document.termsHash }));
+  assert.equal(exported.snapshot.review.id, prepared.snapshot.review.id);
+  assert.equal(f.env.cluster.calls.length, calls); assert.equal(f.env.walletFake.calls.sign.length, 0); assert.equal(f.env.cluster.sent.length, 0);
+  const missing = await f.controller.dispatch({ type: 'recovery.export', tradeId: 'ab'.repeat(32) });
+  assert.equal(missing.code, 'TRADE_NOT_FOUND'); assert.equal(missing.recoveryJson, undefined);
+  success(await f.controller.dispatch({ type: 'profile.lock' }));
+  const locked = await f.controller.dispatch({ type: 'recovery.export', tradeId: f.document.termsHash });
+  assert.equal(locked.code, 'LOCKED'); assert.equal(locked.recoveryJson, undefined);
+});
+test('fresh-key restore retains the same public recovery document without exporting private provenance', async t => {
+  const f = await composed(t); await f.importTrade();
+  const before = success(await f.controller.dispatch({ type: 'recovery.export', tradeId: f.document.termsHash })).recoveryJson;
+  const backup = success(await f.controller.dispatch({ type: 'backup.export' })).backupBytes;
+  success(await f.controller.dispatch({ type: 'profile.lock' }));
+  const restored = success(await f.controller.dispatch({ type: 'backup.restore', bytes: backup, sourcePassphrase: PASS,
+    destinationPassphrase: 'ordinary fresh public-export profile passphrase' }));
+  assert.notEqual(restored.snapshot.profileId, f.id); assert.equal(restored.snapshot.trades[0].restored, true);
+  const after = success(await f.controller.dispatch({ type: 'recovery.export', tradeId: f.document.termsHash })).recoveryJson;
+  assert.equal(after, before); assert.deepEqual(JSON.parse(after), f.document);
+  assert.equal(after.includes(f.id), false); assert.equal(after.includes(restored.snapshot.profileId), false);
+  assert.equal(f.env.walletFake.calls.connect, 0); assert.equal(f.env.walletFake.calls.sign.length, 0); assert.equal(f.env.cluster.sent.length, 0);
+});
+test('the exported public document imports into a separate fresh profile with new private provenance', async t => {
+  const f = await composed(t); await f.importTrade();
+  const exported = success(await f.controller.dispatch({ type: 'recovery.export', tradeId: f.document.termsHash })).recoveryJson;
+  success(await f.controller.dispatch({ type: 'profile.lock' }));
+  const passphrase = 'ordinary independent public recovery import passphrase';
+  const fresh = success(await f.controller.dispatch({ type: 'profile.create', passphrase })).snapshot.profileId;
+  assert.notEqual(fresh, f.id);
+  const imported = success(await f.controller.dispatch({ type: 'recovery.import', text: exported, role: 'seller' }));
+  assert.equal(imported.snapshot.trades[0].id, f.document.termsHash);
+  assert.equal(imported.snapshot.trades[0].restored, false);
+  const records = await f.read(fresh, passphrase);
+  assert.deepEqual(records.documents, [{ document: f.document, role: 'seller', originProfileId: fresh }]);
+  assert.deepEqual(records.intents, []);
+  assert.equal(f.env.walletFake.calls.connect, 0); assert.equal(f.env.walletFake.calls.sign.length, 0); assert.equal(f.env.cluster.sent.length, 0);
+});
 test('manual receipt, exact review, cancellation and IndexedDB-compatible encrypted CAS precede signing and sending', async t => {
   const f = await composed(t); await f.importTrade(); await f.connect();
   assert.equal((await f.controller.dispatch({ type: 'review.prepare', tradeId: f.document.termsHash, action: 'release' })).code, 'FIAT_RECEIPT_REQUIRED');

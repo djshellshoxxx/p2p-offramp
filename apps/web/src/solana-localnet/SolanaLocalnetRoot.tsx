@@ -6,9 +6,9 @@ import { discoverSolanaWallets, type DiscoveredSolanaWallet } from './discovery.
 import type { RecoveryAction, SolanaBrowserClient, SolanaCommand, SolanaSnapshot, SolanaTradeView } from './protocol.ts';
 import './solana-localnet.css';
 
-function download(bytes: Uint8Array): void {
-  const url = URL.createObjectURL(new Blob([Uint8Array.from(bytes)], { type: 'application/octet-stream' }));
-  const anchor = document.createElement('a'); anchor.href = url; anchor.download = 'solana-recovery-encrypted.backup'; anchor.click();
+function download(bytes: Uint8Array, name = 'solana-recovery-encrypted.backup', type = 'application/octet-stream'): void {
+  const url = URL.createObjectURL(new Blob([Uint8Array.from(bytes)], { type }));
+  const anchor = document.createElement('a'); anchor.href = url; anchor.download = name; anchor.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 export function SolanaLocalnetRoot() {
@@ -34,7 +34,7 @@ export function SolanaLocalnetRoot() {
       if (command.type === 'backup.restore') command.bytes.fill(0);
       return null;
     }
-    const generation = ++commandEpoch.current;
+    const generation = ++commandEpoch.current, profileId = owned.snapshot()?.profileId;
     pendingRequest.current = true; setPending(true); setError(null);
     try {
       const response = owned.request(command);
@@ -44,6 +44,10 @@ export function SolanaLocalnetRoot() {
       if (!active.current || generation !== commandEpoch.current || client.current !== owned) return null;
       if (!result.ok) setError(result.code);
       else if (result.backupBytes) download(result.backupBytes);
+      else if (command.type === 'recovery.export' && result.recoveryJson && profileId &&
+        result.snapshot.profileId === profileId && owned.snapshot()?.profileId === profileId) {
+        download(new TextEncoder().encode(result.recoveryJson), `solana-escrow-${command.tradeId}.recovery.json`, 'application/json');
+      }
       return result;
     } catch { if (active.current && generation === commandEpoch.current) setError('UNAVAILABLE'); return null; }
     finally {
@@ -129,6 +133,8 @@ export function SolanaLocalnetRoot() {
         <dt>Seller</dt><dd>{trade.seller}</dd><dt>Buyer</dt><dd>{trade.buyer}</dd><dt>Finalized state</dt><dd>{trade.state}{trade.paidOut ? ' · paid out' : ''}</dd>
         <dt>Finalized chain time</dt><dd>{trade.chainTimeSeconds ?? 'Unavailable'}</dd><dt>Deadline</dt><dd>{trade.deadlineSeconds}</dd></dl>
       {trade.restored && <p>Recovered into this fresh profile. Original transaction provenance is preserved.</p>}
+      <button disabled={busy} onClick={() => void request({ type: 'recovery.export', tradeId: trade.id })}>Export public recovery JSON</button>
+      <p>Public file: original trade terms, wallet addresses and deployment identity. Keep an encrypted backup for your private profile and transaction journal.</p>
       <button disabled={busy} onClick={() => void request({ type: 'wallet.connect', tradeId: trade.id })}>Connect {trade.role} wallet</button>
       {trade.role === 'seller' && <label className="solana-check"><input type="checkbox" checked={received[trade.id] === true} onChange={e => setReceived({ ...received, [trade.id]: e.target.checked })} />I checked my bank account and received the agreed fiat payment.</label>}
       <div className="solana-actions"><button disabled={busy || !trade.canRelease || !received[trade.id]} onClick={() => void prepare(trade, 'release')}>Review release</button>

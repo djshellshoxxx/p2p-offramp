@@ -83,6 +83,16 @@ try {
   assert.equal(chain.summary.appSends.length, 0); assert.equal(fixture.prompts.length, 0);
   pass('actual module Worker refuses absent or wrong-pinned escrows and encrypts three complete original funded receipts');
 
+  const publicDownloadEvent = page.waitForEvent('download');
+  await card(ids.release).getByRole('button', { name: 'Export public recovery JSON', exact: true }).click();
+  const publicDownload = await publicDownloadEvent;
+  assert.equal(publicDownload.suggestedFilename(), `solana-escrow-${ids.release}.recovery.json`);
+  const publicBytes = await readFile(await publicDownload.path()); await idle();
+  assert.ok(publicBytes.length <= 16384);
+  assert.deepEqual(JSON.parse(publicBytes.toString('utf8')), chain.documents.release);
+  assert.equal(fixture.walletConnects, 0); assert.equal(fixture.prompts.length, 0); assert.equal(chain.summary.appSends.length, 0);
+  pass('explicit public recovery download preserves the original document without a wallet connection or transaction');
+
   await connect(ids.release);
   assert.equal(await card(ids.release).getByRole('button', { name: 'Review release', exact: true }).isEnabled(), false);
   await prepare(ids.release, 'release');

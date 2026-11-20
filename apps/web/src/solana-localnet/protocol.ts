@@ -6,6 +6,7 @@ export type SolanaCommand =
   | { readonly type: 'profile.unlock'; readonly profileId: string; readonly passphrase: string }
   | { readonly type: 'backup.restore'; readonly bytes: Uint8Array; readonly sourcePassphrase: string; readonly destinationPassphrase: string }
   | { readonly type: 'recovery.import'; readonly text: string; readonly role: 'seller' | 'buyer' }
+  | { readonly type: 'recovery.export'; readonly tradeId: string }
   | { readonly type: 'wallet.connect'; readonly tradeId: string }
   | { readonly type: 'review.prepare'; readonly tradeId: string; readonly action: RecoveryAction;
       readonly fiatReceiptConfirmed?: boolean; readonly maxRentTopUpLamports?: string; readonly rebuildOf?: string }
@@ -32,7 +33,8 @@ export interface SolanaSnapshot {
   readonly profileId: string | null; readonly wallet: { readonly address: string; readonly tradeId: string } | null;
   readonly trades: readonly SolanaTradeView[]; readonly review: SolanaReview | null; readonly error: string | null;
 }
-export type SolanaResult = { readonly ok: true; readonly snapshot: SolanaSnapshot; readonly backupBytes?: Uint8Array; readonly restoredProfileId?: string }
+export type SolanaResult = { readonly ok: true; readonly snapshot: SolanaSnapshot; readonly backupBytes?: Uint8Array;
+  readonly recoveryJson?: string; readonly restoredProfileId?: string }
   | { readonly ok: false; readonly code: string; readonly snapshot: SolanaSnapshot };
 export interface SolanaBrowserClient {
   request(command: SolanaCommand): Promise<SolanaResult>;
