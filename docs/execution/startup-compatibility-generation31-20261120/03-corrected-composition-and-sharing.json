@@ -1,0 +1,35 @@
+{
+  "label": "03-corrected-composition-and-sharing",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-g31",
+  "argv": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "apps/web/test/startup-compatibility-composition.test.mjs",
+    "apps/web/test/generic-app-share-composition.test.mjs"
+  ],
+  "head": "3bfb7761b6ec430c8e437d117ec31007503f0d12",
+  "headTree": "b46873509b64467338978820a6469de7fffdc619",
+  "patch": "03-corrected-composition-and-sharing.patch",
+  "patchSha256": "10e51da3ae1ed08c5b6244a6281bc68a49e5e28b39e08b9af703d9714790f574",
+  "files": {
+    "apps/web/src/OfflineRoot.tsx": "7f2059b5c1e3c0392e22880a7a9d493b89be1fd855f70377a46d46ed6b8daba2",
+    "apps/web/src/ui/App.tsx": "fdb435b01ad3653fea46342b6866a8ea26cf016610cb80ac578a83614088352d",
+    "apps/web/src/main.tsx": "56d6f772c3fd335e2d07d7480d6ff497fa87a4e3c489e8c0c7ecdf88f5c0bf31",
+    "apps/web/src/ui/Pages.tsx": "5db3601177d38a826428ea475e60b18f3a13f00219a6da62f3721a89d5adc520",
+    "apps/web/src/compatibility/model.ts": "4408765efd7119d5afcdff28b07ae785750e5bf584c880c6b95b112fc550fa97",
+    "apps/web/src/compatibility/probe.ts": "e393f4dfadc098fdf74afd5a2c737142720280b12e92197f5f2b2b2b902b4793",
+    "apps/web/src/compatibility/startup.ts": "b258f8cecb4e5574b2bc3ec0e8d8212c32a132c55e9c8710a807693025a3907b",
+    "apps/web/src/ui/StartupCompatibilityNotice.tsx": "73e8f5d5c9b3cc16f19834255438dc5cbeece42688c0bb20c91829cb6c0efaf9",
+    "apps/web/test/startup-compatibility-composition.test.mjs": "a0225a3ff7643dc256565285659cbe6e4b741f71683718e12a13e726dc11ff99",
+    "apps/web/test/generic-app-share-composition.test.mjs": "b2781db9b3fa161e77d7b63a680a43eaaa96d08e2c01b58d269b46adf485b425"
+  },
+  "startedAt": "2026-11-20T19:00:59.275429+00:00",
+  "durationSeconds": 2.021,
+  "exitCode": 1,
+  "endedAt": "2026-11-20T19:01:01.296772+00:00",
+  "log": "03-corrected-composition-and-sharing.log",
+  "logBytes": 8346,
+  "logSha256": "8186bd5a1599f6530cd4466fc633c6d2e403fcb15d3e376fa0608f6f67b65410"
+}

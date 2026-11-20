@@ -1,0 +1,8 @@
+import { runInNewContext } from 'node:vm';
+for (const mode of ['normal', 'self', 'separate']) {
+  const environment = {};
+  Object.defineProperty(environment, 'capability', { configurable: true, get() { throw Error('blocked'); } });
+  if (mode === 'self') environment.globalThis = environment;
+  if (mode === 'separate') environment.globalThis = Object.defineProperties({}, Object.getOwnPropertyDescriptors(environment));
+  console.log(mode, runInNewContext('try { globalThis.capability === true ? "present" : "missing"; } catch { "unavailable"; }', environment));
+}
