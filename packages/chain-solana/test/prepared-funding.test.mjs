@@ -157,7 +157,8 @@ test('funding requires this client seller session and its original profile and d
   assert.equal(env.walletFake.calls.sign.length, 0);
 });
 
-test('funding views are private capabilities, and a wrong confirmation session consumes only its original review', async () => {
+test('funding views are private capabilities, and a wrong confirmation session consumes only its original review',
+  async () => {
   const env = fundingEnv(), { session, handle } = await prepared(env);
   const other = fundingEnv('native', { terms: env.terms, cluster: env.cluster, journalFake: env.journalFake });
   const second = await connected(other, 'seller');
@@ -175,7 +176,8 @@ test('funding views are private capabilities, and a wrong confirmation session c
   assert.equal(sends(env), 0);
 });
 
-for (const kind of ['native', 'spl']) test(`${kind} confirmation consumes once and preserves exact reviewed bytes and blockhash`, async () => {
+for (const kind of ['native', 'spl']) test(
+  `${kind} confirmation consumes once and preserves exact reviewed bytes and blockhash`, async () => {
   const env = fundingEnv(kind), { session, handle } = await prepared(env);
   env.cluster.advance(5);
   const [first, duplicate] = await Promise.all([
@@ -289,7 +291,8 @@ test('a modified persisted funding record cannot replace the privately retained 
   assert.equal(sends(env), 0);
 });
 
-test('an uncertain funding marker remains durable and only explicit definitive-drop replacement permits a new review', async () => {
+test('an uncertain funding marker remains durable and only explicit definitive-drop replacement permits a new review',
+  async () => {
   const hooks = { after: record => record.state === 'sendMarked' ? 'throw' : undefined };
   const env = fundingEnv('native', { journal: { hooks } }), { session, handle } = await prepared(env);
   error(await env.client.confirm(handle, session), 'UNAVAILABLE');
@@ -313,7 +316,9 @@ test('an uncertain funding marker remains durable and only explicit definitive-d
 });
 
 test('an uncertain funding broadcast reconciles without a second send or a cancellation claim', async () => {
-  const env = fundingEnv('native', { clusterOptions: { sendBehavior: () => { throw new Error('SECRET synthetic provider'); } } });
+  const env = fundingEnv('native', {
+    clusterOptions: { sendBehavior: () => { throw new Error('SECRET synthetic provider'); } }
+  });
   const { session, handle } = await prepared(env), sent = ok(await env.client.confirm(handle, session));
   assert.equal(sent.state, 'unknown');
   error(await env.client.confirm(handle, session), 'CONFLICT');
@@ -353,7 +358,8 @@ class Store {
   }
 }
 
-test('real encrypted journal funding preparation loses authority on lock without releasing pending wallet work', async t => {
+test('real encrypted journal funding preparation loses authority on lock without releasing pending wallet work',
+  async t => {
   const pass = 'synthetic prepared funding passphrase';
   const vault = new EncryptedVaultService(new Store(), crypto, { lifecycle: false });
   t.after(() => vault.dispose());
