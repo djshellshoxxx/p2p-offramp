@@ -466,5 +466,113 @@
       "candidate_prs": "",
       "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
     }
+  ],
+  "staging_overlay": {
+    "source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
+    "scope": "Source on the generation-two child branch, not merged main. Exact hosted qualification and device/release acceptance remain distinct.",
+    "updates": [
+      {
+        "feature_id": "F03",
+        "status": "Implemented on staging",
+        "change": "Actual-byte bounds from #187 applied before retaining review input."
+      },
+      {
+        "feature_id": "F08",
+        "status": "Implemented on staging",
+        "change": "#181 readiness correction retained; native relay and EVM browser paths passed at PR189."
+      },
+      {
+        "feature_id": "F16",
+        "status": "Partial",
+        "change": "Funded-exit browser source and stable labels integrated. Exact-head Solana validator/browser refund workflow remains running; discovery/negotiation/funding UI is not added."
+      },
+      {
+        "feature_id": "F17",
+        "status": "Implemented on staging",
+        "change": "Grouping guard and typed JCS descriptor errors integrated."
+      },
+      {
+        "feature_id": "F18",
+        "status": "Implemented within public review scope",
+        "change": "PR189 exact source completed six actual Chromium journeys with synthetic camera; no physical-device or authenticated-invite claim."
+      },
+      {
+        "feature_id": "F24",
+        "status": "Partial",
+        "change": "Internal unexported updater and four storage lifecycle repairs recovered; no update UI or trust-root activation."
+      },
+      {
+        "feature_id": "F25",
+        "status": "Implemented within source-tooling scope",
+        "change": "Docs/lab/claims plus scriptless portal, strict unsigned staging and inert governance recovered; new portal/distribution hosted steps still need current-head execution."
+      },
+      {
+        "feature_id": "F22",
+        "status": "Accepted optional source; qualification active",
+        "change": "D7 parking superseded Nov18; nine separate package extractions are active and remain outside default app/Worker imports."
+      }
+    ]
+  },
+  "additional_staging_capabilities": [
+    {
+      "id": "F28",
+      "capability": "Encrypted favorites and reusable trade templates",
+      "main_status": "Missing package consumers",
+      "staging_status": "Partial",
+      "source": [
+        "packages/personalization/src/favorites.ts",
+        "packages/personalization/src/trade-draft-store.ts"
+      ],
+      "evidence": [
+        "packages/personalization/test/favorites.test.mjs",
+        "packages/personalization/test/trade-draft-store.test.mjs"
+      ],
+      "remaining": "Current profile/epoch-bound Worker and UI composition; no historical runtime replacement."
+    },
+    {
+      "id": "F29",
+      "capability": "Scriptless public source-reference portal",
+      "main_status": "Missing",
+      "staging_status": "Implemented source; hosted browser pending",
+      "source": [
+        "scripts/portal/build.mjs",
+        "apps/portal/index.html"
+      ],
+      "evidence": [
+        "scripts/portal/build.test.mjs",
+        "scripts/test-scriptless-portal-browser.mjs"
+      ],
+      "remaining": "Actual current-head hosted header/download/print qualification; no deployed-host claim."
+    },
+    {
+      "id": "F30",
+      "capability": "Unsigned deterministic distribution staging",
+      "main_status": "Missing",
+      "staging_status": "Implemented local source",
+      "source": [
+        "scripts/distribution/stage.mjs",
+        "scripts/distribution/manifest.mjs"
+      ],
+      "evidence": [
+        "scripts/distribution/stage.test.mjs",
+        "scripts/distribution/browser.test.mjs"
+      ],
+      "remaining": "Current-head nested browser qualification; independent distribution and signed-release authority remain absent."
+    },
+    {
+      "id": "F31",
+      "capability": "Inert governance and historical assurance checks",
+      "main_status": "Missing dedicated package",
+      "staging_status": "Implemented inert source",
+      "source": [
+        "packages/governance/src/records.ts",
+        "packages/governance/src/assurance.ts"
+      ],
+      "evidence": [
+        "packages/governance/test/records.test.mjs",
+        "packages/governance/test/assurance.test.mjs"
+      ],
+      "remaining": "Historical stale references remain explicit; this module grants no legal, release or economic authority."
+    }
   ]
 }

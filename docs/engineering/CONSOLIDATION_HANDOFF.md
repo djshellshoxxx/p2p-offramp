@@ -1,70 +1,130 @@
 # P2P-Offramp consolidation handoff
 
-## Verified starting point and ownership
+## Current source and authority
 
-Read this file and `consolidation-state.json` before modifying code. The user authorizes autonomous source engineering, safe integration and fresh-worker handoffs. Deployment, releases, real funds, credentials and release-setting changes are outside this task. Preserve `ReleaseEnabled=0`.
+Read this file and `consolidation-state.json` before changing code. The current user authorizes autonomous source engineering, qualified integration and successive native-worker generations. Keep `ReleaseEnabled=0`; deployment, releases, real funds, credentials and settings changes are outside this task.
 
-- Starting/current observed main: `5c5a84ef6300330700c8b0ca54d074ac113f08be`.
-- Published combined source: `84814328f5534d6fceb2bbe74509fe37c5b48689`.
-- Integration branch: `codex/max-consolidation-20261119`.
-- Combined source tree: `0d6d70bb4465c2ce6e9395b602dc3e59a91869b2`, identical to locally tested integration `b13a01b`.
-- No main merge has been performed by this generation. Source integration preserves all seven original PR heads as commit parents. The final documentation commit may be newer; resolve the branch before continuing.
-
-## Inventory and integration ledger
-
-`branch-inventory.json` and `BRANCH_INVENTORY.md` classify all 192 branches at the immutable starting main: A108 integrated, B20 duplicate, C41 partial/cumulative, D5 scoped candidates, E2 defective candidates, F11 experimental, G5 obsolete/incompatible, H0 confirmed active writers. 184 PRs were inspected, including 41 open PRs at 40 distinct source heads. No tags/releases existed. These are snapshot counts, not a claim that future branches cannot appear.
-
-All seven D/E candidates are now integrated on staging: #171 QR grouping bounds; #172 typed JCS failure; #174 docs/lab tooling and bounded claims; #179 funded Solana browser recovery; #181 relay readiness; #183 public QR capture/review; #187 pre-copy review bounds. Exact source SHAs and stable completed IDs are in `consolidation-state.json`.
-
-The repair changes add fixed sibling labels to all six QR controls and four Solana controls. Existing strict browser locators remain unchanged. Three Solana/QR build conflicts and the tooling script conflict were resolved by retaining both features and all existing checks. The dedicated QR decoder remains unavailable to private runtime Workers in default, EVM and Solana profiles. A new cross-profile test covers this boundary.
-
-## Independent evidence and tests
-
-The independent bounds/readiness review is in `INDEPENDENT_SECURITY_REVIEW_20261119.md`; tooling review is in `INDEPENDENT_TOOLING_REVIEW_20261119.md`. Source reviewers found no blocking defect in their scopes. QR source tests reproduced the label defect before its correction; another worker reviewed the Solana label correction.
-
-Executed on Node 24.22.3/npm 11.19.1/Python 3.12.14:
-
-| Command / scope | Result |
+| Reference | Exact value |
 |---|---|
-| Baseline `npm test` | 1,964 passed, 0 failed, 1 skipped |
-| Combined `npm test` | 2,072 passed, 0 failed, 1 skipped |
-| `npm run typecheck` / `npm run build` / `npm run build:demo` | All four projects and both final artifacts passed |
-| `npm run test:build-policy` | 54/54 passed |
-| Solana controller/policy/wallet/RPC/prepared-actions | 63/63 passed |
-| QR plus bounded review/readiness | 129/129 passed |
-| `npm run test:specs` | 32/32 passed |
-| `npm run check:specs` / `check:boundaries` | Passed |
-| `npm run test:fuzz` | 26/26 passed |
-| `npm run test:tooling` | 22/22 passed |
-| `npm run test:formal:unit` | 22/22 passed |
-| Foundry 1.5.1 / solc 0.8.30, CI profile | 92/92 passed; 4,096 fuzz runs and 256 invariant runs at depth 100 |
+| Starting and latest observed main | `5c5a84ef6300330700c8b0ca54d074ac113f08be` |
+| Primary consolidation PR | #188, `codex/max-consolidation-20261119`, observed head `a728ce290eb2fcbe9b4a9e857cc84ced401da70f` |
+| Generation 1 source | `84814328f5534d6fceb2bbe74509fe37c5b48689`, tree `0d6d70bb4465c2ce6e9395b602dc3e59a91869b2` |
+| Qualified QR browser repair | #189, head `9611d6a5cb404fed5d41eeb176dafb31c01de640`, tree `938b76f923df166717ef522666575e37a0623825` |
+| Generation 2 initial source | `ac9a4b0ffc3ca50a299398e72554e7964a634cd4`, tree `f3ee86ab68eb60e4ab516037c58c9c498fc30ff4` |
+| Generation 2 final source | `ef9d74258de63e98917c7a34a9392076ff86c35c`, tree `0fadc2154399d6bd70f6d988fa2670a84fa8c74b` |
+| Generation 2 branch | `codex/historical-recovery-20261119`, a child of the primary consolidation branch |
+| Local tree-identical final source | `f29422b6afdf7973e102edaed3a83bd48671bbde` |
 
-The one Node-suite skip requires Foundry cast. Pinned Foundry 1.5.1 and solc 0.8.30 have since been downloaded with their repository-pinned SHA-256 verified; contract CI-profile qualification passed 92/92, with zero failed or skipped tests.
+Resolve live branch heads and open PRs before continuing. This handoff is committed before opening the generation 2 PR; find that PR by its head branch. Later metadata commits do not change the qualified source tree recorded above. **No main merge has been performed by this operation.**
 
-Local Chromium fails before UI initialization because Unix sockets are forbidden by this execution environment. Hosted browser qualification is required, not replaced by source/unit results. Local Solana CLI/validator is absent. Preserve the actual validator/browser workflow. Its two real minimum-duration refund waits each take 1,800 seconds; the hosted gate can take over an hour and must not be weakened to shorten execution.
+The generation 2 source commit retains generation 1, the complete historical audit stack `06c6b9ab3728fcf743b2c003dd69b0310078b0ad`, and QR repair `9611d6a` as parents. Selective historical extractions preserve original source IDs and exact blob comparisons in their reports; whole obsolete runtime stacks were not merged.
 
-## CI and policy
+## Inventory and completed source
 
-Issue #130 concerns orphaned November 11 runs with zero jobs, not a current repository-wide outage. Recent exact source heads pass normal workflows. #181 independently fixes the inherited restored-profile wallet-connect race. Original #183 fails at the changing Selected file format label; original #179 reaches its actual browser then fails at Recovery JSON. These failures are preserved as evidence, not relabelled passes.
+`branch-inventory.json` and `BRANCH_INVENTORY.md` retain the immutable 192-branch baseline: A108 integrated, B20 duplicated, C41 partial/cumulative, D5 ready candidates, E2 defective candidates, F11 optional/experimental, G5 obsolete, H0 confirmed active writers. The initial inspection covered 184 PRs, including 41 open PRs at 40 distinct heads, with no tags or releases.
 
-Repository workflow sources run tests on main push and PRs; no automatic deployment/release workflow was found, and repository metadata reports Pages disabled. External hooks were not inspected. Do not invoke deployment commands.
+`REDISCOVERY_20261119.md` records a later 194-branch/186-PR snapshot: every original branch still had its original head; only owned #188/#189 source branches were new. The subsequently published historical-recovery branch is another owned addition. Do not rewrite the baseline counts as if they were live counts. No external active writer was confirmed.
 
-D8 accepted tiered policy remains: required checks must pass. Tier B calls for CodeRabbit or Qodo review with findings addressed; an advisory status or skipped review does not demonstrate that review. Source integration is authorized by the current user; do not ask them again merely because an older handoff says approval is pending. Do not weaken gates.
+Generation 1 integrated seven source PRs, containing 20 distinct upstream commits:
 
-## Retained work and architectural limits
+- #171 bounded QR grouping and #172 typed hostile JCS descriptor failures.
+- #174 repaired docs/lab/claims tooling.
+- #179 funded Solana exit and encrypted browser recovery composition.
+- #181 restored-profile and relay readiness correction.
+- #183 public QR image/camera capture and review.
+- #187 actual-byte bounds before retained review copies.
 
-`FEATURE_MATRIX.md` and `feature-matrix.json` map 27 capabilities to source/test paths at starting main. Staging changes above are an overlay, not already-merged main features. Native EVM trading, ERC-20 exits, same-terms resumption, native Nostr interoperability and Solana native recovery already exist on main; older docs describing them as drafts are historical.
+Generation 2 adds the following scoped work:
 
-Retain distinct source for signed asset update (#40/#56/#81), personalization/drafts/retention, portal/distribution tooling and inert intake/governance (#155/#156). They need selective extraction, not whole old-stack merging. Nine optional reference-package branches remain isolated. Do not restore the old custodial ledger. Solana #179 covers funded exits, not discovery/negotiation/funding parity. BasicEscrow has no arbitration settlement. QR decoding does not authenticate an invite.
+| Area | Original source | Completed scope |
+|---|---|---|
+| Asset update | #81 `a45e932a…`, with later malformed-envelope correction | Internal controller, HTTP and storage source; four reproduced IndexedDB open/close lifecycle repairs. Unexported and absent from application imports. |
+| Personalization | #81 `a45e932a…` | Encrypted favorites and bounded reusable templates, with returned-error own-data normalization. No App/Worker wiring. Current retention is already equivalent after five `IntentV1` → `Intent` type adaptations and was not replaced. |
+| Scriptless portal | #44 `f8a9aa14…` | Static source/recovery references, strict local headers and exact downloads. No executable recovery bundle or release approval. |
+| Unsigned distribution | #44 `f8a9aa14…` | Two-pass reproducible local staging, tamper rejection, pinned current QR decoder graph and exact `OfflineRoot` artifact role. Approval flags remain false. |
+| Inert governance | #156 `7a60893c…` | Historical records and source-bound assurance checks; status getter and inconsistent double-read regressions fixed using one detached snapshot. |
+| Peer vector reproduction | #159 `1d3f59a9…` | Exact independent viem generator plus frozen-SHA and complete-byte regression for the already maintained v1 fixture. No protocol or fixture change. |
+| Historical audit records | `06c6b9ab…` | Six dated audit entries retained as historical observations, without turning them into new execution or instructions. |
 
-## Next worker generation
+Stable completed IDs and full SHAs are in the state file. Twelve newly reproduced repair cases are tracked separately from the recovered upstream fixes: two control-label defects, four updater lifecycle cases, two governance snapshot cases, current distribution artifact-role drift, template diagnostics, synthetic camera frame production and the trusted-activity browser oracle. The additional QR/Solana profile isolation assertion is an integration check, not a separately counted defect.
 
-Three fresh workers were actually launched after this handoff was written: `successor_integration_audit`, `successor_historical_tooling` and `successor_asset_update`. They own isolated review/extraction work. The coordinator owns hosted qualification and this state file.
+## Executed verification
 
-1. Fetch main and integration refs; compare against exact SHAs above and inspect active changes.
-2. Independent auditor: review conflict resolutions in `apps/web/scripts/build.mjs`, `static-build-plugin.mjs`, package scripts and changed UI labels; validate profile isolation and retained gates.
-3. Historical extraction worker: review remaining portal/distribution and inert intake/governance source. Own a separate branch/worktree; implement only supported unique work and run its meaningful tests.
-4. CI worker: inspect the newly opened integration PR at its exact head; fix actual failures, preserving financial invariants and strict browser assertions.
-5. Coordinator: rerun affected combined checks after accepted patches, update stable state IDs and this handoff, and hand the verified result to another fresh worker. No arbitrary iteration count defines completion.
+Environment: Node 24.22.3, npm 11.19.1, Python 3.12.14. Foundry 1.5.1 and solc 0.8.30 were obtained with repository-pinned hashes verified. Runtime and framework dependencies remain pinned; no dependency version changed in these generations.
 
-Never overwrite another worker's worktree or source branch. Do not run paid OpenAI/Codex services. Native session workers and direct GitHub tools are available. If shell git push is unauthenticated, GitHub tree/commit/ref tools can preserve the exact local tree and source parents. Verify SHA equality before publishing. Continue other tasks when one gate blocks.
+| Scope | Actual result |
+|---|---|
+| Starting `npm test` | 1,964 passed, 0 failed, 1 skipped |
+| Generation 1 `npm test` | 2,072 passed, 0 failed, 1 skipped |
+| Subsequent cast-dependent wallet oracle | 14/14 passed, zero skips; this is separate evidence, not a rewrite of the original skip |
+| Generation 2 initial full suite | 2,152/2,152 passed, zero failures/skips |
+| Generation 2 final full suite, including recovered vector generator | **2,153/2,153 passed, zero failures/skips** |
+| Build policy | 54/54 passed |
+| Maintained recovered tooling suite | 36/36 passed, including real two-pass distribution builds and tamper refusal |
+| Generation 2 typecheck/default build | All four TypeScript projects and the default artifact passed |
+| Generation 2 boundaries | 234 production files; 140 core entry modules; recovered modules remain outside the default core graph |
+| Independent updater review | 94/94 affected tests; original lifecycle 2 pass/4 fail → repaired 6/6 |
+| Independent historical tooling review | 31/31; governance 8 pass/2 fail → 10/10; distribution role 0/1 → 1/1 |
+| Independent personalization review | 65/65 affected tests; final diagnostic RED 4 pass/6 fail (five scenarios plus parent) → GREEN 10/10 |
+| QR/runtime repair checks | 29/29; independent QR oracle 3/3 |
+| Peer-vector recovery | Independent worker 44/44 affected tests; coordinator generator `--check` and 9/9 acceptance tests |
+| Foundry CI profile | 92/92 passed, 4,096 fuzz runs; 256 invariant runs at depth 100 |
+| Actual local Anvil controller | 12 checks, 12 wallet prompts, 4 sends, 4 durable markers |
+| Actual independent ERC-20 recovery proof | 4 checks, 8 signatures, 3 sends, 3 exact durable markers |
+| Specifications / agreement fuzz / formal harness | 32/32, 26/26 and 22/22 passed respectively |
+
+The full final command was `FOUNDRY_BIN=<verified-toolchain> FOUNDRY_SOLC=<verified-solc-0.8.30> npm test`. Use physical dependencies within each checkout: a symlink to another checkout's node_modules violates the maintained source-bound build policy. Source-specific reports include reproduction commands and log digests; the state file also retains main verification-log hashes.
+
+Independent review documents include `INDEPENDENT_SECURITY_REVIEW_20261119.md`, `INDEPENDENT_TOOLING_REVIEW_20261119.md`, `INDEPENDENT_INTEGRATION_REVIEW_20261119.md`, `INDEPENDENT_EXTRACTION_REVIEW_20261119.md`, `INDEPENDENT_HISTORICAL_TOOLING_REVIEW_20261119.md`, `INDEPENDENT_PERSONALIZATION_REVIEW_20261119.md` and `GENERATION2_INTEGRATION_REVIEW_20261119.md`. No open High or Medium finding remains in these reviewed integration scopes. New optional extractions need their own reviews.
+
+## Hosted qualification and current gates
+
+`HOSTED_QUALIFICATION_20261119.md` records actual hosted evidence, not a local-browser claim. PR #189 at `9611d6a` passed all seven original required contexts plus docs-tooling and native Nostr. Browser run `44640970749`, job `135971620360`, completed all ten maintained browser command groups. Its QR receipt records six journeys, real module Workers and bitmap decoding, real stream capture/cleanup using a synthetic camera source, actual encrypted vault lock clearing, and zero unexpected requests. It does not qualify a physical camera. Native EVM and ERC-20 browser steps also passed.
+
+The hosted checkout `0b4567e88048d52a8ae4bd0c7d8ca4b23006f079` and head `9611d6a` have the exact same tree `938b76f9…`. Their identity was checked through GitHub Git-commit responses.
+
+At the retained observation, both Solana jobs had passed vectors, tool setup, build, lint, LiteSVM and IDL verification, and were still at real-validator acceptance step 14:
+
+- #188: run `44639090596`, job `135965138780`.
+- #189: run `44640971208`, job `135971622812`.
+
+Their subsequent real browser refund step remained pending. Each workflow contains two real 1,800-second minimum-duration refund waits. Preserve those waits and avoid changing qualified heads merely to refresh documentation. Read current statuses before acting; do not infer completion from elapsed time.
+
+Generation 2 still needs its own exact-head hosted qualification, including the newly restored portal and distribution browser steps. The browser checkout now fetches full history because unsigned staging verifies immutable documentation source bytes. Existing checks, permissions and fail-closed behavior remain intact.
+
+Local Chromium cannot launch because the execution environment forbids the required Unix socket behavior. Do not bypass that control or relabel source tests as browser passes. Issue #130's zero-job November 11 runs are historical; actual hosted jobs are executing now. No deployment or release workflow was added or invoked.
+
+## Policy and historical evidence
+
+Use the canonical accepted-decision index with the current user directive. Both combined integrations contain Tier C recovery/release-verification paths. Current source-integration authorization is already provided; do not ask for it again. Required exact-head checks, applicable native/browser qualification and independent review with no open High/Medium finding remain mandatory. The accepted Tier C text does not separately establish the older Tier B named-bot condition as an additional gate for these combined PRs; assess any standalone Tier B change and actual server-enforced rules on their own terms.
+
+**D7 parking was superseded on November 18.** The nine optional packages are accepted for independent, one-package-per-PR source extraction with import-boundary checks. They are not rejected merely because their default app composition remains incomplete. No source acceptance activates financial, network, device or release authority.
+
+Governance currently checks 12 historical records, zero pending records, and 57 assurance rows. Thirteen non-owned references are stale after current changes; this is reported explicitly. The original immutable assurance source remains `8649b7a1994ec21fe5557179d44e861b746bcda8`. Do not promote historical receipts to current execution, remove stale rows, or rebind them to make a check green.
+
+## Active successor work and remaining functionality
+
+Generation 2 actually launched five fresh workers for combined review, historical tooling, asset update, personalization and independent extraction review. Generation 3 actually launched rediscovery, a new integration audit and hosted qualification, followed by three optional-source workers. The integration auditor is now independently reviewing the first optional group.
+
+| Owner | Package scope | State at this handoff |
+|---|---|---|
+| optional_source_a | proof-inputs, liquidity, privacy-policy | Three separate clean local branches qualified; cross-review running. Package tests 21/21, 28/28 and 21/21. Default output remains byte-identical to the generation 2 base. |
+| optional_source_b | arbitration, courier, meetup | Final package tests 38/38,61/61 and95/95 passed. Courier/meetup returned-adapter diagnostic regressions were reproduced and repaired; separate clean branches await independent review. |
+| optional_source_c | privacy-controls, stealth, proof-jobs | Proof-jobs source passed30/30 and its real Node Worker memory cap check; browser remains pending. Privacy-controls and stealth diagnostic repairs are active. Retain all custom gates. |
+
+Each uses base `ac9a4b0…` and its own `codex/optional-<package>-20261119` branch/worktree. Full original source IDs and current known local heads are in `optional_queue`. Do not edit another worker's worktree. Publish and qualify each package separately; old source-head green checks are not new extraction-head qualification.
+
+Remaining application work is explicit: personalization has internal encrypted consumers but no current UI/Worker composition; the updater has internal source but no active update UI or trust-root configuration. Solana funded exits are not full discovery/negotiation/funding parity. BasicEscrow has no arbitration settlement, and optional diagnostic arbitration cannot create it. QR decoding does not authenticate an invite. Physical wallets, camera/print/device coverage and owner-controlled trust inputs remain separate.
+
+#155 intake remains preserved at its immutable source with its Waku signed-64-bit regression, mobile-wallet roundtrip failure, incoherent XMTP snapshot and unexecuted pinned-container qualification. These are concrete limits, not reasons to drop supported optional source packages.
+
+## Exact continuation
+
+1. Fetch main and all owned source branches. Read current handoff/state, latest PR heads, checks and active ownership. Keep the original inventory as a dated baseline and record only new deltas.
+2. Finish independent reviews and any reproduced repairs in the nine optional package branches. Preserve current runtime, dependencies, old gates and one-package-per-PR review scope. Run their custom qualifications and verify absent default imports.
+3. Resolve the generation 2 child PR by head branch; inspect its actual portal/distribution, existing browser and native gates. Preserve the still-running Solana heads/waits. Repair any real failure in an isolated branch and continue unrelated source work.
+4. Integrate only qualified source. Recheck the combined tree after significant batches; do not transfer old-head checks to changed code. Main remains unchanged until applicable gates are satisfied.
+5. Keep explicit partial UI scopes and known experimental limits. Source acceptance does not invent missing trust roots, counterparties, custody or settlement authority.
+6. Update the ledger with exact commits/tests/PRs and hand it to fresh workers. Continue the accepted-scope feature gaps after source recovery; do not restart solved D9/retention work or manufacture tasks.
+
+Existing hourly continuation automation `Automation_ab68cc67e6ac8191bd31dc2d84a085e1` is enabled and was updated for this operation. It supplies scheduled resumption, not an assertion that completed workers run permanently. Keep its prompt aligned with live source/PR heads without duplicating the schedule. Native agents and GitHub tools are available; do not invoke paid OpenAI/Codex services. If shell push lacks authentication, create Git blobs/trees/commits through the connector and verify exact local/remote tree equality before updating only the owned ref with an expected-head lease.

@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
-  "generation": 1,
-  "updated_at_utc": "2026-11-19T23:33:44.506009+00:00",
-  "phase": "combined-source-locally-verified-hosted-qualification-pending",
+  "generation": 2,
+  "updated_at_utc": "2026-11-20T00:11:08.964508+00:00",
+  "phase": "generation-two-source-verified-hosted-qualification-pending-generation-three-active",
   "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
-  "integration_branch": "codex/max-consolidation-20261119",
-  "integration_source_sha": "84814328f5534d6fceb2bbe74509fe37c5b48689",
-  "integration_source_tree": "0d6d70bb4465c2ce6e9395b602dc3e59a91869b2",
+  "integration_branch": "codex/historical-recovery-20261119",
+  "integration_source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
+  "integration_source_tree": "0fadc2154399d6bd70f6d988fa2670a84fa8c74b",
   "scope": {
     "deployment_authorized": false,
     "release_enabled": 0,
@@ -28,6 +28,18 @@
       "F": 11,
       "G": 5,
       "H": 0
+    },
+    "rediscovery": {
+      "report": "REDISCOVERY_20261119.md",
+      "branches_observed": 194,
+      "prs_observed": 186,
+      "open_prs": 43,
+      "merged_prs": 105,
+      "closed_unmerged_prs": 38,
+      "original_heads_moved": 0,
+      "original_heads_removed": 0,
+      "subsequent_owned_branch": "codex/historical-recovery-20261119",
+      "note": "Immutable 192-branch inventory is retained; overlay counts are dated observations, not future live counts."
     }
   },
   "completed": [
@@ -72,23 +84,134 @@
       "source_sha": "6537693eb526969c46d94cfa7f24a5fe02e82116",
       "state": "integrated-on-staging",
       "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/187"
+    },
+    {
+      "id": "RECOVER-HISTORICAL-AUDITS-109-114",
+      "source_sha": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "state": "integrated-on-staging",
+      "scope": "Six dated audit commits retained as historical evidence"
+    },
+    {
+      "id": "EXTRACT-ASSET-UPDATE",
+      "source_sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "state": "integrated-on-staging",
+      "scope": "Internal unexported updater; later malformed-envelope fix retained; four IndexedDB lifecycle repairs"
+    },
+    {
+      "id": "EXTRACT-PERSONALIZATION",
+      "source_sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "state": "integrated-on-staging",
+      "scope": "Encrypted favorites and templates; returned diagnostic boundary repaired; app and Worker remain unwired"
+    },
+    {
+      "id": "EXTRACT-SCRIPTLESS-PORTAL",
+      "source_sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "state": "integrated-on-staging",
+      "scope": "Scriptless source-reference portal with local header qualification harness"
+    },
+    {
+      "id": "EXTRACT-UNSIGNED-DISTRIBUTION",
+      "source_sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "state": "integrated-on-staging",
+      "scope": "Two-pass unsigned staging with strict current QR/OfflineRoot artifact roles"
+    },
+    {
+      "id": "EXTRACT-INERT-GOVERNANCE",
+      "source_sha": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "state": "integrated-on-staging",
+      "scope": "Inert historical records; status getter and inconsistent second-read defects repaired"
+    },
+    {
+      "id": "RECOVER-PEER-V1-GENERATOR",
+      "source_sha": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "state": "integrated-on-staging",
+      "scope": "Independent viem generator restores exact unchanged frozen-vector reproduction"
+    },
+    {
+      "id": "QUALIFY-QR-BROWSER",
+      "source_sha": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "state": "integrated-on-staging",
+      "scope": "Synthetic camera producer and strict trusted-activity oracle; actual hosted browser passed"
     }
   ],
   "repairs": [
     {
       "id": "FIX-QR-STABLE-LABELS",
       "state": "implemented",
-      "source": "apps/web/src/ui/QrPanel.tsx"
+      "source": "apps/web/src/ui/QrPanel.tsx",
+      "kind": "reproduced-defect"
     },
     {
       "id": "FIX-SOLANA-STABLE-LABELS",
       "state": "implemented",
-      "source": "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx"
+      "source": "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+      "kind": "reproduced-defect"
     },
     {
       "id": "INTEGRATE-QR-SOLANA-POLICY",
       "state": "implemented-tested",
-      "source": "apps/web/scripts/qr-build-policy.test.mjs"
+      "source": "apps/web/scripts/qr-build-policy.test.mjs",
+      "kind": "integration-boundary"
+    },
+    {
+      "id": "FIX-UPDATER-OPEN-RETRY",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/security/src/release-update-store.ts"
+    },
+    {
+      "id": "FIX-UPDATER-LATE-BLOCKED-OPEN",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/security/src/release-update-store.ts"
+    },
+    {
+      "id": "FIX-UPDATER-SYNC-OPEN-ERROR",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/security/src/release-update-store.ts"
+    },
+    {
+      "id": "FIX-UPDATER-PENDING-CLOSE",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/security/src/release-update-store.ts"
+    },
+    {
+      "id": "FIX-GOVERNANCE-STATUS-GETTER",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/governance/src/records.ts"
+    },
+    {
+      "id": "FIX-GOVERNANCE-STATUS-SNAPSHOT",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/governance/src/records.ts"
+    },
+    {
+      "id": "FIX-DISTRIBUTION-CURRENT-ASSET-ROLES",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "scripts/distribution/manifest.mjs"
+    },
+    {
+      "id": "FIX-TEMPLATE-RETURNED-DIAGNOSTICS",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "packages/personalization/src/trade-draft-store.ts"
+    },
+    {
+      "id": "FIX-QR-CAMERA-FRAMES",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "scripts/lib/qr-browser-fixture.mjs"
+    },
+    {
+      "id": "FIX-QR-TRUSTED-ACTIVITY-ORACLE",
+      "kind": "reproduced-defect",
+      "state": "implemented-tested",
+      "source": "scripts/lib/qr-browser-fixture.mjs"
     }
   ],
   "verification": {
@@ -129,8 +252,8 @@
       "passed": 26,
       "failed": 0
     },
-    "actual_browser": "not-run-locally-unix-socket-policy-blocks-chromium",
-    "hosted_exact_head": "pending",
+    "actual_browser": "PR189 exact tree passed actual hosted Chromium; local Chromium remains blocked by Unix socket policy",
+    "hosted_exact_head": "PR189 browser and nine listed contexts passed; Solana remains pending; broader generation-two head still requires its own hosted checks",
     "foundry_ci_profile": {
       "version": "1.5.1",
       "solc": "0.8.30",
@@ -147,7 +270,74 @@
       "passed": 22,
       "failed": 0
     },
-    "default_and_demo_builds": "passed-with-four-TypeScript-projects"
+    "default_and_demo_builds": "passed-with-four-TypeScript-projects",
+    "cast_followup": {
+      "tests": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "note": "Separate run resolves original cast-dependent skip; original suite counts remain historical."
+    },
+    "generation_two_initial_full": {
+      "tests": 2152,
+      "passed": 2152,
+      "failed": 0,
+      "skipped": 0,
+      "source_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4"
+    },
+    "generation_two_final_full": {
+      "tests": 2153,
+      "passed": 2153,
+      "failed": 0,
+      "skipped": 0,
+      "source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
+      "tree": "0fadc2154399d6bd70f6d988fa2670a84fa8c74b",
+      "command": "FOUNDRY_BIN=<pinned-toolchain> FOUNDRY_SOLC=<pinned-solc-0.8.30> npm test"
+    },
+    "generation_two_tooling": {
+      "tests": 36,
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0
+    },
+    "generation_two_build_policy": {
+      "tests": 54,
+      "passed": 54,
+      "failed": 0,
+      "skipped": 0
+    },
+    "generation_two_types_build_boundaries": {
+      "typescript_projects": 4,
+      "default_build": "passed",
+      "production_files": 234,
+      "core_modules": 140,
+      "core_modules_activated_by_extractions": 0
+    },
+    "generation_two_module_reviews": {
+      "asset_update_tests": 94,
+      "historical_tooling_tests": 31,
+      "personalization_tests": 65,
+      "independent_integration_review": "no-open-High-or-Medium-finding",
+      "reports": [
+        "INDEPENDENT_EXTRACTION_REVIEW_20261119.md",
+        "INDEPENDENT_HISTORICAL_TOOLING_REVIEW_20261119.md",
+        "INDEPENDENT_PERSONALIZATION_REVIEW_20261119.md",
+        "GENERATION2_INTEGRATION_REVIEW_20261119.md"
+      ]
+    },
+    "local_evm_controller": {
+      "checks": 12,
+      "wallet_prompts": 12,
+      "sends": 4,
+      "durable_markers": 4,
+      "backend": "actual pinned Anvil"
+    },
+    "local_erc20_independent": {
+      "checks": 4,
+      "signatures": 8,
+      "sends": 3,
+      "exact_durable_markers": 3
+    }
   },
   "workers": [
     {
@@ -177,20 +367,68 @@
     {
       "generation": 2,
       "worker": "successor_integration_audit",
-      "state": "running",
+      "state": "complete",
       "scope": "independent combined build/runtime security audit"
     },
     {
       "generation": 2,
       "worker": "successor_historical_tooling",
-      "state": "running",
+      "state": "complete",
       "scope": "portal/distribution and inert intake/governance extraction"
     },
     {
       "generation": 2,
       "worker": "successor_asset_update",
-      "state": "running",
+      "state": "complete",
       "scope": "signed asset-update selective extraction"
+    },
+    {
+      "generation": 2,
+      "worker": "successor_personalization",
+      "state": "complete",
+      "scope": "encrypted favorites/templates extraction and diagnostic repair"
+    },
+    {
+      "generation": 2,
+      "worker": "successor_extraction_audit",
+      "state": "complete",
+      "scope": "three extraction reviews and reproduced regressions"
+    },
+    {
+      "generation": 3,
+      "worker": "generation3_rediscovery",
+      "state": "complete",
+      "scope": "ref delta, peer-vector reproduction and optional queue"
+    },
+    {
+      "generation": 3,
+      "worker": "generation3_integration_review",
+      "state": "running",
+      "scope": "completed generation-two review; independently reviewing optional group A"
+    },
+    {
+      "generation": 3,
+      "worker": "generation3_ci",
+      "state": "complete",
+      "scope": "actual PR189 hosted evidence"
+    },
+    {
+      "generation": 3,
+      "worker": "optional_source_a",
+      "state": "complete",
+      "scope": "three independently scoped extractions awaiting cross-review"
+    },
+    {
+      "generation": 3,
+      "worker": "optional_source_b",
+      "state": "running",
+      "scope": "arbitration, courier and meetup; diagnostic repairs"
+    },
+    {
+      "generation": 3,
+      "worker": "optional_source_c",
+      "state": "running",
+      "scope": "privacy-controls, stealth and proof-jobs"
     }
   ],
   "remaining": [
@@ -198,38 +436,239 @@
       "id": "GATE-COMBINED-HOSTED",
       "priority": 1,
       "state": "pending",
-      "next_action": "Open current integration PR and execute existing hosted checks without weakening them."
+      "next_action": "Open/resolve generation-two child PR and inspect exact-head checks, including new portal/distribution browser groups; preserve real Solana waits."
     },
     {
-      "id": "AUDIT-COMBINED-BOUNDARIES",
+      "id": "GATE-PR189-SOLANA",
       "priority": 1,
-      "state": "ready",
-      "next_action": "Fresh independent worker reviews resolved build policy, runtime isolation, and current source delta."
+      "state": "running",
+      "next_action": "Read exact-head program job135971622812; do not change source or shorten waits. Fold qualified repair and consolidate main only after applicable exact-head gates."
     },
     {
-      "id": "EXTRACT-HISTORICAL-TOOLING",
+      "id": "OPTIONAL-SOURCE-EXTRACTIONS",
       "priority": 2,
-      "state": "ready",
-      "next_action": "Inspect portal/distribution and inert governance/intake source; extract only qualified unique work."
+      "state": "active-nine-package-queue",
+      "next_action": "Publish and independently qualify one package per PR; inspect individual state entries below. No default application wiring."
     },
     {
-      "id": "EXTRACT-ASSET-UPDATE",
+      "id": "COMPOSE-PERSONALIZATION-UI",
       "priority": 2,
-      "state": "needs-design-and-source-review",
-      "next_action": "Assess retained signed-update code and later fixes against current trust and transport types before extraction."
+      "state": "source-ready-interface-work-remaining",
+      "next_action": "Design and implement current profile/epoch-bound Worker commands and UI from reviewed primitives in a separate owned branch; preserve current runtime instead of copying historical UI."
     },
     {
-      "id": "OPTIONAL-REFERENCE-PACKAGES",
+      "id": "COMPOSE-ASSET-UPDATE-UI",
+      "priority": 2,
+      "state": "internal-source-ready-trust-composition-remaining",
+      "next_action": "Review current trust/transport/lifecycle interface design; do not invent trust roots or activate network updates."
+    },
+    {
+      "id": "EXPERIMENTAL-INTAKE",
       "priority": 3,
-      "state": "preserved-separately",
-      "next_action": "Qualify independently; do not wire experimental packages into production core."
+      "state": "preserved-at-source",
+      "next_action": "Keep #155 separate: retained Waku/mobile roundtrip failures, incoherent XMTP snapshot and unexecuted pinned-container qualification are explicit."
     },
     {
       "id": "REAL-DEVICE-QUALIFICATION",
       "priority": 3,
       "state": "external",
-      "next_action": "Physical wallets, camera/print/device matrices and owner-controlled live trust/release inputs remain explicit."
+      "next_action": "Physical wallets/cameras/print/mobile/device matrix and owner-controlled trust inputs remain separate."
     }
   ],
-  "successor_generation": 2
+  "successor_generation": 3,
+  "integration_local_source_sha": "f29422b6afdf7973e102edaed3a83bd48671bbde",
+  "parent_integration_pr": 188,
+  "parent_integration_branch": "codex/max-consolidation-20261119",
+  "parent_integration_head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+  "pull_request_resolution": "Resolve the open PR whose head is integration_branch; this state is committed before opening that PR.",
+  "main_merges_performed": 0,
+  "published_generations": [
+    {
+      "generation": 1,
+      "source_sha": "84814328f5534d6fceb2bbe74509fe37c5b48689",
+      "source_tree": "0d6d70bb4465c2ce6e9395b602dc3e59a91869b2",
+      "pr": 188,
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f"
+    },
+    {
+      "generation": 2,
+      "source_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "source_tree": "f3ee86ab68eb60e4ab516037c58c9c498fc30ff4",
+      "final_source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
+      "final_source_tree": "0fadc2154399d6bd70f6d988fa2670a84fa8c74b"
+    }
+  ],
+  "repair_counting": "12 reproduced repair cases in this session, excluding upstream fixes recovered through source PRs and excluding the separate profile-integration assertion.",
+  "hosted": [
+    {
+      "pr": 188,
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "browser": "failed-before-PR189-repair",
+      "program_run": 44639090596,
+      "program_job": 135965138780,
+      "program_observed_step": 14,
+      "program_state": "in_progress",
+      "other_original_required_contexts": "passed"
+    },
+    {
+      "pr": 189,
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "merge_checkout": "0b4567e88048d52a8ae4bd0c7d8ca4b23006f079",
+      "head_and_merge_tree": "938b76f923df166717ef522666575e37a0623825",
+      "passed_contexts": [
+        "forge",
+        "local-trade",
+        "local-evm",
+        "schemas-and-crypto",
+        "browser",
+        "specs",
+        "inventory",
+        "docs-tooling",
+        "native-nostr-relay"
+      ],
+      "browser_run": 44640970749,
+      "browser_job": 135971620360,
+      "browser_groups": 10,
+      "qr_journeys": 6,
+      "unexpected_qr_requests": 0,
+      "physical_camera_qualified": false,
+      "program_run": 44640971208,
+      "program_job": 135971622812,
+      "program_observed_step": 14,
+      "program_state": "in_progress",
+      "observed_at_utc": "2026-11-19T23:55:00Z"
+    }
+  ],
+  "policy": {
+    "canonical_index": "docs/adr/ACCEPTED-DECISIONS-2026-11-04.md",
+    "combined_tier": "C",
+    "owner_source_integration_authorization": "current user directive; no repeated permission needed",
+    "merge_gate": "green exact-head CI, applicable native/browser qualification, independent review with no open High/Medium finding",
+    "named_bot_gate": "not separately established for these Tier C combined PRs; assess standalone Tier B changes under their applicable policy",
+    "D7": "Nov18 supersedes parking; nine source packages accepted one package per PR with import-boundary checks; default composition has its own gate"
+  },
+  "optional_queue": [
+    {
+      "id": "EXTRACT-OPTIONAL-PROOF-INPUTS",
+      "package": "proof-inputs",
+      "original_pr": 144,
+      "source_sha": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "worker": "optional_source_a",
+      "local_head": "1eac87a0f604d8903daba6a26a761f005e87b89e",
+      "state": "independent-review-running",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-LIQUIDITY",
+      "package": "liquidity",
+      "original_pr": 145,
+      "source_sha": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "worker": "optional_source_a",
+      "local_head": "02e75bf2c7980ac5203a226e6ac23b2b55d296af",
+      "state": "independent-review-running",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-PRIVACY-POLICY",
+      "package": "privacy-policy",
+      "original_pr": 148,
+      "source_sha": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "worker": "optional_source_a",
+      "local_head": "7b9f6ee800ffc94a85e63133f6c423246ae9597d",
+      "state": "independent-review-running",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-ARBITRATION",
+      "package": "arbitration",
+      "original_pr": 147,
+      "source_sha": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "worker": "optional_source_b",
+      "local_head": "ecbefff46a46ec3608c7c0eac32a5485412d0007",
+      "state": "local-qualification-complete-independent-review-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-COURIER",
+      "package": "courier",
+      "original_pr": 146,
+      "source_sha": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "worker": "optional_source_b",
+      "local_head": "e7f54bdaf35b0112de0eaaf920e1c143fb7e90fb",
+      "state": "local-qualification-complete-independent-review-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-MEETUP",
+      "package": "meetup",
+      "original_pr": 163,
+      "source_sha": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "worker": "optional_source_b",
+      "local_head": "e6661b1f103def15c0c019e5a095b8f430facb90",
+      "state": "local-qualification-complete-independent-review-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-PRIVACY-CONTROLS",
+      "package": "privacy-controls",
+      "original_pr": 160,
+      "source_sha": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "worker": "optional_source_c",
+      "local_head": null,
+      "state": "diagnostic-regression-and-repair-in-progress",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-STEALTH",
+      "package": "stealth",
+      "original_pr": 161,
+      "source_sha": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "worker": "optional_source_c",
+      "local_head": null,
+      "state": "diagnostic-regression-and-repair-in-progress",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false
+    },
+    {
+      "id": "EXTRACT-OPTIONAL-PROOF-JOBS",
+      "package": "proof-jobs",
+      "original_pr": 162,
+      "source_sha": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "worker": "optional_source_c",
+      "local_head": "92d687750062f5b3a68c52a9476eccdcf37b5cdd",
+      "state": "local-qualification-complete-independent-review-pending",
+      "base_sha": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+      "default_runtime_imports_authorized": false
+    }
+  ],
+  "automation": {
+    "id": "Automation_ab68cc67e6ac8191bd31dc2d84a085e1",
+    "enabled": true,
+    "cadence": "hourly existing schedule",
+    "semantics": "durable scheduled continuation; not a claim that completed native workers run continuously"
+  },
+  "verification_log_sha256": {
+    "generation2-full.tap": "3affa64cd3bdc9562dd5d08eb803a4c8764814332e23b574184c97c6c876d392",
+    "generation2-final-full.tap": "d6fdb84a0f32578b6e74b8272cdbf8c916d31c0f9910e2220eead224f41a2077",
+    "generation2-typecheck.log": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+    "generation2-boundaries.log": "59a6aa06bcd62b7c1e9f0529431e1941bd12f845e9d8884c86a9deee74ff3e91",
+    "generation2-build-policy.tap": "ac4628d5e2bec4f02b115364d7626f5aaa950a6273da1f8c6d390035e8c70b9a",
+    "generation2-build.log": "db93cafb803272649a30d9dfde5e415505ffd58bb3c401111ee952eb66958fc8",
+    "historical-combined-tooling.tap": "f606770e092b40604ce7330aa014f3d2e61d94b9dba07806e3780cf49c88e25f",
+    "historical-governance.log": "42f9556636da25ed29969162b2b491dc3b013911d5d1488a709864b931dd7194",
+    "historical-docs.log": "ac8481319318f368052ce8cb10fe5d9c1bff19aae21e0bb7fdbadd898fb68c47",
+    "integration-foundry.log": "dce1861e770f5f8dc9a7f67ad315e34a6c1eed8e269f6354ee7081c94ee22b68",
+    "integration-evm-escrow-oracle.tap": "aa441258948dd18ee1c5afc79400994bb1a0ae584685b2cef38dd87759efb4a2",
+    "integration-evm-controller.log": "9dfef677e924d9ae514adc4e01c67cfbc17297e000ab65dc36185aa297e85866",
+    "integration-erc20.log": "14c07ea72fd257ec390f6eb7650d52134aa4ec0f312b6196b8ef76d263601457",
+    "generation2-final-docs.log": "ac8481319318f368052ce8cb10fe5d9c1bff19aae21e0bb7fdbadd898fb68c47",
+    "generation2-final-specs.log": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9"
+  }
 }

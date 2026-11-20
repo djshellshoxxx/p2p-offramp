@@ -34,6 +34,25 @@ Baseline: `5c5a84ef6300330700c8b0ca54d074ac113f08be`. Classifications describe a
 | F26 | Duplicate historical regression stack | Duplicate | D9 #69–75/#91–93 tests, isolated #78–80 tests, and #168 effective browser delta are already represented on current main. | No reimplementation. Exact normalized whole-file preservation and merge-tree proof are in branch-inventory.json.  |
 | F27 | Production release and live-funds qualification | Blocked | Release-disabled architecture, explicit build modes and signed trust primitives exist; no deployment/release is authorized in this task. | Owner-controlled trust roots/pins, physical wallets/public testnet, required independent reviews and explicit release authorization remain separate. Preserve ReleaseEnabled=0.  |
 
+## Staging overlay after two integration generations
+
+The table above remains the immutable 27-capability assessment of starting main. The latest reviewed source is `ef9d74258de63e98917c7a34a9392076ff86c35c` on `codex/historical-recovery-20261119`; it has not merged to main. `consolidation-state.json` records exact source and test evidence.
+
+| Capability | Change on staging | Remaining qualification or composition |
+|---|---|---|
+| F03 / F08 | Pre-copy byte bounds and restored-profile/relay readiness fixes are integrated. | Preserve current source-bound and live-provider checks. |
+| F16 | Funded Solana exit/recovery composition and stable labels are integrated. | Real validator/browser refund workflow is still running; full Solana discovery/funding UI remains absent. |
+| F17 / F18 | Core guards and public image/camera QR review are integrated. PR189 completed six actual Chromium journeys. | Synthetic camera is not physical-device acceptance; unsigned review conveys no authority. |
+| F24 | Internal updater source and four storage lifecycle repairs are recovered. | Unexported/unwired; update UI and current trust composition remain separate. |
+| F25 | Docs/lab tooling and source-bound historical evidence checks are recovered. | Historical receipts remain dated; stale references stay explicit. |
+| F22 | The November18 D7 acceptance permits nine separate source-package extractions. | Independent reviews and package CI are active; no default runtime wiring is authorized by extraction alone. |
+| F28 — favorites/templates | Reviewed encrypted preference consumers and diagnostic repair are recovered. | Current UI/Worker commands and lifecycle composition remain incomplete. |
+| F29 — scriptless portal | Strict source-reference page, exact downloads and browser harness are recovered. | New current-head hosted browser checks remain pending; no deployed-header claim. |
+| F30 — unsigned staging | Real two-pass builds, exact current artifact roles and tamper refusals pass locally. | Nested-path browser gate remains pending; signing, publication and independent distribution approval stay false. |
+| F31 — inert governance | Historical record validators and assurance tooling pass;12 historical records,0 pending. |13 current non-owned historical references remain explicitly stale; records confer no authority. |
+
+The JSON companion preserves the baseline and records this overlay separately. Optional reference source acceptance supersedes the earlier parking wording; application and release acceptance remain their own decisions.
+
 ## Source and regression evidence
 
 ### F01 — Encrypted profiles, backup, fresh-key restore
@@ -198,7 +217,7 @@ Source: `apps/web/scripts/build.mjs`, `docs/recovery/OWNER-TESTNET-RELEASE-RUNBO
 
 Regression source: `apps/web/scripts/artifact-policy.test.mjs`, `scripts/tests/verify-web-artifact.test.mjs`.
 
-## Highest-value integration order
+## Original inventory integration order (historical)
 
 1. Bound retained review reads (#187) and repair readiness publication (#181).
 2. Integrate isolated QR core guards (#171/#172), then repair/qualify public QR capture (#183).
@@ -206,4 +225,4 @@ Regression source: `apps/web/scripts/artifact-policy.test.mjs`, `scripts/tests/v
 4. Integrate repaired lab/docs tooling (#174), preserve old evidence (#176), and reconcile current status text.
 5. Revisit remaining historical asset-update/personalization/journey deltas selectively; keep independent optional packages out of default runtime.
 
-No branch, release setting or deployment was changed by the inventory worker.
+The integration order above is the inventory worker's original recommendation. Completed work and the current queue are in the staging overlay and consolidation handoff. No branch, release setting or deployment was changed by the inventory worker.
