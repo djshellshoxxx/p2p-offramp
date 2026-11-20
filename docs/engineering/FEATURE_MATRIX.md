@@ -1,5 +1,33 @@
 # Feature coverage — dated pinned-main baseline and reviewed current main
 
+## Generation 21 staged feature completion and remaining scope
+
+Main was read back at `8e836baa877b676a863c877003e277b638fc5061` after
+[PR223](https://github.com/djshellshoxxx/p2p-offramp/pull/223) completed its
+14/14 checks plus Snyk and merged at 2026-11-20T16:25:14Z. The following new
+features are staged on `codex/continuation-g21-20261120`, not in that main
+snapshot. Their exact composed source
+`758936c54d0b823b96bad99ccfa93520ee175ae6` passed **2,430/2,430 tests**, including
+67 new cases, plus ten additional qualification commands. Final published-head
+hosted checks and guarded merge remain pending at this dated checkpoint.
+
+| Capability | Completed staging scope | Remaining scope |
+| --- | --- | --- |
+| F19 locale state | Six UI files retain message keys, error codes or exact restore-result values and resolve the selected catalog during rendering. Navigation and Lock presentation also follow semantic command state. | Production remains English-only/draft. Supported translations, semantic review and browser/assistive-technology/device acceptance remain. |
+| F01 / F24 backup and recovery presentation | Verification, fresh recheck, export, restore and reconciliation notices update without repeating operations; consent, receipt identity, cancellation and byte values remain intact. | Final combined-source hosted qualification and physical-device acceptance; trusted own-lock update composition remains unfinished. |
+| F18 QR presentation | Existing camera/read/copy/download notices update with the selected catalog while controller, expiry and public review behavior remain intact. | Actual current-candidate browser gates and physical camera/mobile qualification. |
+| F25 workflow documentation | Six version-controlled guides describe actual Recovery controls, new-profile versus restore states, explicit EVM resumption and separate public Solana recovery export. | Live Wiki publication, supported-locale semantics and existing source-pinned stale claims remain separate; integrity digest refresh supplies no approval. |
+| Consolidation | Eleven exact heads already contained in main were reconciled by closing their duplicate feature PRs; all eleven source branches were retained. | Preserve unique PR178/200 history, separate audit ownership and optional PR191–199; newer PR224–232 are separate optional staging. |
+
+Fresh independent reviews cover backup, shell/export, vault/QR composition and
+the documentation. The two Low documentation/evidence findings were corrected
+and rechecked. See the [generation 21 continuation](CONTINUATION_GENERATION21_20261120.md)
+and [qualification receipt](qualification-generation21.json) for exact scopes,
+source identities and remaining actions. `ReleaseEnabled=0`, optional default
+imports, trust configuration and release requirements remain unchanged. The
+earlier overlays and pinned-main rows below remain historical assessments;
+their present-tense labels do not override this dated checkpoint.
+
 
 ## Current generation 17 main source and remaining scope
 

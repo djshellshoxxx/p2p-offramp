@@ -1,5 +1,41 @@
 # P2P-Offramp consolidation handoff
 
+## Generation 21 checkpoint — reviewed locale completion awaiting hosted integration
+
+**The new composed source passed 2,430/2,430 tests with zero failures or skips.**
+It completes selected-catalog notice rendering across six UI files, adds 67
+regression cases across five test files, and updates six user/developer workflow
+pages. Fresh independent reviews found two Low documentation/evidence issues;
+both were corrected and rechecked, with no open finding in those assigned scopes.
+
+The fully tested source is `758936c54d0b823b96bad99ccfa93520ee175ae6`, tree
+`dfd6384a913552c6dc7bb3c2a8bce1b815fa903d`. All 1,013 non-documentation entries
+remain exact through the independently verified evidence-packaging correction.
+The integration branch is `codex/continuation-g21-20261120`. At this dated
+prepublication checkpoint, final published-head hosted qualification and merge
+remain pending. Use the eventual PR's exact source and completed logs when
+resuming; no earlier main result qualifies this new source.
+
+Main was read back as `8e836baa877b676a863c877003e277b638fc5061` after
+[PR223](https://github.com/djshellshoxxx/p2p-offramp/pull/223) merged at
+2026-11-20T16:25:14Z with 14/14 checks plus Snyk successful. Eleven already-contained
+feature PRs were closed after exact-head verification; their original branches
+remain intact. PR178/200, separately owned audits and optional PR191–199 remain
+preserved; newer optional PR224–232 are separately owned staging work. The
+existing state JSON is a dated snapshot, not a request for an endless sequence
+of state-only PRs.
+
+Read the [generation 21 continuation](CONTINUATION_GENERATION21_20261120.md),
+[combined qualification](qualification-generation21.json),
+[PR223 completion](consolidation-completion-generation20.json) and
+[contained-PR reconciliation](contained-pr-reconciliation-generation20.json).
+The continuation identifies actual tests, source/evidence preservation,
+publication steps and unfinished scope. Production remains English-only/draft,
+the updater remains unconfigured, live Wiki publication is not claimed and
+`ReleaseEnabled=0`. The older generation headings below are preserved dated
+records, superseded for current coordination by this checkpoint and any later
+source-bound publication receipt.
+
 ## Current generation 17 — guarded main integration complete (2026-11-20 UTC)
 
 **Qualified source was merged into `main` as `1084a410676bc0658da97f33eba6a059493d74df` at 2026-11-20T12:29:28Z.** Its
