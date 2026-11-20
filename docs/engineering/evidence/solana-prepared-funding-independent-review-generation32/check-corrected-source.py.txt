@@ -1,0 +1,78 @@
+import hashlib
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+REPO = Path('/workspace/scratch/dcf03ef9bee8/p2p-solana-prepared-funding-review-g32')
+BASE = '8d566f0e46ee76ee35a957cab0a4358a3da4aeb3'
+INITIAL = '800e633dc47c3bd24065093b50bdc78fa709d3ab'
+FIXTURE = 'packages/chain-solana/test/prepared-funding.test.mjs'
+source = sys.argv[1]
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+def entries(ref):
+    result = {}
+    for row in git('ls-tree', '-r', '-z', ref).split(b'\0'):
+        if row:
+            identity, path = row.split(b'\t', 1)
+            result[path.decode()] = identity.decode()
+    return result
+
+
+def changed(left, right):
+    return sorted(path for path in left.keys() | right.keys() if left.get(path) != right.get(path))
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == source
+assert not git('status', '--porcelain').strip()
+assert git('show', '-s', '--format=%P', source).decode().strip() == INITIAL
+assert git('show', '-s', '--format=%P', INITIAL).decode().strip() == BASE
+base, first, current = entries(BASE), entries(INITIAL), entries(source)
+expected = sorted(['packages/chain-solana/README.md', 'packages/chain-solana/src/compose.ts', FIXTURE])
+assert changed(base, current) == expected
+assert changed(first, current) == [FIXTURE]
+assert not base.keys() - current.keys()
+original = git('show', INITIAL + ':' + FIXTURE)
+corrected = git('show', source + ':' + FIXTURE)
+replacements = [
+    (b"test('funding views are private capabilities, and a wrong confirmation session consumes only its original review', async () => {",
+     b"test('funding views are private capabilities, and a wrong confirmation session consumes only its original review',\n  async () => {"),
+    (b"for (const kind of ['native', 'spl']) test(`${kind} confirmation consumes once and preserves exact reviewed bytes and blockhash`, async () => {",
+     b"for (const kind of ['native', 'spl']) test(\n  `${kind} confirmation consumes once and preserves exact reviewed bytes and blockhash`, async () => {"),
+    (b"test('an uncertain funding marker remains durable and only explicit definitive-drop replacement permits a new review', async () => {",
+     b"test('an uncertain funding marker remains durable and only explicit definitive-drop replacement permits a new review',\n  async () => {"),
+    (b"  const env = fundingEnv('native', { clusterOptions: { sendBehavior: () => { throw new Error('SECRET synthetic provider'); } } });",
+     b"  const env = fundingEnv('native', {\n    clusterOptions: { sendBehavior: () => { throw new Error('SECRET synthetic provider'); } }\n  });"),
+    (b"test('real encrypted journal funding preparation loses authority on lock without releasing pending wallet work', async t => {",
+     b"test('real encrypted journal funding preparation loses authority on lock without releasing pending wallet work',\n  async t => {"),
+]
+reconstructed = original
+for old, new in replacements:
+    assert reconstructed.count(old) == 1
+    reconstructed = reconstructed.replace(old, new)
+assert reconstructed == corrected
+overlong = lambda value: [index + 1 for index, line in enumerate(value.decode().splitlines()) if len(line) > 120]
+assert len(overlong(original)) == 5
+assert overlong(corrected) == []
+subprocess.run(['node', '--check', FIXTURE], cwd=REPO, check=True)
+subprocess.run(['git', 'diff', '--check', BASE + '..' + source], cwd=REPO, check=True)
+print(json.dumps({
+    'base': BASE, 'initialSource': INITIAL, 'source': source, 'parent': INITIAL,
+    'tree': git('rev-parse', source + '^{tree}').decode().strip(),
+    'changed': changed(base, current), 'correctionPaths': changed(first, current),
+    'unchangedBaselineEntries': sum(current.get(path) == identity for path, identity in base.items()),
+    'nonDocumentationEntries': sum(not path.startswith('docs/') for path in current),
+    'exactFiveLineWrapReplacementsVerified': True, 'nodeSyntaxCheck': 'passed',
+    'unchangedExitPreparedTests': True, 'productionUnchangedFromInitialSource': True,
+    'allOtherEntriesPreserved': True, 'noBaselineDeletion': True,
+    'initialOverlongLines': overlong(original), 'finalOverlongLines': overlong(corrected),
+    'fixtureInitialSha256': hashlib.sha256(original).hexdigest(),
+    'fixtureFinalSha256': hashlib.sha256(corrected).hexdigest(),
+    'entries': {path: {'identity': current[path], 'sha256': hashlib.sha256(git('show', source + ':' + path)).hexdigest()}
+                for path in expected},
+}, indent=2))

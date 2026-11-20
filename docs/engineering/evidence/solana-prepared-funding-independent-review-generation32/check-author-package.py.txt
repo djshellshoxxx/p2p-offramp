@@ -1,0 +1,156 @@
+import gzip
+import hashlib
+import json
+import os
+import re
+import subprocess
+import tempfile
+from pathlib import Path
+
+REPO = Path('/workspace/scratch/dcf03ef9bee8/p2p-solana-prepared-funding-review-g32')
+BASE = '8d566f0e46ee76ee35a957cab0a4358a3da4aeb3'
+FIRST = '800e633dc47c3bd24065093b50bdc78fa709d3ab'
+SOURCE = '252dd1603f12eab69313ef25b538be1b040bc508'
+EVIDENCE = '2a5fb33568d5433749ffa2fd78786060b8d4ab07'
+PREFIX = 'docs/execution/solana-prepared-funding-generation32-20261120/'
+FIXTURE = 'packages/chain-solana/test/prepared-funding.test.mjs'
+MAIN = '8e836baa877b676a863c877003e277b638fc5061'
+
+
+def git(*args, data=None, env=None):
+    return subprocess.check_output(['git', *args], cwd=REPO, input=data, env=env)
+
+
+def read(path):
+    return git('show', EVIDENCE + ':' + path)
+
+
+def digest(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def entries(ref):
+    return dict((row.split(b'\t', 1)[1].decode(), row.split(b'\t', 1)[0].decode())
+                for row in git('ls-tree', '-r', '-z', ref).split(b'\0') if row)
+
+
+def diff(left, right):
+    return sorted(path for path in left.keys() | right.keys() if left.get(path) != right.get(path))
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert not git('status', '--porcelain').strip()
+assert git('show', '-s', '--format=%P', EVIDENCE).decode().strip() == SOURCE
+source_entries, evidence_entries = entries(SOURCE), entries(EVIDENCE)
+paths = diff(source_entries, evidence_entries)
+assert len(paths) == 42 and all(path.startswith('docs/') and path not in source_entries for path in paths)
+assert {p: v for p, v in source_entries.items() if not p.startswith('docs/')} == {
+    p: v for p, v in evidence_entries.items() if not p.startswith('docs/')}
+manifest = json.loads(read(PREFIX + 'receipt.json'))
+assert manifest['source'] == SOURCE and manifest['sourceParent'] == FIRST and manifest['base'] == BASE
+assert manifest['sourceTree'] == git('rev-parse', SOURCE + '^{tree}').decode().strip()
+assert manifest['initialSourceTree'] == git('rev-parse', FIRST + '^{tree}').decode().strip()
+assert len(manifest['artifacts']) == 38 and len(manifest['commands']) == 9
+verified = []
+artifact_raw = {}
+for artifact in manifest['artifacts']:
+    path = artifact['path']
+    packed = read(path)
+    if path.endswith('.gz'):
+        assert packed[:2] == b'\x1f\x8b' and int.from_bytes(packed[4:8], 'little') == 0
+        assert artifact['gzipMtime'] == 0
+        assert len(packed) == artifact['gzipBytes'] and digest(packed) == artifact['gzipSha256']
+        raw = gzip.decompress(packed)
+        assert len(raw) == artifact['rawBytes'] and digest(raw) == artifact['rawSha256']
+    else:
+        raw = packed
+        assert len(raw) == artifact['bytes'] and digest(raw) == artifact['sha256']
+    artifact_raw[path] = raw
+    origin = artifact['origin']
+    if origin.startswith('/'):
+        assert Path(origin).read_bytes() == raw
+    verified.append({'path': path, 'kind': artifact['kind'], 'rawBytes': len(raw), 'rawSha256': digest(raw)})
+
+assert artifact_raw[PREFIX + 'source/base-to-final.patch.gz'] == git(
+    'diff', '--binary', '--no-ext-diff', BASE, SOURCE)
+assert digest(artifact_raw[PREFIX + 'source/base-to-final.patch.gz']) == manifest['sourcePatchSha256']
+assert json.loads(artifact_raw[PREFIX + 'source/non-docs-tree.json']) == {
+    p: v for p, v in source_entries.items() if not p.startswith('docs/')}
+for item in manifest['sourceFiles']:
+    raw = git('show', SOURCE + ':' + item['path'])
+    assert len(raw) == item['bytes'] and digest(raw) == item['sha256']
+    assert source_entries[item['path']] == item['gitEntry']
+
+snapshots = []
+for command in manifest['commands']:
+    receipt = json.loads(artifact_raw[command['receipt']])
+    for key in ['label', 'command', 'source', 'tree', 'startedAt', 'completedAt', 'exitCode', 'counts']:
+        assert receipt[key] == command[key]
+    assert receipt['startedAt'] < receipt['completedAt'] and receipt['statusBefore'] == receipt['statusAfter']
+    assert receipt['tree'] == git('rev-parse', receipt['source'] + '^{tree}').decode().strip()
+    raw = artifact_raw[command['output']]
+    patch = artifact_raw[command['sourcePatch']]
+    for kind, value in [('log', raw), ('patch', patch)]:
+        assert receipt[kind]['bytes'] == len(value) and receipt[kind]['sha256'] == digest(value)
+    counts = {match.group(1): int(match.group(2)) for match in re.finditer(
+        r'^[#ℹ]\s+(tests|pass|fail|cancelled|skipped|todo)\s+(\d+)', raw.decode(), re.MULTILINE)}
+    assert counts == command['counts']
+    # Reconstruct only in a private temporary index; never modify the checkout or its real index.
+    with tempfile.TemporaryDirectory(prefix='g32-author-snapshot-') as folder:
+        snapshot_env = dict(os.environ, GIT_INDEX_FILE=str(Path(folder) / 'index'))
+        git('read-tree', receipt['source'], env=snapshot_env)
+        if patch:
+            git('apply', '--cached', '--binary', '--whitespace=nowarn', '-', data=patch, env=snapshot_env)
+        snapshot = git('write-tree', env=snapshot_env).decode().strip()
+    for path, metadata in receipt['sourceFiles'].items():
+        value = git('show', snapshot + ':' + path)
+        assert len(value) == metadata['bytes'] and digest(value) == metadata['sha256']
+    index = int(command['label'][:2])
+    if index == 1:
+        assert diff(entries(BASE), entries(snapshot)) == [FIXTURE]
+        assert git('show', snapshot + ':' + FIXTURE) == git('show', FIRST + ':' + FIXTURE)
+        assert counts == {'tests': 50, 'pass': 1, 'fail': 49, 'cancelled': 0, 'skipped': 0, 'todo': 0}
+        assert raw.decode().count('AssertionError [ERR_ASSERTION]: dedicated native funding preparation is available') == 46
+        assert sum(line.startswith('▶ ') for line in raw.decode().splitlines()) == 3
+        assert '✔ the existing exit-only entry still refuses funding without creating an intent' in raw.decode()
+    elif index in [2, 3]:
+        assert diff(entries(FIRST), entries(snapshot)) == ['packages/chain-solana/README.md']
+    elif index in [4, 5, 6]:
+        assert snapshot == git('rev-parse', FIRST + '^{tree}').decode().strip()
+    else:
+        assert snapshot == git('rev-parse', SOURCE + '^{tree}').decode().strip()
+    if index in [5, 6, 9]:
+        assert receipt['statusBefore'] == '' and patch == b''
+    if index == 5:
+        assert counts == {'tests': 367, 'pass': 366, 'fail': 1, 'cancelled': 0, 'skipped': 0, 'todo': 0}
+        assert 'AssertionError [ERR_ASSERTION]: test/prepared-funding.test.mjs:160' in raw.decode()
+        assert '✖ package-lines-at-most-120 ' in raw.decode()
+    if index == 9:
+        assert counts == {'tests': 367, 'pass': 367, 'fail': 0, 'cancelled': 0, 'skipped': 0, 'todo': 0}
+    snapshots.append({'label': command['label'], 'recordedHead': receipt['source'],
+                      'reconstructedExecutionTree': snapshot, 'counts': counts, 'exitCode': command['exitCode']})
+
+white = json.loads(read(PREFIX + '10-source-and-evidence-whitespace.json'))
+assert white['source'] == SOURCE and white['recordedMain'] == MAIN and white['pathExclusions'] == []
+assert diff(entries(white['stagedTreeBeforeThisReceipt']), evidence_entries) == [
+    PREFIX + '10-source-and-evidence-whitespace.json', PREFIX + '10-source-and-evidence-whitespace.log.gz']
+blob = read(white['output']['path'])
+assert len(blob) == white['output']['gzipBytes'] and digest(blob) == white['output']['gzipSha256']
+assert int.from_bytes(blob[4:8], 'little') == 0 and gzip.decompress(blob) == b''
+assert white['output']['rawBytes'] == 0 and white['output']['rawSha256'] == digest(b'')
+assert all(item['exitCode'] == 0 and item['outputBytes'] == 0 and item['outputSha256'] == digest(b'')
+           for item in white['commands'])
+git('diff', '--check', MAIN + '..' + EVIDENCE)
+print(json.dumps({
+    'authorEvidenceCommit': EVIDENCE, 'authorEvidenceTree': git('rev-parse', EVIDENCE + '^{tree}').decode().strip(),
+    'source': SOURCE, 'sourceTree': manifest['sourceTree'], 'documentationPaths': len(paths),
+    'verifiedManifestArtifacts': len(verified), 'allAbsoluteOriginBytesMatched': True,
+    'allGzipHeadersMtimeZero': True, 'nonDocumentationEntriesPreserved': 1030,
+    'sourcePatchAndNonDocumentationManifestVerified': True,
+    'commandsReconstructedFromOriginalPatches': snapshots,
+    'baselineAssertionsMissingMethod': 46, 'baselineAggregateFailures': 3,
+    'independentSourceReconstruction': 'private temporary Git index only; checkout and real index unchanged',
+    'separateWhitespaceReceiptAndCompletedEvidenceWhitespaceVerified': True,
+    'diagnostics': 'Two author formatting errors are recovered transcripts, not original command captures',
+    'artifacts': verified,
+}, indent=2))
