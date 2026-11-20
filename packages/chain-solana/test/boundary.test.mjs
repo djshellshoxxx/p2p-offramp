@@ -23,6 +23,7 @@ test('src-has-no-io-or-forbidden-apis', () => {
     'address.ts',
     'bind.ts',
     'codec.ts',
+    'funding-review.ts',
     'instructions.ts',
     'layout.ts',
     'offchain.ts',

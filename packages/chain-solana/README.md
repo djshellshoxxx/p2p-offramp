@@ -1,5 +1,27 @@
 # Solana adapter and native escrow client for the D5 basic escrow
 
+## Native funding display prerequisite (generation 33)
+
+The internal `src/funding-review.ts` helper, `projectNativeFundingReview(trade, prepared)`, produces frozen native-SOL
+display data from a locally bound trade and supplied prepared-funding fields. It checks exact binding, seller,
+escrow and message consistency with the maintained message verifier. It includes the full fixed terms, principal,
+both deadlines, deployment pins, seller funding source, exact message, exact supplied blockhash and height.
+Fees, escrow rent and total debit remain unknown; no estimates, reads, writes, clock calls or prompts are performed.
+Malformed fields and own accessors produce a fixed `INVALID_INPUT` without evaluating those field getters.
+
+This projection proves **data consistency only**. ProgramData/artifact pins are explicitly metadata from the
+supplied bound trade; the prepared view does not carry the original pin snapshot. Last-valid height is supplied
+metadata, not a field authenticated by the message. Consistent copies, including consistently rebound bytes, may
+display. A cancelled handle can still be display data. Neither result establishes the original active capability,
+current chain state, unexpired eligibility, counterparty acceptance, successful funding or settlement.
+Only the native client's original private handle can be confirmed, with its existing freshness and ownership checks.
+The display result and its serialization have no confirmation authority. The helper does not invent a review ID,
+wallet grant or deadline, and does not claim that arbitrary caller Proxy traps are inert.
+
+This inactive prerequisite has no application command, UI or facade consumer. The funded recovery browser, its
+import/restore contract and its exit-only commands remain unchanged. SPL display and actual unfunded browser
+admission are separate work. No registry trust, release activation, native acceptance or Tier C merge approval follows.
+
 ## Explicit prepared funding (generation 32)
 
 The native client in `src/compose.ts` adds a separate
