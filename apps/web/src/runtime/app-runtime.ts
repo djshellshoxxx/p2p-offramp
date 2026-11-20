@@ -265,6 +265,7 @@ export class AppRuntime {
       async requireVerifiedBackup(signal: AbortSignal): Promise<void> {
         if (signal.aborted) { retire(); return refuse('CANCELLED'); }
         if (phase !== 'selected' || !current()) return refuse('LOCKED');
+        if (signal.aborted) { retire(); return refuse('CANCELLED'); }
         signal.addEventListener('abort', retire, { once: true });
         try {
           const result = await runtime.checkBackupVerification(signal);
@@ -277,6 +278,7 @@ export class AppRuntime {
       async lock(signal: AbortSignal): Promise<void> {
         if (signal.aborted) { retire(); return refuse('CANCELLED'); }
         if (phase !== 'selected' || !current()) return refuse('LOCKED');
+        if (signal.aborted) { retire(); return refuse('CANCELLED'); }
         // Capture the owned transition before dispatch, never infer it from the
         // public locked snapshot after an await or a reentrant Worker callback.
         epoch = {}; generation = runtime.#generation + 1; phase = 'locking';
