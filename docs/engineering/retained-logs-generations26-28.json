@@ -1,0 +1,72 @@
+{
+  "schema": "p2p-offramp.generations26-28-retained-logs.v1",
+  "testedSource": "2a0b26f3392d86c1cd3e056771c59438ece92927",
+  "testedTree": "92beca7b34957889156260d1167df81ebcf4aa84",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g26-g27-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generations26-28-20261120/full-node.log.gz",
+      "decodedBytes": 253936,
+      "compressedBytes": 85103,
+      "decodedSha256": "dd3c29c48af60a466514b12d2bbc7e4ea45bf4818623e278671dcfd1e802cec1",
+      "compressedSha256": "f832b59dbc3bb4461dc97fe0afd6d84689b931555923483d1deeea01b38fe926"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g26-g27-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generations26-28-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g26-g27-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generations26-28-20261120/build-policy.log.gz",
+      "decodedBytes": 7609,
+      "compressedBytes": 3128,
+      "decodedSha256": "5df526220765b02ec7038daa2da8f6708054821866fd376e4c477c458d2b418b",
+      "compressedSha256": "f0f1568b1d313ac19684967f083665250814d661dfe5902e45a9c8bf011d7c01"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g26-g27-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generations26-28-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 288,
+      "decodedSha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "compressedSha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g26-g27-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generations26-28-20261120/default-build.log.gz",
+      "decodedBytes": 1026,
+      "compressedBytes": 496,
+      "decodedSha256": "aa2edf7610aee5d374ddecf74893ee633705136b0a83049f954b232799546e65",
+      "compressedSha256": "02513baaa91c64c252e2f3c96d7c3cef6dae676ce1562b50ea2a226b7f0fb476"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g26-g27-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generations26-28-20261120/demo-build.log.gz",
+      "decodedBytes": 1174,
+      "compressedBytes": 521,
+      "decodedSha256": "dfc87037e9947942067ba7aeb8319195d0bf86cd695b1e36079bea43891a59ed",
+      "compressedSha256": "89730d514a9bbaf179573fb98c01732a964be657d9598c00b07b10bd58c2d47b"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/engineering/unlock-form-admission-generation26.json",
+    "docs/engineering/vault-form-admission-generation27.json",
+    "docs/engineering/unlock-form-admission-independent-review-generation26.json",
+    "docs/engineering/remaining-vault-admission-independent-review-generation27.json",
+    "docs/engineering/main-composition-independent-review-generation28.json"
+  ],
+  "limits": [
+    "Current-source and current-main-target hosted checks, browser/native execution and CodeQL remain required before merge; prior stacked-PR checks do not qualify the final target.",
+    "The form regressions execute maintained TSX handlers with the actual facade/runtime under controlled hooks, form fields, file reads and correlated Worker-port replies. They do not establish native browser duplicate-event reachability or cryptographic/native Worker outcomes.",
+    "The G26 independent RED regression stops at its first ownership assertion; its old-source late-publication mechanism is source analysis. G27 RED explicitly records post-delivery late download, callback, publication or dispatch observations.",
+    "Cancellation does not roll back an already dispatched storage operation. Restore retry coverage waits for original request settlement and complete inventory reconciliation; it does not claim replacement admission while an aborted file read remains unresolved.",
+    "No native browser was launched in this qualification. The parent G24 native scenarios remain implemented but await current-source hosted execution.",
+    "Author, independent, focused and full-suite selections overlap and must not be added together.",
+    "Document bundle hashes change with the reviewed form repair. Native Worker bytes and graph membership remain identical to the published parent.",
+    "No release, deployment, physical-wallet, trust-input, live Wiki or translation approval is established; ReleaseEnabled remains zero."
+  ]
+}
