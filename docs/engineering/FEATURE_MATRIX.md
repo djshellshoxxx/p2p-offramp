@@ -1,6 +1,23 @@
 # Feature coverage — pinned main and retained candidates
 
-## Current continuation overlay: generations 12 and 13
+
+## Current generation 15 staging overlay
+
+[PR219](https://github.com/djshellshoxxx/p2p-offramp/pull/219) consolidates reviewed
+core and completed followups. Its frozen tree768be48c passed the full2,361-test
+suite and fresh independent composition review. Main is unchanged; current-target
+hosted native/browser checks are pending. Exact evidence and remaining inputs are
+in the [current handoff](CONTINUATION_GENERATION15_20261120.md).
+
+| Capability | Implemented staging scope | Remaining scope |
+| --- | --- | --- |
+| F01 / F24 backup prerequisite | Reviewed Settings authentication and fresh recheck, with three-engine hosted journey gates. | Actual final-candidate browser/device qualification. |
+| F24 update UI | Reviewed optional full-identity check/acceptance interface; default injection null and executable updater excluded. | Own-lock adapter, trusted runtime composition and native transition. |
+| F16 Solana recovery | Reviewed explicit export of existing public document from unlocked profile; independent round trip into a fresh profile. | Actual download gate; full discovery/negotiation/funding requires accepted protocol scope. |
+| Dependency and CI | Compatible audited lock, mandatory Cast oracle, Chromium/Firefox/WebKit backup gates and public-download assertions preserved together. | Final updated-lock native and current-target hosted checks. |
+| F22 / F27 | Original optional branches preserved; all six default/demo graphs retain zero optional imports and release0. | Separate optional review, devices/providers, semantic/trust and release decisions. |
+
+## Historical generations 12 and 13 staging overlay
 
 This overlay records published staging source. The pinned-main assessment and
 older overlays below retain their historical scope. Main is still5c5a84e;

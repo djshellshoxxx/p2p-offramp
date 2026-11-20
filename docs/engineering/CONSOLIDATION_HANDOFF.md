@@ -1,7 +1,20 @@
 # P2P-Offramp consolidation handoff
 
 
-## Current continuation — generations 12 and 13
+## Current generation 15 checkpoint — one main-target candidate
+
+**PR219 now contains the reviewed core and completed feature/fix followups in one
+frozen, independently reviewed tree. Its exact source passed 2,361/2,361 tests.**
+Read the [current generation15 handoff](CONTINUATION_GENERATION15_20261120.md),
+[publication map](generation15-publication.json), and
+[hosted snapshot](generation15-hosted-snapshot.json) before resuming.
+Main remains unchanged; final-candidate CI is queued and must pass before merge.
+The six component PRs213–218 are closed as superseded; their source branches
+and commit histories remain, verified after closure.
+Sixteen workers completed this renewed continuation. The existing hourly task
+now points to PR219 and the final evidence. No source worker remains active.
+
+## Previous continuation — generations 12 and 13
 
 The owner renewed consolidation and unfinished-feature engineering. Read the
 [current source, qualification and worker handoff](CONTINUATION_GENERATIONS12_13_20261120.md)

@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
-  "generation": 14,
-  "updated_at_utc": "2026-11-20T06:43:36.796568+00:00",
-  "phase": "reviewed-source-published-combined-qualification-and-recovery-export-review-active",
+  "generation": 15,
+  "updated_at_utc": "2026-11-20T07:05:52.057470+00:00",
+  "phase": "frozen-final-main-candidate-locally-qualified-and-reviewed-current-target-ci-queued",
   "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
-  "integration_branch": "codex/main-consolidation-g12-20261120",
-  "integration_source_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
-  "integration_source_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+  "integration_branch": "codex/reviewed-main-consolidation-g15-20261120",
+  "integration_source_sha": "430fbcaa6eff20dcd869d30a73e6a2ca6add0f0c",
+  "integration_source_tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
   "scope": {
     "deployment_authorized": false,
     "release_enabled": 0,
@@ -1598,12 +1598,12 @@
       "next_action": "Preserve exact2311full/44independent evidence and source ancestry. Currentd301 hosted/native/browser gates remain; original212head unchanged and GitHub records stackedPRmerged."
     }
   ],
-  "successor_generation": 15,
-  "integration_local_source_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
-  "parent_integration_pr": 207,
-  "parent_integration_branch": "codex/generation8-core-20261120",
-  "parent_integration_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
-  "pull_request_resolution": "Main-target213 freezes complete reviewed210 core;214 mandatory Cast oracle,215 backup verification UI,216 compatible lockfile advisory repair and217 Firefox/WebKit flow gates are published separately. No main merge yet; source-bound current-target native/browser gates remain required. Signed-update view-only slice and independent reviews active. Original source refs and optional scopes preserved.",
+  "successor_generation": 16,
+  "integration_local_source_sha": "430fbcaa6eff20dcd869d30a73e6a2ca6add0f0c",
+  "parent_integration_pr": 213,
+  "parent_integration_branch": "codex/main-consolidation-g12-20261120",
+  "parent_integration_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+  "pull_request_resolution": "PR219 is the single complete main-target candidate. PR213\u2013218 were closed as superseded after verifying their heads as candidate parents; all six branch refs read back unchanged. Main remains unchanged; final exact-source CI and merge remain pending.",
   "main_merges_performed": 0,
   "published_generations": [
     {
@@ -2813,9 +2813,9 @@
     "generation11_optional_full": "07831fb7cbd89692037327c2d221cd49afe61a436bd5927dc990e2965714e052",
     "generation11_optional_independent": "fb2cc67c4ab1ac6c156dc6b7a81d10008030f63ca6eabdfb5362fea93537cd51"
   },
-  "integration_pr": 213,
-  "integration_published_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
-  "integration_published_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+  "integration_pr": 219,
+  "integration_published_head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+  "integration_published_tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
   "known_findings": [
     {
       "id": "PRIVACY-ATOMIC-GROUP-PRUNING",
@@ -2953,7 +2953,7 @@
     "author_report": "OPTIONAL_COMPOSITION_20261119.md",
     "author_report_commit": "27fba7450600836b5edc131ae1f4f1744ae96248"
   },
-  "native_workers_actually_launched": 13,
+  "native_workers_actually_launched": 16,
   "optional_hosted_snapshot": {
     "observed_at_utc": "2026-11-20T01:16:13.483Z",
     "checks": {
@@ -4713,8 +4713,8 @@
     "optional_graph_imports": 0,
     "named_standalone_review_condition_satisfied": false
   },
-  "current_core_composition_key": "generation11_core_composition",
-  "current_optional_composition_key": "generation11_optional_stack",
+  "current_core_composition_key": "generation15_final_core",
+  "current_optional_composition_key": "generation15_optional_status",
   "generation11_candidate": {
     "pr": 212,
     "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
@@ -4790,16 +4790,32 @@
     "external_owner_data_removed": false
   },
   "continuation_control": {
-    "status": "active-renewed-request",
-    "handoff": "CONTINUATION_GENERATIONS12_13_20261120.md",
-    "scope": "Original request preserved through context renewal; use new workers for useful bounded work, and retain exact-source review/native/browser gates.",
-    "active_workers": [
-      "combined_qualification_g14",
+    "status": "awaiting-final-candidate-current-target-hosted-gates",
+    "handoff": "CONTINUATION_GENERATION15_20261120.md",
+    "active_workers": [],
+    "completed_workers": [
+      "branch_inventory",
+      "ci_qualification",
+      "feature_completion",
+      "dependency_patch",
+      "backup_ui_review",
+      "dependency_review",
+      "backup_cross_browser",
+      "signed_update_ui",
+      "main_gate_review_g13",
+      "signed_update_ui_review_g13",
       "next_feature_g14",
-      "solana_export_review_g14"
+      "combined_qualification_g14",
+      "solana_export_review_g14",
+      "final_integration_g15",
+      "final_composition_review_g15",
+      "final_composition_review_g15/workflow_preservation_g15"
     ],
     "automation_id": "Automation_ab68cc67e6ac8191bd31dc2d84a085e1",
-    "temporary_automation_notice_must_be_replaced_before_handoff": true
+    "automation_prompt_updated": true,
+    "schedule_and_environment_unchanged": true,
+    "next_action": "Inspect completed PR219 exact-source logs, refresh refs and gates, then perform already-authorized expected-head merge; use fresh workers for concrete failures or newly actionable work.",
+    "temporary_automation_notice_must_be_replaced_before_handoff": false
   },
   "generation11_core_composition": {
     "pr": 210,
@@ -5407,7 +5423,7 @@
     "composition_new_cause_count": 0
   },
   "hosted_generation11_snapshot": "hosted-snapshot-generation11.json",
-  "current_hosted_snapshot_key": "hosted_generations12_13_snapshot",
+  "current_hosted_snapshot_key": "hosted_generation15_snapshot",
   "previous_generation11_top_level_checkpoint": {
     "generation": 11,
     "updated_at_utc": "2026-11-20T05:09:05.194802+00:00",
@@ -5441,7 +5457,7 @@
   "previous_root_native_workers_actually_launched": 44,
   "native_worker_count_scope": "current renewed owner request only; historical root retained separately",
   "hosted_generations12_13_snapshot": "generation12-13-hosted-snapshot.json",
-  "current_continuation_handoff": "CONTINUATION_GENERATIONS12_13_20261120.md",
+  "current_continuation_handoff": "CONTINUATION_GENERATION15_20261120.md",
   "continuation_generations12_13": {
     "request": "Continue source consolidation and useful unfinished features with fresh native workers through context renewal.",
     "reports": [
@@ -5477,10 +5493,7 @@
       "full_suite_recount_claimed": false
     },
     "root_qualification": "generation12-combined-qualification.json",
-    "active_workers": [
-      "signed_update_ui_review_g13",
-      "next_feature_g14"
-    ],
+    "active_workers": [],
     "completed_workers": [
       "branch_inventory",
       "ci_qualification",
@@ -5526,6 +5539,90 @@
     "signed_update_head": "7d40620c8320945750bd51bf865226dadde998ca",
     "signed_update_tree": "b97e184459d9bca9303230edfb4791507a870dac",
     "solana_export_source": "b993d17fdbd7cdfce8f0d1e5d239c7785c9d787e",
-    "solana_export_status": "independent-review-active"
+    "solana_export_status": "independent-review-active",
+    "superseded_by": "generation15_final_core"
+  },
+  "previous_generation14_primary_checkpoint": {
+    "generation": 14,
+    "phase": "reviewed-source-published-combined-qualification-and-recovery-export-review-active",
+    "integration_pr": 213,
+    "integration_branch": "codex/main-consolidation-g12-20261120",
+    "integration_source_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "integration_source_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "integration_published_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "integration_published_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "native_workers_actually_launched": 13,
+    "current_core_composition_key": "generation11_core_composition",
+    "current_hosted_snapshot_key": "hosted_generations12_13_snapshot"
+  },
+  "integration_target": "main",
+  "hosted_generation15_snapshot": "generation15-hosted-snapshot.json",
+  "current_verification_key": "generation15_final_qualification",
+  "generation15_final_core": {
+    "head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+    "tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
+    "local_equivalent": "430fbcaa6eff20dcd869d30a73e6a2ca6add0f0c",
+    "merge_checkout": "0dad3d1bab9b868ab7ee7e8a8565075bf6990452",
+    "ordered_parents": [
+      "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "24378d91682f7ee2957e1237aefcdb2ed062962b",
+      "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+      "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+      "973d7b046df54856e0f71688db7a3efd879e7c2d",
+      "7d40620c8320945750bd51bf865226dadde998ca",
+      "09c3d94aedab3c78a4397e3cb80786fb5eb4fd4a"
+    ],
+    "publication_report": "generation15-publication.json",
+    "review_report": "independent-final-composition-review-generation15.json",
+    "actionable_findings": 0,
+    "source_frozen": true
+  },
+  "generation15_final_qualification": {
+    "report": "final-integration-qualification-generation15.json",
+    "source": "430fbcaa6eff20dcd869d30a73e6a2ca6add0f0c",
+    "tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
+    "passed": 2361,
+    "failed": 0,
+    "skipped": 0,
+    "policy_passed": 58,
+    "typescript_configs": 4,
+    "artifact_files": 27,
+    "observed_current_target_jobs": 14,
+    "current_target_status": "queued",
+    "observed_utc": "2026-11-20 07:02:57 UTC",
+    "semantic_approval": false,
+    "known_stale_claim_rows": 6
+  },
+  "generation15_optional_status": {
+    "status": "preserved-separate-final-core-qualification-not-claimed",
+    "last_published_evidence": "db531cb03ad303821a3625f6858941de1ac07606",
+    "prs": [
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "default_activation": false
+  },
+  "generation15_superseded_prs": {
+    "receipt": "generation15-superseded-prs.json",
+    "prs": [
+      213,
+      214,
+      215,
+      216,
+      217,
+      218
+    ],
+    "reason": "Verified heads are parents of219",
+    "merged": false,
+    "branches_preserved": true,
+    "main_merge": false
   }
 }

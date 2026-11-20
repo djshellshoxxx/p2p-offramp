@@ -933,5 +933,21 @@
     },
     "required_oracle_pr": 214,
     "release_enabled": 0
+  },
+  "current_overlay_key": "staging_overlay_generation15",
+  "staging_overlay_generation15": {
+    "pr": 219,
+    "head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+    "tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
+    "main_unchanged": true,
+    "full_suite_passed": 2361,
+    "independent_actionable_findings": 0,
+    "handoff": "CONTINUATION_GENERATION15_20261120.md",
+    "backup_ui": "implemented; current-source browser pending",
+    "signed_update_ui": "optional view implemented; configured operation incomplete",
+    "solana_recovery_export": "implemented; current-source actual download pending",
+    "native_hosted_gates": "pending",
+    "optional_packages": "preserved separately; final-core qualification not claimed",
+    "release_enabled": 0
   }
 }

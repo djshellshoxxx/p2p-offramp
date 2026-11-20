@@ -1,0 +1,40 @@
+{
+  "source": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+  "checkout": "65f9739dfd1ea44cb2dc9aa93a884c35548aa888",
+  "tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+  "run": 44677307772,
+  "job": 136092098296,
+  "log_sha256": "7c840f417764ba97227da77edccca47ce515c884cd00464b8d2cca522d29b295",
+  "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307772/job/136092098296",
+  "scope": "Original PR210 core only; not the updated lock or later UI/export source",
+  "native_rust_test_groups": [
+    0,
+    8,
+    20,
+    15,
+    5,
+    0
+  ],
+  "validator_checks": 62,
+  "validator_all_checks_passed": true,
+  "validator_duration_seconds": 1906,
+  "browser_checks": [
+    "actual module Worker refuses absent or wrong-pinned escrows and encrypts three complete original funded receipts",
+    "explicit cancellation and a wallet change during an actual sign-only prompt both send zero transactions",
+    "reviewed release finalizes alone, then a separate reviewed payout transfers exact principal to the original buyer",
+    "fresh-key restore preserves the unknown marker without resending; only finalized expiry and a new explicit review permit replacement",
+    "real chain time opens refund; separate reviewed refund and payout return original seller principal minus actual fees"
+  ],
+  "browser_duration_seconds": 2047,
+  "browser_completed_utc": "2026-11-20T06:45:14Z",
+  "browser_evidence": {
+    "ReleaseEnabled": 0,
+    "actualModuleWorker": true,
+    "encryptedIndexedDB": true,
+    "genesisRpcRewritten": false,
+    "clockWarped": false,
+    "fixtureErrors": [],
+    "publicNetworkQualification": false,
+    "freshNegotiationQualification": false
+  }
+}
