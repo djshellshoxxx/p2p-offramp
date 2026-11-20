@@ -1,0 +1,33 @@
+import hashlib
+import json
+import os
+import subprocess
+from pathlib import Path
+
+REPO = Path('/workspace/scratch/dcf03ef9bee8/p2p-solana-prepared-funding-review-g32')
+DONOR = Path('/workspace/scratch/dcf03ef9bee8/p2p-continuation-g31')
+local, donor = REPO / 'node_modules', DONOR / 'node_modules'
+assert local.is_dir() and donor.is_dir()
+assert not local.is_symlink() and not donor.is_symlink()
+assert local.stat().st_ino != donor.stat().st_ino
+samples = []
+for name in ['typescript/package.json', 'typescript/bin/tsc', '@noble/curves/package.json',
+             '@noble/hashes/package.json', 'vite/package.json']:
+    here, there = local / name, donor / name
+    assert here.is_file() and there.is_file() and not here.is_symlink() and not there.is_symlink()
+    a, b = here.stat(), there.stat()
+    assert (a.st_dev, a.st_ino) == (b.st_dev, b.st_ino)
+    assert here.read_bytes() == there.read_bytes()
+    samples.append({'path': name, 'device': a.st_dev, 'inode': a.st_ino,
+                    'links': a.st_nlink, 'bytes': a.st_size,
+                    'sha256': hashlib.sha256(here.read_bytes()).hexdigest()})
+print(json.dumps({
+    'checkout': str(REPO), 'donor': str(DONOR),
+    'directory': {'realPath': str(local.resolve()), 'symlink': local.is_symlink(),
+                  'inode': local.stat().st_ino, 'donorInode': donor.stat().st_ino},
+    'reuse': 'separate physical directory populated using cp -al; sampled immutable files share physical inodes',
+    'installOrDependencyMutation': False,
+    'node': subprocess.check_output(['node', '--version'], cwd=REPO).decode().strip(),
+    'npm': subprocess.check_output(['npm', '--version'], cwd=REPO).decode().strip(),
+    'samples': samples,
+}, indent=2))

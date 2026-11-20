@@ -1,0 +1,320 @@
+from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import json
+import subprocess
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8/p2p-solana-prepared-funding-native-g32')
+INPUT = Path('/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks')
+OUT = ROOT / 'docs/execution/solana-prepared-funding-native-generation32-20261120'
+REPORT = ROOT / 'docs/engineering/SOLANA_PREPARED_FUNDING_NATIVE_GENERATION32_20261120.md'
+BASE = '252dd1603f12eab69313ef25b538be1b040bc508'
+SOURCE = 'e214f70f8bcbb9eb962fc147f2d318081daca2ce'
+TREE = '9e7564a188b8b87f5498ac749eee62db7951317f'
+DRIVER = 'contracts/solana/localnet/client-run.mjs'
+MAIN = '8e836baa877b676a863c877003e277b638fc5061'
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def entries(ref):
+    result = {}
+    for line in git('ls-tree', '-r', '-z', ref).split(b'\0'):
+        if line:
+            metadata, path = line.split(b'\t', 1)
+            result[path.decode()] = metadata.decode()
+    return result
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert git('rev-parse', SOURCE + '^{tree}').decode().strip() == TREE
+assert not git('status', '--porcelain')
+assert not OUT.exists() and not REPORT.exists(), 'Retained evidence must not be overwritten'
+source = git('show', SOURCE + ':' + DRIVER)
+base = git('show', BASE + ':' + DRIVER)
+assert (INPUT / 'frozen-driver.mjs').read_bytes() == source == (ROOT / DRIVER).read_bytes()
+assert gzip.decompress((INPUT / '00-original-driver.mjs.gz').read_bytes()) == base
+assert gzip.decompress((INPUT / '01-source.patch.gz').read_bytes()) == git('diff', '--binary', BASE, SOURCE)
+source_entries, base_entries = entries(SOURCE), entries(BASE)
+assert sorted(path for path in set(source_entries) | set(base_entries)
+              if source_entries.get(path) != base_entries.get(path)) == [DRIVER]
+
+original = json.loads((INPUT / 'initial-artifacts.json').read_bytes())
+build_failure = json.loads((INPUT / '04-build-only.json').read_bytes())
+build_pass = json.loads((INPUT / '05-build-only.json').read_bytes())
+preservation = json.loads((INPUT / '06-source-preservation.json').read_bytes())
+build_result = json.loads(gzip.decompress((INPUT / '05-build-only.log.gz').read_bytes()))
+for item in [*original, build_failure, build_pass, preservation, *build_result['outputs']]:
+    packed = (INPUT / item['file']).read_bytes()
+    raw = gzip.decompress(packed)
+    assert len(raw) == item['rawBytes'] and sha(raw) == item['rawSha256']
+    assert len(packed) == item['gzipBytes'] and sha(packed) == item['gzipSha256']
+    assert int.from_bytes(packed[4:8], 'little') == item['gzipMtime'] == 0
+assert build_failure['exitCode'] == 1 and build_pass['exitCode'] == 0
+assert b"ERR_MODULE_NOT_FOUND" in gzip.decompress((INPUT / '04-build-only.log.gz').read_bytes())
+assert build_result['inputCount'] == len(build_result['inputs']) == 42
+assert not build_result['warnings']
+assert not build_result['compiledOutputExecuted'] and not build_result['nativeValidatorExecuted']
+for item in build_result['inputs']:
+    assert sha(git('show', SOURCE + ':' + item['path'])) == item['sha256']
+OUT.mkdir(parents=True)
+artifacts = []
+for file in sorted(INPUT.iterdir()):
+    assert file.is_file()
+    raw = file.read_bytes()
+    target = OUT / file.name
+    target.write_bytes(raw)
+    entry = {'path': str(target.relative_to(ROOT)), 'origin': str(file),
+             'bytes': len(raw), 'sha256': sha(raw)}
+    if file.suffix == '.gz':
+        unpacked = gzip.decompress(raw)
+        assert int.from_bytes(raw[4:8], 'little') == 0
+        entry.update(rawBytes=len(unpacked), rawSha256=sha(unpacked), gzipMtime=0)
+    artifacts.append(entry)
+
+non_docs = {path: value for path, value in source_entries.items() if not path.startswith('docs/')}
+tree_file = OUT / 'non-docs-source-tree.json'
+tree_raw = (json.dumps(non_docs, indent=2) + '\n').encode()
+tree_file.write_bytes(tree_raw)
+artifacts.append({'path': str(tree_file.relative_to(ROOT)), 'origin': SOURCE,
+                  'bytes': len(tree_raw), 'sha256': sha(tree_raw)})
+
+verifier = r'''from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import json
+import subprocess
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+receipt_raw = (HERE / 'receipt.json').read_bytes()
+receipt = json.loads(receipt_raw)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+
+def entries(ref):
+    result = {}
+    for line in git('ls-tree', '-r', '-z', ref).split(b'\0'):
+        if line:
+            metadata, path = line.split(b'\t', 1)
+            result[path.decode()] = metadata.decode()
+    return result
+
+
+source, base = receipt['source'], receipt['base']
+assert git('rev-parse', source + '^{tree}').decode().strip() == receipt['sourceTree']
+assert git('rev-parse', source + '^').decode().strip() == base
+for item in receipt['artifacts']:
+    raw = (ROOT / item['path']).read_bytes()
+    assert len(raw) == item['bytes'] and sha(raw) == item['sha256'], item['path']
+    if 'gzipMtime' in item:
+        unpacked = gzip.decompress(raw)
+        assert len(unpacked) == item['rawBytes'] and sha(unpacked) == item['rawSha256'], item['path']
+        assert int.from_bytes(raw[4:8], 'little') == item['gzipMtime'] == 0, item['path']
+before, after = entries(base), entries(source)
+changed = sorted(path for path in set(before) | set(after) if before.get(path) != after.get(path))
+assert changed == receipt['changedPaths'] == ['contracts/solana/localnet/client-run.mjs']
+assert {path: value for path, value in after.items() if not path.startswith('docs/')} == json.loads(
+    (HERE / 'non-docs-source-tree.json').read_bytes())
+driver = git('show', source + ':' + changed[0])
+old_driver = git('show', base + ':' + changed[0])
+assert driver == (HERE / 'frozen-driver.mjs').read_bytes()
+assert old_driver == gzip.decompress((HERE / '00-original-driver.mjs.gz').read_bytes())
+assert git('diff', '--binary', base, source) == gzip.decompress((HERE / '01-source.patch.gz').read_bytes())
+build = json.loads(gzip.decompress((HERE / '05-build-only.log.gz').read_bytes()))
+assert build['inputCount'] == len(build['inputs']) == 42
+assert not build['warnings']
+for item in build['inputs']:
+    assert sha(git('show', source + ':' + item['path'])) == item['sha256'], item['path']
+for item in build['outputs']:
+    packed = (HERE / item['file']).read_bytes()
+    raw = gzip.decompress(packed)
+    assert len(raw) == item['rawBytes'] and sha(raw) == item['rawSha256']
+    assert len(packed) == item['gzipBytes'] and sha(packed) == item['gzipSha256']
+    assert int.from_bytes(packed[4:8], 'little') == 0
+preservation = json.loads(gzip.decompress((HERE / '06-source-preservation.log.gz').read_bytes()))
+assert preservation['sourceCommit'] == source and preservation['baseCommit'] == base
+regions = []
+for region in preservation['protectedRegions']:
+    size = region['bytes']
+    matches = []
+    for data, expected in [(old_driver, region['beforeSha256']), (driver, region['afterSha256'])]:
+        starts = [0] + [i + 1 for i, byte in enumerate(data) if byte == 10]
+        found = [start for start in starts if sha(data[start:start + size]) == expected]
+        assert len(found) == 1, region['region']
+        matches.append(data[found[0]:found[0] + size])
+    assert matches[0] == matches[1] and region['exactBytesEqual']
+    regions.append(region['region'])
+assert not build['compiledOutputExecuted'] and not build['nativeValidatorExecuted']
+assert all(value is False for key, value in receipt['executionLimits'].items()
+           if key.endswith('Executed'))
+print(json.dumps({'purpose': 'Retained evidence integrity and frozen-source provenance only',
+                  'checkedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                  'source': source, 'sourceTree': receipt['sourceTree'],
+                  'receiptSha256': sha(receipt_raw), 'retainedArtifactsVerified': len(receipt['artifacts']),
+                  'compiledSourceInputsVerified': len(build['inputs']),
+                  'compiledOutputsVerified': len(build['outputs']),
+                  'unchangedProtectedRegionsVerified': regions,
+                  'nonDocsSourceEntries': len(json.loads((HERE / 'non-docs-source-tree.json').read_bytes())),
+                  'nativeValidatorExecuted': False, 'browserExecuted': False,
+                  'compiledOutputExecuted': False}, indent=2))
+'''
+verify_file = OUT / 'verify-evidence.py.txt'
+verify_raw = verifier.encode()
+verify_file.write_bytes(verify_raw)
+artifacts.append({'path': str(verify_file.relative_to(ROOT)),
+                  'origin': 'Recovery-time evidence integrity checker; no product or native execution',
+                  'bytes': len(verify_raw), 'sha256': sha(verify_raw)})
+
+receipt = {
+    'version': 1,
+    'generation': 32,
+    'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'base': BASE, 'baseTree': git('rev-parse', BASE + '^{tree}').decode().strip(),
+    'source': SOURCE, 'sourceTree': TREE,
+    'changedPaths': [DRIVER],
+    'changeSize': {'insertions': 51, 'deletions': 3},
+    'sourceFile': {'path': DRIVER, 'bytes': len(source), 'sha256': sha(source),
+                   'gitEntry': source_entries[DRIVER]},
+    'composition': {'baseEntries': len(base_entries), 'sourceEntries': len(source_entries),
+                    'nonDocsSourceEntries': len(non_docs),
+                    'unchangedBaseEntries': len(base_entries) - 1,
+                    'allOtherTrackedPathsExactBase': True,
+                    'protectedRegions': json.loads(gzip.decompress(
+                        (INPUT / '06-source-preservation.log.gz').read_bytes()))['protectedRegions']},
+    'commands': [*original[2:], build_failure, build_pass],
+    'sourcePreservationReceipt': preservation,
+    'sourcePreservationLimit': 'The original check retained its result and hash receipt, but not its invocation script; the recovery verifier independently checks every reported preserved byte region.',
+    'buildOnlyResult': {'inputCount': 42, 'nodeVersion': build_result['nodeVersion'],
+                       'rolldownVersion': build_result['rolldownVersion'], 'warnings': [],
+                       'outputs': build_result['outputs'], 'external': build_result['external']},
+    'failure': {'attempt': '04-build-only', 'classification': 'Unavailable optional esbuild dependency',
+                'sourceUnchanged': True,
+                'resolution': 'Used the already installed Rolldown bundler; no dependency installed or mutated'},
+    'executionLimits': {'nativeValidatorExecuted': False, 'browserExecuted': False,
+                        'financialRunExecuted': False, 'compiledOutputExecuted': False,
+                        'fullRepositorySuiteExecuted': False,
+                        'remotePublicationPerformed': False,
+                        'nativeAcceptance': 'Pending hosted execution of the existing Solana client driver on the eventual combined source',
+                        'tierCApproval': 'No approval or merge authorization is established by this companion'},
+    'artifacts': artifacts,
+}
+(OUT / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
+
+def capture(argv, stem):
+    started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    result = subprocess.run(argv, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    completed = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    raw = result.stdout
+    packed = gzip.compress(raw, mtime=0)
+    (OUT / (stem + '.log.gz')).write_bytes(packed)
+    data = {'argv': argv, 'source': SOURCE, 'sourceTree': TREE,
+            'startedAt': started, 'completedAt': completed, 'exitCode': result.returncode,
+            'file': stem + '.log.gz', 'rawBytes': len(raw), 'rawSha256': sha(raw),
+            'gzipBytes': len(packed), 'gzipSha256': sha(packed), 'gzipMtime': 0}
+    (OUT / (stem + '.json')).write_text(json.dumps(data, indent=2) + '\n')
+    assert result.returncode == 0, raw.decode()
+    return data
+
+
+verification = capture(['python', str(verify_file.relative_to(ROOT))], '07-evidence-integrity')
+REPORT.write_text(f'''# Generation 32 — native prepared-funding acceptance companion
+
+## Result and boundary
+
+The existing native Solana client driver now admits its SOL and SPL funding flows through
+`prepareFunding()` followed by explicit `confirm()`. This companion is frozen at
+`{SOURCE}`, tree `{TREE}`, on corrected client source `{BASE}`.
+It changes only `{DRIVER}`: 51 additions and 3 removals.
+
+This is a configured native acceptance path with local syntax, build and source-preservation evidence.
+The driver, its compiled output, a validator and a browser were **not executed** for this companion.
+Actual native acceptance remains pending hosted execution on the eventual combined source. Existing
+validator results for earlier direct funding do not qualify these new prepare-and-confirm admissions.
+No new native check count, send count or financial-run duration is claimed.
+
+## Driver behavior
+
+For each of the existing SOL and SPL funding admissions, the driver now checks that preparation:
+
+- performs no physical wallet signing or client RPC send;
+- returns frozen review, binding and shape objects tied to the seller and the expected absent escrow;
+- encodes the exact funding source and original blockhash in the reviewed message;
+- durably stores exactly one prepared intent with no signature, send marker or outcome; and
+- retains that exact review identity and message until confirmation.
+
+Confirmation continues through the existing `act()` and finalized reconciliation path. New assertions
+compare the same intent and reviewed bytes to the durable result, the single physical wallet-sign call,
+and the single broadcast transaction. The SPL flow passes its existing synthetic seller ATA explicitly;
+the SOL flow passes no token account. Wallet instrumentation retains only the synthetic account address
+and public message bytes, and changes no wallet signing algorithm or RPC adapter behavior.
+
+The complete crash and refund flows still use direct funding and are byte-identical to the parent.
+The existing transaction scenarios, refund waits, margins, programs, transfer amounts, post-funding
+checks, deployment pins, synthetic localnet trust fixture and workflows are preserved. No browser
+funding UI, mint permit, runtime policy, optional feature or release setting is activated.
+
+## Retained verification
+
+| Check | Exact result and scope |
+| --- | --- |
+| JavaScript syntax | `node --check contracts/solana/localnet/client-run.mjs`, exit 0; complete empty output retained. |
+| Full whitespace | `git diff --check {MAIN}`, exit 0, no excluded paths. |
+| Initial build-only attempt | Exit 1 because the optional `esbuild` package was unavailable. Original script, complete error and receipt retained. |
+| Corrected build-only compilation | Installed Rolldown 1.2.15, Node v24.22.3; 42 repository inputs, no warnings, one 194,659-byte ESM output. Node builtins and bare package imports remain external. Output was never evaluated. |
+| Source preservation | Exactly one changed tracked path; six original protected regions verified byte-for-byte, including complete crash/refund/main flows. All other tracked entries are exact parent entries. |
+| Recovery evidence integrity | All {len(artifacts)} retained artifacts, 42 compiled source hashes, one compiled output and six protected byte regions verified against frozen Git objects. No completed syntax/build checks were rerun. |
+
+The compiled output SHA-256 is
+`4bf495a5bbe5b4b931472967a216bdfe15b1e38bfb4c39a1a64f1953a9f7b3e6`.
+Its deterministic gzip SHA-256 is
+`722ff0853158fa696c9d02ec29f7568740571dcfb0e8ddd4cfabdcf75ca9a445`.
+The source file SHA-256 is `{sha(source)}`.
+Every retained compressed artifact records both raw and gzip hashes and uses gzip mtime 0.
+
+The successful syntax check ran at 19:24:41 UTC; the original full-whitespace check followed immediately.
+The unavailable-esbuild attempt ran at 19:25:20 UTC, the successful Rolldown compilation at 19:25:47–48 UTC,
+and source preservation was recorded at 19:26:07 UTC on 2026-11-20. Recovery packaged these existing results.
+The original source-preservation invocation script was not retained; its complete result and hash receipt
+are preserved, and the recovery checker independently verifies every reported unchanged byte region.
+
+## Evidence and remaining qualification
+
+- [Machine-readable receipt](../execution/solana-prepared-funding-native-generation32-20261120/receipt.json)
+- [Original command and source artifacts](../execution/solana-prepared-funding-native-generation32-20261120/initial-artifacts.json)
+- [Recovery evidence checker](../execution/solana-prepared-funding-native-generation32-20261120/verify-evidence.py.txt)
+- [Recovery verification receipt](../execution/solana-prepared-funding-native-generation32-20261120/07-evidence-integrity.json)
+- [Final source-and-evidence whitespace receipt](../execution/solana-prepared-funding-native-generation32-20261120/08-source-and-evidence-whitespace.json)
+
+Root coordination must combine this driver with the reviewed client source, qualify the final combined
+source, retain independent review, and obtain actual applicable hosted checks. This companion neither
+establishes Tier C owner approval nor authorizes a merge, release, deployment or real-funds operation.
+''')
+
+git('add', '--', str(OUT.relative_to(ROOT)), str(REPORT.relative_to(ROOT)))
+whitespace = capture(['git', 'diff', '--cached', '--check', MAIN], '08-source-and-evidence-whitespace')
+git('add', '--', str(OUT.relative_to(ROOT)))
+assert not git('diff', '--cached', '--check', MAIN)
+staged = git('diff', '--cached', '--name-only').decode().splitlines()
+assert staged and all(path.startswith('docs/') for path in staged)
+assert all((ROOT / path).read_bytes() == git('show', SOURCE + ':' + path)
+           for path in source_entries if not path.startswith('docs/'))
+print(json.dumps({'source': SOURCE, 'tree': TREE, 'retainedArtifacts': len(artifacts),
+                  'stagedDocumentationFiles': len(staged), 'nonDocsSourceEntries': len(non_docs),
+                  'integrityExitCode': verification['exitCode'], 'whitespaceExitCode': whitespace['exitCode'],
+                  'nativeValidatorExecuted': False, 'browserExecuted': False}, indent=2))

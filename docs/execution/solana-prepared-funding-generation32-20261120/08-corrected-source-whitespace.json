@@ -1,0 +1,42 @@
+{
+  "label": "08-corrected-source-whitespace",
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "8e836baa877b676a863c877003e277b638fc5061"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-solana-prepared-funding-g32",
+  "source": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+  "tree": "1ed7fc7a7181e0ee964183642e01319468316fce",
+  "statusBefore": "M  packages/chain-solana/test/prepared-funding.test.mjs\n",
+  "sourceFiles": {
+    "packages/chain-solana/src/compose.ts": {
+      "bytes": 27107,
+      "sha256": "969ef26ac76c464d86c8269ed47a3fd2d0402320607299f498a0ff42eb97722a"
+    },
+    "packages/chain-solana/test/prepared-funding.test.mjs": {
+      "bytes": 21266,
+      "sha256": "fec56fa82e3e26f643ca01195b24db3ce136d6cc5534001beb488ccdfdd52608"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 17475,
+      "sha256": "07e57c9a4db863ca06596affa4c0748bfd96aa4cb785fa5fdb97b1ac02db4abd"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/08-corrected-source-whitespace.patch",
+    "bytes": 3373,
+    "sha256": "3c2864301db4d3280c78194bd419de367c4cc59b9286b16d123ed3790b4ee4a8"
+  },
+  "startedAt": "2026-11-20T19:20:14.732378+00:00",
+  "completedAt": "2026-11-20T19:20:14.777186+00:00",
+  "exitCode": 0,
+  "counts": {},
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/08-corrected-source-whitespace.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "statusAfter": "M  packages/chain-solana/test/prepared-funding.test.mjs\n"
+}

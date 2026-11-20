@@ -1,0 +1,48 @@
+{
+  "source": "252dd1603f12eab69313ef25b538be1b040bc508",
+  "sourceTree": "65667d0089b986250b5f8697518863069368d855",
+  "recordedMain": "8e836baa877b676a863c877003e277b638fc5061",
+  "stagedTreeBeforeThisReceipt": "6779cc4006e0c5edb9c61d7876e06609fa03599d",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "startedAt": "2026-11-20T19:23:38.595282+00:00",
+      "completedAt": "2026-11-20T19:23:38.599166+00:00",
+      "exitCode": 0,
+      "outputBytes": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "startedAt": "2026-11-20T19:23:38.599198+00:00",
+      "completedAt": "2026-11-20T19:23:38.639357+00:00",
+      "exitCode": 0,
+      "outputBytes": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "pathExclusions": [],
+  "evidenceOnly": {
+    "nonDocsEntries": 1030,
+    "allGitModesTypesAndObjectsPreserved": true
+  },
+  "output": {
+    "path": "docs/execution/solana-prepared-funding-generation32-20261120/10-source-and-evidence-whitespace.log.gz",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzipBytes": 20,
+    "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "gzipMtime": 0
+  },
+  "scopeNote": "This records the staged tree before adding this receipt and its output. The completed evidence commit is checked again separately."
+}

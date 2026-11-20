@@ -1,0 +1,50 @@
+{
+  "label": "01-missing-capability-baseline",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "packages/chain-solana/test/prepared-funding.test.mjs"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-solana-prepared-funding-g32",
+  "source": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+  "tree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+  "statusBefore": "?? packages/chain-solana/test/prepared-funding.test.mjs\n",
+  "sourceFiles": {
+    "packages/chain-solana/src/compose.ts": {
+      "bytes": 24545,
+      "sha256": "9c79e8ba401f575deef468df425b15beda16a6cfcb2390dc32cd51332006f4ef"
+    },
+    "packages/chain-solana/test/prepared-funding.test.mjs": {
+      "bytes": 21251,
+      "sha256": "06f4b947e5caf718003af442f8ae984f6a1a543000f69103b89b8ab34cad6a9d"
+    },
+    "packages/chain-solana/README.md": {
+      "bytes": 14589,
+      "sha256": "c57ece72e56b35c0bb1a43239b41f4c835c005be3c65e527e267ff6d9aa76a07"
+    }
+  },
+  "patch": {
+    "path": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/01-missing-capability-baseline.patch",
+    "bytes": 21894,
+    "sha256": "90a731b4ead2ec390da270f29547eb7272e7b9578381a1b3aa9c4bda151bfe5b"
+  },
+  "startedAt": "2026-11-20T19:15:11.108731+00:00",
+  "completedAt": "2026-11-20T19:15:12.049424+00:00",
+  "exitCode": 1,
+  "counts": {
+    "tests": 50,
+    "pass": 1,
+    "fail": 49,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "log": {
+    "path": "/workspace/scratch/dcf03ef9bee8/p2p-g32-funding-evidence/01-missing-capability-baseline.log",
+    "bytes": 56242,
+    "sha256": "f52987379c32ecd93b82241ae1291b92691c3dea3791f7053f629139fffc66ee"
+  },
+  "statusAfter": "?? packages/chain-solana/test/prepared-funding.test.mjs\n"
+}

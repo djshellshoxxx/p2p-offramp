@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "git",
+    "diff",
+    "--cached",
+    "--check",
+    "8e836baa877b676a863c877003e277b638fc5061"
+  ],
+  "source": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+  "startedAt": "2026-11-20T19:32:43.397495+00:00",
+  "completedAt": "2026-11-20T19:32:43.417088+00:00",
+  "exitCode": 0,
+  "file": "11-final-whitespace.log.gz",
+  "rawBytes": 0,
+  "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "gzipBytes": 20,
+  "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+  "gzipMtime": 0
+}

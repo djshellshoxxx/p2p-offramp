@@ -1,0 +1,322 @@
+{
+  "version": 1,
+  "generation": 32,
+  "recordedAt": "2026-11-20T19:31:34.507076+00:00",
+  "base": "252dd1603f12eab69313ef25b538be1b040bc508",
+  "baseTree": "65667d0089b986250b5f8697518863069368d855",
+  "source": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+  "sourceTree": "9e7564a188b8b87f5498ac749eee62db7951317f",
+  "changedPaths": [
+    "contracts/solana/localnet/client-run.mjs"
+  ],
+  "changeSize": {
+    "insertions": 51,
+    "deletions": 3
+  },
+  "sourceFile": {
+    "path": "contracts/solana/localnet/client-run.mjs",
+    "bytes": 33030,
+    "sha256": "11242e040bed614cdfcc054fbd3ca002fc653be6b888b5087c87af708a75ed83",
+    "gitEntry": "100644 blob 97ca40a7f12b890bb516aab282ad0be2f5b665fa"
+  },
+  "composition": {
+    "baseEntries": 2996,
+    "sourceEntries": 2996,
+    "nonDocsSourceEntries": 1030,
+    "unchangedBaseEntries": 2995,
+    "allOtherTrackedPathsExactBase": true,
+    "protectedRegions": [
+      {
+        "region": "constants, process controls, validator setup and program finalization",
+        "exactBytesEqual": true,
+        "bytes": 5699,
+        "beforeSha256": "9b21c347fe8231ce5e429e41aac1ed06da588f2ace23f70ce386e2f0906a851b",
+        "afterSha256": "9b21c347fe8231ce5e429e41aac1ed06da588f2ace23f70ce386e2f0906a851b"
+      },
+      {
+        "region": "RPC adapter and send instrumentation",
+        "exactBytesEqual": true,
+        "bytes": 526,
+        "beforeSha256": "c78662bf0ee6c36feab45c7a6c40712d2f4e35dac4fb74886fe0f714c9c95c94",
+        "afterSha256": "c78662bf0ee6c36feab45c7a6c40712d2f4e35dac4fb74886fe0f714c9c95c94"
+      },
+      {
+        "region": "CAS journal, registry, clients, terms, settle and act",
+        "exactBytesEqual": true,
+        "bytes": 4384,
+        "beforeSha256": "e7d3c33c1099115555aff0e757ec5fe9958b27459f03b149475baa723c4f6bab",
+        "afterSha256": "e7d3c33c1099115555aff0e757ec5fe9958b27459f03b149475baa723c4f6bab"
+      },
+      {
+        "region": "native post-funding checks, CLI decode and token helpers",
+        "exactBytesEqual": true,
+        "bytes": 2881,
+        "beforeSha256": "8ca3badf7dcf7557c601dbae866b23154e8e2d872a913191fddd2f88261f40ff",
+        "afterSha256": "8ca3badf7dcf7557c601dbae866b23154e8e2d872a913191fddd2f88261f40ff"
+      },
+      {
+        "region": "SPL post-funding hazard, sequenced payouts and checks",
+        "exactBytesEqual": true,
+        "bytes": 3078,
+        "beforeSha256": "691ecd85138ae4e6a287dc73d07bd2dcf58ca2db60de6f54a5dfb88184a97ff9",
+        "afterSha256": "691ecd85138ae4e6a287dc73d07bd2dcf58ca2db60de6f54a5dfb88184a97ff9"
+      },
+      {
+        "region": "complete crash, refund and main flows through EOF",
+        "exactBytesEqual": true,
+        "bytes": 7418,
+        "beforeSha256": "9ce712f0a152648276dd903273400cff6fafe41624cdb8154768ce841ebbb5ae",
+        "afterSha256": "9ce712f0a152648276dd903273400cff6fafe41624cdb8154768ce841ebbb5ae"
+      }
+    ]
+  },
+  "commands": [
+    {
+      "name": "02-node-syntax.log",
+      "file": "02-node-syntax.log.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0,
+      "argv": [
+        "node",
+        "--check",
+        "contracts/solana/localnet/client-run.mjs"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-11-20T19:24:41.900837+00:00",
+      "completedAt": "2026-11-20T19:24:41.968594+00:00",
+      "sourceFileSha256": "11242e040bed614cdfcc054fbd3ca002fc653be6b888b5087c87af708a75ed83"
+    },
+    {
+      "name": "03-full-whitespace.log",
+      "file": "03-full-whitespace.log.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0,
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-11-20T19:24:41.969167+00:00",
+      "completedAt": "2026-11-20T19:24:41.997695+00:00",
+      "sourceFileSha256": "11242e040bed614cdfcc054fbd3ca002fc653be6b888b5087c87af708a75ed83"
+    },
+    {
+      "name": "04-build-only.log",
+      "file": "04-build-only.log.gz",
+      "argv": [
+        "node",
+        "--input-type=module"
+      ],
+      "stdinArtifact": "04-compile-driver-script.mjs",
+      "sourceCommit": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+      "sourceTree": "9e7564a188b8b87f5498ac749eee62db7951317f",
+      "startedAt": "2026-11-20T19:25:20.286008+00:00",
+      "completedAt": "2026-11-20T19:25:20.380635+00:00",
+      "exitCode": 1,
+      "rawBytes": 1057,
+      "rawSha256": "13fecb6777199122489944430548995cce0ec7d16cc1a94a450ff73689aba6c6",
+      "gzipBytes": 468,
+      "gzipSha256": "f9d03418403b10dfcc0276faa75039547afd69288d246f26bfd1c32fab87138b",
+      "gzipMtime": 0
+    },
+    {
+      "name": "05-build-only.log",
+      "file": "05-build-only.log.gz",
+      "argv": [
+        "node",
+        "--input-type=module"
+      ],
+      "stdinArtifact": "05-compile-driver-script.mjs",
+      "sourceCommit": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+      "sourceTree": "9e7564a188b8b87f5498ac749eee62db7951317f",
+      "startedAt": "2026-11-20T19:25:47.751984+00:00",
+      "completedAt": "2026-11-20T19:25:48.057565+00:00",
+      "exitCode": 0,
+      "rawBytes": 6952,
+      "rawSha256": "b5f3e5781d151875f89aff5927a778e40b67686ac744422496d6498c5dd843db",
+      "gzipBytes": 2527,
+      "gzipSha256": "3e78af36f6cd9dd783941e2d2f3b27f37e1dcb5398bf3634ecbd6b5c37246d1f",
+      "gzipMtime": 0
+    }
+  ],
+  "sourcePreservationReceipt": {
+    "name": "06-source-preservation.log",
+    "file": "06-source-preservation.log.gz",
+    "exitCode": 0,
+    "rawBytes": 2822,
+    "rawSha256": "3bdb9cd0f29d11e64538d5d26251447f63d4f3851931a45e1df57c91bfd5782b",
+    "gzipBytes": 1152,
+    "gzipSha256": "1c89ec5b4e587dff0cdb9c59b45a11c35084c1473a61de1896e0f687050ab0d3",
+    "gzipMtime": 0
+  },
+  "sourcePreservationLimit": "The original check retained its result and hash receipt, but not its invocation script; the recovery verifier independently checks every reported preserved byte region.",
+  "buildOnlyResult": {
+    "inputCount": 42,
+    "nodeVersion": "v24.22.3",
+    "rolldownVersion": "1.2.15",
+    "warnings": [],
+    "outputs": [
+      {
+        "file": "05-compiled-0.mjs.gz",
+        "rawBytes": 194659,
+        "rawSha256": "4bf495a5bbe5b4b931472967a216bdfe15b1e38bfb4c39a1a64f1953a9f7b3e6",
+        "gzipBytes": 52722,
+        "gzipSha256": "722ff0853158fa696c9d02ec29f7568740571dcfb0e8ddd4cfabdcf75ca9a445",
+        "gzipMtime": 0
+      }
+    ],
+    "external": "Node builtins and bare package imports"
+  },
+  "failure": {
+    "attempt": "04-build-only",
+    "classification": "Unavailable optional esbuild dependency",
+    "sourceUnchanged": true,
+    "resolution": "Used the already installed Rolldown bundler; no dependency installed or mutated"
+  },
+  "executionLimits": {
+    "nativeValidatorExecuted": false,
+    "browserExecuted": false,
+    "financialRunExecuted": false,
+    "compiledOutputExecuted": false,
+    "fullRepositorySuiteExecuted": false,
+    "remotePublicationPerformed": false,
+    "nativeAcceptance": "Pending hosted execution of the existing Solana client driver on the eventual combined source",
+    "tierCApproval": "No approval or merge authorization is established by this companion"
+  },
+  "artifacts": [
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/00-original-driver.mjs.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/00-original-driver.mjs.gz",
+      "bytes": 9164,
+      "sha256": "3abd606dafbfbe7b301396ea0f50e897ab520e3653c0efdc07d8545c30dccd52",
+      "rawBytes": 29331,
+      "rawSha256": "125ea6aee62e024ce8555691d970c9d1c7b06f98210116477a01673a04ca5ff2",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/01-source.patch.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/01-source.patch.gz",
+      "bytes": 2367,
+      "sha256": "5c3cb964be47bbb53ce3ddc3a5a75541a37d975481b277d99feba80f531b913d",
+      "rawBytes": 6864,
+      "rawSha256": "33f8dc873aa39bbe2445feb4a620e1e972bba3b48d2d140b50d693a6d977e5b1",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/02-node-syntax.log.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/02-node-syntax.log.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/03-full-whitespace.log.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/03-full-whitespace.log.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/04-build-only.json",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/04-build-only.json",
+      "bytes": 642,
+      "sha256": "39e9d33b3ca80315e2db8ffbe5136c02476c5c9326b31ac82f28a75ad68454c2"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/04-build-only.log.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/04-build-only.log.gz",
+      "bytes": 468,
+      "sha256": "f9d03418403b10dfcc0276faa75039547afd69288d246f26bfd1c32fab87138b",
+      "rawBytes": 1057,
+      "rawSha256": "13fecb6777199122489944430548995cce0ec7d16cc1a94a450ff73689aba6c6",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/04-compile-driver-script.mjs",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/04-compile-driver-script.mjs",
+      "bytes": 1381,
+      "sha256": "46ad378f0a53683dc741db38ff546428f0eb520e20fa37cef725ca647b2769c8"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/05-build-only.json",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/05-build-only.json",
+      "bytes": 643,
+      "sha256": "9d0817febea5c7611fb0a06f34dbfd17d8883403beda639bbb5849a25b58ca8a"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/05-build-only.log.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/05-build-only.log.gz",
+      "bytes": 2527,
+      "sha256": "3e78af36f6cd9dd783941e2d2f3b27f37e1dcb5398bf3634ecbd6b5c37246d1f",
+      "rawBytes": 6952,
+      "rawSha256": "b5f3e5781d151875f89aff5927a778e40b67686ac744422496d6498c5dd843db",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/05-compile-driver-script.mjs",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/05-compile-driver-script.mjs",
+      "bytes": 1816,
+      "sha256": "d35574c08b7e4783516ce4cbe7472457ebe2e04d9aa9bbaa4f3159bdd16c26bb"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/05-compiled-0.mjs.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/05-compiled-0.mjs.gz",
+      "bytes": 52722,
+      "sha256": "722ff0853158fa696c9d02ec29f7568740571dcfb0e8ddd4cfabdcf75ca9a445",
+      "rawBytes": 194659,
+      "rawSha256": "4bf495a5bbe5b4b931472967a216bdfe15b1e38bfb4c39a1a64f1953a9f7b3e6",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/06-source-preservation.json",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/06-source-preservation.json",
+      "bytes": 329,
+      "sha256": "eb6901696e30323a3a690e1fffcf807721c2f32acff48477dfcd803df62e57e3"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/06-source-preservation.log.gz",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/06-source-preservation.log.gz",
+      "bytes": 1152,
+      "sha256": "1c89ec5b4e587dff0cdb9c59b45a11c35084c1473a61de1896e0f687050ab0d3",
+      "rawBytes": 2822,
+      "rawSha256": "3bdb9cd0f29d11e64538d5d26251447f63d4f3851931a45e1df57c91bfd5782b",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/frozen-driver.mjs",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/frozen-driver.mjs",
+      "bytes": 33030,
+      "sha256": "11242e040bed614cdfcc054fbd3ca002fc653be6b888b5087c87af708a75ed83"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/initial-artifacts.json",
+      "origin": "/workspace/scratch/dcf03ef9bee8/g32-native-funding-checks/initial-artifacts.json",
+      "bytes": 2036,
+      "sha256": "c6c5caa54f6fde8e0bf4cdea46f118f67f5b87cc1106523397ca791a19f81894"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/non-docs-source-tree.json",
+      "origin": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+      "bytes": 120147,
+      "sha256": "b4ebbfbafe3560585d79166ba7483fcdd14db0438a455ca34474881cc13ab414"
+    },
+    {
+      "path": "docs/execution/solana-prepared-funding-native-generation32-20261120/verify-evidence.py.txt",
+      "origin": "Recovery-time evidence integrity checker; no product or native execution",
+      "bytes": 4378,
+      "sha256": "648e0e3cbd8b4fc056ea15f184ee374346c13d3609899f3d9b11a22d6f9c72cf"
+    }
+  ]
+}

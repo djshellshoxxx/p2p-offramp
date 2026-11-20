@@ -1,0 +1,87 @@
+from pathlib import Path
+import datetime
+import gzip
+import hashlib
+import json
+import subprocess
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+receipt_raw = (HERE / 'receipt.json').read_bytes()
+receipt = json.loads(receipt_raw)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+
+def entries(ref):
+    result = {}
+    for line in git('ls-tree', '-r', '-z', ref).split(b'\0'):
+        if line:
+            metadata, path = line.split(b'\t', 1)
+            result[path.decode()] = metadata.decode()
+    return result
+
+
+source, base = receipt['source'], receipt['base']
+assert git('rev-parse', source + '^{tree}').decode().strip() == receipt['sourceTree']
+assert git('rev-parse', source + '^').decode().strip() == base
+for item in receipt['artifacts']:
+    raw = (ROOT / item['path']).read_bytes()
+    assert len(raw) == item['bytes'] and sha(raw) == item['sha256'], item['path']
+    if 'gzipMtime' in item:
+        unpacked = gzip.decompress(raw)
+        assert len(unpacked) == item['rawBytes'] and sha(unpacked) == item['rawSha256'], item['path']
+        assert int.from_bytes(raw[4:8], 'little') == item['gzipMtime'] == 0, item['path']
+before, after = entries(base), entries(source)
+changed = sorted(path for path in set(before) | set(after) if before.get(path) != after.get(path))
+assert changed == receipt['changedPaths'] == ['contracts/solana/localnet/client-run.mjs']
+assert {path: value for path, value in after.items() if not path.startswith('docs/')} == json.loads(
+    (HERE / 'non-docs-source-tree.json').read_bytes())
+driver = git('show', source + ':' + changed[0])
+old_driver = git('show', base + ':' + changed[0])
+assert driver == (HERE / 'frozen-driver.mjs').read_bytes()
+assert old_driver == gzip.decompress((HERE / '00-original-driver.mjs.gz').read_bytes())
+assert git('diff', '--binary', base, source) == gzip.decompress((HERE / '01-source.patch.gz').read_bytes())
+build = json.loads(gzip.decompress((HERE / '05-build-only.log.gz').read_bytes()))
+assert build['inputCount'] == len(build['inputs']) == 42
+assert not build['warnings']
+for item in build['inputs']:
+    assert sha(git('show', source + ':' + item['path'])) == item['sha256'], item['path']
+for item in build['outputs']:
+    packed = (HERE / item['file']).read_bytes()
+    raw = gzip.decompress(packed)
+    assert len(raw) == item['rawBytes'] and sha(raw) == item['rawSha256']
+    assert len(packed) == item['gzipBytes'] and sha(packed) == item['gzipSha256']
+    assert int.from_bytes(packed[4:8], 'little') == 0
+preservation = json.loads(gzip.decompress((HERE / '06-source-preservation.log.gz').read_bytes()))
+assert preservation['sourceCommit'] == source and preservation['baseCommit'] == base
+regions = []
+for region in preservation['protectedRegions']:
+    size = region['bytes']
+    matches = []
+    for data, expected in [(old_driver, region['beforeSha256']), (driver, region['afterSha256'])]:
+        starts = [0] + [i + 1 for i, byte in enumerate(data) if byte == 10]
+        found = [start for start in starts if sha(data[start:start + size]) == expected]
+        assert len(found) == 1, region['region']
+        matches.append(data[found[0]:found[0] + size])
+    assert matches[0] == matches[1] and region['exactBytesEqual']
+    regions.append(region['region'])
+assert not build['compiledOutputExecuted'] and not build['nativeValidatorExecuted']
+assert all(value is False for key, value in receipt['executionLimits'].items()
+           if key.endswith('Executed'))
+print(json.dumps({'purpose': 'Retained evidence integrity and frozen-source provenance only',
+                  'checkedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                  'source': source, 'sourceTree': receipt['sourceTree'],
+                  'receiptSha256': sha(receipt_raw), 'retainedArtifactsVerified': len(receipt['artifacts']),
+                  'compiledSourceInputsVerified': len(build['inputs']),
+                  'compiledOutputsVerified': len(build['outputs']),
+                  'unchangedProtectedRegionsVerified': regions,
+                  'nonDocsSourceEntries': len(json.loads((HERE / 'non-docs-source-tree.json').read_bytes())),
+                  'nativeValidatorExecuted': False, 'browserExecuted': False,
+                  'compiledOutputExecuted': False}, indent=2))

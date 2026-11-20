@@ -1,0 +1,109 @@
+import datetime
+import gzip
+import hashlib
+import json
+import re
+import subprocess
+from pathlib import Path
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8')
+REPO = ROOT / 'p2p-solana-prepared-funding-review-g32'
+RAW = Path(__file__).resolve().parent
+PARENT = '1e17cb5d489969b3b52f6a9bc47d2729c836790d'
+SOURCE = '5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031'
+PREFIX = Path('docs/engineering/evidence/solana-prepared-funding-composition-independent-review-generation32')
+REPORT = Path('docs/engineering/INDEPENDENT_SOLANA_PREPARED_FUNDING_COMPOSITION_REVIEW_GENERATION32_20261120.md')
+RECEIPT = Path('docs/engineering/solana-prepared-funding-composition-review-generation32.json')
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+def digest(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == PARENT and not git('status', '--porcelain').strip()
+assert not (REPO / PREFIX).exists() and not (REPO / REPORT).exists() and not (REPO / RECEIPT).exists()
+(REPO / PREFIX).mkdir(parents=True)
+artifacts = []
+
+
+def retain(name, raw, origin, kind, compressed=False):
+    path = PREFIX / (name + ('.gz' if compressed else ''))
+    target = REPO / path
+    value = gzip.compress(raw, mtime=0) if compressed else raw
+    target.write_bytes(value)
+    item = {'path': str(path), 'origin': origin, 'kind': kind}
+    if compressed:
+        assert int.from_bytes(value[4:8], 'little') == 0 and gzip.decompress(value) == raw
+        item.update(rawBytes=len(raw), rawSha256=digest(raw), gzipBytes=len(value),
+                    gzipSha256=digest(value), gzipMtime=0)
+    else:
+        item.update(bytes=len(value), sha256=digest(value))
+    artifacts.append(item)
+    return str(path)
+
+
+verification_raw = (RAW / 'root-qualification-verification.json').read_bytes()
+verification = json.loads(verification_raw)
+assert verification['source'] == SOURCE and verification['nonDocumentationEntries'] == 1030
+assert verification['total_retained_assets_verified'] == 25
+assert verification['total_graphs_verified'] == 6
+assert verification['total_graph_module_references_verified'] == 274
+for item in [verification['receipt'], *verification['commands']]:
+    name = Path(item['log']).name
+    packed = (RAW / name).read_bytes()
+    assert len(packed) == item['gzip_bytes'] and digest(packed) == item['gzip_sha256']
+    raw = gzip.decompress(packed)
+    assert int.from_bytes(packed[4:8], 'little') == item['mtime'] == 0
+    assert len(raw) == item['raw_bytes'] and digest(raw) == item['raw_sha256']
+    target = REPO / PREFIX / name
+    target.write_bytes(packed)
+    artifacts.append({'path': str(PREFIX / name), 'origin': str(RAW / name),
+        'kind': 'complete original root qualification evidence',
+        'rawBytes': len(raw), 'rawSha256': digest(raw), 'gzipBytes': len(packed),
+        'gzipSha256': digest(packed), 'gzipMtime': 0})
+receipt_raw = (RAW / 'root-composition-qualification.json').read_bytes()
+command = json.loads(receipt_raw)
+log_raw = (RAW / 'root-composition-qualification.log').read_bytes()
+assert command['source'] == command['finalSource'] == PARENT and command['cleanTrackedWorktree']
+assert command['exitCode'] == 0 and command['startedAt'] < command['completedAt']
+assert command['bytes'] == len(log_raw) and command['sha256'] == digest(log_raw)
+assert json.loads(log_raw) == verification
+command['receipt'] = retain('root-composition-qualification.json', receipt_raw,
+    str(RAW / 'root-composition-qualification.json'), 'original reviewer command receipt')
+command['output'] = retain('root-composition-qualification.log', log_raw,
+    str(RAW / 'root-composition-qualification.log'), 'complete reviewer verification output', True)
+retain('root-qualification-verification.json', verification_raw,
+       str(RAW / 'root-qualification-verification.json'), 'independent source and artifact verification')
+for name in ['check-root-qualification.py', 'package-composition-review.py']:
+    retain(name + '.txt', (RAW / name).read_bytes(), str(RAW / name), 'original independent reviewer source')
+report = (RAW / 'composition-review-report.md').read_text()
+(REPO / REPORT).write_text(report)
+receipt = {
+    'schema': 'p2p-offramp-independent-review/v1', 'generation': 32,
+    'reviewKind': 'combined native prepared-funding source and root qualification provenance',
+    'reviewedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'source': SOURCE, 'sourceTree': verification['tree'], 'publishedParent': verification['publishedParent'],
+    'reviewCheckout': PARENT, 'clientSourceReview': 'fadd204e3616f7d262add42a7f72a55d27079158',
+    'nativeDriverReview': PARENT, 'report': str(REPORT), 'findings': [],
+    'verification': verification, 'commands': [command], 'artifacts': artifacts,
+    'limits': ['No suite, build, browser, validator, wallet or financial flow was rerun by this reviewer.',
+        'Native SOL/SPL prepared-funding acceptance remains pending actual hosted execution.',
+        'Tier C actual source/target gates and recorded owner authorization remain required.'],
+}
+(REPO / RECEIPT).write_text(json.dumps(receipt, indent=2) + '\n')
+for link in re.findall(r'\]\(([^)]+)\)', report):
+    assert not link.startswith('http') and (REPO / REPORT.parent / link).exists(), link
+for item in artifacts:
+    stored = (REPO / item['path']).read_bytes()
+    if item['path'].endswith('.gz'):
+        assert len(stored) == item['gzipBytes'] and digest(stored) == item['gzipSha256']
+        raw = gzip.decompress(stored)
+        assert len(raw) == item['rawBytes'] and digest(raw) == item['rawSha256']
+    else:
+        assert len(stored) == item['bytes'] and digest(stored) == item['sha256']
+print(json.dumps({'source': SOURCE, 'parent': PARENT, 'report': str(REPORT), 'receipt': str(RECEIPT),
+                  'artifacts': len(artifacts), 'documents': len(artifacts) + 2, 'commands': 1}))

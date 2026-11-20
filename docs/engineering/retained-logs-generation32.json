@@ -1,0 +1,82 @@
+{
+  "schema": "p2p-offramp.generation32-retained-logs.v1",
+  "testedSource": "5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031",
+  "testedTree": "d3b738a378218927d86241a1db987a57af87eec8",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g32-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generation32-20261120/full-node.log.gz",
+      "decodedBytes": 267573,
+      "compressedBytes": 88757,
+      "decodedSha256": "94209a7cdcdbaf7773bce37da3745bb8659a848ae2e91afbc50029bf2c10427b",
+      "compressedSha256": "cfe2bcd57d9b5cc23d94e77495aff0a0a0281d37f995882a42b3a5545c5abd4a"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g32-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generation32-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g32-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generation32-20261120/build-policy.log.gz",
+      "decodedBytes": 7611,
+      "compressedBytes": 3133,
+      "decodedSha256": "b9a73ae1f2bdafccdd21a42ddd8ae78a13c76475dbb37048072bec1f4ea26135",
+      "compressedSha256": "8f9fa2ee437e120503ec9c7fcaec32ef6a42c797df9bc5d103416e462fe511a3"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g32-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generation32-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 287,
+      "decodedSha256": "171459349881532fab298d83fadbd8a8f2a269b3197f7642193a31fe471deb39",
+      "compressedSha256": "4d73e145c5258e7e67d2b9185efeb6eda0122424a642fd702b009bc488c0bb31"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g32-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generation32-20261120/default-build.log.gz",
+      "decodedBytes": 1027,
+      "compressedBytes": 498,
+      "decodedSha256": "ba39501638d4e23741a1b7e3e4fb95efc7126473528e7f4c1f5d7a3925eed353",
+      "compressedSha256": "283db5601684bb0d685428a0b3f11db5ccedaf5aa0d2b58be95456284b25af2a"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g32-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generation32-20261120/demo-build.log.gz",
+      "decodedBytes": 1175,
+      "compressedBytes": 521,
+      "decodedSha256": "cecfb2cf869d693596279add995141ecb44b741176bb06af0527ef0668586b18",
+      "compressedSha256": "d92e6247c3ba64dc15192fae586290a50020b19a331bb9b0d0f17c44c3ee09f4"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g32-qualification/native-fixture-preparation.log",
+      "storedPath": "docs/execution/continuation-generation32-20261120/native-fixture-preparation.log.gz",
+      "decodedBytes": 2196,
+      "compressedBytes": 866,
+      "decodedSha256": "adb72c42b9dc83b797a48aa3b18fef9abbc6598e7ce3495cadfe0dfca66d4ae2",
+      "compressedSha256": "7efca0d12e8510068f2567a490994860be3fde50397237a85496ee2d695c9c80"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/execution/solana-prepared-funding-generation32-20261120/receipt.json",
+    "docs/execution/solana-prepared-funding-native-generation32-20261120/receipt.json",
+    "docs/engineering/solana-prepared-funding-independent-review-generation32.json",
+    "docs/engineering/solana-prepared-funding-native-independent-review-generation32.json",
+    "docs/engineering/solana-prepared-funding-composition-review-generation32.json"
+  ],
+  "limits": [
+    "The dedicated native prepareFunding entry creates an immutable seller/absent-escrow funding review using existing planner, journal and private review authority. Confirmation and cancellation share the existing physical wallet serialization and exact-message revalidation.",
+    "Existing exit-only prepare refuses funding by design. Direct fund behavior, browser recovery admission/protocol/controller, signing algorithms, registry trust and release configuration remain unchanged.",
+    "The native acceptance companion changes only the existing SOL/SPL funding admissions to prepareFunding followed by explicit confirm and adds review/journal/exact-message/sign/send assertions. Crash and refund retain direct funding and their original actual-time waits.",
+    "The original funding baseline reports one exit-only control pass, 46 missing-method assertion failures and three aggregate parent-subtest failures. It does not establish 49 distinct behaviors. The initial full package366/367 line-boundary failure and five line-wrap correction are preserved.",
+    "Corrected author package367/367, independent client98/98 and independent driver-helper2/2 are separate overlapping selections, not a single combined or additive suite.",
+    "The native driver author compiled42 repository modules without evaluating the output. Independent helper probes use the actual client with scripted ports and a sent-record boundary; they do not fabricate finalized/native acceptance.",
+    "Unavailable optional tooling attempts, dependency diagnostics and the packaging gitlink/file error remain retained with their actual evidence provenance. No dependency installation, failed-output deletion or assertion weakening occurred.",
+    "The full Node suite includes the maintained Solana-localnet configured artifact build. That compile check is not native execution or browser funding admission.",
+    "Native updater fixture compilation is build-only. Temporary modules were removed by the maintained command; no native browser or validator flow executed locally. Unchanged default/demo/Worker assets do not transfer hosted checks between sources or targets.",
+    "This bounded native capability and configured driver do not complete browser funding, Solana peer acceptance or wider release readiness. Actual current-source/current-target hosted execution and applicable Tier C owner authorization remain separate. ReleaseEnabled remains zero."
+  ]
+}

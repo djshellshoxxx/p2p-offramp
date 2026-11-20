@@ -1,0 +1,18 @@
+{
+  "source": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+  "tree": "1ed7fc7a7181e0ee964183642e01319468316fce",
+  "command": [
+    "npm",
+    "run",
+    "typecheck"
+  ],
+  "startedAt": "2026-11-20T19:17:57.073317+00:00",
+  "completedAt": "2026-11-20T19:18:00.099532+00:00",
+  "exitCode": 0,
+  "log": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/typecheck.log",
+  "bytes": 341,
+  "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+  "finalSource": "800e633dc47c3bd24065093b50bdc78fa709d3ab",
+  "cleanTrackedWorktree": true,
+  "summary": []
+}

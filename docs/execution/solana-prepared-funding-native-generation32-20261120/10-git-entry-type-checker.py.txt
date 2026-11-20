@@ -1,0 +1,45 @@
+from pathlib import Path
+import datetime
+import hashlib
+import json
+import os
+import subprocess
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+SOURCE = 'e214f70f8bcbb9eb962fc147f2d318081daca2ce'
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+
+source = json.loads((HERE / 'non-docs-source-tree.json').read_bytes())
+index = {}
+for row in git('ls-files', '--stage', '-z').split(b'\0'):
+    if row:
+        metadata, path = row.split(b'\t', 1)
+        mode, oid, stage = metadata.decode().split()
+        assert stage == '0'
+        index[path.decode()] = (mode, oid)
+blobs = 0
+gitlinks = []
+for path, entry in source.items():
+    mode, kind, oid = entry.split()
+    assert index[path] == (mode, oid), path
+    if kind == 'blob':
+        raw = os.readlink(ROOT / path).encode() if mode == '120000' else (ROOT / path).read_bytes()
+        assert hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest() == oid, path
+        blobs += 1
+    else:
+        assert kind == 'commit' and mode == '160000', (path, entry)
+        gitlinks.append({'path': path, 'mode': mode, 'oid': oid, 'trackedPointerMatches': True})
+assert blobs == 1028 and len(gitlinks) == 2
+changed = git('diff', '--name-only', '--ignore-submodules=none', SOURCE).decode().splitlines()
+assert all(path.startswith('docs/') for path in changed), changed
+print(json.dumps({'purpose': 'Git-entry-type-aware packaging verification; no native execution',
+                  'checkedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                  'source': SOURCE, 'sourceTree': git('rev-parse', SOURCE + '^{tree}').decode().strip(),
+                  'workingBlobContentsVerified': blobs, 'trackedGitlinkPointersVerified': gitlinks,
+                  'nonDocsSourceEntriesVerified': len(source), 'allChangesDocumentationOnly': True,
+                  'nativeValidatorExecuted': False, 'browserExecuted': False}, indent=2))

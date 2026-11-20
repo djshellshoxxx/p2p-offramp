@@ -1,0 +1,19 @@
+{
+  "source": "252dd1603f12eab69313ef25b538be1b040bc508",
+  "tree": "65667d0089b986250b5f8697518863069368d855",
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "8e836baa877b676a863c877003e277b638fc5061..252dd1603f12eab69313ef25b538be1b040bc508"
+  ],
+  "startedAt": "2026-11-20T19:21:24.144348+00:00",
+  "completedAt": "2026-11-20T19:21:24.165534+00:00",
+  "exitCode": 0,
+  "log": "/workspace/scratch/dcf03ef9bee8/p2p-solana-funding-review-evidence-g32/source-whitespace-final.log",
+  "bytes": 0,
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "finalSource": "252dd1603f12eab69313ef25b538be1b040bc508",
+  "cleanTrackedWorktree": true,
+  "summary": []
+}

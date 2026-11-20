@@ -1,0 +1,39 @@
+{
+  "recordedAt": "2026-11-20T19:32:43.190165+00:00",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/package-g32-native-funding-evidence.py"
+  ],
+  "exitCode": 1,
+  "source": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+  "classification": "Packaging-only checker incorrectly read an existing Git submodule entry as a regular file",
+  "completedBeforeFailure": [
+    "17-artifact evidence integrity check",
+    "42 source-input hash checks",
+    "six protected-region checks",
+    "full source-and-evidence whitespace"
+  ],
+  "correction": "Retain the original checker and recovered traceback; verify every regular blob by Git content hash and both existing gitlinks by exact tracked mode and commit pointer",
+  "noSourceOrAssertionChanges": true,
+  "artifacts": [
+    {
+      "file": "09-original-packager.py.txt",
+      "bytes": 18433,
+      "sha256": "062935e4089f1231d5c154c5bc514f6e8537465f4276cf533aa16db723bdd314"
+    },
+    {
+      "file": "09-packager-error-recovered.log.gz",
+      "bytes": 438,
+      "sha256": "ad7847fd4716cac6a6de1d697309c0b24c795ecdaeb85bb516019e28213dbe9b",
+      "rawBytes": 1109,
+      "rawSha256": "73595ed6551aa2dec02ee5d9f22282c5babd9aed4d292fe2505bf1a5571130ae",
+      "gzipMtime": 0,
+      "provenance": "Exact tool-result traceback recovered after the command; not an original command output capture"
+    },
+    {
+      "file": "10-git-entry-type-checker.py.txt",
+      "bytes": 1957,
+      "sha256": "cbc8eb3df5c165786afcbd49089aea8a7086e7fcad3fcf15ae7699501e82116d"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "python",
+    "docs/execution/solana-prepared-funding-native-generation32-20261120/10-git-entry-type-checker.py.txt"
+  ],
+  "source": "e214f70f8bcbb9eb962fc147f2d318081daca2ce",
+  "startedAt": "2026-11-20T19:32:43.190437+00:00",
+  "completedAt": "2026-11-20T19:32:43.384458+00:00",
+  "exitCode": 0,
+  "file": "10-git-entry-type-check.log.gz",
+  "rawBytes": 838,
+  "rawSha256": "1f6f3f37971fc501b366e19d884a45aa10e66f0bf12864c43b173898dd16d45c",
+  "gzipBytes": 471,
+  "gzipSha256": "24f8be672146fd1722566f8ddedbcbfc0e3542f363648b4543427c173fbc2633",
+  "gzipMtime": 0
+}
