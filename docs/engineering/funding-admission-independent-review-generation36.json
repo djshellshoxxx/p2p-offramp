@@ -1,0 +1,563 @@
+{
+  "schema": "p2p-offramp.g36-independent-source-evidence-review.v1",
+  "recordedAt": "2026-11-20T20:46:14.451156+00:00",
+  "reviewSource": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+  "reviewTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+  "admissionSource": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+  "base": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+  "worktree": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-review-g36",
+  "branch": "codex/funding-admission-review-g36-20261120",
+  "sourceScope": {
+    "changedPaths": [
+      "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+      "apps/web/src/solana-localnet/client.ts",
+      "apps/web/src/solana-localnet/controller.ts",
+      "apps/web/src/solana-localnet/protocol.ts",
+      "apps/web/src/solana-localnet/validation.ts",
+      "apps/web/test/solana-funding-admission-ui.test.mjs",
+      "apps/web/test/solana-localnet-funding-admission.test.mjs",
+      "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+      "apps/web/test/solana-public-recovery-ui.test.mjs",
+      "scripts/lib/solana-localnet-browser-fixture.mjs",
+      "scripts/lib/solana-localnet-send-evidence.mjs",
+      "scripts/test-solana-localnet-browser.mjs"
+    ],
+    "nonDocumentationEntries": 1038,
+    "includesGitlinks": true,
+    "productionEditsByReviewer": false
+  },
+  "sourceBlobs": {
+    "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx": {
+      "gitEntry": "100644 blob 381939e2d3002a29556bd4b29da96ce95f0a3d55",
+      "sha256": "a056a3aab76b5262bd8bdc4db45ba5e1844a1f2f4bf2b2dc14ed02bba032c01a"
+    },
+    "apps/web/src/solana-localnet/client.ts": {
+      "gitEntry": "100644 blob f25ac051b91427d2c7f75f28463ff8f7f4640887",
+      "sha256": "fcb00018523d5205d7732a361ca59e33a5a468be4084467451467710d6337ef8"
+    },
+    "apps/web/src/solana-localnet/controller.ts": {
+      "gitEntry": "100644 blob b3c75d9121e61b897f73abd93cda4f3b718b0198",
+      "sha256": "a2c12045ee85b43209a0b11c1a7fb8d50f4f0a677573fe367eb00a64f00263eb"
+    },
+    "apps/web/src/solana-localnet/protocol.ts": {
+      "gitEntry": "100644 blob 63de3ab41e9a809e187ec337de72e781e38e7fec",
+      "sha256": "d36282ef72fd4a126585cf8f1f9a8d91aaa075687eb66a41fc32f93d87d38d7a"
+    },
+    "apps/web/src/solana-localnet/validation.ts": {
+      "gitEntry": "100644 blob a27f6141a89f53d73bb56e472b289c2c11a4256b",
+      "sha256": "332f21ac7e2d1ee077ab442eb45bc9cd1723f69c925d6a6c4c9708b8dc6868e7"
+    },
+    "apps/web/test/solana-funding-admission-ui.test.mjs": {
+      "gitEntry": "100644 blob 0f46f18ec08a30754308f0a8ddbd4a41a5d1c93f",
+      "sha256": "b76d63e584466349de0e962310f3bd842cb82d814e44536eb31c575b3324aa81"
+    },
+    "apps/web/test/solana-localnet-funding-admission.test.mjs": {
+      "gitEntry": "100644 blob ef676c3c5cb19e0370eb7e434e9bc1245f103cba",
+      "sha256": "af295c7c883bd1e5c2eb98b9289168f71cb7d333be1c6dedecbbe825a3892288"
+    },
+    "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs": {
+      "gitEntry": "100644 blob 4274be48bef12eba3348cc7074463ae2cef18309",
+      "sha256": "3f54b808aab73d906d76396f8d2c41145940672c10529e13f435b671fff4d158"
+    },
+    "apps/web/test/solana-public-recovery-ui.test.mjs": {
+      "gitEntry": "100644 blob 778a31fad89c0e4138d9d8010062d1f09d69a5b9",
+      "sha256": "0cff1aa79ffb34ce98645ef6ad04ca4f2d99a464156d1b065868dc5856e46583"
+    },
+    "scripts/lib/solana-localnet-browser-fixture.mjs": {
+      "gitEntry": "100644 blob a78bbfb017375f503a103729d2941b2f5ed0e5ba",
+      "sha256": "5c11d48d153d0daa668288bf794bfb05bc931604aa42ed26efaba1f5c0339ab9"
+    },
+    "scripts/lib/solana-localnet-send-evidence.mjs": {
+      "gitEntry": "100644 blob 73904dde7407a374324435f3e28caa9968f05554",
+      "sha256": "da767a37f483251e30b77d15f25101df7a6ab570c3d3b3c9868a3e3fdee208b5"
+    },
+    "scripts/test-solana-localnet-browser.mjs": {
+      "gitEntry": "100644 blob 2cff22454e61b99993baaa734947bc9c5481e533",
+      "sha256": "18453ace44c314314c8eca6cb47b32fde02b1c2c63017ad39f502aa68c7ec7ac"
+    }
+  },
+  "axes": {
+    "standards": "passed; existing controller/session/lease patterns and profile scope retained",
+    "specification": "passed; frozen G36 admission/inventory contract",
+    "unresolvedMaterialFindings": []
+  },
+  "independentTests": {
+    "executions": [
+      {
+        "schema": "p2p-offramp.generation36-independent-execution.v1",
+        "name": "01-independent-selection",
+        "command": [
+          "node",
+          "--import",
+          "./scripts/test-support/register-tsx.mjs",
+          "--test",
+          "--test-concurrency=1",
+          "apps/web/test/solana-localnet-controller.test.mjs",
+          "apps/web/test/solana-localnet-funding-proposal.test.mjs",
+          "apps/web/test/solana-localnet-funding-admission.test.mjs",
+          "apps/web/test/solana-funding-admission-ui.test.mjs",
+          "apps/web/test/solana-localnet-restore-lifecycle.test.mjs",
+          "apps/web/test/solana-public-recovery-ui.test.mjs",
+          "apps/web/test/solana-localnet-wallet.test.mjs",
+          "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+          "apps/web/test/solana-localnet-send-evidence.test.mjs",
+          "../g36-admission-review/independent-probes.test.mjs"
+        ],
+        "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-review-g36",
+        "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+        "tree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+        "sourceMapping": {
+          "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+          "tree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+          "parent": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+          "originalAuthorSource": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+          "driverSource": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+          "reviewExecutionSource": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+          "base": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+          "changedPaths": [
+            "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+            "apps/web/src/solana-localnet/client.ts",
+            "apps/web/src/solana-localnet/controller.ts",
+            "apps/web/src/solana-localnet/protocol.ts",
+            "apps/web/src/solana-localnet/validation.ts",
+            "apps/web/test/solana-funding-admission-ui.test.mjs",
+            "apps/web/test/solana-localnet-funding-admission.test.mjs",
+            "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+            "apps/web/test/solana-public-recovery-ui.test.mjs",
+            "scripts/lib/solana-localnet-browser-fixture.mjs",
+            "scripts/lib/solana-localnet-send-evidence.mjs",
+            "scripts/test-solana-localnet-browser.mjs"
+          ],
+          "nonDocumentationEntries": 1038,
+          "authorProductionEntriesPreserved": true,
+          "legacyOracleBodiesPreserved": true,
+          "legacyDriverLinesPreservedInOrder": 190,
+          "sourcePatch": {
+            "path": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/reviewed-combined-source.patch",
+            "bytes": 86597,
+            "sha256": "7fbc6f26cac849ddf960a0f9f1d8e286020e118443921886c9043a0f22c14e4b"
+          },
+          "fullMainWhitespace": "passed",
+          "sourceClean": true
+        },
+        "startedAt": "2026-11-20T20:39:50.929598+00:00",
+        "initialStatus": "",
+        "probes": {
+          "path": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/01-independent-selection.probes.mjs",
+          "bytes": 16575,
+          "sha256": "035383501dd4ae820fd83f3e38e3cef47ebee96750b55dd08e1151c1cfd22d89"
+        },
+        "completedAt": "2026-11-20T20:40:14.099328+00:00",
+        "exitCode": 0,
+        "counts": {
+          "tests": 168,
+          "pass": 168,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "log": {
+          "path": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/01-independent-selection.log",
+          "bytes": 13611,
+          "sha256": "92e9f5639a16dc415d00d3412e171de2933fbb1a462bc713d2dfe5dff0eeadad"
+        },
+        "finalSource": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+        "finalTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+        "finalStatus": "",
+        "exactSourceUnchanged": true,
+        "retainedOriginalReceipt": "docs/execution/independent-solana-funding-admission-generation36-20261120/01-independent-selection.json.gz",
+        "retainedLog": "docs/execution/independent-solana-funding-admission-generation36-20261120/01-independent-selection.log.gz",
+        "retainedProbeSnapshot": "docs/execution/independent-solana-funding-admission-generation36-20261120/01-independent-selection.probes.mjs.gz"
+      },
+      {
+        "schema": "p2p-offramp.generation36-independent-execution.v1",
+        "name": "02-ui-typecheck",
+        "command": [
+          "node",
+          "node_modules/typescript/bin/tsc",
+          "-p",
+          "apps/web/tsconfig.ui.json",
+          "--noEmit"
+        ],
+        "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-review-g36",
+        "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+        "tree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+        "sourceMapping": {
+          "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+          "tree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+          "parent": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+          "originalAuthorSource": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+          "driverSource": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+          "reviewExecutionSource": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+          "base": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+          "changedPaths": [
+            "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+            "apps/web/src/solana-localnet/client.ts",
+            "apps/web/src/solana-localnet/controller.ts",
+            "apps/web/src/solana-localnet/protocol.ts",
+            "apps/web/src/solana-localnet/validation.ts",
+            "apps/web/test/solana-funding-admission-ui.test.mjs",
+            "apps/web/test/solana-localnet-funding-admission.test.mjs",
+            "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+            "apps/web/test/solana-public-recovery-ui.test.mjs",
+            "scripts/lib/solana-localnet-browser-fixture.mjs",
+            "scripts/lib/solana-localnet-send-evidence.mjs",
+            "scripts/test-solana-localnet-browser.mjs"
+          ],
+          "nonDocumentationEntries": 1038,
+          "authorProductionEntriesPreserved": true,
+          "legacyOracleBodiesPreserved": true,
+          "legacyDriverLinesPreservedInOrder": 190,
+          "sourcePatch": {
+            "path": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/reviewed-combined-source.patch",
+            "bytes": 86597,
+            "sha256": "7fbc6f26cac849ddf960a0f9f1d8e286020e118443921886c9043a0f22c14e4b"
+          },
+          "fullMainWhitespace": "passed",
+          "sourceClean": true
+        },
+        "startedAt": "2026-11-20T20:40:07.202254+00:00",
+        "initialStatus": "",
+        "probes": {
+          "path": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/02-ui-typecheck.probes.mjs",
+          "bytes": 16575,
+          "sha256": "035383501dd4ae820fd83f3e38e3cef47ebee96750b55dd08e1151c1cfd22d89"
+        },
+        "completedAt": "2026-11-20T20:40:08.657381+00:00",
+        "exitCode": 0,
+        "counts": {},
+        "log": {
+          "path": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/02-ui-typecheck.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "finalSource": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+        "finalTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+        "finalStatus": "",
+        "exactSourceUnchanged": true,
+        "retainedOriginalReceipt": "docs/execution/independent-solana-funding-admission-generation36-20261120/02-ui-typecheck.json.gz",
+        "retainedLog": "docs/execution/independent-solana-funding-admission-generation36-20261120/02-ui-typecheck.log.gz",
+        "retainedProbeSnapshot": "docs/execution/independent-solana-funding-admission-generation36-20261120/02-ui-typecheck.probes.mjs.gz"
+      },
+      {
+        "schema": "p2p-offramp.generation36-independent-execution.v1",
+        "name": "03-boundaries",
+        "command": [
+          "node",
+          "scripts/check-import-boundaries.mjs"
+        ],
+        "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-funding-admission-review-g36",
+        "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+        "tree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+        "sourceMapping": {
+          "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+          "tree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+          "parent": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+          "originalAuthorSource": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+          "driverSource": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+          "reviewExecutionSource": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+          "base": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+          "changedPaths": [
+            "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+            "apps/web/src/solana-localnet/client.ts",
+            "apps/web/src/solana-localnet/controller.ts",
+            "apps/web/src/solana-localnet/protocol.ts",
+            "apps/web/src/solana-localnet/validation.ts",
+            "apps/web/test/solana-funding-admission-ui.test.mjs",
+            "apps/web/test/solana-localnet-funding-admission.test.mjs",
+            "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+            "apps/web/test/solana-public-recovery-ui.test.mjs",
+            "scripts/lib/solana-localnet-browser-fixture.mjs",
+            "scripts/lib/solana-localnet-send-evidence.mjs",
+            "scripts/test-solana-localnet-browser.mjs"
+          ],
+          "nonDocumentationEntries": 1038,
+          "authorProductionEntriesPreserved": true,
+          "legacyOracleBodiesPreserved": true,
+          "legacyDriverLinesPreservedInOrder": 190,
+          "sourcePatch": {
+            "path": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/reviewed-combined-source.patch",
+            "bytes": 86597,
+            "sha256": "7fbc6f26cac849ddf960a0f9f1d8e286020e118443921886c9043a0f22c14e4b"
+          },
+          "fullMainWhitespace": "passed",
+          "sourceClean": true
+        },
+        "startedAt": "2026-11-20T20:40:07.209836+00:00",
+        "initialStatus": "",
+        "probes": {
+          "path": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/03-boundaries.probes.mjs",
+          "bytes": 16575,
+          "sha256": "035383501dd4ae820fd83f3e38e3cef47ebee96750b55dd08e1151c1cfd22d89"
+        },
+        "completedAt": "2026-11-20T20:40:08.733161+00:00",
+        "exitCode": 0,
+        "counts": {},
+        "log": {
+          "path": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/03-boundaries.log",
+          "bytes": 160,
+          "sha256": "45447f80cc3a27b891b23e8bfaf112ab0e678c4cb7aa048c9b610173a249797e"
+        },
+        "finalSource": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+        "finalTree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+        "finalStatus": "",
+        "exactSourceUnchanged": true,
+        "retainedOriginalReceipt": "docs/execution/independent-solana-funding-admission-generation36-20261120/03-boundaries.json.gz",
+        "retainedLog": "docs/execution/independent-solana-funding-admission-generation36-20261120/03-boundaries.log.gz",
+        "retainedProbeSnapshot": "docs/execution/independent-solana-funding-admission-generation36-20261120/03-boundaries.probes.mjs.gz"
+      }
+    ],
+    "total": 168,
+    "maintained": 159,
+    "original": 9,
+    "probes": [
+      "Eight bindings consume eight CAS writes; an exact duplicate at capacity preserves payload and snapshot; ninth binding refuses with zero RPC or wallet effects.",
+      "Restored historical-configuration duplicates preserve padded original payload and original provenance without a write.",
+      "Historical registry/network/deployment aliases still reserve the canonical genesis/program/seller/nonce escrow tuple.",
+      "A conflicting unfunded proposal cannot veto eligible funded recovery; it gains a conflict flag and no wallet authority.",
+      "Nine proposal bindings plus a paired funded recovery load at capacity nine; new admission refuses while controlled funded release preparation/cancel remains available.",
+      "A non-trade preference occupying the prospective proposal record ID is never overwritten.",
+      "Profile lock during held hashing retires import before storage.",
+      "Wallet change during held hashing retires import before storage.",
+      "Profile lock at the atomic CAS boundary prevents a late write."
+    ],
+    "independentFailures": 0,
+    "sourceAttribution": "One combined 168-case execution on exact d36; no separate test execution on 328 is claimed."
+  },
+  "componentEvidence": [
+    {
+      "name": "author",
+      "source": "3283940bae1a2d4e7baabed66878ecb5d977bfb1",
+      "tree": "df931285bd7e1818db6736ba968930375bd6cb68",
+      "evidenceCommit": "1d14b1a32f74869d1dae7b1e65e9ef9f0a62408c",
+      "evidenceTree": "14d509a5a4bfad9e8191802255c9f79191edc2ed",
+      "receiptPath": "docs/execution/solana-funding-admission-generation36-20261120/receipt.json",
+      "receiptSha256": "6969322b750f9b6a7a62ecea3fa292f15b8df23ecc1bd8af1f60e837972ccc18",
+      "documentationOnlyPaths": 27,
+      "nonDocumentationEntries": 1037
+    },
+    {
+      "name": "driver",
+      "source": "d36be3c5348b94d39836b73a3e0b9e864ff0a669",
+      "tree": "559034449fe590f42cbd11adaad8b4b850ec818b",
+      "evidenceCommit": "2e07fe01926275c4c5fe888bde2225791fe44163",
+      "evidenceTree": "53f641a5969845e6c1f9e28bceb9b8ade854c0d3",
+      "receiptPath": "docs/execution/solana-funding-admission-browser-generation36-20261120/receipt.json",
+      "receiptSha256": "7258454ef73bd5cb238f9c8757f7a11149849b0ae0d72888b730f474e05fec39",
+      "documentationOnlyPaths": 42,
+      "nonDocumentationEntries": 1038
+    }
+  ],
+  "verification": {
+    "retainedResult": "docs/execution/independent-solana-funding-admission-generation36-20261120/component-evidence-verification.json.gz",
+    "componentArtifactsVerified": 63,
+    "executionTreesReconstructed": 16,
+    "driverCompileInputsVerified": 70,
+    "driverOutputsVerified": 3,
+    "driverOutputRawBytes": 417221,
+    "nativeExecutionClaimed": false
+  },
+  "sourceInspectionMetadataNote": "review-author-source.json records the earlier checked-out source inspection. Its reviewExecutionSource field is not a test execution receipt; all three actual independent command receipts name d36.",
+  "artifacts": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/independent-probes.test.mjs",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/independent-probes.test.mjs.gz",
+      "decodedBytes": 16575,
+      "decodedSha256": "035383501dd4ae820fd83f3e38e3cef47ebee96750b55dd08e1151c1cfd22d89",
+      "compressedBytes": 4317,
+      "compressedSha256": "b159d1d86c0c2d3031b91cb3d29b06e313114c98a97887e1184a92fc88f639f3",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/execute.py",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/execute.py.gz",
+      "decodedBytes": 2888,
+      "decodedSha256": "f030890a562cf65499b165d0b07800d52bb71025d7d14ad317f527c4002e0d36",
+      "compressedBytes": 1235,
+      "compressedSha256": "d82b1213ee0d94c82ef3cfc96d76973b85142851d801f1fc08d24a372c94d5f0",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/review-author-source.json",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/review-author-source.json.gz",
+      "decodedBytes": 1072,
+      "decodedSha256": "65ceab7bb890234666abf0100682f913b7aa03ff7b940f795f7353b76cdd5f38",
+      "compressedBytes": 497,
+      "compressedSha256": "fc49b865c51e2c01ab19d88320e2f7f8982e413912ac7339b21a71fc817c9862",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/review-source.json",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/review-source.json.gz",
+      "decodedBytes": 1552,
+      "decodedSha256": "4a02b30044e365ed2e514911a6506ba9c25a8fdee48178dec241831a95dce927",
+      "compressedBytes": 650,
+      "compressedSha256": "191b6220ab55b21f3a2599b35a6424479e687eefa73225bc0d878ea156ddf41b",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/reviewed-source.patch",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/reviewed-source.patch.gz",
+      "decodedBytes": 65868,
+      "decodedSha256": "82b00659b86cc4ec07a121bb98c5bee0e1d2d935c0654320555cac914691f805",
+      "compressedBytes": 16519,
+      "compressedSha256": "ba5e1a98a0a3f363e83303a289b45bceb5dea94f8e747bb57cf2316255d17276",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/reviewed-combined-source.patch",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/reviewed-combined-source.patch.gz",
+      "decodedBytes": 86597,
+      "decodedSha256": "7fbc6f26cac849ddf960a0f9f1d8e286020e118443921886c9043a0f22c14e4b",
+      "compressedBytes": 21068,
+      "compressedSha256": "fd5601677906f1c07c0fa61fafc762b40b59ba44e0a47cc307b01c1526cea550",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/verify-component-evidence.py",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/verify-component-evidence.py.gz",
+      "decodedBytes": 11492,
+      "decodedSha256": "d1963982dad59228af37a7669f045fa023dac9f8842e1e1995e8501c785170c7",
+      "compressedBytes": 3713,
+      "compressedSha256": "83029e2668cf6b3e68c78edda584420524761c6e2c1ec7db4db804237d1d3b96",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/component-evidence-verification.json",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/component-evidence-verification.json.gz",
+      "decodedBytes": 54568,
+      "decodedSha256": "e4244ce7c0ecb4e27b7f3661b1cba243116eb375f9a14973114b38e555c84de4",
+      "compressedBytes": 8076,
+      "compressedSha256": "2932d7edb79975a281510347b219965173decdbb637f852c0b54c6fee5fc53f4",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/component-evidence-verification.log",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/component-evidence-verification.log.gz",
+      "decodedBytes": 265,
+      "decodedSha256": "4856eed24428c44a116399ba58f1173cbb8c68567a59f89075a1ad1b0edc4f12",
+      "compressedBytes": 210,
+      "compressedSha256": "8496a2e9bf9da718ac9d117c43617403a51b134c78b04fe4aee3f8731ea62321",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/author-receipt-original.json",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/author-receipt-original.json.gz",
+      "decodedBytes": 31876,
+      "decodedSha256": "6969322b750f9b6a7a62ecea3fa292f15b8df23ecc1bd8af1f60e837972ccc18",
+      "compressedBytes": 5092,
+      "compressedSha256": "bb1baef60c51ddda9fa58dfdcf9f7ff0a9517b7e72e9510dee63f05c7d633d7a",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/driver-receipt-original.json",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/driver-receipt-original.json.gz",
+      "decodedBytes": 49214,
+      "decodedSha256": "7258454ef73bd5cb238f9c8757f7a11149849b0ae0d72888b730f474e05fec39",
+      "compressedBytes": 10612,
+      "compressedSha256": "da03bbf032289b5fec1b059984e160b8f35f8d5a2eec4404fceb79211a788fd0",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/package-review.py",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/package-review.py.gz",
+      "decodedBytes": 19422,
+      "decodedSha256": "1b4b9819c6729e419aba2696f836bdaac2ab2a3e1b0e78215d1ae584bd87b471",
+      "compressedBytes": 7393,
+      "compressedSha256": "c0e28a25a4dcceb6f65705ecc663be668a37567c38d170246f1771e16e52d981",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/01-independent-selection.json",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/01-independent-selection.json.gz",
+      "decodedBytes": 3549,
+      "decodedSha256": "c50fecd22bd8dc2e17dd2a70493f1e7c702e36bba1775d7345fa0c8e62a7a9e1",
+      "compressedBytes": 1149,
+      "compressedSha256": "1a65958c5ba6749f710154ea53a8b74ca965dce74beb282447d97f3e3f22ebe7",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/01-independent-selection.log",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/01-independent-selection.log.gz",
+      "decodedBytes": 13611,
+      "decodedSha256": "92e9f5639a16dc415d00d3412e171de2933fbb1a462bc713d2dfe5dff0eeadad",
+      "compressedBytes": 4622,
+      "compressedSha256": "9f9867a2b2aa0ca64f31f87b8edd8216e2f34370e76b247d91c25e95f838dc0c",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/01-independent-selection.probes.mjs",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/01-independent-selection.probes.mjs.gz",
+      "decodedBytes": 16575,
+      "decodedSha256": "035383501dd4ae820fd83f3e38e3cef47ebee96750b55dd08e1151c1cfd22d89",
+      "compressedBytes": 4317,
+      "compressedSha256": "b159d1d86c0c2d3031b91cb3d29b06e313114c98a97887e1184a92fc88f639f3",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/02-ui-typecheck.json",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/02-ui-typecheck.json.gz",
+      "decodedBytes": 2800,
+      "decodedSha256": "2fd97a91c96635618949bb851dd3744baeebdb1f0a38ee9267cbbfc5f2f1167a",
+      "compressedBytes": 1042,
+      "compressedSha256": "ea486085dc6cab9f04401615cce146973ee8919fbb00079b4434333f3359dc56",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/02-ui-typecheck.log",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/02-ui-typecheck.log.gz",
+      "decodedBytes": 0,
+      "decodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedBytes": 20,
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/02-ui-typecheck.probes.mjs",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/02-ui-typecheck.probes.mjs.gz",
+      "decodedBytes": 16575,
+      "decodedSha256": "035383501dd4ae820fd83f3e38e3cef47ebee96750b55dd08e1151c1cfd22d89",
+      "compressedBytes": 4317,
+      "compressedSha256": "b159d1d86c0c2d3031b91cb3d29b06e313114c98a97887e1184a92fc88f639f3",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/03-boundaries.json",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/03-boundaries.json.gz",
+      "decodedBytes": 2741,
+      "decodedSha256": "be0e59bbb5ffee876b6ae12f5aa8749146039e85f40d5087663319a54886a951",
+      "compressedBytes": 1014,
+      "compressedSha256": "b43af6ee52af413930a95388b39ac488b2fe42265ae72db46276ea55079b5865",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/03-boundaries.log",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/03-boundaries.log.gz",
+      "decodedBytes": 160,
+      "decodedSha256": "45447f80cc3a27b891b23e8bfaf112ab0e678c4cb7aa048c9b610173a249797e",
+      "compressedBytes": 147,
+      "compressedSha256": "8ba461a4e6e055f909f39ec297a4226214313c9d405490e9ac13778c9ad2bdfa",
+      "gzipMtime": 0
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g36-admission-review/03-boundaries.probes.mjs",
+      "storedPath": "docs/execution/independent-solana-funding-admission-generation36-20261120/03-boundaries.probes.mjs.gz",
+      "decodedBytes": 16575,
+      "decodedSha256": "035383501dd4ae820fd83f3e38e3cef47ebee96750b55dd08e1151c1cfd22d89",
+      "compressedBytes": 4317,
+      "compressedSha256": "b159d1d86c0c2d3031b91cb3d29b06e313114c98a97887e1184a92fc88f639f3",
+      "gzipMtime": 0
+    }
+  ],
+  "report": "docs/engineering/INDEPENDENT_SOLANA_FUNDING_ADMISSION_REVIEW_GENERATION36_20261120.md",
+  "ReleaseEnabled": 0,
+  "limits": [
+    "Controlled Node tests, encrypted in-memory storage, scripted native ports and maintained TSX hooks do not establish physical wallet, IndexedDB, browser or chain finality.",
+    "The reviewer did not run a full repository suite, build, native driver, browser, validator, financial journey, external action or dependency installation.",
+    "Author and companion overlapping test selections are not summed into the independent total.",
+    "The earlier companion external verifier was explicitly reconstructed by reversing five later additive lines; this verifies the retained version map, not a contemporaneous capture.",
+    "Source review and retained compilation do not grant funding, peer acceptance, production activation or merge authority.",
+    "Root owns the combined seven-command qualification and its separate composition review. No standalone G36 PR or actual hosted/native acceptance is claimed."
+  ]
+}
