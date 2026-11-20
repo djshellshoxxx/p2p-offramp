@@ -78,6 +78,7 @@ function mounted(t, provided) {
   const button = label => { const found = nodes(render(), node => node.type === 'button' && words(node) === label)[0]; assert.ok(found, label); return found; };
   return {
     calls, render, unmount, button,
+    listeners() { return { document: [...documentEvents.keys()].sort(), window: [...windowEvents.keys()].sort() }; },
     click(label, event = { isTrusted: true }) { const target = button(label); assert.notEqual(target.props.disabled, true); target.props.onClick(event); },
     consent(value = true) { const input = nodes(render(), node => node.type === 'input' && node.props.type === 'checkbox')[0]; assert.ok(input); input.props.onChange({ currentTarget: { checked: value } }); },
     setCheck(value) { check = value; }, setAcceptance(value) { acceptance = value; },
@@ -98,6 +99,21 @@ test('Settings exposes an inert default panel without creating or calling an upd
   assert.match(html, /<button[^>]*disabled=""[^>]*>Check for a signed update<\/button>/);
   assert.equal(html.includes(u.accept), false);
   assert.ok(html.includes('href="#/recovery"'));
+});
+
+test('an unconfigured panel owns no global visibility or pagehide listeners', t => {
+  const ui = mounted(t, null);
+  assert.deepEqual(ui.listeners(), { document: [], window: [] }, 'disabled signed-update view must not subscribe');
+  assert.ok(words(ui.render()).includes(u.unconfigured));
+  ui.unmount();
+  assert.deepEqual(ui.listeners(), { document: [], window: [] });
+});
+
+test('configured panel retains exact visibility and pagehide retirement ownership', t => {
+  const ui = mounted(t);
+  assert.deepEqual(ui.listeners(), { document: ['visibilitychange'], window: ['pagehide'] });
+  ui.unmount();
+  assert.deepEqual(ui.listeners(), { document: [], window: [] }, 'teardown unregisters both listeners');
 });
 
 test('rendering a supplied controller starts no check, acceptance or cancellation', () => {
