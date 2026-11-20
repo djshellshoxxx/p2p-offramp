@@ -1,0 +1,10 @@
+{
+  "name": "06-source-preservation.log",
+  "file": "06-source-preservation.log.gz",
+  "exitCode": 0,
+  "rawBytes": 2822,
+  "rawSha256": "3bdb9cd0f29d11e64538d5d26251447f63d4f3851931a45e1df57c91bfd5782b",
+  "gzipBytes": 1152,
+  "gzipSha256": "1c89ec5b4e587dff0cdb9c59b45a11c35084c1473a61de1896e0f687050ab0d3",
+  "gzipMtime": 0
+}
