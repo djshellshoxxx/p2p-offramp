@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
-  "generation": 3,
-  "updated_at_utc": "2026-11-20T00:50:49.094188+00:00",
-  "phase": "nine-optional-prs-reviewed-combined-local-qualification-passed-favorites-review-active",
+  "generation": 4,
+  "updated_at_utc": "2026-11-20T01:18:09.063801+00:00",
+  "phase": "favorites-and-solana-repair-reviewed-published-hosted-pending-templates-and-composition-active",
   "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
   "integration_branch": "codex/historical-recovery-20261119",
   "integration_source_sha": "ef9d74258de63e98917c7a34a9392076ff86c35c",
@@ -50,6 +50,19 @@
       "merged_prs": 105,
       "closed_unmerged_prs": 38,
       "added_owned_branches": 12,
+      "original_heads_moved": 0,
+      "original_heads_removed": 0
+    },
+    "generation4_delta": {
+      "observed_at_utc": "2026-11-20T01:16:13.483Z",
+      "branches_observed": 207,
+      "prs_observed": 199,
+      "open_prs": 56,
+      "merged_prs": 105,
+      "closed_unmerged_prs": 38,
+      "file": "inventory-delta-generation4.json",
+      "added_owned_branches": 15,
+      "new_since_generation3": 3,
       "original_heads_moved": 0,
       "original_heads_removed": 0
     }
@@ -278,6 +291,24 @@
       "repair_sha": "19792ad333a93db6e21cc5147234cc4e22629c5a",
       "severity": null,
       "scope": "Optional source: no default runtime or financial authority activation."
+    },
+    {
+      "id": "FIX-FAVORITES-COMPLETED-LOAD",
+      "kind": "reproduced-defect",
+      "state": "implemented-and-independently-reproduced",
+      "source": "apps/web/src/trade/review-controller.ts",
+      "repair_sha": "677580418fc3dee473702680c29ebb7c2c756e2a",
+      "severity": "Medium",
+      "scope": "Fresh current-registry review completion under trusted-port/infrastructure faults; no demonstrated peer or funds exploit."
+    },
+    {
+      "id": "FIX-SOLANA-WITHHELD-ACK",
+      "kind": "reproduced-fixture-defect",
+      "state": "implemented-and-independently-reproduced-hosted-pending",
+      "source": "scripts/lib/solana-localnet-withheld-send.mjs",
+      "repair_sha": "493a6ea55b2eb332dfc8999b117fd7e817428497",
+      "severity": null,
+      "scope": "Controlled failed-acknowledgment fixture; production RPC and strict physical-send oracle unchanged; no general raw-reset retransmission guarantee."
     }
   ],
   "verification": {
@@ -319,7 +350,7 @@
       "failed": 0
     },
     "actual_browser": "PR189 exact merge/head tree passed10 groups; PR190 exact merge/head tree passed12 groups including portal/distribution. Local Chromium remains blocked by Unix socket policy.",
-    "hosted_exact_head": "PR190 all original seven required contexts plus docs-tooling/native Nostr passed; applicable Solana validator/browser/refund remains running.",
+    "hosted_exact_head": "PR190 foundation/docs/native Nostr passed; real validator passed and actual encrypted Solana browser step remains running at01:12UTC. PR188/189 native browser failed. Reviewed correction PR202 requires its own hosted gates.",
     "foundry_ci_profile": {
       "version": "1.5.1",
       "solc": "0.8.30",
@@ -415,6 +446,38 @@
       "command": "FOUNDRY_BIN=<pinned-toolchain> FOUNDRY_SOLC=<pinned-solc-0.8.30> npm test",
       "executor": "optional_source_b",
       "coordinator_checked_actual_log_summary": true
+    },
+    "favorites_final_full": {
+      "source_sha": "ed2f19ed27083da9c3411ea74fcd471f07c44c0f",
+      "tree": "9c084e77b4ed8605d5e9d98fc4d6ca996f859494",
+      "tests": 2178,
+      "passed": 2178,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "observed_at_utc": "2026-11-20T00:59:53Z",
+      "command": "FOUNDRY_BIN=<pinned-toolchain> FOUNDRY_SOLC=<pinned-solc-0.8.30> npm test"
+    },
+    "solana_ack_independent": {
+      "source_sha": "493a6ea55b2eb332dfc8999b117fd7e817428497",
+      "tree": "3a1e9583b29db88ca73015e2ca35953e41378e0a",
+      "red": {
+        "passed": 0,
+        "failed": 2
+      },
+      "green": {
+        "passed": 2,
+        "failed": 0
+      },
+      "affected_tests": 334,
+      "passed": 334,
+      "failed": 0,
+      "skipped": 0,
+      "build_policy_passed": 54,
+      "typescript_projects": 4,
+      "production_files": 234,
+      "core_modules": 140,
+      "hosted_browser": "pending"
     }
   },
   "workers": [
@@ -499,8 +562,8 @@
     {
       "generation": 3,
       "worker": "optional_source_b",
-      "state": "finishing-report",
-      "scope": "all-nine local qualification passed; preserving source/report provenance"
+      "state": "complete",
+      "scope": "All-nine local2553-test qualification and source-bound report complete"
     },
     {
       "generation": 3,
@@ -511,43 +574,80 @@
     {
       "generation": 4,
       "worker": "personalization_favorites_ui",
-      "state": "running",
-      "scope": "current saved-review favorites UI/private Worker; repairing independent cached-review finding",
+      "state": "complete",
+      "scope": "PR201 published; fresh-load Medium independently closed;2178-test final local qualification complete",
       "branch": "codex/personalization-favorites-ui-20261119",
-      "source_checkpoint": "6a01b49b04d9d49f80ea1c32579f050bfd5f61cc"
+      "source_checkpoint": "ed2f19ed27083da9c3411ea74fcd471f07c44c0f"
     },
     {
       "generation": 4,
       "worker": "favorites_independent_review",
-      "state": "running",
-      "scope": "independent favorites native/runtime/registry/lifecycle review; two-case RED reproduced",
+      "state": "complete",
+      "scope": "Independent favorites Medium closed;39 affected tests and4 real-registry probes passed",
       "branch": "codex/favorites-independent-review-20261119"
+    },
+    {
+      "generation": 4,
+      "worker": "solana_browser_send_repair",
+      "state": "running-followup",
+      "scope": "PR202 acknowledgment repair complete; new isolated investigation of observed restore timeout",
+      "branch": "codex/solana-restore-ack-20261119"
+    },
+    {
+      "generation": 4,
+      "worker": "solana_send_independent_review",
+      "state": "complete",
+      "scope": "Independent RED/GREEN and334 affected tests for source493a6ea; no open High/Medium",
+      "branch": "codex/solana-send-independent-review-20261119"
+    },
+    {
+      "generation": 4,
+      "worker": "personalization_templates_ui",
+      "state": "running",
+      "scope": "Explicit encrypted template preview/consent and fresh ephemeral draft UI; source not frozen",
+      "branch": "codex/personalization-templates-ui-20261119"
+    },
+    {
+      "generation": 4,
+      "worker": "templates_browser_harness",
+      "state": "complete",
+      "scope": "Isolated emitted-App/real-Worker template browser script; syntax passed, hosted execution pending",
+      "branch": "codex/templates-browser-harness-20261119",
+      "source_checkpoint": "fc74d0b63486c524d32912682c303951387b7ae8"
+    },
+    {
+      "generation": 4,
+      "worker": "generation4_composition",
+      "state": "running",
+      "scope": "Actual local combined optional/favorites/Solana qualification; no templates or remote publication",
+      "branch": "codex/generation4-composition-20261119",
+      "source_checkpoint": "5ebeaa646d0b6e09a09a9a5852ff2905653f1841"
     }
   ],
   "remaining": [
     {
       "id": "GATE-COMBINED-HOSTED",
       "priority": 1,
-      "state": "browser-qualified-Solana-running",
-      "next_action": "Inspect PR190 exact-head native job135982126950 without changing its head or real timelocks. Browser12 groups already passed; no repeat investigation of the repaired QR fixture."
+      "state": "PR202-repair-published-qualification-pending",
+      "next_action": "Inspect actual repaired-head early Chromium and complete native/browser gates. Preserve real1800-second waits. Also investigate PR197 restore timeout in separate owned branch; do not infer it is fixed by503."
     },
     {
       "id": "GATE-PR189-SOLANA",
       "priority": 1,
-      "state": "running",
-      "next_action": "Read exact-head program job135971622812; do not change source or shorten waits. Fold qualified repair and consolidate main only after applicable exact-head gates."
+      "state": "failed-repair-in-PR202",
+      "next_action": "Preserve old failure evidence; qualify reviewed PR202 correction and separate restore investigation before integration."
     },
     {
       "id": "OPTIONAL-SOURCE-EXTRACTIONS",
       "priority": 2,
-      "state": "nine-published-independent-reviews-complete-hosted-running",
-      "next_action": "Complete all-nine local composition QA and live exact-head checks for PR191\u2013199, including actual custom browsers; integrate qualified packages individually and preserve the reviewed script/workflow union."
+      "state": "nine-reviewed-all-browser-groups-passed-native-partial",
+      "next_action": "All-nine local2553 passed and dedicated meetup/privacy-controls/proof-jobs browser passed. Read current native failures/runs; integrate packages separately once baseline and exact integration tree qualify."
     },
     {
       "id": "COMPOSE-PERSONALIZATION-UI",
       "priority": 2,
-      "state": "implementation-review-active-finding-held",
-      "next_action": "Author and fresh independent reviewer close two reproduced cached-review cases; finish full local QA; publish exact reviewed source with actual favorites browser gate and qualify it before integration."
+      "state": "favorites201-reviewed-published-templates-active",
+      "next_action": "Qualify actual favorites hosted browser gate. Templates author and separate browser worker implement current draft scope; independent review follows source freeze. Do not reopen closed favorites Medium or manufacture current semantic locale approval."
     },
     {
       "id": "COMPOSE-ASSET-UPDATE-UI",
@@ -566,6 +666,19 @@
       "priority": 3,
       "state": "external",
       "next_action": "Physical wallets/cameras/print/mobile/device matrix and owner-controlled trust inputs remain separate."
+    },
+    {
+      "id": "INVESTIGATE-SOLANA-RESTORE-ACK",
+      "priority": 1,
+      "state": "assigned-reproduction",
+      "next_action": "Reproduce whether immediate blank snapshot lets test inputs race later Worker lock acknowledgment; preserve all boundary clearing and actual full gates."
+    },
+    {
+      "id": "FIX-GENERATION4-TOOLING-COMPOSITION",
+      "priority": 1,
+      "state": "reproduced-under-repair",
+      "owner": "generation4_composition",
+      "next_action": "Preserve32/36 tooling RED log andsource5ebe; repair stale-copy hash validation, targeted stale assertions and exact two-module favorites distribution allowlist; independently review without granting semantic/release approval."
     }
   ],
   "successor_generation": 4,
@@ -573,7 +686,7 @@
   "parent_integration_pr": 188,
   "parent_integration_branch": "codex/max-consolidation-20261119",
   "parent_integration_head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
-  "pull_request_resolution": "PR190 is the historical-recovery integration; PR191\u2013199 are separately reviewed optional source children. Resolve live refs before integration; main has not moved.",
+  "pull_request_resolution": "PR190 is the historical baseline;PR191\u2013199 stay separate optional source scopes;PR201 favorites andPR202 fixture correction are reviewed children;PR200 owns durable handoff. All qualified-main integration remains authorized; no main merge yet.",
   "main_merges_performed": 0,
   "published_generations": [
     {
@@ -594,7 +707,7 @@
       "head_tree": "a3701267756596e833247f50614c5ddc32f2cce0"
     }
   ],
-  "repair_counting": "18 newly reproduced repair cases: the previous12 plus five returned-adapter diagnostic sites and one privacy-policy atomic-group composition defect. Upstream recovered fixes and the separate profile-integration assertion are excluded. The open favorites finding is not counted as fixed.",
+  "repair_counting": "20 newly reproduced repair cases: prior18 plus favorites completed-load reopening and Solana withheld-acknowledgment fixture. The separate QR/Solana profile-policy row is an integration check, not another bug. A newly observed restore-button timeout remains under investigation and is not counted as fixed. Newly authored test-fixture mistakes are not added as product defects.",
   "hosted": [
     {
       "pr": 188,
@@ -603,10 +716,12 @@
       "program_run": 44639090596,
       "program_job": 135965138780,
       "program_observed_step": 16,
-      "program_state": "in_progress",
+      "program_state": "completed",
       "other_original_required_contexts": "passed",
       "validator_acceptance": "passed",
-      "observed_at_utc": "2026-11-20T00:31:00Z"
+      "observed_at_utc": "2026-11-20T01:18:09.063801+00:00",
+      "program_conclusion": "failure",
+      "program_failure": "Strict duplicate physical signature assertion at withheld-acknowledgment fixture; final fixtureErrors failure after real wait."
     },
     {
       "pr": 189,
@@ -633,9 +748,11 @@
       "program_run": 44640971208,
       "program_job": 135971622812,
       "program_observed_step": 16,
-      "program_state": "in_progress",
-      "observed_at_utc": "2026-11-20T00:31:00Z",
-      "validator_acceptance": "passed"
+      "program_state": "completed",
+      "observed_at_utc": "2026-11-20T01:18:09.063801+00:00",
+      "validator_acceptance": "passed",
+      "program_conclusion": "failure",
+      "program_failure": "Strict duplicate physical signature assertion at withheld-acknowledgment fixture; final fixtureErrors failure after real wait."
     },
     {
       "pr": 190,
@@ -664,13 +781,34 @@
       "unexpected_distribution_requests": 0,
       "program_run": 44644082116,
       "program_job": 135982126950,
-      "program_observed_step": 14,
+      "program_observed_step": 16,
       "program_state": "in_progress",
-      "observed_at_utc": "2026-11-20T00:31:00Z",
+      "observed_at_utc": "2026-11-20T01:12:00Z",
       "deployed_host_qualified": false,
       "signed_release_qualified": false,
       "physical_device_qualified": false,
-      "independent_distribution_witness": false
+      "independent_distribution_witness": false,
+      "validator_acceptance": "passed"
+    },
+    {
+      "pr": 201,
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "tree": "2e88aa8eec7a6e609ca113d35a36177c40bf156d",
+      "observed_at_utc": "2026-11-20T01:16:13.483Z",
+      "checks": "all10queued",
+      "browser_job": 136005796688,
+      "program_job": 136005795997
+    },
+    {
+      "pr": 202,
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "tree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+      "published_at_utc": "2026-11-20T01:14:14Z",
+      "checks": "all-five-triggered-workflows-queued",
+      "early_browser_diagnostic": "pending",
+      "native_full_browser": "pending",
+      "foundation_run": 44652103772,
+      "program_run": 44652103777
     }
   ],
   "policy": {
@@ -1036,10 +1174,11 @@
     "enabled": true,
     "cadence": "hourly existing schedule",
     "semantics": "durable scheduled continuation; not a claim that completed native workers run continuously",
-    "prompt_updated_at_utc": "2026-11-20T00:36:20.063232+00:00",
+    "prompt_updated_at_utc": "2026-11-20T00:55:33.904392Z",
     "last_observed_run": "2026-11-20T00:30:00Z",
     "last_observed_run_state": "completed",
-    "last_result_scope": "Read-only source/check verification and PR190 qualification checkpoint; no source mutation."
+    "last_result_scope": "Read-only source/check verification and PR190 qualification checkpoint; no source mutation.",
+    "prompt_refresh_required": "Refresh after this newer handoff is published; keep original schedule/environment/triggers."
   },
   "verification_log_sha256": {
     "generation2-full.tap": "3affa64cd3bdc9562dd5d08eb803a4c8764814332e23b574184c97c6c876d392",
@@ -1084,11 +1223,26 @@
     {
       "id": "FAVORITES-STALE-REVIEW-REOPEN",
       "severity": "Medium",
-      "state": "reproduced-repair-and-independent-closure-required",
+      "state": "independently-closed",
       "reviewed_source": "6a01b49b04d9d49f80ea1c32579f050bfd5f61cc",
       "red_test_commit": "d5ca7f1e72667331e73cef8376e0799cbb29f3df",
       "reproduced_failures": 2,
-      "scope": "Fresh-review UI guarantee under trusted-port/infrastructure faults; not a demonstrated peer/funds exploit."
+      "scope": "Fresh-review UI guarantee under trusted-port/infrastructure faults; not a demonstrated peer/funds exploit.",
+      "pr": 201,
+      "repair_sha": "677580418fc3dee473702680c29ebb7c2c756e2a",
+      "review_commit": "dbe43aca456683c8885bf1632c3d3cf9e3753ba1",
+      "green_affected_tests": 39
+    },
+    {
+      "id": "SOLANA-RESTORE-BUTTON-TIMEOUT",
+      "severity": null,
+      "state": "observed-under-investigation",
+      "pr": 197,
+      "job": 135987836079,
+      "observed_at_utc": "2026-11-20T01:12:23Z",
+      "scope": "Native browser restore button remained disabled after the prior duplicate-send assertion. Source suggests an asynchronous lock acknowledgment/input-clear race; attribution and repair require reproduction.",
+      "owner": "solana_browser_send_repair",
+      "branch": "codex/solana-restore-ack-20261119"
     }
   ],
   "optional_composition": {
@@ -1131,6 +1285,712 @@
       "default_artifact_files": 13,
       "default_artifact_byte_identical": true,
       "optional_package_hits_in_default_graphs": 0
-    }
+    },
+    "author_report": "OPTIONAL_COMPOSITION_20261119.md",
+    "author_report_commit": "27fba7450600836b5edc131ae1f4f1744ae96248"
+  },
+  "native_workers_actually_launched": 22,
+  "optional_hosted_snapshot": {
+    "observed_at_utc": "2026-11-20T01:16:13.483Z",
+    "checks": {
+      "191": [
+        {
+          "name": "local-trade",
+          "id": 135983838780,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135983838368,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135983838247,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135983838200,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "program",
+          "id": 135983838195,
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135983838192,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135983838080,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135983838066,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135983838037,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135983837798,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "192": [
+        {
+          "name": "local-trade",
+          "id": 135983875235,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135983875084,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135983875037,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135983874927,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135983874886,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135983874880,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135983874777,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135983874742,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135983874633,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "193": [
+        {
+          "name": "forge",
+          "id": 135983936139,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135983936025,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-trade",
+          "id": 135983935657,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135983935530,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135983935526,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135983935473,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135983935445,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135983935302,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135983935073,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "194": [
+        {
+          "name": "browser",
+          "id": 135987637963,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135987637957,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135987637942,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135987637934,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135987637906,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135987637821,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135987637690,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135987637568,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-trade",
+          "id": 135987637285,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "195": [
+        {
+          "name": "local-trade",
+          "id": 135987698297,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135987697837,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135987696358,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135987696354,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135987696311,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135987696253,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135987696209,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135987696039,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135987695612,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "196": [
+        {
+          "name": "local-evm",
+          "id": 135987784952,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135987784812,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135987784734,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135987784678,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135987784419,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135987784236,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135987783958,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "program",
+          "id": 135987783703,
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "local-trade",
+          "id": 135987783579,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135987783552,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "197": [
+        {
+          "name": "forge",
+          "id": 135987836903,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135987836751,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135987836712,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135987836650,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135987836645,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-trade",
+          "id": 135987836305,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135987836265,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135987836250,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "program",
+          "id": 135987836079,
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "name": "inventory",
+          "id": 135987835889,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "198": [
+        {
+          "name": "local-trade",
+          "id": 135990859794,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "forge",
+          "id": 135990859400,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135990858853,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-evm",
+          "id": 135990858779,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135990858747,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135990858696,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135990858400,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135990857832,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135990857314,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "199": [
+        {
+          "name": "forge",
+          "id": 135990907097,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "program",
+          "id": 135990906563,
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "local-evm",
+          "id": 135990906482,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "local-trade",
+          "id": 135990906460,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "id": 135990906329,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "docs-tooling",
+          "id": 135990906301,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "id": 135990906205,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 135990906146,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "proof-jobs",
+          "id": 135990906144,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser",
+          "id": 135990905888,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 135990905869,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "201": [
+        {
+          "name": "forge",
+          "id": 136005796881,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "schemas-and-crypto",
+          "id": 136005796749,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "specs",
+          "id": 136005796709,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "browser",
+          "id": 136005796688,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "docs-tooling",
+          "id": 136005796681,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "local-trade",
+          "id": 136005796502,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "local-evm",
+          "id": 136005796300,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "native-nostr-relay",
+          "id": 136005796031,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "program",
+          "id": 136005795997,
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "inventory",
+          "id": 136005795834,
+          "status": "queued",
+          "conclusion": null
+        }
+      ]
+    },
+    "identities": [
+      {
+        "job": 135987784678,
+        "sha": "864477c124a6f064270ffcdb08e5bf9391f22946",
+        "tree": "1fae0bcf2f2263b6164930a4a56ebd5803764185",
+        "parents": [
+          "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+          "4bc4c7e2833b6b8540b8586624fb1697817e02e2"
+        ]
+      },
+      {
+        "job": 135987836712,
+        "sha": "3847e6f49337317a2c402e2f4eb94730959fcf12",
+        "tree": "97712823a475470b48564f48745b4ab5852db8c9",
+        "parents": [
+          "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+          "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84"
+        ]
+      },
+      {
+        "job": 135990906144,
+        "sha": "bf7b71cf2aa680dbd54829abe8bcb07e3a043065",
+        "tree": "b64bcc27a3e35cd7cafb26a020f43e49359f7c28",
+        "parents": [
+          "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+          "e7e1aa90072f4b0376820f0e9b28e609707de74f"
+        ]
+      }
+    ]
+  },
+  "favorites_ui": {
+    "pr": 201,
+    "branch": "codex/personalization-favorites-ui-20261119",
+    "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+    "tree": "2e88aa8eec7a6e609ca113d35a36177c40bf156d",
+    "tested_source": "ed2f19ed27083da9c3411ea74fcd471f07c44c0f",
+    "independent_review": "dbe43aca456683c8885bf1632c3d3cf9e3753ba1",
+    "state": "reviewed-published-local-qualified-hosted-pending",
+    "medium_findings_open": 0,
+    "private_worker_allowance": [
+      "packages/personalization/favorites.ts",
+      "packages/personalization/src/favorites.ts"
+    ],
+    "revision_zero_valid": true,
+    "dangling_loaded_remove_allowed": true,
+    "fresh_completed_current_registry_review_required": true,
+    "catalog_semantic_approval": false,
+    "catalog_and_six_claims_draft_stale": true
+  },
+  "solana_ack_repair": {
+    "pr": 202,
+    "branch": "codex/solana-browser-send-repair-20261119",
+    "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+    "tree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+    "tested_source": "493a6ea55b2eb332dfc8999b117fd7e817428497",
+    "local_publication": "499bccd8f621217f1f8d3d2671625d51c3d19709",
+    "independent_review": "e0317a4a6cb4201298a1637b245571610b16db0d",
+    "state": "reviewed-published-hosted-pending",
+    "medium_findings_open": 0,
+    "production_code_unchanged": true,
+    "strict_send_oracle_unchanged": true,
+    "native_harness_and_real_waits_unchanged": true,
+    "general_transport_retransmission_guarantee": false
+  },
+  "generation4_composition": {
+    "branch": "codex/generation4-composition-20261119",
+    "source": "5ebeaa646d0b6e09a09a9a5852ff2905653f1841",
+    "tree": "cbf4e03186906f8ccf0c8e23ec1737700dd19952",
+    "state": "full-suite-passed-tooling-regressions-under-repair",
+    "published": false,
+    "includes": [
+      "nine optional sources",
+      "favorites201",
+      "Solana acknowledgment202"
+    ],
+    "excludes_unfrozen_templates": true,
+    "base_commands_preserved": 52,
+    "total_commands": 60,
+    "full_suite": {
+      "tests": 2580,
+      "passed": 2580,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "observed_at_utc": "2026-11-20T01:18:53Z"
+    },
+    "tooling": {
+      "tests": 36,
+      "passed": 32,
+      "failed": 4,
+      "state": "investigating-and-repairing",
+      "defects": [
+        "stale locale aggregate assertions",
+        "copyKeys.sourceTextSha256 mismatch suppressed when copyStale",
+        "distribution source allowlist missing exact favorites Worker modules",
+        "After source-path repair, current unsigned distribution remains intentionally blocked by stale immutable locale binding; preserve guard and qualify expected refusal separately."
+      ]
+    },
+    "typescript_projects": 7,
+    "build_policy_tests": 56,
+    "production_files": 301,
+    "core_modules": 140
   }
 }
