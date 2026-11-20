@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdtemp, readFile, rm, writeFile, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import fsPromises from 'node:fs/promises';
+import { syncBuiltinESMExports } from 'node:module';
 import { buildPortal, PORTAL_DOWNLOADS, readPortalSource, sha256, validatePortalFiles, verifyPortalDirectory } from './build.mjs';
 import { PORTAL_HEADERS } from './policy.mjs';
 
@@ -44,4 +46,39 @@ test('dedicated delivery headers forbid executable, connection and framing autho
   const csp=PORTAL_HEADERS['Content-Security-Policy'];
   for(const directive of ['default-src','script-src','connect-src','object-src','base-uri','form-action','frame-src','frame-ancestors','worker-src'])assert.ok(csp.includes(`${directive} 'none'`));
   assert.equal(PORTAL_HEADERS['Referrer-Policy'],'no-referrer');
+});
+
+test('failed portal build preserves a replacement output owned by another operation',async t=>{
+  const temp=await mkdtemp(join(tmpdir(),'portal-cleanup-owner-')); t.after(()=>rm(temp,{recursive:true,force:true}));
+  const directory=join(temp,'portal'),retired=join(temp,'retired'),retained='Unrelated output must survive a failed portal build.\n';
+  const write=fsPromises.writeFile;
+  const injected=t.mock.method(fsPromises,'writeFile',async(path,...args)=>{
+    if(path===join(directory,'downloads/BasicEscrow.json')){
+      await fsPromises.rename(directory,retired);
+      await fsPromises.mkdir(directory);
+      await write(join(directory,'KEEP.txt'),retained,{flag:'wx'});
+      throw Error('INJECTED_PORTAL_WRITE_FAILURE');
+    }
+    return write(path,...args);
+  });
+  syncBuiltinESMExports();
+  try{
+    await assert.rejects(buildPortal({outDir:directory}),/INJECTED_PORTAL_WRITE_FAILURE/);
+    assert.equal(await readFile(join(directory,'KEEP.txt'),'utf8'),retained);
+    assert.equal((await fsPromises.lstat(retired)).isDirectory(),true);
+  }finally{injected.mock.restore();syncBuiltinESMExports();}
+});
+
+test('failed portal build still removes its own incomplete output',async t=>{
+  const temp=await mkdtemp(join(tmpdir(),'portal-cleanup-own-')); t.after(()=>rm(temp,{recursive:true,force:true}));
+  const directory=join(temp,'portal'),write=fsPromises.writeFile;
+  const injected=t.mock.method(fsPromises,'writeFile',async(path,...args)=>{
+    if(path===join(directory,'downloads/BasicEscrow.json'))throw Error('INJECTED_PORTAL_WRITE_FAILURE');
+    return write(path,...args);
+  });
+  syncBuiltinESMExports();
+  try{
+    await assert.rejects(buildPortal({outDir:directory}),/INJECTED_PORTAL_WRITE_FAILURE/);
+    await assert.rejects(fsPromises.lstat(directory),{code:'ENOENT'});
+  }finally{injected.mock.restore();syncBuiltinESMExports();}
 });
