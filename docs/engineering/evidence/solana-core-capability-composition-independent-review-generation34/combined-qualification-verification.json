@@ -1,0 +1,17 @@
+{
+  "source": "911f1ba5559789467f525f3262d114cd3c1565c9",
+  "tree": "6dd8f32643713b4e0d6846466db9af1a39b2abd9",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-composition-review-evidence/check-root-qualification.py"
+  ],
+  "startedAt": "2026-11-20T20:03:23.881167+00:00",
+  "completedAt": "2026-11-20T20:03:25.603370+00:00",
+  "exitCode": 0,
+  "log": "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-composition-review-evidence/combined-qualification-verification.log",
+  "bytes": 72658,
+  "sha256": "444eccfb90028567db17c704f9fee85b733c54a13e45ed74dc0bb587e1de6ba9",
+  "finalSource": "911f1ba5559789467f525f3262d114cd3c1565c9",
+  "cleanTrackedWorktree": true,
+  "summary": []
+}
