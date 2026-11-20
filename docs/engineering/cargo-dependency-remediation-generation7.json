@@ -1,0 +1,349 @@
+{
+  "schema": 1,
+  "id": "G7-CARGO-CTUTILS-PATCH-001",
+  "recorded_at_utc": "2026-11-20T02:47:08.535212+00:00",
+  "task_timezone": "America/Vancouver",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "base": "cd7d54ba075118a7ec043788c17718be842ee405",
+  "base_tree": "ce3c69ddc36245f756005c540e521a26a3ce59b8",
+  "source": "d2ba3b89c5e8a4fb06b3c01b2e981f9fafce672b",
+  "source_tree": "b6359a0273ae6ee5be194cb001878e981c85bf8d",
+  "state": "native-resolved-patch-with-scoped-graph-and-upstream-unit-evidence-awaiting-independent-and-integrated-native-qualification",
+  "lock_preservation": {
+    "packages": 412,
+    "only_changed_package": "ctutils",
+    "before": "0.4.2",
+    "after": "0.4.4",
+    "changed_fields": [
+      "version",
+      "checksum"
+    ],
+    "all_manifest_dependency_and_workflow_bytes_preserved": true,
+    "lock_sha256": "9700b283dad1a3fb008a53398f2e41e30f947aa9e76ddfb044ff9e922043ed90"
+  },
+  "cargo_update": {
+    "command": [
+      "/workspace/scratch/6bd6e00af1c0/verification/generation7-cargo-remediation/rust-1.98.1/bin/cargo",
+      "update",
+      "--manifest-path",
+      "contracts/solana/Cargo.toml",
+      "--package",
+      "ctutils",
+      "--precise",
+      "0.4.4"
+    ],
+    "exit": 0,
+    "seconds": 8.194,
+    "log_sha256": "dd5d4b5af5538dd3d3a016fbf1ea3f7a9c41ce58b034a9214155d86607b10e7c",
+    "before_lock_sha256": "af3401d2bd8e793693ea1e2626df46972b7933207d14c0cb450d13ab8f14c597",
+    "after_lock_sha256": "9700b283dad1a3fb008a53398f2e41e30f947aa9e76ddfb044ff9e922043ed90"
+  },
+  "cargo_audit": {
+    "command": [
+      "/workspace/scratch/6bd6e00af1c0/verification/dependency-qualification/cargo-pins/cargo-audit",
+      "audit",
+      "--file",
+      "contracts/solana/Cargo.lock",
+      "--db",
+      "/workspace/scratch/6bd6e00af1c0/verification/dependency-qualification/cargo-pins/advisory-db",
+      "--no-fetch",
+      "--no-yanked",
+      "--json"
+    ],
+    "exit": 1,
+    "seconds": 0.683,
+    "stdout_sha256": "2c194eff3f175e423423944db89ca26f4ba2b434138417bd25706fd505513ed1",
+    "vulnerabilities": [
+      [
+        "RUSTSEC-2026-0387",
+        "crypto-bigint",
+        "0.5.5"
+      ]
+    ],
+    "warnings": {
+      "unmaintained": 5
+    }
+  },
+  "cargo_audit_database": "074ea9a7ed619f511b5b7374c7a97e98d1e98be4",
+  "remaining_advisories": [
+    {
+      "id": "RUSTSEC-2026-0387",
+      "package": "crypto-bigint",
+      "version": "0.5.5",
+      "patched": [
+        ">=0.7.6"
+      ],
+      "cvss": null,
+      "application_secret_operation_established": false,
+      "scope": "host development dependency graph; active upstream version match; not a risk waiver"
+    }
+  ],
+  "maintenance_warnings": [
+    {
+      "id": "RUSTSEC-2021-0139",
+      "package": "ansi_term",
+      "version": "0.12.1"
+    },
+    {
+      "id": "RUSTSEC-2025-0141",
+      "package": "bincode",
+      "version": "1.3.3"
+    },
+    {
+      "id": "RUSTSEC-2024-0388",
+      "package": "derivative",
+      "version": "2.2.0"
+    },
+    {
+      "id": "RUSTSEC-2025-0161",
+      "package": "libsecp256k1",
+      "version": "0.7.2"
+    },
+    {
+      "id": "RUSTSEC-2024-0436",
+      "package": "paste",
+      "version": "1.0.15"
+    }
+  ],
+  "ctutils_feature_tree": {
+    "command": [
+      "/workspace/scratch/6bd6e00af1c0/verification/generation7-cargo-remediation/rust-1.98.1/bin/cargo",
+      "tree",
+      "--manifest-path",
+      "contracts/solana/Cargo.toml",
+      "--locked",
+      "--features",
+      "localnet",
+      "--edges",
+      "normal,build,dev,features",
+      "--invert",
+      "ctutils",
+      "--charset",
+      "ascii"
+    ],
+    "exit": 0,
+    "seconds": 8.62,
+    "stdout_sha256": "2804b49f490fb160d577efe97b84b670101623ffa72811f7d4eefbedb2c259fa",
+    "stderr_sha256": "4aa7ae0bfbfd7a9febb3fabe1e40d3d23a98eb5db7b2d59531b2ca7565fe5b98"
+  },
+  "other_feature_trees": [
+    {
+      "name": "cargo-tree-normal-build",
+      "command": [
+        "/workspace/scratch/6bd6e00af1c0/verification/generation7-cargo-remediation/rust-1.98.1/bin/cargo",
+        "tree",
+        "--manifest-path",
+        "contracts/solana/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--features",
+        "localnet",
+        "--edges",
+        "normal,build",
+        "--format",
+        "{p}",
+        "--prefix",
+        "none"
+      ],
+      "exit": 0,
+      "seconds": 0.677,
+      "stdout_sha256": "839d81e69b91651cae6942b101faa34e801e00b1f7e3220687d063e65563edc9",
+      "lines": 585,
+      "advisory_crate_lines": []
+    },
+    {
+      "name": "cargo-tree-bigint",
+      "command": [
+        "/workspace/scratch/6bd6e00af1c0/verification/generation7-cargo-remediation/rust-1.98.1/bin/cargo",
+        "tree",
+        "--manifest-path",
+        "contracts/solana/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--features",
+        "localnet",
+        "--edges",
+        "normal,build,dev,features",
+        "--invert",
+        "crypto-bigint",
+        "--charset",
+        "ascii"
+      ],
+      "exit": 0,
+      "seconds": 0.421,
+      "stdout_sha256": "7fbbf752e4d415c0dcfbb6bc38b2271af60f14a0c87eefa74e8c843127124057",
+      "lines": 118,
+      "advisory_crate_lines": [
+        "crypto-bigint v0.5.5"
+      ]
+    },
+    {
+      "name": "cargo-tree-host-digest",
+      "command": [
+        "/workspace/scratch/6bd6e00af1c0/verification/generation7-cargo-remediation/rust-1.98.1/bin/cargo",
+        "tree",
+        "--manifest-path",
+        "contracts/solana/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--features",
+        "localnet",
+        "--edges",
+        "normal,build,features",
+        "--invert",
+        "digest@0.11.3",
+        "--charset",
+        "ascii"
+      ],
+      "exit": 0,
+      "seconds": 0.358,
+      "stdout_sha256": "a22c914bf417921facf17d9a9f54f3379ae095a79e763f089036fe091db5257e",
+      "lines": 62,
+      "advisory_crate_lines": []
+    }
+  ],
+  "feature_graph_observations": {
+    "normal_build_output_lines": 585,
+    "ctutils_in_normal_build_graph": false,
+    "crypto_bigint_in_normal_build_graph": false,
+    "host_digest_mac_enabled": false,
+    "test_digest_mac_enabled": true,
+    "test_k256_signing_features_present": true,
+    "SBPF_compiled_artifact_proven": false
+  },
+  "toolchain": {
+    "manifest_sha256": "a7c8774a5fd8441c997d94c029776cbc5eb111e9d72ab5d256fa69866644347e",
+    "prefix": "/workspace/scratch/6bd6e00af1c0/verification/generation7-cargo-remediation/rust-1.98.1",
+    "components": [
+      {
+        "component": "cargo",
+        "url": "https://static.rust-lang.org/dist/2026-09-03/cargo-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+        "sha256": "ea1de9f9e23107d97ee2b41a72c552f34064a593da503789218387aee59f3ba4",
+        "bytes": 11662108,
+        "exit": 0,
+        "seconds": 8.384
+      },
+      {
+        "component": "rustc",
+        "url": "https://static.rust-lang.org/dist/2026-09-03/rustc-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+        "sha256": "e974f036b28565f37c0f3bd92ddefa809bee16c04f9dcf07b9ed96e05aaaf7c4",
+        "bytes": 79727616,
+        "exit": 0,
+        "seconds": 12.55
+      },
+      {
+        "component": "rust-std",
+        "url": "https://static.rust-lang.org/dist/2026-09-03/rust-std-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+        "sha256": "fa3ff450172a16c026944030230c5069947af93c728d9179971d44e5e0cfb561",
+        "bytes": 30715684,
+        "exit": 0,
+        "seconds": 8.606
+      }
+    ]
+  },
+  "upstream_unit": {
+    "command": [
+      "/workspace/scratch/6bd6e00af1c0/verification/generation7-cargo-remediation/rust-1.98.1/bin/cargo",
+      "test",
+      "--manifest-path",
+      "/workspace/scratch/6bd6e00af1c0/verification/generation7-cargo-remediation/sources/ctutils-0.4.4/Cargo.toml",
+      "--locked",
+      "--lib",
+      "--jobs",
+      "1"
+    ],
+    "exit": 0,
+    "seconds": 35.231,
+    "log_sha256": "10cc3c330e0ad1e9dc815bbc39e4c1f2fbe4603635f0199ed523e45f86f34b8c",
+    "upstream_lock_before": "68a0e988a37f399b87c82d3ae0a690c11044e658c2e11b8f3645add60b59da10",
+    "upstream_lock_after": "68a0e988a37f399b87c82d3ae0a690c11044e658c2e11b8f3645add60b59da10",
+    "summary": [
+      "running 150 tests",
+      "test result: ok. 150 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+    ]
+  },
+  "upstream_unit_tests_passed": 150,
+  "repository_suite_executed": false,
+  "machine_code_constant_time_verification_executed": false,
+  "crypto_bigint_compatibility": {
+    "elliptic_curve_version": "0.13.8",
+    "required_bigint_range": "0.5",
+    "highest_non_yanked_0_5": "0.5.5",
+    "latest_registry_version": "0.7.11",
+    "literal_0_7_6_yanked": true,
+    "forced_major_update": false
+  },
+  "inspected_upstream_sources": [
+    {
+      "package": "solana-syscalls",
+      "version": "4.1.2",
+      "archive_sha256": "f2788d359af16fac879c081bc0b725e8a200702156af92e75e2c18346fcde332",
+      "inspected_files": {
+        "src/lib.rs": "06f659f7e3d17724dc99fca4754f7660ba2e83b26b203afb45433a055bf0f2ce"
+      }
+    },
+    {
+      "package": "solana-secp256k1-recover",
+      "version": "3.3.0",
+      "archive_sha256": "ce0d2e8d53946f04e789476d6c407e4997b7fb412483df5fc10c075c65cb2edf",
+      "inspected_files": {
+        "Cargo.toml": "d7f3ca164ff65a59b9bcf9c59f2885c6c8bef9ad02ae6dc8bd5072a6a3548e03",
+        "src/lib.rs": "ee5b7ae850ceb8faefb7f3fd48b1d1b06d01b93b872958b7aa67e82ab3ecc9f5"
+      }
+    },
+    {
+      "package": "litesvm",
+      "version": "0.15.0",
+      "archive_sha256": "e5c571b8f010af084d125c8968e52658eb2c5d146a0a8254681adcdac36caa3e",
+      "inspected_files": {
+        "Cargo.toml": "c8e0cc0af2f97a6a797f626eb78dbdacd9e3b6caa5c12bdba2caeb633a6e3d1a",
+        "src/lib.rs": "280abbb9e2e62f59058323ad93fbeb22d664f27c9ca5476a617f472bca36cdd4"
+      }
+    },
+    {
+      "package": "solana-message",
+      "version": "4.3.0",
+      "archive_sha256": "f4a54f3f9057e67d521ef4faffbcbf2b11dc4a9021ea937a5983d05c7e28406e",
+      "inspected_files": {
+        "Cargo.toml": "affa3b46ff927d96a86eb29e2b96d9d1bf3c6804fce55906159373a76f1a22a7",
+        "src/legacy.rs": "de83a93b3cf7d7d7fcdc956bb1ef86c46f4dd82b5db9170d6bec3f3923cfa2a6",
+        "src/versions/mod.rs": "51835c88b211de55f3a99a929ec7e11f484778f95e7b0e2107b7417b56f907e2"
+      }
+    },
+    {
+      "package": "elliptic-curve",
+      "version": "0.13.8",
+      "archive_sha256": "b5e6043086bf7973472e0c7dff2142ea0b680d30e18d9cc40f267efbf222bd47",
+      "inspected_files": {
+        "Cargo.toml": "ae28aa3db758a5b18bf9e4b1253082b2503067f41be65e0bf3dc89917fda3f76"
+      }
+    },
+    {
+      "package": "digest",
+      "version": "0.11.3",
+      "archive_sha256": "f1dd6dbb5841937940781866fa1281a1ff7bd3bf827091440879f9994983d5c2",
+      "inspected_files": {
+        "Cargo.toml": "59c4f2cba7e34831c87e8f4844718d91d0f276af7bd192de76fda7d5a8978eb9",
+        "src/lib.rs": "c64f18b3afb199a64d5908459168af95a31f7deae5c73728970c20fe61c584e3",
+        "src/mac.rs": "298379aef3cb001be81176fd522dfa15e2522cd752fd402b82ddcc6b67af6c94"
+      }
+    },
+    {
+      "package": "blake3",
+      "version": "1.8.7",
+      "archive_sha256": "6d9e454fc11f76977dc803893aff6304ed33d6a26efae8696573bea74baa27ae",
+      "inspected_files": {
+        "Cargo.toml": "b10a23f248f27cef9b745adf8b25b2f4b7e0271f171fa268721df43f2bb25d25"
+      }
+    }
+  ],
+  "remote_mutations": 0,
+  "new_nested_workers_launched": 0,
+  "pending": [
+    "independent review of exact lock delta",
+    "integration onto corrected core descendant",
+    "exact-source Solana SBPF/Clippy/LiteSVM/IDL/validator/browser gates",
+    "upstream-compatible crypto-bigint remediation",
+    "yanked-package audit and separately recorded incomplete signature scopes"
+  ]
+}
