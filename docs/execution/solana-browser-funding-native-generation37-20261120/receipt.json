@@ -1,0 +1,1056 @@
+{
+  "schema": "p2p-offramp.solana-browser-funding-native-generation37.v1",
+  "createdAt": "2026-11-20T21:12:34.495588+00:00",
+  "component": {
+    "at": "2026-11-20T21:04:37.534631+00:00",
+    "source": "d8dbf9e82743fd670c7d3af80a024720cbfb0538",
+    "tree": "190a0482812b9dd86b81b66a8d34f3b41fe9efa9",
+    "parent": "b785a01ffc54a75d497641d0e758d077adff41d0",
+    "paths": {
+      "scripts/test-solana-localnet-browser.mjs": "c3e0a309b65e1da55521b579dcb179bb8308dc00e39dba20a3e9b587f586ffae",
+      "scripts/lib/solana-localnet-browser-fixture.mjs": "14e3e8ec0c3dd7ac488594c1a0286f4776d47810e18bd582d420d22957e1d6be",
+      "scripts/lib/solana-localnet-send-evidence.mjs": "2da1bee74f36605989b844fb89a3cf6398c51cdd215eec9f12c867f64612eded",
+      "apps/web/test/solana-localnet-funding-send-evidence.test.mjs": "0b8638dba3da9a55e4896179ab5d2b78060e8701c1b0744dfeed1b90484d3f69"
+    },
+    "sourceTests": 19,
+    "fullRepoSuiteExecuted": false,
+    "nativeExecuted": false,
+    "buildOnlyPendingCombinedSource": true,
+    "ReleaseEnabled": 0
+  },
+  "combined": {
+    "at": "2026-11-20T21:10:00.770228+00:00",
+    "source": "b695834c35e458ef36dd711ab82938d2eaf3f248",
+    "tree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+    "parent": "d8dbf9e82743fd670c7d3af80a024720cbfb0538",
+    "originalApplicationSource": "107ce93d030298f2668285067e156979c883184d",
+    "originalApplicationTree": "c992a93385240cdbfcecae79e70c73d1b2295013",
+    "applicationMappedSource": "b695834c35e458ef36dd711ab82938d2eaf3f248",
+    "componentBaseline": "b785a01ffc54a75d497641d0e758d077adff41d0",
+    "nativeComponentSource": "d8dbf9e82743fd670c7d3af80a024720cbfb0538",
+    "nativePaths": [
+      "apps/web/test/solana-localnet-funding-send-evidence.test.mjs",
+      "scripts/lib/solana-localnet-browser-fixture.mjs",
+      "scripts/lib/solana-localnet-send-evidence.mjs",
+      "scripts/test-solana-localnet-browser.mjs"
+    ],
+    "applicationPaths": [
+      "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+      "apps/web/src/solana-localnet/client.ts",
+      "apps/web/src/solana-localnet/controller.ts",
+      "apps/web/src/solana-localnet/protocol.ts",
+      "apps/web/src/solana-localnet/validation.ts",
+      "apps/web/test/solana-funding-admission-ui.test.mjs",
+      "apps/web/test/solana-funding-flow-support.mjs",
+      "apps/web/test/solana-funding-flow-ui-support.mjs",
+      "apps/web/test/solana-funding-flow-ui.test.mjs",
+      "apps/web/test/solana-localnet-funding-flow.test.mjs",
+      "packages/chain-solana/localnet.ts",
+      "packages/chain-solana/src/funding-review.ts"
+    ],
+    "nonDocumentationEntries": 1043,
+    "sourceCompositionExact": true,
+    "nativeExecuted": false,
+    "ReleaseEnabled": 0
+  },
+  "commands": [
+    {
+      "name": "01-missing-funding-oracle",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/solana-localnet-funding-send-evidence.test.mjs",
+        "apps/web/test/solana-localnet-send-evidence.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-browser-funding-native-g37",
+      "before": {
+        "head": "b785a01ffc54a75d497641d0e758d077adff41d0",
+        "headTree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+        "executionTree": "b508b53cea771d60e5bcf0ad7aff2d4bc03121fb",
+        "clean": false,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/01-missing-funding-oracle.patch",
+        "patchBytes": 9387,
+        "patchSha256": "4f3afb95759a399609ac0cc3af5b6a2f1545ea6235ff06e7adcfdde4dbf71c8b"
+      },
+      "startedAt": "2026-11-20T21:00:18.516893+00:00",
+      "completedAt": "2026-11-20T21:00:19.346191+00:00",
+      "exitCode": 1,
+      "after": {
+        "head": "b785a01ffc54a75d497641d0e758d077adff41d0",
+        "headTree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+        "executionTree": "b508b53cea771d60e5bcf0ad7aff2d4bc03121fb",
+        "clean": false,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/01-missing-funding-oracle.after.patch",
+        "patchBytes": 9387,
+        "patchSha256": "4f3afb95759a399609ac0cc3af5b6a2f1545ea6235ff06e7adcfdde4dbf71c8b"
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/01-missing-funding-oracle.log",
+      "bytes": 11786,
+      "sha256": "7449788e6279082c768530ab17be1565c9446eb14c92117a07cb4473f3a85ba5",
+      "counts": {
+        "tests": 10,
+        "pass": 2,
+        "fail": 8,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "unchangedDuringExecution": true
+    },
+    {
+      "name": "02-fixed-funding-oracle",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/solana-localnet-funding-send-evidence.test.mjs",
+        "apps/web/test/solana-localnet-send-evidence.test.mjs",
+        "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-browser-funding-native-g37",
+      "before": {
+        "head": "b785a01ffc54a75d497641d0e758d077adff41d0",
+        "headTree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+        "executionTree": "a304a0ef11112fea6f8efc89e0dee77d409cc788",
+        "clean": false,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/02-fixed-funding-oracle.patch",
+        "patchBytes": 15384,
+        "patchSha256": "9109e48366ba3498dd002b2656cc9859de1ed4fb1c6eafd8806d66d0de09e136"
+      },
+      "startedAt": "2026-11-20T21:00:47.234637+00:00",
+      "completedAt": "2026-11-20T21:00:48.531828+00:00",
+      "exitCode": 0,
+      "after": {
+        "head": "b785a01ffc54a75d497641d0e758d077adff41d0",
+        "headTree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+        "executionTree": "a304a0ef11112fea6f8efc89e0dee77d409cc788",
+        "clean": false,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/02-fixed-funding-oracle.after.patch",
+        "patchBytes": 15384,
+        "patchSha256": "9109e48366ba3498dd002b2656cc9859de1ed4fb1c6eafd8806d66d0de09e136"
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/02-fixed-funding-oracle.log",
+      "bytes": 4529,
+      "sha256": "b35323d0f1fe62bb0233f51d18151f188a2666bb902bdc8a6ea302d1b22158d5",
+      "counts": {
+        "tests": 17,
+        "pass": 17,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "unchangedDuringExecution": true
+    },
+    {
+      "name": "03-driver-and-oracle-selection",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/solana-localnet-funding-send-evidence.test.mjs",
+        "apps/web/test/solana-localnet-send-evidence.test.mjs",
+        "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+        "apps/web/test/solana-localnet-withheld-send.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-browser-funding-native-g37",
+      "before": {
+        "head": "b785a01ffc54a75d497641d0e758d077adff41d0",
+        "headTree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+        "executionTree": "190a0482812b9dd86b81b66a8d34f3b41fe9efa9",
+        "clean": false,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/03-driver-and-oracle-selection.patch",
+        "patchBytes": 34468,
+        "patchSha256": "27a6a86062c7fbf0d42c903461dfd58b38ed18f4bd84e2b78f3c4eaaef0a88fa"
+      },
+      "startedAt": "2026-11-20T21:03:14.027247+00:00",
+      "completedAt": "2026-11-20T21:03:15.231998+00:00",
+      "exitCode": 0,
+      "after": {
+        "head": "b785a01ffc54a75d497641d0e758d077adff41d0",
+        "headTree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+        "executionTree": "190a0482812b9dd86b81b66a8d34f3b41fe9efa9",
+        "clean": false,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/03-driver-and-oracle-selection.after.patch",
+        "patchBytes": 34468,
+        "patchSha256": "27a6a86062c7fbf0d42c903461dfd58b38ed18f4bd84e2b78f3c4eaaef0a88fa"
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/03-driver-and-oracle-selection.log",
+      "bytes": 5059,
+      "sha256": "2fb4e9ced3f11af1f82616e648ee14dba532d4f96378bb488270e6cae5ab72e2",
+      "counts": {
+        "tests": 19,
+        "pass": 19,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "unchangedDuringExecution": true
+    },
+    {
+      "name": "04-preservation-syntax-whitespace",
+      "command": [
+        "python3",
+        "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/verify-preservation.py"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-browser-funding-native-g37",
+      "before": {
+        "head": "b785a01ffc54a75d497641d0e758d077adff41d0",
+        "headTree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+        "executionTree": "190a0482812b9dd86b81b66a8d34f3b41fe9efa9",
+        "clean": false,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/04-preservation-syntax-whitespace.patch",
+        "patchBytes": 34468,
+        "patchSha256": "27a6a86062c7fbf0d42c903461dfd58b38ed18f4bd84e2b78f3c4eaaef0a88fa"
+      },
+      "startedAt": "2026-11-20T21:04:16.515238+00:00",
+      "completedAt": "2026-11-20T21:04:16.923958+00:00",
+      "exitCode": 0,
+      "after": {
+        "head": "b785a01ffc54a75d497641d0e758d077adff41d0",
+        "headTree": "f6cad0ba726fc8a077a54cb5610f2032e3cd0242",
+        "executionTree": "190a0482812b9dd86b81b66a8d34f3b41fe9efa9",
+        "clean": false,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/04-preservation-syntax-whitespace.after.patch",
+        "patchBytes": 34468,
+        "patchSha256": "27a6a86062c7fbf0d42c903461dfd58b38ed18f4bd84e2b78f3c4eaaef0a88fa"
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/04-preservation-syntax-whitespace.log",
+      "bytes": 1168,
+      "sha256": "ef4ef850a8f0982692953b1c02ebc355d19fd8c493d66f0fe59555abd76cefe0",
+      "counts": {},
+      "unchangedDuringExecution": true
+    },
+    {
+      "name": "05-combined-oracle-selection",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/solana-localnet-funding-send-evidence.test.mjs",
+        "apps/web/test/solana-localnet-send-evidence.test.mjs",
+        "apps/web/test/solana-localnet-proposal-browser-evidence.test.mjs",
+        "apps/web/test/solana-localnet-withheld-send.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-browser-funding-native-g37",
+      "before": {
+        "head": "b695834c35e458ef36dd711ab82938d2eaf3f248",
+        "headTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "executionTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "clean": true,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/05-combined-oracle-selection.patch",
+        "patchBytes": 0,
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "startedAt": "2026-11-20T21:10:23.439229+00:00",
+      "completedAt": "2026-11-20T21:10:24.736980+00:00",
+      "exitCode": 0,
+      "after": {
+        "head": "b695834c35e458ef36dd711ab82938d2eaf3f248",
+        "headTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "executionTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "clean": true,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/05-combined-oracle-selection.after.patch",
+        "patchBytes": 0,
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/05-combined-oracle-selection.log",
+      "bytes": 5058,
+      "sha256": "98640b63ed33ce5a943fdaa7bd2555e4ba17263a9b7f7e534c9e398b83a59a51",
+      "counts": {
+        "tests": 19,
+        "pass": 19,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "unchangedDuringExecution": true
+    },
+    {
+      "name": "06-build-only-driver",
+      "command": [
+        "node",
+        "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/compile-driver.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-browser-funding-native-g37",
+      "before": {
+        "head": "b695834c35e458ef36dd711ab82938d2eaf3f248",
+        "headTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "executionTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "clean": true,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/06-build-only-driver.patch",
+        "patchBytes": 0,
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "startedAt": "2026-11-20T21:10:44.893177+00:00",
+      "completedAt": "2026-11-20T21:10:45.142519+00:00",
+      "exitCode": 0,
+      "after": {
+        "head": "b695834c35e458ef36dd711ab82938d2eaf3f248",
+        "headTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "executionTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "clean": true,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/06-build-only-driver.after.patch",
+        "patchBytes": 0,
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/06-build-only-driver.log",
+      "bytes": 11877,
+      "sha256": "91cf8aa97be14672c74000bf8f420041d8df24c87e6b5c91c017ed0ddef14792",
+      "counts": {},
+      "unchangedDuringExecution": true
+    },
+    {
+      "name": "07-combined-interface",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/verify-combined-interface.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-browser-funding-native-g37",
+      "before": {
+        "head": "b695834c35e458ef36dd711ab82938d2eaf3f248",
+        "headTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "executionTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "clean": true,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/07-combined-interface.patch",
+        "patchBytes": 0,
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "startedAt": "2026-11-20T21:11:12.214802+00:00",
+      "completedAt": "2026-11-20T21:11:12.734941+00:00",
+      "exitCode": 0,
+      "after": {
+        "head": "b695834c35e458ef36dd711ab82938d2eaf3f248",
+        "headTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "executionTree": "1549b5ba9077244e43720edbb1072eceeb6abb60",
+        "clean": true,
+        "patch": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/07-combined-interface.after.patch",
+        "patchBytes": 0,
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "log": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/07-combined-interface.log",
+      "bytes": 747,
+      "sha256": "90ecbdc27bde8142ca4df3a4ca60702b83c9684d1e11b0c10e20c93b0a61eb8d",
+      "counts": {},
+      "unchangedDuringExecution": true
+    }
+  ],
+  "compilation": {
+    "check": "Build-only Node browser-driver compilation; generated output is never evaluated",
+    "nodeVersion": "v24.22.3",
+    "rolldownVersion": "1.2.15",
+    "source": "scripts/test-solana-localnet-browser.mjs",
+    "inputCount": 70,
+    "inputs": [
+      {
+        "path": "apps/web/scripts/artifact-policy.mjs",
+        "sha256": "7817ed04f64a800da0f62e7f189d3f6057f60c9b0ca13b7f8ada2d8afc0db398"
+      },
+      {
+        "path": "apps/web/scripts/build.mjs",
+        "sha256": "9d5d4ff5c33c164cd2d91ff85553009bb0b75de5ce518effdad3fabbbbf6b882"
+      },
+      {
+        "path": "apps/web/scripts/qr-build-policy.mjs",
+        "sha256": "09205d7bc3d67e65b97c5107037a8d8495c6da33f36cb5e0d6f487e85ba33077"
+      },
+      {
+        "path": "apps/web/scripts/source-locale.mjs",
+        "sha256": "4f730b6d7b0ca36a8bb6b8e1aef0f60405c110de685bd4a8e252c107e65f8cf5"
+      },
+      {
+        "path": "apps/web/scripts/static-build-plugin.mjs",
+        "sha256": "b1afc553772285330c732eafc3cb49db3af13b43ae7eb7521dff27ef4d4c976d"
+      },
+      {
+        "path": "apps/web/scripts/testnet-trust.mjs",
+        "sha256": "f52257af09ea837a74352ee8bdf17fde7e83013ae1ae87256cf87835c33c3fe3"
+      },
+      {
+        "path": "apps/web/src/localnet/config.ts",
+        "sha256": "973188b3646d4d4a9088d43f37d6d8cbd46c88648e1abde6f22f27e82cbaef98"
+      },
+      {
+        "path": "apps/web/src/solana-localnet/config.ts",
+        "sha256": "ab3045d87ce47a4591e42416de1da1ce597c4aa37e9a4795dae7ba53759a0f3c"
+      },
+      {
+        "path": "apps/web/src/solana-localnet/funding-proposal.ts",
+        "sha256": "e749b7b33a8b2a8ab0bdaa7f5a5ee3df0a10378f8519116614bfee5488591b8c"
+      },
+      {
+        "path": "apps/web/src/solana-localnet/validation.ts",
+        "sha256": "e4aea49117e84935fce41e760127f806190bebbbc413386c672d61432636f5ea"
+      },
+      {
+        "path": "apps/web/src/testnet/sepolia-network.ts",
+        "sha256": "1af89b6c9a32a1c48b82c5a6d8bf24c870e9ecfdb05a3ebf6b0740bc67205bc8"
+      },
+      {
+        "path": "apps/web/src/ui/locale/catalog.ts",
+        "sha256": "f1b8923380517a6f1012f9abbfde0a3277a7f15812a4e94f35c74bd41cf4b763"
+      },
+      {
+        "path": "apps/web/src/ui/locale/en.ts",
+        "sha256": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18"
+      },
+      {
+        "path": "apps/web/vite.config.ts",
+        "sha256": "c06238ffe63f31b89b3ae3ad2a09a4d52d735cce56c200b5d3b82279b05b0da4"
+      },
+      {
+        "path": "contracts/solana/localnet/driver.mjs",
+        "sha256": "5ac16f54283c8fcc3dd49f735ee8e7a5f86878cc7c70fd7185dce5ec540d42e1"
+      },
+      {
+        "path": "contracts/solana/localnet/tool-path.mjs",
+        "sha256": "d057d63871e6ae0fdb4ef8b9293bf85b10820f9afba79ade35df75920d069ef5"
+      },
+      {
+        "path": "contracts/solana/vectors/derive.mjs",
+        "sha256": "dc5cceb1404fe8589e0fef0799749ce502ad5c091bf48e6fe127d5bb30e90fba"
+      },
+      {
+        "path": "packages/chain-solana/src/address.ts",
+        "sha256": "eb919e23ef0d84a999b9dfe58ce75569612c390fb9d4e35b2ea74fb731ca07f8"
+      },
+      {
+        "path": "packages/chain-solana/src/auxiliary.ts",
+        "sha256": "c7a07093ceb10bdef19e371bf44cbcc05f9ce68e62eae1cebe83a0bf77f3ee89"
+      },
+      {
+        "path": "packages/chain-solana/src/bind.ts",
+        "sha256": "6e69bdf39d20156f3e789755a7a53b84a32b7c9bf6a88d846ef4f9e32d598886"
+      },
+      {
+        "path": "packages/chain-solana/src/codec.ts",
+        "sha256": "83fb33e97601e7b2803d41215f6df4a05047859c08f5d9008343eb1a0ecdd998"
+      },
+      {
+        "path": "packages/chain-solana/src/compose.ts",
+        "sha256": "969ef26ac76c464d86c8269ed47a3fd2d0402320607299f498a0ff42eb97722a"
+      },
+      {
+        "path": "packages/chain-solana/src/instructions.ts",
+        "sha256": "b9587cd5f8148a0221268998f17f927e093972682654d8c0f08ffb94366f6646"
+      },
+      {
+        "path": "packages/chain-solana/src/intent.ts",
+        "sha256": "aaf2dc624e2e64474d3498781cf4ee1ff04508938e4ecf69423e0d2060479143"
+      },
+      {
+        "path": "packages/chain-solana/src/journal.ts",
+        "sha256": "834c0cc0bdb3ac950e52fb0c0eeeff2c85c14bacc2f7633d93561128a839ef21"
+      },
+      {
+        "path": "packages/chain-solana/src/layout.ts",
+        "sha256": "4e5b88672ce76448be49bfcf022b2ee032fd2359006a38d28e4b8ced28e257a7"
+      },
+      {
+        "path": "packages/chain-solana/src/message.ts",
+        "sha256": "3cbc8d12f247eeeac9498f77b636a4229de0ec6c957bfda61952ab14e40e4920"
+      },
+      {
+        "path": "packages/chain-solana/src/payout.ts",
+        "sha256": "b282b4c5fb67cc95ed7e68afa07a71225f31d06232dc2ec6f81e5ad9efed6af8"
+      },
+      {
+        "path": "packages/chain-solana/src/plan.ts",
+        "sha256": "ef5e14a71bf9a15886d071b9455c03a55b22538da1161891d968bc3fdd1be4c0"
+      },
+      {
+        "path": "packages/chain-solana/src/policy.ts",
+        "sha256": "047238dfa2cf89b2f91dda4fdfc543f06299bf94547473768d1cf07510d3e186"
+      },
+      {
+        "path": "packages/chain-solana/src/reader.ts",
+        "sha256": "678e64326a997d18feff72803c2b08e234b92e12e9c336220e61c743bc51e2c0"
+      },
+      {
+        "path": "packages/chain-solana/src/recovery.ts",
+        "sha256": "b56b98c17061a047d3e0b223bbe4adbb84232c1104fe3d0fc31f43aa6b1a9c8e"
+      },
+      {
+        "path": "packages/chain-solana/src/submit.ts",
+        "sha256": "575e9f79e96c41c010591eba001f87eab0d04d197c3bb16495213037fe7c3856"
+      },
+      {
+        "path": "packages/chain-solana/src/wallet.ts",
+        "sha256": "391d8083235fb71ab873e29cc3a499787ae65ffc7ae3403daf3ab23b39c32fb1"
+      },
+      {
+        "path": "packages/chain-solana/src/window.ts",
+        "sha256": "5d322c7447a6f948f17476f6fa4b3484cb799ec54f935c749e53807cfd1b275f"
+      },
+      {
+        "path": "packages/domain/index.ts",
+        "sha256": "c9404cdbc78cc8d5989a856f9ec191ac68b797efd02df4074508d43332a4e1b1"
+      },
+      {
+        "path": "packages/domain/src/errors.ts",
+        "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5"
+      },
+      {
+        "path": "packages/domain/src/journey-view.ts",
+        "sha256": "c1c4827fe287846806270b0975b6728b542d1781147da2aa118a34f86e90314f"
+      },
+      {
+        "path": "packages/domain/src/observation-dispatcher.ts",
+        "sha256": "4029e90b88f14985542cdb41ec126c3a122422d089853d51e9d0ece544ba1ef2"
+      },
+      {
+        "path": "packages/domain/src/privacy-view.ts",
+        "sha256": "78f87e101f3b73e4bec7a19451d59063daca9c33245a65cf9dda1f89ae78e715"
+      },
+      {
+        "path": "packages/domain/src/registry.ts",
+        "sha256": "2674e7aae8f10e949ed0e22219e4727340c57c9352095aa7c5c5a04b0a605f18"
+      },
+      {
+        "path": "packages/domain/src/terms-review.ts",
+        "sha256": "21771f29867c14a4fc6f4e3e0c3ca07313fcd504c93a5314db0afb1c81c5f364"
+      },
+      {
+        "path": "packages/domain/src/trade-draft.ts",
+        "sha256": "9376a28f27287e9c6ce17940de24012e5308c6b11dcb5a09605624da025c51f1"
+      },
+      {
+        "path": "packages/domain/src/trade-terms.ts",
+        "sha256": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2"
+      },
+      {
+        "path": "packages/schemas/index.ts",
+        "sha256": "d3246790ee5c8e4213611771c2e30c0b74d36a39094f28ab0ad18f03986cfa15"
+      },
+      {
+        "path": "packages/schemas/src/core.ts",
+        "sha256": "b2e16e203d47a7add7531ffdd5701dad932e6ebd275470b66d56d8417749037e"
+      },
+      {
+        "path": "packages/schemas/src/intent.ts",
+        "sha256": "3b91d8edbae6f359c1b67eab3469f3c0ed7c02604083f15310529257f893d948"
+      },
+      {
+        "path": "packages/schemas/src/recovery-reference.ts",
+        "sha256": "52cf80934460a4c4dbe134b3be7f058ab037fe9512765b4bb48994bff4147625"
+      },
+      {
+        "path": "packages/schemas/src/registry.ts",
+        "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183"
+      },
+      {
+        "path": "packages/schemas/src/runtime.ts",
+        "sha256": "7555752bd735d2a23335d102bb1ea4a44e29fc49255f3d3b0c41750d3e90b93c"
+      },
+      {
+        "path": "packages/schemas/src/saved-review.ts",
+        "sha256": "5d6ad0a31b5c0ff880f2e7202a602bf8aa961166f51db3dc8b821cc33dd8f9c5"
+      },
+      {
+        "path": "packages/schemas/src/solana-recovery-reference.ts",
+        "sha256": "2684bec2dd59d3760b50fb9a58d9780d39b1b8e05c292c532397e0d738cb8897"
+      },
+      {
+        "path": "packages/schemas/src/trade-drafts.ts",
+        "sha256": "964ee6756b1ad68b2489a51147542f09c6d287c9dc5efbaa7ad3f02622d60838"
+      },
+      {
+        "path": "packages/schemas/src/transport-selection.ts",
+        "sha256": "23298bcc145008000acffb1632a9be35729ae3e99d7db458a3fd762caabaae42"
+      },
+      {
+        "path": "packages/schemas/src/transport.ts",
+        "sha256": "084c0b5e16975340911f7e4f70eaf5d3823799b7cb19037db5012f6d3c892dc8"
+      },
+      {
+        "path": "packages/schemas/src/vault.ts",
+        "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8"
+      },
+      {
+        "path": "packages/security/index.ts",
+        "sha256": "5d10ac31c235c8ec4b6cfafa0c6b13367175dead87f5209da95aceabe83184a9"
+      },
+      {
+        "path": "packages/security/src/acceptance-gates.ts",
+        "sha256": "1377c53a6cf794c5d0af1f2b40f999f4e7409fbd70153ef3c399f6f80eed041b"
+      },
+      {
+        "path": "packages/security/src/content-policy.ts",
+        "sha256": "4685e0018840b551557fab53834971bba1751cb92f436e0409ad2510dde72381"
+      },
+      {
+        "path": "packages/security/src/release-locator.ts",
+        "sha256": "a9de13ed5853f2c58c9ea6c725346b60da47958bc180adc07a50b81c1ca6c4e4"
+      },
+      {
+        "path": "packages/security/src/release-manifest.ts",
+        "sha256": "d01f4becc6e88cf2ff2a3ddfa9909c83147154f86f60fead0629daa56d7a4969"
+      },
+      {
+        "path": "packages/security/src/release-proof.ts",
+        "sha256": "309f3660a5ce5a4d5d15f549bdcb54fde8749c18b3464a7b23a85b544c34fafe"
+      },
+      {
+        "path": "packages/storage/src/vault-crypto.ts",
+        "sha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513"
+      },
+      {
+        "path": "scripts/lib/chromium-path.mjs",
+        "sha256": "c4e049e5739047ae82f800758f3085b2161f94a712c1509c28d2232d20818728"
+      },
+      {
+        "path": "scripts/lib/is-main.mjs",
+        "sha256": "122a4e55eb0f064ecbc3bd48e4ef21a5880267418af0fc0dc23d0a96654af3eb"
+      },
+      {
+        "path": "scripts/lib/solana-localnet-browser-fixture.mjs",
+        "sha256": "14e3e8ec0c3dd7ac488594c1a0286f4776d47810e18bd582d420d22957e1d6be"
+      },
+      {
+        "path": "scripts/lib/solana-localnet-fixture.mjs",
+        "sha256": "d6a554f5ac1f3384c6b094a29cdb24b30980d22ec94e192bedddba875923d1fd"
+      },
+      {
+        "path": "scripts/lib/solana-localnet-send-evidence.mjs",
+        "sha256": "2da1bee74f36605989b844fb89a3cf6398c51cdd215eec9f12c867f64612eded"
+      },
+      {
+        "path": "scripts/lib/solana-localnet-withheld-send.mjs",
+        "sha256": "b4d2f20c16e4ac1cea943a1b915fd7b0f972d1d9c3de695f715cae0a60f54b32"
+      },
+      {
+        "path": "scripts/test-solana-localnet-browser.mjs",
+        "sha256": "c3e0a309b65e1da55521b579dcb179bb8308dc00e39dba20a3e9b587f586ffae"
+      }
+    ],
+    "warnings": [],
+    "outputs": [
+      {
+        "file": "compiled-driver-0.mjs.gz",
+        "rawBytes": 321797,
+        "rawSha256": "f7c2b0d1ecd3587feafca7205e2eb1600a8b6e90b23589a8405cd69f5a0e3e32",
+        "compressedBytes": 84236,
+        "compressedSha256": "0e425b5dddfc056acb785e3852b938f17d70882d89eef8377db7395633a789ac",
+        "gzipMtime": 0
+      },
+      {
+        "file": "compiled-driver-1.mjs.gz",
+        "rawBytes": 16390,
+        "rawSha256": "419dc2822a17c03bf44b609f9e10a81309831c275b88c5c8994c463bc001faf5",
+        "compressedBytes": 5612,
+        "compressedSha256": "7ad6c6390ac52b0bbfcf1740e7f3c87221a94fbb00312c153eb0f727a784ca31",
+        "gzipMtime": 0
+      },
+      {
+        "file": "compiled-driver-2.mjs.gz",
+        "rawBytes": 91597,
+        "rawSha256": "b715263a39dcf344efa91f7f22a76212ad01a17fce294d841015701e1bf5784d",
+        "compressedBytes": 28604,
+        "compressedSha256": "8cd2b94559242ad858cb291dad38e2792e85991b740781a87011f0b2fad4b21b",
+        "gzipMtime": 0
+      }
+    ],
+    "external": "Node builtins and bare package imports",
+    "nativeBrowserExecuted": false,
+    "nativeValidatorExecuted": false,
+    "compiledOutputExecuted": false,
+    "ReleaseEnabled": 0
+  },
+  "artifacts": [
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/01-missing-funding-oracle.after.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/01-missing-funding-oracle.after.patch",
+      "rawBytes": 9387,
+      "rawSha256": "4f3afb95759a399609ac0cc3af5b6a2f1545ea6235ff06e7adcfdde4dbf71c8b",
+      "compressedBytes": 2733,
+      "compressedSha256": "3e80072d744c50ba6772501c71ecac092c8e5cade31474ab5b47a39d9a575eae",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/01-missing-funding-oracle.json.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/01-missing-funding-oracle.json",
+      "rawBytes": 1733,
+      "rawSha256": "be12df0f6714c076b26e024a03b4f83e265350f5db1763e0afcaf5cbe0fee0df",
+      "compressedBytes": 644,
+      "compressedSha256": "39169739da30d8bcebf16f94b9e529ed0b444ee9d331d3569e78c9842e2bbce5",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/01-missing-funding-oracle.log.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/01-missing-funding-oracle.log",
+      "rawBytes": 11786,
+      "rawSha256": "7449788e6279082c768530ab17be1565c9446eb14c92117a07cb4473f3a85ba5",
+      "compressedBytes": 1299,
+      "compressedSha256": "1aae59cc730acf23b09118511d462c9148445f7042a61edd76259453da5e9f95",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/01-missing-funding-oracle.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/01-missing-funding-oracle.patch",
+      "rawBytes": 9387,
+      "rawSha256": "4f3afb95759a399609ac0cc3af5b6a2f1545ea6235ff06e7adcfdde4dbf71c8b",
+      "compressedBytes": 2733,
+      "compressedSha256": "3e80072d744c50ba6772501c71ecac092c8e5cade31474ab5b47a39d9a575eae",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/02-fixed-funding-oracle.after.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/02-fixed-funding-oracle.after.patch",
+      "rawBytes": 15384,
+      "rawSha256": "9109e48366ba3498dd002b2656cc9859de1ed4fb1c6eafd8806d66d0de09e136",
+      "compressedBytes": 4325,
+      "compressedSha256": "b5bad8b75f80853f4350510657557241a76c0477ba81bd7263a5522e6dd8fbd2",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/02-fixed-funding-oracle.json.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/02-fixed-funding-oracle.json",
+      "rawBytes": 1799,
+      "rawSha256": "338b45edd939364e9cf1843ca03f0ff5129f18daab50fb65d47810734416b9cc",
+      "compressedBytes": 651,
+      "compressedSha256": "16532a5b8addecdd2ed33a180f9d34b8f3e0f2b34b88036c83197bd5266e6778",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/02-fixed-funding-oracle.log.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/02-fixed-funding-oracle.log",
+      "rawBytes": 4529,
+      "rawSha256": "b35323d0f1fe62bb0233f51d18151f188a2666bb902bdc8a6ea302d1b22158d5",
+      "compressedBytes": 1168,
+      "compressedSha256": "9cae0d517cb9416e6192c16e25c1e455666a70b399b3bac859d03ea9e9129817",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/02-fixed-funding-oracle.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/02-fixed-funding-oracle.patch",
+      "rawBytes": 15384,
+      "rawSha256": "9109e48366ba3498dd002b2656cc9859de1ed4fb1c6eafd8806d66d0de09e136",
+      "compressedBytes": 4325,
+      "compressedSha256": "b5bad8b75f80853f4350510657557241a76c0477ba81bd7263a5522e6dd8fbd2",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/03-driver-and-oracle-selection.after.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/03-driver-and-oracle-selection.after.patch",
+      "rawBytes": 34468,
+      "rawSha256": "27a6a86062c7fbf0d42c903461dfd58b38ed18f4bd84e2b78f3c4eaaef0a88fa",
+      "compressedBytes": 8531,
+      "compressedSha256": "1ce3837819de72eced7c4ac7aa0ed9d7cd18419a97bfd6ade912ba009495fd6d",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/03-driver-and-oracle-selection.json.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/03-driver-and-oracle-selection.json",
+      "rawBytes": 1887,
+      "rawSha256": "7f5b6df929f3cb087bd3f3ca44831d7669b86d94de6783928b11bd3f2fbaded0",
+      "compressedBytes": 668,
+      "compressedSha256": "a148940f5a35cd745216a6a1526c8f12792b5fd28b654dfe6960ecc3fcecbc43",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/03-driver-and-oracle-selection.log.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/03-driver-and-oracle-selection.log",
+      "rawBytes": 5059,
+      "rawSha256": "2fb4e9ced3f11af1f82616e648ee14dba532d4f96378bb488270e6cae5ab72e2",
+      "compressedBytes": 1303,
+      "compressedSha256": "292f10c00b528ee24eaee17398535c9470cd25b8c3c8aa2ad1b25b661ce52c59",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/03-driver-and-oracle-selection.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/03-driver-and-oracle-selection.patch",
+      "rawBytes": 34468,
+      "rawSha256": "27a6a86062c7fbf0d42c903461dfd58b38ed18f4bd84e2b78f3c4eaaef0a88fa",
+      "compressedBytes": 8531,
+      "compressedSha256": "1ce3837819de72eced7c4ac7aa0ed9d7cd18419a97bfd6ade912ba009495fd6d",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/04-preservation-syntax-whitespace.after.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/04-preservation-syntax-whitespace.after.patch",
+      "rawBytes": 34468,
+      "rawSha256": "27a6a86062c7fbf0d42c903461dfd58b38ed18f4bd84e2b78f3c4eaaef0a88fa",
+      "compressedBytes": 8531,
+      "compressedSha256": "1ce3837819de72eced7c4ac7aa0ed9d7cd18419a97bfd6ade912ba009495fd6d",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/04-preservation-syntax-whitespace.json.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/04-preservation-syntax-whitespace.json",
+      "rawBytes": 1524,
+      "rawSha256": "5e7ef0270d7dde8d0ba0d5fe661162a934d287a13f208d16e81aaacedeb1acfc",
+      "compressedBytes": 535,
+      "compressedSha256": "9d07d776249772ebc4517b75aa62fb313cd7e7b8ab8096f0e5c4f664cdb72294",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/04-preservation-syntax-whitespace.log.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/04-preservation-syntax-whitespace.log",
+      "rawBytes": 1168,
+      "rawSha256": "ef4ef850a8f0982692953b1c02ebc355d19fd8c493d66f0fe59555abd76cefe0",
+      "compressedBytes": 607,
+      "compressedSha256": "b8ef2c851e21bbe533a8008b3a01a77db0c02e6c4583252915060ac3e465f645",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/04-preservation-syntax-whitespace.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/04-preservation-syntax-whitespace.patch",
+      "rawBytes": 34468,
+      "rawSha256": "27a6a86062c7fbf0d42c903461dfd58b38ed18f4bd84e2b78f3c4eaaef0a88fa",
+      "compressedBytes": 8531,
+      "compressedSha256": "1ce3837819de72eced7c4ac7aa0ed9d7cd18419a97bfd6ade912ba009495fd6d",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/05-combined-oracle-selection.after.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/05-combined-oracle-selection.after.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedBytes": 20,
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/05-combined-oracle-selection.json.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/05-combined-oracle-selection.json",
+      "rawBytes": 1869,
+      "rawSha256": "e208ccbee9a74a7656f722fafc4d4691a7c46db68566c1de77d39ca9e102ecf8",
+      "compressedBytes": 637,
+      "compressedSha256": "352337c2dfc95f1c8e93d91c5fb370525a696822bda5e408e48e3ca3ea522a09",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/05-combined-oracle-selection.log.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/05-combined-oracle-selection.log",
+      "rawBytes": 5058,
+      "rawSha256": "98640b63ed33ce5a943fdaa7bd2555e4ba17263a9b7f7e534c9e398b83a59a51",
+      "compressedBytes": 1301,
+      "compressedSha256": "47e4f863b924ee0920921386301694c77dbb943a05fe730cc09b1c14e8dc36e6",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/05-combined-oracle-selection.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/05-combined-oracle-selection.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedBytes": 20,
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/06-build-only-driver.after.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/06-build-only-driver.after.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedBytes": 20,
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/06-build-only-driver.json.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/06-build-only-driver.json",
+      "rawBytes": 1456,
+      "rawSha256": "0abe7f3353cfe7f9755464d97b0c22f272b4f794a6a75293f5abfd157ade5d37",
+      "compressedBytes": 504,
+      "compressedSha256": "1311e873e02d0b8ddf8570a569459dcdd9f714640fe6ddc0f69cbc60ef0be496",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/06-build-only-driver.log.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/06-build-only-driver.log",
+      "rawBytes": 11877,
+      "rawSha256": "91cf8aa97be14672c74000bf8f420041d8df24c87e6b5c91c017ed0ddef14792",
+      "compressedBytes": 4224,
+      "compressedSha256": "a7e62c29ee739c6a132e2046201917a25f1dad8d5b5ef8339730ea01f13ffa6d",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/06-build-only-driver.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/06-build-only-driver.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedBytes": 20,
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/07-combined-interface.after.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/07-combined-interface.after.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedBytes": 20,
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/07-combined-interface.json.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/07-combined-interface.json",
+      "rawBytes": 1532,
+      "rawSha256": "0a233ba80ee00030692214b3ba80530ced9e5de4505d40b447069b34c3ae2c4e",
+      "compressedBytes": 532,
+      "compressedSha256": "e8b34da3af26c8f062c9dc8b3608be1182597229369d6308a2775b4a58132048",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/07-combined-interface.log.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/07-combined-interface.log",
+      "rawBytes": 747,
+      "rawSha256": "90ecbdc27bde8142ca4df3a4ca60702b83c9684d1e11b0c10e20c93b0a61eb8d",
+      "compressedBytes": 461,
+      "compressedSha256": "9efdf8cf308b4c918aa45e72b15a7bc4ab5171dcfcc4fe8ba34efd014f4eb340",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/07-combined-interface.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/07-combined-interface.patch",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressedBytes": 20,
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/capture.py.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/capture.py",
+      "rawBytes": 2131,
+      "rawSha256": "5a6c38c2f12265eb6147f9f2c86d7a2eb639c30829242d65e86e17d5510fcde6",
+      "compressedBytes": 1034,
+      "compressedSha256": "f8f94902bbba5aa9ff7137267e7e68cdf1964746d6422967bb07ea5c55325e1f",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/combined-source.json.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/combined-source.json",
+      "rawBytes": 1590,
+      "rawSha256": "e1a29fe4037f606bcb43fd832834c0010e0d075366eebae851d02c46094e233d",
+      "compressedBytes": 616,
+      "compressedSha256": "9be3c9fd33a9ff802fcdc00b3a77ef3f8013aa6cc6180ea9af11916f5544fd8f",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/compile-driver.mjs.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/compile-driver.mjs",
+      "rawBytes": 2587,
+      "rawSha256": "9f923634abaa3b2188980e49f0ee71880665ab6bfd8b61ad585093bd011a1c2d",
+      "compressedBytes": 1175,
+      "compressedSha256": "3a692d7a8a32ef8444a96313d13b08ede7a56b03f9375bbff564ce9678680914",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/compiled-driver-0.mjs.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/compiled-driver-0.mjs.gz",
+      "rawBytes": 321797,
+      "rawSha256": "f7c2b0d1ecd3587feafca7205e2eb1600a8b6e90b23589a8405cd69f5a0e3e32",
+      "compressedBytes": 84236,
+      "compressedSha256": "0e425b5dddfc056acb785e3852b938f17d70882d89eef8377db7395633a789ac",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/compiled-driver-1.mjs.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/compiled-driver-1.mjs.gz",
+      "rawBytes": 16390,
+      "rawSha256": "419dc2822a17c03bf44b609f9e10a81309831c275b88c5c8994c463bc001faf5",
+      "compressedBytes": 5612,
+      "compressedSha256": "7ad6c6390ac52b0bbfcf1740e7f3c87221a94fbb00312c153eb0f727a784ca31",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/compiled-driver-2.mjs.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/compiled-driver-2.mjs.gz",
+      "rawBytes": 91597,
+      "rawSha256": "b715263a39dcf344efa91f7f22a76212ad01a17fce294d841015701e1bf5784d",
+      "compressedBytes": 28604,
+      "compressedSha256": "8cd2b94559242ad858cb291dad38e2792e85991b740781a87011f0b2fad4b21b",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/mapped-application-source.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/mapped-application-source.patch",
+      "rawBytes": 79336,
+      "rawSha256": "f288c78d24380fa3e7ce1c4d429df07dfa52035bba007257cf642c4f1b714057",
+      "compressedBytes": 18944,
+      "compressedSha256": "ebfe07c5ee71d8ba8b3814831ca483f2d50622767673ee9fd24195c186f803d0",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/native-component-source.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/native-component-source.patch",
+      "rawBytes": 34468,
+      "rawSha256": "27a6a86062c7fbf0d42c903461dfd58b38ed18f4bd84e2b78f3c4eaaef0a88fa",
+      "compressedBytes": 8531,
+      "compressedSha256": "1ce3837819de72eced7c4ac7aa0ed9d7cd18419a97bfd6ade912ba009495fd6d",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/original-application-source.patch.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/original-application-source.patch",
+      "rawBytes": 79336,
+      "rawSha256": "f288c78d24380fa3e7ce1c4d429df07dfa52035bba007257cf642c4f1b714057",
+      "compressedBytes": 18944,
+      "compressedSha256": "ebfe07c5ee71d8ba8b3814831ca483f2d50622767673ee9fd24195c186f803d0",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/package-evidence.py.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/package-evidence.py",
+      "rawBytes": 4297,
+      "rawSha256": "70e90a1104d71d616f4bde9561815479fe4e927b014172ba5200d47197072bdd",
+      "compressedBytes": 1811,
+      "compressedSha256": "be1284e861f4eb263e82dcb753cb1ee6b0f5685795a119d48b8c6d5c76122122",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/read-diagnostics-recovered.json.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/read-diagnostics-recovered.json",
+      "rawBytes": 465,
+      "rawSha256": "4bc9b6b57354975e4d44c74dab08ef5e302c28b3577dcc934b57a7674f49212b",
+      "compressedBytes": 306,
+      "compressedSha256": "0a4e8fcc8016b54d709a75913a341a7f61a0606c0d41376eaa19b520eeff39b5",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/source.json.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/source.json",
+      "rawBytes": 873,
+      "rawSha256": "5fb00859374310e355d09f6e7638df8e89cd4ff39ff7def2af14decdf34e0d95",
+      "compressedBytes": 512,
+      "compressedSha256": "21209c7646d259245197776c9db2565fe96062d2de4ecc560488882a6b097eae",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/verify-combined-interface.mjs.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/verify-combined-interface.mjs",
+      "rawBytes": 2611,
+      "rawSha256": "1770c5823850fda2b9bd1b77cd4d267e19adb29c808bffba5cc0475e57e287d3",
+      "compressedBytes": 1122,
+      "compressedSha256": "8e346d069144a5f83f9c452b6434bd0ebe1b21a68ce2dd8854533768cc24c9bb",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/execution/solana-browser-funding-native-generation37-20261120/verify-preservation.py.gz",
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/g37-browser-funding-native/verify-preservation.py",
+      "rawBytes": 5521,
+      "rawSha256": "17cb2d33f3f953448d349885140c5dd33a7b934eeb56f1dd02bd6721faa78849",
+      "compressedBytes": 1965,
+      "compressedSha256": "b1a6fbed7ae7e356d7f8fb3da5284178c61e707ec27ca6388b6d18c0c8ba7d2c",
+      "gzipMtime": 0
+    }
+  ],
+  "nonDocumentationEntries": 1043,
+  "ReleaseEnabled": 0,
+  "nativeBrowserExecuted": false,
+  "nativeValidatorExecuted": false
+}
