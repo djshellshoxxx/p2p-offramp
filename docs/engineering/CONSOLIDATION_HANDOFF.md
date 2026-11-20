@@ -1,3 +1,67 @@
+# Current consolidation checkpoint — generations 33–34 (2026-11-20 UTC)
+
+**The native funding candidate now combines prepared funding, immutable review
+display data and the accepted-D4 core-only planning guard.** Frozen source
+`0b7832d1c5b348a0755d59152442d0318d4a620c`, tree
+`78de2de3db335147d8261ad5ab9b116976faf986`, passed **2,735/2,735 tests**,
+with zero other outcomes, and all six additional qualification commands.
+Independent source, evidence and composition reviews found no blocking issue
+within their recorded scopes. The complete nine-path delta against PR239 yields
+1,033 exact reviewed non-documentation entries, preserving 1,024 parent entries.
+
+The active plan is **one G32+G33+G34 funding candidate above frozen PR239**,
+head `708a3a2bc167cbbc15eaa3d3c168e058499c7f8e`, preserving actual
+published PR240 head `7bd5cf595bddadaa204e51e418d0060a1d43a1bc` as an
+ancestor. **PR240 stays draft, held and unmerged; no standalone G33 PR is
+planned.** The replacement has no published identity at this checkpoint.
+Publish new commits from actual PR240 while targeting PR239's branch; do not
+remap PR240's existing commits from PR239. This replaces the older sequential
+funding-child plan below while preserving its historical record.
+
+The G33 internal native-SOL projection checks exact supplied data and returns
+frozen semantic terms with `confirmationAuthority: false`. It has no facade or
+application consumer. Supplied pin and height metadata do not prove original
+or live provenance, freshness, peer acceptance or a funding outcome. Fees and
+rent remain unknown. The G34 guard derives the maintained count-zero capability
+hash only in `planFund`, shared by direct funding, preparation and confirmation
+replans. Historical binding, codecs, journal decoding, recovery and funded exits
+remain unchanged. The corrected policy omission predates G32.
+
+G33's separate combined source `a7d2a6699903b3791eda6b5f958b81e31adead6c`
+passed 2,702/2,702. Its independent 107/107 on `31ae662` and separate final
+1/1 on `448cdcc` retain their exact attribution. G34's author 448/448 and
+independent 100/100 overlap the full suite and are not summed. Original baseline,
+line-boundary, fixture-assumption, tooling and checker failures remain retained
+with source snapshots and raw/compressed hashes. Both default/demo artifacts
+and graphs match retained G32/G33. The native updater's 37-module preparation
+is build-only; the G32 driver was never executed locally. `ReleaseEnabled=0`.
+
+**PR236 remains frozen as the main-target aggregate for PR233–235.** The
+coordinator's 2026-11-20 20:06 UTC readback observed 14/15 successful checks,
+the Solana program check running, and main unchanged at
+`8e836baa877b676a863c877003e277b638fc5061`. Refresh actual gates before a
+qualified expected-head merge and complete main/tree/ordered-parent/ancestry
+readback. PR237 retention, PR238 sharing and PR239 startup retain separate
+Tier B **CodeRabbit or Qodo pass with findings answered** requirements.
+After parent merges, retarget or reconcile actual main and refresh applicable
+source/target gates. The funding candidate remains Tier C and requires actual
+hosted native prepare-and-confirm acceptance and matching recorded owner
+authorization; local qualification establishes neither.
+
+Read the [G33–G34 continuation](CONTINUATION_GENERATIONS33_34_20261120.md),
+[G34 qualification](qualification-generation34.json),
+[retained logs](retained-logs-generation34.json) and
+[independent composition review](INDEPENDENT_SOLANA_CORE_CAPABILITY_COMPOSITION_REVIEW_GENERATION34_20261120.md).
+G35's fresh owner is implementing the frozen 4 KiB public proposal / 8 KiB
+private record codec only; no completion or admission activation is claimed.
+Explicit seller-direct admission, quota/collision handling, retained original
+review authority, confirmation and finalized recovery promotion remain future
+work. Funded recovery restrictions, bilateral acceptance, production trust,
+optional PR224–232 and audits184–186 retain their separate boundaries and owners.
+Every earlier byte below remains unchanged historical evidence.
+
+---
+
 # Current consolidation checkpoint — generation 32 (2026-11-20 UTC)
 
 **The native Solana client now supports explicit funding preparation and
