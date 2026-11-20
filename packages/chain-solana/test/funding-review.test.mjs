@@ -187,7 +187,8 @@ test('projection and fixed refusals perform no additional port, clock, random or
   const descriptors = new Map(['Date', 'crypto', 'fetch'].map(name =>
     [name, Object.getOwnPropertyDescriptor(globalThis, name)]));
   const random = Math.random, read = env.journalFake.journal.read, profile = env.journalFake.journal.profileId;
-  const forbidden = () => { throw new Error('projection attempted an operation'); };
+  let operations = 0;
+  const forbidden = () => { operations++; throw new Error('projection attempted an operation'); };
   try {
     Object.defineProperty(globalThis, 'Date', { configurable: true, value: class { constructor() { forbidden(); }
       static now() { return forbidden(); } } });
@@ -206,6 +207,7 @@ test('projection and fixed refusals perform no additional port, clock, random or
     env.journalFake.journal.read = read;
     env.journalFake.journal.profileId = profile;
   }
+  assert.equal(operations, 0);
   assert.deepEqual({ rpc: env.cluster.calls.length, wallet: env.walletFake.calls,
     writes: env.journalFake.writes, records: env.journalFake.records(env.binding) }, before);
   ok(await env.client.cancel(env.handle));
