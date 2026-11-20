@@ -1,0 +1,80 @@
+{
+  "schema": "p2p-offramp.generation33-retained-logs.v1",
+  "testedSource": "a7d2a6699903b3791eda6b5f958b81e31adead6c",
+  "testedTree": "ac680be624aae21eac610f51157da49f1b3238cb",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g33-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generation33-20261120/full-node.log.gz",
+      "decodedBytes": 271351,
+      "compressedBytes": 89784,
+      "decodedSha256": "faa48d7c0fd6c1f83a28504ca8df02b225d3db3aa4ef3c12078112b32236efce",
+      "compressedSha256": "dd7a2ceb722046a1829186aa41645a32bebb0013a253375ade3bd8431493d305"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g33-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generation33-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g33-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generation33-20261120/build-policy.log.gz",
+      "decodedBytes": 7610,
+      "compressedBytes": 3123,
+      "decodedSha256": "fc3aeddaf1345ae4e3ccf6388ec0f01192c993610c4e0d53bcc5d54346a0b998",
+      "compressedSha256": "6a4e7a0ef718328b3555e6931f8563deb5fe84bd860eab54ac972b19e011f465"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g33-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generation33-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 288,
+      "decodedSha256": "b460f1c640842daae2ad9cc06e4760d7947d23a24226953417652dd33b5032b8",
+      "compressedSha256": "98f5e0eb711f2510a3764442d254b68d1d8531c6dd4e7acf3a919fdcbab49cb1"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g33-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generation33-20261120/default-build.log.gz",
+      "decodedBytes": 1027,
+      "compressedBytes": 498,
+      "decodedSha256": "ada86b0800314ecfa367456174ba71c916da30d5d4f2b5bac1b2f6831618bed8",
+      "compressedSha256": "be8654a6ba08181be525b66081473ba5da8b3c20f23899d587c366e67a33ccca"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g33-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generation33-20261120/demo-build.log.gz",
+      "decodedBytes": 1175,
+      "compressedBytes": 521,
+      "decodedSha256": "b594691d96a15e3acf848469d7c0ed2e2d88ac58c9d30db59c352efa314ac5ea",
+      "compressedSha256": "ce6a909a6dc49c340c7ddd3aba28db72e59d05d81256356c6fda70cd72742e12"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g33-qualification/native-fixture-preparation.log",
+      "storedPath": "docs/execution/continuation-generation33-20261120/native-fixture-preparation.log.gz",
+      "decodedBytes": 2196,
+      "compressedBytes": 862,
+      "decodedSha256": "bc36e8d63b6953fd5f946f9a33b3349bf23035cf066866d2b05efca6ad0e1711",
+      "compressedSha256": "06fabe484eab5318be3f5eaada255bbaa3df4e2cde0f8276b598070c1aaaf53f"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/execution/solana-funding-review-generation33-20261120/receipt.json",
+    "docs/engineering/funding-review-projection-independent-review-generation33.json",
+    "docs/engineering/funding-review-projection-composition-review-generation33.json"
+  ],
+  "limits": [
+    "The inactive internal native-SOL helper produces detached immutable display data using the existing bound-trade brand, descriptor validation and exact message verifier. It performs no additional RPC, wallet, journal, clock or random operation. Own accessors are refused; arbitrary caller Proxy traps are not claimed inert.",
+    "Validation establishes data consistency only, with no confirmation authority or live eligibility claim. Supplied-bound-trade program/artifact pins do not prove the original preparation snapshot; supplied last-valid height is not message-authenticated metadata.",
+    "Consistent copied/rebound bytes, alternate same-binding registry pins and cancelled handles may remain display data. Only the native client retained original handle can be confirmed with its existing ownership and freshness checks.",
+    "Principal remains separate from unknown fees, escrow rent and total debit. Counterparty acceptance and funding outcome remain unestablished. No review ID, wallet grant or deadline is invented.",
+    "There is no facade, UI, application command or protocol consumer. Browser funded-recovery admission, existing confirmation algorithms, wallet bridge, configuration, workflows and native driver remain unchanged.",
+    "The author baseline reports one maintained fixture control pass and 47 missing-feature failures. Initial wired selection passes 52 of 53 cases before the existing line-length correction; all original output and patches remain retained.",
+    "Author 103/103 and package TypeScript/boundary checks belong to earlier31ae662. Final448cdcc changes only the purity test to count forbidden-operation attempts; its 53/53 focused result is separate. Independent earlier107/107 and final1/1 are separate overlapping commands, not a single 108-case result.",
+    "Recovered formatting/provenance diagnostics and the independent execution-snapshot checker failure remain accurately labeled. Corrected evidence reconstructs all snapshots without removing hash assertions.",
+    "The full Node suite also compiles the maintained configured Solana-localnet artifact. Native updater preparation compiles37 modules and removes them. No browser, native validator or financial flow ran locally.",
+    "The inherited D4 count-zero funding policy omission is separately owned G34 work. This display helper is not that policy guard; PR240 remains held for the final combined funding candidate. No deployment, trust provisioning, optional activation or release follows. ReleaseEnabled remains zero."
+  ]
+}
