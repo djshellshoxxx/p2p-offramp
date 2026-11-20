@@ -130,6 +130,28 @@ test('lock acknowledgment reentrancy cannot publish ownership after a further lo
   } finally { port.removeEventListener('message', reenter); await runtime.dispose(); }
 });
 
+test('one lease cannot adopt the owned lock of another lease captured from the same selection', async () => {
+  const { port, runtime, lease } = await selected();
+  try {
+    const other = runtime.captureBackupSelection();
+    await lease.lock(new AbortController().signal); assert.equal(lease.current(), true); assert.equal(other.current(), false);
+    await refused(other.lock(new AbortController().signal), 'LOCKED');
+    assert.equal(port.sent.filter(command => command.operation === 'lock').length, 1);
+  } finally { await runtime.dispose(); }
+});
+
+for (const operation of ['lock', 'requireVerifiedBackup']) {
+  test(`cancellation observed during the ${operation} preflight retires the lease before a new command`, async () => {
+    let duringClock = () => {}; const { port, runtime, lease } = await selected({ now: () => { duringClock(); return 0; } });
+    try {
+      const abort = new AbortController(), before = port.sent.length; duringClock = () => abort.abort();
+      await refused(lease[operation](abort.signal), 'CANCELLED');
+      duringClock = () => {}; assert.equal(lease.current(), false);
+      assert.equal(port.sent.length, before); assert.equal(runtime.current.state, 'unlocked');
+    } finally { duringClock = () => {}; await runtime.dispose(); }
+  });
+}
+
 for (const operation of ['unlock', 'create']) for (const outcome of ['success', 'refusal']) {
   test(`an admitted ${operation} retires an owned locked lease before its ${outcome} reply`, async () => {
     const { port, runtime, lease } = await selected();
