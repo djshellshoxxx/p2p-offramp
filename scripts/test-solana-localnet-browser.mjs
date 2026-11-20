@@ -12,7 +12,7 @@ const pass = name => { checks.push(name); console.log(`ok - ${name}`); };
 let fixture;
 const card = id => fixture.page.locator(`[data-trade-id="${id}"]`);
 const review = () => fixture.page.locator('[data-review-id]');
-const idle = () => until(async () => await fixture.page.locator('main').getAttribute('data-phase') !== 'working', 'Worker command completion');
+const idle = () => until(async () => await fixture.page.locator('main').getAttribute('aria-busy') === 'false', 'acknowledged UI command completion');
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function refresh() {
   await fixture.page.getByRole('button', { name: 'Refresh finalized state', exact: true }).click();
@@ -118,7 +118,7 @@ try {
   const downloadEvent = page.waitForEvent('download'); await page.getByRole('button', { name: 'Export encrypted backup', exact: true }).click();
   const download = await downloadEvent, backup = await readFile(await download.path()); await idle();
   await page.getByRole('button', { name: 'Lock profile', exact: true }).click();
-  await until(async () => await fixture.profileId() === '', 'profile lock');
+  await until(async () => await fixture.profileId() === '', 'profile lock'); await idle();
   assert.equal(await page.locator('[data-trade-id]').count(), 0);
   await page.getByLabel('Encrypted backup', { exact: true }).setInputFiles({ name: 'local-recovery.backup', mimeType: 'application/octet-stream', buffer: backup });
   await page.getByLabel('Backup passphrase', { exact: true }).fill(PASS);
