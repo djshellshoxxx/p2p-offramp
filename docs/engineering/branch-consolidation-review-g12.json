@@ -1,0 +1,3738 @@
+{
+  "schema": 1,
+  "reviewer": "branch_inventory",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "observation": "Read-only GitHub API census and local exact-object ancestry review during generation12 on 2026-11-20 UTC. No runtime tests or remote mutations performed by this reviewer.",
+  "main": {
+    "sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+    "tree": "6ffabef1d87259f4df2f79b2a89b5f5680e3a8e2"
+  },
+  "combined_core": {
+    "pr": 210,
+    "branch": "codex/transport-qualification-20261120",
+    "sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842"
+  },
+  "canonical_handoff": {
+    "pr": 200,
+    "branch": "codex/consolidation-handoff-20261119",
+    "sha": "d72cbf40883dcb0791b20df7a0a507e1a9f4d21d"
+  },
+  "counts": {
+    "branches": 222,
+    "pull_requests": 209,
+    "open": 65,
+    "merged": 106,
+    "closed_unmerged": 38
+  },
+  "previous_generation11_delta": {
+    "previous_branches": 221,
+    "added": [
+      {
+        "branch": "codex/optional-current-core-evidence-g11-20261120",
+        "head": "db531cb03ad303821a3625f6858941de1ac07606"
+      }
+    ],
+    "changed": [
+      {
+        "branch": "codex/consolidation-handoff-20261119",
+        "before": "3a9cfcf3b733284f3d457d5a5cc66256669bff8f",
+        "after": "d72cbf40883dcb0791b20df7a0a507e1a9f4d21d"
+      }
+    ],
+    "removed": [],
+    "new_pull_requests": [],
+    "changed_pr_numbers": [
+      200
+    ]
+  },
+  "server_policy": {
+    "main_protected": false,
+    "rulesets": [],
+    "read_sources": [
+      "https://api.github.com/repos/djshellshoxxx/p2p-offramp/branches/main",
+      "https://api.github.com/repos/djshellshoxxx/p2p-offramp/rulesets"
+    ],
+    "meaning": "Documented acceptance gates still apply; absence of server enforcement is not a waiver."
+  },
+  "accepted_policy": {
+    "tier": "C",
+    "authorization": "Current user directive requests branch consolidation. Accepted-decision index also records prior owner authorization for reviewed Tier C consolidation. No repeated owner permission needed for this source integration.",
+    "gates": [
+      "green exact-source applicable CI",
+      "actual checkout/tree and completed hosted/native/browser evidence",
+      "independent review with no open High or Medium findings",
+      "verify expected main/head/merge tree immediately before merge"
+    ],
+    "named_bot_gate": "One CodeRabbit or Qodo pass applies under the standalone Tier B packet. No separately established named-bot requirement for this combined Tier C source.",
+    "source_paths": [
+      "docs/adr/ACCEPTED-DECISIONS-2026-11-04.md",
+      "docs/adr/proposed/D8-merge-policy-and-branch-protection.md"
+    ],
+    "release_authorization": false
+  },
+  "prospective_integration": {
+    "main_ancestor": true,
+    "prospective_merge_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "same_tree_as_qualified_head": true,
+    "recommended": "Create a main-target consolidation PR at exact d301 using a new owned branch; preserve original component refs and history. Merge only after current applicable gates finish and source receipts are verified.",
+    "main_to_head_changed_paths": 351,
+    "pr207_to_head_changed_paths": 46,
+    "merge_tree_command_status": 0,
+    "merge_tree_actual": "fa0d662c991cb03729ca0a4ea53ef60960b81842"
+  },
+  "api_branch_heads": [
+    {
+      "branch": "autonomous/completion-20261031",
+      "head": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/completion-20261102",
+      "head": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/continuation-20261031",
+      "head": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/guidance-20261101",
+      "head": "c8494b05e36cda43ac3f73e0feab831cfa00647d",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/journey-20261101",
+      "head": "3947074c95fa1e0facd65a8947a2c7e70363c708",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/acceptance-cli-input-bounds-20261110",
+      "head": "2ba1a4e18f4673f006b195e822b5f984effb48e8",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/acceptance-review-boolean-20261110",
+      "head": "08a9cf1e9abc0fb703b14964062a3da2234fdbb6",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "head": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-compatibility-20261118",
+      "head": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
+      "head": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "head": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+      "head": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "head": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-utf8-20261119-108",
+      "head": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-cross-deployment-nonce-20261111",
+      "head": "c153a99dd5c876c23bdb115f7037a4bf63cb57d4",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
+      "head": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
+      "head": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
+      "head": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
+      "head": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
+      "head": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
+      "head": "146d06d81474445434070aff557ad56379ad24a3",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
+      "head": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
+      "head": "92cc054ce9a2ee21936e20d103757e374f4af296",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-race-20261111",
+      "head": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
+      "head": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-collaboration-20261117",
+      "head": "e21a58e6a4d09c099d3249660ddec770f2164a74",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-python-baseline-20261116",
+      "head": "75a5e35b56310a9660aa7c6a3855db3c64e759f4",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-static-offers-status-20261116",
+      "head": "30efa0e158c6b50525c8e0dced494faa9f54eb08",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-status-20261118",
+      "head": "708d937df7e4799e4ad212b3293bec923f619940",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-wiki-20261110",
+      "head": "c14cfd07a440f03b5f57e35c8d39e63cdabfd5bf",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+      "head": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
+      "head": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
+      "head": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-native-withdraw-recipient-20261111",
+      "head": "84bb67f6e438b26bd1d321995c427d6a86a58930",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
+      "head": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g16-bilateral-replay-20261111",
+      "head": "969d02aecf86c6be18dde509b5cf0016345b0fe4",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-final-chain-recheck-20261111",
+      "head": "921f067769188f53c2d379f035695a40ae978083",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
+      "head": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g20-chat-scope-regression-20261111",
+      "head": "a5c74990f0f5e9162a23450db5e9af00f37d88e8",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g25-public-endpoint-regression-20261110",
+      "head": "e0a9033158d1ae874c78de7f25d0be0aa3a13157",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g26-clear-reentrancy-20261111",
+      "head": "548495515c83fc1389837f00eb0468758cd232fd",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
+      "head": "5f2381ab42c27984dbb1cc872468dd3e09771690",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+      "head": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
+      "head": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qualify-pr61-20261110",
+      "head": "a1930a3596f76eff4c29a1ee2991d6acd7f35895",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/recovery-reference-identity-20261115",
+      "head": "85849f7b267dddceffc35ef5253da4a23ef9be05",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/registry-concurrency-20261110",
+      "head": "a213166ea83a0c5ec0768f693ff583413e8e976b",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/review-read-bounds-20261119-119",
+      "head": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
+      "head": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex-continuation-spec-20261109",
+      "head": "62c6c14539ccc2ac2e56658a81602f6d1ba50d73",
+      "protected": false
+    },
+    {
+      "branch": "claude/adoring-wozniak-850ue6",
+      "head": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+      "protected": false
+    },
+    {
+      "branch": "claude/compassionate-gauss-uyhfih",
+      "head": "970ac80f08c04e8d340ee57d901e48e26a667a18",
+      "protected": false
+    },
+    {
+      "branch": "claude/confident-fermi-g6wjp3",
+      "head": "64c7c1861779ea34632f2f800b80bdaecbaefa03",
+      "protected": false
+    },
+    {
+      "branch": "claude/docs-screenshots",
+      "head": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+      "protected": false
+    },
+    {
+      "branch": "claude/friendly-dijkstra-nsi310",
+      "head": "bd26833555e13408825942e9696157ed68e9980e",
+      "protected": false
+    },
+    {
+      "branch": "claude/gifted-faraday-73kydc",
+      "head": "8fb081b492ccf9ecef4dc47525c753cac670dacb",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy",
+      "head": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-decisions",
+      "head": "89d0a928e9e1127a4c8911f9437359260bd06ab6",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-journey",
+      "head": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+      "head": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
+      "head": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+      "head": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+      "head": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "head": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "head": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "head": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "head": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "head": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "head": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "head": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+      "head": "494703e837897d04bce1cb04134fa8be6b747377",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s00-ci-triggers",
+      "head": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s01-tooling",
+      "head": "4e319013ea61ead31ae00ea9a44fa9c431cc84ce",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s02-core-contracts-storage",
+      "head": "01344cbd6655f509f3e2e3903333cdb579228d37",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s03-core-messaging",
+      "head": "5a747ded358ee9fcca393bb4a0616fd4e8632296",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
+      "head": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
+      "head": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
+      "head": "14be5a1c1ec69d91b0affe8a87811c681269fb6c",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s07-native-journey",
+      "head": "8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s08-portal-lab-docs",
+      "head": "c950dad4b387cb4b33910789c454eb8f2ab0ae81",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s09-intake",
+      "head": "389c0ea69e24615d0f1d7595942514300cd855f9",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s10-optional-packages",
+      "head": "c696c02b94eb6b90da2ed76f93c383fcd8a7f703",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s11-governance-ci",
+      "head": "789b2b2c2644af741daa5328adf76ac2ec88599c",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s12-evidence",
+      "head": "001c31cc868b683080e79a025b6621d900acb96a",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-consolidation-k5h13u",
+      "head": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "head": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-integration-aan57u",
+      "head": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-prompt-lqcgno",
+      "head": "25a01987385b49e9c28199fdfb4a874b29a6ad89",
+      "protected": false
+    },
+    {
+      "branch": "claude/post-merge-followups",
+      "head": "ec65012dbb94189180d3da52de2619cc22fe0482",
+      "protected": false
+    },
+    {
+      "branch": "claude/quirky-knuth-3s6ysy",
+      "head": "2f839b12768700ac6c3b674f75a144c6ec19fa93",
+      "protected": false
+    },
+    {
+      "branch": "claude/recovery-consolidation",
+      "head": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+      "protected": false
+    },
+    {
+      "branch": "claude/sleepy-fermat-4s6ocx",
+      "head": "f1d9dd63a2ac9d55912899f8c6233456ebf8a499",
+      "protected": false
+    },
+    {
+      "branch": "claude/sweet-noether-arf6ne",
+      "head": "391653eaba946f77057b01fd03d3c234958bcf1d",
+      "protected": false
+    },
+    {
+      "branch": "claude/sweet-shannon-grykla",
+      "head": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+      "protected": false
+    },
+    {
+      "branch": "claude/tender-goodall-db3cot",
+      "head": "8783636e7a1739b5e884cec62fbecf9c77a0ceaf",
+      "protected": false
+    },
+    {
+      "branch": "claude/trade-review-integration",
+      "head": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+      "protected": false
+    },
+    {
+      "branch": "claude/vibrant-cray-ny4gum",
+      "head": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "protected": false
+    },
+    {
+      "branch": "codex/completion-20261116",
+      "head": "88f9e40bbf8ea086705edd554a2555865429b54a",
+      "protected": false
+    },
+    {
+      "branch": "codex/consolidation-20261116",
+      "head": "274d4fe533f47ffa15aed936bd095f82ad10d9ce",
+      "protected": false
+    },
+    {
+      "branch": "codex/consolidation-handoff-20261119",
+      "head": "d72cbf40883dcb0791b20df7a0a507e1a9f4d21d",
+      "protected": false
+    },
+    {
+      "branch": "codex/consolidation-ledger-20261104",
+      "head": "d5b959b5ed732ab3e6f7adfd37e872a841470225",
+      "protected": false
+    },
+    {
+      "branch": "codex/continue-completion-20261116",
+      "head": "e7506c22e6b0bc405a9e51f1c809fa30c2fe5861",
+      "protected": false
+    },
+    {
+      "branch": "codex/core-continuation-20261104",
+      "head": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+      "protected": false
+    },
+    {
+      "branch": "codex/ctutils-remediation-20261119",
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "protected": false
+    },
+    {
+      "branch": "codex/d9-migration-20261116",
+      "head": "c1f8e750beb7e22d5b9a7f0e47cca9f8cd8bdb65",
+      "protected": false
+    },
+    {
+      "branch": "codex/foundation-gates-20261104",
+      "head": "77fb7c52dcdde58cad17ceee45a0f43e7e22ad43",
+      "protected": false
+    },
+    {
+      "branch": "codex/generation5-core-20261119",
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "protected": false
+    },
+    {
+      "branch": "codex/generation8-core-20261120",
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "protected": false
+    },
+    {
+      "branch": "codex/generation9-backup-verification-20261120",
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "protected": false
+    },
+    {
+      "branch": "codex/historical-recovery-20261119",
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "protected": false
+    },
+    {
+      "branch": "codex/max-consolidation-20261119",
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-arbitration-20261119",
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-complete-evidence-g10-20261120",
+      "head": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-composition-evidence-g8-20261120",
+      "head": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-corrected-evidence-g9-20261120",
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-courier-20261119",
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-current-core-evidence-g11-20261120",
+      "head": "db531cb03ad303821a3625f6858941de1ac07606",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-liquidity-20261119",
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-meetup-20261119",
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-privacy-controls-20261119",
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-privacy-policy-20261119",
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-proof-inputs-20261119",
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-proof-jobs-20261119",
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-stealth-20261119",
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "protected": false
+    },
+    {
+      "branch": "codex/peer-acceptance-20261116",
+      "head": "b3f508420e63329ab30e1b646f61337020a1ebad",
+      "protected": false
+    },
+    {
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "protected": false
+    },
+    {
+      "branch": "codex/personalization-templates-ui-20261119",
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "protected": false
+    },
+    {
+      "branch": "codex/post-send-reconcile-20261109",
+      "head": "af0e1789889790c2050142ed508b5042ef5bcc85",
+      "protected": false
+    },
+    {
+      "branch": "codex/qr-camera-fixture-20261119",
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "protected": false
+    },
+    {
+      "branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "protected": false
+    },
+    {
+      "branch": "codex/review-consolidate-20261116",
+      "head": "5eadddd54f6db6e755e658c1982c95f95b37a823",
+      "protected": false
+    },
+    {
+      "branch": "codex/rq00-evidence-20261109",
+      "head": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+      "protected": false
+    },
+    {
+      "branch": "codex/setup-autonomous-agent-20261104",
+      "head": "54e632f8f472a4d26b2fdda4ebdd3f2e02a5dba0",
+      "protected": false
+    },
+    {
+      "branch": "codex/solana-browser-send-repair-20261119",
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "protected": false
+    },
+    {
+      "branch": "codex/solana-payout-docs-20261109",
+      "head": "7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
+      "protected": false
+    },
+    {
+      "branch": "codex/solana-restore-ack-20261119",
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "protected": false
+    },
+    {
+      "branch": "codex/successor-handoff-20261120",
+      "head": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+      "protected": false
+    },
+    {
+      "branch": "codex/transport-qualification-20261120",
+      "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "protected": false
+    },
+    {
+      "branch": "consolidation/qualified-regressions-20261116",
+      "head": "f2375dba1b249912ac434ed9da3998e4cb0a40f0",
+      "protected": false
+    },
+    {
+      "branch": "consolidation/solana-browser-recovery-20261119",
+      "head": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "protected": false
+    },
+    {
+      "branch": "consolidation/tooling154-20261119",
+      "head": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "protected": false
+    },
+    {
+      "branch": "docs/consolidation-20261119",
+      "head": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+      "protected": false
+    },
+    {
+      "branch": "docs/lean-release-handoff-2026-10-24",
+      "head": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+      "protected": false
+    },
+    {
+      "branch": "docs/offramp-research-tools-execution-plan-20261106",
+      "head": "0f1792f589a20efab1f629f38d2a0068d4f44193",
+      "protected": false
+    },
+    {
+      "branch": "docs/security-spec-expansion-20261021",
+      "head": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+      "protected": false
+    },
+    {
+      "branch": "docs/spec-readiness-and-foundations",
+      "head": "6b6004bdf35b7aea14530f965756ca6d54336682",
+      "protected": false
+    },
+    {
+      "branch": "feat/custodial-ledger-foundation",
+      "head": "52e6987e77d9ef6bc403c0129b3f52531986ade8",
+      "protected": false
+    },
+    {
+      "branch": "feature/erc20-browser-continuation-20261118",
+      "head": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+      "protected": false
+    },
+    {
+      "branch": "feature/public-qr-capture-20261119",
+      "head": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "protected": false
+    },
+    {
+      "branch": "feature/same-terms-resumption-20261119",
+      "head": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+      "protected": false
+    },
+    {
+      "branch": "fix/localnet-readiness-20261119",
+      "head": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "protected": false
+    },
+    {
+      "branch": "fix/qr-async-expiry-20261120",
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "protected": false
+    },
+    {
+      "branch": "fix/remediation-09f20d73-9524c0",
+      "head": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+      "protected": false
+    },
+    {
+      "branch": "fix/remediation-f84468d6-0a97ed",
+      "head": "dba5072d7a67f67e223432c48aefabc07f31f005",
+      "protected": false
+    },
+    {
+      "branch": "fix/transport-preflight-zeroization-20261120",
+      "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "protected": false
+    },
+    {
+      "branch": "gpt/p2p-beta-spec-20261109",
+      "head": "c4fb7b590639e2a1d0a3220cf6bf7936156cc8e4",
+      "protected": false
+    },
+    {
+      "branch": "integration/all-compatible-work",
+      "head": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+      "protected": false
+    },
+    {
+      "branch": "integration/browser-mvp-20261118",
+      "head": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
+      "protected": false
+    },
+    {
+      "branch": "integration/core-hardening-20261118",
+      "head": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+      "protected": false
+    },
+    {
+      "branch": "integration/docs-reconciliation-20261118",
+      "head": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+      "protected": false
+    },
+    {
+      "branch": "integration/m2a-safe-fixes-20261114",
+      "head": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+      "protected": false
+    },
+    {
+      "branch": "integration/p2p-consolidated-20261109",
+      "head": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+      "protected": false
+    },
+    {
+      "branch": "integration/pages-beta-qualification-20261112",
+      "head": "4dcddf2b4bcc9890e50647cea067f81b1b734cdd",
+      "protected": false
+    },
+    {
+      "branch": "integration/pages-offline-recovery-20261112",
+      "head": "9550d4b182806170ee28149e9d46ffbccef56c33",
+      "protected": false
+    },
+    {
+      "branch": "integration/privacy-endpoint-disclosures-20261109",
+      "head": "07b3b2abfc548a1b69621396b1d45a52dfe79063",
+      "protected": false
+    },
+    {
+      "branch": "integration/solana-core-qualification-20261118",
+      "head": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+      "protected": false
+    },
+    {
+      "branch": "main",
+      "head": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "protected": false
+    },
+    {
+      "branch": "nodata/affectionate-ritchie-xq4bon",
+      "head": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+      "protected": false
+    },
+    {
+      "branch": "nodata/doc-sweep-20261118",
+      "head": "436b591a3a750bcca2327117e487336f6dd77470",
+      "protected": false
+    },
+    {
+      "branch": "nodata/epic-goldberg-sg8n96",
+      "head": "1df700355e5199c69e84d5b41b12005677b5f5ee",
+      "protected": false
+    },
+    {
+      "branch": "nodata/epic-newton-7bowm4",
+      "head": "1fe5ae00ed2105633081d71a67db2b5436da9c8d",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx",
+      "head": "014a10a148f8b3b69c9d650fbcb083c8142e7d28",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1-reader-test-flake",
+      "head": "b7d06fed31fb7d2793da99c23f15bf6795a82b8a",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1a-reader",
+      "head": "37f074dd1d65d5f12b73182420998a152374b813",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
+      "head": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1c-acceptance",
+      "head": "236f815e79a852643d8dfa61d6d4895c8a93f54a",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+      "head": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+      "head": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+      "head": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+      "head": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+      "head": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+      "head": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+      "head": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+      "head": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+      "head": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b3-formal",
+      "head": "39096586e1160c3c8434a2d081339bb70aeb4c1b",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+      "head": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+      "head": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
+      "head": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
+      "head": "579b02f3775323ba273dfe2bc624b5860897431e",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
+      "head": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+      "protected": false
+    },
+    {
+      "branch": "parallel/accessibility-recovery-panels-20261113",
+      "head": "db38fba65be8b6e19c880c78e439e712ffe7e974",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-cold-nonce-20261113",
+      "head": "2cacd1d5219a82d984a75668838204e3160d5791",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-cold-recovery-20261113",
+      "head": "65efc3428ff01d4f091600baee85edfff094b347",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-peer-offer-20261113",
+      "head": "d6d65a47b99e68d00f82153d83fef366e532cf67",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-runtime-engines-20261113",
+      "head": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+      "protected": false
+    },
+    {
+      "branch": "parallel/cli-argument-regression-20261113",
+      "head": "605bcd24ef3d239f6a080c129761132482029ef7",
+      "protected": false
+    },
+    {
+      "branch": "parallel/diagnostics-20261113",
+      "head": "330fa1ede8b70e532a02230e4895b0711579491e",
+      "protected": false
+    },
+    {
+      "branch": "parallel/docs-web-profile-recovery-20261113",
+      "head": "3524096c0ff1f4d743b01f06421bc56bbe07b9b3",
+      "protected": false
+    },
+    {
+      "branch": "parallel/locale-20261113",
+      "head": "c4b13ddccc5bd78406762c656df5af35958e83f9",
+      "protected": false
+    },
+    {
+      "branch": "parallel/localization-blank-warning-20261113",
+      "head": "718208880b650b03ac380d358a00878480827870",
+      "protected": false
+    },
+    {
+      "branch": "parallel/portable-recovery-guide-20261113",
+      "head": "05794e754c8bf588fc6781100e8af99675418629",
+      "protected": false
+    },
+    {
+      "branch": "parallel/recovery-builder-help-20261113",
+      "head": "4f75e00d0c8e7eb9f61efd633b684ca0a47b9d76",
+      "protected": false
+    },
+    {
+      "branch": "parallel/spec-tool-20261113",
+      "head": "6d48c9b0695cacd2a166a7386f24b61a6248bc10",
+      "protected": false
+    },
+    {
+      "branch": "parallel/tooling-source-correspondence-20261113",
+      "head": "32a4052163553f7826d55f784ab9a6e96425e576",
+      "protected": false
+    },
+    {
+      "branch": "research/code-reuse-2026-11-03",
+      "head": "5fec2c6db018868a49c8ce40c21e186cdf702417",
+      "protected": false
+    },
+    {
+      "branch": "research/remaining-gaps-20261103",
+      "head": "922a391e429d07b0840bbbe525b3a10c6d3c830c",
+      "protected": false
+    },
+    {
+      "branch": "research/security-addendum-20261103",
+      "head": "3a523a11a87d85443c484b6a4d4284b96c5f0b41",
+      "protected": false
+    },
+    {
+      "branch": "research/upstream-reuse-20261103",
+      "head": "977b36654bab2d00ca20c6139398b60c693bab73",
+      "protected": false
+    },
+    {
+      "branch": "review/codebase-security-20261104-94554ec",
+      "head": "6e9c0c5ea8881013d06892103cf87ef1c547476a",
+      "protected": false
+    },
+    {
+      "branch": "test/erc20-browser-recovery-20261119",
+      "head": "c7f462c6688c78c35514808177ff7cfed32b9961",
+      "protected": false
+    },
+    {
+      "branch": "test/nostr-relay-interop-20261119",
+      "head": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+      "protected": false
+    },
+    {
+      "branch": "work/noncustodial-reconstruction-2026-10-24",
+      "head": "bc996aac828ce63856193c9114edfef480153325",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-client-shell-2026-10-24",
+      "head": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-consolidated-20261030",
+      "head": "68fb46920431e3311c78f931432bc4a21d066c17",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-exchange-close-20261030",
+      "head": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-exchange-test-repair-20261030",
+      "head": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-gate-reconciliation-20261030",
+      "head": "e762e649600493221e3bd10f0c3525858722bc94",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-independent-branch-review-20261030",
+      "head": "9f80c9b27b943b30409710dea76a53d97a761832",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-pr14-finish-handoff-20261030",
+      "head": "8c8911e2dd3c7af4d515e645a6501eedc6178111",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-relay-lifetime-20261030",
+      "head": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-validation-20261030",
+      "head": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+      "protected": false
+    }
+  ],
+  "open_prs": [
+    {
+      "number": 211,
+      "title": "fix(qr): recheck expiry after async hash and signature verification",
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "branch": "fix/qr-async-expiry-20261120",
+      "base": "codex/generation8-core-20261120",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/211"
+    },
+    {
+      "number": 210,
+      "title": "Compose reviewed core followups and transport cleanup",
+      "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "branch": "codex/transport-qualification-20261120",
+      "base": "codex/generation8-core-20261120",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/210"
+    },
+    {
+      "number": 209,
+      "title": "Update compatible ctutils lock and retain explicit dependency findings",
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "branch": "codex/ctutils-remediation-20261119",
+      "base": "codex/generation8-core-20261120",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/209"
+    },
+    {
+      "number": 208,
+      "title": "Complete current-runtime backup verification prerequisite",
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "branch": "codex/generation9-backup-verification-20261120",
+      "base": "codex/generation8-core-20261120",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/208"
+    },
+    {
+      "number": 207,
+      "title": "Consolidate reviewed Solana expiry and lifecycle repairs",
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "branch": "codex/generation8-core-20261120",
+      "base": "main",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/207"
+    },
+    {
+      "number": 206,
+      "title": "fix(relay): reject invalid ad clocks and unbounded order-book capacity",
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "base": "codex/generation8-core-20261120",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/206"
+    },
+    {
+      "number": 205,
+      "title": "Integrate reviewed core recovery, encrypted preferences and tooling repairs",
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "branch": "codex/generation5-core-20261119",
+      "base": "main",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/205"
+    },
+    {
+      "number": 204,
+      "title": "Compose encrypted templates with explicit consent and fresh draft review",
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "branch": "codex/personalization-templates-ui-20261119",
+      "base": "codex/personalization-favorites-ui-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/204"
+    },
+    {
+      "number": 203,
+      "title": "Fix Solana restore acknowledgment and backup byte ownership",
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "branch": "codex/solana-restore-ack-20261119",
+      "base": "codex/solana-browser-send-repair-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/203"
+    },
+    {
+      "number": 202,
+      "title": "fix: complete withheld Solana acknowledgment and qualify one browser POST",
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "branch": "codex/solana-browser-send-repair-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/202"
+    },
+    {
+      "number": 201,
+      "title": "Compose encrypted saved-review favorites with fresh-review and lifecycle checks",
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/201"
+    },
+    {
+      "number": 200,
+      "title": "Record current corrections, source qualifications and continuation handoff",
+      "head": "d72cbf40883dcb0791b20df7a0a507e1a9f4d21d",
+      "branch": "codex/consolidation-handoff-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/200"
+    },
+    {
+      "number": 199,
+      "title": "Recover optional proof-jobs with independent source qualification",
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "branch": "codex/optional-proof-jobs-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/199"
+    },
+    {
+      "number": 198,
+      "title": "Recover optional stealth with independent source qualification",
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "branch": "codex/optional-stealth-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/198"
+    },
+    {
+      "number": 197,
+      "title": "Recover optional privacy-controls source with reviewed boundary repairs",
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "branch": "codex/optional-privacy-controls-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/197"
+    },
+    {
+      "number": 196,
+      "title": "Recover optional meetup source with reviewed boundary repairs",
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "branch": "codex/optional-meetup-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/196"
+    },
+    {
+      "number": 195,
+      "title": "Recover optional courier source with reviewed boundary repairs",
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "branch": "codex/optional-courier-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/195"
+    },
+    {
+      "number": 194,
+      "title": "Recover optional privacy-policy source with reviewed boundary repairs",
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "branch": "codex/optional-privacy-policy-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/194"
+    },
+    {
+      "number": 193,
+      "title": "Recover accepted optional arbitration source with independent review",
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "branch": "codex/optional-arbitration-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/193"
+    },
+    {
+      "number": 192,
+      "title": "Recover accepted optional liquidity source with independent review",
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "branch": "codex/optional-liquidity-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/192"
+    },
+    {
+      "number": 191,
+      "title": "Recover accepted optional proof-inputs source with independent review",
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "branch": "codex/optional-proof-inputs-20261119",
+      "base": "codex/historical-recovery-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/191"
+    },
+    {
+      "number": 190,
+      "title": "Recover reviewed historical modules, tooling and durable consolidation handoff",
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "branch": "codex/historical-recovery-20261119",
+      "base": "codex/max-consolidation-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/190"
+    },
+    {
+      "number": 189,
+      "title": "Repair synthetic QR camera frame production during browser qualification",
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "branch": "codex/qr-camera-fixture-20261119",
+      "base": "codex/max-consolidation-20261119",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/189"
+    },
+    {
+      "number": 188,
+      "title": "Consolidate seven source branches and repair QR/Solana browser qualification",
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "branch": "codex/max-consolidation-20261119",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/188"
+    },
+    {
+      "number": 187,
+      "title": "fix(web): bound actual trade-review reads before retention (test-first)",
+      "head": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "branch": "chatgpt/zero-codex/review-read-bounds-20261119-119",
+      "base": "main",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/187"
+    },
+    {
+      "number": 186,
+      "title": "docs(audit): record static sharing and privacy endpoint inspections (113\u2013114)",
+      "head": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+      "base": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/186"
+    },
+    {
+      "number": 185,
+      "title": "docs(audit): record Pages startup-capability review (112)",
+      "head": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "base": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/185"
+    },
+    {
+      "number": 184,
+      "title": "docs(audit): rotate static-client content-admission review (110)",
+      "head": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "base": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/184"
+    },
+    {
+      "number": 183,
+      "title": "feat(web): add bounded public QR capture and explicit review",
+      "head": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "branch": "feature/public-qr-capture-20261119",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/183"
+    },
+    {
+      "number": 182,
+      "title": "docs(audit): read-only Solana intent and send-marker inspection 109",
+      "head": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/182"
+    },
+    {
+      "number": 181,
+      "title": "fix(web): publish current readiness during relay recovery",
+      "head": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "branch": "fix/localnet-readiness-20261119",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/181"
+    },
+    {
+      "number": 179,
+      "title": "feat(solana): compose funded recovery with exact browser transaction review",
+      "head": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "branch": "consolidation/solana-browser-recovery-20261119",
+      "base": "main",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/179"
+    },
+    {
+      "number": 178,
+      "title": "docs(wiki): reconcile qualified main, resumption, and merge policy",
+      "head": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+      "branch": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/178"
+    },
+    {
+      "number": 176,
+      "title": "Record comprehensive consolidation, verification and remaining MVP work",
+      "head": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+      "branch": "docs/consolidation-20261119",
+      "base": "main",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/176"
+    },
+    {
+      "number": 174,
+      "title": "Repair and integrate historical documentation and lab tooling (#154)",
+      "head": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "branch": "consolidation/tooling154-20261119",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/174"
+    },
+    {
+      "number": 172,
+      "title": "fix(qr): normalize JCS array descriptor traps (test-first)",
+      "head": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "branch": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/172"
+    },
+    {
+      "number": 171,
+      "title": "fix(qr): bound display grouping size (D6, regression first)",
+      "head": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "branch": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/171"
+    },
+    {
+      "number": 163,
+      "title": "[Lane B] B2 optional package 9/9: meetup",
+      "head": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/163"
+    },
+    {
+      "number": 162,
+      "title": "[Lane B] B2 optional package 8/9: proof-jobs (own optional workflow)",
+      "head": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/162"
+    },
+    {
+      "number": 161,
+      "title": "[Lane B] B2 optional package 7/9: stealth",
+      "head": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/161"
+    },
+    {
+      "number": 160,
+      "title": "[Lane B] B2 optional package 6/9: privacy-controls",
+      "head": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/160"
+    },
+    {
+      "number": 159,
+      "title": "G1/G2: D1 peer acceptance in exchange v2, wallet signer, localnet build profile (in progress)",
+      "head": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "base": "main",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/159"
+    },
+    {
+      "number": 156,
+      "title": "[Lane B] B4 governance 3/3: inert governance records (historical), assurance packet, evidence binding",
+      "head": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+      "base": "main",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/156"
+    },
+    {
+      "number": 155,
+      "title": "[Lane B] B4 intake 2/3: dependency intake probes and Semaphore v4 reputation evaluation",
+      "head": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+      "base": "main",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/155"
+    },
+    {
+      "number": 154,
+      "title": "[Lane B] B4 tooling 1/3: lab, docs consistency tooling, claims register, tool-path",
+      "head": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
+      "base": "main",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/154"
+    },
+    {
+      "number": 148,
+      "title": "[Lane B] B2 optional package 5/9: privacy-policy",
+      "head": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/148"
+    },
+    {
+      "number": 147,
+      "title": "[Lane B] B2 optional package 4/9: arbitration",
+      "head": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/147"
+    },
+    {
+      "number": 146,
+      "title": "[Lane B] B2 optional package 3/9: courier",
+      "head": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/146"
+    },
+    {
+      "number": 145,
+      "title": "[Lane B] B2 optional package 2/9: liquidity",
+      "head": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/145"
+    },
+    {
+      "number": 144,
+      "title": "[Lane B] B2 optional package 1/9: proof-inputs",
+      "head": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/144"
+    },
+    {
+      "number": 142,
+      "title": "Consolidation run 3: post-#134 retirement script, branching rules, ledger entry",
+      "head": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+      "branch": "claude/p2p-offramp-consolidation-k5h13u",
+      "base": "main",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/142"
+    },
+    {
+      "number": 81,
+      "title": "Integrate #56 Sonar fixes and split-stack extractions #37/#38/#40\u2013#43",
+      "head": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "branch": "claude/vibrant-cray-ny4gum",
+      "base": "integration/p2p-consolidated-20261109",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/81"
+    },
+    {
+      "number": 56,
+      "title": "Resolve PR #54 review findings, harden agent workflow, record live project state",
+      "head": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "branch": "claude/vibrant-cray-ny4gum",
+      "base": "codex/core-continuation-20261104",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/56"
+    },
+    {
+      "number": 48,
+      "title": "Split PR #26 (12/12): execution evidence, review receipts and root docs",
+      "head": "494703e837897d04bce1cb04134fa8be6b747377",
+      "branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+      "base": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/48"
+    },
+    {
+      "number": 47,
+      "title": "Split PR #26 (11/12): governance records, assurance packet and final CI wiring",
+      "head": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "base": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/47"
+    },
+    {
+      "number": 46,
+      "title": "Split PR #26 (10/12): optional reference packages (D7 recommends parking)",
+      "head": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "base": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/46"
+    },
+    {
+      "number": 45,
+      "title": "Split PR #26 (9/12): dependency and candidate intake evaluations",
+      "head": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "base": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/45"
+    },
+    {
+      "number": 44,
+      "title": "Split PR #26 (8/12): recovery portal, test lab, docs tooling and distribution",
+      "head": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "base": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/44"
+    },
+    {
+      "number": 43,
+      "title": "Split PR #26 (7/12): native private-trade journey and retention",
+      "head": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "base": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/43"
+    },
+    {
+      "number": 42,
+      "title": "Split PR #26 (6/12): personalization, web runtime, UI wiring and browser qualification",
+      "head": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "base": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/42"
+    },
+    {
+      "number": 40,
+      "title": "Split PR #26 (4/12): wallet EIP-1271 acceptance and signed asset updates",
+      "head": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+      "base": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/40"
+    },
+    {
+      "number": 37,
+      "title": "Split PR #26 (1/12): gate tooling, signature oracle, Sepolia and formal EVM checks",
+      "head": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/37"
+    },
+    {
+      "number": 35,
+      "title": "Fix PR #31 journey findings F01, F03 and F06 (parked pending D9)",
+      "head": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+      "branch": "claude/loving-einstein-xgzvdy-journey",
+      "base": "claude/loving-einstein-xgzvdy",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/35"
+    },
+    {
+      "number": 28,
+      "title": "Fix PR #26 browser, cancellation, relay and HTTP defects",
+      "head": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+      "branch": "claude/loving-einstein-xgzvdy",
+      "base": "autonomous/completion-20261102",
+      "draft": true,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/28"
+    },
+    {
+      "number": 26,
+      "title": "Complete local recovery and trade workflows with whole-source audit",
+      "head": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "branch": "autonomous/completion-20261102",
+      "base": "main",
+      "draft": false,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/26"
+    }
+  ],
+  "included_component_prs": [
+    171,
+    172,
+    174,
+    179,
+    181,
+    183,
+    187,
+    188,
+    189,
+    190,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    211,
+    212
+  ],
+  "hosted_status_at_review": {
+    "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "completed_success": 9,
+    "in_progress": [
+      {
+        "name": "program",
+        "job_id": 136092098296,
+        "run_id": 44677307772
+      }
+    ],
+    "actual_execution_logs_reviewed": false,
+    "meaning": "Status observation only. The dedicated CI worker must read completed logs and actual checkout/tree receipts before merge."
+  },
+  "remaining_unique_source": {
+    "optional_source_prs": [
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "optional_current_core_evidence": "db531cb03ad303821a3625f6858941de1ac07606",
+    "default_activation_authorized": false,
+    "unfinished_features": [
+      "Full Solana discovery/negotiation/funding UI",
+      "Signed-update UI and trust/transport composition",
+      "Physical-device and wallet qualification"
+    ],
+    "current_feature_worker": "Parent is recovering an existing backup-verification form from historical PR81 as an independent feature branch."
+  },
+  "limits": [
+    "Ancestry proves integration history, not semantic preservation of every historical feature.",
+    "No new runtime test count is claimed by this reviewer.",
+    "Documentation PR200 and historical evidence lanes remain separately preserved.",
+    "No main merge, release, deployment, branch deletion, force push, external messaging or remote mutation by this reviewer."
+  ],
+  "ancestry_observed_at_utc": "2026-11-20T06:07:01.018339+00:00",
+  "branch_ancestry": [
+    {
+      "branch": "autonomous/completion-20261031",
+      "head": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "autonomous/completion-20261102",
+      "head": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "autonomous/continuation-20261031",
+      "head": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "autonomous/guidance-20261101",
+      "head": "c8494b05e36cda43ac3f73e0feab831cfa00647d",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "autonomous/journey-20261101",
+      "head": "3947074c95fa1e0facd65a8947a2c7e70363c708",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/acceptance-cli-input-bounds-20261110",
+      "head": "2ba1a4e18f4673f006b195e822b5f984effb48e8",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/acceptance-review-boolean-20261110",
+      "head": "08a9cf1e9abc0fb703b14964062a3da2234fdbb6",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "head": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-compatibility-20261118",
+      "head": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
+      "head": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "head": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+      "head": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "head": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-utf8-20261119-108",
+      "head": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-cross-deployment-nonce-20261111",
+      "head": "c153a99dd5c876c23bdb115f7037a4bf63cb57d4",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
+      "head": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
+      "head": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
+      "head": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
+      "head": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
+      "head": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
+      "head": "146d06d81474445434070aff557ad56379ad24a3",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
+      "head": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
+      "head": "92cc054ce9a2ee21936e20d103757e374f4af296",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-race-20261111",
+      "head": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
+      "head": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-collaboration-20261117",
+      "head": "e21a58e6a4d09c099d3249660ddec770f2164a74",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-python-baseline-20261116",
+      "head": "75a5e35b56310a9660aa7c6a3855db3c64e759f4",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-static-offers-status-20261116",
+      "head": "30efa0e158c6b50525c8e0dced494faa9f54eb08",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-status-20261118",
+      "head": "708d937df7e4799e4ad212b3293bec923f619940",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-wiki-20261110",
+      "head": "c14cfd07a440f03b5f57e35c8d39e63cdabfd5bf",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+      "head": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
+      "head": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
+      "head": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-native-withdraw-recipient-20261111",
+      "head": "84bb67f6e438b26bd1d321995c427d6a86a58930",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
+      "head": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/g16-bilateral-replay-20261111",
+      "head": "969d02aecf86c6be18dde509b5cf0016345b0fe4",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-final-chain-recheck-20261111",
+      "head": "921f067769188f53c2d379f035695a40ae978083",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
+      "head": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/g20-chat-scope-regression-20261111",
+      "head": "a5c74990f0f5e9162a23450db5e9af00f37d88e8",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/g25-public-endpoint-regression-20261110",
+      "head": "e0a9033158d1ae874c78de7f25d0be0aa3a13157",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/g26-clear-reentrancy-20261111",
+      "head": "548495515c83fc1389837f00eb0468758cd232fd",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
+      "head": "5f2381ab42c27984dbb1cc872468dd3e09771690",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+      "head": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
+      "head": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/qualify-pr61-20261110",
+      "head": "a1930a3596f76eff4c29a1ee2991d6acd7f35895",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/recovery-reference-identity-20261115",
+      "head": "85849f7b267dddceffc35ef5253da4a23ef9be05",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/registry-concurrency-20261110",
+      "head": "a213166ea83a0c5ec0768f693ff583413e8e976b",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/review-read-bounds-20261119-119",
+      "head": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
+      "head": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "chatgpt/zero-codex-continuation-spec-20261109",
+      "head": "62c6c14539ccc2ac2e56658a81602f6d1ba50d73",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/adoring-wozniak-850ue6",
+      "head": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/compassionate-gauss-uyhfih",
+      "head": "970ac80f08c04e8d340ee57d901e48e26a667a18",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/confident-fermi-g6wjp3",
+      "head": "64c7c1861779ea34632f2f800b80bdaecbaefa03",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/docs-screenshots",
+      "head": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/friendly-dijkstra-nsi310",
+      "head": "bd26833555e13408825942e9696157ed68e9980e",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/gifted-faraday-73kydc",
+      "head": "8fb081b492ccf9ecef4dc47525c753cac670dacb",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy",
+      "head": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-decisions",
+      "head": "89d0a928e9e1127a4c8911f9437359260bd06ab6",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-journey",
+      "head": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+      "head": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
+      "head": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+      "head": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+      "head": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "head": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "head": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "head": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "head": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "head": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "head": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "head": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+      "head": "494703e837897d04bce1cb04134fa8be6b747377",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s00-ci-triggers",
+      "head": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s01-tooling",
+      "head": "4e319013ea61ead31ae00ea9a44fa9c431cc84ce",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s02-core-contracts-storage",
+      "head": "01344cbd6655f509f3e2e3903333cdb579228d37",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s03-core-messaging",
+      "head": "5a747ded358ee9fcca393bb4a0616fd4e8632296",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
+      "head": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
+      "head": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
+      "head": "14be5a1c1ec69d91b0affe8a87811c681269fb6c",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s07-native-journey",
+      "head": "8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s08-portal-lab-docs",
+      "head": "c950dad4b387cb4b33910789c454eb8f2ab0ae81",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s09-intake",
+      "head": "389c0ea69e24615d0f1d7595942514300cd855f9",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s10-optional-packages",
+      "head": "c696c02b94eb6b90da2ed76f93c383fcd8a7f703",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s11-governance-ci",
+      "head": "789b2b2c2644af741daa5328adf76ac2ec88599c",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s12-evidence",
+      "head": "001c31cc868b683080e79a025b6621d900acb96a",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/p2p-offramp-consolidation-k5h13u",
+      "head": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "head": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/p2p-offramp-integration-aan57u",
+      "head": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/p2p-offramp-prompt-lqcgno",
+      "head": "25a01987385b49e9c28199fdfb4a874b29a6ad89",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/post-merge-followups",
+      "head": "ec65012dbb94189180d3da52de2619cc22fe0482",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/quirky-knuth-3s6ysy",
+      "head": "2f839b12768700ac6c3b674f75a144c6ec19fa93",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/recovery-consolidation",
+      "head": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/sleepy-fermat-4s6ocx",
+      "head": "f1d9dd63a2ac9d55912899f8c6233456ebf8a499",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/sweet-noether-arf6ne",
+      "head": "391653eaba946f77057b01fd03d3c234958bcf1d",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/sweet-shannon-grykla",
+      "head": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/tender-goodall-db3cot",
+      "head": "8783636e7a1739b5e884cec62fbecf9c77a0ceaf",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/trade-review-integration",
+      "head": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "claude/vibrant-cray-ny4gum",
+      "head": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/completion-20261116",
+      "head": "88f9e40bbf8ea086705edd554a2555865429b54a",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/consolidation-20261116",
+      "head": "274d4fe533f47ffa15aed936bd095f82ad10d9ce",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/consolidation-handoff-20261119",
+      "head": "d72cbf40883dcb0791b20df7a0a507e1a9f4d21d",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/consolidation-ledger-20261104",
+      "head": "d5b959b5ed732ab3e6f7adfd37e872a841470225",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/continue-completion-20261116",
+      "head": "e7506c22e6b0bc405a9e51f1c809fa30c2fe5861",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/core-continuation-20261104",
+      "head": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/ctutils-remediation-20261119",
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/d9-migration-20261116",
+      "head": "c1f8e750beb7e22d5b9a7f0e47cca9f8cd8bdb65",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/foundation-gates-20261104",
+      "head": "77fb7c52dcdde58cad17ceee45a0f43e7e22ad43",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/generation5-core-20261119",
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/generation8-core-20261120",
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/generation9-backup-verification-20261120",
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/historical-recovery-20261119",
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/max-consolidation-20261119",
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-arbitration-20261119",
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-complete-evidence-g10-20261120",
+      "head": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-composition-evidence-g8-20261120",
+      "head": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-corrected-evidence-g9-20261120",
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-courier-20261119",
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-current-core-evidence-g11-20261120",
+      "head": "db531cb03ad303821a3625f6858941de1ac07606",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": true,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-liquidity-20261119",
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-meetup-20261119",
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-privacy-controls-20261119",
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-privacy-policy-20261119",
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-proof-inputs-20261119",
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-proof-jobs-20261119",
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/optional-stealth-20261119",
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/peer-acceptance-20261116",
+      "head": "b3f508420e63329ab30e1b646f61337020a1ebad",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/personalization-templates-ui-20261119",
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/post-send-reconcile-20261109",
+      "head": "af0e1789889790c2050142ed508b5042ef5bcc85",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/qr-camera-fixture-20261119",
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/review-consolidate-20261116",
+      "head": "5eadddd54f6db6e755e658c1982c95f95b37a823",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/rq00-evidence-20261109",
+      "head": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/setup-autonomous-agent-20261104",
+      "head": "54e632f8f472a4d26b2fdda4ebdd3f2e02a5dba0",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/solana-browser-send-repair-20261119",
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/solana-payout-docs-20261109",
+      "head": "7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/solana-restore-ack-20261119",
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/successor-handoff-20261120",
+      "head": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "codex/transport-qualification-20261120",
+      "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": true,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "consolidation/qualified-regressions-20261116",
+      "head": "f2375dba1b249912ac434ed9da3998e4cb0a40f0",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "consolidation/solana-browser-recovery-20261119",
+      "head": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "consolidation/tooling154-20261119",
+      "head": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "docs/consolidation-20261119",
+      "head": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "docs/lean-release-handoff-2026-10-24",
+      "head": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "docs/offramp-research-tools-execution-plan-20261106",
+      "head": "0f1792f589a20efab1f629f38d2a0068d4f44193",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "docs/security-spec-expansion-20261021",
+      "head": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "docs/spec-readiness-and-foundations",
+      "head": "6b6004bdf35b7aea14530f965756ca6d54336682",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "feat/custodial-ledger-foundation",
+      "head": "52e6987e77d9ef6bc403c0129b3f52531986ade8",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "feature/erc20-browser-continuation-20261118",
+      "head": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "feature/public-qr-capture-20261119",
+      "head": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "feature/same-terms-resumption-20261119",
+      "head": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "fix/localnet-readiness-20261119",
+      "head": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "fix/qr-async-expiry-20261120",
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "fix/remediation-09f20d73-9524c0",
+      "head": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "fix/remediation-f84468d6-0a97ed",
+      "head": "dba5072d7a67f67e223432c48aefabc07f31f005",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "fix/transport-preflight-zeroization-20261120",
+      "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "gpt/p2p-beta-spec-20261109",
+      "head": "c4fb7b590639e2a1d0a3220cf6bf7936156cc8e4",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "integration/all-compatible-work",
+      "head": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "integration/browser-mvp-20261118",
+      "head": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "integration/core-hardening-20261118",
+      "head": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "integration/docs-reconciliation-20261118",
+      "head": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "integration/m2a-safe-fixes-20261114",
+      "head": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "integration/p2p-consolidated-20261109",
+      "head": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "integration/pages-beta-qualification-20261112",
+      "head": "4dcddf2b4bcc9890e50647cea067f81b1b734cdd",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "integration/pages-offline-recovery-20261112",
+      "head": "9550d4b182806170ee28149e9d46ffbccef56c33",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "integration/privacy-endpoint-disclosures-20261109",
+      "head": "07b3b2abfc548a1b69621396b1d45a52dfe79063",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "integration/solana-core-qualification-20261118",
+      "head": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "main",
+      "head": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/affectionate-ritchie-xq4bon",
+      "head": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/doc-sweep-20261118",
+      "head": "436b591a3a750bcca2327117e487336f6dd77470",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/epic-goldberg-sg8n96",
+      "head": "1df700355e5199c69e84d5b41b12005677b5f5ee",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/epic-newton-7bowm4",
+      "head": "1fe5ae00ed2105633081d71a67db2b5436da9c8d",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx",
+      "head": "014a10a148f8b3b69c9d650fbcb083c8142e7d28",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1-reader-test-flake",
+      "head": "b7d06fed31fb7d2793da99c23f15bf6795a82b8a",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1a-reader",
+      "head": "37f074dd1d65d5f12b73182420998a152374b813",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
+      "head": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1c-acceptance",
+      "head": "236f815e79a852643d8dfa61d6d4895c8a93f54a",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+      "head": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+      "head": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+      "head": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+      "head": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+      "head": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+      "head": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+      "head": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+      "head": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+      "head": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b3-formal",
+      "head": "39096586e1160c3c8434a2d081339bb70aeb4c1b",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+      "head": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+      "head": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
+      "head": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
+      "head": "579b02f3775323ba273dfe2bc624b5860897431e",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
+      "head": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/accessibility-recovery-panels-20261113",
+      "head": "db38fba65be8b6e19c880c78e439e712ffe7e974",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/browser-cold-nonce-20261113",
+      "head": "2cacd1d5219a82d984a75668838204e3160d5791",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/browser-cold-recovery-20261113",
+      "head": "65efc3428ff01d4f091600baee85edfff094b347",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/browser-peer-offer-20261113",
+      "head": "d6d65a47b99e68d00f82153d83fef366e532cf67",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/browser-runtime-engines-20261113",
+      "head": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/cli-argument-regression-20261113",
+      "head": "605bcd24ef3d239f6a080c129761132482029ef7",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/diagnostics-20261113",
+      "head": "330fa1ede8b70e532a02230e4895b0711579491e",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/docs-web-profile-recovery-20261113",
+      "head": "3524096c0ff1f4d743b01f06421bc56bbe07b9b3",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/locale-20261113",
+      "head": "c4b13ddccc5bd78406762c656df5af35958e83f9",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/localization-blank-warning-20261113",
+      "head": "718208880b650b03ac380d358a00878480827870",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/portable-recovery-guide-20261113",
+      "head": "05794e754c8bf588fc6781100e8af99675418629",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/recovery-builder-help-20261113",
+      "head": "4f75e00d0c8e7eb9f61efd633b684ca0a47b9d76",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/spec-tool-20261113",
+      "head": "6d48c9b0695cacd2a166a7386f24b61a6248bc10",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "parallel/tooling-source-correspondence-20261113",
+      "head": "32a4052163553f7826d55f784ab9a6e96425e576",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "research/code-reuse-2026-11-03",
+      "head": "5fec2c6db018868a49c8ce40c21e186cdf702417",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "research/remaining-gaps-20261103",
+      "head": "922a391e429d07b0840bbbe525b3a10c6d3c830c",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "research/security-addendum-20261103",
+      "head": "3a523a11a87d85443c484b6a4d4284b96c5f0b41",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "research/upstream-reuse-20261103",
+      "head": "977b36654bab2d00ca20c6139398b60c693bab73",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "review/codebase-security-20261104-94554ec",
+      "head": "6e9c0c5ea8881013d06892103cf87ef1c547476a",
+      "head_is_ancestor_of_core": false,
+      "head_is_ancestor_of_main": false,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "test/erc20-browser-recovery-20261119",
+      "head": "c7f462c6688c78c35514808177ff7cfed32b9961",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "test/nostr-relay-interop-20261119",
+      "head": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "work/noncustodial-reconstruction-2026-10-24",
+      "head": "bc996aac828ce63856193c9114edfef480153325",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "work/p2p-client-shell-2026-10-24",
+      "head": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "work/p2p-consolidated-20261030",
+      "head": "68fb46920431e3311c78f931432bc4a21d066c17",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "work/p2p-exchange-close-20261030",
+      "head": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "work/p2p-exchange-test-repair-20261030",
+      "head": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "work/p2p-gate-reconciliation-20261030",
+      "head": "e762e649600493221e3bd10f0c3525858722bc94",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "work/p2p-independent-branch-review-20261030",
+      "head": "9f80c9b27b943b30409710dea76a53d97a761832",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "work/p2p-pr14-finish-handoff-20261030",
+      "head": "8c8911e2dd3c7af4d515e645a6501eedc6178111",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "work/p2p-relay-lifetime-20261030",
+      "head": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    },
+    {
+      "branch": "work/p2p-validation-20261030",
+      "head": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+      "head_is_ancestor_of_core": true,
+      "head_is_ancestor_of_main": true,
+      "core_is_ancestor_of_head": false,
+      "local_ref_matches_api": true
+    }
+  ],
+  "local_api_all_heads_identical": true,
+  "ancestry_counts": {
+    "exact_ancestors_of_core": 135,
+    "proper_descendants_of_core": 1,
+    "diverged_from_core": 86
+  },
+  "included_component_ancestry": [
+    {
+      "pr": 171,
+      "head": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 172,
+      "head": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 174,
+      "head": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 179,
+      "head": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 181,
+      "head": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 183,
+      "head": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 187,
+      "head": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 188,
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 189,
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 190,
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 201,
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 202,
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 203,
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 204,
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 205,
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 206,
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 207,
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 208,
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 209,
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 211,
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "ancestor_of_core": true
+    },
+    {
+      "pr": 212,
+      "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "ancestor_of_core": true
+    }
+  ]
+}

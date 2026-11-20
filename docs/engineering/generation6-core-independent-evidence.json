@@ -1,0 +1,164 @@
+{
+  "red-results": [
+    {
+      "name": "red-solana",
+      "exit": 1,
+      "seconds": 1.125,
+      "summary": [
+        "\u2139 tests 2",
+        "\u2139 suites 0",
+        "\u2139 pass 0",
+        "\u2139 fail 2",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 965.857921"
+      ],
+      "sha256": "ad0b754ee4e6ac6c7a62db39b6eb9acf1a2421efa2ae191ce1c0875cbab0275b"
+    },
+    {
+      "name": "red-store",
+      "exit": 1,
+      "seconds": 0.857,
+      "summary": [
+        "\u2139 tests 9",
+        "\u2139 suites 0",
+        "\u2139 pass 6",
+        "\u2139 fail 3",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 733.687536"
+      ],
+      "sha256": "75a38cabc55910f6b62e48605b9007721c403e85e790802f676e2fb10d314548"
+    },
+    {
+      "name": "red-update-controller",
+      "exit": 1,
+      "seconds": 0.622,
+      "summary": [
+        "\u2139 tests 2",
+        "\u2139 suites 0",
+        "\u2139 pass 1",
+        "\u2139 fail 1",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 507.121887"
+      ],
+      "sha256": "f77153c6ba089e6149379067d47cabb0556cfda01bc030633fad3c72272bf212"
+    },
+    {
+      "name": "red-portal",
+      "exit": 1,
+      "seconds": 1.447,
+      "summary": [
+        "\u2139 tests 2",
+        "\u2139 suites 0",
+        "\u2139 pass 1",
+        "\u2139 fail 1",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 1340.136075"
+      ],
+      "sha256": "7aebf8b83eed69d131dceee7853fd54d56ce75489c0eadbd19cb61f590ab33f0"
+    },
+    {
+      "name": "red-navigation",
+      "exit": 1,
+      "seconds": 0.672,
+      "summary": [
+        "\u2139 tests 15",
+        "\u2139 suites 0",
+        "\u2139 pass 8",
+        "\u2139 fail 7",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 561.620369"
+      ],
+      "sha256": "6c8d45aae4dfd7d1d18d951646c60f06752ec553f66e32775902d7f92bbcb716"
+    }
+  ],
+  "green-results": {
+    "source": "b67bd81e74b0f58338dc15bc694cd3a22b724cd4",
+    "tree": "f2476312544b27fc5d8c44dcc16a30857e4e7381",
+    "command": [
+      "node",
+      "--import",
+      "./scripts/test-support/register-tsx.mjs",
+      "--test",
+      "--test-concurrency=1",
+      "packages/chain-solana/test/lifecycle.test.mjs",
+      "packages/chain-solana/test/independent-review-regressions.test.mjs",
+      "packages/chain-solana/test/reconciliation-context.test.mjs",
+      "packages/security/test/release-update-store.test.mjs",
+      "packages/security/test/release-update.test.mjs",
+      "packages/security/test/release-update-http-encoding.test.mjs",
+      "scripts/portal/build.test.mjs",
+      "apps/web/test/trade-ui-navigation-lifecycle.test.mjs",
+      "apps/web/test/trade-draft-navigation-contract.test.mjs",
+      "apps/web/test/trade-templates-controller.test.mjs"
+    ],
+    "exit": 0,
+    "seconds": 9.762,
+    "sha256": "b8f3e2600b282df0fa15b8e54b9a4fb29814f5db7b8fdc8783ae083422082795",
+    "summary": [
+      "\u2139 tests 97",
+      "\u2139 suites 0",
+      "\u2139 pass 97",
+      "\u2139 fail 0",
+      "\u2139 cancelled 0",
+      "\u2139 skipped 0",
+      "\u2139 todo 0",
+      "\u2139 duration_ms 9513.913867"
+    ]
+  },
+  "preservation": {
+    "base": "cd7d54ba075118a7ec043788c17718be842ee405",
+    "source": "b67bd81e74b0f58338dc15bc694cd3a22b724cd4",
+    "tree": "f2476312544b27fc5d8c44dcc16a30857e4e7381",
+    "changed": [
+      "apps/web/src/ui/trade/TradeDraftPanel.tsx",
+      "apps/web/src/ui/trade/TradePages.tsx",
+      "apps/web/test/trade-draft-navigation-contract.test.mjs",
+      "apps/web/test/trade-ui-navigation-lifecycle.test.mjs",
+      "docs/engineering/CODE_AUDIT_GENERATION6_20261119.md",
+      "docs/engineering/CODE_AUDIT_GENERATION7_20261119.md",
+      "docs/engineering/GENERATION6_BUG_HUNT_20261119.md",
+      "docs/engineering/INDEPENDENT_NAVIGATION_REVIEW_GENERATION7_20261119.md",
+      "docs/engineering/SECURITY_REVIEW_QR_WORKER_GENERATION7_20261119.md",
+      "docs/engineering/SOLANA_RECONCILIATION_CONTEXT_20261119.md",
+      "packages/chain-solana/src/submit.ts",
+      "packages/chain-solana/test/reconciliation-context.test.mjs",
+      "packages/security/src/release-update-store.ts",
+      "packages/security/test/release-update-store.test.mjs",
+      "packages/security/test/release-update.test.mjs",
+      "scripts/portal/build.mjs",
+      "scripts/portal/build.test.mjs"
+    ],
+    "workflows_preserved": true,
+    "workflow_paths": [
+      ".github/workflows/evm-escrow.yml",
+      ".github/workflows/nostr-relay.yml",
+      ".github/workflows/openai-agents.yml",
+      ".github/workflows/solana-escrow.yml",
+      ".github/workflows/specifications.yml",
+      ".github/workflows/vault-foundation.yml"
+    ],
+    "contract_paths_count": 74,
+    "contract_paths_preserved": true,
+    "dependency_manifests_and_locks_preserved": true,
+    "dependency_paths": [
+      "contracts/solana/Cargo.lock",
+      "contracts/solana/Cargo.toml",
+      "contracts/solana/programs/basic-escrow/Cargo.toml",
+      "contracts/solana/rust-toolchain.toml",
+      "package-lock.json",
+      "package.json",
+      "packages/escrow-evm/package-lock.json",
+      "packages/escrow-evm/package.json"
+    ]
+  }
+}
