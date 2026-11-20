@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
-  "generation": 7,
-  "updated_at_utc": "2026-11-20T02:57:36.148846+00:00",
-  "phase": "corrected-core207-and-compatible-cargo209-published-exact-hosted-gates-pending",
+  "generation": 8,
+  "updated_at_utc": "2026-11-20T03:27:46.924896+00:00",
+  "phase": "reviewed-transport210-and-dependency209-published-core207-hosted-hold",
   "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
   "integration_branch": "codex/generation8-core-20261120",
   "integration_source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
@@ -117,7 +117,15 @@
         209
       ],
       "scope": "Verified individually after dated212/203 snapshot; derived totals are not a fresh complete enumeration."
-    }
+    },
+    "generation8_publications": [
+      {
+        "pr": 210,
+        "head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+        "tree": "47f982cf20cd123df45805597b266f1f5ab98259",
+        "scope": "Individual publication after dated212/203 enumeration; no new full inventory total claimed."
+      }
+    ]
   },
   "completed": [
     {
@@ -921,14 +929,26 @@
       "state": "complete",
       "scope": "Read-only protocol/call-site and boundary review.",
       "report_commit": "854e0a83936bf15236231f9947c85aa88d2520a1"
+    },
+    {
+      "generation": 8,
+      "worker": "generation8_transport_fixture",
+      "state": "complete-source-reviewed-published210-hosted-pending",
+      "scope": "Narrow actual-warmed-connection diagnostic qualification; all per-trial behavior assertions retained; no browser launch.",
+      "branch": "codex/generation8-transport-fixture-20261120",
+      "source_checkpoint": "ec7ea30a098f8b46de4a13dbe9c5eacd307447a5",
+      "report_commit": "0b4e23ea13f56283657e6f31d5ffb156d5c57af1",
+      "affected_passed": 22,
+      "published_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+      "published_pr": 210
     }
   ],
   "remaining": [
     {
       "id": "GATE-COMBINED-HOSTED",
       "priority": 1,
-      "state": "corrected207-published-hosted-pending",
-      "next_action": "Observe exact207 and dependent209 source checks; preserve independent review and full native/browser financial proof."
+      "state": "207-original-browser-failed-reviewed210-correction-published",
+      "next_action": "Observe exact210 hosted browser proof, then coordinate qualified source integration on corrected core with expected heads/trees. Retain all native financial gates and independent review; never transfer an ancestor pass."
     },
     {
       "id": "GATE-PR189-SOLANA",
@@ -988,11 +1008,11 @@
     {
       "id": "RELAY-PR206-REVIEW",
       "priority": 2,
-      "state": "independent-original-module-review-complete-external-integration-owned",
-      "next_action": "Use root140 and separately attributed external98/four-probe evidence; compose only reviewed unique delta and qualify exact corrected source."
+      "state": "original-independent-review-and-external-recomposition-published",
+      "next_action": "Do not duplicate2265-test206 composition on207. Preserve distinct root140/external98 scope and require exact new-source hosted/native gates."
     }
   ],
-  "successor_generation": 7,
+  "successor_generation": 8,
   "integration_local_source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
   "parent_integration_pr": 205,
   "parent_integration_branch": "codex/generation5-core-20261119",
@@ -1161,12 +1181,26 @@
       "program_job": 136022950914,
       "browser": "passed",
       "program_state": "in_progress",
-      "observed_at_utc": "2026-11-20T02:42:41+00:00",
+      "observed_at_utc": "2026-11-20T03:06:05Z",
       "foundation": "all5jobs-passed",
-      "program_observed_step": 14,
+      "program_observed_step": 16,
       "checks": "9-successful1-in-progress",
       "browser_groups": 14,
-      "full_evidence": "hosted-snapshot-generation7.json"
+      "full_evidence": "hosted-snapshot-generation7.json",
+      "prior_observation": {
+        "pr": 203,
+        "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+        "browser_job": 136022950072,
+        "program_job": 136022950914,
+        "browser": "passed",
+        "program_state": "in_progress",
+        "observed_at_utc": "2026-11-20T02:42:41+00:00",
+        "foundation": "all5jobs-passed",
+        "program_observed_step": 14,
+        "checks": "9-successful1-in-progress",
+        "browser_groups": 14,
+        "full_evidence": "hosted-snapshot-generation7.json"
+      }
     },
     {
       "pr": 204,
@@ -1174,13 +1208,30 @@
       "browser_job": 136023879924,
       "program_job": 136023880105,
       "browser": "passed",
-      "program_state": "in_progress",
-      "observed_at_utc": "2026-11-20T02:42:41+00:00",
+      "program_state": "completed",
+      "observed_at_utc": "2026-11-20T03:06:05Z",
       "foundation": "all5jobs-passed",
-      "program_observed_step": 14,
-      "checks": "9-successful1-in-progress",
+      "program_observed_step": 16,
+      "checks": "9-successful1-failed",
       "browser_groups": 14,
-      "full_evidence": "hosted-snapshot-generation7.json"
+      "full_evidence": "hosted-failure-triage-generation8.json",
+      "prior_observation": {
+        "pr": 204,
+        "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+        "browser_job": 136023879924,
+        "program_job": 136023880105,
+        "browser": "passed",
+        "program_state": "in_progress",
+        "observed_at_utc": "2026-11-20T02:42:41+00:00",
+        "foundation": "all5jobs-passed",
+        "program_observed_step": 14,
+        "checks": "9-successful1-in-progress",
+        "browser_groups": 14,
+        "full_evidence": "hosted-snapshot-generation7.json"
+      },
+      "program_conclusion": "failure",
+      "merge_checkout": "c579e9a646855b5d821caf97249df9872b3e98e1",
+      "program_failure": "Duplicate physical-send assertion followed by disabled restore timeout. Older response.destroy fixture; not a new product cause."
     },
     {
       "pr": 205,
@@ -1192,35 +1243,166 @@
       "browser_job": 136027175362,
       "program_run": 44657477232,
       "program_job": 136027174510,
-      "observed_at_utc": "2026-11-20T02:42:41+00:00",
+      "observed_at_utc": "2026-11-20T03:06:05Z",
       "browser": "16-groups-passed",
       "foundation": "all5jobs-passed",
       "program_state": "in_progress",
-      "program_observed_step": 14,
+      "program_observed_step": 16,
       "checks": "12-successful1-in-progress-including-aggregate-CodeQL",
       "browser_groups": 16,
-      "full_evidence": "hosted-snapshot-generation7.json"
+      "full_evidence": "hosted-snapshot-generation7.json",
+      "prior_observation": {
+        "pr": 205,
+        "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+        "merge_checkout": "3dbe6ac3994c56bf2e6424676c6dc034ecc9a9b4",
+        "contexts": 12,
+        "state": "foundation-passed-native-in-progress-source-hold",
+        "foundation_run": 44657477341,
+        "browser_job": 136027175362,
+        "program_run": 44657477232,
+        "program_job": 136027174510,
+        "observed_at_utc": "2026-11-20T02:42:41+00:00",
+        "browser": "16-groups-passed",
+        "foundation": "all5jobs-passed",
+        "program_state": "in_progress",
+        "program_observed_step": 14,
+        "checks": "12-successful1-in-progress-including-aggregate-CodeQL",
+        "browser_groups": 16,
+        "full_evidence": "hosted-snapshot-generation7.json"
+      }
     },
     {
       "pr": 207,
       "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
       "tree": "4b694124197ae8ce271f14307d12abc43c719406",
-      "checks": "forge-passed11queued-at02:55UTC",
+      "checks": "3-successful1-failed8-queued1-neutral-including-aggregate-CodeQL",
       "program_job": 136044687282,
       "browser_job": 136044687707,
-      "state": "exact-corrected-source-native-browser-required",
-      "observed_at_utc": "2026-11-20T02:55:00Z"
+      "state": "actual-browser-warmed-socket-precondition-failed-source-held",
+      "observed_at_utc": "2026-11-20T03:06:05Z",
+      "prior_observation": {
+        "pr": 207,
+        "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+        "tree": "4b694124197ae8ce271f14307d12abc43c719406",
+        "checks": "forge-passed11queued-at02:55UTC",
+        "program_job": 136044687282,
+        "browser_job": 136044687707,
+        "state": "exact-corrected-source-native-browser-required",
+        "observed_at_utc": "2026-11-20T02:55:00Z"
+      },
+      "browser_conclusion": "failure",
+      "browser_run": 44662758173,
+      "merge_checkout": "0aba9abd40c39920b8c1cfe9a94fd5870d01f1f9",
+      "program_state": "queued",
+      "browser_failure": "Diagnostic warm-socket assertion failed after exact one-call/fetch/POST and503 assertions. Later completion/error assertions not reached; no successful receipt.",
+      "full_evidence": "hosted-failure-triage-generation8.json"
     },
     {
       "pr": 209,
       "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
       "tree": "e7aba3833fa52c6eda7a23cd6d1301cadc610355",
-      "checks": "10queued-at02:55UTC",
+      "checks": "10-queued",
       "program_job": 136048938614,
       "browser_job": 136048938353,
       "merge_checkout": "16a98b0213ea7105a6ad27c210a17ccdbc020434",
       "state": "exact-new-lock-native-qualification-required",
-      "observed_at_utc": "2026-11-20T02:55:00Z"
+      "observed_at_utc": "2026-11-20T03:06:05Z",
+      "prior_observation": {
+        "pr": 209,
+        "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+        "tree": "e7aba3833fa52c6eda7a23cd6d1301cadc610355",
+        "checks": "10queued-at02:55UTC",
+        "program_job": 136048938614,
+        "browser_job": 136048938353,
+        "merge_checkout": "16a98b0213ea7105a6ad27c210a17ccdbc020434",
+        "state": "exact-new-lock-native-qualification-required",
+        "observed_at_utc": "2026-11-20T02:55:00Z"
+      }
+    },
+    {
+      "pr": 208,
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "tree": "6a4417741c0b399dde894773f29854f7a2d36228",
+      "checks": "10-queued",
+      "program_job": 136048284590,
+      "program_state": "queued",
+      "observed_at_utc": "2026-11-20T03:06:05Z",
+      "state": "external-backup-prerequisite-own-hosted-gates-required"
+    },
+    {
+      "pr": 210,
+      "head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+      "tree": "47f982cf20cd123df45805597b266f1f5ab98259",
+      "base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "merge_object": "604cbc5fac9228ab22c6d447059d09220452334b",
+      "merge_object_is_not_executed_checkout": true,
+      "checks": "10-queued-initial-publication-snapshot",
+      "check_records": [
+        {
+          "name": "docs-tooling",
+          "status": "queued",
+          "conclusion": null,
+          "id": 136060707626
+        },
+        {
+          "name": "schemas-and-crypto",
+          "status": "queued",
+          "conclusion": null,
+          "id": 136060707609
+        },
+        {
+          "name": "local-evm",
+          "status": "queued",
+          "conclusion": null,
+          "id": 136060707554
+        },
+        {
+          "name": "browser",
+          "status": "queued",
+          "conclusion": null,
+          "id": 136060707469
+        },
+        {
+          "name": "specs",
+          "status": "queued",
+          "conclusion": null,
+          "id": 136060707286
+        },
+        {
+          "name": "program",
+          "status": "queued",
+          "conclusion": null,
+          "id": 136060703683
+        },
+        {
+          "name": "inventory",
+          "status": "queued",
+          "conclusion": null,
+          "id": 136060703382
+        },
+        {
+          "name": "local-trade",
+          "status": "queued",
+          "conclusion": null,
+          "id": 136060703254
+        },
+        {
+          "name": "native-nostr-relay",
+          "status": "queued",
+          "conclusion": null,
+          "id": 136060703235
+        },
+        {
+          "name": "forge",
+          "status": "queued",
+          "conclusion": null,
+          "id": 136060702829
+        }
+      ],
+      "browser_job": 136060707469,
+      "program_job": 136060703683,
+      "state": "new-fixture-needs-exact-hosted-warmed-socket-and-all-applicable-gates",
+      "observed_at_utc": "2026-11-20T03:27:46.924896+00:00"
     }
   ],
   "policy": {
@@ -1594,11 +1776,12 @@
     "enabled": true,
     "cadence": "hourly existing schedule",
     "semantics": "durable scheduled continuation; not a claim that completed native workers run continuously",
-    "prompt_updated_at_utc": "2026-11-20T02:45:32.857827+00:00",
+    "prompt_updated_at_utc": "2026-11-20T03:26:44.906112+00:00",
     "last_observed_run": "2026-11-20T02:30:00Z",
     "last_observed_run_state": "completed2026-11-20T02:40:01Z",
     "last_result_scope": "Published draft relay206; subsequent actual-module independent reviews complete.",
-    "prompt_refresh_required": true
+    "prompt_refresh_required": false,
+    "checkpoint_pointer_update_after_publication": "Final docs-only PR200 ref will be refreshed in the existing task after its leased update; schedule and environment remain unchanged."
   },
   "verification_log_sha256": {
     "generation2-full.tap": "3affa64cd3bdc9562dd5d08eb803a4c8764814332e23b574184c97c6c876d392",
@@ -1696,6 +1879,17 @@
       "state": "open-on-published205-corrected-and-independent-review-complete-in-successor",
       "repair_sha": "dde7345e1ee2e722344d6f27dd8bd952c285d520",
       "scope": "Finalized expiry slot/height and fresh absence contexts must agree before an uncertain intent becomes dropped; no automatic resend."
+    },
+    {
+      "id": "QUALIFY-WARMED-TRANSPORT-TRIALS",
+      "severity": null,
+      "state": "reviewed-correction-published210-hosted-required",
+      "scope": "Public localHTTP diagnostic only; no wallet, signed transaction, validator or upstream. No application retry failure established.",
+      "owner": "generation8_transport_fixture",
+      "source_sha": "ec7ea30a098f8b46de4a13dbe9c5eacd307447a5",
+      "counted_as_product_defect": false,
+      "pr": 210,
+      "published_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265"
     }
   ],
   "optional_composition": {
@@ -1742,7 +1936,7 @@
     "author_report": "OPTIONAL_COMPOSITION_20261119.md",
     "author_report_commit": "27fba7450600836b5edc131ae1f4f1744ae96248"
   },
-  "native_workers_actually_launched": 34,
+  "native_workers_actually_launched": 35,
   "optional_hosted_snapshot": {
     "observed_at_utc": "2026-11-20T01:16:13.483Z",
     "checks": {
@@ -2820,7 +3014,7 @@
     "remaining_compatibility_blocker": "elliptic-curve0.13.8 requires bigint0.5; highest inspected non-yanked0.5 is0.5.5; patched>=0.7.6 cannot be forced as compatible. Upstream transition/backport is separate; no waiver."
   },
   "external_local_ownership": {
-    "observed_at_utc": "2026-11-20T02:44:09.856309+00:00",
+    "observed_at_utc": "2026-11-20T03:08:46Z",
     "owner_not_in_this_collaboration_tree": true,
     "worker_count_excludes_unattributed_external_workers": true,
     "do_not_modify": [
@@ -2855,8 +3049,16 @@
       "worktree": "/workspace/scratch/6eace968c0df/p2p-offramp",
       "branch": "codex/p2p-successor-consolidation-20261120",
       "observed_head": "d82d5282bfc78e46ccb34d9c700cf1b59dc8b23a",
-      "state": "four-source-repairs-committed-reviewed-qualified-publication-owned-externally",
-      "unpublished_feature_work": "74d4143 backup-verification prerequisite is separate; excluded from frozen core"
+      "state": "core207-backup208-relay206-published-external-owner",
+      "separate_feature_work": "Backup prerequisite is published208 and remains separate from core207."
+    },
+    "separate_handoff": {
+      "branch": "codex/successor-handoff-20261120",
+      "head": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+      "tree": "c7323a825a19aa8cff7b4b24ae5ebe7a129fafcf",
+      "worker_count_reported": 19,
+      "excluded_from_this_root_count": true,
+      "preserve_other_owner": true
     }
   },
   "successor_core": {
@@ -2926,7 +3128,20 @@
     "external_review": "14ab05b57ff84160b8ada310c17fa53402338ac9",
     "external_tests": "6a6030cd3df9b770f0db3adcf90997dccbedaa96",
     "external_tests_not_added_to140": true,
-    "state": "reviewed-separate-from207-external-source-integration-owned"
+    "state": "reviewed-original-source-and-external-corrected-core-composition-published",
+    "composition": {
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "tree": "243d178ac6a3822f71ddf3ad3073cc1d8020b864",
+      "base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "source": "46727d2a8ee1fd58cde15dcc252e1692408830f4",
+      "source_tree": "6745c3b148aed3e13c092cc1d917541c24a9a482",
+      "local_report": "d4199d2c1ac4f3a6abaebd2571a031948fcfef8f",
+      "full_passed": 2265,
+      "execution_owner": "external-successor",
+      "root_reexecuted_full_suite": false,
+      "root_original_scope_count_separate": 140,
+      "state": "published-current-source-hosted-native-required"
+    }
   },
   "backup_verification_successor": {
     "pr": 208,
@@ -2944,5 +3159,37 @@
     "source_reports_artifacts_logs_preserved": true,
     "free_after_gib": 2.43,
     "evidence": "verification/generation7-owned-cache-cleanup.json"
+  },
+  "transport_fixture_qualification": {
+    "id": "QUALIFY-WARMED-TRANSPORT-TRIALS",
+    "state": "independently-reviewed-published210-exact-hosted-pending",
+    "base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+    "source": "ec7ea30a098f8b46de4a13dbe9c5eacd307447a5",
+    "source_tree": "fa36ed6fb1e6f3c72fe10d014c4919c0b9f75ee4",
+    "author_report": "0b4e23ea13f56283657e6f31d5ffb156d5c57af1",
+    "affected_tests": 22,
+    "new_control_tests_in_affected_count": 16,
+    "artifact_bytes": 4812,
+    "artifact_sha256": "8e1d06fb99e221589dfdd888a8b120ac45195dc63535a39de1f000f7b835cb0a",
+    "browser_executed": false,
+    "product_repair_count_increment": 0,
+    "qualification_correction_count": 1,
+    "invariants": "Every trial must pass all original behavior assertions; only clean cold-socket evidence permits another isolated trial; a measured warm socket is mandatory; errors are never retried.",
+    "max_trials": 8,
+    "receipt": "Version2 retains each trial and aggregate counts; no globally-one-send claim for multiple trials.",
+    "failed_original_job": 136044687707,
+    "failure_evidence": "hosted-failure-triage-generation8.json",
+    "pr": 210,
+    "published_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+    "published_tree": "47f982cf20cd123df45805597b266f1f5ab98259",
+    "publication_local_head": "f53b73150b96f3d8bdf1120359baafa9de19a624",
+    "independent_review": "d4bf4b9d82fbbef70350dba5e7c737a6b9fcf238",
+    "independent_control_passed": 22,
+    "combined_tested_source": "53bb347d830796998cb7e10781d0ab82df263fde",
+    "combined_tested_tree": "688a2475a375a6caf2f847ce14c3573829b5f5ff",
+    "combined_affected_passed": 28,
+    "combined_log_sha256": "f77cc5e85573c90082a82af4048a214e67a6de4f5011d53d547868fd648608d3",
+    "open_high_medium_in_reviewed_scope": 0,
+    "merge_object": "604cbc5fac9228ab22c6d447059d09220452334b"
   }
 }

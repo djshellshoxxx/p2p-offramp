@@ -34,24 +34,45 @@ Baseline: `5c5a84ef6300330700c8b0ca54d074ac113f08be`. Classifications describe a
 | F26 | Duplicate historical regression stack | Duplicate | D9 #69–75/#91–93 tests, isolated #78–80 tests, and #168 effective browser delta are already represented on current main. | No reimplementation. Exact normalized whole-file preservation and merge-tree proof are in branch-inventory.json.  |
 | F27 | Production release and live-funds qualification | Blocked | Release-disabled architecture, explicit build modes and signed trust primitives exist; no deployment/release is authorized in this task. | Owner-controlled trust roots/pins, physical wallets/public testnet, required independent reviews and explicit release authorization remain separate. Preserve ReleaseEnabled=0.  |
 
-## Current staging overlay through generation 5
+## Current staging overlay: corrected core and separate descendants
 
-The table above remains the immutable 27-capability assessment of starting main. Generation 2 source `ef9d74258de63e98917c7a34a9392076ff86c35c` is published in PR #190 at `2b23ee614ff2dd05bd3a6e79f1278658c30a3909`; it has not merged to main. The generation5 core source de5bb8a extends that baseline with independently reviewed favorites, templates, immutable tooling and Solana acknowledgment/restore repairs. Its actual full2217-test suite passed; current hosted qualification remains pending. Nine optional packages remain separate source PRs. `consolidation-state.json` preserves exact source and test evidence.
+The table above remains the immutable 27-capability assessment of starting main.
+Current corrected core is PR #207 at
+`df10fe26a308407237f9ccbc636c8bb61f55b84f`, tree
+`4b694124197ae8ce271f14307d12abc43c719406`. Its tested source
+`7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390` passed **2,259/2,259** full
+tests; root independent review passed **97/97** affected tests after reproducing
+the four original failures. Its actual hosted browser job subsequently failed
+the transport diagnostic's mandatory warmed-socket precondition. The preceding
+one-call/one-fetch/one-POST/503 assertions passed, but later error assertions were
+not reached. This is incomplete qualification, not a browser pass.
 
-| Capability | Change on staging | Remaining qualification or composition |
+PR #205's 2,217-test source and historical hosted results remain evidence for
+that older source. It lacks the four core corrections and remains held. Relay
+#206, backup #208 and dependency #209 are separately reviewed descendants of
+#207; their individual results are not a qualification of their combined tree.
+See [the handoff](CONSOLIDATION_HANDOFF.md),
+[failure triage](HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md) and
+[machine-readable state](consolidation-state.json) for exact source identities,
+current ownership and the next execution gate.
+
+| Capability | Current staging change | Remaining qualification or composition |
 |---|---|---|
-| F03 / F08 | Pre-copy byte bounds and restored-profile/relay readiness fixes are integrated. | Preserve current source-bound and live-provider checks. |
-| F16 | Funded Solana exit/recovery composition and stable labels are integrated. | Older native workflows failed. Reviewed acknowledgment and restore corrections are composed into generation5; current native qualification remains pending. Full discovery/funding UI remains absent. |
-| F17 / F18 | Core guards and public image/camera QR review are integrated. PR189 completed six actual Chromium journeys. | Synthetic camera is not physical-device acceptance; unsigned review conveys no authority. |
-| F24 | Internal updater source and four storage lifecycle repairs are recovered. | Unexported/unwired; update UI and current trust composition remain separate. |
-| F25 | Docs/lab tooling and source-bound historical evidence checks are recovered. | Historical receipts remain dated; stale references stay explicit. |
-| F22 | All nine packages are published as #191–#199 with completed independent source reviews. Local all-nine composition preserves their exact source and prior gates. | Combined local qualification passed 2,553 tests and all 13 output files match the base; current-head hosted qualification remains active. No default runtime wiring is authorized by extraction alone. |
-| F28 — favorites/templates | Favorites and templates now have reviewed current-runtime UI/Worker composition in PR201/204 and core source de5bb8a. Native stores, explicit CAS/consent and current registry review remain. | Favorites Medium and template lifecycle defects are closed. Full2217 core and independent506 affected/38 policy/3 cross-feature probes passed; actual new-source hosted UI qualification remains pending. |
-| F29 — scriptless portal | Strict source-reference page, exact downloads and actual PR190 hosted browser qualification passed, including PDF and enforced headers. | No deployed-host or physical print/device claim. |
-| F30 — unsigned staging | Historical PR190 two-pass/nested-path qualification remains valid for its exact source. Immutable copy-text binding and exact favorites/templates admission are repaired and reviewed. | Current locale drift keeps current-source staging refused. The historical-client/current-tooling positive fixture explicitly does not qualify the new client; signing and publication remain false. |
-| F31 — inert governance | Historical record validators and assurance tooling pass;12 historical records,0 pending. |13 current non-owned historical references remain explicitly stale; records confer no authority. |
+| F01 — backup verification | Separate #208 exposes complete-file verification through current Worker/VaultService ownership, bound to profile, generation and persisted revision. External author reports 2,277 full tests and independent reviews. | This coordinator did not execute that suite. Exact source gates remain; these APIs complete a prerequisite, without activating signed updates. |
+| F03 / F08 | Pre-copy byte bounds and restored-profile/relay readiness corrections are integrated. | Preserve source-bound native and current hosted checks; historical provider evidence is scoped to its source. |
+| F06 — relay validation | #206 now composes the reviewed clock/capacity guards onto #207. External combined suite passed 2,265; root's original-source independent selection passed 140. | Counts describe separate executions. Native Nostr and exact hosted/browser gates remain required. No new default financial effect is established. |
+| F11 / F16 — funded Solana recovery | #207 contains acknowledged-send/restore repairs and the finalized expiry/status-context correction. #202 separately completed 62 validator and five actual Worker/browser checks with real refund waits. | #207's preliminary diagnostic failed and its own complete native proof remains required. Keep no automatic resend and durable unknown markers. Discovery/negotiation/funding UI parity remains incomplete. |
+| F17 / F18 — public QR | Core guards and image/camera review are integrated. #189 completed six actual Chromium journeys. | Synthetic camera is not physical-device acceptance; unsigned review conveys no authority. Current core still needs its own hosted execution. |
+| F24 — internal asset updater | Historical internal source and storage lifecycle corrections, including cancellation during pending IndexedDB open, are reviewed. #208 adds backup verification prerequisites. | Real trust/transport/update UI composition remains incomplete. The external successor's screened historical browser adaptation is excluded; no bypass, execution or activation is claimed. |
+| F25 — tooling | Docs/lab tooling, immutable historical copy checks and output-directory ownership corrections are reviewed. | Historical receipts remain dated; current unsigned distribution still refuses stale immutable locale evidence. |
+| F22 — nine optional packages | Separate #191–#199 retain independent source reviews and absent default imports. The older #205-based composition passed 2,617 tests, preserving 13 default and 14 demo artifacts. The external evidence branch has the identical tree. | It predates four core repairs. Recompose one package at a time on corrected core and satisfy the applicable standalone automated-review condition plus current-source gates. |
+| F28 — favorites/templates | Current UI/Worker composition retains encrypted stores, explicit consent/CAS and fresh registry review. #205's actual hosted groups passed; #207 adds route ownership across four entry points. | The newer navigation source requires its own browser proof. Do not transfer older passes or count four entry points as four independent causes. |
+| F29 — scriptless portal | Source-reference page and exact downloads retain #190's source-bound browser evidence. #207 adds reviewed replacement-directory cleanup ownership. | Current-source hosted qualification, deployed-host and physical print/device acceptance remain separate. |
+| F30 — unsigned staging | Historical two-pass/nested-path evidence and current immutable-copy validation are preserved. | Current locale drift keeps staging refused. The historical-client/current-tooling positive fixture does not qualify the new client; signing/publication remain false. |
+| F31 — inert governance | Historical validators and assurance tooling remain reviewed source. | Stale non-owned references stay explicit; records confer no legal, release or economic authority. |
 
-The JSON companion preserves the baseline and records this overlay separately. Optional reference source acceptance supersedes the earlier parking wording; application and release acceptance remain their own decisions.
+The JSON companion preserves the baseline and records this overlay separately.
+No staging-source result means a main merge, production activation or release.
 
 ## Source and regression evidence
 

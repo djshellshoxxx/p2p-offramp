@@ -468,23 +468,48 @@
     }
   ],
   "staging_overlay": {
-    "source_sha": "de5bb8aadadd9b76099110262b2f7beb123f9421",
-    "scope": "Published generation5 core PR205, locally qualified2217 full and independently reviewed. Hosted execution queued; original27-capability main baseline remains immutable. Nine optional packages remain separate.",
+    "source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+    "source_tree": "b330e1ca3a8a22598197bdd5de9532a0c56a917b",
+    "published_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+    "published_tree": "4b694124197ae8ce271f14307d12abc43c719406",
+    "integration_pr": 207,
+    "scope": "Corrected core207 has2259 full source tests and independent97 affected tests. Its actual hosted browser diagnostic failed the warmed-connection precondition on2026-11-20; full current-source qualification remains incomplete. Original27-capability main baseline is unchanged. Relay206, backup208 and dependency209 are separately reviewed descendants, not one qualified combined tree.",
+    "historical_core": {
+      "pr": 205,
+      "source": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+      "full_passed": 2217,
+      "state": "held because four later core corrections are absent"
+    },
     "updates": [
+      {
+        "feature_id": "F01",
+        "status": "Implemented library; separate runtime prerequisite reviewed",
+        "change": "PR208 exposes selected-profile complete-backup verification through current Worker/VaultService ownership and fresh generation/revision checks. External author2277 full tests; this coordinator did not execute those tests. No signed-update UI activation."
+      },
       {
         "feature_id": "F03",
         "status": "Implemented on staging",
-        "change": "Actual-byte bounds from #187 applied before retaining review input."
+        "change": "Actual-byte bounds from187 applied before retaining review input."
+      },
+      {
+        "feature_id": "F06",
+        "status": "Reviewed source correction in separate PR206",
+        "change": "Clock/capacity guards composed on207; external2265 full tests and root original-source140 affected tests are separate counts. Native/current-source hosted qualification remains required."
       },
       {
         "feature_id": "F08",
         "status": "Implemented on staging",
-        "change": "#181 readiness correction retained; native relay and EVM browser paths passed at PR189."
+        "change": "Readiness correction retained; historical source-bound native relay and EVM browser evidence remains separate from current-source qualification."
+      },
+      {
+        "feature_id": "F11",
+        "status": "Reviewed reconciliation correction in207",
+        "change": "Unknown Solana outcomes retain their marker until finalized expiry and covering status contexts agree. No automatic resend; RPC context consistency is not cryptographic history completeness."
       },
       {
         "feature_id": "F16",
         "status": "Partial",
-        "change": "Funded-exit source plus acknowledgment fixture and restore lifecycle repairs are composed and independently reviewed. Older native flows failed; current full hosted qualification remains pending. No discovery/funding parity added."
+        "change": "Funded-exit, acknowledged-send and restore lifecycle source is composed.202 completed62 validator and5 actual Worker/browser checks with real refund waits.207 has a distinct failed transport-fixture precondition and pending native qualification. No discovery/funding parity added."
       },
       {
         "feature_id": "F17",
@@ -494,26 +519,25 @@
       {
         "feature_id": "F18",
         "status": "Implemented within public review scope",
-        "change": "PR189 exact source completed six actual Chromium journeys with synthetic camera; no physical-device or authenticated-invite claim."
+        "change": "189 completed six actual Chromium journeys with synthetic camera. New core retains source but still needs its exact hosted execution; no physical-device or authenticated-invite claim."
       },
       {
         "feature_id": "F24",
         "status": "Partial",
-        "change": "Internal unexported updater and four storage lifecycle repairs recovered; no update UI or trust-root activation."
+        "change": "Internal updater recovered with storage retry/cancellation corrections.208 adds the backup prerequisite. Real trust/transport/update-UI composition remains incomplete; the externally screened historical browser adaptation is excluded."
       },
       {
         "feature_id": "F25",
         "status": "Implemented within source-tooling scope",
-        "change": "Recovered tooling now verifies immutable copy text even with current locale drift. Current unsigned distribution stays refused; historical-client positive staging is explicitly separate."
+        "change": "Immutable copy-text tooling and replacement-output cleanup corrections are reviewed. Current unsigned distribution still refuses stale locale evidence; historical positive fixtures do not approve new source."
       },
       {
         "feature_id": "F22",
-        "status": "Nine reviewed source PRs; hosted qualification active",
-        "change": "PR191\u2013199 preserve one-package scope, native/custom gates and absent default imports. Combined source a2f90cbd passed2553 tests and all13 default files byte-match; current-head hosted qualification remains active."
+        "status": "Nine reviewed separate source PRs; corrected-base qualification remains",
+        "change": "191\u2013199 stay unwired. Older205-based all-nine composition passed2617 and preserved13 default/14 demo artifacts; external evidence branch is tree-identical. It predates four core repairs. Recompose one package at a time and satisfy standalone review conditions."
       }
     ],
-    "published_head": "cd7d54ba075118a7ec043788c17718be842ee405",
-    "integration_pr": 205
+    "hosted_failure_report": "HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md"
   },
   "additional_staging_capabilities": [
     {
@@ -529,11 +553,12 @@
         "packages/personalization/test/favorites.test.mjs",
         "packages/personalization/test/trade-draft-store.test.mjs"
       ],
-      "remaining": "Favorites PR201 Medium independently closed; PR204 adds maintained templates UI/Worker and tooling repair. Core2217 full and independent506 affected/38 policy/3 shared-revision/backup probes passed. Actual current-source hosted favorites/templates gates remain pending.",
+      "remaining": "205 hosted favorites/templates groups passed for that source.207 adds reviewed route-ownership corrections across four entry points, with2259 full and97 independent affected checks; its failed preliminary transport diagnostic prevents transfer of a new-source browser pass.",
       "status": "Implemented in reviewed source; hosted qualification pending",
       "source_prs": [
         201,
-        204
+        204,
+        207
       ]
     },
     {
@@ -549,7 +574,7 @@
         "scripts/portal/build.test.mjs",
         "scripts/test-scriptless-portal-browser.mjs"
       ],
-      "remaining": "No deployed-host, physical-print/device or release claim; preserve current source-bound qualification."
+      "remaining": "207 also includes independently reviewed replacement-directory cleanup ownership. Exact current-source hosted qualification remains required; historical190 browser evidence is not a deployed-host, print/device or release claim."
     },
     {
       "id": "F30",

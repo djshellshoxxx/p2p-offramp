@@ -1,8 +1,30 @@
 # P2P-Offramp consolidation handoff
 
-## Current generation 7 coordination checkpoint
+## Current generation 8 coordination checkpoint
 
-**Corrected core [PR207](https://github.com/djshellshoxxx/p2p-offramp/pull/207) is published and awaiting its exact hosted qualification.** Head `df10fe26a308407237f9ccbc636c8bb61f55b84f`, tree `4b694124197ae8ce271f14307d12abc43c719406`, directly descends from PR205. The remote tree equals the external successor's local report checkpoint. PR205 remains draft/held because it lacks four corrected defects. Main remains `5c5a84ef6300330700c8b0ca54d074ac113f08be`; this coordinator has merged zero PRs into main. Resolve live refs before acting; all status below is dated evidence.
+**Corrected core [PR207](https://github.com/djshellshoxxx/p2p-offramp/pull/207) remains held after its actual browser diagnostic failed the mandatory warmed-connection precondition.** Head `df10fe26a308407237f9ccbc636c8bb61f55b84f`, tree `4b694124197ae8ce271f14307d12abc43c719406`, directly descends from PR205. The remote tree equals the external successor's local report checkpoint. PR205 remains draft/held because it lacks four corrected defects. Main remains `5c5a84ef6300330700c8b0ca54d074ac113f08be`; this coordinator has merged zero PRs into main. Resolve live refs before acting; all status below is dated evidence.
+
+The completed browser job `136044687707` ran exact merge checkout
+`0aba9abd40c39920b8c1cfe9a94fd5870d01f1f9`. Its one application call, one fetch,
+one physical POST, zero fetch failures and HTTP503/RPC_UNAVAILABLE assertions
+passed before the socket assertion failed at 03:03:18 UTC. Later completed-response,
+fixture-error and unexpected-request checks were not reached. The diagnostic is
+byte-identical to the earlier passing PR202/205 version; the precise connection-pool
+cause is unproven. The independently reviewed correction is now separately
+published as [PR210](https://github.com/djshellshoxxx/p2p-offramp/pull/210), head
+`cff9eb05d77c82c82a5d22a5395b0ce63b02b265`, tree
+`47f982cf20cd123df45805597b266f1f5ab98259`, based on207. All28 combined
+author/independent/adjacent tests passed on source
+`53bb347d830796998cb7e10781d0ab82df263fde`; no open High/Medium remains in
+the scoped independent review. Every trial retains all behavior assertions and
+mandatory server-observed warmth; only a completely clean cold trial permits
+another sample, up to eight. Execution, assertion and teardown errors abort.
+The version2 receipt reports all trials and aggregate counts. No local browser
+was executed; all ten initial hosted contexts were queued. This is a separate
+fixture qualification correction, not another product defect. See
+[completed-log triage](HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md),
+[author and combined evidence](TRANSPORT_WARM_CONNECTION_QUALIFICATION_GENERATION8_20261120.md)
+and [independent review](INDEPENDENT_TRANSPORT_FIXTURE_REVIEW_GENERATION8_20261120.md).
 
 The corrected core's tested source `7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390`, tree `b330e1ca3a8a22598197bdd5de9532a0c56a917b`, passed **2,259/2,259 full tests**, 44 tooling, 57 policy, four TypeScript projects, 32 specification tests, boundaries 238/142, default/demo, docs and governance. This coordinator read and hash-verified all eleven recorded logs. Root also independently reproduced the four original failures and ran **97/97 affected tests** on `b67bd81e74b0f58338dc15bc694cd3a22b724cd4`; its production bytes equal the final tested source. A fresh RPC review inspected the Solana correction against pinned Agave. The earlier 2,244-pass/1-fail full run remains a failure: two overlong new test lines were corrected before final qualification.
 
@@ -10,14 +32,24 @@ The four corrected causes are Solana reconciliation context (Medium), accepted-r
 
 | Current source | Exact identity and next gate |
 | --- | --- |
-| Corrected core PR207 | `df10fe26a308407237f9ccbc636c8bb61f55b84f`; at 02:55 UTC Forge passed and eleven other check records were queued. Exact financial/browser execution remains required. |
+| Corrected core PR207 | `df10fe26a308407237f9ccbc636c8bb61f55b84f`; at 03:05–03:06 UTC, three check records succeeded, browser failed, eight were queued and aggregate CodeQL was neutral. Exact financial/browser execution remains required. |
+| Transport diagnostic [PR210](https://github.com/djshellshoxxx/p2p-offramp/pull/210) | `cff9eb05d77c82c82a5d22a5395b0ce63b02b265`, tree `47f982cf20cd123df45805597b266f1f5ab98259`, on207. Independent review and actual combined28-test selection passed; exact hosted Chromium and applicable native gates remain. |
 | Compatible dependency [PR209](https://github.com/djshellshoxxx/p2p-offramp/pull/209) | `c8695278c3b85ac75fc2ad3318830aa8a08f4d50`, tree `e7aba3833fa52c6eda7a23cd6d1301cadc610355`, stacked on 207. Only ctutils version/checksum plus three reports change. Ten check records were queued at02:55 UTC. |
-| Relay [PR206](https://github.com/djshellshoxxx/p2p-offramp/pull/206) | `e848ae19574e8b7f4cb040082df5255ee5a63f1e`, still based on 205. Actual original-module RED0/2, repaired2/2, affected140/140; no additional High/Medium. External integration/review ownership is preserved. |
+| Relay [PR206](https://github.com/djshellshoxxx/p2p-offramp/pull/206) | Now `825a85a55a1e0a43d6f416696fabee94913a2f18`, tree `243d178ac6a3822f71ddf3ad3073cc1d8020b864`, based on 207 and preserving old206 ancestry. External combined source passed 2,265 tests. Root's original-module RED0/2, repaired2/2 and affected140/140 are separate evidence. Current-source hosted/native gates remain. |
 | Backup prerequisite [PR208](https://github.com/djshellshoxxx/p2p-offramp/pull/208) | `0e148564743b1ee353abdbdf8931fec464f09870`, tree `6a4417741c0b399dde894773f29854f7a2d36228`, stacked on 207. External author reports 2,277/2,277 and independent reviews; its own hosted gates remain. No signed-update UI activation or invented trust root. |
 
 PR202's **complete native run passed** on exact checkout `32f7353551660a6c1e3e9302eecf3647b482c0c3`, tree `25d637fa5d6596e44cdae060ccc407f0c23186ee`: 62 validator checks, 1,851 seconds of actual refund waiting, and five emitted-app browser recovery/refund checks with a real module Worker/encrypted IndexedDB and zero fixture errors. The browser ran 2,045 seconds using real chain time. Root read the finalized log and complete browser receipt. This closes the acknowledgment-fixture execution gate on that source; it does not qualify207's changed reconciliation logic.
 
-PR203 and204 each passed 14 browser groups; PR205 passed all 16, including encrypted Favorites/Templates and acknowledged restore. At the 02:42:41 UTC snapshot, native203–205 were still in progress. `hosted-snapshot-generation7.json` and `GENERATION7_REDISCOVERY_20261119.md` bind checkout trees, exact receipts, limitations and historical failures. Preserve all older failed jobs and both real 1,800-second refund minima.
+PR203 and204 each passed 14 foundation browser groups; PR205 passed all 16,
+including encrypted Favorites/Templates and acknowledged restore. PR204's later
+native browser job `136023880105` failed after a duplicate physical-send assertion
+and disabled restore-control timeout. Its actual checkout
+`c579e9a646855b5d821caf97249df9872b3e98e1` retains the older `response.destroy()`
+fixture, while corrected207 already contains the complete503 replacement. This
+is preserved failed historical source, not a newly counted product cause.
+Native203/205 were running their second gate at 03:05–03:06 UTC. Dated generation7
+snapshots remain unchanged; the generation8 triage records the newer results.
+Preserve both real 1,800-second refund minima and every strict financial assertion.
 
 The nine-layer optional stack `d67e022f71f14d54419bcb6987227b957d80107e`, tree `65d567546d93640358be842a71b31fcb445a3851`, passed **2,617/2,617**, 42 tooling, 57 policy, seven TypeScript configurations, boundaries 304/142, 32 specification tests, native Worker/WASM cap, docs/governance and builds. It preserves 652 protected core paths, all 56 core commands within an exact 62-command union, all 13 default/14 demo files, and zero optional graph imports. Published optional evidence `db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2` has the exact same complete tree; it adds no functionality. Both predate the four core corrections. Recompose against the reviewed corrected base, retaining one-package PRs and applicable standalone review conditions.
 
@@ -25,7 +57,14 @@ Fresh inventory from 02:39:46–02:41:07 UTC observed **212 branches and 203 PRs
 
 The dependency audit returned zero npm findings but two Cargo advisory matches on the old lock. PR209 removes the ctutils match through compatible 0.4.4 resolution; author 150/150 upstream library tests and root's independent exact-lock/native audit are recorded. **One crypto-bigint 0.5.5 advisory and five maintenance warnings remain**, and the audit correctly exits 1. Its parent requires 0.5 while the patched range starts 0.7.6; no compatible patched 0.5 release was found. Host normal/build graphs contain neither affected crate, but that is not an SBPF artifact proof or owner waiver. Read both dependency reports and independent review before deciding integration.
 
-**Thirty-four distinct native workers have actually launched in this coordination tree.** These include the fresh relay semantics and hosted snapshot children. Completed workers are not permanently active. External successor/automation workers are separately owned and excluded from this count. All deployment, release, funds, credential and settings limits remain. The existing automation carries the next bounded cycle after this durable checkpoint.
+**Thirty-five distinct native workers have actually launched in this coordination tree.** This includes the fresh generation8 transport-fixture worker; resuming the existing independent reviewer and inventory worker does not increase the count. Completed workers are not permanently active. The external successor's 19 workers are separately attributed and excluded. All deployment, release, funds, credential and settings limits remain. The existing automation carries the next bounded cycle after the durable checkpoint.
+
+The external successor separately published its documentation checkpoint at
+`3b538fd4586b6fc00846262d67956a2125b6c9f1`, tree
+`c7323a825a19aa8cff7b4b24ae5ebe7a129fafcf`, on
+`codex/successor-handoff-20261120`. Its earlier workflow-level queue observation
+does not supersede the later per-job failures above. Preserve both source owners;
+PR200 remains this coordinator's documentation-only branch.
 
 ## Historical generation 5 source and authority
 
@@ -116,7 +155,7 @@ Environment: Node 24.22.3, npm 11.19.1, Python 3.12.14. Foundry 1.5.1 and solc 0
 | Actual independent ERC-20 recovery proof | 4 checks, 8 signatures, 3 sends, 3 exact durable markers |
 | Specifications / agreement fuzz / formal harness | 32/32, 26/26 and 22/22 passed respectively |
 
-### Current qualified source executions
+### Historical locally qualified source executions
 
 | Source | Actual result |
 | --- | --- |
@@ -136,9 +175,13 @@ The full final command was `FOUNDRY_BIN=<verified-toolchain> FOUNDRY_SOLC=<verif
 
 Independent review documents include `INDEPENDENT_SECURITY_REVIEW_20261119.md`, `INDEPENDENT_TOOLING_REVIEW_20261119.md`, `INDEPENDENT_INTEGRATION_REVIEW_20261119.md`, `INDEPENDENT_EXTRACTION_REVIEW_20261119.md`, `INDEPENDENT_HISTORICAL_TOOLING_REVIEW_20261119.md`, `INDEPENDENT_PERSONALIZATION_REVIEW_20261119.md` and `GENERATION2_INTEGRATION_REVIEW_20261119.md`. Those dated reviews found no open High/Medium in their stated scopes. The later four reproduced findings supersede any blanket clearance of PR205; three are Medium and one is Low. Exact source-bound reports establish the review; they do not override a failed or pending hosted gate.
 
-## Hosted qualification and current gates
+## Historical hosted snapshots and current gates
 
 Local Chromium cannot launch under the managed Unix-socket restriction. Do not bypass it or label source/build checks as browser executions. Hosted jobs are actually executing; issue130's zero-job November11 history is not the current runner state.
+
+The table below preserves earlier dated observations. The current checkpoint and
+generation8 triage above supersede its pending statuses without rewriting failures
+or transferring a passing result to another tree.
 
 | PR/source | Actual observed result |
 | --- | --- |
@@ -191,7 +234,7 @@ Privacy-policy's Medium planning defect is fixed and independently closed: atomi
 
 ## Active workers and remaining functionality
 
-**Thirty-four distinct native workers have actually launched in this coordination tree.** Resuming a worker does not increase the count. Generation 6 optional-stack, dependency/pin and independent Solana RPC reviews are complete. Generation 7 Cargo remediation, inventory/hosted review and relay review are complete. The coordinator independently reproduced all four new core causes and ran 97 affected tests. External coordinators/workers are not included in this count; their working trees and publication refs remain owned by them. PR200 is this coordinator's documentation-only checkpoint.
+**Thirty-five distinct native workers have actually launched in this coordination tree.** Resuming a worker does not increase the count. Generation6 optional-stack, dependency/pin and independent Solana RPC reviews are complete. Generation7 Cargo remediation, inventory/hosted review and relay review are complete. Generation8 transport correction, independent review and completed-job triage are now committed; the correction is published as210 with28 combined affected tests passing. These workers completed their scoped tasks; hosted execution remains pending. The coordinator independently reproduced the four core causes and ran97 affected tests. External coordinators/workers are excluded from this count; their worktrees and publication refs remain owned by them. PR200 is this coordinator's documentation-only checkpoint.
 
 The detailed accepted D8 packet has a named CodeRabbit/Qodo condition for standalone Tier B PRs. Fresh rediscovery found no named review on the nine optional PRs and is documenting applicability separately from server rules. Do not impose that condition on the combined Tier C core, silently remove an applicable standalone rule, or infer inaccessible protection settings. Optional source integration remains one package per PR with absent default imports.
 
@@ -211,9 +254,9 @@ External `/workspace/scratch/6eace968c0df/p2p-offramp` owns the four corrected c
 ## Exact continuation
 
 1. Resolve live main, PR200, the corrected core publication, PR206 and active ownership. Read current state and dated inventory overlays; do not substitute older snapshots for live refs.
-2. Keep original PR205 unmerged. Its actual foundation/browser passes remain source-bound. Qualify the reviewed corrected descendant on its own full native/browser checks, preserving strict sends, durable markers, principal/fees and both real 1,800-second waits.
+2. Keep original PR205 unmerged. Its actual foundation/browser passes remain source-bound. Obtain hosted execution of independently reviewed PR210 on its exact source, preserving mandatory measured socket warmth and every behavior assertion. Qualify the actual corrected composition on its own full native/browser checks, preserving strict sends, durable markers, principal/fees and both real 1,800-second waits.
 3. Qualify independently reviewed dependency PR209 on its exact native source. Preserve the remaining bigint advisory and scope; do not force an incompatible major or infer a waiver.
-4. Use the completed independent PR206 relay review and separately attributed external probes for reviewed composition. Preserve PR208 backup-verification ownership and exact gates. Do not aggregate unreviewed changes merely because a new branch exists.
+4. PR206 is already composed on207 at825a85a with2,265 external combined tests; do not duplicate that work. Preserve the root140-test and external98-test review scopes, PR208 backup-verification ownership and all exact gates. Do not aggregate unreviewed changes merely because a new branch exists.
 5. Recompose optional one-package layers only against the reviewed corrected base. Keep the tested d67e022f composition as historical exact-source evidence, all default imports absent, and the applicable standalone CodeRabbit/Qodo condition unwaived.
 6. After the applicable gates pass, merge the already authorized source using expected head/base/tree checks. No force push, branch deletion, deployment or release.
 7. Update PR200 with exact source identities, current CI evidence, stable repair IDs and ownership. Continue independently actionable work with fresh native workers; avoid repeated closed work and invented trust inputs.
