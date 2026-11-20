@@ -1,0 +1,427 @@
+✖ UnlockForm profile validation notice follows live locale selection without starting an operation (41.740767ms)
+✖ ExportForm profile validation notice follows live locale selection without starting an operation (16.202229ms)
+✖ ExportForm unchecked-export consent notice follows live locale selection without starting an operation (6.917964ms)
+✖ CreateForm passphrase confirmation notice follows live locale selection without starting an operation (9.1049ms)
+✖ CreateForm creation consent notice follows live locale selection without starting an operation (2.636144ms)
+✖ RestoreForm required file notice follows live locale selection without starting an operation (5.362524ms)
+✖ RestoreForm file size notice follows live locale selection without starting an operation (7.229876ms)
+✖ RestoreForm passphrase confirmation notice follows live locale selection without starting an operation (7.436408ms)
+✖ RestoreForm fresh-key restore consent notice follows live locale selection without starting an operation (2.861555ms)
+✖ UnlockForm completed service refusal follows the selected catalog without repeating work (7.560895ms)
+✖ CreateForm completed service refusal follows the selected catalog without repeating work (16.382376ms)
+✖ ExportForm completed service refusal follows the selected catalog without repeating work (3.35505ms)
+✖ RestoreForm completed service refusal follows the selected catalog without repeating work (10.773911ms)
+✖ an ordinary thrown unlock error keeps its fixed mapping after locale selection (5.778622ms)
+✖ unchecked export success relocalizes its notice without a second download or consent reuse (2.778799ms)
+✖ confirmed restore notice relocalizes all 1 records while preserving its exact profile handoff (11.223971ms)
+✖ confirmed restore notice relocalizes all 17 records while preserving its exact profile handoff (7.037174ms)
+✔ a pending unlock keeps its operation and clears input when the parent changes locale (6.829331ms)
+✔ locale selection during a fresh-key restore preserves the single file read and confirmed result (38.760745ms)
+✔ cancelled restore remains uncertain across locale changes and ignores a late confirmation (12.643666ms)
+✖ explicit restore reconciliation refusal relocalizes without retrying restoration or inventory (3.515503ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 3
+ℹ fail 18
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2755.482911
+
+✖ failing tests:
+
+test at apps/web/test/vault-forms-locale.test.mjs:135:4
+✖ UnlockForm profile validation notice follows live locale selection without starting an operation (41.740767ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Enter an exact 32-character lowercase hexadecimal profile ID.'
+  -   '[DRAFT Enter an exact 32-character lowercase hexadecimal profile ID.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:137:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Enter an exact 32-character lowercase hexadecimal profile ID.' ],
+    expected: [ '[DRAFT Enter an exact 32-character lowercase hexadecimal profile ID.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:135:4
+✖ ExportForm profile validation notice follows live locale selection without starting an operation (16.202229ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Enter an exact 32-character lowercase hexadecimal profile ID.'
+  -   '[DRAFT Enter an exact 32-character lowercase hexadecimal profile ID.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:137:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Enter an exact 32-character lowercase hexadecimal profile ID.' ],
+    expected: [ '[DRAFT Enter an exact 32-character lowercase hexadecimal profile ID.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:135:4
+✖ ExportForm unchecked-export consent notice follows live locale selection without starting an operation (6.917964ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Read and accept the unchecked export notice before downloading.'
+  -   '[DRAFT Read and accept the unchecked export notice before downloading.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:137:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Read and accept the unchecked export notice before downloading.' ],
+    expected: [ '[DRAFT Read and accept the unchecked export notice before downloading.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:135:4
+✖ CreateForm passphrase confirmation notice follows live locale selection without starting an operation (9.1049ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'The passphrases do not match. Both fields were cleared.'
+  -   '[DRAFT The passphrases do not match. Both fields were cleared.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:137:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'The passphrases do not match. Both fields were cleared.' ],
+    expected: [ '[DRAFT The passphrases do not match. Both fields were cleared.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:135:4
+✖ CreateForm creation consent notice follows live locale selection without starting an operation (2.636144ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Read and accept the passphrase notice before creating a profile.'
+  -   '[DRAFT Read and accept the passphrase notice before creating a profile.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:137:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Read and accept the passphrase notice before creating a profile.' ],
+    expected: [ '[DRAFT Read and accept the passphrase notice before creating a profile.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:135:4
+✖ RestoreForm required file notice follows live locale selection without starting an operation (5.362524ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Choose an encrypted backup file.'
+  -   '[DRAFT Choose an encrypted backup file.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:137:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Choose an encrypted backup file.' ],
+    expected: [ '[DRAFT Choose an encrypted backup file.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:135:4
+✖ RestoreForm file size notice follows live locale selection without starting an operation (7.229876ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'A local safety limit was reached. Keep the original data and use recovery guidance.'
+  -   '[DRAFT A local safety limit was reached. Keep the original data and use recovery guidance.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:137:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'A local safety limit was reached. Keep the original data and use recovery guidance.' ],
+    expected: [ '[DRAFT A local safety limit was reached. Keep the original data and use recovery guidance.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:135:4
+✖ RestoreForm passphrase confirmation notice follows live locale selection without starting an operation (7.436408ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'The passphrases do not match. Both fields were cleared.'
+  -   '[DRAFT The passphrases do not match. Both fields were cleared.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:137:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'The passphrases do not match. Both fields were cleared.' ],
+    expected: [ '[DRAFT The passphrases do not match. Both fields were cleared.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:135:4
+✖ RestoreForm fresh-key restore consent notice follows live locale selection without starting an operation (2.861555ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Read and accept the restore notice before continuing.'
+  -   '[DRAFT Read and accept the restore notice before continuing.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:137:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Read and accept the restore notice before continuing.' ],
+    expected: [ '[DRAFT Read and accept the restore notice before continuing.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:147:4
+✖ UnlockForm completed service refusal follows the selected catalog without repeating work (7.560895ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'The vault could not be authenticated. Check the passphrase and keep the original data.'
+  -   '[DRAFT The vault could not be authenticated. Check the passphrase and keep the original data.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:149:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'The vault could not be authenticated. Check the passphrase and keep the original data.' ],
+    expected: [ '[DRAFT The vault could not be authenticated. Check the passphrase and keep the original data.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:147:4
+✖ CreateForm completed service refusal follows the selected catalog without repeating work (16.382376ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Local storage is unavailable. Check browser storage permissions and keep your original data.'
+  -   '[DRAFT Local storage is unavailable. Check browser storage permissions and keep your original data.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:149:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Local storage is unavailable. Check browser storage permissions and keep your original data.' ],
+    expected: [ '[DRAFT Local storage is unavailable. Check browser storage permissions and keep your original data.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:147:4
+✖ ExportForm completed service refusal follows the selected catalog without repeating work (3.35505ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Local storage is unavailable. Check browser storage permissions and keep your original data.'
+  -   '[DRAFT Local storage is unavailable. Check browser storage permissions and keep your original data.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:149:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Local storage is unavailable. Check browser storage permissions and keep your original data.' ],
+    expected: [ '[DRAFT Local storage is unavailable. Check browser storage permissions and keep your original data.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:147:4
+✖ RestoreForm completed service refusal follows the selected catalog without repeating work (10.773911ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'The local operation could not use this input. Check the profile ID and passphrase requirements.'
+  -   '[DRAFT The local operation could not use this input. Check the profile ID and passphrase requirements.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:149:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'The local operation could not use this input. Check the profile ID and passphrase requirements.' ],
+    expected: [ '[DRAFT The local operation could not use this input. Check the profile ID and passphrase requirements.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:154:1
+✖ an ordinary thrown unlock error keeps its fixed mapping after locale selection (5.778622ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'The local service could not complete this operation safely. Keep your data and open recovery guidance.'
+  -   '[DRAFT The local service could not complete this operation safely. Keep your data and open recovery guidance.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:156:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'The local service could not complete this operation safely. Keep your data and open recovery guidance.' ],
+    expected: [ '[DRAFT The local service could not complete this operation safely. Keep your data and open recovery guidance.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:160:1
+✖ unchecked export success relocalizes its notice without a second download or consent reuse (2.778799ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Unchecked encrypted file prepared. Your browser controls whether it is saved. This is not a verified recovery test.'
+  -   '[DRAFT Unchecked encrypted file prepared. Your browser controls whether it is saved. This is not a verified recovery test.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:162:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Unchecked encrypted file prepared. Your browser controls whether it is saved. This is not a verified recovery test.' ],
+    expected: [ '[DRAFT Unchecked encrypted file prepared. Your browser controls whether it is saved. This is not a verified recovery test.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:169:32
+✖ confirmed restore notice relocalizes all 1 records while preserving its exact profile handoff (11.223971ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Restored as a new locked profile bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb with 1 record. Unlock it from Home.'
+  -   '[DRAFT Restored as a new locked profile ⁦bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb⁩ with ١ record. Unlock it from Home.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:171:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Restored as a new locked profile bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb with 1 record. Unlock it from Home.' ],
+    expected: [ '[DRAFT Restored as a new locked profile ⁦bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb⁩ with ١ record. Unlock it from Home.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:169:32
+✖ confirmed restore notice relocalizes all 17 records while preserving its exact profile handoff (7.037174ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Restored as a new locked profile bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb with 17 records. Unlock it from Home.'
+  -   '[DRAFT Restored as a new locked profile ⁦bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb⁩ with ١٧ records. Unlock it from Home.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:171:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Restored as a new locked profile bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb with 17 records. Unlock it from Home.' ],
+    expected: [ '[DRAFT Restored as a new locked profile ⁦bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb⁩ with ١٧ records. Unlock it from Home.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/vault-forms-locale.test.mjs:209:1
+✖ explicit restore reconciliation refusal relocalizes without retrying restoration or inventory (3.515503ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Local storage is unavailable. Check browser storage permissions and keep your original data.'
+  -   '[DRAFT Local storage is unavailable. Check browser storage permissions and keep your original data.]'
+    ]
+  
+      at selectBoth (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:119:36)
+      at TestContext.<anonymous> (file:///workspace/scratch/dcf03ef9bee8/p2p-vault-forms-locale-g21/apps/web/test/vault-forms-locale.test.mjs:212:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Local storage is unavailable. Check browser storage permissions and keep your original data.' ],
+    expected: [ '[DRAFT Local storage is unavailable. Check browser storage permissions and keep your original data.]' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
