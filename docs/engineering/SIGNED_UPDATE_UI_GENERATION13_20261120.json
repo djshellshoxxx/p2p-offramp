@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "date": "2026-11-20",
+  "feature": "F24",
+  "status": "optional-ui-implemented-configured-update-unqualified",
+  "baseCommit": "bad3b708bb6528cfdc7b1e65e8f29727ad4bbe6e",
+  "implementationCommit": "723b8d105a185f3c84130d1ccd5c9a907ff13153",
+  "implementationTree": "5813c5bbc09900698ce7a79ca44383adb149c8e8",
+  "defaultController": null,
+  "checks": {
+    "ui": {
+      "passed": 20,
+      "failed": 0
+    },
+    "locale": {
+      "passed": 25,
+      "failed": 0
+    },
+    "affected": {
+      "passed": 34,
+      "failed": 0
+    },
+    "importBoundaries": {
+      "passed": 15,
+      "failed": 0
+    },
+    "buildPolicy": {
+      "passed": 58,
+      "failed": 0,
+      "includesImportBoundarySuite": true
+    },
+    "typecheck": {
+      "passed": true,
+      "projects": 4
+    },
+    "sourceBoundaries": {
+      "passed": true,
+      "sourceFiles": 241,
+      "visitedModules": 148
+    },
+    "defaultBuild": {
+      "passed": true,
+      "files": 12,
+      "bytes": 794354
+    }
+  },
+  "graphs": [
+    {
+      "name": "core-graph-document.json",
+      "sha256": "6bab9f039c39415e064c4ea9c4bff47665e1d4f00e855fcb7b486ed34acd7807",
+      "moduleCount": 95,
+      "updaterModules": [],
+      "hasPanel": true
+    },
+    {
+      "name": "core-graph-worker.json",
+      "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+      "moduleCount": 30,
+      "updaterModules": [],
+      "hasPanel": false
+    },
+    {
+      "name": "qr-graph-worker.json",
+      "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+      "moduleCount": 4,
+      "updaterModules": [],
+      "hasPanel": false
+    }
+  ],
+  "release": {
+    "ReleaseEnabled": 0,
+    "signedRelease": false,
+    "releaseAcceptance": false
+  },
+  "qualification": {
+    "independentReview": false,
+    "hostedBrowser": false,
+    "configuredUpdate": false,
+    "ownLockLeaseAdapter": false,
+    "nativeOriginTransition": false,
+    "physicalWallet": false,
+    "productionTrust": false
+  },
+  "logs": [
+    {
+      "file": "ui.log",
+      "sha256": "44058e25d2de7f448ebd36490195c81a730fdf513f328d8ec24752761ac7ea2b",
+      "bytes": 1826
+    },
+    {
+      "file": "locale.log",
+      "sha256": "91662b8ac1e9a52210adc395ad7ad535fb31b52b5ea2ab87ddbba1dc959bf75f",
+      "bytes": 2902
+    },
+    {
+      "file": "affected.log",
+      "sha256": "2b3be37510d45261aaa59548b8dcb1b8a9159523d19fc5ab5ac45a646b76805a",
+      "bytes": 3185
+    },
+    {
+      "file": "boundary-tests.log",
+      "sha256": "8cca1eb799de88b6e590e25200cfb1a5761d4aeef45a203a3153caecda383a86",
+      "bytes": 1770
+    },
+    {
+      "file": "typecheck.log",
+      "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "bytes": 341
+    },
+    {
+      "file": "boundaries.log",
+      "sha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "bytes": 392
+    },
+    {
+      "file": "build-policy.log",
+      "sha256": "56f0e1be4dcfad87141f783d825283294d43913a2a3913397cb2a3452f270539",
+      "bytes": 7639
+    },
+    {
+      "file": "build.log",
+      "sha256": "0ab3587c2414d0780c7ccdb5be8e9875f3883e1ad1a4be116c4585eee0fdd9be",
+      "bytes": 1026
+    },
+    {
+      "file": "graphs.json",
+      "sha256": "9e98643d146565f99901bbb877a92a2b0c7f621ae41579b3b7e3d1bc6cb70216",
+      "bytes": 3488
+    }
+  ]
+}

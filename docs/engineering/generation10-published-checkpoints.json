@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "generation": 10,
+  "verified_at_utc": "2026-11-20T04:44:28.101Z",
+  "core": {
+    "pr": 210,
+    "branch": "codex/transport-qualification-20261120",
+    "tested_source": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+    "tested_tree": "81845317f8c1cfe7c76846aa54403fb49cc141b0",
+    "published_source": "7819b88d32375905c12681e297773c712dabe94a",
+    "ordered_source_parents": [
+      "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+      "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "0e148564743b1ee353abdbdf8931fec464f09870",
+      "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "e7397f45f68f18fae8857ea31b58a04e248df404"
+    ],
+    "local_final": "cc178fc653611ae8b6875fa8da371b096d71ba74",
+    "published_final": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+    "final_tree": "976a729bc359d331214924abab617969aa066950",
+    "only_three_reports_after_source": true,
+    "immutable_objects_ref_and_pr_body_verified": true,
+    "full_passed": 2309,
+    "independent_focused_passed": 54,
+    "full_suite_invocations": 1
+  },
+  "optional": {
+    "base_local": "cc178fc653611ae8b6875fa8da371b096d71ba74",
+    "base_published": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+    "base_tree": "976a729bc359d331214924abab617969aa066950",
+    "tested_source": "7dc8f486791f8f4a2fa0b9182181354e6b72f188",
+    "tested_tree": "e0826f1f8824f8f1f044e161311432ace6e06254",
+    "published_source": "f96d439b66775a5cc86dbefd02dba45fdc90c072",
+    "local_final": "ae9c7137303745f601dba763e7da53a49fb224ad",
+    "published_final": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+    "final_tree": "08c42c12a1cdb1dc81fc0c8422ec58a923e05733",
+    "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
+    "only_three_reports_after_source": true,
+    "full_passed": 2709,
+    "independent_boundary_passed": 16,
+    "full_suite_invocations": 1,
+    "original_optional_refs_changed": false,
+    "bulk_optional_pr_created": false,
+    "default_activation": false,
+    "all_deltas_equal_already_published_original_blobs": true,
+    "all_layer_trees_and_ordered_parents_verified": true,
+    "final_ref_verified": true,
+    "layers": [
+      {
+        "pr": 191,
+        "local_head": "c1a01830105e2de83342fbfe5ae186e25b84f8c7",
+        "published_head": "618704211c9e5ab201ad98aa77eb658a81e000aa",
+        "tree": "42323f8ab566ce72208d9e6f91bba7b053b0bb15",
+        "original_first_parent": "61f0c6c05d245c4cc7524852224d00693929df3c",
+        "local_second_parent": "cc178fc653611ae8b6875fa8da371b096d71ba74",
+        "published_second_parent": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "delta_paths": 12
+      },
+      {
+        "pr": 192,
+        "local_head": "1b059bdc91097686b2c5d21eaa28ffe9d87f30d6",
+        "published_head": "71fbc85b0620fa706ebfad001dca28bcc0b284e8",
+        "tree": "6b4c21fce978c045f87c1282a178316ca5663073",
+        "original_first_parent": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+        "local_second_parent": "c1a01830105e2de83342fbfe5ae186e25b84f8c7",
+        "published_second_parent": "618704211c9e5ab201ad98aa77eb658a81e000aa",
+        "delta_paths": 14
+      },
+      {
+        "pr": 193,
+        "local_head": "8729fcad8af422ed91a84969311542d63a31c8d4",
+        "published_head": "029b7365d6540857c106b1315c75a5a1c7b4b8c7",
+        "tree": "9037354e7f203afc614d4e038aa97cb985fde127",
+        "original_first_parent": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+        "local_second_parent": "1b059bdc91097686b2c5d21eaa28ffe9d87f30d6",
+        "published_second_parent": "71fbc85b0620fa706ebfad001dca28bcc0b284e8",
+        "delta_paths": 20
+      },
+      {
+        "pr": 194,
+        "local_head": "f71b45d947a0510897b30d25d03faf06859e7f60",
+        "published_head": "43d2edf510368ea4a2fa0a30b1c1a154d1a6aa49",
+        "tree": "058b0a069bacff67cad52a1f042d4a2e07feb052",
+        "original_first_parent": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+        "local_second_parent": "8729fcad8af422ed91a84969311542d63a31c8d4",
+        "published_second_parent": "029b7365d6540857c106b1315c75a5a1c7b4b8c7",
+        "delta_paths": 11
+      },
+      {
+        "pr": 195,
+        "local_head": "1293ae763ee8174a73f09a1370407c2051848a24",
+        "published_head": "7c19fe6ded51fade01ab35bfcba734b904307884",
+        "tree": "09d0d6864cb38534d1ea5aa5eba34693ba164322",
+        "original_first_parent": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+        "local_second_parent": "f71b45d947a0510897b30d25d03faf06859e7f60",
+        "published_second_parent": "43d2edf510368ea4a2fa0a30b1c1a154d1a6aa49",
+        "delta_paths": 24
+      },
+      {
+        "pr": 196,
+        "local_head": "8756a903e26bde486db3bee125a6d9b01a81dca2",
+        "published_head": "744359e8614374faf18bb8e53a830369f7e3112a",
+        "tree": "b53ba4400fbd31915a253693d6825ad92e1eb2f1",
+        "original_first_parent": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+        "local_second_parent": "1293ae763ee8174a73f09a1370407c2051848a24",
+        "published_second_parent": "7c19fe6ded51fade01ab35bfcba734b904307884",
+        "delta_paths": 39
+      },
+      {
+        "pr": 197,
+        "local_head": "da3acb45fff2b3d1679ad2df5e2befec5451a065",
+        "published_head": "f0fea7500db51ec401e9b7e71e063803ce6920c4",
+        "tree": "da6add848e50044d003bc3d23ae210f9864cd9be",
+        "original_first_parent": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+        "local_second_parent": "8756a903e26bde486db3bee125a6d9b01a81dca2",
+        "published_second_parent": "744359e8614374faf18bb8e53a830369f7e3112a",
+        "delta_paths": 16
+      },
+      {
+        "pr": 198,
+        "local_head": "615737caa784b1897ef888f89e9c71d8b50cce99",
+        "published_head": "6707b07b3307f5fa0a4253f9c04f2586a24355bd",
+        "tree": "239eeb96261aa8dbac504957dc3627d4df608297",
+        "original_first_parent": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+        "local_second_parent": "da3acb45fff2b3d1679ad2df5e2befec5451a065",
+        "published_second_parent": "f0fea7500db51ec401e9b7e71e063803ce6920c4",
+        "delta_paths": 21
+      },
+      {
+        "pr": 199,
+        "local_head": "7dc8f486791f8f4a2fa0b9182181354e6b72f188",
+        "published_head": "f96d439b66775a5cc86dbefd02dba45fdc90c072",
+        "tree": "e0826f1f8824f8f1f044e161311432ace6e06254",
+        "original_first_parent": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+        "local_second_parent": "615737caa784b1897ef888f89e9c71d8b50cce99",
+        "published_second_parent": "6707b07b3307f5fa0a4253f9c04f2586a24355bd",
+        "delta_paths": 22
+      }
+    ]
+  },
+  "source_binding_note": "Local and connector-created commit metadata differ; complete Git tree equality is verified at every layer and report checkpoint. Local tests do not become hosted execution evidence.",
+  "inventory_note": "The full 219-branch/208-PR census is dated 04:13 UTC. This later optional evidence branch is an individually verified addition, not a new complete census.",
+  "qualification_note": "Exact-source hosted/native/browser/SBPF and applicable standalone named-review gates remain open. No main merge, release, deployment, settings change or waiver.",
+  "newer_candidate_note": "The existing 04:30 scheduled continuation completed 04:40:11 UTC and published external PR212 on701f3866. It is a later three-path transport cleanup candidate. Fresh workers42/43 own independent review and source qualification; all G10 results remain tied to G10 source."
+}

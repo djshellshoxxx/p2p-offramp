@@ -1,0 +1,817 @@
+{
+  "schema": 1,
+  "recorded_at_utc": "2026-11-20T06:46:29.080968+00:00",
+  "scope": "Fresh local qualification of composed reviewed backup UI, mandatory Cast oracle, cross-browser gates, compatible Cargo lock and optional signed-update UI. No new runtime source edits.",
+  "branch": "codex/combined-qualification-g14-20261120",
+  "source": "e7c262659f94af30d18caf790a48e8b1fed77370",
+  "tree": "30c9264b9cc98786f43279b8aa513bd2c5fce9d3",
+  "production_source_edits_by_integrator": false,
+  "composition": {
+    "base": "bf12a45604497860b8ded9d0e65f06a1c0cc9860",
+    "source": "e7c262659f94af30d18caf790a48e8b1fed77370",
+    "tree": "30c9264b9cc98786f43279b8aa513bd2c5fce9d3",
+    "components": [
+      {
+        "name": "cross_browser",
+        "base": "bad3b708bb6528cfdc7b1e65e8f29727ad4bbe6e",
+        "head": "e0e1a8b943a2a05bfe9102a0df3db85198da568d",
+        "tree": "9c5e9d8cc8d3c6996a646b43d39b581fe325484f",
+        "changed_paths": [
+          ".github/workflows/vault-foundation.yml",
+          "apps/web/README.md",
+          "docs/engineering/BACKUP_CROSS_BROWSER_GENERATION13_20261120.md",
+          "docs/engineering/backup-cross-browser-generation13-evidence.json",
+          "scripts/test-backup-verification-browser.mjs"
+        ],
+        "ancestor_of_combined": true
+      },
+      {
+        "name": "dependency",
+        "base": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "head": "1e940862ba6e01309b81d5ce9d3d9f4ae4e32ce7",
+        "tree": "5ab1f4ddc56742645c60ac43ac2184e194867e0a",
+        "changed_paths": [
+          "contracts/solana/Cargo.lock"
+        ],
+        "ancestor_of_combined": true
+      },
+      {
+        "name": "signed_update",
+        "base": "bad3b708bb6528cfdc7b1e65e8f29727ad4bbe6e",
+        "head": "485c37cc12dc100e43abd11dbcd8017f0399b741",
+        "tree": "b97e184459d9bca9303230edfb4791507a870dac",
+        "changed_paths": [
+          "apps/web/src/ui/App.tsx",
+          "apps/web/src/ui/Pages.tsx",
+          "apps/web/src/ui/SignedUpdatePanel.tsx",
+          "apps/web/src/ui/locale/en.ts",
+          "apps/web/test/signed-update-ui.test.mjs",
+          "docs/engineering/INDEPENDENT_SIGNED_UPDATE_UI_REVIEW_GENERATION13_20261120.md",
+          "docs/engineering/SIGNED_UPDATE_UI_GENERATION13_20261120.json",
+          "docs/engineering/SIGNED_UPDATE_UI_GENERATION13_20261120.md",
+          "docs/engineering/signed-update-ui-independent-review-generation13.json",
+          "packages/security/README-UPDATES.md",
+          "packages/security/update-view.ts",
+          "scripts/check-import-boundaries.mjs",
+          "scripts/tests/import-boundaries.test.mjs"
+        ],
+        "ancestor_of_combined": true
+      }
+    ],
+    "changed_paths": 19,
+    "all_changed_blobs_exact": true,
+    "unchanged_base_paths_preserved": true,
+    "blob_checks": [
+      {
+        "path": ".github/workflows/vault-foundation.yml",
+        "expected_blob": "6024ba60bf009f9ec68438254455836e56dc2878",
+        "actual_blob": "6024ba60bf009f9ec68438254455836e56dc2878"
+      },
+      {
+        "path": "apps/web/README.md",
+        "expected_blob": "779f6859c4cc7ed76b6eb3ecb85542c9fdeb5ca7",
+        "actual_blob": "779f6859c4cc7ed76b6eb3ecb85542c9fdeb5ca7"
+      },
+      {
+        "path": "docs/engineering/BACKUP_CROSS_BROWSER_GENERATION13_20261120.md",
+        "expected_blob": "dd3548b1e9e849a2bb1463c65e17078531138032",
+        "actual_blob": "dd3548b1e9e849a2bb1463c65e17078531138032"
+      },
+      {
+        "path": "docs/engineering/backup-cross-browser-generation13-evidence.json",
+        "expected_blob": "96464d8457d425ce471ee5db3b219df50c67fa6c",
+        "actual_blob": "96464d8457d425ce471ee5db3b219df50c67fa6c"
+      },
+      {
+        "path": "scripts/test-backup-verification-browser.mjs",
+        "expected_blob": "f6afc775c6bb97abc7e2950f73a98ed813303d15",
+        "actual_blob": "f6afc775c6bb97abc7e2950f73a98ed813303d15"
+      },
+      {
+        "path": "contracts/solana/Cargo.lock",
+        "expected_blob": "7d9b985b90a095c0a8c248d086512a19ed21ff66",
+        "actual_blob": "7d9b985b90a095c0a8c248d086512a19ed21ff66"
+      },
+      {
+        "path": "apps/web/src/ui/App.tsx",
+        "expected_blob": "cb2f4d681afd9027db9aeca9feebcb9376112a2d",
+        "actual_blob": "cb2f4d681afd9027db9aeca9feebcb9376112a2d"
+      },
+      {
+        "path": "apps/web/src/ui/Pages.tsx",
+        "expected_blob": "d1a4d6a4e4277aa88b07f8ade3863567e81b41c8",
+        "actual_blob": "d1a4d6a4e4277aa88b07f8ade3863567e81b41c8"
+      },
+      {
+        "path": "apps/web/src/ui/SignedUpdatePanel.tsx",
+        "expected_blob": "156fa39b4fdf012ed105f163f772235747bec165",
+        "actual_blob": "156fa39b4fdf012ed105f163f772235747bec165"
+      },
+      {
+        "path": "apps/web/src/ui/locale/en.ts",
+        "expected_blob": "7b90d918ff20bcaa4caa5b7e45dc3f025d05285e",
+        "actual_blob": "7b90d918ff20bcaa4caa5b7e45dc3f025d05285e"
+      },
+      {
+        "path": "apps/web/test/signed-update-ui.test.mjs",
+        "expected_blob": "b0400ad59ad359a4be3ad520f3e63a985834c06b",
+        "actual_blob": "b0400ad59ad359a4be3ad520f3e63a985834c06b"
+      },
+      {
+        "path": "docs/engineering/INDEPENDENT_SIGNED_UPDATE_UI_REVIEW_GENERATION13_20261120.md",
+        "expected_blob": "873dd0979148dcbae05cb2b97dcfb52c22427e71",
+        "actual_blob": "873dd0979148dcbae05cb2b97dcfb52c22427e71"
+      },
+      {
+        "path": "docs/engineering/SIGNED_UPDATE_UI_GENERATION13_20261120.json",
+        "expected_blob": "fbc21693ba5c9c2a7e61c9a42fa9b6fd441932cf",
+        "actual_blob": "fbc21693ba5c9c2a7e61c9a42fa9b6fd441932cf"
+      },
+      {
+        "path": "docs/engineering/SIGNED_UPDATE_UI_GENERATION13_20261120.md",
+        "expected_blob": "be61fbd5c5ce8d9aa9579a632ca5a58b63c26bc7",
+        "actual_blob": "be61fbd5c5ce8d9aa9579a632ca5a58b63c26bc7"
+      },
+      {
+        "path": "docs/engineering/signed-update-ui-independent-review-generation13.json",
+        "expected_blob": "adf19240e3efbd27f7c345197d77e9b117297f0a",
+        "actual_blob": "adf19240e3efbd27f7c345197d77e9b117297f0a"
+      },
+      {
+        "path": "packages/security/README-UPDATES.md",
+        "expected_blob": "30b611c3369d3ed08da4176cbfc7ce7f4c2ae05d",
+        "actual_blob": "30b611c3369d3ed08da4176cbfc7ce7f4c2ae05d"
+      },
+      {
+        "path": "packages/security/update-view.ts",
+        "expected_blob": "b9ebc8b22273a679c8db659c6d6b02e9b05a7466",
+        "actual_blob": "b9ebc8b22273a679c8db659c6d6b02e9b05a7466"
+      },
+      {
+        "path": "scripts/check-import-boundaries.mjs",
+        "expected_blob": "4455ec624a97724c4c04fd3801b5bcbfc642ad12",
+        "actual_blob": "4455ec624a97724c4c04fd3801b5bcbfc642ad12"
+      },
+      {
+        "path": "scripts/tests/import-boundaries.test.mjs",
+        "expected_blob": "b043ede5878608aa1595f90bf692f7fde3f559b0",
+        "actual_blob": "b043ede5878608aa1595f90bf692f7fde3f559b0"
+      }
+    ],
+    "merge_commits": [
+      "e7c262659f94af30d18caf790a48e8b1fed77370 fe70b3918da296546d7b4e144273558c0e7145e1 485c37cc12dc100e43abd11dbcd8017f0399b741",
+      "fe70b3918da296546d7b4e144273558c0e7145e1 2db934379802a9be7e65a3c4fb852fa588981733 1e940862ba6e01309b81d5ce9d3d9f4ae4e32ce7",
+      "2db934379802a9be7e65a3c4fb852fa588981733 bf12a45604497860b8ded9d0e65f06a1c0cc9860 e0e1a8b943a2a05bfe9102a0df3db85198da568d"
+    ],
+    "lock_sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039"
+  },
+  "environment": {
+    "node": "v24.22.3",
+    "npm": "11.19.1",
+    "python": "Python 3.12.14",
+    "node_modules_physical": true,
+    "npm_lock_sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72",
+    "cast_version": "cast Version: 1.5.1-v1.5.1\nCommit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2\nBuild Timestamp: 2025-12-19T14:07:55.455914129Z (1766153275)\nBuild Profile: maxperf",
+    "cast_sha256": "7b25a9c61dac49a0718ba3c2d37ba638014f3baf35739777b2d809780914e91d",
+    "git_submodule_pins": [
+      " 8e40513d678f392f398620b3ef2b418648b33e89 contracts/evm/lib/forge-std (v1.11.0)",
+      " c64a1edb67b6e3f4a15cca8909c9482ad33a02b0 contracts/evm/lib/openzeppelin-contracts (v4.8.0-952-gc64a1edb)",
+      " 232ff9ba8194e406967f52ecc5cb52ed764209e9 contracts/evm/lib/openzeppelin-contracts/lib/erc4626-tests (v0.1.1)",
+      " 3b20d60d14b343ee4f908cb8079495c07f5e8981 contracts/evm/lib/openzeppelin-contracts/lib/forge-std (v1.9.6)",
+      " 7328abe100445fc53885c21d0e713b95293cf14c contracts/evm/lib/openzeppelin-contracts/lib/halmos-cheatcodes (7328abe)"
+    ],
+    "npm_commands": {
+      "original_count": 56,
+      "all_original_unchanged": true,
+      "added": {
+        "test:backup:browser": "node scripts/test-backup-verification-browser.mjs"
+      }
+    }
+  },
+  "executions": {
+    "source": "e7c262659f94af30d18caf790a48e8b1fed77370",
+    "tree": "30c9264b9cc98786f43279b8aa513bd2c5fce9d3",
+    "started_at_utc": "2026-11-20T06:42:29.228006+00:00",
+    "environment": {
+      "FOUNDRY_BIN": "/workspace/scratch/dcf03ef9bee8/tools/foundry-v1.5.1"
+    },
+    "node": "v24.22.3",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "results": [
+      {
+        "argv": [
+          "npm",
+          "test"
+        ],
+        "exit": 0,
+        "started_at_utc": "2026-11-20T06:42:29.232754+00:00",
+        "completed_at_utc": "2026-11-20T06:44:47.514492+00:00",
+        "duration_seconds": 138.282,
+        "log": "/workspace/scratch/dcf03ef9bee8/evidence/combined-g14/qualification-01.log",
+        "sha256": "efbd1a252f8b5303f36e4d2a14a3c68415ada9fff20346577f75573e3c9e0180"
+      },
+      {
+        "argv": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "exit": 0,
+        "started_at_utc": "2026-11-20T06:44:47.517602+00:00",
+        "completed_at_utc": "2026-11-20T06:44:49.351468+00:00",
+        "duration_seconds": 1.834,
+        "log": "/workspace/scratch/dcf03ef9bee8/evidence/combined-g14/qualification-02.log",
+        "sha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a"
+      },
+      {
+        "argv": [
+          "npm",
+          "run",
+          "test:build-policy"
+        ],
+        "exit": 0,
+        "started_at_utc": "2026-11-20T06:44:49.351914+00:00",
+        "completed_at_utc": "2026-11-20T06:44:56.266358+00:00",
+        "duration_seconds": 6.914,
+        "log": "/workspace/scratch/dcf03ef9bee8/evidence/combined-g14/qualification-03.log",
+        "sha256": "61616919fbaf94000097f10b8b3c754f352480715fd9d13658a30134d07507e2"
+      },
+      {
+        "argv": [
+          "npm",
+          "run",
+          "build"
+        ],
+        "exit": 0,
+        "started_at_utc": "2026-11-20T06:44:56.266809+00:00",
+        "completed_at_utc": "2026-11-20T06:45:00.929189+00:00",
+        "duration_seconds": 4.662,
+        "log": "/workspace/scratch/dcf03ef9bee8/evidence/combined-g14/qualification-04.log",
+        "sha256": "59c42185f29e82e5c624cbecd0d74f532e20c9918cc12c829b1788edcdd9f09b"
+      },
+      {
+        "argv": [
+          "npm",
+          "run",
+          "build:demo"
+        ],
+        "exit": 0,
+        "started_at_utc": "2026-11-20T06:45:00.929624+00:00",
+        "completed_at_utc": "2026-11-20T06:45:06.089779+00:00",
+        "duration_seconds": 5.16,
+        "log": "/workspace/scratch/dcf03ef9bee8/evidence/combined-g14/qualification-05.log",
+        "sha256": "2313ce65e1380872049e5cc18201b24d6d3795d771ec042b8ee8c91962ed6180"
+      },
+      {
+        "argv": [
+          "npm",
+          "run",
+          "check:docs"
+        ],
+        "exit": 0,
+        "started_at_utc": "2026-11-20T06:45:06.090866+00:00",
+        "completed_at_utc": "2026-11-20T06:45:07.088645+00:00",
+        "duration_seconds": 0.998,
+        "log": "/workspace/scratch/dcf03ef9bee8/evidence/combined-g14/qualification-06.log",
+        "sha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4"
+      },
+      {
+        "argv": [
+          "npm",
+          "run",
+          "check:governance"
+        ],
+        "exit": 0,
+        "started_at_utc": "2026-11-20T06:45:07.089261+00:00",
+        "completed_at_utc": "2026-11-20T06:45:08.313313+00:00",
+        "duration_seconds": 1.224,
+        "log": "/workspace/scratch/dcf03ef9bee8/evidence/combined-g14/qualification-07.log",
+        "sha256": "42f9556636da25ed29969162b2b491dc3b013911d5d1488a709864b931dd7194"
+      },
+      {
+        "argv": [
+          "npm",
+          "run",
+          "check:specs"
+        ],
+        "exit": 0,
+        "started_at_utc": "2026-11-20T06:45:08.313876+00:00",
+        "completed_at_utc": "2026-11-20T06:45:08.869889+00:00",
+        "duration_seconds": 0.556,
+        "log": "/workspace/scratch/dcf03ef9bee8/evidence/combined-g14/qualification-08.log",
+        "sha256": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9"
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "exit": 0,
+        "started_at_utc": "2026-11-20T06:45:08.870635+00:00",
+        "completed_at_utc": "2026-11-20T06:45:09.083835+00:00",
+        "duration_seconds": 0.213,
+        "log": "/workspace/scratch/dcf03ef9bee8/evidence/combined-g14/qualification-09.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "completed_at_utc": "2026-11-20T06:45:09.084674+00:00"
+  },
+  "full_suite": {
+    "tests": 2351,
+    "suites": 0,
+    "pass": 2351,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 138048.907937
+  },
+  "build_policy_suite": {
+    "tests": 58,
+    "suites": 0,
+    "pass": 58,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 6681.124762
+  },
+  "source_boundaries": {
+    "production_files": 241,
+    "visited_core_modules": 148
+  },
+  "four_typescript_projects": {
+    "passed": true,
+    "execution": "Existing npm run build and npm run build:demo commands each invoke npm run typecheck; no standalone additional typecheck claimed."
+  },
+  "documentation": {
+    "engineeringConsistency": true,
+    "semanticApproval": false,
+    "published": false,
+    "approvedRelease": null,
+    "stale": [
+      "apps/web/src/ui/locale/en.ts"
+    ],
+    "staleClaims": [
+      "location-scope",
+      "logical-removal",
+      "message-content",
+      "selected-route",
+      "stealth-local",
+      "vault-at-rest"
+    ]
+  },
+  "specifications": {
+    "broken_links": 0,
+    "categories": {
+      "catalog": 1,
+      "design-review-pending": 171,
+      "planning": 1
+    },
+    "total": 173,
+    "unindexed": []
+  },
+  "artifacts": {
+    "source": "e7c262659f94af30d18caf790a48e8b1fed77370",
+    "tree": "30c9264b9cc98786f43279b8aa513bd2c5fce9d3",
+    "profiles": {
+      "default": {
+        "directory": "/workspace/scratch/dcf03ef9bee8/p2p-combined-g14/apps/web/dist",
+        "graphs": {
+          "core-graph-document.json": {
+            "modules": 95,
+            "signed_update_panel_present": true,
+            "updater_modules": [],
+            "optional_modules": [],
+            "sha256": "6bab9f039c39415e064c4ea9c4bff47665e1d4f00e855fcb7b486ed34acd7807"
+          },
+          "core-graph-worker.json": {
+            "modules": 30,
+            "signed_update_panel_present": false,
+            "updater_modules": [],
+            "optional_modules": [],
+            "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+          },
+          "qr-graph-worker.json": {
+            "modules": 4,
+            "signed_update_panel_present": false,
+            "updater_modules": [],
+            "optional_modules": [],
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          }
+        },
+        "build_evidence": {
+          "version": 1,
+          "ReleaseEnabled": 0,
+          "syntheticDemo": false,
+          "testnet": false,
+          "signedRelease": false,
+          "releaseAcceptance": false,
+          "framingAttestation": false,
+          "inspection": {
+            "files": 12,
+            "bytes": 794354,
+            "bundledSinkTokensRequiringFrameworkReview": 18,
+            "completeXssProof": false
+          },
+          "assets": [
+            {
+              "path": "_headers",
+              "bytes": 342,
+              "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+            },
+            {
+              "path": "assets/OfflineRoot-CWCMjvRo.js",
+              "bytes": 299778,
+              "sha256": "1b83251b7b2d25613ce397dad8a3e77bebd6bd9dff206da495c06e12500105f7"
+            },
+            {
+              "path": "assets/decode.worker-DGcSBxfL.js",
+              "bytes": 133927,
+              "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+            },
+            {
+              "path": "assets/index-CjAuCTBm.js",
+              "bytes": 220808,
+              "sha256": "ee9029de1d5374849dd0febef12e8113a4727bfa209c2967f14c42c1dd14381f"
+            },
+            {
+              "path": "assets/index-rPDFZ4F5.css",
+              "bytes": 8414,
+              "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+            },
+            {
+              "path": "assets/vault.worker-BFynfgnx.js",
+              "bytes": 93535,
+              "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+            },
+            {
+              "path": "content-policy.json",
+              "bytes": 1009,
+              "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+            },
+            {
+              "path": "core-graph-document.json",
+              "bytes": 14266,
+              "sha256": "6bab9f039c39415e064c4ea9c4bff47665e1d4f00e855fcb7b486ed34acd7807"
+            },
+            {
+              "path": "core-graph-worker.json",
+              "bytes": 4758,
+              "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+            },
+            {
+              "path": "index.html",
+              "bytes": 1283,
+              "sha256": "f52ebdd8abdd1a84ed73d94d4b0f78c367d400373e0c024aebe39d6b566e7485"
+            },
+            {
+              "path": "qr-graph-worker.json",
+              "bytes": 905,
+              "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+            },
+            {
+              "path": "third-party-licenses.json",
+              "bytes": 15329,
+              "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+            }
+          ],
+          "qr": {
+            "decoderVersion": "1.4.0",
+            "dependencySha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859",
+            "graph": "qr-graph-worker.json",
+            "worker": "assets/decode.worker-DGcSBxfL.js",
+            "authority": "none",
+            "physicalDeviceQualification": false
+          }
+        },
+        "content_policy": {
+          "manifest": {
+            "version": 1,
+            "releaseId": "local-development",
+            "connectOrigins": [],
+            "delivery": "meta",
+            "framingProtected": false
+          },
+          "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'",
+          "headers": {},
+          "meta": [
+            {
+              "httpEquiv": "Content-Security-Policy",
+              "content": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+            },
+            {
+              "name": "referrer",
+              "content": "no-referrer"
+            }
+          ],
+          "notices": [
+            "content.policy.deployment-unverified",
+            "content.policy.framing-unverified",
+            "content.policy.meta-before-resources-required"
+          ],
+          "releaseAcceptance": false,
+          "ReleaseEnabled": 0
+        },
+        "artifact_file_count": 13,
+        "artifact_files": [
+          {
+            "path": "_headers",
+            "bytes": 342,
+            "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+          },
+          {
+            "path": "assets/OfflineRoot-CWCMjvRo.js",
+            "bytes": 299778,
+            "sha256": "1b83251b7b2d25613ce397dad8a3e77bebd6bd9dff206da495c06e12500105f7"
+          },
+          {
+            "path": "assets/decode.worker-DGcSBxfL.js",
+            "bytes": 133927,
+            "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+          },
+          {
+            "path": "assets/index-CjAuCTBm.js",
+            "bytes": 220808,
+            "sha256": "ee9029de1d5374849dd0febef12e8113a4727bfa209c2967f14c42c1dd14381f"
+          },
+          {
+            "path": "assets/index-rPDFZ4F5.css",
+            "bytes": 8414,
+            "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+          },
+          {
+            "path": "assets/vault.worker-BFynfgnx.js",
+            "bytes": 93535,
+            "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+          },
+          {
+            "path": "content-policy.json",
+            "bytes": 1009,
+            "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+          },
+          {
+            "path": "core-graph-document.json",
+            "bytes": 14266,
+            "sha256": "6bab9f039c39415e064c4ea9c4bff47665e1d4f00e855fcb7b486ed34acd7807"
+          },
+          {
+            "path": "core-graph-worker.json",
+            "bytes": 4758,
+            "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+          },
+          {
+            "path": "index.html",
+            "bytes": 1283,
+            "sha256": "f52ebdd8abdd1a84ed73d94d4b0f78c367d400373e0c024aebe39d6b566e7485"
+          },
+          {
+            "path": "local-build-evidence.json",
+            "bytes": 2525,
+            "sha256": "35004699c4b0298dae407b8c21b0a364d9e1810718c48d64d1c3c82ec162aac9"
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "bytes": 905,
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          },
+          {
+            "path": "third-party-licenses.json",
+            "bytes": 15329,
+            "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+          }
+        ]
+      },
+      "demo": {
+        "directory": "/workspace/scratch/dcf03ef9bee8/p2p-combined-g14/apps/web/dist-demo",
+        "graphs": {
+          "core-graph-document.json": {
+            "modules": 97,
+            "signed_update_panel_present": true,
+            "updater_modules": [],
+            "optional_modules": [],
+            "sha256": "38644a95df655c1020f51b4875c84d8b08b0f8166fc9f5792e3bd1ed116649cc"
+          },
+          "core-graph-worker.json": {
+            "modules": 30,
+            "signed_update_panel_present": false,
+            "updater_modules": [],
+            "optional_modules": [],
+            "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+          },
+          "qr-graph-worker.json": {
+            "modules": 4,
+            "signed_update_panel_present": false,
+            "updater_modules": [],
+            "optional_modules": [],
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          }
+        },
+        "build_evidence": {
+          "version": 1,
+          "ReleaseEnabled": 0,
+          "syntheticDemo": true,
+          "testnet": false,
+          "signedRelease": false,
+          "releaseAcceptance": false,
+          "framingAttestation": false,
+          "inspection": {
+            "files": 13,
+            "bytes": 806266,
+            "bundledSinkTokensRequiringFrameworkReview": 18,
+            "completeXssProof": false
+          },
+          "assets": [
+            {
+              "path": "_headers",
+              "bytes": 342,
+              "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+            },
+            {
+              "path": "assets/OfflineRoot-BTXy7sEa.js",
+              "bytes": 305636,
+              "sha256": "c54f96eec36178d5a3113c74e87103b840a47ba5af22e5ed2e878e883e4c2771"
+            },
+            {
+              "path": "assets/decode.worker-DGcSBxfL.js",
+              "bytes": 133927,
+              "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+            },
+            {
+              "path": "assets/index-CrDSQJPL.js",
+              "bytes": 220820,
+              "sha256": "ece49bab35fdf99a5b9b7f084fdc0842f75a95d92996c1e4217114944a476fa8"
+            },
+            {
+              "path": "assets/index-rPDFZ4F5.css",
+              "bytes": 8414,
+              "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+            },
+            {
+              "path": "assets/synthetic-local-cWvsq8gw.js",
+              "bytes": 5743,
+              "sha256": "8d1a38db9cf33fb3d9a0de6550e702758397297cef5b055c0ee609482047d2a0"
+            },
+            {
+              "path": "assets/vault.worker-BFynfgnx.js",
+              "bytes": 93535,
+              "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+            },
+            {
+              "path": "content-policy.json",
+              "bytes": 1009,
+              "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+            },
+            {
+              "path": "core-graph-document.json",
+              "bytes": 14565,
+              "sha256": "38644a95df655c1020f51b4875c84d8b08b0f8166fc9f5792e3bd1ed116649cc"
+            },
+            {
+              "path": "core-graph-worker.json",
+              "bytes": 4758,
+              "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+            },
+            {
+              "path": "index.html",
+              "bytes": 1283,
+              "sha256": "eda9d3baf936b0c12b0f408cc63fb4041917ae3e9c95dd7c4184caabd2878d52"
+            },
+            {
+              "path": "qr-graph-worker.json",
+              "bytes": 905,
+              "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+            },
+            {
+              "path": "third-party-licenses.json",
+              "bytes": 15329,
+              "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+            }
+          ],
+          "qr": {
+            "decoderVersion": "1.4.0",
+            "dependencySha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859",
+            "graph": "qr-graph-worker.json",
+            "worker": "assets/decode.worker-DGcSBxfL.js",
+            "authority": "none",
+            "physicalDeviceQualification": false
+          }
+        },
+        "content_policy": {
+          "manifest": {
+            "version": 1,
+            "releaseId": "local-development",
+            "connectOrigins": [],
+            "delivery": "meta",
+            "framingProtected": false
+          },
+          "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'",
+          "headers": {},
+          "meta": [
+            {
+              "httpEquiv": "Content-Security-Policy",
+              "content": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+            },
+            {
+              "name": "referrer",
+              "content": "no-referrer"
+            }
+          ],
+          "notices": [
+            "content.policy.deployment-unverified",
+            "content.policy.framing-unverified",
+            "content.policy.meta-before-resources-required"
+          ],
+          "releaseAcceptance": false,
+          "ReleaseEnabled": 0
+        },
+        "artifact_file_count": 14,
+        "artifact_files": [
+          {
+            "path": "_headers",
+            "bytes": 342,
+            "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+          },
+          {
+            "path": "assets/OfflineRoot-BTXy7sEa.js",
+            "bytes": 305636,
+            "sha256": "c54f96eec36178d5a3113c74e87103b840a47ba5af22e5ed2e878e883e4c2771"
+          },
+          {
+            "path": "assets/decode.worker-DGcSBxfL.js",
+            "bytes": 133927,
+            "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+          },
+          {
+            "path": "assets/index-CrDSQJPL.js",
+            "bytes": 220820,
+            "sha256": "ece49bab35fdf99a5b9b7f084fdc0842f75a95d92996c1e4217114944a476fa8"
+          },
+          {
+            "path": "assets/index-rPDFZ4F5.css",
+            "bytes": 8414,
+            "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+          },
+          {
+            "path": "assets/synthetic-local-cWvsq8gw.js",
+            "bytes": 5743,
+            "sha256": "8d1a38db9cf33fb3d9a0de6550e702758397297cef5b055c0ee609482047d2a0"
+          },
+          {
+            "path": "assets/vault.worker-BFynfgnx.js",
+            "bytes": 93535,
+            "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+          },
+          {
+            "path": "content-policy.json",
+            "bytes": 1009,
+            "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+          },
+          {
+            "path": "core-graph-document.json",
+            "bytes": 14565,
+            "sha256": "38644a95df655c1020f51b4875c84d8b08b0f8166fc9f5792e3bd1ed116649cc"
+          },
+          {
+            "path": "core-graph-worker.json",
+            "bytes": 4758,
+            "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+          },
+          {
+            "path": "index.html",
+            "bytes": 1283,
+            "sha256": "eda9d3baf936b0c12b0f408cc63fb4041917ae3e9c95dd7c4184caabd2878d52"
+          },
+          {
+            "path": "local-build-evidence.json",
+            "bytes": 2693,
+            "sha256": "9b7d044bd3c21642eb8452f6b9ff96879fbfe5919b689a710972d2e30a87fceb"
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "bytes": 905,
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          },
+          {
+            "path": "third-party-licenses.json",
+            "bytes": 15329,
+            "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+          }
+        ]
+      }
+    },
+    "default_matches_independent_signed_update_build": true,
+    "independent_reference_source": "12729ba1e895d68a0a5417c96b83673eea14b9c6",
+    "independent_reference_tree": "92a10d92ee70d9246e0dfd12e626e8c277448577",
+    "default_reference_hash_differences": []
+  },
+  "remaining": [
+    "Applicable exact-source hosted checks, actual backup flow on Chromium/Firefox/WebKit, native Solana SBPF/Clippy/LiteSVM/IDL/validator/browser gates remain separate.",
+    "Cargo.lock is byte-identical to separately audited and host-compiled dependency source; this worker did not rerun audit or native compilation.",
+    "Signed update view is optional and default-null. Exact-own-lock backup adapter, trusted configuration and actual origin transitions remain unqualified.",
+    "Public Solana recovery export under active development was not included.",
+    "No production release, deployment, real-fund operation, trust configuration or optional runtime activation."
+  ],
+  "release_enabled": 0
+}

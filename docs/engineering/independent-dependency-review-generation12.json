@@ -1,0 +1,795 @@
+{
+  "reviewer": "independent dependency_review worker",
+  "source_commit": "1e940862ba6e01309b81d5ce9d3d9f4ae4e32ce7",
+  "source_tree": "5ab1f4ddc56742645c60ac43ac2184e194867e0a",
+  "base": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+  "lock_sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039",
+  "only_runtime_changed_path": "contracts/solana/Cargo.lock",
+  "record_counts": {
+    "before": 412,
+    "after": 427,
+    "added_versions": 25,
+    "removed_versions": 10,
+    "unchanged_records": 380,
+    "same_version_dependency_updates": 22
+  },
+  "registry_checks": {
+    "observed_at": "2026-11-20T06:16:31.254133+00:00",
+    "packages": [
+      {
+        "name": "base16ct",
+        "version": "1.0.0",
+        "checksum": "fd307490d624467aa6f74b0eabb77633d1f758a7b25f12bceb0b22e08d9726f6",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/base16ct/1.0.0",
+        "metadata_sha256": "0a02424857228303f4a5eae427e1217bc362baa7692746ac147858d7ea1b383d"
+      },
+      {
+        "name": "cpubits",
+        "version": "0.1.1",
+        "checksum": "15b85f9c39137c3a891689859392b1bd49812121d0d61c9caf00d46ed5ce06ae",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/cpubits/0.1.1",
+        "metadata_sha256": "d5e48c8800efceab2afe4aa0f95b5b1e13b605b03fd44b8840383b492c89d908"
+      },
+      {
+        "name": "crypto-bigint",
+        "version": "0.7.11",
+        "checksum": "914c195c4d7fbc5ed7f88d14cbf85914d5c664967658d43404b263913a477e82",
+        "yanked": false,
+        "rust_version": "1.87",
+        "url": "https://crates.io/api/v1/crates/crypto-bigint/0.7.11",
+        "metadata_sha256": "5fc083e61cb48b91bf2808820b1d589ffc11c23ee9cbdf05cb139802ac9bf97b"
+      },
+      {
+        "name": "ctutils",
+        "version": "0.4.8",
+        "checksum": "261af4dc7a06ea8a527a8717d8cbba3417530d6ea14e1edb3de6b67806be474f",
+        "yanked": false,
+        "rust_version": "1.87",
+        "url": "https://crates.io/api/v1/crates/ctutils/0.4.8",
+        "metadata_sha256": "931aa6b142eec446bf27b6d99764d3106e464e7ade4d53f345b4fed7d4a9c1d1"
+      },
+      {
+        "name": "der",
+        "version": "0.8.3",
+        "checksum": "6a996a108feb8b427a6e12fcf6af4aa83409b79d72c15337d7741368131ee004",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/der/0.8.3",
+        "metadata_sha256": "616ac7aaaed72f3d6a77aae1b0d8cbf41fd180c33de8ac0a0fdbe8f64f37e623"
+      },
+      {
+        "name": "ecdsa",
+        "version": "0.17.0",
+        "checksum": "c0681a4fc24c767085329728d8dfba959af91228aa4610cca4f8ce317ba46ae0",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/ecdsa/0.17.0",
+        "metadata_sha256": "2e4eda1ae8fd2dcf26fad7d48c3118aacd74c8f7dbbd7ae8dd8455375df4d758"
+      },
+      {
+        "name": "elliptic-curve",
+        "version": "0.14.3",
+        "checksum": "900f37e7e18d74a2347389af6cd69e3a30d5cc9e697f40004865679aa75e9c7c",
+        "yanked": false,
+        "rust_version": "1.87",
+        "url": "https://crates.io/api/v1/crates/elliptic-curve/0.14.3",
+        "metadata_sha256": "23d3d78081f220e67cc902f703667071e0204b9ee0b9dc84ae011af24a6cc009"
+      },
+      {
+        "name": "ff",
+        "version": "0.14.0",
+        "checksum": "a1f686ab92a9fb0eaf188f6c6c87b89490baa6fdb0db4544ba4dc47f7942489f",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/ff/0.14.0",
+        "metadata_sha256": "9733526a40915f3044e78bf3515061147bcaae5e271a1161668abb70cdcd7102"
+      },
+      {
+        "name": "getrandom",
+        "version": "0.4.3",
+        "checksum": "300e883d756b2e4ec94e02791f39b04b522276138852cfc41d9fb7e904106099",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/getrandom/0.4.3",
+        "metadata_sha256": "98031e20b45e0a35c0c452b81bba7ba070f3dca77d1397679896e0c818eaf0a9"
+      },
+      {
+        "name": "group",
+        "version": "0.14.0",
+        "checksum": "7fd1a1c7a5206c5b7a3f5a0d7ccd3ff85d0c8f5133d62a02680255b0004af5f4",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/group/0.14.0",
+        "metadata_sha256": "21f658e5be422103d3b0e291c3fe0007bfa020e751841d19622ff114ebcc6a54"
+      },
+      {
+        "name": "hmac",
+        "version": "0.13.0",
+        "checksum": "6303bc9732ae41b04cb554b844a762b4115a61bfaa81e3e83050991eeb56863f",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/hmac/0.13.0",
+        "metadata_sha256": "8b9e7ef8cc2f8342e42063fe46ececef565f9c35d1f2c67be15624b4c177a728"
+      },
+      {
+        "name": "k256",
+        "version": "0.14.0",
+        "checksum": "93f50113171a713f4a4231ef82eb26703607139b35dcb56241f0ceab2ae1f7d8",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/k256/0.14.0",
+        "metadata_sha256": "1fb90e3c61c44b66e198bfaa3256495e59b00a25e539bd273b2237a29119182c"
+      },
+      {
+        "name": "pkcs8",
+        "version": "0.11.0",
+        "checksum": "451913da69c775a56034ea8d9003d27ee8948e12443eae7c038ba100a4f21cb7",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/pkcs8/0.11.0",
+        "metadata_sha256": "e01457bdcf8ca6190727bcfbbe4b5b1634be9f6ea76af660ff64ed4c132a60cf"
+      },
+      {
+        "name": "primefield",
+        "version": "0.14.0",
+        "checksum": "c555a6e4eb7d4e158fcb028c835c3b8642206ddc279b5c6b202ef9a8bdb592f4",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/primefield/0.14.0",
+        "metadata_sha256": "caec276b3ca45e818e4b35bbae550206b13117434fc0c3d22edb6047a6a6ce04"
+      },
+      {
+        "name": "primeorder",
+        "version": "0.14.0",
+        "checksum": "5c9f42978c78a00e3d68f69fc03e57a234debae69da4020a4fb588fcdcd07b06",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/primeorder/0.14.0",
+        "metadata_sha256": "7f4b60d3cd0bd3affb36a4bbead976b0839bba2c855af478f0d7ed7a55d3a119"
+      },
+      {
+        "name": "r-efi",
+        "version": "6.0.0",
+        "checksum": "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf",
+        "yanked": false,
+        "rust_version": "1.68",
+        "url": "https://crates.io/api/v1/crates/r-efi/6.0.0",
+        "metadata_sha256": "e2d165f45d81c0615bd49efe588d25acd7e309d95d9cd599b84cc97ab20c2158"
+      },
+      {
+        "name": "rand_core",
+        "version": "0.10.1",
+        "checksum": "63b8176103e19a2643978565ca18b50549f6101881c443590420e4dc998a3c69",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/rand_core/0.10.1",
+        "metadata_sha256": "fe67d54f2c3aeb2fbdd2551dafabd11ca36f1c6cdfc8526191d8ef4c24e80c01"
+      },
+      {
+        "name": "rfc6979",
+        "version": "0.6.0",
+        "checksum": "b4a459cddafb3fe76b31fd8f1108007566c40301feb64dc7b54656eb7388172b",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/rfc6979/0.6.0",
+        "metadata_sha256": "bfd7b9073c1fc0e576ed54f583e3bffbe52b33d01959a0d8cb56b935e1617aff"
+      },
+      {
+        "name": "sec1",
+        "version": "0.8.1",
+        "checksum": "d56d437c2f19203ce5f7122e507831de96f3d2d4d3be5af44a0b0a09d8a80e4d",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/sec1/0.8.1",
+        "metadata_sha256": "0edbf09a92105119285643816b651ce01d931db50e87c59d91ee89e94bf42ca3"
+      },
+      {
+        "name": "serdect",
+        "version": "0.4.3",
+        "checksum": "66cf8fedced2fcf12406bcb34223dffb92eaf34908ede12fed414c82b7f00b3e",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/serdect/0.4.3",
+        "metadata_sha256": "9958a6b31555d2a9b72cafec2049ec8bd712284b0150928ff78711f08c09ed0f"
+      },
+      {
+        "name": "signature",
+        "version": "3.0.0",
+        "checksum": "28d567dcbaf0049cb8ac2608a76cd95ff9e4412e1899d389ee400918ca7537f5",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/signature/3.0.0",
+        "metadata_sha256": "860ff98b485ce9e757cf495f212512fd520c25bce3173478f5f95aeddfd7fd84"
+      },
+      {
+        "name": "solana-define-syscall",
+        "version": "5.4.0",
+        "checksum": "8506988b0997022c4f2801985d9c4dccfb18c16e6a38f30390a47d54efeca805",
+        "yanked": false,
+        "rust_version": null,
+        "url": "https://crates.io/api/v1/crates/solana-define-syscall/5.4.0",
+        "metadata_sha256": "f7b783241ed1e46ecee83e486b205680f5ce13d066dbcb3dce99586bc2e7b791"
+      },
+      {
+        "name": "solana-secp256k1-recover",
+        "version": "3.3.1",
+        "checksum": "99f00f973301968be9f05f4af951974a28848b6513fb16edf77c8af20e681914",
+        "yanked": false,
+        "rust_version": null,
+        "url": "https://crates.io/api/v1/crates/solana-secp256k1-recover/3.3.1",
+        "metadata_sha256": "483736ffecc34f8f38b2c4021989988de31597b0e73ec9fd970b4e0ed69d235c"
+      },
+      {
+        "name": "spki",
+        "version": "0.8.1",
+        "checksum": "7ef958a98b9d5da290cfc78946e9f3e61e1e62a18db0d92cac0b83cc161491a9",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/spki/0.8.1",
+        "metadata_sha256": "6774710a42ef000f5aaf225a7e1174c7909d39ac78cbcd33063d158c963425c7"
+      },
+      {
+        "name": "wnaf",
+        "version": "0.14.1",
+        "checksum": "795ca18b3fdb5e62bf982199278341ddcf7ebf7d32e25e212ad05d496e95f6fa",
+        "yanked": false,
+        "rust_version": "1.85",
+        "url": "https://crates.io/api/v1/crates/wnaf/0.14.1",
+        "metadata_sha256": "fa4dbcba1b4c39cda7cc2dac7c1e9d1905e49967c55ea31fafe45c1069081c47"
+      }
+    ],
+    "count": 25
+  },
+  "closure": {
+    "every_added_version_in_updated_roots_closure": true,
+    "added_count": 25,
+    "recovery_parents": [
+      [
+        "solana-syscalls",
+        "4.1.2"
+      ]
+    ],
+    "bigint_parents": [
+      [
+        "elliptic-curve",
+        "0.14.3"
+      ],
+      [
+        "primefield",
+        "0.14.0"
+      ],
+      [
+        "rfc6979",
+        "0.6.0"
+      ]
+    ],
+    "syscall5_parents": [
+      [
+        "solana-address",
+        "2.6.1"
+      ],
+      [
+        "solana-bn254",
+        "3.2.1"
+      ],
+      [
+        "solana-curve25519",
+        "4.0.1"
+      ],
+      [
+        "solana-get-sysvar",
+        "1.0.0"
+      ],
+      [
+        "solana-instruction",
+        "3.4.0"
+      ],
+      [
+        "solana-msg",
+        "3.1.0"
+      ],
+      [
+        "solana-secp256k1-recover",
+        "3.3.1"
+      ],
+      [
+        "solana-sha512-hasher",
+        "1.0.1"
+      ],
+      [
+        "solana-sysvar",
+        "4.1.0"
+      ]
+    ]
+  },
+  "syscall_signatures": {
+    "retained_syscalls": 43,
+    "changed_existing_signatures": [],
+    "new_syscalls": [
+      "sol_get_leader"
+    ],
+    "macro_source_identical": true
+  },
+  "recovery_source": {
+    "public_function_and_onchain_branch_identical": true,
+    "block_sha256": "fd16d158dabb7926eee4e3edfd71615c22c8ba1fad3c07387a7053c67f484c69",
+    "host_change": "Explicit existing high-S refusal retained across k256 API transition; uncompressed point method renamed."
+  },
+  "independent_audit": {
+    "command": [
+      "/workspace/scratch/dcf03ef9bee8/tools/cargo-audit-v0.23.0/cargo-audit-x86_64-unknown-linux-gnu-v0.23.0/cargo-audit",
+      "audit",
+      "--db",
+      "/workspace/scratch/dcf03ef9bee8/tools/rustsec-advisory-db-g12",
+      "--no-fetch",
+      "--json",
+      "--file",
+      "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/Cargo.reviewed.lock"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.078,
+    "db_commit": "074ea9a7ed619f511b5b7374c7a97e98d1e98be4",
+    "lock_sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039",
+    "output_sha256": "2feeba37bfa504a2f6d511a04fcf1fe9dfd8689d580bdc30d1ed115ae37dc88a",
+    "vulnerabilities": 0,
+    "warnings": {
+      "unmaintained": [
+        {
+          "id": "RUSTSEC-2021-0139",
+          "name": "ansi_term",
+          "version": "0.12.1"
+        },
+        {
+          "id": "RUSTSEC-2025-0141",
+          "name": "bincode",
+          "version": "1.3.3"
+        },
+        {
+          "id": "RUSTSEC-2024-0388",
+          "name": "derivative",
+          "version": "2.2.0"
+        },
+        {
+          "id": "RUSTSEC-2025-0161",
+          "name": "libsecp256k1",
+          "version": "0.7.2"
+        },
+        {
+          "id": "RUSTSEC-2024-0436",
+          "name": "paste",
+          "version": "1.0.15"
+        }
+      ]
+    }
+  },
+  "author_receipts_verified": [
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/cargo-update-receipt.json",
+        "sha256": "47cd7bff8984a3c058cef9d64c88958d29caf064d498f8f5ebe25815344c833d",
+        "bytes": 502
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/cargo-update.log",
+        "sha256": "9a7f7158dc7b60aa267e0ed3d2bef8eeec5e972057b3d24b1e00dec2868a716b",
+        "bytes": 1676
+      },
+      "exit_code": 101
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/ctutils-supporting-update-receipt.json",
+        "sha256": "b801c4964bde4ca53d0d21e8b1595fe1e19678cb1769ba1b362d724226a2133b",
+        "bytes": 385
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/ctutils-supporting-update.log",
+        "sha256": "30f959fc1f610e19f8f86e4d3700757e00b3ac0e86d30360e2dcb35b2f7b24f6",
+        "bytes": 138
+      },
+      "exit_code": 0
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/recovery-targeted-update-receipt.json",
+        "sha256": "0087175c93c8f0ddae99640ab6a41d17445ae5b708c492462f18ddf05bc560db",
+        "bytes": 402
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/recovery-targeted-update.log",
+        "sha256": "244f490f26444e14abcea9d6fda1731f7f7ada567bd8207ceaa663329f8f6874",
+        "bytes": 901
+      },
+      "exit_code": 0
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/audit-before-receipt.json",
+        "sha256": "933ee721818a99c71bf3f7e00457332ab419e9aa56416e7dd2f0e5c9e8789bd4",
+        "bytes": 507
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/audit-before.json",
+        "sha256": "2c194eff3f175e423423944db89ca26f4ba2b434138417bd25706fd505513ed1",
+        "bytes": 9973
+      },
+      "exit_code": 1
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/audit-after-receipt.json",
+        "sha256": "324c7a9bb71dab498ff3da4c1909a4226a70dd059474edf4f915ad50326ddc9d",
+        "bytes": 1164
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/audit-after.json",
+        "sha256": "2feeba37bfa504a2f6d511a04fcf1fe9dfd8689d580bdc30d1ed115ae37dc88a",
+        "bytes": 7718
+      },
+      "exit_code": 0
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/host-normal-build-tree-receipt.json",
+        "sha256": "161243b0fd486985c5e05dedbbcbe6ab6ca5a7e77431e990bd9fcbee774407ab",
+        "bytes": 332
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/host-normal-build-tree.log",
+        "sha256": "2d1fa502279ca7d63a0e3239b254f8d95244532d51ea8f3e4370a2589f701709",
+        "bytes": 31859
+      },
+      "exit_code": 0
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/bigint-feature-tree-receipt.json",
+        "sha256": "d36daf0c335e10b381586c4eec49cefb3c4ccd94f9693fcd1c42de33606a47a0",
+        "bytes": 359
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/bigint-feature-tree.log",
+        "sha256": "9b403675220b31f845c4e9aa6026c65906af79536d65449282ef68bdc4a44a06",
+        "bytes": 8630
+      },
+      "exit_code": 0
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/syscalls-native-check-receipt.json",
+        "sha256": "ba6d63edc6a22d6663426703f7ec2b734ecfa5456c7b5cc6a8a11b88b4970329",
+        "bytes": 334
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/syscalls-native-check.log",
+        "sha256": "05d03ab4390eda1fc6214e5bcc15fee8e92627c0ca4bf2ed67cbd350c0a33cf8",
+        "bytes": 35900
+      },
+      "exit_code": 101
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/build-sbf-receipt.json",
+        "sha256": "3c420608fedec3acd8475857cc34dd3bb281f39b969fe9bea29de4612712b74d",
+        "bytes": 466
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/build-sbf.log",
+        "sha256": "2186c2607460e6b21a252983c10be180b50ea731b39f6e59a51e4a2f0d4b2f09",
+        "bytes": 231
+      },
+      "exit_code": 1
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/cargo-format-receipt.json",
+        "sha256": "4fa33568d6a7f72ab83a5209baf83be1b81164aca04e6d7b25e2a5325e1cd2a8",
+        "bytes": 191
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/cargo-format.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "exit_code": 0
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/build-sbf-pinned-compiler-receipt.json",
+        "sha256": "84410512ad22183147a4f359e8d154a3867decfcd92880b6aa716fe679c07fef",
+        "bytes": 543
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/build-sbf-pinned-compiler.log",
+        "sha256": "7a425d8d0afcb69df9098d7e4822d65119375b51c3f6fb6b31a318864dfa5447",
+        "bytes": 6943
+      },
+      "exit_code": 1
+    },
+    {
+      "receipt": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/build-sbf-serial-receipt.json",
+        "sha256": "77ffc0a03bdab4d128a44d22500fff31503a1c6b23ba12e594dd0d68dd538845",
+        "bytes": 542
+      },
+      "log": {
+        "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/build-sbf-serial.log",
+        "sha256": "679a8d8fbf668faa2343d08a19fa4698d089185284d1ce12aa8735aef8238233",
+        "bytes": 1863
+      },
+      "exit_code": 1
+    }
+  ],
+  "native_status": "unqualified: initial compiler selection failure and both pinned-compiler SIGKILL attempts retained; no profile changes or further SBPF retries; author root-library test still running",
+  "scope_findings": [],
+  "release_authorized": false,
+  "raw_independent_evidence": [
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/audit-independent-receipt.json",
+      "sha256": "0327af299e30d7bc69369004c6acd3f9355ba85de87c69b33ec3af7776798f6f",
+      "bytes": 1270
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/audit-independent.json",
+      "sha256": "2feeba37bfa504a2f6d511a04fcf1fe9dfd8689d580bdc30d1ed115ae37dc88a",
+      "bytes": 7718
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/audit-independent.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/closure-review.json",
+      "sha256": "431c50045f7fff584e94d661e03e2fe5147bc600ff4018a85551b00d963388b9",
+      "bytes": 836
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/independent-lock-delta.json",
+      "sha256": "1163f3fee4f2dfccb048cb7bc73961d7c03ac6d9e17b8fdf3c0d61eef384c11c",
+      "bytes": 32501
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/recovery-source-review.json",
+      "sha256": "7864758e9d79301b5cf6f81c4465b05d26da9eab0470a4101669db1910c9dea2",
+      "bytes": 270
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-base16ct-1.0.0.json",
+      "sha256": "0a02424857228303f4a5eae427e1217bc362baa7692746ac147858d7ea1b383d",
+      "bytes": 1818
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-cpubits-0.1.1.json",
+      "sha256": "d5e48c8800efceab2afe4aa0f95b5b1e13b605b03fd44b8840383b492c89d908",
+      "bytes": 1351
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-crypto-bigint-0.7.11.json",
+      "sha256": "5fc083e61cb48b91bf2808820b1d589ffc11c23ee9cbdf05cb139802ac9bf97b",
+      "bytes": 1756
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-ctutils-0.4.8.json",
+      "sha256": "931aa6b142eec446bf27b6d99764d3106e464e7ade4d53f345b4fed7d4a9c1d1",
+      "bytes": 1464
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-der-0.8.3.json",
+      "sha256": "616ac7aaaed72f3d6a77aae1b0d8cbf41fd180c33de8ac0a0fdbe8f64f37e623",
+      "bytes": 1647
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-ecdsa-0.17.0.json",
+      "sha256": "2e4eda1ae8fd2dcf26fad7d48c3118aacd74c8f7dbbd7ae8dd8455375df4d758",
+      "bytes": 1991
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-elliptic-curve-0.14.3.json",
+      "sha256": "23d3d78081f220e67cc902f703667071e0204b9ee0b9dc84ae011af24a6cc009",
+      "bytes": 1947
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-ff-0.14.0.json",
+      "sha256": "9733526a40915f3044e78bf3515061147bcaae5e271a1161668abb70cdcd7102",
+      "bytes": 1678
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-getrandom-0.4.3.json",
+      "sha256": "98031e20b45e0a35c0c452b81bba7ba070f3dca77d1397679896e0c818eaf0a9",
+      "bytes": 1333
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-group-0.14.0.json",
+      "sha256": "21f658e5be422103d3b0e291c3fe0007bfa020e751841d19622ff114ebcc6a54",
+      "bytes": 1673
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-hmac-0.13.0.json",
+      "sha256": "8b9e7ef8cc2f8342e42063fe46ececef565f9c35d1f2c67be15624b4c177a728",
+      "bytes": 1230
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-k256-0.14.0.json",
+      "sha256": "1fb90e3c61c44b66e198bfaa3256495e59b00a25e539bd273b2237a29119182c",
+      "bytes": 2541
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-pkcs8-0.11.0.json",
+      "sha256": "e01457bdcf8ca6190727bcfbbe4b5b1634be9f6ea76af660ff64ed4c132a60cf",
+      "bytes": 1769
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-primefield-0.14.0.json",
+      "sha256": "caec276b3ca45e818e4b35bbae550206b13117434fc0c3d22edb6047a6a6ce04",
+      "bytes": 1451
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-primeorder-0.14.0.json",
+      "sha256": "7f4b60d3cd0bd3affb36a4bbead976b0839bba2c855af478f0d7ed7a55d3a119",
+      "bytes": 1703
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-r-efi-6.0.0.json",
+      "sha256": "e2d165f45d81c0615bd49efe588d25acd7e309d95d9cd599b84cc97ab20c2158",
+      "bytes": 1647
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-rand_core-0.10.1.json",
+      "sha256": "fe67d54f2c3aeb2fbdd2551dafabd11ca36f1c6cdfc8526191d8ef4c24e80c01",
+      "bytes": 1276
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-rfc6979-0.6.0.json",
+      "sha256": "bfd7b9073c1fc0e576ed54f583e3bffbe52b33d01959a0d8cb56b935e1617aff",
+      "bytes": 1349
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-sec1-0.8.1.json",
+      "sha256": "0edbf09a92105119285643816b651ce01d931db50e87c59d91ee89e94bf42ca3",
+      "bytes": 1600
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-serdect-0.4.3.json",
+      "sha256": "9958a6b31555d2a9b72cafec2049ec8bd712284b0150928ff78711f08c09ed0f",
+      "bytes": 1394
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-signature-3.0.0.json",
+      "sha256": "860ff98b485ce9e757cf495f212512fd520c25bce3173478f5f95aeddfd7fd84",
+      "bytes": 1268
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-solana-define-syscall-5.4.0.json",
+      "sha256": "f7b783241ed1e46ecee83e486b205680f5ce13d066dbcb3dce99586bc2e7b791",
+      "bytes": 1339
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-solana-secp256k1-recover-3.3.1.json",
+      "sha256": "483736ffecc34f8f38b2c4021989988de31597b0e73ec9fd970b4e0ed69d235c",
+      "bytes": 1387
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-spki-0.8.1.json",
+      "sha256": "6774710a42ef000f5aaf225a7e1174c7909d39ac78cbcd33063d158c963425c7",
+      "bytes": 1489
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-verification.json",
+      "sha256": "d01c223b8df0e7d604dbed6d20d56fbde29cdcb37f68ea2645e5ba26dbbf3714",
+      "bytes": 9086
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/registry-wnaf-0.14.1.json",
+      "sha256": "fa4dbcba1b4c39cda7cc2dac7c1e9d1905e49967c55ea31fafe45c1069081c47",
+      "bytes": 1727
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/solana-define-syscall-5.2.0.crate",
+      "sha256": "bf8209ece2bd9f1450e672858ffc0e5c8c786ff6916d2a862b126dd0128f380f",
+      "bytes": 3813
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/solana-define-syscall-5.4.0.crate",
+      "sha256": "8506988b0997022c4f2801985d9c4dccfb18c16e6a38f30390a47d54efeca805",
+      "bytes": 3979
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/syscall-5.2.0-lib.rs",
+      "sha256": "737b180ccbb655a63db26c48a92996ddee2580f87bdde4f2e0aac0e86b81fa1e",
+      "bytes": 3019
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/syscall-5.4.0-lib.rs",
+      "sha256": "737b180ccbb655a63db26c48a92996ddee2580f87bdde4f2e0aac0e86b81fa1e",
+      "bytes": 3019
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/syscall-package-comparison.json",
+      "sha256": "677589442db74faacc3b62c71e8ca30c0d89f2b9c4aefc02555f86e86e8091b2",
+      "bytes": 1573
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/syscall-signature-review.json",
+      "sha256": "87d830bed544738dd642d8ba168ee77dab7ee403b79a5ff06d8f4d1ff8eeea76",
+      "bytes": 147
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/syscall-source-receipts.json",
+      "sha256": "43ca0292e746ff806edbfbe0f7afecc637a1770a8570ddd498ece1785a3bf447",
+      "bytes": 509
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/syscall-source.diff",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/independent-resolution-receipt.json",
+      "sha256": "5698fc01c1fbc73e68d9cb51619c4da5d639481027a23a82c5f463e1df748a89",
+      "bytes": 910
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/independent-resolve-ctutils.log",
+      "sha256": "1076874d92ba602ebf0fe98dd0076aa4ffd4e1edd237a917dba7fb5c4d0b0b8d",
+      "bytes": 107
+    },
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/independent/independent-resolve-solana-secp256k1-recover.log",
+      "sha256": "2311647b5635a3b0c13547efb85efb1675ce90a6365626bfa2be4a05e825aaf1",
+      "bytes": 871
+    }
+  ],
+  "independent_resolution": {
+    "commands": [
+      {
+        "command": [
+          "cargo",
+          "update",
+          "--manifest-path",
+          "contracts/solana/Cargo.toml",
+          "--offline",
+          "--package",
+          "ctutils",
+          "--precise",
+          "0.4.8"
+        ],
+        "exit_code": 0,
+        "seconds": 1.439,
+        "log_sha256": "1076874d92ba602ebf0fe98dd0076aa4ffd4e1edd237a917dba7fb5c4d0b0b8d"
+      },
+      {
+        "command": [
+          "cargo",
+          "update",
+          "--manifest-path",
+          "contracts/solana/Cargo.toml",
+          "--offline",
+          "--package",
+          "solana-secp256k1-recover",
+          "--precise",
+          "3.3.1"
+        ],
+        "exit_code": 0,
+        "seconds": 0.629,
+        "log_sha256": "2311647b5635a3b0c13547efb85efb1675ce90a6365626bfa2be4a05e825aaf1"
+      }
+    ],
+    "final_lock_sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039",
+    "matches_frozen_source": true
+  },
+  "audit_before_after_warning_equality": true,
+  "published_source": {
+    "pr": 216,
+    "commit": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+    "tree": "5ab1f4ddc56742645c60ac43ac2184e194867e0a",
+    "parents": [
+      "d30152336bb687b31ae547ab3fcecb8835a02ef4"
+    ],
+    "independently_fetched": true
+  }
+}

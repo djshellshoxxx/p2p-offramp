@@ -1,0 +1,4560 @@
+{
+  "schema": "p2p-consolidation-generation11-inventory/v1",
+  "generation": 11,
+  "worker": 44,
+  "repository": "djshellshoxxx/p2p-offramp",
+  "observed_from_utc": "2026-11-20T04:56:14.088Z",
+  "observed_to_utc": "2026-11-20T04:56:50.511Z",
+  "input_handoff": {
+    "published_head": "3a9cfcf3b733284f3d457d5a5cc66256669bff8f",
+    "local_equivalent": "63baffade77614a0a435488fa93c758254064e60",
+    "tree": "175a7614b7987d823f2477810bb535d4b012e4e9",
+    "immutable_tree_verified": true
+  },
+  "main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+  "counts": {
+    "branches": 221,
+    "pull_requests": 209,
+    "open": 65,
+    "merged": 106,
+    "closed_unmerged": 38,
+    "tags": 0,
+    "releases": 0
+  },
+  "original_classification_counts": {
+    "A": 108,
+    "B": 20,
+    "C": 41,
+    "D": 5,
+    "E": 2,
+    "F": 11,
+    "G": 5,
+    "H": 0
+  },
+  "original_branch_heads_compared": 192,
+  "original_heads_changed": [],
+  "original_pr_records_compared": 184,
+  "original_pr_changes": [],
+  "original_pr_fields_compared": [
+    "state",
+    "merged",
+    "head_sha",
+    "base branch",
+    "title"
+  ],
+  "previous_generation10_branch_count": 219,
+  "previous_generation10_pr_count": 208,
+  "new_branches_since_generation10": [
+    {
+      "branch": "codex/optional-complete-evidence-g10-20261120",
+      "head": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+      "protected": false,
+      "classification": "C",
+      "owner": "root-coordinator",
+      "action": "preserve known evidence; next exact-core optional preparation already owned by43/42",
+      "reason": "Known cumulative derivative with reviewed source/evidence. No additional unowned source delta; not a standalone main-merge qualification.",
+      "identity_proof": {
+        "head": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+        "tree": "08c42c12a1cdb1dc81fc0c8422ec58a923e05733",
+        "parents": [
+          "f96d439b66775a5cc86dbefd02dba45fdc90c072"
+        ],
+        "merge_base_main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+        "ahead_of_main": 72,
+        "report_only_paths": [
+          "docs/engineering/GENERATION10_OPTIONAL_COMPLETE_STACK_20261120.md",
+          "docs/engineering/INDEPENDENT_GENERATION10_OPTIONAL_REVIEW_20261120.md",
+          "docs/engineering/generation10-optional-stack-plan.json"
+        ]
+      }
+    },
+    {
+      "branch": "fix/transport-preflight-zeroization-20261120",
+      "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "protected": false,
+      "classification": "C",
+      "owner": "external PR212 author; source incorporated by root210",
+      "action": "preserve original source ref; exact head is parent of current210 report checkpoint",
+      "reason": "Known cumulative derivative with reviewed source/evidence. No additional unowned source delta; not a standalone main-merge qualification.",
+      "identity_proof": {
+        "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+        "tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+        "parents": [
+          "56e1ae0fd50c40109aea3f40ce8505e85fc1a5c2"
+        ],
+        "merge_base_main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+        "ahead_of_main": 55,
+        "paths_against701f": [
+          "docs/engineering/TRANSPORT_PREFLIGHT_COPY_ZEROIZATION_20261120.md",
+          "packages/transport/src/http-driver.ts",
+          "packages/transport/test/http-driver-preflight-zeroization.test.mjs"
+        ]
+      }
+    }
+  ],
+  "changed_branches_since_generation10": [
+    {
+      "branch": "codex/consolidation-handoff-20261119",
+      "before": "b01aa60a7eb893d0359449f335f1862864eec179",
+      "now": "3a9cfcf3b733284f3d457d5a5cc66256669bff8f"
+    },
+    {
+      "branch": "codex/transport-qualification-20261120",
+      "before": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+      "now": "d30152336bb687b31ae547ab3fcecb8835a02ef4"
+    }
+  ],
+  "new_prs_since_generation10": [
+    {
+      "number": 212,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "head_branch": "fix/transport-preflight-zeroization-20261120",
+      "base_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+      "base_branch": "codex/transport-qualification-20261120",
+      "title": "fix(transport): wipe detached POST bytes on early preflight refusal",
+      "updated_at": "2026-11-20T04:52:43Z",
+      "created_at": "2026-11-20T04:37:57Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/212"
+    }
+  ],
+  "changed_prs_since_generation10": [
+    {
+      "pr": 200,
+      "changes": {
+        "head_sha": {
+          "before": "b01aa60a7eb893d0359449f335f1862864eec179",
+          "now": "3a9cfcf3b733284f3d457d5a5cc66256669bff8f"
+        }
+      }
+    },
+    {
+      "pr": 210,
+      "changes": {
+        "head_sha": {
+          "before": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "now": "d30152336bb687b31ae547ab3fcecb8835a02ef4"
+        }
+      }
+    }
+  ],
+  "deleted_branch_names": [],
+  "deleted_pr_numbers": [],
+  "original_optional_heads": [
+    {
+      "pr": 191,
+      "branch": "codex/optional-proof-inputs-20261119",
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "unchanged": true
+    },
+    {
+      "pr": 192,
+      "branch": "codex/optional-liquidity-20261119",
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "unchanged": true
+    },
+    {
+      "pr": 193,
+      "branch": "codex/optional-arbitration-20261119",
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "unchanged": true
+    },
+    {
+      "pr": 194,
+      "branch": "codex/optional-privacy-policy-20261119",
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "unchanged": true
+    },
+    {
+      "pr": 195,
+      "branch": "codex/optional-courier-20261119",
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "unchanged": true
+    },
+    {
+      "pr": 196,
+      "branch": "codex/optional-meetup-20261119",
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "unchanged": true
+    },
+    {
+      "pr": 197,
+      "branch": "codex/optional-privacy-controls-20261119",
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "unchanged": true
+    },
+    {
+      "pr": 198,
+      "branch": "codex/optional-stealth-20261119",
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "unchanged": true
+    },
+    {
+      "pr": 199,
+      "branch": "codex/optional-proof-jobs-20261119",
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "unchanged": true
+    }
+  ],
+  "all_branch_heads": [
+    {
+      "branch": "autonomous/completion-20261031",
+      "head": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/completion-20261102",
+      "head": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/continuation-20261031",
+      "head": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/guidance-20261101",
+      "head": "c8494b05e36cda43ac3f73e0feab831cfa00647d",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/journey-20261101",
+      "head": "3947074c95fa1e0facd65a8947a2c7e70363c708",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/acceptance-cli-input-bounds-20261110",
+      "head": "2ba1a4e18f4673f006b195e822b5f984effb48e8",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/acceptance-review-boolean-20261110",
+      "head": "08a9cf1e9abc0fb703b14964062a3da2234fdbb6",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "head": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-compatibility-20261118",
+      "head": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
+      "head": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "head": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+      "head": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "head": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-utf8-20261119-108",
+      "head": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-cross-deployment-nonce-20261111",
+      "head": "c153a99dd5c876c23bdb115f7037a4bf63cb57d4",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
+      "head": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
+      "head": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
+      "head": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
+      "head": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
+      "head": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
+      "head": "146d06d81474445434070aff557ad56379ad24a3",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
+      "head": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
+      "head": "92cc054ce9a2ee21936e20d103757e374f4af296",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-race-20261111",
+      "head": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
+      "head": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-collaboration-20261117",
+      "head": "e21a58e6a4d09c099d3249660ddec770f2164a74",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-python-baseline-20261116",
+      "head": "75a5e35b56310a9660aa7c6a3855db3c64e759f4",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-static-offers-status-20261116",
+      "head": "30efa0e158c6b50525c8e0dced494faa9f54eb08",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-status-20261118",
+      "head": "708d937df7e4799e4ad212b3293bec923f619940",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-wiki-20261110",
+      "head": "c14cfd07a440f03b5f57e35c8d39e63cdabfd5bf",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+      "head": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
+      "head": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
+      "head": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-native-withdraw-recipient-20261111",
+      "head": "84bb67f6e438b26bd1d321995c427d6a86a58930",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
+      "head": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g16-bilateral-replay-20261111",
+      "head": "969d02aecf86c6be18dde509b5cf0016345b0fe4",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-final-chain-recheck-20261111",
+      "head": "921f067769188f53c2d379f035695a40ae978083",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
+      "head": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g20-chat-scope-regression-20261111",
+      "head": "a5c74990f0f5e9162a23450db5e9af00f37d88e8",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g25-public-endpoint-regression-20261110",
+      "head": "e0a9033158d1ae874c78de7f25d0be0aa3a13157",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g26-clear-reentrancy-20261111",
+      "head": "548495515c83fc1389837f00eb0468758cd232fd",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
+      "head": "5f2381ab42c27984dbb1cc872468dd3e09771690",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+      "head": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
+      "head": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qualify-pr61-20261110",
+      "head": "a1930a3596f76eff4c29a1ee2991d6acd7f35895",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/recovery-reference-identity-20261115",
+      "head": "85849f7b267dddceffc35ef5253da4a23ef9be05",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/registry-concurrency-20261110",
+      "head": "a213166ea83a0c5ec0768f693ff583413e8e976b",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/review-read-bounds-20261119-119",
+      "head": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
+      "head": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex-continuation-spec-20261109",
+      "head": "62c6c14539ccc2ac2e56658a81602f6d1ba50d73",
+      "protected": false
+    },
+    {
+      "branch": "claude/adoring-wozniak-850ue6",
+      "head": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+      "protected": false
+    },
+    {
+      "branch": "claude/compassionate-gauss-uyhfih",
+      "head": "970ac80f08c04e8d340ee57d901e48e26a667a18",
+      "protected": false
+    },
+    {
+      "branch": "claude/confident-fermi-g6wjp3",
+      "head": "64c7c1861779ea34632f2f800b80bdaecbaefa03",
+      "protected": false
+    },
+    {
+      "branch": "claude/docs-screenshots",
+      "head": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+      "protected": false
+    },
+    {
+      "branch": "claude/friendly-dijkstra-nsi310",
+      "head": "bd26833555e13408825942e9696157ed68e9980e",
+      "protected": false
+    },
+    {
+      "branch": "claude/gifted-faraday-73kydc",
+      "head": "8fb081b492ccf9ecef4dc47525c753cac670dacb",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy",
+      "head": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-decisions",
+      "head": "89d0a928e9e1127a4c8911f9437359260bd06ab6",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-journey",
+      "head": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+      "head": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
+      "head": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+      "head": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+      "head": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "head": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "head": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "head": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "head": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "head": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "head": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "head": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+      "head": "494703e837897d04bce1cb04134fa8be6b747377",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s00-ci-triggers",
+      "head": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s01-tooling",
+      "head": "4e319013ea61ead31ae00ea9a44fa9c431cc84ce",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s02-core-contracts-storage",
+      "head": "01344cbd6655f509f3e2e3903333cdb579228d37",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s03-core-messaging",
+      "head": "5a747ded358ee9fcca393bb4a0616fd4e8632296",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
+      "head": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
+      "head": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
+      "head": "14be5a1c1ec69d91b0affe8a87811c681269fb6c",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s07-native-journey",
+      "head": "8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s08-portal-lab-docs",
+      "head": "c950dad4b387cb4b33910789c454eb8f2ab0ae81",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s09-intake",
+      "head": "389c0ea69e24615d0f1d7595942514300cd855f9",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s10-optional-packages",
+      "head": "c696c02b94eb6b90da2ed76f93c383fcd8a7f703",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s11-governance-ci",
+      "head": "789b2b2c2644af741daa5328adf76ac2ec88599c",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s12-evidence",
+      "head": "001c31cc868b683080e79a025b6621d900acb96a",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-consolidation-k5h13u",
+      "head": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "head": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-integration-aan57u",
+      "head": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-prompt-lqcgno",
+      "head": "25a01987385b49e9c28199fdfb4a874b29a6ad89",
+      "protected": false
+    },
+    {
+      "branch": "claude/post-merge-followups",
+      "head": "ec65012dbb94189180d3da52de2619cc22fe0482",
+      "protected": false
+    },
+    {
+      "branch": "claude/quirky-knuth-3s6ysy",
+      "head": "2f839b12768700ac6c3b674f75a144c6ec19fa93",
+      "protected": false
+    },
+    {
+      "branch": "claude/recovery-consolidation",
+      "head": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+      "protected": false
+    },
+    {
+      "branch": "claude/sleepy-fermat-4s6ocx",
+      "head": "f1d9dd63a2ac9d55912899f8c6233456ebf8a499",
+      "protected": false
+    },
+    {
+      "branch": "claude/sweet-noether-arf6ne",
+      "head": "391653eaba946f77057b01fd03d3c234958bcf1d",
+      "protected": false
+    },
+    {
+      "branch": "claude/sweet-shannon-grykla",
+      "head": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+      "protected": false
+    },
+    {
+      "branch": "claude/tender-goodall-db3cot",
+      "head": "8783636e7a1739b5e884cec62fbecf9c77a0ceaf",
+      "protected": false
+    },
+    {
+      "branch": "claude/trade-review-integration",
+      "head": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+      "protected": false
+    },
+    {
+      "branch": "claude/vibrant-cray-ny4gum",
+      "head": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "protected": false
+    },
+    {
+      "branch": "codex/completion-20261116",
+      "head": "88f9e40bbf8ea086705edd554a2555865429b54a",
+      "protected": false
+    },
+    {
+      "branch": "codex/consolidation-20261116",
+      "head": "274d4fe533f47ffa15aed936bd095f82ad10d9ce",
+      "protected": false
+    },
+    {
+      "branch": "codex/consolidation-handoff-20261119",
+      "head": "3a9cfcf3b733284f3d457d5a5cc66256669bff8f",
+      "protected": false
+    },
+    {
+      "branch": "codex/consolidation-ledger-20261104",
+      "head": "d5b959b5ed732ab3e6f7adfd37e872a841470225",
+      "protected": false
+    },
+    {
+      "branch": "codex/continue-completion-20261116",
+      "head": "e7506c22e6b0bc405a9e51f1c809fa30c2fe5861",
+      "protected": false
+    },
+    {
+      "branch": "codex/core-continuation-20261104",
+      "head": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+      "protected": false
+    },
+    {
+      "branch": "codex/ctutils-remediation-20261119",
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "protected": false
+    },
+    {
+      "branch": "codex/d9-migration-20261116",
+      "head": "c1f8e750beb7e22d5b9a7f0e47cca9f8cd8bdb65",
+      "protected": false
+    },
+    {
+      "branch": "codex/foundation-gates-20261104",
+      "head": "77fb7c52dcdde58cad17ceee45a0f43e7e22ad43",
+      "protected": false
+    },
+    {
+      "branch": "codex/generation5-core-20261119",
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "protected": false
+    },
+    {
+      "branch": "codex/generation8-core-20261120",
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "protected": false
+    },
+    {
+      "branch": "codex/generation9-backup-verification-20261120",
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "protected": false
+    },
+    {
+      "branch": "codex/historical-recovery-20261119",
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "protected": false
+    },
+    {
+      "branch": "codex/max-consolidation-20261119",
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-arbitration-20261119",
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-complete-evidence-g10-20261120",
+      "head": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-composition-evidence-g8-20261120",
+      "head": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-corrected-evidence-g9-20261120",
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-courier-20261119",
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-liquidity-20261119",
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-meetup-20261119",
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-privacy-controls-20261119",
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-privacy-policy-20261119",
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-proof-inputs-20261119",
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-proof-jobs-20261119",
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-stealth-20261119",
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "protected": false
+    },
+    {
+      "branch": "codex/peer-acceptance-20261116",
+      "head": "b3f508420e63329ab30e1b646f61337020a1ebad",
+      "protected": false
+    },
+    {
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "protected": false
+    },
+    {
+      "branch": "codex/personalization-templates-ui-20261119",
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "protected": false
+    },
+    {
+      "branch": "codex/post-send-reconcile-20261109",
+      "head": "af0e1789889790c2050142ed508b5042ef5bcc85",
+      "protected": false
+    },
+    {
+      "branch": "codex/qr-camera-fixture-20261119",
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "protected": false
+    },
+    {
+      "branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "protected": false
+    },
+    {
+      "branch": "codex/review-consolidate-20261116",
+      "head": "5eadddd54f6db6e755e658c1982c95f95b37a823",
+      "protected": false
+    },
+    {
+      "branch": "codex/rq00-evidence-20261109",
+      "head": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+      "protected": false
+    },
+    {
+      "branch": "codex/setup-autonomous-agent-20261104",
+      "head": "54e632f8f472a4d26b2fdda4ebdd3f2e02a5dba0",
+      "protected": false
+    },
+    {
+      "branch": "codex/solana-browser-send-repair-20261119",
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "protected": false
+    },
+    {
+      "branch": "codex/solana-payout-docs-20261109",
+      "head": "7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
+      "protected": false
+    },
+    {
+      "branch": "codex/solana-restore-ack-20261119",
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "protected": false
+    },
+    {
+      "branch": "codex/successor-handoff-20261120",
+      "head": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+      "protected": false
+    },
+    {
+      "branch": "codex/transport-qualification-20261120",
+      "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "protected": false
+    },
+    {
+      "branch": "consolidation/qualified-regressions-20261116",
+      "head": "f2375dba1b249912ac434ed9da3998e4cb0a40f0",
+      "protected": false
+    },
+    {
+      "branch": "consolidation/solana-browser-recovery-20261119",
+      "head": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "protected": false
+    },
+    {
+      "branch": "consolidation/tooling154-20261119",
+      "head": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "protected": false
+    },
+    {
+      "branch": "docs/consolidation-20261119",
+      "head": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+      "protected": false
+    },
+    {
+      "branch": "docs/lean-release-handoff-2026-10-24",
+      "head": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+      "protected": false
+    },
+    {
+      "branch": "docs/offramp-research-tools-execution-plan-20261106",
+      "head": "0f1792f589a20efab1f629f38d2a0068d4f44193",
+      "protected": false
+    },
+    {
+      "branch": "docs/security-spec-expansion-20261021",
+      "head": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+      "protected": false
+    },
+    {
+      "branch": "docs/spec-readiness-and-foundations",
+      "head": "6b6004bdf35b7aea14530f965756ca6d54336682",
+      "protected": false
+    },
+    {
+      "branch": "feat/custodial-ledger-foundation",
+      "head": "52e6987e77d9ef6bc403c0129b3f52531986ade8",
+      "protected": false
+    },
+    {
+      "branch": "feature/erc20-browser-continuation-20261118",
+      "head": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+      "protected": false
+    },
+    {
+      "branch": "feature/public-qr-capture-20261119",
+      "head": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "protected": false
+    },
+    {
+      "branch": "feature/same-terms-resumption-20261119",
+      "head": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+      "protected": false
+    },
+    {
+      "branch": "fix/localnet-readiness-20261119",
+      "head": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "protected": false
+    },
+    {
+      "branch": "fix/qr-async-expiry-20261120",
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "protected": false
+    },
+    {
+      "branch": "fix/remediation-09f20d73-9524c0",
+      "head": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+      "protected": false
+    },
+    {
+      "branch": "fix/remediation-f84468d6-0a97ed",
+      "head": "dba5072d7a67f67e223432c48aefabc07f31f005",
+      "protected": false
+    },
+    {
+      "branch": "fix/transport-preflight-zeroization-20261120",
+      "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "protected": false
+    },
+    {
+      "branch": "gpt/p2p-beta-spec-20261109",
+      "head": "c4fb7b590639e2a1d0a3220cf6bf7936156cc8e4",
+      "protected": false
+    },
+    {
+      "branch": "integration/all-compatible-work",
+      "head": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+      "protected": false
+    },
+    {
+      "branch": "integration/browser-mvp-20261118",
+      "head": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
+      "protected": false
+    },
+    {
+      "branch": "integration/core-hardening-20261118",
+      "head": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+      "protected": false
+    },
+    {
+      "branch": "integration/docs-reconciliation-20261118",
+      "head": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+      "protected": false
+    },
+    {
+      "branch": "integration/m2a-safe-fixes-20261114",
+      "head": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+      "protected": false
+    },
+    {
+      "branch": "integration/p2p-consolidated-20261109",
+      "head": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+      "protected": false
+    },
+    {
+      "branch": "integration/pages-beta-qualification-20261112",
+      "head": "4dcddf2b4bcc9890e50647cea067f81b1b734cdd",
+      "protected": false
+    },
+    {
+      "branch": "integration/pages-offline-recovery-20261112",
+      "head": "9550d4b182806170ee28149e9d46ffbccef56c33",
+      "protected": false
+    },
+    {
+      "branch": "integration/privacy-endpoint-disclosures-20261109",
+      "head": "07b3b2abfc548a1b69621396b1d45a52dfe79063",
+      "protected": false
+    },
+    {
+      "branch": "integration/solana-core-qualification-20261118",
+      "head": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+      "protected": false
+    },
+    {
+      "branch": "main",
+      "head": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "protected": false
+    },
+    {
+      "branch": "nodata/affectionate-ritchie-xq4bon",
+      "head": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+      "protected": false
+    },
+    {
+      "branch": "nodata/doc-sweep-20261118",
+      "head": "436b591a3a750bcca2327117e487336f6dd77470",
+      "protected": false
+    },
+    {
+      "branch": "nodata/epic-goldberg-sg8n96",
+      "head": "1df700355e5199c69e84d5b41b12005677b5f5ee",
+      "protected": false
+    },
+    {
+      "branch": "nodata/epic-newton-7bowm4",
+      "head": "1fe5ae00ed2105633081d71a67db2b5436da9c8d",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx",
+      "head": "014a10a148f8b3b69c9d650fbcb083c8142e7d28",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1-reader-test-flake",
+      "head": "b7d06fed31fb7d2793da99c23f15bf6795a82b8a",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1a-reader",
+      "head": "37f074dd1d65d5f12b73182420998a152374b813",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
+      "head": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1c-acceptance",
+      "head": "236f815e79a852643d8dfa61d6d4895c8a93f54a",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+      "head": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+      "head": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+      "head": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+      "head": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+      "head": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+      "head": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+      "head": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+      "head": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+      "head": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b3-formal",
+      "head": "39096586e1160c3c8434a2d081339bb70aeb4c1b",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+      "head": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+      "head": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
+      "head": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
+      "head": "579b02f3775323ba273dfe2bc624b5860897431e",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
+      "head": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+      "protected": false
+    },
+    {
+      "branch": "parallel/accessibility-recovery-panels-20261113",
+      "head": "db38fba65be8b6e19c880c78e439e712ffe7e974",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-cold-nonce-20261113",
+      "head": "2cacd1d5219a82d984a75668838204e3160d5791",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-cold-recovery-20261113",
+      "head": "65efc3428ff01d4f091600baee85edfff094b347",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-peer-offer-20261113",
+      "head": "d6d65a47b99e68d00f82153d83fef366e532cf67",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-runtime-engines-20261113",
+      "head": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+      "protected": false
+    },
+    {
+      "branch": "parallel/cli-argument-regression-20261113",
+      "head": "605bcd24ef3d239f6a080c129761132482029ef7",
+      "protected": false
+    },
+    {
+      "branch": "parallel/diagnostics-20261113",
+      "head": "330fa1ede8b70e532a02230e4895b0711579491e",
+      "protected": false
+    },
+    {
+      "branch": "parallel/docs-web-profile-recovery-20261113",
+      "head": "3524096c0ff1f4d743b01f06421bc56bbe07b9b3",
+      "protected": false
+    },
+    {
+      "branch": "parallel/locale-20261113",
+      "head": "c4b13ddccc5bd78406762c656df5af35958e83f9",
+      "protected": false
+    },
+    {
+      "branch": "parallel/localization-blank-warning-20261113",
+      "head": "718208880b650b03ac380d358a00878480827870",
+      "protected": false
+    },
+    {
+      "branch": "parallel/portable-recovery-guide-20261113",
+      "head": "05794e754c8bf588fc6781100e8af99675418629",
+      "protected": false
+    },
+    {
+      "branch": "parallel/recovery-builder-help-20261113",
+      "head": "4f75e00d0c8e7eb9f61efd633b684ca0a47b9d76",
+      "protected": false
+    },
+    {
+      "branch": "parallel/spec-tool-20261113",
+      "head": "6d48c9b0695cacd2a166a7386f24b61a6248bc10",
+      "protected": false
+    },
+    {
+      "branch": "parallel/tooling-source-correspondence-20261113",
+      "head": "32a4052163553f7826d55f784ab9a6e96425e576",
+      "protected": false
+    },
+    {
+      "branch": "research/code-reuse-2026-11-03",
+      "head": "5fec2c6db018868a49c8ce40c21e186cdf702417",
+      "protected": false
+    },
+    {
+      "branch": "research/remaining-gaps-20261103",
+      "head": "922a391e429d07b0840bbbe525b3a10c6d3c830c",
+      "protected": false
+    },
+    {
+      "branch": "research/security-addendum-20261103",
+      "head": "3a523a11a87d85443c484b6a4d4284b96c5f0b41",
+      "protected": false
+    },
+    {
+      "branch": "research/upstream-reuse-20261103",
+      "head": "977b36654bab2d00ca20c6139398b60c693bab73",
+      "protected": false
+    },
+    {
+      "branch": "review/codebase-security-20261104-94554ec",
+      "head": "6e9c0c5ea8881013d06892103cf87ef1c547476a",
+      "protected": false
+    },
+    {
+      "branch": "test/erc20-browser-recovery-20261119",
+      "head": "c7f462c6688c78c35514808177ff7cfed32b9961",
+      "protected": false
+    },
+    {
+      "branch": "test/nostr-relay-interop-20261119",
+      "head": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+      "protected": false
+    },
+    {
+      "branch": "work/noncustodial-reconstruction-2026-10-24",
+      "head": "bc996aac828ce63856193c9114edfef480153325",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-client-shell-2026-10-24",
+      "head": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-consolidated-20261030",
+      "head": "68fb46920431e3311c78f931432bc4a21d066c17",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-exchange-close-20261030",
+      "head": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-exchange-test-repair-20261030",
+      "head": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-gate-reconciliation-20261030",
+      "head": "e762e649600493221e3bd10f0c3525858722bc94",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-independent-branch-review-20261030",
+      "head": "9f80c9b27b943b30409710dea76a53d97a761832",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-pr14-finish-handoff-20261030",
+      "head": "8c8911e2dd3c7af4d515e645a6501eedc6178111",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-relay-lifetime-20261030",
+      "head": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-validation-20261030",
+      "head": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+      "protected": false
+    }
+  ],
+  "all_pull_requests": [
+    {
+      "number": 1,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+      "head_branch": "docs/security-spec-expansion-20261021",
+      "base_sha": "28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa",
+      "base_branch": "main",
+      "title": "docs: expand P2P off-ramp security specs and component audit matrix",
+      "updated_at": "2026-10-27T21:57:31Z",
+      "created_at": "2026-10-22T03:43:37Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/1"
+    },
+    {
+      "number": 2,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "6b6004bdf35b7aea14530f965756ca6d54336682",
+      "head_branch": "docs/spec-readiness-and-foundations",
+      "base_sha": "28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa",
+      "base_branch": "main",
+      "title": "Expand all off-ramp design baselines and implement vault schema/crypto foundation",
+      "updated_at": "2026-10-27T21:57:31Z",
+      "created_at": "2026-10-22T09:12:56Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/2"
+    },
+    {
+      "number": 3,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "3df560fcc2cae2f6031ec258b53ce37ad03c6510",
+      "head_branch": "claude/sweet-noether-arf6ne",
+      "base_sha": "28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa",
+      "base_branch": "main",
+      "title": "Integrate noncustodial foundation and remaining-work plan",
+      "updated_at": "2026-10-27T21:57:31Z",
+      "created_at": "2026-10-24T13:35:35Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/3"
+    },
+    {
+      "number": 4,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+      "head_branch": "work/p2p-client-shell-2026-10-24",
+      "base_sha": "28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa",
+      "base_branch": "main",
+      "title": "Integrate noncustodial foundations and offline client-side shell",
+      "updated_at": "2026-10-27T21:57:29Z",
+      "created_at": "2026-10-24T15:13:33Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/4"
+    },
+    {
+      "number": 5,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+      "head_branch": "claude/adoring-wozniak-850ue6",
+      "base_sha": "d96dcbb2114353c53b5b60cca0a8d0ba5a46150a",
+      "base_branch": "main",
+      "title": "Bounded local profile capacity, inventory and create/restore through Worker",
+      "updated_at": "2026-10-27T21:57:53Z",
+      "created_at": "2026-10-24T18:18:56Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/5"
+    },
+    {
+      "number": 6,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+      "head_branch": "docs/lean-release-handoff-2026-10-24",
+      "base_sha": "a606743d4f417ee37158e69292ea0395b55b5675",
+      "base_branch": "claude/adoring-wozniak-850ue6",
+      "title": "docs: set one-EVM-trade scope and preserve stacked continuation",
+      "updated_at": "2026-10-24T22:09:44Z",
+      "created_at": "2026-10-24T22:01:13Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/6"
+    },
+    {
+      "number": 7,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+      "head_branch": "claude/p2p-offramp-integration-aan57u",
+      "base_sha": "6d76590d5ee8cd5a89af1624fff1546e31bf1e9d",
+      "base_branch": "main",
+      "title": "Unmounted trade-terms review and synthetic local EVM scenario fixtures",
+      "updated_at": "2026-10-27T21:58:09Z",
+      "created_at": "2026-10-27T13:36:38Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/7"
+    },
+    {
+      "number": 8,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+      "head_branch": "claude/trade-review-integration",
+      "base_sha": "55a9ea4ebb850f1746fa09864bb557ce0943a8d7",
+      "base_branch": "main",
+      "title": "Local trade-terms review journey (mounted), synthetic demo build, boundary-check fix",
+      "updated_at": "2026-10-27T21:58:28Z",
+      "created_at": "2026-10-27T21:28:55Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/8"
+    },
+    {
+      "number": 9,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "ec65012dbb94189180d3da52de2619cc22fe0482",
+      "head_branch": "claude/post-merge-followups",
+      "base_sha": "48513fbea700b4211a3de9257338ba6171ba40f5",
+      "base_branch": "main",
+      "title": "Post-merge follow-ups: Home link to terms review, responsive review check, merge record",
+      "updated_at": "2026-10-27T22:03:06Z",
+      "created_at": "2026-10-27T22:00:21Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/9"
+    },
+    {
+      "number": 10,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "391653eaba946f77057b01fd03d3c234958bcf1d",
+      "head_branch": "claude/sweet-noether-arf6ne",
+      "base_sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "base_branch": "main",
+      "title": "EVM escrow, G12 reconcile, relay, nostr-crypto, and the NIP-17 encrypted terms exchange",
+      "updated_at": "2026-10-31T06:30:00Z",
+      "created_at": "2026-10-27T22:15:51Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/10"
+    },
+    {
+      "number": 11,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+      "head_branch": "claude/recovery-consolidation",
+      "base_sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "base_branch": "main",
+      "title": "Consolidate recovered private-lineage source (snapshot 0770e298) with main",
+      "updated_at": "2026-10-31T06:30:00Z",
+      "created_at": "2026-10-27T23:33:33Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/11"
+    },
+    {
+      "number": 12,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+      "head_branch": "claude/sweet-shannon-grykla",
+      "base_sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "base_branch": "main",
+      "title": "Integration: #11 recovery consolidation + #10 escrow/G12/relay/nostr-crypto on main",
+      "updated_at": "2026-10-31T06:30:00Z",
+      "created_at": "2026-10-28T02:12:47Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/12"
+    },
+    {
+      "number": 13,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+      "head_branch": "claude/docs-screenshots",
+      "base_sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "base_branch": "main",
+      "title": "docs: add README screenshots",
+      "updated_at": "2026-10-31T06:30:00Z",
+      "created_at": "2026-10-28T12:38:33Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/13"
+    },
+    {
+      "number": 14,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "head_branch": "work/p2p-exchange-close-20261030",
+      "base_sha": "47f9bbee455e7affbc39539489227228eb346a0f",
+      "base_branch": "claude/sweet-noether-arf6ne",
+      "title": "fix(exchange): reject late results, expired terms, and replay overbooking",
+      "updated_at": "2026-10-31T03:43:28Z",
+      "created_at": "2026-10-30T10:07:55Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/14"
+    },
+    {
+      "number": 15,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+      "head_branch": "work/p2p-relay-lifetime-20261030",
+      "base_sha": "47f9bbee455e7affbc39539489227228eb346a0f",
+      "base_branch": "claude/sweet-noether-arf6ne",
+      "title": "Fix relay cancellation, socket cleanup and closed-subscription handling",
+      "updated_at": "2026-10-31T06:30:46Z",
+      "created_at": "2026-10-30T10:12:15Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/15"
+    },
+    {
+      "number": 16,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "9f80c9b27b943b30409710dea76a53d97a761832",
+      "head_branch": "work/p2p-independent-branch-review-20261030",
+      "base_sha": "47f9bbee455e7affbc39539489227228eb346a0f",
+      "base_branch": "claude/sweet-noether-arf6ne",
+      "title": "docs(review): record exchange race defects and relay merge gates",
+      "updated_at": "2026-10-31T03:39:02Z",
+      "created_at": "2026-10-30T10:28:52Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/16"
+    },
+    {
+      "number": 17,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+      "head_branch": "work/p2p-exchange-test-repair-20261030",
+      "base_sha": "0054543f81f48e928a46bd58c1dab14f91d0edeb",
+      "base_branch": "work/p2p-exchange-close-20261030",
+      "title": "test(exchange): repair frozen-provider close regression harness",
+      "updated_at": "2026-10-30T10:50:24Z",
+      "created_at": "2026-10-30T10:31:33Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/17"
+    },
+    {
+      "number": 18,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "68fb46920431e3311c78f931432bc4a21d066c17",
+      "head_branch": "work/p2p-consolidated-20261030",
+      "base_sha": "47f9bbee455e7affbc39539489227228eb346a0f",
+      "base_branch": "claude/sweet-noether-arf6ne",
+      "title": "Consolidate preserved P2P work, owner exchange fixes and continuation plan",
+      "updated_at": "2026-10-31T06:30:51Z",
+      "created_at": "2026-10-30T10:50:27Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/18"
+    },
+    {
+      "number": 19,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+      "head_branch": "integration/all-compatible-work",
+      "base_sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "base_branch": "main",
+      "title": "Consolidate noncustodial work, complete local acceptance and close audit findings",
+      "updated_at": "2026-10-31T06:30:58Z",
+      "created_at": "2026-10-31T06:05:50Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/19"
+    },
+    {
+      "number": 20,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+      "head_branch": "autonomous/completion-20261031",
+      "base_sha": "eaa1fe5361ff5d0d93e7b7dd7711cb18bc37c38a",
+      "base_branch": "main",
+      "title": "Complete unblocked client capabilities and bind relay destinations",
+      "updated_at": "2026-11-01T05:22:55Z",
+      "created_at": "2026-10-31T08:14:37Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/20"
+    },
+    {
+      "number": 21,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+      "head_branch": "autonomous/continuation-20261031",
+      "base_sha": "b7000850398712a855b79e669302445b0ada2556",
+      "base_branch": "main",
+      "title": "Harden chain proofs and add portable recovery with typed English copy",
+      "updated_at": "2026-11-01T06:35:34Z",
+      "created_at": "2026-11-01T05:44:27Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/21"
+    },
+    {
+      "number": 22,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+      "head_branch": "fix/remediation-09f20d73-9524c0",
+      "base_sha": "aa108b53046a28f7c0d07fdf0d82cae63f406d1b",
+      "base_branch": "autonomous/continuation-20261031",
+      "title": "Fix: [for cherry-picking] Updated deployment proof validation to accept",
+      "updated_at": "2026-11-01T05:51:01Z",
+      "created_at": "2026-11-01T05:49:20Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/22"
+    },
+    {
+      "number": 23,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c8494b05e36cda43ac3f73e0feab831cfa00647d",
+      "head_branch": "autonomous/guidance-20261101",
+      "base_sha": "f264cabec4e21bc110a378bd63f8672285e28338",
+      "base_branch": "main",
+      "title": "Complete local guidance and privacy status; harden wallet error boundary",
+      "updated_at": "2026-11-01T11:57:40Z",
+      "created_at": "2026-11-01T11:39:19Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/23"
+    },
+    {
+      "number": 24,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "3947074c95fa1e0facd65a8947a2c7e70363c708",
+      "head_branch": "autonomous/journey-20261101",
+      "base_sha": "f421fdcb1d127a087991270d0e5f60a3be323ba3",
+      "base_branch": "main",
+      "title": "Compose native payment journey and broker-driven privacy status",
+      "updated_at": "2026-11-01T12:38:11Z",
+      "created_at": "2026-11-01T12:14:22Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/24"
+    },
+    {
+      "number": 25,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "dba5072d7a67f67e223432c48aefabc07f31f005",
+      "head_branch": "fix/remediation-f84468d6-0a97ed",
+      "base_sha": "10ea8728bffc0ccbfadd9605509195b479496dae",
+      "base_branch": "autonomous/journey-20261101",
+      "title": "Fix: [for cherry-picking] Inspection-only expiries now remove display w",
+      "updated_at": "2026-11-01T12:20:50Z",
+      "created_at": "2026-11-01T12:17:38Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/25"
+    },
+    {
+      "number": 26,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "head_branch": "autonomous/completion-20261102",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main",
+      "title": "Complete local recovery and trade workflows with whole-source audit",
+      "updated_at": "2026-11-02T19:40:10Z",
+      "created_at": "2026-11-02T12:05:43Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/26"
+    },
+    {
+      "number": 27,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "2f839b12768700ac6c3b674f75a144c6ec19fa93",
+      "head_branch": "claude/quirky-knuth-3s6ysy",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main",
+      "title": "Add evidence-grounded execution prompt for the next autonomous run",
+      "updated_at": "2026-11-18T07:52:06Z",
+      "created_at": "2026-11-04T01:56:38Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/27"
+    },
+    {
+      "number": 28,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+      "head_branch": "claude/loving-einstein-xgzvdy",
+      "base_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "base_branch": "autonomous/completion-20261102",
+      "title": "Fix PR #26 browser, cancellation, relay and HTTP defects",
+      "updated_at": "2026-11-18T07:11:52Z",
+      "created_at": "2026-11-04T02:13:07Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/28"
+    },
+    {
+      "number": 29,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "89d0a928e9e1127a4c8911f9437359260bd06ab6",
+      "head_branch": "claude/loving-einstein-xgzvdy-decisions",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main",
+      "title": "Propose owner decision packets D1 to D9",
+      "updated_at": "2026-11-18T07:05:58Z",
+      "created_at": "2026-11-04T02:16:32Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/29"
+    },
+    {
+      "number": 30,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "3a523a11a87d85443c484b6a4d4284b96c5f0b41",
+      "head_branch": "research/security-addendum-20261103",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main",
+      "title": "docs: add parallel security research and prioritized implementation notes",
+      "updated_at": "2026-11-05T18:26:34Z",
+      "created_at": "2026-11-04T02:27:43Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/30"
+    },
+    {
+      "number": 31,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "6e9c0c5ea8881013d06892103cf87ef1c547476a",
+      "head_branch": "review/codebase-security-20261104-94554ec",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main",
+      "title": "Record independent security and correctness review of PR #26",
+      "updated_at": "2026-11-18T07:07:03Z",
+      "created_at": "2026-11-04T02:29:13Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/31"
+    },
+    {
+      "number": 32,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "5fec2c6db018868a49c8ce40c21e186cdf702417",
+      "head_branch": "research/code-reuse-2026-11-03",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main",
+      "title": "docs: research reusable code for unfinished P2P Offramp features",
+      "updated_at": "2026-11-16T23:53:41Z",
+      "created_at": "2026-11-04T02:34:06Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/32"
+    },
+    {
+      "number": 33,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "977b36654bab2d00ca20c6139398b60c693bab73",
+      "head_branch": "research/upstream-reuse-20261103",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main",
+      "title": "docs: map unfinished features to upstream code reuse research",
+      "updated_at": "2026-11-16T23:53:36Z",
+      "created_at": "2026-11-04T02:37:48Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/33"
+    },
+    {
+      "number": 34,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "922a391e429d07b0840bbbe525b3a10c6d3c830c",
+      "head_branch": "research/remaining-gaps-20261103",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main",
+      "title": "docs: map remaining research and record source-backed decisions",
+      "updated_at": "2026-11-05T18:27:37Z",
+      "created_at": "2026-11-04T02:54:26Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/34"
+    },
+    {
+      "number": 35,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+      "head_branch": "claude/loving-einstein-xgzvdy-journey",
+      "base_sha": "3e32c981bd06088acaa7d80603b4283effb15955",
+      "base_branch": "claude/loving-einstein-xgzvdy",
+      "title": "Fix PR #31 journey findings F01, F03 and F06 (parked pending D9)",
+      "updated_at": "2026-11-04T08:03:44Z",
+      "created_at": "2026-11-04T05:04:13Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/35"
+    },
+    {
+      "number": 36,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+      "head_branch": "claude/loving-einstein-xgzvdy-s00-ci-triggers",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main",
+      "title": "Split PR #26 (0/12): run CI once per change and cancel superseded runs",
+      "updated_at": "2026-11-04T07:50:48Z",
+      "created_at": "2026-11-04T05:46:49Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/36"
+    },
+    {
+      "number": 37,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+      "base_sha": "bebbbf582bae8bc65d57a943c974c1871acc83a4",
+      "base_branch": "main",
+      "title": "Split PR #26 (1/12): gate tooling, signature oracle, Sepolia and formal EVM checks",
+      "updated_at": "2026-11-04T08:05:36Z",
+      "created_at": "2026-11-04T05:46:56Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/37"
+    },
+    {
+      "number": 38,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
+      "base_sha": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+      "title": "Split PR #26 (2/12): core schemas, domain, transport, storage and identity",
+      "updated_at": "2026-11-18T12:06:14Z",
+      "created_at": "2026-11-04T05:47:04Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/38"
+    },
+    {
+      "number": 39,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+      "base_sha": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
+      "title": "Split PR #26 (3/12): relay and messaging bounds with per-subscription dedupe",
+      "updated_at": "2026-11-18T11:29:42Z",
+      "created_at": "2026-11-04T05:47:28Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/39"
+    },
+    {
+      "number": 40,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+      "base_sha": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+      "title": "Split PR #26 (4/12): wallet EIP-1271 acceptance and signed asset updates",
+      "updated_at": "2026-11-04T07:54:14Z",
+      "created_at": "2026-11-04T05:47:36Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/40"
+    },
+    {
+      "number": 41,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "base_sha": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+      "title": "Split PR #26 (5/12): web locale runtime and unwired leaf modules",
+      "updated_at": "2026-11-18T11:29:45Z",
+      "created_at": "2026-11-04T05:47:43Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/41"
+    },
+    {
+      "number": 42,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "base_sha": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "title": "Split PR #26 (6/12): personalization, web runtime, UI wiring and browser qualification",
+      "updated_at": "2026-11-04T07:56:04Z",
+      "created_at": "2026-11-04T05:47:51Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/42"
+    },
+    {
+      "number": 43,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "base_sha": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "title": "Split PR #26 (7/12): native private-trade journey and retention",
+      "updated_at": "2026-11-04T07:56:02Z",
+      "created_at": "2026-11-04T05:48:04Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/43"
+    },
+    {
+      "number": 44,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "base_sha": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "title": "Split PR #26 (8/12): recovery portal, test lab, docs tooling and distribution",
+      "updated_at": "2026-11-04T07:54:39Z",
+      "created_at": "2026-11-04T05:48:13Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/44"
+    },
+    {
+      "number": 45,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "base_sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "title": "Split PR #26 (9/12): dependency and candidate intake evaluations",
+      "updated_at": "2026-11-04T08:04:22Z",
+      "created_at": "2026-11-04T05:48:20Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/45"
+    },
+    {
+      "number": 46,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "base_sha": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "title": "Split PR #26 (10/12): optional reference packages (D7 recommends parking)",
+      "updated_at": "2026-11-04T08:02:55Z",
+      "created_at": "2026-11-04T05:48:29Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/46"
+    },
+    {
+      "number": 47,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "base_sha": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "title": "Split PR #26 (11/12): governance records, assurance packet and final CI wiring",
+      "updated_at": "2026-11-04T17:16:56Z",
+      "created_at": "2026-11-04T05:48:38Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/47"
+    },
+    {
+      "number": 48,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "494703e837897d04bce1cb04134fa8be6b747377",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+      "base_sha": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "title": "Split PR #26 (12/12): execution evidence, review receipts and root docs",
+      "updated_at": "2026-11-04T07:57:37Z",
+      "created_at": "2026-11-04T05:48:48Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/48"
+    },
+    {
+      "number": 49,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "8fb081b492ccf9ecef4dc47525c753cac670dacb",
+      "head_branch": "claude/gifted-faraday-73kydc",
+      "base_sha": "e4146f98fe5c532799b0fb75857704541730ee0e",
+      "base_branch": "integration/p2p-consolidated-20261109",
+      "title": "Record owner acceptance of decisions D4, D6, D7 (D1/D5 from base)",
+      "updated_at": "2026-11-15T06:44:15Z",
+      "created_at": "2026-11-04T07:50:53Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/49"
+    },
+    {
+      "number": 50,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "e2e25cf0f5aa43c23d4f70ad8ef1c120b7df9746",
+      "head_branch": "claude/sleepy-fermat-4s6ocx",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "Add the D5 Solana basic escrow program and read-only adapter",
+      "updated_at": "2026-11-18T07:05:00Z",
+      "created_at": "2026-11-04T08:08:14Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/50"
+    },
+    {
+      "number": 51,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "54e632f8f472a4d26b2fdda4ebdd3f2e02a5dba0",
+      "head_branch": "codex/setup-autonomous-agent-20261104",
+      "base_sha": "f87343287199b1c32c443daf2e4e901476729e6d",
+      "base_branch": "main",
+      "title": "Configure OpenAI autonomous development workflow and prompts",
+      "updated_at": "2026-11-04T21:28:17Z",
+      "created_at": "2026-11-04T21:19:57Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/51"
+    },
+    {
+      "number": 52,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "d5b959b5ed732ab3e6f7adfd37e872a841470225",
+      "head_branch": "codex/consolidation-ledger-20261104",
+      "base_sha": "a7e3062cb0412be4ee5e3491198ee4089a32e23f",
+      "base_branch": "main",
+      "title": "Document branch ancestry and gated consolidation sequence",
+      "updated_at": "2026-11-05T18:25:54Z",
+      "created_at": "2026-11-04T21:28:19Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/52"
+    },
+    {
+      "number": 53,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "77fb7c52dcdde58cad17ceee45a0f43e7e22ad43",
+      "head_branch": "codex/foundation-gates-20261104",
+      "base_sha": "a7e3062cb0412be4ee5e3491198ee4089a32e23f",
+      "base_branch": "main",
+      "title": "Consolidate foundation boundary and signature verification gates",
+      "updated_at": "2026-11-18T07:05:01Z",
+      "created_at": "2026-11-04T22:02:35Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/53"
+    },
+    {
+      "number": 54,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+      "head_branch": "codex/core-continuation-20261104",
+      "base_sha": "a7e3062cb0412be4ee5e3491198ee4089a32e23f",
+      "base_branch": "main",
+      "title": "Consolidate P2P Offramp core continuation and recovery fixesCodex/core continuation 20261104",
+      "updated_at": "2026-11-18T07:05:03Z",
+      "created_at": "2026-11-04T23:09:59Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/54"
+    },
+    {
+      "number": 56,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "head_branch": "claude/vibrant-cray-ny4gum",
+      "base_sha": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+      "base_branch": "codex/core-continuation-20261104",
+      "title": "Resolve PR #54 review findings, harden agent workflow, record live project state",
+      "updated_at": "2026-11-11T02:09:41Z",
+      "created_at": "2026-11-07T04:03:29Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/56"
+    },
+    {
+      "number": 57,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
+      "head_branch": "codex/solana-payout-docs-20261109",
+      "base_sha": "e2e25cf0f5aa43c23d4f70ad8ef1c120b7df9746",
+      "base_branch": "claude/sleepy-fermat-4s6ocx",
+      "title": "docs(solana): correct release and payout rollback guidance",
+      "updated_at": "2026-11-18T07:06:00Z",
+      "created_at": "2026-11-09T11:11:26Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/57"
+    },
+    {
+      "number": 58,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "af0e1789889790c2050142ed508b5042ef5bcc85",
+      "head_branch": "codex/post-send-reconcile-20261109",
+      "base_sha": "07b1b9b043e2614d434fa6263db5ee423f20cfa6",
+      "base_branch": "claude/vibrant-cray-ny4gum",
+      "title": "fix(domain): keep post-send wallet rejections uncertain",
+      "updated_at": "2026-11-11T00:55:04Z",
+      "created_at": "2026-11-09T11:14:34Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/58"
+    },
+    {
+      "number": 59,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+      "head_branch": "codex/rq00-evidence-20261109",
+      "base_sha": "07b1b9b043e2614d434fa6263db5ee423f20cfa6",
+      "base_branch": "claude/vibrant-cray-ny4gum",
+      "title": "feat(research): admit source-pinned evidence receipts without inflating results",
+      "updated_at": "2026-11-11T00:55:03Z",
+      "created_at": "2026-11-09T11:22:28Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/59"
+    },
+    {
+      "number": 60,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "c4fb7b590639e2a1d0a3220cf6bf7936156cc8e4",
+      "head_branch": "gpt/p2p-beta-spec-20261109",
+      "base_sha": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+      "base_branch": "codex/rq00-evidence-20261109",
+      "title": "Specify accelerated beta delivery and harden registry evidence checks",
+      "updated_at": "2026-11-18T07:05:49Z",
+      "created_at": "2026-11-10T01:07:57Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/60"
+    },
+    {
+      "number": 61,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+      "head_branch": "integration/p2p-consolidated-20261109",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "Consolidate core continuation, beta evidence, and safe wallet reconciliation (staging)",
+      "updated_at": "2026-11-18T07:04:56Z",
+      "created_at": "2026-11-10T01:17:49Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/61"
+    },
+    {
+      "number": 62,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "07b3b2abfc548a1b69621396b1d45a52dfe79063",
+      "head_branch": "integration/privacy-endpoint-disclosures-20261109",
+      "base_sha": "23a93dd5a0da8e03cac57f2c572afa06efb44c94",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Extract G23 fail-closed privacy endpoint disclosures from reviewed split stack",
+      "updated_at": "2026-11-15T06:32:48Z",
+      "created_at": "2026-11-10T01:56:48Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/62"
+    },
+    {
+      "number": 63,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "62c6c14539ccc2ac2e56658a81602f6d1ba50d73",
+      "head_branch": "chatgpt/zero-codex-continuation-spec-20261109",
+      "base_sha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "base_branch": "main",
+      "title": "docs: ChatGPT-only zero-Codex continuation specification",
+      "updated_at": "2026-11-18T07:06:48Z",
+      "created_at": "2026-11-10T04:07:52Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/63"
+    },
+    {
+      "number": 64,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "25a01987385b49e9c28199fdfb4a874b29a6ad89",
+      "head_branch": "claude/p2p-offramp-prompt-lqcgno",
+      "base_sha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "base_branch": "main",
+      "title": "docs: M2A orchestration prompt",
+      "updated_at": "2026-11-18T07:06:50Z",
+      "created_at": "2026-11-10T07:34:10Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/64"
+    },
+    {
+      "number": 65,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "bd26833555e13408825942e9696157ed68e9980e",
+      "head_branch": "claude/friendly-dijkstra-nsi310",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "M2A tranche: race/boundary evidence, audit fixes, gap table, M2B record",
+      "updated_at": "2026-11-18T07:52:05Z",
+      "created_at": "2026-11-10T07:49:10Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/65"
+    },
+    {
+      "number": 66,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "a1930a3596f76eff4c29a1ee2991d6acd7f35895",
+      "head_branch": "chatgpt/zero-codex/qualify-pr61-20261110",
+      "base_sha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "base_branch": "main",
+      "title": "docs: pin PR #61 exact-head qualification and remaining security gates",
+      "updated_at": "2026-11-18T07:06:59Z",
+      "created_at": "2026-11-10T12:33:21Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/66"
+    },
+    {
+      "number": 67,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+      "head_branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
+      "base_sha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "base_branch": "main",
+      "title": "docs(audit): source-pinned randomized EVM agreement parser review ledger",
+      "updated_at": "2026-11-18T07:07:01Z",
+      "created_at": "2026-11-10T12:34:27Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/67"
+    },
+    {
+      "number": 68,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "c14cfd07a440f03b5f57e35c8d39e63cdabfd5bf",
+      "head_branch": "chatgpt/zero-codex/docs-wiki-20261110",
+      "base_sha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "base_branch": "main",
+      "title": "docs(wiki): separate User Guide and Developer Guide, repair stale entry pages",
+      "updated_at": "2026-11-18T07:05:51Z",
+      "created_at": "2026-11-10T12:37:58Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/68"
+    },
+    {
+      "number": 69,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+      "head_branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
+      "base_sha": "5243449b56bca9470e1c0643ae85f0da4b4ed712",
+      "base_branch": "integration/p2p-consolidated-20261109",
+      "title": "test(d9): fail closed when durable send marker write reports an error",
+      "updated_at": "2026-11-18T07:07:45Z",
+      "created_at": "2026-11-10T13:36:21Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/69"
+    },
+    {
+      "number": 70,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+      "head_branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
+      "base_sha": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+      "base_branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
+      "title": "test(d9): retain broadcast-unknown provenance after encrypted fresh-key restore",
+      "updated_at": "2026-11-18T07:07:43Z",
+      "created_at": "2026-11-10T14:33:53Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/70"
+    },
+    {
+      "number": 71,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+      "head_branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
+      "base_sha": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+      "base_branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
+      "title": "test(d9): recovered terminal labels require current native evidence to release nonce",
+      "updated_at": "2026-11-18T07:07:42Z",
+      "created_at": "2026-11-10T15:33:33Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/71"
+    },
+    {
+      "number": 72,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "92cc054ce9a2ee21936e20d103757e374f4af296",
+      "head_branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
+      "base_sha": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+      "base_branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
+      "title": "test(d9): preserve restored prepared nonce hold without native promotion",
+      "updated_at": "2026-11-18T07:07:40Z",
+      "created_at": "2026-11-10T16:33:48Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/72"
+    },
+    {
+      "number": 73,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+      "head_branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
+      "base_sha": "92cc054ce9a2ee21936e20d103757e374f4af296",
+      "base_branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
+      "title": "test(d9): retain known-hash pending nonce hold after fresh-key recovery",
+      "updated_at": "2026-11-18T07:07:38Z",
+      "created_at": "2026-11-10T17:30:53Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/73"
+    },
+    {
+      "number": 74,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "146d06d81474445434070aff557ad56379ad24a3",
+      "head_branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
+      "base_sha": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+      "base_branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
+      "title": "test(d9): reject conflicting hash after encrypted pending recovery",
+      "updated_at": "2026-11-18T07:07:37Z",
+      "created_at": "2026-11-10T18:33:28Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/74"
+    },
+    {
+      "number": 75,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+      "head_branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
+      "base_sha": "146d06d81474445434070aff557ad56379ad24a3",
+      "base_branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
+      "title": "test(d9): retain restored EVM nonce holds across account casing",
+      "updated_at": "2026-11-18T07:07:35Z",
+      "created_at": "2026-11-10T19:30:47Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/75"
+    },
+    {
+      "number": 76,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "2ba1a4e18f4673f006b195e822b5f984effb48e8",
+      "head_branch": "chatgpt/zero-codex/acceptance-cli-input-bounds-20261110",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(cli): reject adversarial offline acceptance input files",
+      "updated_at": "2026-11-16T23:48:30Z",
+      "created_at": "2026-11-10T20:36:14Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/76"
+    },
+    {
+      "number": 77,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "08a9cf1e9abc0fb703b14964062a3da2234fdbb6",
+      "head_branch": "chatgpt/zero-codex/acceptance-review-boolean-20261110",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g24): verify literal review approval and no release authority",
+      "updated_at": "2026-11-16T23:48:30Z",
+      "created_at": "2026-11-10T21:31:00Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/77"
+    },
+    {
+      "number": 78,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "a213166ea83a0c5ec0768f693ff583413e8e976b",
+      "head_branch": "chatgpt/zero-codex/registry-concurrency-20261110",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g11): verify concurrent registry loads cannot replace authenticated snapshot",
+      "updated_at": "2026-11-18T01:41:46Z",
+      "created_at": "2026-11-10T22:34:47Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/78"
+    },
+    {
+      "number": 79,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "e0a9033158d1ae874c78de7f25d0be0aa3a13157",
+      "head_branch": "chatgpt/zero-codex/g25-public-endpoint-regression-20261110",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g25): fail closed for credentialed public registry RPC URLs",
+      "updated_at": "2026-11-18T01:41:48Z",
+      "created_at": "2026-11-10T23:33:02Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/79"
+    },
+    {
+      "number": 80,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "5f2381ab42c27984dbb1cc872468dd3e09771690",
+      "head_branch": "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g05): verify HTTP upload copy, zeroization and fail-closed size limit",
+      "updated_at": "2026-11-18T01:41:50Z",
+      "created_at": "2026-11-11T00:30:59Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/80"
+    },
+    {
+      "number": 81,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "head_branch": "claude/vibrant-cray-ny4gum",
+      "base_sha": "5243449b56bca9470e1c0643ae85f0da4b4ed712",
+      "base_branch": "integration/p2p-consolidated-20261109",
+      "title": "Integrate #56 Sonar fixes and split-stack extractions #37/#38/#40\u2013#43",
+      "updated_at": "2026-11-15T06:37:20Z",
+      "created_at": "2026-11-11T00:52:53Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/81"
+    },
+    {
+      "number": 83,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "8783636e7a1739b5e884cec62fbecf9c77a0ceaf",
+      "head_branch": "claude/tender-goodall-db3cot",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test: integrate isolated regression tests #78\u2013#80 (Issue #82 step 2)",
+      "updated_at": "2026-11-16T23:48:30Z",
+      "created_at": "2026-11-11T04:04:12Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/83"
+    },
+    {
+      "number": 84,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "edc8a6971819a5e726f4c22813b4e51a6b9d8f9e",
+      "head_branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "EVM MVP: upstream reuse matrix, viem/nostr-tools differential oracles, relay failover diagnosis",
+      "updated_at": "2026-11-18T07:05:53Z",
+      "created_at": "2026-11-11T04:46:47Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/84"
+    },
+    {
+      "number": 85,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "921f067769188f53c2d379f035695a40ae978083",
+      "head_branch": "chatgpt/zero-codex/g18-final-chain-recheck-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g18): refuse post-proof chain switches in native payment guidance",
+      "updated_at": "2026-11-16T23:48:30Z",
+      "created_at": "2026-11-11T08:37:22Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/85"
+    },
+    {
+      "number": 86,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "a5c74990f0f5e9162a23450db5e9af00f37d88e8",
+      "head_branch": "chatgpt/zero-codex/g20-chat-scope-regression-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g20): reject encrypted chat replay across EVM network and deployment scopes",
+      "updated_at": "2026-11-16T23:48:30Z",
+      "created_at": "2026-11-11T09:32:34Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/86"
+    },
+    {
+      "number": 87,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "head_branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "fix(g12): reject symlinked and replaced recovery CLI reference files",
+      "updated_at": "2026-11-16T23:48:30Z",
+      "created_at": "2026-11-11T10:31:42Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/87"
+    },
+    {
+      "number": 88,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+      "head_branch": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g18): reject inherited, accessor and proxy-backed receipt RPC evidence",
+      "updated_at": "2026-11-16T23:48:30Z",
+      "created_at": "2026-11-11T11:33:01Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/88"
+    },
+    {
+      "number": 89,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+      "head_branch": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g05): bind transport grants to exact destination path and query",
+      "updated_at": "2026-11-16T23:48:30Z",
+      "created_at": "2026-11-11T12:30:50Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/89"
+    },
+    {
+      "number": 90,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "548495515c83fc1389837f00eb0468758cd232fd",
+      "head_branch": "chatgpt/zero-codex/g26-clear-reentrancy-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g26): invalidate diagnostics export previews before reentrant clear",
+      "updated_at": "2026-11-16T23:48:30Z",
+      "created_at": "2026-11-11T13:34:02Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/90"
+    },
+    {
+      "number": 91,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+      "head_branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
+      "base_sha": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+      "base_branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
+      "title": "test(d9): preserve restored nonce isolation across EVM networks",
+      "updated_at": "2026-11-18T07:07:33Z",
+      "created_at": "2026-11-11T14:33:57Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/91"
+    },
+    {
+      "number": 92,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+      "head_branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
+      "base_sha": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+      "base_branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
+      "title": "test(d9): retain account-scoped nonce holds after encrypted recovery",
+      "updated_at": "2026-11-18T07:07:32Z",
+      "created_at": "2026-11-11T15:32:58Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/92"
+    },
+    {
+      "number": 93,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
+      "head_branch": "chatgpt/zero-codex/d9-restored-race-20261111",
+      "base_sha": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+      "base_branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
+      "title": "test(d9): prevent restored concurrent journals double-reserving EVM nonce",
+      "updated_at": "2026-11-18T07:07:30Z",
+      "created_at": "2026-11-11T16:37:45Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/93"
+    },
+    {
+      "number": 94,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "84bb67f6e438b26bd1d321995c427d6a86a58930",
+      "head_branch": "chatgpt/zero-codex/g12-native-withdraw-recipient-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g12): bind offline deferred withdrawal plans to native recipient",
+      "updated_at": "2026-11-16T23:48:29Z",
+      "created_at": "2026-11-11T17:34:05Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/94"
+    },
+    {
+      "number": 95,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "969d02aecf86c6be18dde509b5cf0016345b0fe4",
+      "head_branch": "chatgpt/zero-codex/g16-bilateral-replay-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g16): reject buyer/seller acceptance replays across immutable EVM terms",
+      "updated_at": "2026-11-16T23:48:30Z",
+      "created_at": "2026-11-11T18:37:26Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/95"
+    },
+    {
+      "number": 96,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+      "head_branch": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(g12): bind historical ERC-20 recovery withdrawals to chain recipient and asset",
+      "updated_at": "2026-11-16T23:48:29Z",
+      "created_at": "2026-11-11T19:37:36Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/96"
+    },
+    {
+      "number": 97,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "c153a99dd5c876c23bdb115f7037a4bf63cb57d4",
+      "head_branch": "chatgpt/zero-codex/d9-cross-deployment-nonce-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "test(d9): retain EVM nonce holds across escrow deployments after journal restart",
+      "updated_at": "2026-11-16T23:48:29Z",
+      "created_at": "2026-11-11T20:29:39Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/97"
+    },
+    {
+      "number": 98,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "a0105f9abce8e389d7f0dbaff36d68d81da9f523",
+      "head_branch": "integration/pages-beta-qualification-20261112",
+      "base_sha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "base_branch": "integration/p2p-consolidated-20261109",
+      "title": "Qualify Pages artifacts, interrupted ERC-20 payout recovery and staging regressions",
+      "updated_at": "2026-11-13T04:10:56Z",
+      "created_at": "2026-11-13T03:43:08Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/98"
+    },
+    {
+      "number": 99,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "32a4052163553f7826d55f784ab9a6e96425e576",
+      "head_branch": "parallel/tooling-source-correspondence-20261113",
+      "base_sha": "d36413d8088d8a55de526e80561432aaccec0203",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Require all recorded provider files during offline source verification",
+      "updated_at": "2026-11-13T03:55:55Z",
+      "created_at": "2026-11-13T03:51:38Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/99"
+    },
+    {
+      "number": 100,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "718208880b650b03ac380d358a00878480827870",
+      "head_branch": "parallel/localization-blank-warning-20261113",
+      "base_sha": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "title": "Regression evidence for blank recovery warnings in candidate locale catalogs",
+      "updated_at": "2026-11-18T07:06:30Z",
+      "created_at": "2026-11-13T03:52:27Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/100"
+    },
+    {
+      "number": 101,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "9550d4b182806170ee28149e9d46ffbccef56c33",
+      "head_branch": "integration/pages-offline-recovery-20261112",
+      "base_sha": "cc3e442d1875201cf85c1dc8aff780651c8e4e63",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Integrate offline recovery CLI file checks after #98",
+      "updated_at": "2026-11-13T03:57:08Z",
+      "created_at": "2026-11-13T03:53:23Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/101"
+    },
+    {
+      "number": 102,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "605bcd24ef3d239f6a080c129761132482029ef7",
+      "head_branch": "parallel/cli-argument-regression-20261113",
+      "base_sha": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "base_branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
+      "title": "Record ambiguous duplicate --endpoint selection in the recovery CLI",
+      "updated_at": "2026-11-18T07:05:55Z",
+      "created_at": "2026-11-13T03:53:38Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/102"
+    },
+    {
+      "number": 103,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+      "head_branch": "parallel/browser-runtime-engines-20261113",
+      "base_sha": "d36413d8088d8a55de526e80561432aaccec0203",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Run the existing encrypted vault Worker fixture in Firefox and WebKit",
+      "updated_at": "2026-11-13T04:01:49Z",
+      "created_at": "2026-11-13T03:55:21Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/103"
+    },
+    {
+      "number": 104,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "db38fba65be8b6e19c880c78e439e712ffe7e974",
+      "head_branch": "parallel/accessibility-recovery-panels-20261113",
+      "base_sha": "cc3e442d1875201cf85c1dc8aff780651c8e4e63",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Keep keyboard focus on recovery results and private export previews",
+      "updated_at": "2026-11-13T04:01:47Z",
+      "created_at": "2026-11-13T03:56:10Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/104"
+    },
+    {
+      "number": 105,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "3524096c0ff1f4d743b01f06421bc56bbe07b9b3",
+      "head_branch": "parallel/docs-web-profile-recovery-20261113",
+      "base_sha": "93d181eb053684ac1675bfc19663273689631bbb",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Document current browser profile creation, backup and recovery",
+      "updated_at": "2026-11-13T04:07:44Z",
+      "created_at": "2026-11-13T04:00:57Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/105"
+    },
+    {
+      "number": 106,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "330fa1ede8b70e532a02230e4895b0711579491e",
+      "head_branch": "parallel/diagnostics-20261113",
+      "base_sha": "152173a205a40a9c8428f18ab0ee8c65ea3bfa02",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Restore keyboard focus after a refused diagnostics export",
+      "updated_at": "2026-11-15T06:27:39Z",
+      "created_at": "2026-11-13T04:05:44Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/106"
+    },
+    {
+      "number": 107,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c4b13ddccc5bd78406762c656df5af35958e83f9",
+      "head_branch": "parallel/locale-20261113",
+      "base_sha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "base_branch": "integration/p2p-consolidated-20261109",
+      "title": "Show the correct static recovery guidance when scripting is disabled",
+      "updated_at": "2026-11-16T01:13:33Z",
+      "created_at": "2026-11-13T04:05:45Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/107"
+    },
+    {
+      "number": 108,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "4f75e00d0c8e7eb9f61efd633b684ca0a47b9d76",
+      "head_branch": "parallel/recovery-builder-help-20261113",
+      "base_sha": "fbec79f080f73ae4ee4a966370cd79ebb93ff573",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Add recovery builder help and reject ambiguous output arguments",
+      "updated_at": "2026-11-15T06:28:13Z",
+      "created_at": "2026-11-13T04:05:47Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/108"
+    },
+    {
+      "number": 109,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "05794e754c8bf588fc6781100e8af99675418629",
+      "head_branch": "parallel/portable-recovery-guide-20261113",
+      "base_sha": "aa85c5813ebdffbc11d2df3d32756697440bf6fe",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Document private reference export and historical EVM inspection",
+      "updated_at": "2026-11-15T06:32:41Z",
+      "created_at": "2026-11-13T04:05:48Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/109"
+    },
+    {
+      "number": 110,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "6d48c9b0695cacd2a166a7386f24b61a6248bc10",
+      "head_branch": "parallel/spec-tool-20261113",
+      "base_sha": "fbec79f080f73ae4ee4a966370cd79ebb93ff573",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Fix specification catalog checks for Markdown links and fenced examples",
+      "updated_at": "2026-11-15T06:28:17Z",
+      "created_at": "2026-11-13T04:05:49Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/110"
+    },
+    {
+      "number": 111,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "65efc3428ff01d4f091600baee85edfff094b347",
+      "head_branch": "parallel/browser-cold-recovery-20261113",
+      "base_sha": "a0105f9abce8e389d7f0dbaff36d68d81da9f523",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Verify private recovery references and fresh consent after a full browser restart",
+      "updated_at": "2026-11-15T06:25:40Z",
+      "created_at": "2026-11-13T04:13:50Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/111"
+    },
+    {
+      "number": 112,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "2cacd1d5219a82d984a75668838204e3160d5791",
+      "head_branch": "parallel/browser-cold-nonce-20261113",
+      "base_sha": "5947849cbd79427c1703fef6da639142b42f837f",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Verify a pending EVM nonce stays reserved across a full browser restart",
+      "updated_at": "2026-11-15T06:25:46Z",
+      "created_at": "2026-11-13T04:13:51Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/112"
+    },
+    {
+      "number": 113,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "d6d65a47b99e68d00f82153d83fef366e532cf67",
+      "head_branch": "parallel/browser-peer-offer-20261113",
+      "base_sha": "fc503edc021e9fde9b0e2374668fdbfc803d7620",
+      "base_branch": "integration/pages-beta-qualification-20261112",
+      "title": "Verify live and stored signed offer discovery between isolated browser peers",
+      "updated_at": "2026-11-15T06:25:53Z",
+      "created_at": "2026-11-13T04:15:38Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/113"
+    },
+    {
+      "number": 114,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "4dcddf2b4bcc9890e50647cea067f81b1b734cdd",
+      "head_branch": "integration/pages-beta-qualification-20261112",
+      "base_sha": "5243449b56bca9470e1c0643ae85f0da4b4ed712",
+      "base_branch": "integration/p2p-consolidated-20261109",
+      "title": "Integration: qualify latest Pages beta follow-ups and privacy disclosures",
+      "updated_at": "2026-11-15T06:39:00Z",
+      "created_at": "2026-11-15T06:34:14Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/114"
+    },
+    {
+      "number": 115,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+      "head_branch": "integration/m2a-safe-fixes-20261114",
+      "base_sha": "78ca21ac42403e84b131184296469f75836fb431",
+      "base_branch": "integration/p2p-consolidated-20261109",
+      "title": "Fix malformed saved-review isolation and strengthen EVM boundary tests",
+      "updated_at": "2026-11-15T06:49:51Z",
+      "created_at": "2026-11-15T06:42:27Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/115"
+    },
+    {
+      "number": 116,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "970ac80f08c04e8d340ee57d901e48e26a667a18",
+      "head_branch": "claude/compassionate-gauss-uyhfih",
+      "base_sha": "78ca21ac42403e84b131184296469f75836fb431",
+      "base_branch": "integration/p2p-consolidated-20261109",
+      "title": "Docs: preserve D1/D4/D6/D9 implementation ownership and M2A continuation tasks",
+      "updated_at": "2026-11-15T06:50:00Z",
+      "created_at": "2026-11-15T06:48:53Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/116"
+    },
+    {
+      "number": 117,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "85849f7b267dddceffc35ef5253da4a23ef9be05",
+      "head_branch": "chatgpt/zero-codex/recovery-reference-identity-20261115",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "fix(web): identify filtered recovery references by stable record ID",
+      "updated_at": "2026-11-16T23:40:21Z",
+      "created_at": "2026-11-16T01:53:41Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/117"
+    },
+    {
+      "number": 118,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "25b4be639ba6776a5ea10911a6dea7a2106a1300",
+      "head_branch": "claude/confident-fermi-g6wjp3",
+      "base_sha": "f2950cf29a69bc56f28b04262f310c5c86a72d84",
+      "base_branch": "integration/p2p-consolidated-20261109",
+      "title": "Ultracode integration: D9 send marker, canonical reader, red-team pass, SECURITY.md",
+      "updated_at": "2026-11-16T23:52:05Z",
+      "created_at": "2026-11-16T08:29:22Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/118"
+    },
+    {
+      "number": 119,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "274d4fe533f47ffa15aed936bd095f82ad10d9ce",
+      "head_branch": "codex/consolidation-20261116",
+      "base_sha": "d112d8235961e7b3fc009e1e7eb2e53e4c48bb04",
+      "base_branch": "claude/confident-fermi-g6wjp3",
+      "title": "Consolidate canonical escrow reads, durable recovery migration, and output checks",
+      "updated_at": "2026-11-16T14:06:05Z",
+      "created_at": "2026-11-16T09:41:17Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/119"
+    },
+    {
+      "number": 120,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "88f9e40bbf8ea086705edd554a2555865429b54a",
+      "head_branch": "codex/completion-20261116",
+      "base_sha": "d43eb461352d2f43e53962876efd93c5db70d43c",
+      "base_branch": "codex/consolidation-20261116",
+      "title": "Complete canonical escrow reader, consolidate D9 safety fix, and guard agent output",
+      "updated_at": "2026-11-16T13:51:07Z",
+      "created_at": "2026-11-16T09:49:30Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/120"
+    },
+    {
+      "number": 121,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "30efa0e158c6b50525c8e0dced494faa9f54eb08",
+      "head_branch": "chatgpt/zero-codex/docs-static-offers-status-20261116",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main",
+      "title": "docs: clarify merged synthetic Offers review versus live discovery",
+      "updated_at": "2026-11-16T23:37:51Z",
+      "created_at": "2026-11-16T11:10:17Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/121"
+    },
+    {
+      "number": 122,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c1f8e750beb7e22d5b9a7f0e47cca9f8cd8bdb65",
+      "head_branch": "codex/d9-migration-20261116",
+      "base_sha": "927530e28f0351881c7a8cd58719e7757a7c1646",
+      "base_branch": "codex/consolidation-20261116",
+      "title": "D9: persist profile-bound send markers and recover local cancelled approvals",
+      "updated_at": "2026-11-16T14:05:31Z",
+      "created_at": "2026-11-16T14:01:24Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/122"
+    },
+    {
+      "number": 123,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "e7506c22e6b0bc405a9e51f1c809fa30c2fe5861",
+      "head_branch": "codex/continue-completion-20261116",
+      "base_sha": "7461c872a08a6af7045759bda8288c135171da63",
+      "base_branch": "claude/confident-fermi-g6wjp3",
+      "title": "Qualify canonical escrow recovery and consolidate current development status",
+      "updated_at": "2026-11-16T17:33:25Z",
+      "created_at": "2026-11-16T16:40:16Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/123"
+    },
+    {
+      "number": 124,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "b3f508420e63329ab30e1b646f61337020a1ebad",
+      "head_branch": "codex/peer-acceptance-20261116",
+      "base_sha": "46e2a7d43ae930501c6c9c2e14877e0b2f6ad162",
+      "base_branch": "claude/confident-fermi-g6wjp3",
+      "title": "D1 candidate: offline wallet-to-messaging-key binding and replay defenses",
+      "updated_at": "2026-11-16T23:38:03Z",
+      "created_at": "2026-11-16T17:35:36Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/124"
+    },
+    {
+      "number": 125,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "bd7c36251d2a53e27cd9ea92d02e5f712fce2f74",
+      "head_branch": "codex/review-consolidate-20261116",
+      "base_sha": "174308d61e6a7771227f7b1d0825d94eda64cbd2",
+      "base_branch": "claude/confident-fermi-g6wjp3",
+      "title": "Consolidate D1 candidate, bounded carrier and replay qualification",
+      "updated_at": "2026-11-16T23:38:01Z",
+      "created_at": "2026-11-16T21:01:13Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/125"
+    },
+    {
+      "number": 126,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "f2375dba1b249912ac434ed9da3998e4cb0a40f0",
+      "head_branch": "consolidation/qualified-regressions-20261116",
+      "base_sha": "28da0d9667c8dadf41f994462b60933395dadc21",
+      "base_branch": "main",
+      "title": "Integrate historical offline wallet, transport and recovery regressions",
+      "updated_at": "2026-11-16T23:48:28Z",
+      "created_at": "2026-11-16T23:45:29Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/126"
+    },
+    {
+      "number": 127,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "5eadddd54f6db6e755e658c1982c95f95b37a823",
+      "head_branch": "codex/review-consolidate-20261116",
+      "base_sha": "25b4be639ba6776a5ea10911a6dea7a2106a1300",
+      "base_branch": "claude/confident-fermi-g6wjp3",
+      "title": "Reject invisible-only recovery warning translations",
+      "updated_at": "2026-11-18T07:04:54Z",
+      "created_at": "2026-11-16T23:48:47Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/127"
+    },
+    {
+      "number": 128,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "64c7c1861779ea34632f2f800b80bdaecbaefa03",
+      "head_branch": "claude/confident-fermi-g6wjp3",
+      "base_sha": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+      "base_branch": "integration/p2p-consolidated-20261109",
+      "title": "Integrate Solana D5, red-team remediation (D9/exchange/locale), D9 and G3 reviews",
+      "updated_at": "2026-11-18T07:04:54Z",
+      "created_at": "2026-11-16T23:53:52Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/128"
+    },
+    {
+      "number": 129,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "75a5e35b56310a9660aa7c6a3855db3c64e759f4",
+      "head_branch": "chatgpt/zero-codex/docs-python-baseline-20261116",
+      "base_sha": "2dfd09011611447306b7038483683d8bddcc46af",
+      "base_branch": "main",
+      "title": "docs: align operator Python baseline with supported CI version",
+      "updated_at": "2026-11-18T07:06:31Z",
+      "created_at": "2026-11-17T01:31:08Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/129"
+    },
+    {
+      "number": 131,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "e21a58e6a4d09c099d3249660ddec770f2164a74",
+      "head_branch": "chatgpt/zero-codex/docs-collaboration-20261117",
+      "base_sha": "2dfd09011611447306b7038483683d8bddcc46af",
+      "base_branch": "main",
+      "title": "docs(handoff): track GitHub collaboration inventory and blocked CI",
+      "updated_at": "2026-11-18T07:06:58Z",
+      "created_at": "2026-11-17T10:42:35Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/131"
+    },
+    {
+      "number": 132,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+      "head_branch": "nodata/affectionate-ritchie-xq4bon",
+      "base_sha": "6ef9a2614b237d855a91cf14fb5df112ffc6cd76",
+      "base_branch": "main",
+      "title": "Consolidation Phase 2: land the cumulative trunk (#61/#128/#127) on main, plus gameplan",
+      "updated_at": "2026-11-18T07:04:48Z",
+      "created_at": "2026-11-18T01:37:19Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/132"
+    },
+    {
+      "number": 133,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "1df700355e5199c69e84d5b41b12005677b5f5ee",
+      "head_branch": "nodata/epic-goldberg-sg8n96",
+      "base_sha": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+      "base_branch": "nodata/affectionate-ritchie-xq4bon",
+      "title": "Consolidation Phase 2 fix: #132 is missing the confident-fermi tip (Solana D5, red-team fixes)",
+      "updated_at": "2026-11-18T07:04:56Z",
+      "created_at": "2026-11-18T02:13:42Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/133"
+    },
+    {
+      "number": 134,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "7be1dbef7fe38204db441ffb9c29e6f06acfaecd",
+      "head_branch": "nodata/epic-newton-7bowm4",
+      "base_sha": "6ef9a2614b237d855a91cf14fb5df112ffc6cd76",
+      "base_branch": "main",
+      "title": "Consolidation: land the trunk (#132 + #133) on main with the EX2/EX3 admission repair",
+      "updated_at": "2026-11-18T07:03:28Z",
+      "created_at": "2026-11-18T06:36:53Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/134"
+    },
+    {
+      "number": 135,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "b601f30b83b49f9fb2727e5d85507e260d77ef3c",
+      "head_branch": "nodata/epic-newton-7bowm4",
+      "base_sha": "eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9",
+      "base_branch": "main",
+      "title": "Locale root lang/dir and selector; Phase 2 outcome, Phase 3 plan, Lane B prompt",
+      "updated_at": "2026-11-18T07:44:21Z",
+      "created_at": "2026-11-18T07:09:19Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/135"
+    },
+    {
+      "number": 136,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "014a10a148f8b3b69c9d650fbcb083c8142e7d28",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx",
+      "base_sha": "eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9",
+      "base_branch": "main",
+      "title": "[Lane B] progress: Lane B progress record and handoff",
+      "updated_at": "2026-11-19T06:31:04Z",
+      "created_at": "2026-11-18T07:29:40Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/136"
+    },
+    {
+      "number": 137,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "39096586e1160c3c8434a2d081339bb70aeb4c1b",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b3-formal",
+      "base_sha": "97ce6a41805ab4d8fc6fccbcfb9dd79463deebd7",
+      "base_branch": "main",
+      "title": "[Lane B] B3 formal harness: extract the EVM formal/SMT evidence harness (dev-only)",
+      "updated_at": "2026-11-18T13:58:01Z",
+      "created_at": "2026-11-18T07:36:10Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/137"
+    },
+    {
+      "number": 138,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+      "head_branch": "chatgpt/zero-codex/audit-compatibility-20261118",
+      "base_sha": "eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9",
+      "base_branch": "main",
+      "title": "docs(audit): randomized static-client inspection ledger through audit 107",
+      "updated_at": "2026-11-19T07:06:16Z",
+      "created_at": "2026-11-18T07:37:00Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/138"
+    },
+    {
+      "number": 139,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "708d937df7e4799e4ad212b3293bec923f619940",
+      "head_branch": "chatgpt/zero-codex/docs-status-20261118",
+      "base_sha": "eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9",
+      "base_branch": "main",
+      "title": "docs: reconcile November 18 integration status and wiki release gates",
+      "updated_at": "2026-11-19T06:31:04Z",
+      "created_at": "2026-11-18T07:38:31Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/139"
+    },
+    {
+      "number": 140,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "ddfc7eded0c8f37cb2eb19d4ed31d7514fb74e64",
+      "head_branch": "nodata/epic-newton-7bowm4",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main",
+      "title": "D3 release-trust unification and D6 QR interchange codec (owner-approved Tier C)",
+      "updated_at": "2026-11-18T08:35:24Z",
+      "created_at": "2026-11-18T07:46:58Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/140"
+    },
+    {
+      "number": 141,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main",
+      "title": "[Lane B] B6 artifact verifier: take the scan mode from the command line (D-L4) \u2014 Tier C, owner approval",
+      "updated_at": "2026-11-18T11:16:59Z",
+      "created_at": "2026-11-18T07:47:13Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/141"
+    },
+    {
+      "number": 142,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+      "head_branch": "claude/p2p-offramp-consolidation-k5h13u",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main",
+      "title": "Consolidation run 3: post-#134 retirement script, branching rules, ledger entry",
+      "updated_at": "2026-11-18T08:49:10Z",
+      "created_at": "2026-11-18T07:53:30Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/142"
+    },
+    {
+      "number": 143,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "579b02f3775323ba273dfe2bc624b5860897431e",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "[Lane B] B5 chain-evm: bind state reads to the anchored block hash (EIP-1898, C-L1)",
+      "updated_at": "2026-11-18T12:15:03Z",
+      "created_at": "2026-11-18T07:58:16Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/143"
+    },
+    {
+      "number": 144,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main",
+      "title": "[Lane B] B2 optional package 1/9: proof-inputs",
+      "updated_at": "2026-11-19T07:34:30Z",
+      "created_at": "2026-11-18T08:03:32Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/144"
+    },
+    {
+      "number": 145,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main",
+      "title": "[Lane B] B2 optional package 2/9: liquidity",
+      "updated_at": "2026-11-19T08:34:45Z",
+      "created_at": "2026-11-18T08:03:40Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/145"
+    },
+    {
+      "number": 146,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+      "base_sha": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+      "base_branch": "main",
+      "title": "[Lane B] B2 optional package 3/9: courier",
+      "updated_at": "2026-11-19T08:33:36Z",
+      "created_at": "2026-11-18T08:03:48Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/146"
+    },
+    {
+      "number": 147,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main",
+      "title": "[Lane B] B2 optional package 4/9: arbitration",
+      "updated_at": "2026-11-19T08:17:05Z",
+      "created_at": "2026-11-18T08:03:55Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/147"
+    },
+    {
+      "number": 148,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main",
+      "title": "[Lane B] B2 optional package 5/9: privacy-policy",
+      "updated_at": "2026-11-19T07:34:27Z",
+      "created_at": "2026-11-18T08:04:04Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/148"
+    },
+    {
+      "number": 149,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+      "head_branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main",
+      "title": "test(web): preserve unknown-broadcast recovery references after fresh-key restore",
+      "updated_at": "2026-11-18T11:22:54Z",
+      "created_at": "2026-11-18T08:35:10Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/149"
+    },
+    {
+      "number": 150,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "1b4e9a45b1f19f2d20e5a8f295e6264ecb501f51",
+      "head_branch": "nodata/epic-newton-7bowm4",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "D1 peer acceptance (Option B): two-signature v2 carrier, account classification, durable replay (owner-approved Tier C)",
+      "updated_at": "2026-11-18T09:48:32Z",
+      "created_at": "2026-11-18T08:35:54Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/150"
+    },
+    {
+      "number": 151,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "236f815e79a852643d8dfa61d6d4895c8a93f54a",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b1c-acceptance",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "[Lane B] B1 Solana 1/3: native off-chain peer acceptance (verify-only candidate)",
+      "updated_at": "2026-11-18T12:05:19Z",
+      "created_at": "2026-11-18T08:47:16Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/151"
+    },
+    {
+      "number": 152,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "37f074dd1d65d5f12b73182420998a152374b813",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b1a-reader",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "[Lane B] B1 Solana 2/3: reader policies, frozen-vault funded (C-L3), payout plans, margins, CI cache scope",
+      "updated_at": "2026-11-19T06:37:31Z",
+      "created_at": "2026-11-18T08:48:21Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/152"
+    },
+    {
+      "number": 153,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "b7d06fed31fb7d2793da99c23f15bf6795a82b8a",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b1-reader-test-flake",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "[Lane B] B1 test: prove the Solana base64 cap without a wall-clock bound (flake fix)",
+      "updated_at": "2026-11-19T06:37:31Z",
+      "created_at": "2026-11-18T08:49:43Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/153"
+    },
+    {
+      "number": 154,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "[Lane B] B4 tooling 1/3: lab, docs consistency tooling, claims register, tool-path",
+      "updated_at": "2026-11-18T08:59:22Z",
+      "created_at": "2026-11-18T08:59:22Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/154"
+    },
+    {
+      "number": 155,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "[Lane B] B4 intake 2/3: dependency intake probes and Semaphore v4 reputation evaluation",
+      "updated_at": "2026-11-18T08:59:32Z",
+      "created_at": "2026-11-18T08:59:32Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/155"
+    },
+    {
+      "number": 156,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "[Lane B] B4 governance 3/3: inert governance records (historical), assurance packet, evidence binding",
+      "updated_at": "2026-11-18T08:59:44Z",
+      "created_at": "2026-11-18T08:59:44Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/156"
+    },
+    {
+      "number": 157,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "f1d9dd63a2ac9d55912899f8c6233456ebf8a499",
+      "head_branch": "claude/sleepy-fermat-4s6ocx",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "chain-solana: settlement planner, frozen-vault policy and reader hardening",
+      "updated_at": "2026-11-19T06:37:31Z",
+      "created_at": "2026-11-18T09:09:06Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/157"
+    },
+    {
+      "number": 158,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "[Lane B] B1 Solana 3/3: transaction lifecycle, durable send marker, C-L2 sequencing, portable recovery",
+      "updated_at": "2026-11-19T06:37:31Z",
+      "created_at": "2026-11-18T09:12:53Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/158"
+    },
+    {
+      "number": 159,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "head_branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "G1/G2: D1 peer acceptance in exchange v2, wallet signer, localnet build profile (in progress)",
+      "updated_at": "2026-11-18T09:27:14Z",
+      "created_at": "2026-11-18T09:27:14Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/159"
+    },
+    {
+      "number": 160,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+      "base_sha": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+      "base_branch": "main",
+      "title": "[Lane B] B2 optional package 6/9: privacy-controls",
+      "updated_at": "2026-11-19T08:12:47Z",
+      "created_at": "2026-11-18T09:33:44Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/160"
+    },
+    {
+      "number": 161,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "[Lane B] B2 optional package 7/9: stealth",
+      "updated_at": "2026-11-19T08:17:08Z",
+      "created_at": "2026-11-18T09:33:52Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/161"
+    },
+    {
+      "number": 162,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+      "base_sha": "539ad540731be82c5499e9d3446482bfa1a1a51d",
+      "base_branch": "main",
+      "title": "[Lane B] B2 optional package 8/9: proof-jobs (own optional workflow)",
+      "updated_at": "2026-11-19T08:34:17Z",
+      "created_at": "2026-11-18T09:34:01Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/162"
+    },
+    {
+      "number": 163,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main",
+      "title": "[Lane B] B2 optional package 9/9: meetup",
+      "updated_at": "2026-11-19T08:49:19Z",
+      "created_at": "2026-11-18T09:34:09Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/163"
+    },
+    {
+      "number": 164,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "436b591a3a750bcca2327117e487336f6dd77470",
+      "head_branch": "nodata/doc-sweep-20261118",
+      "base_sha": "97ce6a41805ab4d8fc6fccbcfb9dd79463deebd7",
+      "base_branch": "main",
+      "title": "docs: sync docs with current code (2026-11-18)",
+      "updated_at": "2026-11-19T06:31:04Z",
+      "created_at": "2026-11-18T09:48:57Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/164"
+    },
+    {
+      "number": 165,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "1fe5ae00ed2105633081d71a67db2b5436da9c8d",
+      "head_branch": "nodata/epic-newton-7bowm4",
+      "base_sha": "97ce6a41805ab4d8fc6fccbcfb9dd79463deebd7",
+      "base_branch": "main",
+      "title": "docs(consolidation): record #135/#140/#150 merges and a Lane A handoff",
+      "updated_at": "2026-11-19T06:31:04Z",
+      "created_at": "2026-11-18T09:49:43Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/165"
+    },
+    {
+      "number": 166,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+      "head_branch": "integration/core-hardening-20261118",
+      "base_sha": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "base_branch": "main",
+      "title": "Consolidate EVM canonical reads, signing fences, and isolated localnet build",
+      "updated_at": "2026-11-19T06:35:17Z",
+      "created_at": "2026-11-18T11:34:18Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/166"
+    },
+    {
+      "number": 167,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+      "head_branch": "integration/solana-core-qualification-20261118",
+      "base_sha": "22711c16847133be0d6de39fdf31dd7372be4e7a",
+      "base_branch": "main",
+      "title": "Consolidate Solana client and recovery with native validator qualification",
+      "updated_at": "2026-11-19T06:37:29Z",
+      "created_at": "2026-11-18T11:41:27Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/167"
+    },
+    {
+      "number": 168,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
+      "head_branch": "integration/browser-mvp-20261118",
+      "base_sha": "e17b4d34097ca97c21e621547a38766c0271fbde",
+      "base_branch": "main",
+      "title": "Integrate reviewed localnet browser trading, encrypted recovery, and qualification gates",
+      "updated_at": "2026-11-19T06:43:54Z",
+      "created_at": "2026-11-18T12:23:18Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/168"
+    },
+    {
+      "number": 169,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+      "head_branch": "integration/docs-reconciliation-20261118",
+      "base_sha": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "base_branch": "main",
+      "title": "Consolidate four documentation branches and reconcile feature status",
+      "updated_at": "2026-11-19T06:31:02Z",
+      "created_at": "2026-11-18T14:11:48Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/169"
+    },
+    {
+      "number": 170,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+      "head_branch": "feature/erc20-browser-continuation-20261118",
+      "base_sha": "e17b4d34097ca97c21e621547a38766c0271fbde",
+      "base_branch": "main",
+      "title": "Complete localnet ERC-20 reviews, settlement and recovery with independent regressions",
+      "updated_at": "2026-11-19T06:43:07Z",
+      "created_at": "2026-11-18T14:29:22Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/170"
+    },
+    {
+      "number": 171,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "head_branch": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+      "base_sha": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "base_branch": "main",
+      "title": "fix(qr): bound display grouping size (D6, regression first)",
+      "updated_at": "2026-11-19T06:29:07Z",
+      "created_at": "2026-11-19T01:34:22Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/171"
+    },
+    {
+      "number": 172,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "head_branch": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
+      "base_sha": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "base_branch": "main",
+      "title": "fix(qr): normalize JCS array descriptor traps (test-first)",
+      "updated_at": "2026-11-19T06:29:08Z",
+      "created_at": "2026-11-19T05:29:47Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/172"
+    },
+    {
+      "number": 173,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c7f462c6688c78c35514808177ff7cfed32b9961",
+      "head_branch": "test/erc20-browser-recovery-20261119",
+      "base_sha": "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+      "base_branch": "main",
+      "title": "fix(recovery): qualify ERC-20 restore and finalized nonce recovery",
+      "updated_at": "2026-11-19T08:32:07Z",
+      "created_at": "2026-11-19T06:38:23Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/173"
+    },
+    {
+      "number": 174,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "head_branch": "consolidation/tooling154-20261119",
+      "base_sha": "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+      "base_branch": "main",
+      "title": "Repair and integrate historical documentation and lab tooling (#154)",
+      "updated_at": "2026-11-19T06:59:05Z",
+      "created_at": "2026-11-19T06:53:24Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/174"
+    },
+    {
+      "number": 175,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+      "head_branch": "feature/same-terms-resumption-20261119",
+      "base_sha": "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+      "base_branch": "main",
+      "title": "Restore unfunded trades with explicit same-terms bilateral revalidation",
+      "updated_at": "2026-11-19T07:47:21Z",
+      "created_at": "2026-11-19T07:03:54Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/175"
+    },
+    {
+      "number": 176,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+      "head_branch": "docs/consolidation-20261119",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "base_branch": "main",
+      "title": "Record comprehensive consolidation, verification and remaining MVP work",
+      "updated_at": "2026-11-19T07:30:29Z",
+      "created_at": "2026-11-19T07:14:19Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/176"
+    },
+    {
+      "number": 177,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+      "head_branch": "chatgpt/zero-codex/audit-utf8-20261119-108",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "base_branch": "main",
+      "title": "docs(audit): rotated read-only QR UTF-8 inspection 108",
+      "updated_at": "2026-11-19T08:14:07Z",
+      "created_at": "2026-11-19T07:38:40Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/177"
+    },
+    {
+      "number": 178,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+      "head_branch": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "base_branch": "main",
+      "title": "docs(wiki): reconcile qualified main, resumption, and merge policy",
+      "updated_at": "2026-11-19T08:34:46Z",
+      "created_at": "2026-11-19T07:38:43Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/178"
+    },
+    {
+      "number": 179,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "head_branch": "consolidation/solana-browser-recovery-20261119",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "base_branch": "main",
+      "title": "feat(solana): compose funded recovery with exact browser transaction review",
+      "updated_at": "2026-11-19T08:07:54Z",
+      "created_at": "2026-11-19T07:39:26Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/179"
+    },
+    {
+      "number": 180,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+      "head_branch": "test/nostr-relay-interop-20261119",
+      "base_sha": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+      "base_branch": "main",
+      "title": "test(nostr): qualify independent native relay transport and AUTH refusal",
+      "updated_at": "2026-11-19T08:23:54Z",
+      "created_at": "2026-11-19T07:53:17Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/180"
+    },
+    {
+      "number": 181,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "head_branch": "fix/localnet-readiness-20261119",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main",
+      "title": "fix(web): publish current readiness during relay recovery",
+      "updated_at": "2026-11-19T08:34:14Z",
+      "created_at": "2026-11-19T08:34:14Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/181"
+    },
+    {
+      "number": 182,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "head_branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main",
+      "title": "docs(audit): read-only Solana intent and send-marker inspection 109",
+      "updated_at": "2026-11-19T08:42:58Z",
+      "created_at": "2026-11-19T08:34:29Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/182"
+    },
+    {
+      "number": 183,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "head_branch": "feature/public-qr-capture-20261119",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main",
+      "title": "feat(web): add bounded public QR capture and explicit review",
+      "updated_at": "2026-11-19T08:49:16Z",
+      "created_at": "2026-11-19T08:49:16Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/183"
+    },
+    {
+      "number": 184,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "head_branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "base_sha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "base_branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "title": "docs(audit): rotate static-client content-admission review (110)",
+      "updated_at": "2026-11-19T10:33:32Z",
+      "created_at": "2026-11-19T10:33:32Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/184"
+    },
+    {
+      "number": 185,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "head_branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "base_sha": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "base_branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "title": "docs(audit): record Pages startup-capability review (112)",
+      "updated_at": "2026-11-19T12:32:36Z",
+      "created_at": "2026-11-19T12:32:36Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/185"
+    },
+    {
+      "number": 186,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "head_branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+      "base_sha": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "base_branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "title": "docs(audit): record static sharing and privacy endpoint inspections (113\u2013114)",
+      "updated_at": "2026-11-19T23:38:02Z",
+      "created_at": "2026-11-19T14:37:14Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/186"
+    },
+    {
+      "number": 187,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "head_branch": "chatgpt/zero-codex/review-read-bounds-20261119-119",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main",
+      "title": "fix(web): bound actual trade-review reads before retention (test-first)",
+      "updated_at": "2026-11-19T21:35:44Z",
+      "created_at": "2026-11-19T19:31:31Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/187"
+    },
+    {
+      "number": 188,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "head_branch": "codex/max-consolidation-20261119",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main",
+      "title": "Consolidate seven source branches and repair QR/Solana browser qualification",
+      "updated_at": "2026-11-19T23:36:27Z",
+      "created_at": "2026-11-19T23:36:27Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/188"
+    },
+    {
+      "number": 189,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "head_branch": "codex/qr-camera-fixture-20261119",
+      "base_sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "base_branch": "codex/max-consolidation-20261119",
+      "title": "Repair synthetic QR camera frame production during browser qualification",
+      "updated_at": "2026-11-19T23:50:24Z",
+      "created_at": "2026-11-19T23:43:54Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/189"
+    },
+    {
+      "number": 190,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "head_branch": "codex/historical-recovery-20261119",
+      "base_sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "base_branch": "codex/max-consolidation-20261119",
+      "title": "Recover reviewed historical modules, tooling and durable consolidation handoff",
+      "updated_at": "2026-11-20T00:30:12Z",
+      "created_at": "2026-11-20T00:13:14Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/190"
+    },
+    {
+      "number": 191,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "head_branch": "codex/optional-proof-inputs-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Recover accepted optional proof-inputs source with independent review",
+      "updated_at": "2026-11-20T00:16:54Z",
+      "created_at": "2026-11-20T00:16:54Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/191"
+    },
+    {
+      "number": 192,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "head_branch": "codex/optional-liquidity-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Recover accepted optional liquidity source with independent review",
+      "updated_at": "2026-11-20T00:16:59Z",
+      "created_at": "2026-11-20T00:16:59Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/192"
+    },
+    {
+      "number": 193,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "head_branch": "codex/optional-arbitration-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Recover accepted optional arbitration source with independent review",
+      "updated_at": "2026-11-20T00:17:05Z",
+      "created_at": "2026-11-20T00:17:05Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/193"
+    },
+    {
+      "number": 194,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "head_branch": "codex/optional-privacy-policy-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Recover optional privacy-policy source with reviewed boundary repairs",
+      "updated_at": "2026-11-20T00:25:11Z",
+      "created_at": "2026-11-20T00:25:11Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/194"
+    },
+    {
+      "number": 195,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "head_branch": "codex/optional-courier-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Recover optional courier source with reviewed boundary repairs",
+      "updated_at": "2026-11-20T00:25:19Z",
+      "created_at": "2026-11-20T00:25:19Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/195"
+    },
+    {
+      "number": 196,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "head_branch": "codex/optional-meetup-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Recover optional meetup source with reviewed boundary repairs",
+      "updated_at": "2026-11-20T00:25:30Z",
+      "created_at": "2026-11-20T00:25:30Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/196"
+    },
+    {
+      "number": 197,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "head_branch": "codex/optional-privacy-controls-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Recover optional privacy-controls source with reviewed boundary repairs",
+      "updated_at": "2026-11-20T00:25:37Z",
+      "created_at": "2026-11-20T00:25:37Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/197"
+    },
+    {
+      "number": 198,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "head_branch": "codex/optional-stealth-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Recover optional stealth with independent source qualification",
+      "updated_at": "2026-11-20T00:32:16Z",
+      "created_at": "2026-11-20T00:32:16Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/198"
+    },
+    {
+      "number": 199,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "head_branch": "codex/optional-proof-jobs-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Recover optional proof-jobs with independent source qualification",
+      "updated_at": "2026-11-20T00:32:23Z",
+      "created_at": "2026-11-20T00:32:23Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/199"
+    },
+    {
+      "number": 200,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "3a9cfcf3b733284f3d457d5a5cc66256669bff8f",
+      "head_branch": "codex/consolidation-handoff-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Record current corrections, source qualifications and continuation handoff",
+      "updated_at": "2026-11-20T04:52:07Z",
+      "created_at": "2026-11-20T00:52:15Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/200"
+    },
+    {
+      "number": 201,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "head_branch": "codex/personalization-favorites-ui-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "Compose encrypted saved-review favorites with fresh-review and lifecycle checks",
+      "updated_at": "2026-11-20T01:06:08Z",
+      "created_at": "2026-11-20T01:06:08Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/201"
+    },
+    {
+      "number": 202,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "head_branch": "codex/solana-browser-send-repair-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119",
+      "title": "fix: complete withheld Solana acknowledgment and qualify one browser POST",
+      "updated_at": "2026-11-20T01:14:14Z",
+      "created_at": "2026-11-20T01:14:14Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/202"
+    },
+    {
+      "number": 203,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "head_branch": "codex/solana-restore-ack-20261119",
+      "base_sha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "base_branch": "codex/solana-browser-send-repair-20261119",
+      "title": "Fix Solana restore acknowledgment and backup byte ownership",
+      "updated_at": "2026-11-20T01:47:52Z",
+      "created_at": "2026-11-20T01:47:52Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/203"
+    },
+    {
+      "number": 204,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "head_branch": "codex/personalization-templates-ui-20261119",
+      "base_sha": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "base_branch": "codex/personalization-favorites-ui-20261119",
+      "title": "Compose encrypted templates with explicit consent and fresh draft review",
+      "updated_at": "2026-11-20T01:50:14Z",
+      "created_at": "2026-11-20T01:50:14Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/204"
+    },
+    {
+      "number": 205,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "head_branch": "codex/generation5-core-20261119",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main",
+      "title": "Integrate reviewed core recovery, encrypted preferences and tooling repairs",
+      "updated_at": "2026-11-20T02:22:17Z",
+      "created_at": "2026-11-20T01:58:44Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/205"
+    },
+    {
+      "number": 206,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "head_branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120",
+      "title": "fix(relay): reject invalid ad clocks and unbounded order-book capacity",
+      "updated_at": "2026-11-20T02:59:56Z",
+      "created_at": "2026-11-20T02:37:19Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/206"
+    },
+    {
+      "number": 207,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "head_branch": "codex/generation8-core-20261120",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main",
+      "title": "Consolidate reviewed Solana expiry and lifecycle repairs",
+      "updated_at": "2026-11-20T02:42:56Z",
+      "created_at": "2026-11-20T02:42:56Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/207"
+    },
+    {
+      "number": 208,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "head_branch": "codex/generation9-backup-verification-20261120",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120",
+      "title": "Complete current-runtime backup verification prerequisite",
+      "updated_at": "2026-11-20T02:52:35Z",
+      "created_at": "2026-11-20T02:52:34Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/208"
+    },
+    {
+      "number": 209,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "head_branch": "codex/ctutils-remediation-20261119",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120",
+      "title": "Update compatible ctutils lock and retain explicit dependency findings",
+      "updated_at": "2026-11-20T02:55:08Z",
+      "created_at": "2026-11-20T02:54:24Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/209"
+    },
+    {
+      "number": 210,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "head_branch": "codex/transport-qualification-20261120",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120",
+      "title": "Compose reviewed core followups and transport cleanup",
+      "updated_at": "2026-11-20T04:53:28Z",
+      "created_at": "2026-11-20T03:25:31Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/210"
+    },
+    {
+      "number": 211,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "head_branch": "fix/qr-async-expiry-20261120",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120",
+      "title": "fix(qr): recheck expiry after async hash and signature verification",
+      "updated_at": "2026-11-20T03:39:26Z",
+      "created_at": "2026-11-20T03:39:26Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/211"
+    },
+    {
+      "number": 212,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "head_branch": "fix/transport-preflight-zeroization-20261120",
+      "base_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+      "base_branch": "codex/transport-qualification-20261120",
+      "title": "fix(transport): wipe detached POST bytes on early preflight refusal",
+      "updated_at": "2026-11-20T04:52:43Z",
+      "created_at": "2026-11-20T04:37:57Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/212"
+    }
+  ],
+  "tags": [],
+  "releases": [],
+  "inventory_method": {
+    "branch_pages": [
+      100,
+      100,
+      21
+    ],
+    "pull_request_pages": [
+      100,
+      100,
+      9
+    ],
+    "page_size": 100,
+    "terminal_pages_below_page_size": true,
+    "state": "all",
+    "pr_sort": "created ascending",
+    "api_cli_heads_identical": true,
+    "cli": "git ls-remote --heads --tags origin",
+    "tags_method": "git ls-remote --heads --tags origin; the connector rejected the /tags URL before HTTP retrieval, so the exhaustive public Git ref listing establishes tags.",
+    "releases_api": "GET /repos/djshellshoxxx/p2p-offramp/releases?per_page=100&page=1",
+    "non_atomic_snapshot": true
+  },
+  "prior_snapshot_digest_verified": {
+    "file": "verification/generation10-rediscovery/remote-snapshot.json",
+    "sha256": "aef91ad07bf26d1b213e8790ead07653625c6f10ebe78b61eafafe3b968f5e38",
+    "matches_committed_generation10_record": true
+  },
+  "input_file_sha256": {
+    "branch-inventory.json": "e883c87372cec60b9a5e4c391a4793f3734258551aca5a18e3e07396891228e7",
+    "inventory-delta-generation10.json": "3785a1bd04a7d2d616161925f4d44d81b7ee5029a92ed08cb365e42973676ad6"
+  },
+  "ownership": {
+    "observed_at_utc": "2026-11-20T04:58:46.513236+00:00",
+    "method": "Read-only worktree list and git --no-optional-locks status; cleanliness is not evidence that a worker has stopped.",
+    "known_assignments": {
+      "42": "independent transport/optional review",
+      "43": "accepted-source/core/optional qualification",
+      "44": "bounded final inventory/current gates"
+    },
+    "worktrees": [
+      {
+        "path": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation11-core",
+        "head": "4b42a58f5ae37207a7188e518295065f8d00c7e0",
+        "branch": "refs/heads/codex/generation11-transport-core-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "root-generation11-owned"
+      },
+      {
+        "path": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation11-final-rediscovery",
+        "head": "63baffade77614a0a435488fa93c758254064e60",
+        "branch": "refs/heads/codex/generation11-final-rediscovery-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "root-generation11-owned"
+      },
+      {
+        "path": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation11-optional",
+        "head": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+        "branch": "refs/heads/codex/generation11-optional-complete-stack-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "root-generation11-owned"
+      },
+      {
+        "path": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation11-optional-independent",
+        "head": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+        "branch": "refs/heads/review/generation11-optional-independent-20261120",
+        "status_exit": 0,
+        "status_lines": [
+          "?? docs/engineering/INDEPENDENT_GENERATION11_OPTIONAL_REVIEW_20261120.md"
+        ],
+        "scope": "root-generation11-owned"
+      },
+      {
+        "path": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation11-optional-reference",
+        "head": "4b42a58f5ae37207a7188e518295065f8d00c7e0",
+        "branch": null,
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "root-generation11-owned"
+      },
+      {
+        "path": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation11-transport-original",
+        "head": "56e1ae0fd50c40109aea3f40ce8505e85fc1a5c2",
+        "branch": null,
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "root-generation11-owned"
+      },
+      {
+        "path": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation11-transport-review",
+        "head": "92ba098fe87bb648e49b5e72f9b31ee7dee68804",
+        "branch": "refs/heads/review/generation11-transport-preflight-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "root-generation11-owned"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-backup-composition-g9",
+        "head": "0eee707a2b300b7075b217372781d584a2c72932",
+        "branch": "refs/heads/codex/generation9-backup-verification-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-bug-hunt-g6",
+        "head": "db9a4b53fe8cadfacca1c25eae8446a81a6a4e1b",
+        "branch": "refs/heads/codex/p2p-bug-hunt-g6-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-bug-hunt-g7",
+        "head": "351be0bf828e5c3ee85a7f026e4d044576d1b84e",
+        "branch": "refs/heads/codex/p2p-bug-hunt-g7-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-bug-hunt-g8",
+        "head": "fd3aba496cd8f75000c1d484f25b531524859f09",
+        "branch": "refs/heads/codex/p2p-bug-hunt-g8-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-bug-hunt-g9",
+        "head": "be6451f53f47012424795404c812065d620b8d16",
+        "branch": "refs/heads/codex/p2p-bug-hunt-g9-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-code-audit-g10",
+        "head": "14ab05b57ff84160b8ada310c17fa53402338ac9",
+        "branch": "refs/heads/codex/p2p-code-audit-g10-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-code-audit-g6",
+        "head": "b1e61dc78c462d8a4e1419249b19d814d4648148",
+        "branch": "refs/heads/codex/p2p-code-audit-g6-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-code-audit-g7",
+        "head": "b1e0499ad31a73f0a56c021b56711b04756d189c",
+        "branch": "refs/heads/codex/p2p-code-audit-g7-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-code-audit-g8",
+        "head": "bbf009a8b35e964524260b08a5896a7772e91c29",
+        "branch": "refs/heads/codex/p2p-code-audit-g8-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-feature-g9",
+        "head": "637bedf9218176f933dac29039631ca56bcb42fd",
+        "branch": "refs/heads/codex/p2p-feature-g9-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-final-coordination-g11",
+        "head": "3393067e0e3de8aecda63acb139c248dac7afe39",
+        "branch": "refs/heads/codex/p2p-final-coordination-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-hosted-review-g11",
+        "head": "2b52b6eef894f133e8aa7d191fdb6f9b2d662da6",
+        "branch": "refs/heads/codex/p2p-hosted-review-g11-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-hosted-review-g9",
+        "head": "d30ca5235dfc5c64774fbee836b309ae159eb462",
+        "branch": "refs/heads/codex/p2p-hosted-review-g9-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-offramp",
+        "head": "d82d5282bfc78e46ccb34d9c700cf1b59dc8b23a",
+        "branch": "refs/heads/codex/p2p-successor-consolidation-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-optional-successor",
+        "head": "813f9192a64f95028a755f167bb6ab888cfa392d",
+        "branch": "refs/heads/codex/p2p-optional-successor-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-publication-audit-g11",
+        "head": "6a9061c53f8ecef2509a2f293603d4e1fb068592",
+        "branch": "refs/heads/codex/p2p-publication-audit-g11-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-relay-composition-g11",
+        "head": "d4199d2c1ac4f3a6abaebd2571a031948fcfef8f",
+        "branch": "refs/heads/codex/p2p-relay-composition-g11-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-security-audit-g6",
+        "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+        "branch": "refs/heads/codex/p2p-security-audit-g6-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-security-g10",
+        "head": "3ce5a5d70edf63ac67bceb483cbdca5281e16ba7",
+        "branch": "refs/heads/codex/p2p-security-g10-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-security-g9",
+        "head": "1a9dfd3d9f3661932c6955b5c2f413ad9c56a9a8",
+        "branch": "refs/heads/codex/p2p-security-g9-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-security-review-g7",
+        "head": "68f3698abbe6f49e28498c47d8661f6da9bef76f",
+        "branch": "refs/heads/codex/p2p-security-review-g7-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-solana-review-g8",
+        "head": "bc3edc1379d9235e551aeac9f205524c1a433232",
+        "branch": "refs/heads/codex/p2p-solana-review-g8-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      },
+      {
+        "path": "/workspace/scratch/6eace968c0df/p2p-updater-browser-g10",
+        "head": "01f40b3e009d77b520ba0b6d7881fa24fc6301f9",
+        "branch": "refs/heads/codex/p2p-updater-browser-g10-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "scope": "external-preserve"
+      }
+    ],
+    "observer_note": "Both repository entry points share the same worktree registry. Records were deduplicated and ownership classified by actual worktree path, not the repository entry point."
+  },
+  "current_core_identity": {
+    "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "parents": [
+      "540e1fe2660e0a6084600726d5f6f75fd5c1ee05"
+    ],
+    "merge_base_main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+    "ahead_of_main": 56,
+    "report_only_paths": [
+      "docs/engineering/GENERATION11_TRANSPORT_CORE_QUALIFICATION_20261120.md",
+      "docs/engineering/INDEPENDENT_TRANSPORT_PREFLIGHT_REVIEW_GENERATION11_20261120.md",
+      "docs/engineering/generation11-core-plan.json"
+    ],
+    "contains_exact212_source_head": true
+  },
+  "additional_unowned_safely_actionable_source_work_identified": false,
+  "remaining_owned_work": [
+    {
+      "owner": "worker43 and independent42",
+      "scope": "Generation11 optional source97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07 on finald301 core; final reports/publication owned by root."
+    },
+    {
+      "owner": "root/scheduled continuation",
+      "scope": "Applicable exact-current-source hosted/browser/native/SBPF gates, named standalone optional review and existing dependency/device/trust limitations."
+    }
+  ],
+  "later_publication_rule": "Any later generation11 optional evidence branch is a separate dated observation; it does not change this complete snapshot count.",
+  "source_tests_executed": 0,
+  "remote_mutations": 0,
+  "main_merges_performed": 0,
+  "evidence_sha256": {
+    "comparison.json": "78430cedfe782a2404e15974baeca1fc9b69d25232fbc72187d3863c6df63386",
+    "immutable-and-steps.json": "56d4d4adb611290a01bb26e1f3fe90107347d3a79a033c4670f4e81be5829566",
+    "remote-snapshot.json": "3d097b0cf5386caf43d5397bb3e9bc64ad098970558271d76993977402504a3b",
+    "ownership.json": "491d0e3f78f81aa8cf4b51c62c891d2a68f0fc59f808a1d2c627754145e5ffec",
+    "checks-and-identities.json": "3937ca490753712418b0711e5b321c3324afbdd3ec3dcab54efb74abe9172763",
+    "source-identity-proof.json": "224f10ec11aaf196585b716074ec856c50cf0f2c5d267b8d9c8f7042d373dd25"
+  }
+}

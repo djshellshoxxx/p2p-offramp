@@ -1,0 +1,113 @@
+{
+  "sourceCommit": "358868f673f7a71ea09764752dcbaaed87f53dc0",
+  "sourceTree": "0c1824c69baccfdaee5869b9b850420dee31e12d",
+  "parentCommit": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+  "historicalFormCommit": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+  "scope": "Recovery UI for existing complete-file backup authentication and explicit revision recheck",
+  "checks": {
+    "ui": {
+      "passed": 14,
+      "failed": 0
+    },
+    "affected": {
+      "passed": 40,
+      "failed": 0,
+      "includesUiTests": true
+    },
+    "buildPolicy": {
+      "passed": 57,
+      "failed": 0
+    },
+    "contentPolicy": {
+      "passed": 11,
+      "failed": 0
+    },
+    "typescriptProjects": 4,
+    "boundaries": {
+      "productionSources": 239,
+      "coreEntryModules": 143
+    },
+    "documentationConsistency": true,
+    "documentationSemanticApproval": false,
+    "browser": {
+      "status": "blocked-before-execution",
+      "reason": "Chromium process_singleton_posix socket() failed: Operation not permitted",
+      "finalFixtureSyntaxChecked": true,
+      "initialAttemptProductSourceUnchanged": true
+    }
+  },
+  "logs": {
+    "p2p-g12-backup-affected.log": "fc7e44e86130f237a06f1f701ca3fd97e9dc2735678b898ddd3c9f7b3aced35a",
+    "p2p-g12-backup-boundaries.log": "2dfba649e4e8a9f10695ab238460bb8e402fd3e651a49ec39d47e4acbe85ad8a",
+    "p2p-g12-backup-browser.log": "9cbf062fa60da67fa88c9cc169cfb743d12b88d26e400267f0718943d36f8523",
+    "p2p-g12-backup-build-invocation-error.log": "028492b1fff697e61f6ae5f9b8801d18473919bd3b48bc34d1f6e9d9435205c1",
+    "p2p-g12-backup-builds.log": "6d2461ae0412b9152a8777d2bc165f56cc78785bf64ca2e2750f3c9b3e10a31d",
+    "p2p-g12-backup-content-policy.log": "ee91cb6667785253c2ed38829a3bbb8c9c0f8783929a8190944b07502b3d959d",
+    "p2p-g12-backup-docs.log": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4",
+    "p2p-g12-backup-policy.log": "5e3f1049511d159c7661d6e6d53b9c19139aecf3580f57f88a0631c560ae83f9",
+    "p2p-g12-backup-ui-tests.log": "a0e01a936cad521afe11919cc6ba4c5731a894b7ac67cf43498d2d66afea6abc"
+  },
+  "artifacts": [
+    {
+      "delivery": "meta",
+      "files": {
+        "_headers": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+        "assets/OfflineRoot-CtqbvMoA.js": "7ec100f4462024ad7863d72f48af5a1c5edc867f413c324bd9a519da73a2c9dd",
+        "assets/decode.worker-DGcSBxfL.js": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+        "assets/index-CejmKC9k.js": "227e0e177230d46302cfce3df3dbf50002a9e24ce718ae020362226089b95a51",
+        "assets/index-rPDFZ4F5.css": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+        "assets/vault.worker-BFynfgnx.js": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044",
+        "content-policy.json": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+        "core-graph-document.json": "6bf85539dfcb89440254db99f22560be1dcef248a954c97ab17241bc067c1803",
+        "core-graph-worker.json": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+        "index.html": "68eb71f3d33fdcb61782b02ef0dafbd154e25adc407cb900fa854a03c85e0306",
+        "local-build-evidence.json": "2d6b6fead57bf8d1a8e414d00866e0784625860e692608e84051dcff6f59cca5",
+        "qr-graph-worker.json": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+        "third-party-licenses.json": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+      },
+      "graphModuleCounts": {
+        "core-graph-document.json": 94,
+        "core-graph-worker.json": 30,
+        "qr-graph-worker.json": 4
+      },
+      "newFormInDocumentGraph": true,
+      "optionalPackageImports": 0,
+      "ReleaseEnabled": 0,
+      "signedRelease": false,
+      "releaseAcceptance": false,
+      "connectOrigins": [],
+      "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+    },
+    {
+      "delivery": "demo",
+      "files": {
+        "_headers": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+        "assets/OfflineRoot-CQJdtb7J.js": "1d32c0b610584a1a88d5accf499916d4b1e54b4fda05efc644d7367cd932990a",
+        "assets/decode.worker-DGcSBxfL.js": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+        "assets/index-B2wJMrtf.js": "d74b6010294a0ad1650eced0f8ffb20eebfe22d9f55e767aca5aa4493cfe6eef",
+        "assets/index-rPDFZ4F5.css": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+        "assets/synthetic-local-MdjGh0DS.js": "5b9d5f9129d9214288560329f7b9881fd645c9b75adbfd38cbfc2965a6d1f058",
+        "assets/vault.worker-BFynfgnx.js": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044",
+        "content-policy.json": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+        "core-graph-document.json": "7333bab4512e862cb53be9ba25765f67da5beb15d7414d249058ea08ccdaca96",
+        "core-graph-worker.json": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+        "index.html": "89ffbb2239aead4a541f1a9f11c49825aa9d86b019ac0d37b6172bf3bcc94126",
+        "local-build-evidence.json": "88b76073e2df834266733122d970d490a623f707b1088d9d06952cb116a4b3c9",
+        "qr-graph-worker.json": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+        "third-party-licenses.json": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+      },
+      "graphModuleCounts": {
+        "core-graph-document.json": 96,
+        "core-graph-worker.json": 30,
+        "qr-graph-worker.json": 4
+      },
+      "newFormInDocumentGraph": true,
+      "optionalPackageImports": 0,
+      "ReleaseEnabled": 0,
+      "signedRelease": false,
+      "releaseAcceptance": false,
+      "connectOrigins": [],
+      "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "schema": "p2p-consolidation-generation11-hosted/v1",
+  "generation": 11,
+  "worker": 44,
+  "repository": "djshellshoxxx/p2p-offramp",
+  "observed_from_utc": "2026-11-20T04:57:18.035Z",
+  "observed_to_utc": "2026-11-20T04:57:18.698Z",
+  "current_pr": 210,
+  "current_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+  "current_source_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+  "source_commit_parents": [
+    "540e1fe2660e0a6084600726d5f6f75fd5c1ee05"
+  ],
+  "base_branch": "codex/generation8-core-20261120",
+  "base_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+  "source_identity_verified": true,
+  "main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+  "main_unchanged": true,
+  "counts": {
+    "queued": 10
+  },
+  "check_records": [
+    {
+      "id": 136092100209,
+      "name": "schemas-and-crypto",
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-11-20T04:52:48Z",
+      "completed_at": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307789/job/136092100209"
+    },
+    {
+      "id": 136092100152,
+      "name": "specs",
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-11-20T04:52:48Z",
+      "completed_at": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307789/job/136092100152"
+    },
+    {
+      "id": 136092100072,
+      "name": "local-evm",
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-11-20T04:52:48Z",
+      "completed_at": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307789/job/136092100072"
+    },
+    {
+      "id": 136092100057,
+      "name": "docs-tooling",
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-11-20T04:52:48Z",
+      "completed_at": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307789/job/136092100057"
+    },
+    {
+      "id": 136092099829,
+      "name": "browser",
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-11-20T04:52:48Z",
+      "completed_at": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307789/job/136092099829"
+    },
+    {
+      "id": 136092099215,
+      "name": "forge",
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-11-20T04:52:48Z",
+      "completed_at": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307459/job/136092099215"
+    },
+    {
+      "id": 136092099167,
+      "name": "local-trade",
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-11-20T04:52:48Z",
+      "completed_at": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307459/job/136092099167"
+    },
+    {
+      "id": 136092098753,
+      "name": "inventory",
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-11-20T04:52:48Z",
+      "completed_at": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307785/job/136092098753"
+    },
+    {
+      "id": 136092098664,
+      "name": "native-nostr-relay",
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-11-20T04:52:48Z",
+      "completed_at": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307450/job/136092098664"
+    },
+    {
+      "id": 136092098296,
+      "name": "program",
+      "head_sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "status": "queued",
+      "conclusion": null,
+      "started_at": "2026-11-20T04:52:48Z",
+      "completed_at": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44677307772/job/136092098296"
+    }
+  ],
+  "one_program_step_observation": {
+    "observed_at_utc": "2026-11-20T04:59:49.521Z",
+    "job_id": 136092098296,
+    "steps": [],
+    "interpretation": "Empty steps for a queued job; no executed native stage inferred."
+  },
+  "completed_current_head_logs_read": 0,
+  "actual_executed_checkout": null,
+  "actual_executed_tree": null,
+  "actual_executed_ordered_parents": null,
+  "structured_execution_receipts": [],
+  "current_head_pass_claimed": false,
+  "pr212_recorded_closure": {
+    "number": 212,
+    "state": "closed",
+    "merged": true,
+    "merged_at": "2026-11-20T04:52:43Z",
+    "merged_by_login": "djshellshoxxx",
+    "merge_commit_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+    "head_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+    "head_ref": "fix/transport-preflight-zeroization-20261120",
+    "recorded_base_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+    "base_ref": "codex/transport-qualification-20261120",
+    "exact_source_is_parent_of_current210": true,
+    "interpretation": "Observed stacked-PR merged state is separate from main; source ref is unchanged. No merge operation was performed by this observer, and the closure mechanism is not inferred from actor metadata."
+  },
+  "next_evidence": {
+    "browser": {
+      "job": 136092099829,
+      "required": "Complete current-source log, actual checkout/tree/ordered parents and all structured browser receipts including physical-send and measured-warmth assertions."
+    },
+    "native_nostr": {
+      "job": 136092098664,
+      "required": "Complete log, actual execution identity and native relay receipt; no TLS/financial inference."
+    },
+    "native_program": {
+      "job": 136092098296,
+      "required": "Complete validator and actual Worker/encrypted-browser financial receipts, both real1800-second refund minima and all send/signature/marker/principal/fee/fixture assertions."
+    }
+  },
+  "limits": [
+    "Source commit ancestry is not an executed merge-checkout identity.",
+    "No old701f/component/ancestor result transfers to d301.",
+    "No polling, waiting, browser/native/full-suite execution or historical log reread.",
+    "Retained dependency findings and applicable standalone named-review conditions are unchanged."
+  ],
+  "local_source_tests": 0,
+  "remote_mutations": 0,
+  "main_merges_performed": 0,
+  "raw_evidence_sha256": "3937ca490753712418b0711e5b321c3324afbdd3ec3dcab54efb74abe9172763"
+}
