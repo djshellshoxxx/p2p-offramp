@@ -1,3 +1,52 @@
+# Current consolidation checkpoint — generation 31 (2026-11-20 UTC)
+
+**Offline startup now uses the maintained API presence probe, initialization
+guard and compatibility notice.** Missing or unavailable required APIs prevent
+service initialization; optional camera/share/clipboard APIs remain optional,
+and actual runtime failure remains authoritative. Stable snapshot rendering
+preserves service ownership, cleanup, locale behavior, G30 app-link propagation
+and native EVM/Solana entry branches. Presence grants no device, storage or
+wallet certification.
+
+Frozen combined source `8d566f0e46ee76ee35a957cab0a4358a3da4aeb3`, tree
+`99047cf4675fbc299d700eec51d9b388da6707fe`, passed **2,604/2,604 tests**
+with zero other outcomes and all six additional qualification commands.
+Independent source and combined-provenance reviews found no actionable findings.
+Two production paths, one adjacent sharing fixture and one new startup fixture
+form the exact delta; all 1,029 non-documentation entries equal reviewed source.
+Retained fixture failures are attributed separately from missing integration.
+
+Generation 30 is now published as
+[PR238](https://github.com/djshellshoxxx/p2p-offramp/pull/238), head
+`1c658181fb2bd04ffc4df0d0fbdf6735da3e7fce`, tree
+`bc470673a26f2e7d18eb55f72e2e15ddc7c5d803`, targeting PR237's branch.
+G31 is a separate unpublished follow-up above that exact parent.
+**Keep PR236 frozen as the main-target aggregate for PR233–235.** Preserve
+original branches, qualify and guard its merge, then read main/tree/ordered
+parents and prove containment before reconciling those PRs. PR237 and PR238
+remain separate children. Retarget/reconcile follow-ups after parent merges
+and refresh actual source/target acceptance; older sequential instructions
+remain superseded.
+
+Standalone G31 is D8 Tier B. Applicable hosted checks and a **CodeRabbit-or-Qodo
+pass with findings answered** remain required alongside independent review.
+Native preparation was build-only; API presence, controlled fixtures and static
+artifacts do not establish native browser/device/storage acceptance.
+`ReleaseEnabled=0` and existing trust boundaries remain fixed.
+
+Read the [G31 handoff](CONTINUATION_GENERATION31_20261120.md),
+[qualification](qualification-generation31.json),
+[retained logs](retained-logs-generation31.json) and
+[independent composition supplement](INDEPENDENT_STARTUP_COMPOSITION_REVIEW_GENERATION31_20261120.md).
+They distinguish the initial mixed reviewer command from the separate four-probe
+pass and preserve unsuccessful evidence. G32 native prepared funding has
+separate author/reviewer ownership and no completion claim. Optional PR224–232
+and audits184–186 remain independently owned. All earlier bytes below remain
+historical evidence, including older publication-pending statements.
+
+---
+
+
 # Current consolidation checkpoint — generation 30 (2026-11-20 UTC)
 
 **Generic app address sharing now reaches Settings through the ordinary offline
