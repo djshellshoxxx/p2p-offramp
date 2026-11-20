@@ -1,3 +1,54 @@
+# Current consolidation checkpoint — generations 26–28 (2026-11-20 UTC)
+
+**The combined source passed 2,505/2,505 tests and all five additional
+qualification commands.** Exact source
+`2a0b26f3392d86c1cd3e056771c59438ece92927`, tree
+`92beca7b34957889156260d1167df81ebcf4aa84`, retains the published PR233,
+PR234 and PR235 ancestry and repairs request ownership in all four vault forms.
+After PR235, only `VaultForms.tsx` changes in production: four existing-ref
+admission guards and one explanatory comment. Two new regressions add 27 cases.
+The same cases reproduce four G26 and twelve G27 failures on unchanged
+production; independent reviews pass the repaired cases with no findings.
+
+**One new aggregate will target main. This supersedes the older sequential
+PR233 → PR234 → PR235 merge/retarget plan preserved below.** Keep all three
+original heads frozen while the aggregate is owned and qualifying:
+
+| Preserved PR | Exact published head |
+| --- | --- |
+| [PR233](https://github.com/djshellshoxxx/p2p-offramp/pull/233) | `92663e46508b06645111d9c713beb82d3a6d1a0f` |
+| [PR234](https://github.com/djshellshoxxx/p2p-offramp/pull/234) | `477777dc152cd3148ba7f25a75ce8f00dc1b03b5` |
+| [PR235](https://github.com/djshellshoxxx/p2p-offramp/pull/235) | `bca96b796db18d69563ae5f0395452494a0dacd5` |
+
+The intended branch is `codex/main-consolidation-g28-20261120`; last observed
+main is `8e836baa877b676a863c877003e277b638fc5061`. A new published head/PR,
+actual proposed merge and hosted completion are pending at this checkpoint.
+Require every applicable gate on the actual aggregate source and current main
+target, including browser, native financial and CodeQL qualification. Earlier
+stacked results do not transfer. After an expected-head guarded merge, read back
+main/tree/ordered parents and prove each frozen PR head is an ancestor before
+reconciling those contained PRs. Retain their original branches.
+
+Read the [generations 26–28 handoff](CONTINUATION_GENERATIONS26_28_20261120.md),
+[combined receipt](qualification-generations26-28.json),
+[retained-log index](retained-logs-generations26-28.json) and
+[independent composition review](INDEPENDENT_MAIN_COMPOSITION_REVIEW_GENERATION28_20261120.md).
+The review verifies all 55 prior publication mappings, tested non-documentation
+identities, unchanged workflows, complete logs and both build artifacts. All
+1,022 tested non-documentation entries must remain exact through publication.
+
+The controlled handler/facade/runtime regressions do not establish native event
+reachability or storage rollback. Restore retains uncertainty, original-request
+settlement and complete reconciliation before the tested retry. Native updater
+scenarios remain locally unexecuted; current-target hosted acceptance is still
+required. The default updater is unconfigured, production trust is unset,
+production locales remain English-only/draft and `ReleaseEnabled=0`.
+Optional PR224–232 and audits 184–186 remain separately owned. Earlier sections
+below are retained byte-for-byte as dated history and do not override this plan
+or subsequent exact-source publication receipts.
+
+---
+
 # Current consolidation checkpoint — generations 24–25
 
 **Frozen child source passed 2,478/2,478 tests and all eleven additional

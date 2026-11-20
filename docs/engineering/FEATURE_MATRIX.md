@@ -1,3 +1,37 @@
+# Current feature coverage — generations 26–28 (2026-11-20 UTC)
+
+Frozen combined source `2a0b26f3392d86c1cd3e056771c59438ece92927`, tree
+`92beca7b34957889156260d1167df81ebcf4aa84`, passed **2,505/2,505 tests**
+with zero failures, skips, cancellations or todos and all five additional
+qualification commands. It contains the exact published PR233/234/235 ancestry;
+its final main-target publication and hosted acceptance remain pending.
+
+| Capability | Completed staged scope | Remaining scope |
+| --- | --- | --- |
+| F01 / F02 vault-form request ownership | Unlock, export, create and restore retain the admitted controller or original pending read through duplicate handler calls. Four existing-ref guard changes and two regression files add 27 cases. Independent reviews reproduce the failures and pass the repaired cases without findings. Consent, secret clearing, original notices, accepted success and explicit retry remain covered. | Native browser event reachability and physical/native cryptographic acceptance are outside the controlled TSX/facade/runtime regressions. Cancellation does not roll back storage work; the covered Restore retry requires original-request settlement and complete reconciliation. No broader rate policy was added. |
+| F01 / F24 runtime and update composition | Published runtime backup-selection leases, direct updater binding and the six native-fixture scenarios are retained exactly. The emitted vault Worker remains byte-identical. | Native scenarios remain locally unexecuted. Current-target hosted execution, native accepted-floor durability, physical wallets, trusted activation, actual navigation/origin and configured application acceptance remain separate requirements. |
+| F19 / F20 locale and privacy presentation | Previously reviewed selected-catalog rendering remains in the aggregate; the four ownership guards preserve those source paths and G26 UnlockForm coverage. | English-only/draft production, supported-translation review, assistive technology and physical-device acceptance remain unchanged. No live Wiki publication is claimed. |
+| F25 evidence and consolidation | Combined local qualification and independent source/artifact review preserve all 55 earlier publication mappings, expected ancestry and unchanged workflows. Of 1,020 PR235 non-documentation entries, 1,019 remain exact; one UI file changes and two tests are added, for 1,022 tested entries. | Publish one aggregate against main and require every applicable current-source/current-main-target hosted browser/native/CodeQL gate. The local evidence does not supply remote completion. |
+
+**The single main-target aggregate supersedes the older sequential PR233 →
+PR234 → PR235 merge/retarget plan below.** Keep all three original heads frozen
+while it qualifies. After the guarded aggregate merge, read back main and prove
+all three exact frozen heads are ancestors before reconciling contained PRs;
+retain their branches. A changing main requires ordinary reconciliation and
+fresh qualification of the actual target.
+
+Read the [generations 26–28 continuation](CONTINUATION_GENERATIONS26_28_20261120.md),
+[combined qualification](qualification-generations26-28.json) and
+[independent composition review](INDEPENDENT_MAIN_COMPOSITION_REVIEW_GENERATION28_20261120.md).
+The branch is `codex/main-consolidation-g28-20261120`; last observed main is
+`8e836baa877b676a863c877003e277b638fc5061`. Optional PR224–232 and audits
+184–186 remain separately owned. Trust, default updater configuration and release
+approval remain absent; `ReleaseEnabled=0`. Earlier sections below retain their
+exact historical bytes and source scope, and do not override this plan or later
+source-bound publication receipts.
+
+---
+
 # Current feature coverage — generations 24–25
 
 Frozen source `1a52c1c4f53a97cbbd0937f14a4379b88fd249b8`, tree
