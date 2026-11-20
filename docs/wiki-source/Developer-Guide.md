@@ -4,7 +4,13 @@
 
 **Status: active development.** Documentation here describes **main**, not an automatic combination of unmerged draft branches. Node `>=24`; Python 3.12 is used in CI for the spec inventory; a local Chromium installation is needed for browser checks. Foundry is needed for native EVM contract verification.
 
-## Recorded development checkpoint — November 18, 2026
+## Current development checkpoint — November 18, 2026 (Pacific; November 19 UTC)
+
+Merged `main@bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e` incorporates documentation #169, EVM core #166, Solana client/recovery #167, browser trading/ERC-20 recovery #170, audit ledger #138, and same-terms unfunded resumption #175. PR #168 was closed after its complete changes were verified as incorporated through #170. #175 passed all seven D8 checks, 92 Foundry tests, and actual Chromium with isolated buyer/seller contexts, encrypted restoration, explicit same-terms resumption, and a fresh wallet review ([qualification record](https://github.com/djshellshoxxx/p2p-offramp/pull/175#issuecomment-7003052261)). ERC-20 recovery/browser #173, funded native-Solana recovery/browser #179, and consolidation documentation #176 remain **unmerged candidates**, each subject to its own checks and review.
+
+Historical integration #61 is merged; proposed continuation spec #63 is closed without merging and remains historical guidance. The merged native and browser fixtures establish scoped original-deployment, journal, and two-party evidence. They do not cover every physical wallet/browser, native-Solana application flow, or public-network scenario. Independent security approval, SonarCloud A, and public-release qualification remain open. The live Wiki is not verified as published.
+
+## Historical recorded development checkpoint — November 18, 2026
 
 This guide is scoped to merged `main@6c38e641e24abcfdcf645f864bd64c9645836d75`. The
 [documentation reconciliation](../consolidation/2026-11-18-documentation-reconciliation.md)
@@ -45,7 +51,7 @@ The [operator guide](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs
 
 ## APIs, contracts and CLI
 
-Read [`packages/schemas/index.ts`](https://github.com/djshellshoxxx/p2p-offramp/blob/main/packages/schemas/index.ts) for exported interfaces; the schema parser itself can be structural-only and **must not be treated as signature or chain authorization**. Consult [`packages/domain`](https://github.com/djshellshoxxx/p2p-offramp/tree/main/packages/domain) for trade/review and lifecycle contracts, and [`packages/chain-evm`](https://github.com/djshellshoxxx/p2p-offramp/tree/main/packages/chain-evm) for read-only chain integration. Wallet send/reconciliation functions are privileged boundaries: unknown broadcast outcomes remain unknown until proven otherwise; persistent send-marker and restoration/provenance work is not finished by passing CI. The acceptance-report CLI is read-only and cannot override owner review policy.
+Read [`packages/schemas/index.ts`](https://github.com/djshellshoxxx/p2p-offramp/blob/main/packages/schemas/index.ts) for exported interfaces; the schema parser itself can be structural-only and **must not be treated as signature or chain authorization**. Consult [`packages/domain`](https://github.com/djshellshoxxx/p2p-offramp/tree/main/packages/domain) for trade/review and lifecycle contracts, and [`packages/chain-evm`](https://github.com/djshellshoxxx/p2p-offramp/tree/main/packages/chain-evm) for read-only chain integration. Wallet send/reconciliation functions are privileged boundaries: unknown broadcast outcomes remain unknown until proven otherwise; passing CI establishes only its explicitly exercised persistent-marker and restoration/provenance scenarios. The acceptance-report CLI is read-only and cannot override owner review policy.
 
 ## Reproducing D9 recovery acceptance without live funds
 
@@ -61,7 +67,7 @@ For this test class, confirm the original pending transaction keeps its hash and
 
 ## Contribution and collaboration
 
-Before changes, inspect [README](https://github.com/djshellshoxxx/p2p-offramp/blob/main/README.md), [development roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md), [task ledger](https://github.com/djshellshoxxx/p2p-offramp/blob/main/tasks/todo.md), open PRs and their exact head checks. Work on isolated branches and draft PRs; add failing tests for regressions, preserve a reproducible source SHA and verify changed-file ownership. Never rebase/overwrite another agent's branch or silently alter D1/D8/D9/financial policy. Use [continuation spec in PR #63](https://github.com/djshellshoxxx/p2p-offramp/pull/63) for the **proposed** ChatGPT-only lane until merged. See [Architecture and Development](Architecture-and-Development.md).
+Before changes, inspect [README](https://github.com/djshellshoxxx/p2p-offramp/blob/main/README.md), [development roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md), [task ledger](https://github.com/djshellshoxxx/p2p-offramp/blob/main/tasks/todo.md), open PRs and their exact head checks. Work on isolated branches and draft PRs; add failing tests for regressions, preserve a reproducible source SHA and verify changed-file ownership. Never rebase/overwrite another agent's branch or silently alter D1/D8/D9/financial policy. The [continuation spec in closed, unmerged PR #63](https://github.com/djshellshoxxx/p2p-offramp/pull/63) is historical advisory source; follow the owner's current, separately authorized zero-Codex instructions rather than treating that PR as awaiting merge. See [Architecture and Development](Architecture-and-Development.md).
 
 ## CI, debugging and security
 
@@ -69,4 +75,6 @@ GitHub Actions workflows are [specifications](https://github.com/djshellshoxxx/p
 
 ## Releases, ADRs, specs and remaining engineering work
 
-`ReleaseEnabled=0` and the empty default approved-registry set must remain unchanged. **Do not enable real funds, merge, deploy or release** without explicit owner authorization, audited escrow/test proofs, trust pins, independent security review, D8 Tier C approval and buyer/seller acceptance. Review [security/release](Security-and-Release.md), [operator build policy](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/OPERATOR.md), [product completion specs](https://github.com/djshellshoxxx/p2p-offramp/tree/main/00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion), [roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md) and [remaining tasks](https://github.com/djshellshoxxx/p2p-offramp/blob/main/tasks/todo.md). Draft integration PR #61, D9 send-marker/provenance, D1 peer acceptance and chain/contract-wallet tests remain qualified separately. No release is claimed.
+`ReleaseEnabled=0` and the empty default approved-registry set must remain unchanged. Source integration follows the accepted [D8 tiered merge policy](../adr/proposed/D8-merge-policy-and-branch-protection.md): all seven required checks, the applicable automated-review requirement for Tier B, and explicit owner approval for Tier C. The owner's current consolidation directive authorizes reviewed, qualified source merges subject to those gates. Public deployment, real funds, production trust changes, and release require separate authorization and release qualification.
+
+Review [security/release](Security-and-Release.md), [operator build policy](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/OPERATOR.md), [product completion specs](https://github.com/djshellshoxxx/p2p-offramp/tree/main/00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion), [roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md) and [remaining tasks](https://github.com/djshellshoxxx/p2p-offramp/blob/main/tasks/todo.md). Existing two-party, D9, and native-chain proofs retain their exact source and fixture scope; broader wallet/chain compatibility and independent security approval remain outstanding. No release is claimed.

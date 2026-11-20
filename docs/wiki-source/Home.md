@@ -11,7 +11,13 @@
 
 [Getting Started](Getting-Started.md) · [Wallet and QR Safety](Wallet-and-QR-Safety.md) · [Privacy and Recovery](Privacy-and-Recovery.md) · [Architecture and Development](Architecture-and-Development.md) · [Codespaces Test Lab](Codespaces-Test-Lab.md) · [Security and Release](Security-and-Release.md)
 
-## Recorded source checkpoint — November 18, 2026
+## Current source checkpoint — November 18, 2026 (Pacific; November 19 UTC)
+
+At merged `main@bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e`, documentation reconciliation [#169](https://github.com/djshellshoxxx/p2p-offramp/pull/169), EVM core [#166](https://github.com/djshellshoxxx/p2p-offramp/pull/166), Solana client/recovery [#167](https://github.com/djshellshoxxx/p2p-offramp/pull/167), browser trading/ERC-20 recovery [#170](https://github.com/djshellshoxxx/p2p-offramp/pull/170), audit ledger [#138](https://github.com/djshellshoxxx/p2p-offramp/pull/138), and same-terms unfunded resumption [#175](https://github.com/djshellshoxxx/p2p-offramp/pull/175) are **merged**. [#168](https://github.com/djshellshoxxx/p2p-offramp/pull/168) was closed after its complete changes were independently verified as incorporated through #170; it did not need a separate merge. #175 passed all seven required checks and actual Chromium with isolated buyer/seller contexts, encrypted restoration, explicit resumption, and a fresh wallet review.
+
+Further ERC-20 recovery/browser coverage [#173](https://github.com/djshellshoxxx/p2p-offramp/pull/173), funded native-Solana recovery/browser work [#179](https://github.com/djshellshoxxx/p2p-offramp/pull/179), and [consolidation documentation #176](https://github.com/djshellshoxxx/p2p-offramp/pull/176) remain **unmerged candidates** at this checkpoint. Their new-head qualification is separate. Existing loopback browser, encrypted-journal, and native-chain proofs are scoped development evidence; broader wallet/browser compatibility, independent security approval, SonarCloud A, and public-release qualification remain open. `ReleaseEnabled=0`; no live deployment or Wiki publication is claimed.
+
+## Historical recorded source checkpoint — November 18, 2026
 
 This wiki source describes merged `main@6c38e641e24abcfdcf645f864bd64c9645836d75` unless a feature is
 marked draft, future-only or blocked. The [reconciliation record](../consolidation/2026-11-18-documentation-reconciliation.md)
