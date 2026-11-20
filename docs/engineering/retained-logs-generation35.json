@@ -1,0 +1,81 @@
+{
+  "schema": "p2p-offramp.generation35-retained-logs.v1",
+  "testedSource": "ea3ee7f5b5d36456616bd9fef893257327560a10",
+  "testedTree": "077ffa6a9cb7f964f5468a6eb33bd3ac231db98c",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g35-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generation35-20261120/full-node.log.gz",
+      "decodedBytes": 279096,
+      "compressedBytes": 91742,
+      "decodedSha256": "98091a8713b228442f58982c8b4f0abc632a9c6c223a371472b272b39e1f4e59",
+      "compressedSha256": "3d2c6f5951517ec8514f176cc5a470401c467ffa55f600fcba85d2c07eafbb04"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g35-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generation35-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g35-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generation35-20261120/build-policy.log.gz",
+      "decodedBytes": 7604,
+      "compressedBytes": 3125,
+      "decodedSha256": "1861fb8160728aff13004f70c54d2ecb70e74cd67f24213f784dc65de0612de1",
+      "compressedSha256": "9afe290c70ade3ea8e591d301737ac202c720357874723a8e52a4e67c7b3a71b"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g35-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generation35-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 287,
+      "decodedSha256": "57b3c937bbdb01e88c246681dbbd7f8e0e638bc3aa23bc8017283572b8164f3f",
+      "compressedSha256": "01563b399db9a8f5e230455be16e6bba2e094357f8477c7d967d5aebeba0d20b"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g35-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generation35-20261120/default-build.log.gz",
+      "decodedBytes": 1027,
+      "compressedBytes": 498,
+      "decodedSha256": "bffe10f688a3e8d5021decfaa9b3de315ba9ea6bbfed64bcaa48d54d6b886bb8",
+      "compressedSha256": "21c7753925b75c6c61aa6e0924083dd18a87bb7f7c1ca4812745a0023bfd49bd"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g35-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generation35-20261120/demo-build.log.gz",
+      "decodedBytes": 1175,
+      "compressedBytes": 521,
+      "decodedSha256": "6c40ecf81a519463ccc7178d576d91149c09855c7b5e63a94e4b46c063851b96",
+      "compressedSha256": "f3073fe545b0c0b87d9cefa644c291668c4f4951e1ea7d7937fc29bf7e9cdc9b"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g35-qualification/native-fixture-preparation.log",
+      "storedPath": "docs/execution/continuation-generation35-20261120/native-fixture-preparation.log.gz",
+      "decodedBytes": 2196,
+      "compressedBytes": 865,
+      "decodedSha256": "3cf5a6bc8ac4bab880274aa3b716bc82785f4d8cedb17398f9bea96c18ebe4d4",
+      "compressedSha256": "a2f98b3da8eecc4f126d9abeaf8f35e55a00d84f0ceb2ad373edcc9882f38a44"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/execution/solana-funding-proposal-generation35-20261120/receipt.json",
+    "docs/engineering/funding-proposal-codec-independent-review-generation35.json",
+    "docs/engineering/solana-funding-proposal-composition-review-generation35.json",
+    "docs/engineering/qualification-generation34.json"
+  ],
+  "limits": [
+    "The public envelope has only format and all fifteen immutable G16 terms, bounded to 4096 bytes. Identity is SHA256 of maintained G16 binary encoding, not JSON layout. Canonical non-core commitments remain readable data; funding eligibility stays at G34 planFund.",
+    "The 8192-byte decoded private record derives its full binding from independently installed configuration, retains immutable original profile and configuration provenance, and uses a domain-separated full-binding ID. Decode verifies wrapper, complete shape, terms hash, binding, provenance representation and recomputed ID.",
+    "All inputs are captured before asynchronous hashing yields. Own accessor fields are refused. Arbitrary caller-created Proxy traps are not claimed inert. Stored endpoints and margins remain historical data and are not installed as executable configuration.",
+    "Exactly two new source paths are present. This component has no controller consumer, protocol command, facade export, persistence, wallet grant, journal mutation or browser/economic activation.",
+    "The original 78-case baseline contains one passing fixture control and 77 missing-feature failures. The first implementation passed 77/78; invalid retained RPC was refused with a generic config error. The narrow normalization correction and four further cases yield final 82/82. Original failures and exact snapshots remain retained.",
+    "Author four-project TypeScript, independent 96/96 selected cases, UI TypeScript and boundary verification are separate overlapping evidence, not additive totals. The reviewer preserves its original spec-format log and derives counts separately rather than rerunning or overwriting it.",
+    "Controlled actual vault/backup services verify that the existing recovery reader ignores the bounded unknown proposal record while reading funded recovery data, and fresh-key restore preserves proposal payload and original profile. These tests establish no native chain finality or physical wallet/browser acceptance.",
+    "All 1035 non-documentation entries match the reviewed author source, and actual PR241/PR240 ancestry remains preserved. Current default/demo assets and graphs remain identical to retained G34 outputs.",
+    "The full Node suite compiles the maintained configured Solana-localnet artifact; native updater preparation strictly compiles 37 modules and removes them. No browser, validator or financial flow ran locally.",
+    "Explicit admission, shared quota and escrow collisions, mismatch readability, original bound/prepared/session/epoch ownership, funding confirmation and finalized-only recovery materialization remain subsequent composition work. Bilateral acceptance, production trust and release are separate. ReleaseEnabled remains zero."
+  ]
+}
