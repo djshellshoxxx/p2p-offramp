@@ -1,0 +1,32 @@
+{
+  "name": "09-root-qualification",
+  "source": "d1559e721d80eceb6fde94a02f6c903ce8311481",
+  "tree": "26e99b944cc0cc92f3c53d84d8635e1b60c4813b",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+  "command": [
+    "python",
+    "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-root-qualification.py",
+    "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+    "99047cf4675fbc299d700eec51d9b388da6707fe",
+    "1c658181fb2bd04ffc4df0d0fbdf6735da3e7fce"
+  ],
+  "startedAt": "2026-11-20T19:12:05.645132+00:00",
+  "completedAt": "2026-11-20T19:12:06.404215+00:00",
+  "exitCode": 0,
+  "sourceStatusAtStart": "",
+  "sourceUnchanged": true,
+  "sourceStatusAtEnd": "",
+  "scriptInputs": [
+    {
+      "path": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-evidence-g31/check-root-qualification.py",
+      "bytes": 11339,
+      "sha256": "f31fb1a386b9878781318120255bfc9b8d7c8652fc1adefb67935a1b0460a5c3"
+    }
+  ],
+  "rawBytes": 14524,
+  "rawSha256": "2cbcb07b62b76ee299a20edaa2adb0b5e2dc864540b026bb07e4f582a4dc52f2",
+  "gzipBytes": 3379,
+  "gzipSha256": "8ba3d980e2a36f12c1462131265c00692c8894baa853eae47a57397e6e3f104b",
+  "gzipMtime": 0,
+  "summary": []
+}

@@ -1,0 +1,25 @@
+{
+  "name": "10-supplement-whitespace",
+  "source": "d1559e721d80eceb6fde94a02f6c903ce8311481",
+  "tree": "26e99b944cc0cc92f3c53d84d8635e1b60c4813b",
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-startup-compatibility-review-g31",
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "8e836baa877b676a863c877003e277b638fc5061"
+  ],
+  "startedAt": "2026-11-20T19:13:22.613888+00:00",
+  "completedAt": "2026-11-20T19:13:22.651694+00:00",
+  "exitCode": 0,
+  "sourceStatusAtStart": "A  docs/engineering/INDEPENDENT_STARTUP_COMPOSITION_REVIEW_GENERATION31_20261120.md\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/09-root-qualification.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/09-root-qualification.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-root-qualification.py.txt\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-boundaries.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-build-policy.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-default-build.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-demo-build.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-full-node.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-native-fixture-preparation.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification-verification.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification.json.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-typecheck.log.gz\nA  docs/engineering/startup-compatibility-composition-review-generation31.json",
+  "sourceUnchanged": true,
+  "sourceStatusAtEnd": "A  docs/engineering/INDEPENDENT_STARTUP_COMPOSITION_REVIEW_GENERATION31_20261120.md\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/09-root-qualification.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/09-root-qualification.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/check-root-qualification.py.txt\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-boundaries.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-build-policy.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-default-build.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-demo-build.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-full-node.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-native-fixture-preparation.log.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification-verification.json\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-qualification.json.gz\nA  docs/engineering/evidence/startup-compatibility-independent-review-generation31/root-typecheck.log.gz\nA  docs/engineering/startup-compatibility-composition-review-generation31.json",
+  "scriptInputs": [],
+  "rawBytes": 0,
+  "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "gzipBytes": 20,
+  "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+  "gzipMtime": 0,
+  "summary": []
+}
