@@ -34,7 +34,28 @@ Baseline: `5c5a84ef6300330700c8b0ca54d074ac113f08be`. Classifications describe a
 | F26 | Duplicate historical regression stack | Duplicate | D9 #69–75/#91–93 tests, isolated #78–80 tests, and #168 effective browser delta are already represented on current main. | No reimplementation. Exact normalized whole-file preservation and merge-tree proof are in branch-inventory.json.  |
 | F27 | Production release and live-funds qualification | Blocked | Release-disabled architecture, explicit build modes and signed trust primitives exist; no deployment/release is authorized in this task. | Owner-controlled trust roots/pins, physical wallets/public testnet, required independent reviews and explicit release authorization remain separate. Preserve ReleaseEnabled=0.  |
 
-## Current staging overlay: corrected core and separate descendants
+## Generation 9 updates: corrected optional source and QR review
+
+The pinned-main table above remains unchanged. Nine reviewed optional packages
+are now prepared as separate layers on exact210 and published as evidence at
+`8af4dbc2b60b106ec80a2417ddf78d487c3f3586`. Tested source
+`390e6685bdf2ba098bc2908183fe5e38442d18cc` passed 2,681 full tests, with 13 default
+and 14 demo files identical to fresh210 and zero optional graph imports.
+Independent review verified all 2,463 protected base entries at every layer,
+original package subtrees,commands/workflows and actual artifacts. Existing
+PR191–199 refs remain unchanged; named standalone review and exact-source
+hosted/native/browser gates remain. This stack excludes206,208,209 and 211.
+
+Separately, QR211's post-await expiry correction passed 112 affected tests,
+including four regressions that previously produced1 pass/3 failures. It closes
+one Low public-review timing cause and preserves authority:none. Actual new-source
+browser and physical-device qualification remain separate. These source-specific
+updates do not change the 27-capability assessment of main or claim a qualified
+combined core. See the current [handoff](CONSOLIDATION_HANDOFF.md) and machine
+matrix for exact trees,independent reports and remaining integration work.
+
+## Historical generation 8 staging overlay
+
 
 The table above remains the immutable 27-capability assessment of starting main.
 Current corrected core is PR #207 at

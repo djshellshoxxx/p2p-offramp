@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
-  "generation": 8,
-  "updated_at_utc": "2026-11-20T03:33:55.040360+00:00",
-  "phase": "reviewed-transport210-and-dependency209-published-core207-hosted-hold",
+  "generation": 9,
+  "updated_at_utc": "2026-11-20T04:06:09.842655+00:00",
+  "phase": "corrected-optional-evidence-published-and-qr-reviewed-core-followup-composition-identified",
   "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
   "integration_branch": "codex/generation8-core-20261120",
   "integration_source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
@@ -364,11 +364,13 @@
     {
       "id": "FIX-SOLANA-WITHHELD-ACK",
       "kind": "reproduced-fixture-defect",
-      "state": "independently-closed-early-hosted-passed-full-native-pending",
+      "state": "independently-closed-completed-ancestor-native-proof-current-corrected-source-pending",
       "source": "scripts/lib/solana-localnet-withheld-send.mjs",
       "repair_sha": "493a6ea55b2eb332dfc8999b117fd7e817428497",
       "severity": null,
-      "scope": "Controlled failed-acknowledgment fixture; production RPC and strict physical-send oracle unchanged; no general raw-reset retransmission guarantee."
+      "scope": "Controlled failed-acknowledgment fixture; production RPC and strict physical-send oracle unchanged; no general raw-reset retransmission guarantee.",
+      "prior_state_generation8": "independently-closed-early-hosted-passed-full-native-pending",
+      "completed_native_evidence": "native-final-receipts-generation8.json"
     },
     {
       "id": "FIX-IMMUTABLE-COPY-TEXT-HASH",
@@ -389,18 +391,22 @@
     {
       "id": "FIX-SOLANA-RESTORE-ACK-ADMISSION",
       "kind": "reproduced-defect",
-      "state": "independently-closed-hosted-pending",
+      "state": "independently-closed-completed-ancestor-native-proof-current-corrected-source-pending",
       "source": "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
       "repair_sha": "6207d14bf83213847620b0dd1541f2c7d2e3b893",
-      "scope": "Immediate redaction remains; restore inputs stay disabled through actual lock acknowledgment."
+      "scope": "Immediate redaction remains; restore inputs stay disabled through actual lock acknowledgment.",
+      "prior_state_generation8": "independently-closed-hosted-pending",
+      "completed_native_evidence": "native-final-receipts-generation8.json"
     },
     {
       "id": "FIX-SOLANA-RESTORE-BUFFER-OWNERSHIP",
       "kind": "reproduced-defect",
-      "state": "independently-closed-hosted-pending",
+      "state": "independently-closed-completed-ancestor-native-proof-current-corrected-source-pending",
       "source": "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
       "repair_sha": "6207d14bf83213847620b0dd1541f2c7d2e3b893",
-      "scope": "Late/overlapping file reads cannot retain or replace active bytes; Worker receives intact clone before document zeroing."
+      "scope": "Late/overlapping file reads cannot retain or replace active bytes; Worker receives intact clone before document zeroing.",
+      "prior_state_generation8": "independently-closed-hosted-pending",
+      "completed_native_evidence": "native-final-receipts-generation8.json"
     },
     {
       "id": "FIX-TEMPLATE-ACCEPTED-REVIEW-RETIREMENT",
@@ -483,6 +489,27 @@
       "pr": 206,
       "independent_review": "854e0a83936bf15236231f9947c85aa88d2520a1",
       "scope": "Require safe integer capacity1..1000; real application callers use32."
+    },
+    {
+      "id": "FIX-QR-ASYNC-EXPIRY-RECHECK",
+      "kind": "reproduced-defect",
+      "severity": "Low",
+      "state": "independently-reproduced-corrected211-local-review-complete-hosted-pending",
+      "repair_sha": "3afe1504556466d9a22ad4f2d69826b6d68a78bf",
+      "published_head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "pr": 211,
+      "independent_review": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+      "scope": "One public QR review timing cause across asynchronous hash/verifier/clock variants. Review authority remains none; no financial impact established.",
+      "original_regressions": {
+        "pass": 1,
+        "fail": 3
+      },
+      "fixed_regressions": {
+        "pass": 4,
+        "fail": 0
+      },
+      "affected_passed": 112,
+      "affected_includes_fixed_regressions": true
     }
   ],
   "verification": {
@@ -694,6 +721,24 @@
       "broken_links": 0,
       "unindexed": 0,
       "prior_45second_timeout_retained_as_incomplete": true
+    },
+    "generation9_optional_full": {
+      "source_sha": "390e6685bdf2ba098bc2908183fe5e38442d18cc",
+      "tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+      "tests": 2681,
+      "passed": 2681,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "full_suite_invocations": 1,
+      "report": "GENERATION9_OPTIONAL_CORRECTED_STACK_20261120.md"
+    },
+    "generation9_qr_independent": {
+      "source_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "tree": "224341968be39c6de7874b34a1f7fd6eefa19857",
+      "affected_passed": 112,
+      "affected_includes_regressions": true,
+      "report": "INDEPENDENT_QR_ASYNC_EXPIRY_REVIEW_GENERATION9_20261120.md"
     }
   },
   "workers": [
@@ -941,6 +986,36 @@
       "affected_passed": 22,
       "published_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
       "published_pr": 210
+    },
+    {
+      "generation": 9,
+      "worker": "generation9_optional_recomposition",
+      "state": "complete-locally-qualified-evidence-published",
+      "scope": "Nine separate original-package layers on210; exact protected core, command/gate union and default isolation; one full qualification execution. No original optional ref changes.",
+      "branch": "codex/generation9-optional-corrected-stack-20261120",
+      "source_checkpoint": "390e6685bdf2ba098bc2908183fe5e38442d18cc",
+      "report_commit": "5ffd917aefc8b753c6a2afd98b913c9c5b99de73",
+      "full_passed": 2681
+    },
+    {
+      "generation": 9,
+      "worker": "generation9_optional_independent",
+      "state": "complete-no-open-high-or-medium-in-integration-delta",
+      "scope": "Independent frozen-layer ancestry/package/core/manifests/artifacts/log review. No duplicate full or browser execution.",
+      "branch": "codex/generation9-optional-corrected-independent-20261120",
+      "source_checkpoint": "390e6685bdf2ba098bc2908183fe5e38442d18cc",
+      "report_commit": "479e0e9fe95420699f1f0e24208751712bd68239",
+      "own_boundary_passed": 16
+    },
+    {
+      "generation": 9,
+      "worker": "generation9_qr_candidate_review",
+      "state": "complete-one-low-cause-independently-closed",
+      "scope": "Focused actual QR expiry regression and adjacent package/type/boundary checks; public review authority remains none. No author branch changes.",
+      "branch": "review/qr-async-expiry-generation9-20261120",
+      "source_checkpoint": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "report_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+      "affected_passed": 112
     }
   ],
   "remaining": [
@@ -959,8 +1034,8 @@
     {
       "id": "OPTIONAL-SOURCE-EXTRACTIONS",
       "priority": 2,
-      "state": "generation6-nine-layer-stack-locally-qualified-corrected-base-required",
-      "next_action": "Preserve d67e022f2617pass evidence. Recompose one-package layers against reviewed corrected core; satisfy applicable named standalone review and exact hosted gates."
+      "state": "generation9-corrected210-layer-evidence-published-original-pr-refs-unchanged",
+      "next_action": "Use exact published layer mapping after applicable standalone review and exact-source hosted/native gates. If the core advances, recompose and qualify against the newly reviewed source; old counts never transfer."
     },
     {
       "id": "COMPOSE-PERSONALIZATION-UI",
@@ -989,8 +1064,8 @@
     {
       "id": "INVESTIGATE-SOLANA-RESTORE-ACK",
       "priority": 1,
-      "state": "203-and205-early-real-worker-browser-gates-passed-complete-native-pending",
-      "next_action": "Observe full native recovery/refund on exact corrected successor; preserve strict physical-send assertions."
+      "state": "203-and205-complete-native-passed-corrected207-current-source-in-progress",
+      "next_action": "Preserve completed203/205 source-bound receipts; observe207 own complete browser/refund result and210 transport correction execution."
     },
     {
       "id": "FIX-GENERATION4-TOOLING-COMPOSITION",
@@ -1010,14 +1085,20 @@
       "priority": 2,
       "state": "original-independent-review-and-external-recomposition-published",
       "next_action": "Do not duplicate2265-test206 composition on207. Preserve distinct root140/external98 scope and require exact new-source hosted/native gates."
+    },
+    {
+      "id": "COMPOSE-REVIEWED-CORE-FOLLOWUPS",
+      "priority": 1,
+      "state": "safely-actionable-after-generation9-checkpoint",
+      "next_action": "Coordinate a fresh source composition of reviewed206 relay,208 backup prerequisite,209 ctutils,210 transport and211 QR on corrected207; verify exact source union, execute new full tests and independent integration review. Preserve every original owner/ref and all native/hosted gates. Reuse the root-owned210 descendant only after its new combined source is qualified."
     }
   ],
-  "successor_generation": 8,
+  "successor_generation": 9,
   "integration_local_source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
   "parent_integration_pr": 205,
   "parent_integration_branch": "codex/generation5-core-20261119",
   "parent_integration_head": "cd7d54ba075118a7ec043788c17718be842ee405",
-  "pull_request_resolution": "PR207 is the corrected main-targeting core, externally owned and awaiting exact hosted gates. PR205 stays draft/held. Independently reviewed ctutils PR209 and externally reviewed backup-verification PR208 are stacked on207. Reviewed relay PR206 remains based on205. PR200 is documentation-only. Optional PR191-199 stay separate and unwired.",
+  "pull_request_resolution": "PR207 is the corrected main-targeting core, externally owned and awaiting exact hosted gates. PR205 stays draft/held. Separately reviewed relay206, backup208, dependency209 and transport210 are stacked on207; QR211 is a separately authored candidate under independent review. PR200 is documentation-only. Optional PR191-199 stay separate and unwired; new nine-layer preparation is on210 and excludes206/208/209/211.",
   "main_merges_performed": 0,
   "published_generations": [
     {
@@ -1052,7 +1133,7 @@
       ]
     }
   ],
-  "repair_counting": "31 reproduced locally corrected causes: prior25, four corrected core causes in207, and two Low relay API/configuration causes in206. Two non-defect integration checks remain separate. One compatible dependency remediation is separate from reproduced product defects; an upstream withdrawal is not a repair.",
+  "repair_counting": "32 reproduced corrected causes:31 implementation defects and one previously reproduced acknowledgment-fixture defect. New QR211 contributes one Low implementation cause, not three causes for its three original failing tests. Two other ledger rows are an integration-boundary check and a workflow gate correction. Compatible dependency209 remediation and the later transport210 qualification correction remain separate.",
   "hosted": [
     {
       "pr": 188,
@@ -1500,7 +1581,15 @@
       "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
       "native_or_custom_gates": [
         "typecheck:proof-inputs"
-      ]
+      ],
+      "generation9_preparation": {
+        "local_head": "6a1e7531897fe0fd5614c982819cf311880abad4",
+        "published_layer_head": "d7845035bf712d107ae4005ed2a720f4c5b089fe",
+        "tree": "dede27391324a45b90b14ef163d837ab89671176",
+        "existing_pr_head_unchanged": true,
+        "source_evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+        "required_gates": "Exact per-source hosted/native/browser and applicable named standalone review; no default activation."
+      }
     },
     {
       "id": "EXTRACT-OPTIONAL-LIQUIDITY",
@@ -1547,7 +1636,15 @@
       },
       "hosted_browser_job": 135983875037,
       "hosted_browser_groups": 12,
-      "integration_sequence": "Qualified child remains unmerged while PR190 runs its native gate; merging into that parent now would change its source head."
+      "integration_sequence": "Qualified child remains unmerged while PR190 runs its native gate; merging into that parent now would change its source head.",
+      "generation9_preparation": {
+        "local_head": "0dffe8fe89ad7cd2cc34b77855ded9da8f1b413c",
+        "published_layer_head": "83e36480e74bb9250e194a50a7b2d41257d8aa24",
+        "tree": "9b1240f3989c7890e791d90f5856b615ce5314d8",
+        "existing_pr_head_unchanged": true,
+        "source_evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+        "required_gates": "Exact per-source hosted/native/browser and applicable named standalone review; no default activation."
+      }
     },
     {
       "id": "EXTRACT-OPTIONAL-ARBITRATION",
@@ -1584,7 +1681,15 @@
       "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
       "native_or_custom_gates": [
         "independent cast3 Vote vectors"
-      ]
+      ],
+      "generation9_preparation": {
+        "local_head": "7a74b21b0756e61409af65a882eabd5ca6dc6730",
+        "published_layer_head": "6eb36df8f14b93d664c32580093d797ee63d68ae",
+        "tree": "25f1127915573b966dc8bb2023128a934501dc19",
+        "existing_pr_head_unchanged": true,
+        "source_evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+        "required_gates": "Exact per-source hosted/native/browser and applicable named standalone review; no default activation."
+      }
     },
     {
       "id": "EXTRACT-OPTIONAL-PRIVACY-POLICY",
@@ -1621,7 +1726,15 @@
       "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
       "native_or_custom_gates": [
         "atomic-group native replay required/optional/complete pair"
-      ]
+      ],
+      "generation9_preparation": {
+        "local_head": "ff37386467b64f6ed140cdb88b29f640d29275e4",
+        "published_layer_head": "a8030df73af7d19aa55757fe3e92546ad69398a6",
+        "tree": "494266ad9d72c2e3532e749a297f81293ef4cb93",
+        "existing_pr_head_unchanged": true,
+        "source_evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+        "required_gates": "Exact per-source hosted/native/browser and applicable named standalone review; no default activation."
+      }
     },
     {
       "id": "EXTRACT-OPTIONAL-COURIER",
@@ -1658,7 +1771,15 @@
       "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
       "native_or_custom_gates": [
         "independent Python278-byte container preimage"
-      ]
+      ],
+      "generation9_preparation": {
+        "local_head": "d4382044b4b98d5fd472a381004b82999f07d1fd",
+        "published_layer_head": "c3cb7c020797a7e9f626d8710565a67e54e77696",
+        "tree": "08f6a31c7f2a1657efc8dacffde72d3ee6e96eca",
+        "existing_pr_head_unchanged": true,
+        "source_evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+        "required_gates": "Exact per-source hosted/native/browser and applicable named standalone review; no default activation."
+      }
     },
     {
       "id": "EXTRACT-OPTIONAL-MEETUP",
@@ -1697,7 +1818,15 @@
         "test:meetup:browser",
         "Python1024 geohash/4096 comparisons",
         "Python92 XYZ vectors"
-      ]
+      ],
+      "generation9_preparation": {
+        "local_head": "df84b5ff0419a5f5e71f97aa0389a46ed646a0fb",
+        "published_layer_head": "0b9596ded94958699cbdb5b55004926576a17284",
+        "tree": "74ed0ac99237c9c0b196b4159edfb2ab44c649c5",
+        "existing_pr_head_unchanged": true,
+        "source_evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+        "required_gates": "Exact per-source hosted/native/browser and applicable named standalone review; no default activation."
+      }
     },
     {
       "id": "EXTRACT-OPTIONAL-PRIVACY-CONTROLS",
@@ -1734,7 +1863,15 @@
       "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
       "native_or_custom_gates": [
         "test:privacy-controls:browser"
-      ]
+      ],
+      "generation9_preparation": {
+        "local_head": "e703ed725205a7dacbd5c61b588c0cf6fc2f582a",
+        "published_layer_head": "6fbe89435493c54351205f38057a6537248a5c77",
+        "tree": "f21e1b5fc8cf2db82df14246e574ec0c163b0e36",
+        "existing_pr_head_unchanged": true,
+        "source_evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+        "required_gates": "Exact per-source hosted/native/browser and applicable named standalone review; no default activation."
+      }
     },
     {
       "id": "EXTRACT-OPTIONAL-STEALTH",
@@ -1771,7 +1908,15 @@
       "hosted_merge_note": "Source heads parent ac9a4b0; hosted merge trees include the newer PR190 base and must be bound separately.",
       "native_or_custom_gates": [
         "independent cast3 public fixture hashes"
-      ]
+      ],
+      "generation9_preparation": {
+        "local_head": "1b173518f5ce2c5f1da01496d0901d377e698915",
+        "published_layer_head": "714493da3a697d91171b0455251ea7073744f584",
+        "tree": "f343acb7c517b2118ff6c9037be4dec34a40e21d",
+        "existing_pr_head_unchanged": true,
+        "source_evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+        "required_gates": "Exact per-source hosted/native/browser and applicable named standalone review; no default activation."
+      }
     },
     {
       "id": "EXTRACT-OPTIONAL-PROOF-JOBS",
@@ -1811,7 +1956,15 @@
         "test:proof:memory",
         "test:proof:browser",
         "optional-proof-jobs.yml"
-      ]
+      ],
+      "generation9_preparation": {
+        "local_head": "390e6685bdf2ba098bc2908183fe5e38442d18cc",
+        "published_layer_head": "c4c640aff58c1bcaf3b80875d121b8a95245ab36",
+        "tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+        "existing_pr_head_unchanged": true,
+        "source_evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+        "required_gates": "Exact per-source hosted/native/browser and applicable named standalone review; no default activation."
+      }
     }
   ],
   "automation": {
@@ -1819,12 +1972,13 @@
     "enabled": true,
     "cadence": "hourly existing schedule",
     "semantics": "durable scheduled continuation; not a claim that completed native workers run continuously",
-    "prompt_updated_at_utc": "2026-11-20T03:26:44.906112+00:00",
-    "last_observed_run": "2026-11-20T02:30:00Z",
-    "last_observed_run_state": "completed2026-11-20T02:40:01Z",
-    "last_result_scope": "Published draft relay206; subsequent actual-module independent reviews complete.",
-    "prompt_refresh_required": false,
-    "checkpoint_pointer_update_after_publication": "Final docs-only PR200 ref will be refreshed in the existing task after its leased update; schedule and environment remain unchanged."
+    "prompt_updated_at_utc": "2026-11-20T03:49:32.041804+00:00",
+    "last_observed_run": "2026-11-20T03:30:00Z",
+    "last_observed_run_state": "completed2026-11-20T03:42:26.600140Z",
+    "last_result_scope": "Published QR211; subsequently independently qualified by root worker38 with112 affected tests and one Low timing cause.",
+    "prompt_refresh_required": true,
+    "checkpoint_pointer_update_after_publication": "Final docs-only PR200 ref will be refreshed in the existing task after its leased update; schedule and environment remain unchanged.",
+    "last_observed_run_id": "888cb5a9-1ec4-832a-9fdd-9b999fcc74da"
   },
   "verification_log_sha256": {
     "generation2-full.tap": "3affa64cd3bdc9562dd5d08eb803a4c8764814332e23b574184c97c6c876d392",
@@ -1854,7 +2008,10 @@
     "optional-composition-source-audit.json": "fa50af9204c3168e9da269824e2ab9f8e2deabbcb986961b098526ab6adb41cd",
     "optional-composition-root-audit.json": "756734fd4866b669896767c4c6dbbef4b11c3dda5ce6407a2cd6d7b5fcdf5891",
     "generation5-core-full.log": "36626a89af28233901be3550f2ffb7c1e74743968b38b39b02f1e7a3977961af",
-    "generation5-core-tooling.log": "4f121ba387f78be9502e3e0b47083f5b6cd238fa43c9ffddd922ff64f4a467a4"
+    "generation5-core-tooling.log": "4f121ba387f78be9502e3e0b47083f5b6cd238fa43c9ffddd922ff64f4a467a4",
+    "generation9_optional_full": "b4b365820bc81f572118982248629e7fc7bd121dd7d7abfb68b1445cc0e824b4",
+    "generation9_optional_independent_boundaries": "68eef7a6240c5ddd7357fad402d61c9fd8f0caa465a4a0ae37544d3623278013",
+    "generation9_qr_affected": "5880e2e0e6fe4ffa928f3784873ff9d8208a7e5a3f91137f62d151d2666f928e"
   },
   "integration_pr": 207,
   "integration_published_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
@@ -1933,6 +2090,14 @@
       "counted_as_product_defect": false,
       "pr": 210,
       "published_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265"
+    },
+    {
+      "id": "FIX-QR-ASYNC-EXPIRY-RECHECK",
+      "severity": "Low",
+      "state": "independently-closed-on211-local-scope-hosted-pending",
+      "pr": 211,
+      "review_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+      "scope": "Expiry and clock availability revalidated after asynchronous operations at public-review boundary; authority none."
     }
   ],
   "optional_composition": {
@@ -1979,7 +2144,7 @@
     "author_report": "OPTIONAL_COMPOSITION_20261119.md",
     "author_report_commit": "27fba7450600836b5edc131ae1f4f1744ae96248"
   },
-  "native_workers_actually_launched": 35,
+  "native_workers_actually_launched": 38,
   "optional_hosted_snapshot": {
     "observed_at_utc": "2026-11-20T01:16:13.483Z",
     "checks": {
@@ -2730,7 +2895,7 @@
     "independent_report": "38536886cb08066ee8679325a2bceae65d4cd366",
     "author_report": "4e5ea0ffe27f031e77297c8119d2c1a36177e012"
   },
-  "reproduced_repairs_count": 31,
+  "reproduced_repairs_count": 32,
   "non_defect_integration_checks_count": 2,
   "solana_restore_repair": {
     "pr": 203,
@@ -3153,7 +3318,8 @@
     "default_files_identical": 13,
     "demo_files_identical": 14,
     "optional_graph_imports": 0,
-    "state": "locally-qualified-held-for-corrected-core-recomposition-independent-review-and-applicable-standalone-review-and-hosted-gates"
+    "state": "locally-qualified-held-for-corrected-core-recomposition-independent-review-and-applicable-standalone-review-and-hosted-gates",
+    "superseded_by_generation9_preparation": "390e6685bdf2ba098bc2908183fe5e38442d18cc"
   },
   "integration_owner": "external-successor-coordinator",
   "coordination_branch": "codex/consolidation-handoff-20261119",
@@ -3235,5 +3401,125 @@
     "open_high_medium_in_reviewed_scope": 0,
     "merge_object": "604cbc5fac9228ab22c6d447059d09220452334b"
   },
-  "latest_completed_native_evidence": "native-final-receipts-generation8.json"
+  "latest_completed_native_evidence": "native-final-receipts-generation8.json",
+  "generation9_optional_stack": {
+    "source": "390e6685bdf2ba098bc2908183fe5e38442d18cc",
+    "tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+    "base": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+    "base_pr": 210,
+    "state": "locally-qualified-independently-reviewed-durable-layer-evidence-published-hosted-and-standalone-gates-pending",
+    "layers": 9,
+    "original_optional_refs_changed": false,
+    "bulk_optional_pr_created": false,
+    "separate_candidates_excluded": [
+      206,
+      208,
+      209,
+      211
+    ],
+    "author_report_commit": "5ffd917aefc8b753c6a2afd98b913c9c5b99de73",
+    "independent_report_commit": "479e0e9fe95420699f1f0e24208751712bd68239",
+    "plan": "generation9-optional-stack-plan.json",
+    "published_mapping": "generation9-optional-published-layers.json",
+    "source_evidence_head": "c4c640aff58c1bcaf3b80875d121b8a95245ab36",
+    "evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+    "published_report_head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+    "published_report_tree": "6a9eb6f25ea0568daa80b928408c958356a3db59",
+    "report_only_paths_after_tested_source": 4,
+    "full_passed": 2681,
+    "full_failed": 0,
+    "full_skipped": 0,
+    "full_cancelled": 0,
+    "full_suite_invocations": 1,
+    "tooling_passed": 44,
+    "policy_passed": 57,
+    "typescript_configurations": 7,
+    "specification_tests_passed": 32,
+    "production_files": 304,
+    "core_modules": 142,
+    "independent_boundary_tests_passed": 16,
+    "protected_base_entries_preserved_each_layer": 2463,
+    "core_commands_preserved": 56,
+    "total_commands": 62,
+    "default_artifact_files_identical": 13,
+    "demo_artifact_files_identical": 14,
+    "optional_graph_imports": 0,
+    "root_logs_hash_verified": 18,
+    "independent_author_reference_logs_hash_verified": 20,
+    "independent_artifact_files_hashed": 54,
+    "independent_graph_module_hashes_checked": 256,
+    "open_high_or_medium_in_integration_review": 0,
+    "named_standalone_review_condition_satisfied": false,
+    "hosted_native_browser_qualification_complete": false
+  },
+  "qr_async_expiry_review": {
+    "pr": 211,
+    "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+    "tree": "224341968be39c6de7874b34a1f7fd6eefa19857",
+    "base_pr": 207,
+    "state": "independently-reviewed-local-scoped-qualification-complete-hosted-pending",
+    "counted_as_completed_cause": true,
+    "source_paths": [
+      "packages/qr/src/text-codec.ts",
+      "packages/qr/test/async-expiry.test.mjs",
+      "docs/engineering/QR_ASYNC_EXPIRY_RECHECK_20261120.md"
+    ],
+    "scope": "Post-await expiry/clock recheck at public QR review boundary; authority none; no financial exploit established.",
+    "cause_count": 1,
+    "severity": "Low",
+    "review_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+    "review_tree": "046ade29db8960d21a697bcf7af83f8b7cedbb4c",
+    "report": "INDEPENDENT_QR_ASYNC_EXPIRY_REVIEW_GENERATION9_20261120.md",
+    "original_regressions": {
+      "passed": 1,
+      "failed": 3
+    },
+    "fixed_regressions": {
+      "passed": 4,
+      "failed": 0
+    },
+    "affected": {
+      "passed": 112,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "includes_four_regressions": true
+    },
+    "typescript_projects_executed": 1,
+    "boundaries": {
+      "production_files": 238,
+      "core_modules": 142
+    },
+    "root_hash_verified_logs": 5,
+    "author_ref_changed": false,
+    "full_suite_executed": false,
+    "browser_executed": false
+  },
+  "local_resource_recovery_generation9": {
+    "observed_at": "2026-11-20T03:48:44.704909+00:00",
+    "scope": "Only verified ignored node_modules in seven completed root-owned worktrees; all source, reports, logs, primary dependencies and toolchains retained.",
+    "free_bytes_before": 217866240,
+    "free_bytes_after": 1865625600,
+    "removed": [
+      "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation8-transport-fixture/node_modules",
+      "/workspace/scratch/6bd6e00af1c0/p2p-offramp-transport-publication/node_modules",
+      "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation7-relay-independent/node_modules",
+      "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation6-optional-stack/node_modules",
+      "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation5-core/node_modules",
+      "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation5-core-audit/node_modules",
+      "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation6-core-audit/node_modules"
+    ],
+    "git_status_unchanged": true,
+    "active_worktree_check": true
+  },
+  "repair_count_breakdown": {
+    "reproduced_implementation_defects": 31,
+    "reproduced_historical_fixture_defects": 1,
+    "reproduced_total": 32,
+    "other_ledger_rows": 2,
+    "separate_dependency_remediations": 1,
+    "separate_generation8_transport_qualification_corrections": 1,
+    "note": "Refines prior loose product-cause wording without changing any earlier repair identity or evidence."
+  },
+  "hosted_generation9_snapshot": "hosted-snapshot-generation9.json"
 }

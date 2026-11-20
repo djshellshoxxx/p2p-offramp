@@ -518,8 +518,8 @@
       },
       {
         "feature_id": "F18",
-        "status": "Implemented within public review scope",
-        "change": "189 completed six actual Chromium journeys with synthetic camera. New core retains source but still needs its exact hosted execution; no physical-device or authenticated-invite claim."
+        "status": "Implemented public-review source; separate211 timing correction independently reviewed",
+        "change": "211 rechecks expiry and clock validity after awaited hash/verifier work. Original1pass/3fail became4pass; affected112pass includes those4. One Low cause; authority none. Actual new-source browser/physical-device and authenticated invite qualification remain separate."
       },
       {
         "feature_id": "F24",
@@ -533,11 +533,29 @@
       },
       {
         "feature_id": "F22",
-        "status": "Nine reviewed separate source PRs; corrected-base qualification remains",
-        "change": "191\u2013199 stay unwired. Older205-based all-nine composition passed2617 and preserved13 default/14 demo artifacts; external evidence branch is tree-identical. It predates four core repairs. Recompose one package at a time and satisfy standalone review conditions."
+        "status": "Nine separately reviewed packages recomposed on corrected210; local2681-pass evidence published",
+        "change": "Generation9 preserves2463 core entries at every layer, exact original package subtrees,56-to62 command union and13 default/14 demo files; zero optional graph imports. Evidence8af4dbc2 preserves nine original-head-parent layers; original PR191-199 remain unchanged. Standalone named review and source-bound hosted/native/browser gates remain."
       }
     ],
-    "hosted_failure_report": "HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md"
+    "hosted_failure_report": "HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md",
+    "generation9_optional_evidence": {
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "tree": "6a9eb6f25ea0568daa80b928408c958356a3db59",
+      "tested_source_tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+      "full_passed": 2681,
+      "separate_candidates_excluded": [
+        206,
+        208,
+        209,
+        211
+      ]
+    },
+    "qr211_independent": {
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "affected_passed": 112,
+      "report_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+      "status": "locally-qualified-separate-source-hosted-pending"
+    }
   },
   "additional_staging_capabilities": [
     {

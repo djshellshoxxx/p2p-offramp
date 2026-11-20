@@ -1,0 +1,186 @@
+{
+  "schema": 1,
+  "generated_at_utc": "2026-11-20T03:59:09.158Z",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "purpose": "Durable nine-layer evidence mapping; original optional PR refs remain unchanged and no bulk optional PR is created.",
+  "base_pr": 210,
+  "base_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+  "base_tree": "47f982cf20cd123df45805597b266f1f5ab98259",
+  "tested_local_source": "390e6685bdf2ba098bc2908183fe5e38442d18cc",
+  "tested_source_tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+  "prepared_remote_source_head": "c4c640aff58c1bcaf3b80875d121b8a95245ab36",
+  "source_tree_equality_verified": true,
+  "layer_ordered_parents_verified": true,
+  "ref_publication_state": "nine-source-layer-commits-published-and-verified",
+  "layers": [
+    {
+      "pr": 191,
+      "package": "proof-inputs",
+      "original_branch": "codex/optional-proof-inputs-20261119",
+      "expected_original_head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "local_prepared_head": "6a1e7531897fe0fd5614c982819cf311880abad4",
+      "published_layer_head": "d7845035bf712d107ae4005ed2a720f4c5b089fe",
+      "tree": "dede27391324a45b90b14ef163d837ab89671176",
+      "ordered_parents": [
+        "61f0c6c05d245c4cc7524852224d00693929df3c",
+        "cff9eb05d77c82c82a5d22a5395b0ce63b02b265"
+      ],
+      "intended_base_branch": "codex/transport-qualification-20261120",
+      "paths_vs_preceding_layer": 12,
+      "remote_identity_verified": true
+    },
+    {
+      "pr": 192,
+      "package": "liquidity",
+      "original_branch": "codex/optional-liquidity-20261119",
+      "expected_original_head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "local_prepared_head": "0dffe8fe89ad7cd2cc34b77855ded9da8f1b413c",
+      "published_layer_head": "83e36480e74bb9250e194a50a7b2d41257d8aa24",
+      "tree": "9b1240f3989c7890e791d90f5856b615ce5314d8",
+      "ordered_parents": [
+        "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+        "d7845035bf712d107ae4005ed2a720f4c5b089fe"
+      ],
+      "intended_base_branch": "codex/optional-proof-inputs-20261119",
+      "paths_vs_preceding_layer": 14,
+      "remote_identity_verified": true
+    },
+    {
+      "pr": 193,
+      "package": "arbitration",
+      "original_branch": "codex/optional-arbitration-20261119",
+      "expected_original_head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "local_prepared_head": "7a74b21b0756e61409af65a882eabd5ca6dc6730",
+      "published_layer_head": "6eb36df8f14b93d664c32580093d797ee63d68ae",
+      "tree": "25f1127915573b966dc8bb2023128a934501dc19",
+      "ordered_parents": [
+        "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+        "83e36480e74bb9250e194a50a7b2d41257d8aa24"
+      ],
+      "intended_base_branch": "codex/optional-liquidity-20261119",
+      "paths_vs_preceding_layer": 20,
+      "remote_identity_verified": true
+    },
+    {
+      "pr": 194,
+      "package": "privacy-policy",
+      "original_branch": "codex/optional-privacy-policy-20261119",
+      "expected_original_head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "local_prepared_head": "ff37386467b64f6ed140cdb88b29f640d29275e4",
+      "published_layer_head": "a8030df73af7d19aa55757fe3e92546ad69398a6",
+      "tree": "494266ad9d72c2e3532e749a297f81293ef4cb93",
+      "ordered_parents": [
+        "a419b420dcee58ce99391a0f73289aa28dc6413b",
+        "6eb36df8f14b93d664c32580093d797ee63d68ae"
+      ],
+      "intended_base_branch": "codex/optional-arbitration-20261119",
+      "paths_vs_preceding_layer": 11,
+      "remote_identity_verified": true
+    },
+    {
+      "pr": 195,
+      "package": "courier",
+      "original_branch": "codex/optional-courier-20261119",
+      "expected_original_head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "local_prepared_head": "d4382044b4b98d5fd472a381004b82999f07d1fd",
+      "published_layer_head": "c3cb7c020797a7e9f626d8710565a67e54e77696",
+      "tree": "08f6a31c7f2a1657efc8dacffde72d3ee6e96eca",
+      "ordered_parents": [
+        "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+        "a8030df73af7d19aa55757fe3e92546ad69398a6"
+      ],
+      "intended_base_branch": "codex/optional-privacy-policy-20261119",
+      "paths_vs_preceding_layer": 24,
+      "remote_identity_verified": true
+    },
+    {
+      "pr": 196,
+      "package": "meetup",
+      "original_branch": "codex/optional-meetup-20261119",
+      "expected_original_head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "local_prepared_head": "df84b5ff0419a5f5e71f97aa0389a46ed646a0fb",
+      "published_layer_head": "0b9596ded94958699cbdb5b55004926576a17284",
+      "tree": "74ed0ac99237c9c0b196b4159edfb2ab44c649c5",
+      "ordered_parents": [
+        "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+        "c3cb7c020797a7e9f626d8710565a67e54e77696"
+      ],
+      "intended_base_branch": "codex/optional-courier-20261119",
+      "paths_vs_preceding_layer": 39,
+      "remote_identity_verified": true
+    },
+    {
+      "pr": 197,
+      "package": "privacy-controls",
+      "original_branch": "codex/optional-privacy-controls-20261119",
+      "expected_original_head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "local_prepared_head": "e703ed725205a7dacbd5c61b588c0cf6fc2f582a",
+      "published_layer_head": "6fbe89435493c54351205f38057a6537248a5c77",
+      "tree": "f21e1b5fc8cf2db82df14246e574ec0c163b0e36",
+      "ordered_parents": [
+        "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+        "0b9596ded94958699cbdb5b55004926576a17284"
+      ],
+      "intended_base_branch": "codex/optional-meetup-20261119",
+      "paths_vs_preceding_layer": 16,
+      "remote_identity_verified": true
+    },
+    {
+      "pr": 198,
+      "package": "stealth",
+      "original_branch": "codex/optional-stealth-20261119",
+      "expected_original_head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "local_prepared_head": "1b173518f5ce2c5f1da01496d0901d377e698915",
+      "published_layer_head": "714493da3a697d91171b0455251ea7073744f584",
+      "tree": "f343acb7c517b2118ff6c9037be4dec34a40e21d",
+      "ordered_parents": [
+        "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+        "6fbe89435493c54351205f38057a6537248a5c77"
+      ],
+      "intended_base_branch": "codex/optional-privacy-controls-20261119",
+      "paths_vs_preceding_layer": 21,
+      "remote_identity_verified": true
+    },
+    {
+      "pr": 199,
+      "package": "proof-jobs",
+      "original_branch": "codex/optional-proof-jobs-20261119",
+      "expected_original_head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "local_prepared_head": "390e6685bdf2ba098bc2908183fe5e38442d18cc",
+      "published_layer_head": "c4c640aff58c1bcaf3b80875d121b8a95245ab36",
+      "tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+      "ordered_parents": [
+        "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+        "714493da3a697d91171b0455251ea7073744f584"
+      ],
+      "intended_base_branch": "codex/optional-stealth-20261119",
+      "paths_vs_preceding_layer": 22,
+      "remote_identity_verified": true
+    }
+  ],
+  "qualification": {
+    "full_source_passed": 2681,
+    "full_source_failed": 0,
+    "full_source_skipped": 0,
+    "full_source_cancelled": 0,
+    "source_report": "GENERATION9_OPTIONAL_CORRECTED_STACK_20261120.md",
+    "independent_report": "INDEPENDENT_OPTIONAL_CORRECTED_STACK_GENERATION9_20261120.md",
+    "independent_report_commit": "479e0e9fe95420699f1f0e24208751712bd68239",
+    "independent_boundary_passed": 16,
+    "per_layer_full_suite_executed": false,
+    "hosted_native_browser_pending": true,
+    "standalone_named_review_required": true,
+    "default_activation": false
+  },
+  "excluded_separate_candidates": [
+    206,
+    208,
+    209,
+    211
+  ],
+  "main_merge_performed": false,
+  "evidence_branch": "codex/optional-corrected-evidence-g9-20261120",
+  "source_branch_head": "c4c640aff58c1bcaf3b80875d121b8a95245ab36",
+  "author_report_commit": "5ffd917aefc8b753c6a2afd98b913c9c5b99de73",
+  "report_append_policy": "Author and independent reports retain their dated local-source statements. Resolve the evidence branch for later report-only descendants; source tree and layer mapping remain exact."
+}

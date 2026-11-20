@@ -1,6 +1,108 @@
 # P2P-Offramp consolidation handoff
 
-## Current generation 8 coordination checkpoint
+## Current generation 9 coordination checkpoint
+
+**The nine optional packages are now independently reviewed and locally qualified on corrected PR210, and the separate QR211 correction has completed focused independent validation.** Main remains `5c5a84ef6300330700c8b0ca54d074ac113f08be`; this coordinator has performed **zero main merges**. Exact-source hosted/native/browser gates remain open. All three generation9 workers completed their assigned scopes; **38 distinct native workers** have actually launched in this root tree. The external coordinator's workers remain separately attributed.
+
+### Corrected optional composition, preserved as nine layers
+
+The tested source is `390e6685bdf2ba098bc2908183fe5e38442d18cc`, tree
+`19e8952f7786cae85c661457c0e1545da4f8b758`, based on exact PR210
+`cff9eb05d77c82c82a5d22a5395b0ce63b02b265`. Its single full execution passed
+**2,681/2,681**, zero failures, skips, cancellations or todos. The same frozen
+source passed 44 tooling tests,57 policy tests,seven TypeScript configurations,
+32 specification tests,304/142 import boundaries,docs/governance and native
+Node Worker/WASM memory-cap checks. No local Chromium or extended native
+financial execution was added.
+
+The published source-layer equivalent is `c4c640aff58c1bcaf3b80875d121b8a95245ab36`
+with the exact tested tree. The dedicated evidence branch
+[`codex/optional-corrected-evidence-g9-20261120`](https://github.com/djshellshoxxx/p2p-offramp/tree/codex/optional-corrected-evidence-g9-20261120)
+now ends at **`8af4dbc2b60b106ec80a2417ddf78d487c3f3586`**, tree
+`6a9eb6f25ea0568daa80b928408c958356a3db59`. That descendant adds only four
+evidence documents. All nine remote layer trees and ordered parents were
+individually verified. Each retains its original optional head as first parent
+and the preceding prepared layer, or210, as second parent. **Original PR191–199
+refs remain unchanged; no bulk optional PR was created.**
+
+The author preserved all 2,463 base entries outside the two permitted shared
+files at every layer, exact original package subtrees, all 56 core commands in
+the 62-command union, and all 139 foundation lines plus seven reviewed additions.
+All 13 default and 14 demo files match fresh210 builds byte for byte, with zero
+optional graph imports. Independent reviewer37 ran16/16 boundary tests and
+separately checked all 20 author/reference logs,54 actual artifact files and 256
+graph-module hashes. Root read the actual full summary and hash-verified all 18
+author qualification logs. These are distinct evidence scopes, not additive test
+counts. No open High/Medium integration finding remains.
+
+Read the [author report](GENERATION9_OPTIONAL_CORRECTED_STACK_20261120.md),
+[independent review](INDEPENDENT_OPTIONAL_CORRECTED_STACK_GENERATION9_20261120.md),
+[complete source-bound plan](generation9-optional-stack-plan.json) and
+[local-to-published layer mapping](generation9-optional-published-layers.json).
+The old2617-test205-based stack remains historical. The new stack excludes
+separate relay206,backup208,dependency209 and QR211. Per-source hosted/native/
+browser checks and the accepted standalone CodeRabbit/Qodo review condition
+remain required. No default activation or policy waiver is established.
+
+### QR211: one independently corrected review-timing cause
+
+[PR211](https://github.com/djshellshoxxx/p2p-offramp/pull/211) remains at
+`e7397f45f68f18fae8857ea31b58a04e248df404`, tree
+`224341968be39c6de7874b34a1f7fd6eefa19857`, based on 207. Independent worker 38
+ran the supplied tests on the exact original test-only predecessor: **1 passed,
+3 failed**. The identical tests on 211 passed **4/4**. Its combined maintained
+QR/application/policy selection passed **112/112**, including those four tests,
+with zero skips or cancellations. The root TypeScript project and 238/142 import
+boundary check also passed; root hash-verified the five execution logs.
+
+The correction refreshes clock validity and expiry after awaited hashing and
+signature verification and clamps observed time within a decode. This is **one
+Low implementation cause**, with several asynchronous variants. The public review
+retains `authority: none`; no payment or signing authority was added. No open
+High,Medium or Low finding remained in the reviewed diff. Report-only review
+`49761aac1b2868a39ff0e80317f9d8c070660de9` is preserved in the
+[independent QR report](INDEPENDENT_QR_ASYNC_EXPIRY_REVIEW_GENERATION9_20261120.md).
+Actual new-source browser and applicable composed-source qualification remain.
+
+### Counting, hosted state and continuation
+
+The exact ledger now has **32 reproduced corrections:31 implementation defects
+and one previously reproduced acknowledgment-fixture defect**. Two other ledger
+rows are an integration-boundary check and a workflow gate correction. The
+compatible ctutils remediation and later210 transport qualification correction
+are separately tracked. This refines earlier loose product-cause wording;
+no earlier repair identity, original failure or test count was changed.
+
+The [03:52:02 UTC hosted snapshot](hosted-snapshot-generation9.json) observed207
+with 11 successful records,one failed foundation-browser diagnostic and one
+running native job;210 had10 queued records and 211 had9 queued records. These
+are selected-source observations, not a full inventory or new test executions.
+Completed203/205 validator/browser receipts remain bound to those ancestor
+sources, and 205 still lacks the four later core corrections. Both real refund
+waits, every financial assertion and the actual transport-warmth requirement
+remain intact.
+
+Scratch exhaustion was resolved by removing only ignored dependency caches from
+seven completed root-owned worktrees. Source, reports, logs, toolchains and active
+work were preserved, Git status remained unchanged, and 1,865,625,600 bytes were
+free immediately afterward. The state includes the cleanup receipt. No other
+owner's checkout was modified.
+
+The existing hourly automation remains enabled with its schedule and environment
+unchanged. Its 03:30 run actually completed at 03:42:26 UTC and published211;
+worker 38 subsequently closed that candidate's local review gap. The task prompt
+will be refreshed to this published checkpoint before the next continuation.
+
+**Useful remaining integration work is identified:** compose the reviewed206,
+208,209,210 and 211 followups on corrected207, preserving exact source unions,
+then perform new combined execution and independent review. The root-owned210
+descendant is the candidate for an ordinary leased advance after qualification;
+207 and other source-owner refs must remain untouched. Fresh workers must read
+this checkpoint and live ownership before beginning. Optional layers remain
+separate and would require fresh rebinding if that core changes. Do not rerun
+closed package audits, transfer ancestor passes, or manufacture new work.
+
+## Historical generation 8 coordination checkpoint
 
 **Corrected core [PR207](https://github.com/djshellshoxxx/p2p-offramp/pull/207) remains held after its actual browser diagnostic failed the mandatory warmed-connection precondition.** Head `df10fe26a308407237f9ccbc636c8bb61f55b84f`, tree `4b694124197ae8ce271f14307d12abc43c719406`, directly descends from PR205. The remote tree equals the external successor's local report checkpoint. PR205 remains draft/held because it lacks four corrected defects. Main remains `5c5a84ef6300330700c8b0ca54d074ac113f08be`; this coordinator has merged zero PRs into main. Resolve live refs before acting; all status below is dated evidence.
 
