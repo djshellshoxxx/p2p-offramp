@@ -1,6 +1,6 @@
 /**
  * Partial G07/MEM01 offline Worker boundary. No network or signer operation exists. The only record operations are the
- * purpose-bound saved terms reviews, their bounded encrypted favorites, reusable templates and scalar offline recovery inspection;
+ * purpose-bound saved terms reviews, their bounded encrypted favorites, reusable templates, scalar offline recovery inspection and retention counts;
  * no generic record read or write exists.
  */
 import { decodeBase64url, encodePassphrase, MAX_RECORDS, MAX_VAULT_PROFILES, ValidationError } from './vault.ts';
@@ -55,11 +55,17 @@ export interface RuntimeTradeTemplatePreview {
 export interface RuntimeTradeTemplateConsent { readonly reviewed: true; readonly logicalOnly: true; readonly backupAndRemoteLimitsAcknowledged: true; }
 export interface RuntimeTradeTemplateReceipt { readonly revision: number; readonly changed: boolean; readonly persisted: true; readonly sessionCurrent: boolean; }
 export interface RuntimeTradeTemplateCancelled { readonly cancelled: true; }
-export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore | RuntimeSavedReviewRef | RuntimeSavedReviews | RuntimeRecoveryReferences | RuntimeSavedReviewFavorites | RuntimeSavedReviewFavorite | RuntimeTradeTemplates | RuntimeTradeTemplatePreview | RuntimeTradeTemplateReceipt | RuntimeTradeTemplateCancelled | BackupVerificationReceipt | RuntimeBackupVerification;
+/** DATA01 offline counts only. This projection carries no native review or deletion authority. */
+export interface RuntimeRetentionPreview {
+  readonly version: 1; readonly revision: number; readonly archiveReviewCount: number;
+  readonly reviewedDeleteCount: 0; readonly protectedCount: number;
+  readonly logicalOnly: true; readonly backupAndRemoteCopiesUnaffected: true;
+}
+export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore | RuntimeSavedReviewRef | RuntimeSavedReviews | RuntimeRecoveryReferences | RuntimeSavedReviewFavorites | RuntimeSavedReviewFavorite | RuntimeTradeTemplates | RuntimeTradeTemplatePreview | RuntimeTradeTemplateReceipt | RuntimeTradeTemplateCancelled | BackupVerificationReceipt | RuntimeBackupVerification | RuntimeRetentionPreview;
 export type RuntimeOperation = 'init' | 'status' | 'unlock' | 'create' | 'restore' | 'listProfiles' | 'lock' | 'exportEncrypted' | 'dispose' | 'activity' |
-  'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification';
+  'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification' | 'planRetention';
 const OPERATIONS: readonly RuntimeOperation[] = ['init', 'status', 'unlock', 'create', 'restore', 'listProfiles', 'lock', 'exportEncrypted', 'dispose', 'activity',
-  'saveTermsReview', 'listTermsReviews', 'deleteTermsReview', 'listRecoveryReferences', 'listFavoriteReviews', 'setReviewFavorite', 'loadTradeTemplates', 'previewTradeTemplateChange', 'commitTradeTemplateChange', 'cancelTradeTemplateChange', 'verifyBackup', 'checkBackupVerification'];
+  'saveTermsReview', 'listTermsReviews', 'deleteTermsReview', 'listRecoveryReferences', 'listFavoriteReviews', 'setReviewFavorite', 'loadTradeTemplates', 'previewTradeTemplateChange', 'commitTradeTemplateChange', 'cancelTradeTemplateChange', 'verifyBackup', 'checkBackupVerification', 'planRetention'];
 interface Header { readonly version: 1; readonly requestId: number; readonly generation: number; }
 export type RuntimeCommand = Header & (
   { readonly operation: 'init'; readonly config: RuntimeConfig } |
@@ -68,6 +74,7 @@ export type RuntimeCommand = Header & (
   { readonly operation: 'restore'; readonly bytes: Uint8Array; readonly sourcePassphrase: string; readonly destinationPassphrase: string } |
   { readonly operation: 'verifyBackup'; readonly profileId: string; readonly bytes: Uint8Array; readonly passphrase: string } |
   { readonly operation: 'checkBackupVerification'; readonly profileId: string } |
+  { readonly operation: 'planRetention'; readonly profileId: string; readonly nowMs: number } |
   { readonly operation: 'exportEncrypted'; readonly profileId: string } |
   { readonly operation: 'saveTermsReview'; readonly profileId: string; readonly source: SavedReviewSource; readonly bytes: Uint8Array } |
   { readonly operation: 'listTermsReviews'; readonly profileId: string } |
@@ -87,6 +94,7 @@ export type RuntimeResponse = Header & { readonly kind: 'response'; readonly ope
   { readonly operation: 'restore'; readonly result: { readonly ok: true; readonly value: RuntimeRestore } } |
   { readonly operation: 'verifyBackup'; readonly result: { readonly ok: true; readonly value: BackupVerificationReceipt } } |
   { readonly operation: 'checkBackupVerification'; readonly result: { readonly ok: true; readonly value: RuntimeBackupVerification } } |
+  { readonly operation: 'planRetention'; readonly result: { readonly ok: true; readonly value: RuntimeRetentionPreview } } |
   { readonly operation: 'saveTermsReview'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviewRef } } |
   { readonly operation: 'deleteTermsReview'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviewRef } } |
   { readonly operation: 'listTermsReviews'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviews } } |
@@ -97,7 +105,7 @@ export type RuntimeResponse = Header & { readonly kind: 'response'; readonly ope
   { readonly operation: 'previewTradeTemplateChange'; readonly result: { readonly ok: true; readonly value: RuntimeTradeTemplatePreview } } |
   { readonly operation: 'commitTradeTemplateChange'; readonly result: { readonly ok: true; readonly value: RuntimeTradeTemplateReceipt } } |
   { readonly operation: 'cancelTradeTemplateChange'; readonly result: { readonly ok: true; readonly value: RuntimeTradeTemplateCancelled } } |
-  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'deleteTermsReview' | 'listTermsReviews' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
+  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'deleteTermsReview' | 'listTermsReviews' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification' | 'planRetention'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
 export type RuntimeMessage = RuntimeResponse | { readonly version: 1; readonly kind: 'locked'; readonly generation: number } |
   { readonly version: 1; readonly kind: 'closed'; readonly generation: number; readonly code: RuntimeErrorCode };
 
@@ -169,6 +177,7 @@ export function parseRuntimeCommand(input: unknown): RuntimeCommand {
     op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'verifyBackup' ? ['profileId', 'bytes', 'passphrase'] : op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'listFavoriteReviews' || op === 'loadTradeTemplates' || op === 'cancelTradeTemplateChange' || op === 'checkBackupVerification' ? ['profileId'] :
     op === 'saveTermsReview' ? ['profileId', 'source', 'bytes'] : op === 'deleteTermsReview' ? ['profileId', 'recordId'] : op === 'listRecoveryReferences' ? ['profileId', 'offset', 'expectedRevision'] :
     op === 'setReviewFavorite' ? ['profileId', 'recordId', 'favorite', 'expectedRevision'] :
+    op === 'planRetention' ? ['profileId', 'nowMs'] :
     op === 'previewTradeTemplateChange' ? ['profileId', 'expectedRevision', 'change'] :
     op === 'commitTradeTemplateChange' ? ['profileId', 'expectedRevision', 'previewId', 'consent'] : [];
   const raw = exact(input, ['version', 'requestId', 'generation', 'operation', ...extra]); const base = header(raw);
@@ -184,6 +193,11 @@ export function parseRuntimeCommand(input: unknown): RuntimeCommand {
     // Validate scalars before retaining the bounded owned file copy.
     const profileId = profile(raw.profileId), password = passphrase(raw.passphrase);
     return Object.freeze({ ...base, operation: op, profileId, passphrase: password, bytes: boundedBytes(raw.bytes, MAX_BACKUP_BYTES) });
+  }
+  if (op === 'planRetention') {
+    const nowMs = raw.nowMs;
+    if (typeof nowMs !== 'number' || !Number.isSafeInteger(nowMs) || nowMs < 0) return fail();
+    return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), nowMs });
   }
   if (op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'listFavoriteReviews' || op === 'loadTradeTemplates' || op === 'cancelTradeTemplateChange' || op === 'checkBackupVerification') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId) });
   if (op === 'saveTermsReview') {
@@ -311,6 +325,14 @@ export function parseRuntimeTradeTemplateReceipt(input: unknown): RuntimeTradeTe
 function templateCancelled(input: unknown): RuntimeTradeTemplateCancelled {
   const raw = exact(input, ['cancelled']); if (raw.cancelled !== true) return fail(); return Object.freeze({ cancelled: true });
 }
+export function parseRuntimeRetentionPreview(input: unknown): RuntimeRetentionPreview {
+  const raw = exact(input, ['version', 'revision', 'archiveReviewCount', 'reviewedDeleteCount', 'protectedCount', 'logicalOnly', 'backupAndRemoteCopiesUnaffected']);
+  const archiveReviewCount = revision(raw.archiveReviewCount), protectedCount = revision(raw.protectedCount);
+  if (raw.version !== 1 || raw.reviewedDeleteCount !== 0 || raw.logicalOnly !== true || raw.backupAndRemoteCopiesUnaffected !== true ||
+      archiveReviewCount > protectedCount || protectedCount > MAX_RECORDS) return fail();
+  return Object.freeze({ version: 1, revision: revision(raw.revision), archiveReviewCount, reviewedDeleteCount: 0, protectedCount,
+    logicalOnly: true, backupAndRemoteCopiesUnaffected: true });
+}
 export function parseRuntimeMessage(input: unknown): RuntimeMessage {
   const kind = own(input, 'kind');
   if (kind === 'locked' || kind === 'closed') {
@@ -337,6 +359,7 @@ export function parseRuntimeMessage(input: unknown): RuntimeMessage {
     const value = exact(result.value, ['verification']);
     try { return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: Object.freeze({ verification: value.verification === null ? null : parseBackupVerificationReceipt(value.verification) }) }) }); } catch { return fail(); }
   }
+  if (base.operation === 'planRetention') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: parseRuntimeRetentionPreview(result.value) }) });
   if (base.operation === 'exportEncrypted') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: encryptedExport(result.value) }) });
   if (base.operation === 'listProfiles') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: inventory(result.value) }) });
   if (base.operation === 'restore') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: restored(result.value) }) });

@@ -1,6 +1,6 @@
 /** Offline document composition boundary. UI receives state and commands, never a vault handle or record. */
 import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore,
-  type BackupVerificationReceipt, type RuntimeBackupVerification,
+  type BackupVerificationReceipt, type RuntimeBackupVerification, type RuntimeRetentionPreview,
   type RuntimeTradeTemplates, type RuntimeTradeTemplatePreview, type RuntimeTradeTemplateReceipt, type RuntimeTradeTemplateCancelled, type RuntimeTradeTemplateConsent, type TradeDraftChangeV1,
   type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeSavedReviewFavorites, type RuntimeSavedReviewFavorite } from '../../../packages/schemas/index.ts';
 import { AppRuntime, type AppRuntimeOptions, type RuntimeBackupSelection } from './runtime/app-runtime.ts';
@@ -31,6 +31,8 @@ export interface AppServices {
   verifyBackup(bytes: Uint8Array, passphrase: string, signal?: AbortSignal): Promise<AppResult<BackupVerificationReceipt>>;
   /** Fresh Worker/storage recheck of the current selected-profile verification, without caller-supplied facts. */
   checkBackupVerification(signal?: AbortSignal): Promise<AppResult<RuntimeBackupVerification>>;
+  /** DATA01 explicit offline counts; no record IDs, native review or deletion authority. */
+  planRetention(nowMs: number, signal?: AbortSignal): Promise<AppResult<RuntimeRetentionPreview>>;
   /** Opaque selection lease for trusted composition, including one acknowledged
    * own lock. It never accepts a receipt or supplies update/navigation authority. */
   captureBackupSelection(): AppBackupSelection | null;
@@ -49,7 +51,7 @@ export interface AppServices {
   listRecoveryReferences(offset?: number, expectedRevision?: number | null, signal?: AbortSignal): Promise<AppResult<RuntimeRecoveryReferences>>;
   dispose(): Promise<void>;
 }
-export type { RuntimeErrorCode, RuntimeInventory, RuntimeRestore, RuntimeSavedReviewRef, RuntimeSavedReviews, SavedReviewSource, RuntimeSavedReviewFavorites, RuntimeSavedReviewFavorite };
+export type { RuntimeErrorCode, RuntimeInventory, RuntimeRestore, RuntimeSavedReviewRef, RuntimeSavedReviews, SavedReviewSource, RuntimeSavedReviewFavorites, RuntimeSavedReviewFavorite, RuntimeRetentionPreview };
 export { MAX_BACKUP_BYTES, MAX_VAULT_PROFILES } from '../../../packages/schemas/index.ts';
 const LOCKED: PublicStatus = Object.freeze({ state: 'locked' });
 const UNLOCKED: PublicStatus = Object.freeze({ state: 'unlocked' });
@@ -100,6 +102,9 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     },
     checkBackupVerification: async (signal?: AbortSignal): Promise<AppResult<RuntimeBackupVerification>> => {
       try { return await runtime.checkBackupVerification(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    planRetention: async (nowMs: number, signal?: AbortSignal): Promise<AppResult<RuntimeRetentionPreview>> => {
+      try { return await runtime.planRetention(nowMs, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     captureBackupSelection: () => runtime.captureBackupSelection(),
     saveTermsReview: async (source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>> => {
