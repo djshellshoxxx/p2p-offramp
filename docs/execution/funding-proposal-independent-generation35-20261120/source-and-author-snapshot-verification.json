@@ -1,0 +1,146 @@
+{
+  "source": "4228040248963389d7dae28881f1db2927ca54ec",
+  "tree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+  "base": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+  "mainWhitespaceBaseline": "8e836baa877b676a863c877003e277b638fc5061",
+  "newSourcePaths": [
+    "apps/web/src/solana-localnet/funding-proposal.ts",
+    "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+  ],
+  "nonDocumentationEntries": 1035,
+  "preservedBaseEntries": 3330,
+  "sourceBlobs": {
+    "apps/web/src/solana-localnet/funding-proposal.ts": {
+      "entry": "100644 blob 2636d5687e47c1381b017d27a0feca15336791da",
+      "sha256": "e749b7b33a8b2a8ab0bdaa7f5a5ee3df0a10378f8519116614bfee5488591b8c"
+    },
+    "apps/web/test/solana-localnet-funding-proposal.test.mjs": {
+      "entry": "100644 blob e416d281023d20d0f4088056f0642411f9b72a34",
+      "sha256": "465bed02acd7b01b7279de37cf12171a3d9055857ee68611eed0bbdfd4923719"
+    }
+  },
+  "authorExecutionSnapshots": [
+    {
+      "name": "01-baseline",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "12df5f52124c8853533c2221d07699ae6758641e",
+      "changedPathsFromBase": [
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+      ],
+      "exitCode": 1,
+      "counts": {
+        "tests": 78,
+        "pass": 1,
+        "fail": 77,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exactSavedPatch": true,
+      "logSha256": "715c1a9d1f8acb46c6a83419f6b7e751ea07275a11fa03690eb3cee3bbebb540",
+      "patchSha256": "73a3d842970822590476e71ebc49a865bcebfd763c244dcaf32902ec8fef42ea"
+    },
+    {
+      "name": "02-first-implementation",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "f570971e723b8d76973773e45a985fec490ece93",
+      "changedPathsFromBase": [
+        "apps/web/src/solana-localnet/funding-proposal.ts",
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+      ],
+      "exitCode": 1,
+      "counts": {
+        "tests": 78,
+        "pass": 77,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exactSavedPatch": true,
+      "logSha256": "1c1a1373bb24b84a98f1444aa26fc72db6b16aa9776351590b917c2754e091d9",
+      "patchSha256": "c8aab6b31bd16483479cb1701c9028323d1ab5a45b493e931aeedbbbf53e080e"
+    },
+    {
+      "name": "03-ui-typescript",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "f570971e723b8d76973773e45a985fec490ece93",
+      "changedPathsFromBase": [
+        "apps/web/src/solana-localnet/funding-proposal.ts",
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+      ],
+      "exitCode": 0,
+      "counts": {},
+      "exactSavedPatch": true,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "patchSha256": "c8aab6b31bd16483479cb1701c9028323d1ab5a45b493e931aeedbbbf53e080e"
+    },
+    {
+      "name": "04-focused-corrected",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "changedPathsFromBase": [
+        "apps/web/src/solana-localnet/funding-proposal.ts",
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+      ],
+      "exitCode": 0,
+      "counts": {
+        "tests": 82,
+        "pass": 82,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exactSavedPatch": true,
+      "logSha256": "610626dc965bc9331fb23a456caec013e6acb2b4830474f5934a95d8b96bb1fe",
+      "patchSha256": "6e6c78e208b82dfb38c9f9cd931d45e92066c1a5c1fb2a6d91271254aa38aaf5"
+    },
+    {
+      "name": "05-boundaries",
+      "source": "0b7832d1c5b348a0755d59152442d0318d4a620c",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "changedPathsFromBase": [
+        "apps/web/src/solana-localnet/funding-proposal.ts",
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+      ],
+      "exitCode": 0,
+      "counts": {},
+      "exactSavedPatch": true,
+      "logSha256": "57b3c937bbdb01e88c246681dbbd7f8e0e638bc3aa23bc8017283572b8164f3f",
+      "patchSha256": "6e6c78e208b82dfb38c9f9cd931d45e92066c1a5c1fb2a6d91271254aa38aaf5"
+    },
+    {
+      "name": "06-frozen-typescript",
+      "source": "4228040248963389d7dae28881f1db2927ca54ec",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "changedPathsFromBase": [
+        "apps/web/src/solana-localnet/funding-proposal.ts",
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+      ],
+      "exitCode": 0,
+      "counts": {},
+      "exactSavedPatch": true,
+      "logSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "07-frozen-whitespace",
+      "source": "4228040248963389d7dae28881f1db2927ca54ec",
+      "executionTree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+      "changedPathsFromBase": [
+        "apps/web/src/solana-localnet/funding-proposal.ts",
+        "apps/web/test/solana-localnet-funding-proposal.test.mjs"
+      ],
+      "exitCode": 0,
+      "counts": {},
+      "exactSavedPatch": true,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "limits": [
+    "Snapshot and log verification only; no test, build, native or browser rerun.",
+    "The author first implementation failure was error-code normalization for a refused endpoint, preserved before the narrow rpcUrl wrapper correction."
+  ]
+}

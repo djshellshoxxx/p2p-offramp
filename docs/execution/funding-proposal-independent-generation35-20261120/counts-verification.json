@@ -1,0 +1,20 @@
+{
+  "source": "4228040248963389d7dae28881f1db2927ca54ec",
+  "tree": "cbdc2f8d4335d356fa70a21edbcd37ec916cf2f2",
+  "originalReceipt": "01-focused-independent.json",
+  "originalLogSha256": "8903ce50591f6f4648514bd4d8d53c744241ba2b44e2b44c8ddb0b2f23b0686c",
+  "counts": {
+    "tests": 96,
+    "pass": 96,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "composition": {
+    "maintainedProposalCases": 82,
+    "maintainedG16Cases": 10,
+    "originalIndependentProbes": 4
+  },
+  "note": "The original execution capture only recognized TAP # counters. Node emitted its spec reporter with \u2139 counters. This derivative parses the preserved full original output; no test rerun, output alteration or receipt overwrite."
+}
