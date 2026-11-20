@@ -8,8 +8,10 @@ import { captureQrFrame, createBrowserQrDecoder } from '../qr/browser-image.ts';
 import { trustedQrContext } from '../qr/trusted-context.ts';
 import { QrSymbol } from '../qr/display.tsx';
 import { copyPublicQrText, downloadPublicQrText } from '../qr/public-export.ts';
-import { fixedFailure, type QrAppResult } from '../qr/protocol.ts';
+import { fixedFailure, type QrAppCode, type QrAppResult } from '../qr/protocol.ts';
 import { qrMessages as q } from './qr-messages.ts';
+
+type Notice = { readonly code: QrAppCode } | { readonly key: 'copied' | 'copyUnavailable' } | null;
 
 export function QrReviewDetails({ review }: { readonly review: QrImportReview }) {
   const field = (key: keyof typeof q.fields, value: string) => <div key={key}><dt>{q.fields[key]}</dt><dd><bdi dir="ltr">{value}</bdi></dd></div>;
@@ -59,7 +61,7 @@ export function QrPanel({ services, trade, scope }: { readonly services: AppServ
   const [bundle, setBundle] = useState(createBundle);
   const snapshot = useSyncExternalStore(bundle.controller.subscribe, bundle.controller.getSnapshot, bundle.controller.getSnapshot);
   const camera = useSyncExternalStore(bundle.camera.subscribe, bundle.camera.getSnapshot, bundle.camera.getSnapshot);
-  const [text, setText] = useState(''), [notice, setNotice] = useState(''), [showSymbol, setShowSymbol] = useState(false);
+  const [text, setText] = useState(''), [notice, setNotice] = useState<Notice>(null), [showSymbol, setShowSymbol] = useState(false);
   const [fileEpoch, setFileEpoch] = useState(0);
   const [imageFile, setImageFile] = useState<File | null>(null), [publicFile, setPublicFile] = useState<File | null>(null);
   const [fingerprintFile, setFingerprintFile] = useState<File | null>(null), [compareFile, setCompareFile] = useState<File | null>(null);
@@ -67,7 +69,7 @@ export function QrPanel({ services, trade, scope }: { readonly services: AppServ
   const clearInputs = () => { setText(''); setImageFile(null); setPublicFile(null); setFingerprintFile(null); setCompareFile(null); setFileEpoch(value => value + 1); };
   const discard = () => {
     generation.current++; bundle.camera.cancel(); bundle.controller.cancel(); bundle.decoder.cancel();
-    clearInputs(); setShowSymbol(false); setNotice('');
+    clearInputs(); setShowSymbol(false); setNotice(null);
   };
   useLayoutEffect(() => {
     if (bundle.retired) { setBundle(createBundle()); return; }
@@ -85,41 +87,42 @@ export function QrPanel({ services, trade, scope }: { readonly services: AppServ
     const expiry = snapshot.review?.expiresAt;
     if (expiry === null || expiry === undefined) return;
     const timer = setInterval(() => {
-      if (Math.floor(Date.now() / 1000) + 60 >= expiry) { discard(); setNotice(q.errors.EXPIRED); }
+      if (Math.floor(Date.now() / 1000) + 60 >= expiry) { discard(); setNotice({ code: 'EXPIRED' }); }
     }, 1000);
     return () => clearInterval(timer);
   }, [bundle, snapshot.review?.requestId, snapshot.phase]);
   async function run(action: () => Promise<QrAppResult>) {
     const current = ++generation.current;
-    bundle.camera.cancel(); clearInputs(); setShowSymbol(false); setNotice('');
+    bundle.camera.cancel(); clearInputs(); setShowSymbol(false); setNotice(null);
     try {
       const result = await action();
-      if (current === generation.current && !bundle.retired && !result.ok) setNotice(q.errors[result.code]);
-    } catch (error) { if (current === generation.current && !bundle.retired) setNotice(q.errors[fixedFailure(error).code]); }
+      if (current === generation.current && !bundle.retired && !result.ok) setNotice({ code: result.code });
+    } catch (error) { if (current === generation.current && !bundle.retired) setNotice({ code: fixedFailure(error).code }); }
   }
   async function cameraStart() {
     discard(); const current = generation.current;
     const result = await bundle.camera.start();
-    if (current === generation.current && !bundle.retired && !result.ok) setNotice(q.errors[result.code]);
+    if (current === generation.current && !bundle.retired && !result.ok) setNotice({ code: result.code });
   }
   function capture() {
     try {
       if (!video.current) return;
       const pixels = captureQrFrame(video.current);
       void run(() => bundle.controller.reviewPixels(pixels));
-    } catch (error) { bundle.camera.cancel(); setNotice(q.errors[fixedFailure(error).code]); }
+    } catch (error) { bundle.camera.cancel(); setNotice({ code: fixedFailure(error).code }); }
   }
   async function copy() {
     const ready = bundle.controller.confirmedText();
-    if (!ready.ok) { setNotice(q.errors[ready.code]); return; }
+    if (!ready.ok) { setNotice({ code: ready.code }); return; }
     const current = generation.current, result = await copyPublicQrText(ready.value);
-    if (current === generation.current && !bundle.retired) setNotice(result.ok ? q.copied : q.copyUnavailable);
+    if (current === generation.current && !bundle.retired) setNotice({ key: result.ok ? 'copied' : 'copyUnavailable' });
   }
   function download() {
     const ready = bundle.controller.confirmedText();
-    if (!ready.ok) { setNotice(q.errors[ready.code]); return; }
-    try { downloadPublicQrText(ready.value); } catch (error) { setNotice(q.errors[fixedFailure(error).code]); }
+    if (!ready.ok) { setNotice({ code: ready.code }); return; }
+    try { downloadPublicQrText(ready.value); } catch (error) { setNotice({ code: fixedFailure(error).code }); }
   }
+  const noticeText = notice ? ('code' in notice ? q.errors[notice.code] : q[notice.key]) : null;
   return <section className="panel qr-panel" aria-labelledby="qr-title" data-qr-phase={snapshot.phase} data-qr-confirmed={snapshot.confirmed ? 'true' : 'false'}>
     <h2 id="qr-title">{q.title}</h2><p>{q.intro}</p><p>{q.physical}</p><p>{q.chainScope}</p>
     <h3>{q.captureTitle}</h3><p>{q.cameraHelp}</p>
@@ -148,12 +151,12 @@ export function QrPanel({ services, trade, scope }: { readonly services: AppServ
     <button type="button" disabled={snapshot.busy || !fingerprintFile} onClick={() => { const selected = fingerprintFile, selectedFormat = format; if (selected) void run(() => bundle.controller.createFingerprint(selected, selectedFormat)); }}>{q.fingerprintCreate}</button>
     <div className="actions"><button type="button" onClick={discard}>{q.cancel}</button></div>
     {snapshot.busy ? <p role="status">{q.busy}</p> : null}
-    {notice || snapshot.error || camera.error ? <p className="notice" role="alert">{notice || q.errors[snapshot.error ?? camera.error ?? 'UNAVAILABLE']}</p> : null}
+    {noticeText || snapshot.error || camera.error ? <p className="notice" role="alert">{noticeText || q.errors[snapshot.error ?? camera.error ?? 'UNAVAILABLE']}</p> : null}
     {snapshot.review ? <section className="qr-review" aria-labelledby="qr-review-title">
       <h3 id="qr-review-title" ref={reviewHeading} tabIndex={-1}>{q.reviewTitle}</h3><QrReviewDetails review={snapshot.review} />
       {!snapshot.confirmed ? <button type="button" disabled={snapshot.busy} onClick={() => void run(() => bundle.controller.confirm())}>{q.confirm}</button> : <>
         <p role="status">{q.confirmed}</p>
-        <div className="actions"><button type="button" disabled={snapshot.busy} onClick={() => { const result = bundle.controller.confirmedText(); if (result.ok) setShowSymbol(true); else setNotice(q.errors[result.code]); }}>{q.display}</button>
+        <div className="actions"><button type="button" disabled={snapshot.busy} onClick={() => { const result = bundle.controller.confirmedText(); if (result.ok) setShowSymbol(true); else setNotice({ code: result.code }); }}>{q.display}</button>
           <button type="button" disabled={snapshot.busy} onClick={() => void copy()}>{q.copy}</button><button type="button" disabled={snapshot.busy} onClick={download}>{q.download}</button></div>
         {showSymbol && snapshot.matrix ? <><QrSymbol matrix={snapshot.matrix} label={q.symbolLabel} />
           {snapshot.review.envelopeBytes > GENERATION_TARGET_BYTES ? <p>{q.generationTarget}</p> : null}</> : null}
