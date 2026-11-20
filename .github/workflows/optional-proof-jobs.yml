@@ -1,0 +1,47 @@
+name: Optional proof-jobs package
+# The proof-jobs browser fixture composes the real apps/web App with the optional public-resource Worker, so its
+# typecheck and browser runs depend on App internals that another lane owns. They run here, outside the required
+# per-PR jobs: on changes to the package itself, nightly to catch drift, and on demand. A failure after an App
+# change means the fixture in packages/proof-jobs/test must be updated; it never blocks core or web PRs.
+on:
+  pull_request:
+    paths:
+      - 'packages/proof-jobs/**'
+      - '.github/workflows/optional-proof-jobs.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'packages/proof-jobs/**'
+      - '.github/workflows/optional-proof-jobs.yml'
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  proof-jobs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4, official ref checked 2026-10-24
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck:proof-jobs
+      - run: npm run test:proof:memory
+      - name: Install Chromium
+        id: chrome
+        uses: browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce # v1.7.3, official annotated tag dereferenced
+        with:
+          chrome-version: stable
+      - run: npm run test:proof:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
