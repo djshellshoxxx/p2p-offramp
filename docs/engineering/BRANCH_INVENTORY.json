@@ -15,6 +15,7 @@
     "C": "Historical diverged docs-only branch content proven byte-for-byte included in current main; commits remain nonancestors. No software qualification implied"
   },
   "notes": [
+    "2026-11-22: immutable-commit GitHub comparison establishes 22 newly-assessed tips are exact main ancestors, plus two divergent test-only tips with complete byte-identical final test source already in main; no Git patch-id or runtime tests. U123→99; A44→66; F12→14.",
     "2026-11-22 all-pages refreshed GitHub inventory confirmed 257 branches and 242 PRs (60 open,124 merged,58 closed). The inventory branch head is captured immediately BEFORE publishing this very update; as with any self-index, its own post-publication SHA necessarily changes.",
     "2026-11-22 bounded new cohort: 14 former U tips proven exact ancestors of main, two diverged historical docs branches source-content included; 9 historical EVM execution defensive test scenarios absent from main and potential unsafe reentrant accessor/current-callback behavior flagged for executable review; no product merge or runtime test.",
     "Open PR metadata includes parent stacks; a PR's changed-file count can include ancestors.",
@@ -1202,9 +1203,9 @@
       "branch": "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
       "sha": "5f2381ab42c27984dbb1cc872468dd3e09771690",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "F-equivalent-source-already-present-in-main",
+      "inspection": "2026-11-22 GitHub immutable compare: one divergent test path; complete branch and current-main blob SHA and full UTF-8 bytes identical; not patch-id or commit ancestry",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -1216,15 +1217,27 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/80"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+        "aheadBy": 1,
+        "behindBy": 614,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub single-file diff plus identical full file source",
+        "equivalentFile": "packages/transport/test/http-driver.test.mjs",
+        "blobSha": "85984e592582ab4700cfc9b4fdc6d8f995e22bcb",
+        "patchIdVerified": false
+      },
+      "consolidationDecision": "Net unique source absent; no source transplant. Original divergent commit retained."
     },
     {
       "branch": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
       "sha": "5984dc823c25399a001b5f059c79db89f51a1324",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -1236,7 +1249,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/171"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "5984dc823c25399a001b5f059c79db89f51a1324",
+        "aheadBy": 0,
+        "behindBy": 233,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
@@ -1318,9 +1340,9 @@
       "branch": "chatgpt/zero-codex/registry-concurrency-20261110",
       "sha": "a213166ea83a0c5ec0768f693ff583413e8e976b",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "F-equivalent-source-already-present-in-main",
+      "inspection": "2026-11-22 GitHub immutable compare: one divergent test path; complete branch and current-main blob SHA and full UTF-8 bytes identical; not patch-id or commit ancestry",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -1332,15 +1354,27 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/78"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+        "aheadBy": 1,
+        "behindBy": 614,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub single-file diff plus identical full file source",
+        "equivalentFile": "packages/domain/test/registry.test.mjs",
+        "blobSha": "2e5ed07bdb76725b64883e48bd7c9580e32a8579",
+        "patchIdVerified": false
+      },
+      "consolidationDecision": "Net unique source absent; no source transplant. Original divergent commit retained."
     },
     {
       "branch": "chatgpt/zero-codex/review-read-bounds-20261119-119",
       "sha": "6537693eb526969c46d94cfa7f24a5fe02e82116",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -1352,7 +1386,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/187"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+        "aheadBy": 0,
+        "behindBy": 144,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
@@ -2604,9 +2647,9 @@
       "branch": "codex/backup-verification-ui-g12-20261120",
       "sha": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -2618,7 +2661,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/215"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+        "aheadBy": 0,
+        "behindBy": 88,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "codex/browser-funding-continuation-g37-20261120",
@@ -3588,9 +3640,9 @@
       "branch": "codex/peer-acceptance-20261116",
       "sha": "b3f508420e63329ab30e1b646f61337020a1ebad",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -3602,15 +3654,24 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/124"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "b3f508420e63329ab30e1b646f61337020a1ebad",
+        "aheadBy": 0,
+        "behindBy": 388,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "codex/personalization-favorites-ui-20261119",
       "sha": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -3622,15 +3683,24 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/201"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+        "aheadBy": 0,
+        "behindBy": 112,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "codex/personalization-templates-ui-20261119",
       "sha": "98d33db64622eab3f5f4ece6141d445d255245e7",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -3642,7 +3712,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/204"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "98d33db64622eab3f5f4ece6141d445d255245e7",
+        "aheadBy": 0,
+        "behindBy": 111,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "codex/post-send-reconcile-20261109",
@@ -3831,9 +3910,9 @@
       "branch": "codex/qr-camera-fixture-20261119",
       "sha": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -3845,7 +3924,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/189"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+        "aheadBy": 0,
+        "behindBy": 122,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "codex/relay-freshness-capacity-20261120-auto2",
@@ -3994,9 +4082,9 @@
       "branch": "codex/runtime-update-continuation-g22-20261120",
       "sha": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -4008,7 +4096,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/234"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+        "aheadBy": 0,
+        "behindBy": 23,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "codex/setup-autonomous-agent-20261104",
@@ -4257,9 +4354,9 @@
       "branch": "codex/transport-qualification-20261120",
       "sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -4271,7 +4368,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/210"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "aheadBy": 0,
+        "behindBy": 90,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "consolidation/qualified-regressions-20261116",
@@ -4566,9 +4672,9 @@
       "branch": "fix/localnet-readiness-20261119",
       "sha": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -4580,15 +4686,24 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/181"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+        "aheadBy": 0,
+        "behindBy": 151,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "fix/qr-async-expiry-20261120",
       "sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -4600,7 +4715,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/211"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+        "aheadBy": 0,
+        "behindBy": 102,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "fix/remediation-09f20d73-9524c0",
@@ -4814,9 +4938,9 @@
       "branch": "integration/m2a-safe-fixes-20261114",
       "sha": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -4828,15 +4952,24 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/115"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+        "aheadBy": 0,
+        "behindBy": 435,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "integration/p2p-consolidated-20261109",
       "sha": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -4848,7 +4981,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/61"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+        "aheadBy": 0,
+        "behindBy": 382,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "integration/pages-beta-qualification-20261112",
@@ -5132,9 +5274,9 @@
       "branch": "nodata/youthful-maxwell-uwy8hx-b1a-reader",
       "sha": "37f074dd1d65d5f12b73182420998a152374b813",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -5146,15 +5288,24 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/152"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "37f074dd1d65d5f12b73182420998a152374b813",
+        "aheadBy": 0,
+        "behindBy": 270,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
       "sha": "0b0ca2907b372071471d7e060d0a80178d4294c9",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -5166,7 +5317,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/158"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+        "aheadBy": 0,
+        "behindBy": 270,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b1c-acceptance",
@@ -5689,9 +5849,9 @@
       "branch": "parallel/browser-runtime-engines-20261113",
       "sha": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -5703,7 +5863,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/103"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+        "aheadBy": 0,
+        "behindBy": 483,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "parallel/cli-argument-regression-20261113",
@@ -6059,9 +6228,9 @@
       "branch": "test/nostr-relay-interop-20261119",
       "sha": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -6073,7 +6242,16 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/180"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+        "aheadBy": 0,
+        "behindBy": 157,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "validation/pr237-current-main-20261121",
@@ -6154,9 +6332,9 @@
       "branch": "work/p2p-exchange-close-20261030",
       "sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -6168,15 +6346,24 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/14"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+        "aheadBy": 0,
+        "behindBy": 697,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "work/p2p-exchange-test-repair-20261030",
       "sha": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -6188,17 +6375,35 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/17"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+        "aheadBy": 0,
+        "behindBy": 700,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "work/p2p-gate-reconciliation-20261030",
       "sha": "e762e649600493221e3bd10f0c3525858722bc94",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
-      "associatedPullRequests": []
+      "associatedPullRequests": [],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "e762e649600493221e3bd10f0c3525858722bc94",
+        "aheadBy": 0,
+        "behindBy": 702,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "work/p2p-independent-branch-review-20261030",
@@ -6234,9 +6439,9 @@
       "branch": "work/p2p-relay-lifetime-20261030",
       "sha": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -6248,17 +6453,35 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/15"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+        "aheadBy": 0,
+        "behindBy": 698,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
       "branch": "work/p2p-validation-20261030",
       "sha": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 immutable SHA compare: exact branch tip is merge-base of current main, zero commits ahead and zero net files",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
-      "associatedPullRequests": []
+      "associatedPullRequests": [],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+        "aheadBy": 0,
+        "behindBy": 696,
+        "verifiedDate": "2026-11-22",
+        "method": "GitHub immutable-commit compare, full-tip ancestry"
+      },
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     }
   ],
   "lastVerifiedDate": "2026-11-22",
@@ -6312,13 +6535,13 @@
     "releaseEnabled": 0
   },
   "currentClassificationTotals": {
-    "A": 44,
+    "A": 66,
     "P": 58,
-    "U": 123,
+    "U": 99,
     "C": 3,
     "E": 10,
     "V": 6,
-    "F": 12,
+    "F": 14,
     "B": 1
   },
   "cohortWalletSafetyReview20261122": {
@@ -6399,5 +6622,39 @@
     "unchangedOpenPrHeads": 2,
     "unassessedAfter": 123,
     "noRuntimeTestOrProductMerge": true
+  },
+  "cohortAncestryTestEquivalence20261122": {
+    "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "branchCount": 24,
+    "ancestorCount": 22,
+    "sourceEquivalentNonancestorCount": 2,
+    "localRuntimeTestsExecuted": false,
+    "completedProductMerges": 0,
+    "recordedNames": [
+      "work/p2p-exchange-close-20261030",
+      "work/p2p-exchange-test-repair-20261030",
+      "work/p2p-relay-lifetime-20261030",
+      "work/p2p-gate-reconciliation-20261030",
+      "work/p2p-validation-20261030",
+      "fix/qr-async-expiry-20261120",
+      "fix/localnet-readiness-20261119",
+      "codex/runtime-update-continuation-g22-20261120",
+      "codex/backup-verification-ui-g12-20261120",
+      "codex/peer-acceptance-20261116",
+      "integration/p2p-consolidated-20261109",
+      "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
+      "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+      "chatgpt/zero-codex/review-read-bounds-20261119-119",
+      "codex/personalization-favorites-ui-20261119",
+      "codex/personalization-templates-ui-20261119",
+      "codex/qr-camera-fixture-20261119",
+      "codex/transport-qualification-20261120",
+      "nodata/youthful-maxwell-uwy8hx-b1a-reader",
+      "parallel/browser-runtime-engines-20261113",
+      "test/nostr-relay-interop-20261119",
+      "integration/m2a-safe-fixes-20261114",
+      "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
+      "chatgpt/zero-codex/registry-concurrency-20261110"
+    ]
   }
 }
