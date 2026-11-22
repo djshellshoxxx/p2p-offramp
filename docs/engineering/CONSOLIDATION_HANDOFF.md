@@ -1,3 +1,20 @@
+# Verified live continuation intake — November 22, 2026
+
+**Scope/status:** Partial repo consolidation and qualified evidence intake; this header supersedes earlier dated *pending* publication statements only where verified live data is newer. No changes have been merged into main by this intake.
+
+- **Current observed main:** `01f6f4feca051d68de24a04299cd3bb444bce40c`, tree `437323a382952b9623a875c818f8af005a5d4563`. PR236 has merged; its documented PR233/234/235 lineage is preserved.
+- **Branch metadata inventory:** [BRANCH_INVENTORY.json](BRANCH_INVENTORY.json) records 256 branches and 59 open PRs as of capture (includes new #244 diagnostic branch; excludes the later branch that publishes these inventory documents). Metadata-only branches are **not** certified as obsolete or integrated.
+- **Unmerged application chain:** #237 `main` → #238 → #239, with child #243 (browser acceptance). PR243's **12 hosted GitHub checks succeeded**, but it is still draft, has no recorded review submissions, and is not a merged application feature.
+- **Unmerged Solana chain:** #241 consolidates source from #240; #242 is a child of #241 and remains blocked by a **real native-browser program failure**. Job [136601434309](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44826827834/job/136601434309) timed out waiting for the disabled **Review separate payout** button after a finalized released-chain observation. The exact blocking guard was not established by the existing logs.
+- **New bounded follow-up:** [draft PR244](https://github.com/djshellshoxxx/p2p-offramp/pull/244) at `2acdaa3714b2c263291251b18742068077cc54ea` proposes guard-preserving browser readiness and redacted debug state. This session did **not** run the revised test or alter any product payout authority.
+- **Optional modules:** #224–232 remain separately open and unmerged; earlier #191–199 source branches must be retained. No optional module may silently gain core or financial authority.
+- **Merge blockers:** #237's named Tier B CodeRabbit/Qodo reviewer and current-target reconciliation, #241/#242 Tier C matching owner approval, #242 failed real hosted acceptance, and current-target validation of stacked PRs. Every source/head/target must be rechecked before merge.
+- **Release:** `ReleaseEnabled=0`, default activation and deployment still prohibited. No real-funds readiness claimed.
+
+See [consolidation master](BRANCH_CONSOLIDATION_MASTER.md), [feature tracker](FEATURE_COMPLETION_TRACKER.md), and [exact-source test report](CONSOLIDATION_TEST_RESULTS.md). The older reports below are preserved as historical, source-pinned context rather than current release or merge approval.
+
+---
+
 # Current consolidation checkpoint — generations 26–28 (2026-11-20 UTC)
 
 **The combined source passed 2,505/2,505 tests and all five additional
