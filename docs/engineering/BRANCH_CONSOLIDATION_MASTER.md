@@ -67,4 +67,4 @@ At `main@01f6f4feca05`, authenticated GitHub comparisons for each optional PR #2
 | #231 meetup | 37 added; workflow/package files modified | 15/15 success |
 | #232 stealth | 21 added | 14/14 success |
 
-No submitted GitHub review and no unresolved inline threads were found for these nine PRs at inspection. The mostly additive per-package source is promising for isolated intake, but **three packages edit package/workflow wiring, conflicts may appear in a combined tree, and no final target-specific integration gate is satisfied**. No optional main merge was attempted.
+All nine PR descriptions explicitly require a **D8 Tier B CodeRabbit-or-Qodo pass with findings answered**, in addition to independent human/source review and current-target CI. No submitted GitHub review and no unresolved inline threads were found for these nine PRs at inspection. The mostly additive per-package source is promising for isolated intake, but **three packages edit package/workflow wiring, conflicts may appear in a combined tree, and no final target-specific integration gate is satisfied**. No optional main merge was attempted.
