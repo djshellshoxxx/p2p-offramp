@@ -1,0 +1,2915 @@
+{
+  "schemaVersion": 1,
+  "repository": "djshellshoxxx/p2p-offramp",
+  "capturedDate": "2026-11-22",
+  "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+  "source": "Authenticated GitHub GET branches and open pull requests; full branch pagination",
+  "branchCount": 256,
+  "openPullRequestCount": 59,
+  "classificationNotes": {
+    "F": "Current main branch only",
+    "P": "Open PR; no assertion that code is unique, merge-ready or unfinished",
+    "U": "No open-PR head match; code and ancestry need semantic inspection"
+  },
+  "notes": [
+    "Open PR metadata includes parent stacks; a PR's changed-file count can include ancestors.",
+    "Historical merged/closed PR association and per-branch patch equivalence are not yet individually established.",
+    "Never delete, merge, promote to default build or deploy based only on this metadata inventory.",
+    "ReleaseEnabled=0 remains in effect."
+  ],
+  "branches": [
+    {
+      "branch": "autonomous/completion-20261031",
+      "sha": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "autonomous/completion-20261102",
+      "sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "openPullRequests": [
+        {
+          "number": 26,
+          "title": "Complete local recovery and trade workflows with whole-source audit",
+          "headSha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-02T19:40:10Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/26"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "autonomous/continuation-20261031",
+      "sha": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "autonomous/guidance-20261101",
+      "sha": "c8494b05e36cda43ac3f73e0feab831cfa00647d",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "autonomous/journey-20261101",
+      "sha": "3947074c95fa1e0facd65a8947a2c7e70363c708",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/acceptance-cli-input-bounds-20261110",
+      "sha": "2ba1a4e18f4673f006b195e822b5f984effb48e8",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/acceptance-review-boolean-20261110",
+      "sha": "08a9cf1e9abc0fb703b14964062a3da2234fdbb6",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "sha": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "openPullRequests": [
+        {
+          "number": 185,
+          "title": "docs(audit): record Pages startup-capability review (112)",
+          "headSha": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+          "base": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+          "draft": true,
+          "updatedAt": "2026-11-19T12:32:36Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/185"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-compatibility-20261118",
+      "sha": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
+      "sha": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "sha": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "openPullRequests": [
+        {
+          "number": 184,
+          "title": "docs(audit): rotate static-client content-admission review (110)",
+          "headSha": "bfed3af3fa53425084f99efa18916433a5868fd1",
+          "base": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+          "draft": true,
+          "updatedAt": "2026-11-19T10:33:32Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/184"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+      "sha": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "openPullRequests": [
+        {
+          "number": 186,
+          "title": "docs(audit): record static sharing and privacy endpoint inspections (113–114)",
+          "headSha": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+          "base": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+          "draft": true,
+          "updatedAt": "2026-11-19T23:38:02Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/186"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "sha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-utf8-20261119-108",
+      "sha": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-cross-deployment-nonce-20261111",
+      "sha": "c153a99dd5c876c23bdb115f7037a4bf63cb57d4",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
+      "sha": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
+      "sha": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
+      "sha": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
+      "sha": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
+      "sha": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
+      "sha": "146d06d81474445434070aff557ad56379ad24a3",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
+      "sha": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
+      "sha": "92cc054ce9a2ee21936e20d103757e374f4af296",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-race-20261111",
+      "sha": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
+      "sha": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-collaboration-20261117",
+      "sha": "e21a58e6a4d09c099d3249660ddec770f2164a74",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-python-baseline-20261116",
+      "sha": "75a5e35b56310a9660aa7c6a3855db3c64e759f4",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-static-offers-status-20261116",
+      "sha": "30efa0e158c6b50525c8e0dced494faa9f54eb08",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-status-20261118",
+      "sha": "708d937df7e4799e4ad212b3293bec923f619940",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-wiki-20261110",
+      "sha": "c14cfd07a440f03b5f57e35c8d39e63cdabfd5bf",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+      "sha": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+      "openPullRequests": [
+        {
+          "number": 178,
+          "title": "docs(wiki): reconcile qualified main, resumption, and merge policy",
+          "headSha": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-19T08:34:46Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/178"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
+      "sha": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
+      "sha": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-native-withdraw-recipient-20261111",
+      "sha": "84bb67f6e438b26bd1d321995c427d6a86a58930",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
+      "sha": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g16-bilateral-replay-20261111",
+      "sha": "969d02aecf86c6be18dde509b5cf0016345b0fe4",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-final-chain-recheck-20261111",
+      "sha": "921f067769188f53c2d379f035695a40ae978083",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
+      "sha": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g20-chat-scope-regression-20261111",
+      "sha": "a5c74990f0f5e9162a23450db5e9af00f37d88e8",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g25-public-endpoint-regression-20261110",
+      "sha": "e0a9033158d1ae874c78de7f25d0be0aa3a13157",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g26-clear-reentrancy-20261111",
+      "sha": "548495515c83fc1389837f00eb0468758cd232fd",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
+      "sha": "5f2381ab42c27984dbb1cc872468dd3e09771690",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+      "sha": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
+      "sha": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qualify-pr61-20261110",
+      "sha": "a1930a3596f76eff4c29a1ee2991d6acd7f35895",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/recovery-reference-identity-20261115",
+      "sha": "85849f7b267dddceffc35ef5253da4a23ef9be05",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/registry-concurrency-20261110",
+      "sha": "a213166ea83a0c5ec0768f693ff583413e8e976b",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/review-read-bounds-20261119-119",
+      "sha": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
+      "sha": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "chatgpt/zero-codex-continuation-spec-20261109",
+      "sha": "62c6c14539ccc2ac2e56658a81602f6d1ba50d73",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/adoring-wozniak-850ue6",
+      "sha": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/compassionate-gauss-uyhfih",
+      "sha": "970ac80f08c04e8d340ee57d901e48e26a667a18",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/confident-fermi-g6wjp3",
+      "sha": "64c7c1861779ea34632f2f800b80bdaecbaefa03",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/docs-screenshots",
+      "sha": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/friendly-dijkstra-nsi310",
+      "sha": "bd26833555e13408825942e9696157ed68e9980e",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/gifted-faraday-73kydc",
+      "sha": "8fb081b492ccf9ecef4dc47525c753cac670dacb",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy",
+      "sha": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+      "openPullRequests": [
+        {
+          "number": 28,
+          "title": "Fix PR #26 browser, cancellation, relay and HTTP defects",
+          "headSha": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+          "base": "autonomous/completion-20261102",
+          "draft": true,
+          "updatedAt": "2026-11-18T07:11:52Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/28"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-decisions",
+      "sha": "89d0a928e9e1127a4c8911f9437359260bd06ab6",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-journey",
+      "sha": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+      "openPullRequests": [
+        {
+          "number": 35,
+          "title": "Fix PR #31 journey findings F01, F03 and F06 (parked pending D9)",
+          "headSha": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+          "base": "claude/loving-einstein-xgzvdy",
+          "draft": true,
+          "updatedAt": "2026-11-04T08:03:44Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/35"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+      "sha": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "openPullRequests": [
+        {
+          "number": 37,
+          "title": "Split PR #26 (1/12): gate tooling, signature oracle, Sepolia and formal EVM checks",
+          "headSha": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-04T08:05:36Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/37"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
+      "sha": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+      "sha": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+      "sha": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "openPullRequests": [
+        {
+          "number": 40,
+          "title": "Split PR #26 (4/12): wallet EIP-1271 acceptance and signed asset updates",
+          "headSha": "7706859d2385cae0f8e49615392de08dfee83f84",
+          "base": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+          "draft": false,
+          "updatedAt": "2026-11-04T07:54:14Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/40"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "sha": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "sha": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "openPullRequests": [
+        {
+          "number": 42,
+          "title": "Split PR #26 (6/12): personalization, web runtime, UI wiring and browser qualification",
+          "headSha": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+          "base": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+          "draft": false,
+          "updatedAt": "2026-11-04T07:56:04Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/42"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "sha": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "openPullRequests": [
+        {
+          "number": 43,
+          "title": "Split PR #26 (7/12): native private-trade journey and retention",
+          "headSha": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+          "base": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+          "draft": false,
+          "updatedAt": "2026-11-04T07:56:02Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/43"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "openPullRequests": [
+        {
+          "number": 44,
+          "title": "Split PR #26 (8/12): recovery portal, test lab, docs tooling and distribution",
+          "headSha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+          "base": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+          "draft": false,
+          "updatedAt": "2026-11-04T07:54:39Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/44"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "sha": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "openPullRequests": [
+        {
+          "number": 45,
+          "title": "Split PR #26 (9/12): dependency and candidate intake evaluations",
+          "headSha": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+          "base": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+          "draft": false,
+          "updatedAt": "2026-11-04T08:04:22Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/45"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "sha": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "openPullRequests": [
+        {
+          "number": 46,
+          "title": "Split PR #26 (10/12): optional reference packages (D7 recommends parking)",
+          "headSha": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+          "base": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+          "draft": false,
+          "updatedAt": "2026-11-04T08:02:55Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/46"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "sha": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "openPullRequests": [
+        {
+          "number": 47,
+          "title": "Split PR #26 (11/12): governance records, assurance packet and final CI wiring",
+          "headSha": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+          "base": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+          "draft": false,
+          "updatedAt": "2026-11-04T17:16:56Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/47"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+      "sha": "494703e837897d04bce1cb04134fa8be6b747377",
+      "openPullRequests": [
+        {
+          "number": 48,
+          "title": "Split PR #26 (12/12): execution evidence, review receipts and root docs",
+          "headSha": "494703e837897d04bce1cb04134fa8be6b747377",
+          "base": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+          "draft": false,
+          "updatedAt": "2026-11-04T07:57:37Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/48"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s00-ci-triggers",
+      "sha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s01-tooling",
+      "sha": "4e319013ea61ead31ae00ea9a44fa9c431cc84ce",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s02-core-contracts-storage",
+      "sha": "01344cbd6655f509f3e2e3903333cdb579228d37",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s03-core-messaging",
+      "sha": "5a747ded358ee9fcca393bb4a0616fd4e8632296",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
+      "sha": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
+      "sha": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
+      "sha": "14be5a1c1ec69d91b0affe8a87811c681269fb6c",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s07-native-journey",
+      "sha": "8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s08-portal-lab-docs",
+      "sha": "c950dad4b387cb4b33910789c454eb8f2ab0ae81",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s09-intake",
+      "sha": "389c0ea69e24615d0f1d7595942514300cd855f9",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s10-optional-packages",
+      "sha": "c696c02b94eb6b90da2ed76f93c383fcd8a7f703",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s11-governance-ci",
+      "sha": "789b2b2c2644af741daa5328adf76ac2ec88599c",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s12-evidence",
+      "sha": "001c31cc868b683080e79a025b6621d900acb96a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/p2p-offramp-consolidation-k5h13u",
+      "sha": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+      "openPullRequests": [
+        {
+          "number": 142,
+          "title": "Consolidation run 3: post-#134 retirement script, branching rules, ledger entry",
+          "headSha": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+          "base": "main",
+          "draft": true,
+          "updatedAt": "2026-11-18T08:49:10Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/142"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "sha": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "openPullRequests": [
+        {
+          "number": 159,
+          "title": "G1/G2: D1 peer acceptance in exchange v2, wallet signer, localnet build profile (in progress)",
+          "headSha": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+          "base": "main",
+          "draft": true,
+          "updatedAt": "2026-11-18T09:27:14Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/159"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/p2p-offramp-integration-aan57u",
+      "sha": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/p2p-offramp-prompt-lqcgno",
+      "sha": "25a01987385b49e9c28199fdfb4a874b29a6ad89",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/post-merge-followups",
+      "sha": "ec65012dbb94189180d3da52de2619cc22fe0482",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/quirky-knuth-3s6ysy",
+      "sha": "2f839b12768700ac6c3b674f75a144c6ec19fa93",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/recovery-consolidation",
+      "sha": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/sleepy-fermat-4s6ocx",
+      "sha": "f1d9dd63a2ac9d55912899f8c6233456ebf8a499",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/sweet-noether-arf6ne",
+      "sha": "391653eaba946f77057b01fd03d3c234958bcf1d",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/sweet-shannon-grykla",
+      "sha": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/tender-goodall-db3cot",
+      "sha": "8783636e7a1739b5e884cec62fbecf9c77a0ceaf",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/trade-review-integration",
+      "sha": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "claude/vibrant-cray-ny4gum",
+      "sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "openPullRequests": [
+        {
+          "number": 81,
+          "title": "Integrate #56 Sonar fixes and split-stack extractions #37/#38/#40–#43",
+          "headSha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+          "base": "integration/p2p-consolidated-20261109",
+          "draft": true,
+          "updatedAt": "2026-11-15T06:37:20Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/81"
+        },
+        {
+          "number": 56,
+          "title": "Resolve PR #54 review findings, harden agent workflow, record live project state",
+          "headSha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+          "base": "codex/core-continuation-20261104",
+          "draft": true,
+          "updatedAt": "2026-11-11T02:09:41Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/56"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/arbitration-main-g19-20261120",
+      "sha": "6937cb01c34c0df38055a41a5c487ecf5ac0446d",
+      "openPullRequests": [
+        {
+          "number": 226,
+          "title": "Integrate optional arbitration reference with current main",
+          "headSha": "6937cb01c34c0df38055a41a5c487ecf5ac0446d",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-20T16:18:06Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/226"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/backup-cross-browser-g13-20261120",
+      "sha": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/backup-verification-ui-g12-20261120",
+      "sha": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/browser-funding-continuation-g37-20261120",
+      "sha": "00efff307b10c5ed9a8bd604a21eb2bf5816e7ef",
+      "openPullRequests": [
+        {
+          "number": 242,
+          "title": "feat(solana): complete saved-proposal seller funding and recovery flow",
+          "headSha": "00efff307b10c5ed9a8bd604a21eb2bf5816e7ef",
+          "base": "codex/native-funding-consolidation-g34-20261120",
+          "draft": true,
+          "updatedAt": "2026-11-20T23:09:44Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/242"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/browser-sharing-startup-acceptance-20261121",
+      "sha": "56ca31bad8fd3d1beaa2aca0af1d6541c4280fdf",
+      "openPullRequests": [
+        {
+          "number": 243,
+          "title": "test: real Chromium acceptance for generic sharing and offline startup",
+          "headSha": "56ca31bad8fd3d1beaa2aca0af1d6541c4280fdf",
+          "base": "codex/startup-compatibility-continuation-g31-20261120",
+          "draft": true,
+          "updatedAt": "2026-11-22T04:51:56Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/243"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/canonical-handoff-postmerge-g17-20261120",
+      "sha": "2730d83154e54ef53e939965b1fa5f3d0de18bc9",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/ci-oracle-g12-20261120",
+      "sha": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/completion-20261116",
+      "sha": "88f9e40bbf8ea086705edd554a2555865429b54a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/consolidation-20261116",
+      "sha": "274d4fe533f47ffa15aed936bd095f82ad10d9ce",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/consolidation-handoff-20261119",
+      "sha": "45420ed6dc4e16ec55b1f76f215c211db2884e09",
+      "openPullRequests": [
+        {
+          "number": 200,
+          "title": "Record current corrections, source qualifications and continuation handoff",
+          "headSha": "45420ed6dc4e16ec55b1f76f215c211db2884e09",
+          "base": "codex/historical-recovery-20261119",
+          "draft": false,
+          "updatedAt": "2026-11-20T15:45:00Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/200"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/consolidation-ledger-20261104",
+      "sha": "d5b959b5ed732ab3e6f7adfd37e872a841470225",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/continuation-g21-20261120",
+      "sha": "92663e46508b06645111d9c713beb82d3a6d1a0f",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/continue-completion-20261116",
+      "sha": "e7506c22e6b0bc405a9e51f1c809fa30c2fe5861",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/core-continuation-20261104",
+      "sha": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/courier-main-g19-20261120",
+      "sha": "16a62533925fe7b4e0aa5daf0f5ca11ef2255ab5",
+      "openPullRequests": [
+        {
+          "number": 230,
+          "title": "Integrate reviewed optional courier source with current main",
+          "headSha": "16a62533925fe7b4e0aa5daf0f5ca11ef2255ab5",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-20T16:26:33Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/230"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/ctutils-remediation-20261119",
+      "sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/d9-migration-20261116",
+      "sha": "c1f8e750beb7e22d5b9a7f0e47cca9f8cd8bdb65",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/dependency-g12-20261120",
+      "sha": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/foundation-gates-20261104",
+      "sha": "77fb7c52dcdde58cad17ceee45a0f43e7e22ad43",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/generation5-core-20261119",
+      "sha": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/generation8-core-20261120",
+      "sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/generation9-backup-verification-20261120",
+      "sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/generic-share-continuation-g30-20261120",
+      "sha": "1c658181fb2bd04ffc4df0d0fbdf6735da3e7fce",
+      "openPullRequests": [
+        {
+          "number": 238,
+          "title": "feat: connect generic app address sharing in Settings (generation 30)",
+          "headSha": "1c658181fb2bd04ffc4df0d0fbdf6735da3e7fce",
+          "base": "codex/retention-preview-continuation-g29-20261120",
+          "draft": false,
+          "updatedAt": "2026-11-22T04:50:47Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/238"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/historical-recovery-20261119",
+      "sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/liquidity-main-g19-20261120",
+      "sha": "edcfe4500951eb21fcaec38a551ce85abdb9bd0d",
+      "openPullRequests": [
+        {
+          "number": 225,
+          "title": "Integrate optional liquidity reference with current main",
+          "headSha": "edcfe4500951eb21fcaec38a551ce85abdb9bd0d",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-20T16:18:05Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/225"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/main-consolidation-g12-20261120",
+      "sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/main-consolidation-g28-20261120",
+      "sha": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/max-consolidation-20261119",
+      "sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/meetup-main-g19-20261120",
+      "sha": "efc1e3f09e19a2622c45cd3cc63ebe22734cf64d",
+      "openPullRequests": [
+        {
+          "number": 231,
+          "title": "Integrate reviewed optional meetup source with current main",
+          "headSha": "efc1e3f09e19a2622c45cd3cc63ebe22734cf64d",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-20T16:26:34Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/231"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/native-funding-consolidation-g34-20261120",
+      "sha": "29491c2842e0aedcb00a674cbfffb9edc2424013",
+      "openPullRequests": [
+        {
+          "number": 241,
+          "title": "feat(solana): consolidate funding preparation, review data and core policy",
+          "headSha": "29491c2842e0aedcb00a674cbfffb9edc2424013",
+          "base": "codex/startup-compatibility-continuation-g31-20261120",
+          "draft": true,
+          "updatedAt": "2026-11-21T10:42:47Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/241"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/native-update-locale-continuation-g24-20261120",
+      "sha": "bca96b796db18d69563ae5f0395452494a0dacd5",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-arbitration-20261119",
+      "sha": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "openPullRequests": [
+        {
+          "number": 193,
+          "title": "Recover accepted optional arbitration source with independent review",
+          "headSha": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+          "base": "codex/historical-recovery-20261119",
+          "draft": false,
+          "updatedAt": "2026-11-20T00:17:05Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/193"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-complete-evidence-g10-20261120",
+      "sha": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-composition-evidence-g8-20261120",
+      "sha": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-corrected-evidence-g9-20261120",
+      "sha": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-courier-20261119",
+      "sha": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "openPullRequests": [
+        {
+          "number": 195,
+          "title": "Recover optional courier source with reviewed boundary repairs",
+          "headSha": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+          "base": "codex/historical-recovery-20261119",
+          "draft": false,
+          "updatedAt": "2026-11-20T00:25:19Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/195"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-current-core-evidence-g11-20261120",
+      "sha": "db531cb03ad303821a3625f6858941de1ac07606",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-liquidity-20261119",
+      "sha": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "openPullRequests": [
+        {
+          "number": 192,
+          "title": "Recover accepted optional liquidity source with independent review",
+          "headSha": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+          "base": "codex/historical-recovery-20261119",
+          "draft": false,
+          "updatedAt": "2026-11-20T00:16:59Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/192"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-meetup-20261119",
+      "sha": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "openPullRequests": [
+        {
+          "number": 196,
+          "title": "Recover optional meetup source with reviewed boundary repairs",
+          "headSha": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+          "base": "codex/historical-recovery-20261119",
+          "draft": false,
+          "updatedAt": "2026-11-20T00:25:30Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/196"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-privacy-controls-20261119",
+      "sha": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "openPullRequests": [
+        {
+          "number": 197,
+          "title": "Recover optional privacy-controls source with reviewed boundary repairs",
+          "headSha": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+          "base": "codex/historical-recovery-20261119",
+          "draft": false,
+          "updatedAt": "2026-11-20T00:25:37Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/197"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-privacy-policy-20261119",
+      "sha": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "openPullRequests": [
+        {
+          "number": 194,
+          "title": "Recover optional privacy-policy source with reviewed boundary repairs",
+          "headSha": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+          "base": "codex/historical-recovery-20261119",
+          "draft": false,
+          "updatedAt": "2026-11-20T00:25:11Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/194"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-proof-inputs-20261119",
+      "sha": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "openPullRequests": [
+        {
+          "number": 191,
+          "title": "Recover accepted optional proof-inputs source with independent review",
+          "headSha": "61f0c6c05d245c4cc7524852224d00693929df3c",
+          "base": "codex/historical-recovery-20261119",
+          "draft": false,
+          "updatedAt": "2026-11-20T00:16:54Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/191"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-proof-jobs-20261119",
+      "sha": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "openPullRequests": [
+        {
+          "number": 199,
+          "title": "Recover optional proof-jobs with independent source qualification",
+          "headSha": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+          "base": "codex/historical-recovery-20261119",
+          "draft": false,
+          "updatedAt": "2026-11-20T00:32:23Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/199"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/optional-stealth-20261119",
+      "sha": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "openPullRequests": [
+        {
+          "number": 198,
+          "title": "Recover optional stealth with independent source qualification",
+          "headSha": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+          "base": "codex/historical-recovery-20261119",
+          "draft": false,
+          "updatedAt": "2026-11-20T00:32:16Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/198"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/peer-acceptance-20261116",
+      "sha": "b3f508420e63329ab30e1b646f61337020a1ebad",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "sha": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/personalization-templates-ui-20261119",
+      "sha": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/post-send-reconcile-20261109",
+      "sha": "af0e1789889790c2050142ed508b5042ef5bcc85",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/postmerge-state-reconciliation-g18-20261120",
+      "sha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/pr242-payout-readiness-diagnostics-20261122",
+      "sha": "2acdaa3714b2c263291251b18742068077cc54ea",
+      "openPullRequests": [
+        {
+          "number": 244,
+          "title": "test(solana): qualify guarded payout admission after finalized release",
+          "headSha": "2acdaa3714b2c263291251b18742068077cc54ea",
+          "base": "codex/browser-funding-continuation-g37-20261120",
+          "draft": true,
+          "updatedAt": "2026-11-22T09:14:32Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/244"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/privacy-controls-main-g19-20261120",
+      "sha": "4a8f7bb02d5799d622fa71ab489591c2b557fa8d",
+      "openPullRequests": [
+        {
+          "number": 229,
+          "title": "Integrate optional privacy controls with current main",
+          "headSha": "4a8f7bb02d5799d622fa71ab489591c2b557fa8d",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-20T16:20:00Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/229"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/privacy-policy-main-g19-20261120",
+      "sha": "7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0",
+      "openPullRequests": [
+        {
+          "number": 227,
+          "title": "Integrate reviewed optional privacy-policy source with current main",
+          "headSha": "7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-20T16:18:07Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/227"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/proof-inputs-main-g19-20261120",
+      "sha": "e1bf579169aff082cf796cfa6dd0912c255d05a6",
+      "openPullRequests": [
+        {
+          "number": 224,
+          "title": "Integrate optional proof-inputs source with current main",
+          "headSha": "e1bf579169aff082cf796cfa6dd0912c255d05a6",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-20T16:37:23Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/224"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/proof-jobs-main-g19-20261120",
+      "sha": "ded1952e50683c10edcba54236ac606fff18fd83",
+      "openPullRequests": [
+        {
+          "number": 228,
+          "title": "Integrate optional proof-jobs with current main",
+          "headSha": "ded1952e50683c10edcba54236ac606fff18fd83",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-20T16:19:59Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/228"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/qr-camera-fixture-20261119",
+      "sha": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/retention-preview-continuation-g29-20261120",
+      "sha": "33232f62dc9cd250528ef3eb0313c0c319d99495",
+      "openPullRequests": [
+        {
+          "number": 237,
+          "title": "feat: expose offline retention preview in Settings (generation 29)",
+          "headSha": "33232f62dc9cd250528ef3eb0313c0c319d99495",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-21T11:12:09Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/237"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/review-consolidate-20261116",
+      "sha": "5eadddd54f6db6e755e658c1982c95f95b37a823",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/reviewed-main-consolidation-g15-20261120",
+      "sha": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/reviewed-main-consolidation-g17-20261120",
+      "sha": "24b67bb2db7c74654b9a5b9496279b4d44380d28",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/rq00-evidence-20261109",
+      "sha": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/runtime-update-continuation-g22-20261120",
+      "sha": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/setup-autonomous-agent-20261104",
+      "sha": "54e632f8f472a4d26b2fdda4ebdd3f2e02a5dba0",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/signed-update-ui-g13-20261120",
+      "sha": "7d40620c8320945750bd51bf865226dadde998ca",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/solana-browser-send-repair-20261119",
+      "sha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/solana-payout-docs-20261109",
+      "sha": "7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/solana-prepared-funding-continuation-g32-20261120",
+      "sha": "7bd5cf595bddadaa204e51e418d0060a1d43a1bc",
+      "openPullRequests": [
+        {
+          "number": 240,
+          "title": "feat: add explicit native Solana funding preparation",
+          "headSha": "7bd5cf595bddadaa204e51e418d0060a1d43a1bc",
+          "base": "codex/startup-compatibility-continuation-g31-20261120",
+          "draft": true,
+          "updatedAt": "2026-11-20T20:22:06Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/240"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/solana-public-export-g14-20261120",
+      "sha": "09c3d94aedab3c78a4397e3cb80786fb5eb4fd4a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/solana-restore-ack-20261119",
+      "sha": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/startup-compatibility-continuation-g31-20261120",
+      "sha": "708a3a2bc167cbbc15eaa3d3c168e058499c7f8e",
+      "openPullRequests": [
+        {
+          "number": 239,
+          "title": "feat: connect offline startup compatibility and recovery guidance",
+          "headSha": "708a3a2bc167cbbc15eaa3d3c168e058499c7f8e",
+          "base": "codex/generic-share-continuation-g30-20261120",
+          "draft": false,
+          "updatedAt": "2026-11-22T04:50:49Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/239"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/stealth-main-g19-20261120",
+      "sha": "a99141d51af52b17faf357e341c5aad5685f2e2f",
+      "openPullRequests": [
+        {
+          "number": 232,
+          "title": "Integrate optional stealth source and restore sparse-topic test assertion",
+          "headSha": "a99141d51af52b17faf357e341c5aad5685f2e2f",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-20T16:26:35Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/232"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-and-selected-source-reviewed",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/successor-handoff-20261120",
+      "sha": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "codex/transport-qualification-20261120",
+      "sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "consolidation/qualified-regressions-20261116",
+      "sha": "f2375dba1b249912ac434ed9da3998e4cb0a40f0",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "consolidation/solana-browser-recovery-20261119",
+      "sha": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "consolidation/tooling154-20261119",
+      "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "docs/consolidation-20261119",
+      "sha": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+      "openPullRequests": [
+        {
+          "number": 176,
+          "title": "Record comprehensive consolidation, verification and remaining MVP work",
+          "headSha": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+          "base": "main",
+          "draft": true,
+          "updatedAt": "2026-11-19T07:30:29Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/176"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "docs/lean-release-handoff-2026-10-24",
+      "sha": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "docs/offramp-research-tools-execution-plan-20261106",
+      "sha": "0f1792f589a20efab1f629f38d2a0068d4f44193",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "docs/security-spec-expansion-20261021",
+      "sha": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "docs/spec-readiness-and-foundations",
+      "sha": "6b6004bdf35b7aea14530f965756ca6d54336682",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "feat/custodial-ledger-foundation",
+      "sha": "52e6987e77d9ef6bc403c0129b3f52531986ade8",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "feature/erc20-browser-continuation-20261118",
+      "sha": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "feature/public-qr-capture-20261119",
+      "sha": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "feature/same-terms-resumption-20261119",
+      "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "fix/localnet-readiness-20261119",
+      "sha": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "fix/qr-async-expiry-20261120",
+      "sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "fix/remediation-09f20d73-9524c0",
+      "sha": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "fix/remediation-f84468d6-0a97ed",
+      "sha": "dba5072d7a67f67e223432c48aefabc07f31f005",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "fix/signed-update-unconfigured-lifecycle-g16-20261120",
+      "sha": "eaa7914ad2f10e932afc877e9e742e0a3117d9c4",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "fix/transport-preflight-zeroization-20261120",
+      "sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "gpt/p2p-beta-spec-20261109",
+      "sha": "c4fb7b590639e2a1d0a3220cf6bf7936156cc8e4",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "integration/all-compatible-work",
+      "sha": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "integration/browser-mvp-20261118",
+      "sha": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "integration/core-hardening-20261118",
+      "sha": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "integration/docs-reconciliation-20261118",
+      "sha": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "integration/m2a-safe-fixes-20261114",
+      "sha": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "integration/p2p-consolidated-20261109",
+      "sha": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "integration/pages-beta-qualification-20261112",
+      "sha": "4dcddf2b4bcc9890e50647cea067f81b1b734cdd",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "integration/pages-offline-recovery-20261112",
+      "sha": "9550d4b182806170ee28149e9d46ffbccef56c33",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "integration/privacy-endpoint-disclosures-20261109",
+      "sha": "07b3b2abfc548a1b69621396b1d45a52dfe79063",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "integration/solana-core-qualification-20261118",
+      "sha": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "main",
+      "sha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+      "openPullRequests": [],
+      "classification": "F-current-main",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/affectionate-ritchie-xq4bon",
+      "sha": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/doc-sweep-20261118",
+      "sha": "436b591a3a750bcca2327117e487336f6dd77470",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/epic-goldberg-sg8n96",
+      "sha": "1df700355e5199c69e84d5b41b12005677b5f5ee",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/epic-newton-7bowm4",
+      "sha": "1fe5ae00ed2105633081d71a67db2b5436da9c8d",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx",
+      "sha": "014a10a148f8b3b69c9d650fbcb083c8142e7d28",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1-reader-test-flake",
+      "sha": "b7d06fed31fb7d2793da99c23f15bf6795a82b8a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1a-reader",
+      "sha": "37f074dd1d65d5f12b73182420998a152374b813",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
+      "sha": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1c-acceptance",
+      "sha": "236f815e79a852643d8dfa61d6d4895c8a93f54a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+      "sha": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "openPullRequests": [
+        {
+          "number": 147,
+          "title": "[Lane B] B2 optional package 4/9: arbitration",
+          "headSha": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-19T08:17:05Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/147"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+      "sha": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "openPullRequests": [
+        {
+          "number": 146,
+          "title": "[Lane B] B2 optional package 3/9: courier",
+          "headSha": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-19T08:33:36Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/146"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+      "sha": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "openPullRequests": [
+        {
+          "number": 145,
+          "title": "[Lane B] B2 optional package 2/9: liquidity",
+          "headSha": "f03ebbfb395128f839fbe069226e6d79bc143258",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-19T08:34:45Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/145"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+      "sha": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "openPullRequests": [
+        {
+          "number": 163,
+          "title": "[Lane B] B2 optional package 9/9: meetup",
+          "headSha": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-19T08:49:19Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/163"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+      "sha": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "openPullRequests": [
+        {
+          "number": 160,
+          "title": "[Lane B] B2 optional package 6/9: privacy-controls",
+          "headSha": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-19T08:12:47Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/160"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+      "sha": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "openPullRequests": [
+        {
+          "number": 148,
+          "title": "[Lane B] B2 optional package 5/9: privacy-policy",
+          "headSha": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-19T07:34:27Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/148"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+      "sha": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "openPullRequests": [
+        {
+          "number": 144,
+          "title": "[Lane B] B2 optional package 1/9: proof-inputs",
+          "headSha": "0b681ed42330b9129502eb0097783cf5995e8382",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-19T07:34:30Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/144"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+      "sha": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "openPullRequests": [
+        {
+          "number": 162,
+          "title": "[Lane B] B2 optional package 8/9: proof-jobs (own optional workflow)",
+          "headSha": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-19T08:34:17Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/162"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+      "sha": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "openPullRequests": [
+        {
+          "number": 161,
+          "title": "[Lane B] B2 optional package 7/9: stealth",
+          "headSha": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+          "base": "main",
+          "draft": false,
+          "updatedAt": "2026-11-19T08:17:08Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/161"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b3-formal",
+      "sha": "39096586e1160c3c8434a2d081339bb70aeb4c1b",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+      "sha": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "openPullRequests": [
+        {
+          "number": 156,
+          "title": "[Lane B] B4 governance 3/3: inert governance records (historical), assurance packet, evidence binding",
+          "headSha": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+          "base": "main",
+          "draft": true,
+          "updatedAt": "2026-11-18T08:59:44Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/156"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+      "sha": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+      "openPullRequests": [
+        {
+          "number": 155,
+          "title": "[Lane B] B4 intake 2/3: dependency intake probes and Semaphore v4 reputation evaluation",
+          "headSha": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+          "base": "main",
+          "draft": true,
+          "updatedAt": "2026-11-18T08:59:32Z",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/155"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
+      "sha": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
+      "sha": "579b02f3775323ba273dfe2bc624b5860897431e",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
+      "sha": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/accessibility-recovery-panels-20261113",
+      "sha": "db38fba65be8b6e19c880c78e439e712ffe7e974",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/browser-cold-nonce-20261113",
+      "sha": "2cacd1d5219a82d984a75668838204e3160d5791",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/browser-cold-recovery-20261113",
+      "sha": "65efc3428ff01d4f091600baee85edfff094b347",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/browser-peer-offer-20261113",
+      "sha": "d6d65a47b99e68d00f82153d83fef366e532cf67",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/browser-runtime-engines-20261113",
+      "sha": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/cli-argument-regression-20261113",
+      "sha": "605bcd24ef3d239f6a080c129761132482029ef7",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/diagnostics-20261113",
+      "sha": "330fa1ede8b70e532a02230e4895b0711579491e",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/docs-web-profile-recovery-20261113",
+      "sha": "3524096c0ff1f4d743b01f06421bc56bbe07b9b3",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/locale-20261113",
+      "sha": "c4b13ddccc5bd78406762c656df5af35958e83f9",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/localization-blank-warning-20261113",
+      "sha": "718208880b650b03ac380d358a00878480827870",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/portable-recovery-guide-20261113",
+      "sha": "05794e754c8bf588fc6781100e8af99675418629",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/recovery-builder-help-20261113",
+      "sha": "4f75e00d0c8e7eb9f61efd633b684ca0a47b9d76",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/spec-tool-20261113",
+      "sha": "6d48c9b0695cacd2a166a7386f24b61a6248bc10",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "parallel/tooling-source-correspondence-20261113",
+      "sha": "32a4052163553f7826d55f784ab9a6e96425e576",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "research/code-reuse-2026-11-03",
+      "sha": "5fec2c6db018868a49c8ce40c21e186cdf702417",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "research/remaining-gaps-20261103",
+      "sha": "922a391e429d07b0840bbbe525b3a10c6d3c830c",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "research/security-addendum-20261103",
+      "sha": "3a523a11a87d85443c484b6a4d4284b96c5f0b41",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "research/upstream-reuse-20261103",
+      "sha": "977b36654bab2d00ca20c6139398b60c693bab73",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "review/codebase-security-20261104-94554ec",
+      "sha": "6e9c0c5ea8881013d06892103cf87ef1c547476a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "test/erc20-browser-recovery-20261119",
+      "sha": "c7f462c6688c78c35514808177ff7cfed32b9961",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "test/nostr-relay-interop-20261119",
+      "sha": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "validation/pr237-current-main-20261121",
+      "sha": "92831704820a1f35867fd757bd952eea81412f0f",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "work/noncustodial-reconstruction-2026-10-24",
+      "sha": "bc996aac828ce63856193c9114edfef480153325",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "work/p2p-client-shell-2026-10-24",
+      "sha": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "work/p2p-consolidated-20261030",
+      "sha": "68fb46920431e3311c78f931432bc4a21d066c17",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "work/p2p-exchange-close-20261030",
+      "sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "work/p2p-exchange-test-repair-20261030",
+      "sha": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "work/p2p-gate-reconciliation-20261030",
+      "sha": "e762e649600493221e3bd10f0c3525858722bc94",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "work/p2p-independent-branch-review-20261030",
+      "sha": "9f80c9b27b943b30409710dea76a53d97a761832",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "work/p2p-pr14-finish-handoff-20261030",
+      "sha": "8c8911e2dd3c7af4d515e645a6501eedc6178111",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "work/p2p-relay-lifetime-20261030",
+      "sha": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    },
+    {
+      "branch": "work/p2p-validation-20261030",
+      "sha": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+      "openPullRequests": [],
+      "classification": "U-needs-code-diff-review",
+      "inspection": "metadata-only",
+      "uniqueChangesVerified": false,
+      "completionVerified": false
+    }
+  ]
+}
