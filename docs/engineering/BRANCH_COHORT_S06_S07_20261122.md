@@ -1,0 +1,33 @@
+# P2P-Offramp branch consolidation — historical S06/S07 versus current M-0 owners (2026-11-22)
+
+**Evidence grade:** exact authenticated GitHub commit ancestry, 4 complete recursive Git blob trees per stage, stage-local per-file diffs, and read-only source/test review. **Not** local Git patch-ID equivalence, test execution, native-browser acceptance or release qualification.
+
+**Frozen baseline:** `main@01f6f4feca051d68de24a04299cd3bb444bce40c`, tree `437323a382952b9623a875c818f8af005a5d4563`. All original heads and PR branches remain preserved.
+
+## S06 — web runtime, draft/favorites and cancellation
+
+Original `claude/loving-einstein-xgzvdy-s06-web-runtime-ui@14be5a1c1ec69d91b0affe8a87811c681269fb6c`, tree `041874de75d8b1f36c77d875386871b9462c2e7a`. Parent is S05 `72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce`; the **single S06-stage commit changes 55 paths**. Against current main it is **6 ahead / 626 behind**, merge base `a88560741e60146a424cc18fcb2cc1043756ae3e`.
+
+For those **55 exact S06-stage paths**, current main has **5 identical Git blobs, 31 changed blobs and 19 absent paths**. All **55 historical stage blobs** occur byte-identically in the separately owned open [PR #42](https://github.com/djshellshoxxx/p2p-offramp/pull/42) head `58b3c876ae6036114a195af6b2dcc4c9cc2a09ad`, tree `4d8ca0453291192343023c88e8aeab7905516c5f`. This is source **retention**, not inclusion in main, and does not imply the whole S06 history is a PR42 ancestor.
+
+One high-value test exists in PR42 but **not current main or open PR26's current head**: `apps/web/test/app-services-abort.test.mjs` blob `0b73b460802f39588580916750335f403b133604`. It defines three real Worker/facade/storage tests: already-aborted draft commit must post/write nothing; abort after durable write must lock and reconcile on explicit unlock/reload without resending; and signal-accepting facade methods must all reject already-aborted calls without Worker posts or writes. This file was **read but not executed** here. Current main has a newer renamed API (`commitTradeTemplateChange`, `loadTradeTemplates`, `previewTradeTemplateChange`) instead of historical `commitTradeDraftChange`, `loadTradeDraftLibrary`, `planTradeDraftChange`; copying the old test verbatim against main would not be a valid runtime regression. Current-main `trade-templates-runtime.test.mjs` and `trade-templates-worker.test.mjs` already check held durable commits, unknown outcomes, explicit reload and prewrite cancellation in their newer interfaces. Exact full already-aborted/no-Worker-post coverage across current facade methods requires **a reviewed, API-adapted test**, not a claim of a confirmed bug.
+
+## S07 — native private journey and retention
+
+Original `claude/loving-einstein-xgzvdy-s07-native-journey@8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7`, tree `c5865b3a02a653078babbb81d2ac93dab09e6a7a`. Parent is S06 `14be5a1c1ec69d91b0affe8a87811c681269fb6c`; the **single S07-stage commit changes 24 paths**. Against main: **7 ahead / 626 behind**, same merge base `a88560741e60146a424cc18fcb2cc1043756ae3e`.
+
+Of those **24 stage paths**, current main has **3 different Git blobs and 21 absent paths; zero exact matches**. In separately owned open [PR #43](https://github.com/djshellshoxxx/p2p-offramp/pull/43), head `bc549f477f86e27516f554c7f1923a7147b82ea4`, tree `f5db60cbd40c57649fca7fed531724478f336025`, **all 24 paths exist**: 18 historical blobs are exact and 6 have subsequent changes. No S07 stage-local path is absent from both PR43 and the older open PR26. Seven missing-main source paths cover `apps/web/src/journey/*` and `apps/web/src/retention/native-retention.ts`; do not treat them as deployed or accepted merely because they are preserved in PR43/PR26.
+
+A concrete PR43 source correction replaces in-place `matches.sort(...)` with `[...matches].sort(...)` inside `apps/web/src/journey/private-trade.ts` (original blob `1e56c13cb29e92da49c5d56305de2ca56785f138`, PR43 `a010d917c652aecae1e77a2e2549ca4b658bfc0e`), avoiding mutation of the matches array during recovery selection. The M-0 recovery test blob `3d0cfceda86b4706cb68e80b8d0010d8814b81f0` adds an explicit comparator to `Object.keys(row).sort(...)` in place of the historical default sort (blob `397a613406b4f9082527954086290db94018244f`). Its nine named prepared/unsent and restart/reconciliation scenarios are present in PR43 but **that file is absent from main and PR26**. Original historical failures and later Sonar corrections remain source-bound.
+
+## Current gates, ownership and integration decision
+
+- PR42 is open, non-draft, and is the active S06 stack owner; PR43 is open, non-draft, and is the active S07 stack owner (PR43 targets PR42). Both have COMMENTED GitHub reviews but **no evidenced required approval** in this inspection. On both unchanged heads, CodeRabbit was **SKIPPED**, not passed. PR42 also retains older cancelled workflow attempts; later successful checks do not erase them. PR43 has successful hosted source checks but lacks a fresh current-main target checkout and required Tier C owner gate.
+- No historical S06/S07 source should be re-merged independently into main. Integrate only proven unique, desirable code through the existing ordered PR42/43 and broader PR26 lineage after exact current-target Git tree checks, independent review and all applicable D8 Tier B/Tier C, native and browser gates. Do not transfer a stage's old successful test results to changed current-main source.
+- **Disposition:** both historical S06 and S07 branches are `V-divergent-partially-reconciled`: full stage-path retention in owned active PRs is proved, but neither entire branch nor runtime acceptance is certified as integrated/superseded. This reduces **unassessed** branches by two, *not* the count of unresolved integration candidates.
+
+## Next actionable cohort
+
+Compare the newer M-0 corrected S06/S07 behavior against current-main trade-template and native-retention boundaries; adapt the already-aborted/no-post facade regression to current API in an isolated test-first branch **only if no live worker owns the files**, then execute focused Node/Worker tests and full relevant CI. Separately review PR42/43 full diffs and retained fail-closed native journey tests, including prepared-but-never-marked approvals, with no weakening of original-send/replay/unknown-outcome protections. Proceed to other unassessed custody/refund branches when owner/gate work cannot be safely advanced.
+
+No local checkout was mounted, git clone DNS failed, no local tests, physical sends, validator/browser runtime, actual review approval, guarded merge, release, deployment or real-funds operation took place. `ReleaseEnabled=0` and optional-default restrictions are unchanged.

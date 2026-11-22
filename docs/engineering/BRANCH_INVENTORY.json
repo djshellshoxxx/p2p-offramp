@@ -1994,18 +1994,35 @@
       "branch": "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
       "sha": "14be5a1c1ec69d91b0affe8a87811c681269fb6c",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22: exact historical single-stage 55-path Git blob comparison to main and active owned PR #42; see BRANCH_COHORT_S06_S07_20261122.md",
       "uniqueChangesVerified": false,
       "completionVerified": false,
-      "associatedPullRequests": []
+      "associatedPullRequests": [],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "aheadBy": 6,
+        "behindBy": 626,
+        "verifiedDate": "2026-11-22"
+      },
+      "stageLocalDiff": {
+        "paths": 55,
+        "mainExactBlobs": 5,
+        "mainDifferentBlobs": 31,
+        "mainAbsent": 19,
+        "activeOwnerPr": 42,
+        "sourceRetention": "all stage-local path names present in current owner PR; source not merged into main",
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Partially reconciled via existing active PR #42; do not duplicate/merge original historical branch; missing main code remains gated by owner, D8 and fresh current-target tests"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s07-native-journey",
       "sha": "8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "2026-11-22 preliminary compare only: 7 ahead/626 behind, merge base a88560741e60146a424cc18fcb2cc1043756ae3e; 199 old-base changed paths; nested historical PR #26 split-stage provenance, not yet assessed for content equivalence.",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22: exact historical single-stage 24-path Git blob comparison to main and active owned PR #43; see BRANCH_COHORT_S06_S07_20261122.md",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [],
@@ -2014,10 +2031,18 @@
         "mergeBaseSha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
         "aheadBy": 7,
         "behindBy": 626,
-        "changedPathCount": 199,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "UNASSESSED CONTENT: do not merge or discard. Stage-04 and stage-07 overlaps require distinct source/test diff and open-PR ownership review."
+      "consolidationDecision": "Partially reconciled via existing active PR #43; do not duplicate/merge original historical branch; missing main code remains gated by owner, D8 and fresh current-target tests",
+      "stageLocalDiff": {
+        "paths": 24,
+        "mainExactBlobs": 0,
+        "mainDifferentBlobs": 3,
+        "mainAbsent": 21,
+        "activeOwnerPr": 43,
+        "sourceRetention": "all stage-local path names present in current owner PR; source not merged into main",
+        "verifiedDate": "2026-11-22"
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s08-portal-lab-docs",
@@ -6159,10 +6184,10 @@
   "currentClassificationTotals": {
     "A": 43,
     "P": 58,
-    "U": 130,
+    "U": 128,
     "C": 3,
     "E": 10,
-    "V": 1,
+    "V": 3,
     "F": 12
   },
   "cohortWalletSafetyReview20261122": {
@@ -6177,5 +6202,29 @@
     ],
     "noNewProductCode": true,
     "noNativeExecution": true
+  },
+  "cohortS06S07": {
+    "date": "2026-11-22",
+    "evidence": "BRANCH_COHORT_S06_S07_20261122.md",
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "branches": [
+      "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
+      "claude/loving-einstein-xgzvdy-s07-native-journey"
+    ],
+    "reclassification": "U-to-V, 2",
+    "missingTestsPresentInOpenPrs": [
+      {
+        "path": "apps/web/test/app-services-abort.test.mjs",
+        "pr": 42,
+        "sha": "0b73b460802f39588580916750335f403b133604"
+      },
+      {
+        "path": "apps/web/test/journey-private-trade-recovery.test.mjs",
+        "pr": 43,
+        "sha": "3d0cfceda86b4706cb68e80b8d0010d8814b81f0"
+      }
+    ],
+    "noSourceIntegration": true,
+    "noRuntimeAcceptance": true
   }
 }
