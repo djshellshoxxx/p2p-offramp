@@ -1,3 +1,18 @@
+# Verified branch-consolidation continuation — 2026-11-22 (newest source-bound checkpoint)
+
+**This section supersedes only older live-count and PR #244 pending-state statements; preserve historical failures and reports below.** The repository's current main is still `01f6f4feca051d68de24a04299cd3bb444bce40c`, tree `437323a382952b9623a875c818f8af005a5d4563`. No main merges or source changes occurred in this continuation.
+
+- Canonical draft [PR #245](https://github.com/djshellshoxxx/p2p-offramp/pull/245) branch `codex/consolidation-evidence-inventory-20261122`: [BRANCH_INVENTORY.json](BRANCH_INVENTORY.json) schema v2 now enumerates all **257** current remote branches (with exact tip SHA and open/historical PR association), across **242** PRs (60 open / 124 merged / 58 closed unmerged). Snapshot update commit `913e65961836b003f239cc981e5a22f34ba39e21`; commit was read back from GitHub.
+- [BRANCH_CONSOLIDATION_MASTER.md](BRANCH_CONSOLIDATION_MASTER.md) update commit `8fe7da6b5e2fa633f1cbca5bae4c3408c21a2a2b`: **19 additional** exact-main ancestry-contained source branches positively reconciled via live compare. Two divergent D9 security/recovery branches were inspected for added-line source overlap only, **not** declared fully equivalent. No feature source was cherry-picked or overwritten.
+- Inventory tally: **29 exact-main ancestor heads** (19 new + 10 prior); **1 separate source-equivalent browser head** from prior evidence; **2 diverged D9 heads awaiting patch equivalence**, **58 open-PR heads**, **166 metadata-only unassessed heads**, **1 current main**. Open-PR heads still require individual review, even where CI is green.
+- PR #244 current exact unchanged head `2acdaa3714b2c263291251b18742068077cc54ea`: **12/12 hosted GitHub checks SUCCESS**, including program and browser. This does not retroactively pass the original PR #242's **failed** hosted browser test. PR #244 is still draft and has zero submitted reviews. PR #237 and PR #241 also have zero submitted reviews; applicable Tier B / Tier C and current-target gates remain.
+- Historical PR #26, #237–244, separate optional #224–232, audits #184–186 and frozen source histories remain preserved. No guessed keys/provider/trust, no real funds, no optional default activation, no local Chromium bypass, no force pushes/deletes, no deployment/release. `ReleaseEnabled=0` remains unchanged.
+- **Next bounded cohort:** complete line-removal/patch-id semantic review of D9 marker and restored-account-isolation diverged branches, then compare unassessed security/fund-recovery `claude/*`, `chatgpt/*`, `nodata/*` branches and recheck open stacks. The earlier owner-approval/review blockers are not resolved by documentation.
+
+**Execution availability:** The old `/workspace/scratch/dcf03ef9bee8` worktree was absent and direct Git clone DNS resolution failed in this runtime. Authenticated GitHub connector source/PR/compare/commit/file operations succeeded; no local tests, native financial flows or independent runtime workers were executed. Keep all prior source-bound failures and historical dates below intact.
+
+---
+
 # Verified live continuation intake — November 22, 2026
 
 **Scope/status:** Partial repo consolidation and qualified evidence intake; this header supersedes earlier dated *pending* publication statements only where verified live data is newer. No changes have been merged into main by this intake.
