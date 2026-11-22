@@ -205,6 +205,32 @@ try {
   const buyerBefore = await getBalance(chain.rpc, chain.buyer, 'finalized');
   await prepare(ids.release, 'release'); await confirm(); await settled(ids.release, 'released', false);
   assert.equal(await getBalance(chain.rpc, chain.buyer, 'finalized'), buyerBefore, 'release alone changes state without paying');
+  // A released finalized escrow snapshot is not proof that the release intent has settled.
+  // Use only the existing explicit refresh and guarded payout eligibility; never force enable.
+  try {
+    await until(async () => {
+      await refresh();
+      return await card(ids.release).getByRole('button', { name: 'Review separate payout', exact: true }).isEnabled();
+    }, 'separate payout admission after finalized release and terminal journal reconciliation', 150000, 1000);
+  } catch (error) {
+    const observed = (await fixture.vault()).intents.filter(intent => intent.binding.tradeId === ids.release)
+      .map(intent => ({ action: intent.action, state: intent.state }));
+    console.error('payout admission diagnostic (no keys or signatures):', JSON.stringify({
+      chainState: await card(ids.release).getAttribute('data-chain-state'),
+      paidOut: await card(ids.release).getAttribute('data-paid-out'),
+      walletTradeMatched: (await page.locator('main').getAttribute('data-wallet-trade')) === ids.release,
+      uiBusy: await page.locator('main').getAttribute('aria-busy'),
+      intents: observed,
+      conditions: await card(ids.release).locator('p').filter({ hasText: /^Payout condition:/ }).allTextContents(),
+    }));
+    throw error;
+  }
+  const releaseIntents = (await fixture.vault()).intents.filter(intent =>
+    intent.binding.tradeId === ids.release && intent.action === 'release');
+  assert.ok(releaseIntents.some(intent => intent.state === 'finalized'), 'release journal requires finalized evidence before payout');
+  assert.ok(releaseIntents.every(intent => ['finalized', 'failed', 'dropped', 'cancelled'].includes(intent.state)),
+    'payout admission must not bypass an unresolved release intent');
+  assert.equal(chain.summary.appSends.length, 2, 'read-only readiness refresh never broadcasts a second release');
   await prepare(ids.release, 'payout'); await confirm(); await settled(ids.release, 'released', true);
   assert.equal(await getBalance(chain.rpc, chain.buyer, 'finalized'), buyerBefore + 100000000);
   assert.equal(chain.summary.appSends.length, 1 + 2);
