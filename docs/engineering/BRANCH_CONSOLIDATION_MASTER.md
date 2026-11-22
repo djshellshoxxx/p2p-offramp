@@ -1,5 +1,9 @@
 # P2P-Offramp — branch consolidation master (live intake, 2026-11-22)
 
+## New verified cohort: original S08–S10 stage source retained (2026-11-22)
+
+[Source-bound SHA/PR blob report](BRANCH_COHORT_S08_S10_20261122.md). The three original divergent S08/S09/S10 stage refs are now **path-level reconciled** to still-open owner PR44/45/46, with exact stage-local recursive blob proof: S08 **41 paths** (PR44: 37 exact/4 corrected; main: 11 exact/30 different), S09 **27** (PR45: 27 exact; 26 absent main), S10 **136** (PR46: 120 exact/16 corrected; 134 absent main). This is *not* integration or whole-history patch equivalence. S09 mobile-wallet's historical 4/5 evaluation remains failed for the stronger URI expectation; optional S10 packages remain off by D7 and PR46 lacks a review. No runtime/native execution or product change. Fully paginated branch refs still total **257 before this report publication**, main `01f6f4feca051d68de24a04299cd3bb444bce40c`. Updated inventory statuses: **43 A, 58 P, 125 U, 3 C, 10 E, 6 V, 12 F**, 257 total. Preserve PR44/45/46 owners and original historical heads. Next: S11/S12 with PR47/48, then specific owner-corrected source and current-main adapted tests. `ReleaseEnabled=0`.
+
 > **Execution status: PARTIAL.** This is a reproducible coordination baseline, not a claim that all branches are qualified, features finished, or any open PR merged. The complete branch-head/open-PR metadata capture is [BRANCH_INVENTORY.json](BRANCH_INVENTORY.json).
 
 ## Authoritative baseline

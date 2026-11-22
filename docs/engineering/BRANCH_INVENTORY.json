@@ -2048,31 +2048,97 @@
       "branch": "claude/loving-einstein-xgzvdy-s08-portal-lab-docs",
       "sha": "c950dad4b387cb4b33910789c454eb8f2ab0ae81",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22: all 41 stage-local changed-file paths compared by exact recursive Git blob SHA to main and current owning PR #44; original source divergent; no runtime/patch-id claim",
       "uniqueChangesVerified": false,
       "completionVerified": false,
-      "associatedPullRequests": []
+      "associatedPullRequests": [],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "aheadBy": 8,
+        "behindBy": 626,
+        "verifiedDate": "2026-11-22"
+      },
+      "sourcePreservation": {
+        "ownerPullRequest": 44,
+        "ownerHeadSha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+        "stageLocalChangedPaths": 41,
+        "stageLocalRemovedPaths": 0,
+        "mainExactBlobs": 11,
+        "mainDifferentBlobs": 30,
+        "mainAbsentPaths": 0,
+        "ownerExactBlobs": 37,
+        "ownerCorrectedBlobs": 4,
+        "ownerAbsentPaths": 0,
+        "verification": "authenticated recursive Git tree SHA",
+        "evidencePath": "docs/engineering/BRANCH_COHORT_S08_S10_20261122.md"
+      },
+      "consolidationDecision": "Hold without merge. Exact stage-local content preserved by existing PR #44; full commit/semantic equivalence and current-source acceptance unresolved; respect active PR owner."
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s09-intake",
       "sha": "389c0ea69e24615d0f1d7595942514300cd855f9",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22: all 27 stage-local changed-file paths compared by exact recursive Git blob SHA to main and current owning PR #45; original source divergent; no runtime/patch-id claim",
       "uniqueChangesVerified": false,
       "completionVerified": false,
-      "associatedPullRequests": []
+      "associatedPullRequests": [],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "aheadBy": 9,
+        "behindBy": 626,
+        "verifiedDate": "2026-11-22"
+      },
+      "sourcePreservation": {
+        "ownerPullRequest": 45,
+        "ownerHeadSha": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+        "stageLocalChangedPaths": 27,
+        "stageLocalRemovedPaths": 0,
+        "mainExactBlobs": 0,
+        "mainDifferentBlobs": 1,
+        "mainAbsentPaths": 26,
+        "ownerExactBlobs": 27,
+        "ownerCorrectedBlobs": 0,
+        "ownerAbsentPaths": 0,
+        "verification": "authenticated recursive Git tree SHA",
+        "evidencePath": "docs/engineering/BRANCH_COHORT_S08_S10_20261122.md"
+      },
+      "consolidationDecision": "Hold without merge. Exact stage-local content preserved by existing PR #45; full commit/semantic equivalence and current-source acceptance unresolved; respect active PR owner."
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s10-optional-packages",
       "sha": "c696c02b94eb6b90da2ed76f93c383fcd8a7f703",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22: all 136 stage-local changed-file paths compared by exact recursive Git blob SHA to main and current owning PR #46; original source divergent; no runtime/patch-id claim",
       "uniqueChangesVerified": false,
       "completionVerified": false,
-      "associatedPullRequests": []
+      "associatedPullRequests": [],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "aheadBy": 10,
+        "behindBy": 626,
+        "verifiedDate": "2026-11-22"
+      },
+      "sourcePreservation": {
+        "ownerPullRequest": 46,
+        "ownerHeadSha": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+        "stageLocalChangedPaths": 136,
+        "stageLocalRemovedPaths": 0,
+        "mainExactBlobs": 0,
+        "mainDifferentBlobs": 2,
+        "mainAbsentPaths": 134,
+        "ownerExactBlobs": 120,
+        "ownerCorrectedBlobs": 16,
+        "ownerAbsentPaths": 0,
+        "verification": "authenticated recursive Git tree SHA",
+        "evidencePath": "docs/engineering/BRANCH_COHORT_S08_S10_20261122.md"
+      },
+      "consolidationDecision": "Hold without merge. Exact stage-local content preserved by existing PR #46; full commit/semantic equivalence and current-source acceptance unresolved; respect active PR owner."
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s11-governance-ci",
@@ -6184,10 +6250,10 @@
   "currentClassificationTotals": {
     "A": 43,
     "P": 58,
-    "U": 128,
+    "U": 125,
     "C": 3,
     "E": 10,
-    "V": 3,
+    "V": 6,
     "F": 12
   },
   "cohortWalletSafetyReview20261122": {
@@ -6226,5 +6292,29 @@
     ],
     "noSourceIntegration": true,
     "noRuntimeAcceptance": true
+  },
+  "cohortS08S10": {
+    "date": "2026-11-22",
+    "evidence": "BRANCH_COHORT_S08_S10_20261122.md",
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "originalBranches": [
+      "claude/loving-einstein-xgzvdy-s08-portal-lab-docs",
+      "claude/loving-einstein-xgzvdy-s09-intake",
+      "claude/loving-einstein-xgzvdy-s10-optional-packages"
+    ],
+    "preservedByOpenPRs": [
+      44,
+      45,
+      46
+    ],
+    "reclassification": "U-to-V, 3",
+    "allStageLocalPathsPreserved": true,
+    "mainMissingFiles": {
+      "s08": 0,
+      "s09": 26,
+      "s10": 134
+    },
+    "noRuntimeOrFinancialQualification": true,
+    "noSourceIntegration": true
   }
 }
