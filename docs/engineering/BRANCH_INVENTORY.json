@@ -1846,7 +1846,7 @@
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "metadata-only",
+      "inspection": "2026-11-22 complete stage-local Git tree/blob comparison; pending semantic/target-test qualification",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -1859,7 +1859,26 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/47"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "aheadBy": 49,
+        "behindBy": 626,
+        "verifiedDate": "2026-11-22"
+      },
+      "stageLocalAssessment": {
+        "parent": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+        "stagePathCount": 36,
+        "exactCurrentMainBlobCount": 10,
+        "differingCurrentMainBlobCount": 26,
+        "absentCurrentMainPathCount": 0,
+        "sourceAndGovernanceDifferences": "current main supports historical/superseded governance states, absent from old S11",
+        "ownerPr": 47,
+        "review": "Qodo COMMENTED only; not accepted",
+        "status": "open and unmerged"
+      },
+      "consolidationDecision": "Preserve owned PR #47; exact stage-local source retention proven, but do not merge old stage over newer main without target-specific review and applicable CI"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
@@ -1873,7 +1892,7 @@
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "metadata-only",
+      "inspection": "2026-11-22 complete stage-local Git tree/blob comparison; pending semantic/target-test qualification",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -1886,7 +1905,26 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/48"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "aheadBy": 53,
+        "behindBy": 626,
+        "verifiedDate": "2026-11-22"
+      },
+      "stageLocalAssessment": {
+        "parent": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+        "stagePathCount": 190,
+        "exactCurrentMainBlobCount": 0,
+        "differingCurrentMainBlobCount": 5,
+        "absentCurrentMainPathCount": 185,
+        "absentPathScope": "docs/execution historical evidence",
+        "ownerPr": 48,
+        "review": "Qodo COMMENTED only; not accepted",
+        "status": "open and unmerged"
+      },
+      "consolidationDecision": "Preserve owned PR #48; exact stage-local source retention proven, but do not merge old stage over newer main without target-specific review and applicable CI"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s00-ci-triggers",
@@ -4419,11 +4457,29 @@
       "branch": "feat/custodial-ledger-foundation",
       "sha": "52e6987e77d9ef6bc403c0129b3f52531986ade8",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "B-external-design-blocked-custodial-prototype",
+      "inspection": "read complete 12-path GitHub compare plus README/architecture/SQL and source: separate PostgreSQL custodial ledger prototype, not noncustodial escrow",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
-      "associatedPullRequests": []
+      "associatedPullRequests": [],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa",
+        "aheadBy": 16,
+        "behindBy": 918,
+        "verifiedDate": "2026-11-22"
+      },
+      "stageLocalAssessment": {
+        "addedPathsAbsentMain": 12,
+        "prototype": "Node/PostgreSQL 16+ custodial account/holds ledger",
+        "documentedMissing": [
+          "database-backed tests not executed",
+          "real-funds custody authorization",
+          "hold capture/authorization/webhook settlement"
+        ],
+        "distinctFromCurrentProduct": true
+      },
+      "consolidationDecision": "Blocked on explicit owner decision to operate a separate custodial product; never add custodial balance/cash-out authority to noncustodial default"
     },
     {
       "branch": "feature/erc20-browser-continuation-20261118",
@@ -6040,11 +6096,19 @@
       "branch": "work/noncustodial-reconstruction-2026-10-24",
       "sha": "bc996aac828ce63856193c9114edfef480153325",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "live GitHub compare proves branch tip is ancestor of current main; zero ahead commits",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
-      "associatedPullRequests": []
+      "associatedPullRequests": [],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "bc996aac828ce63856193c9114edfef480153325",
+        "aheadBy": 0,
+        "behindBy": 841,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Entire branch history included by main ancestry; no additional merge"
     },
     {
       "branch": "work/p2p-client-shell-2026-10-24",
@@ -6248,13 +6312,14 @@
     "releaseEnabled": 0
   },
   "currentClassificationTotals": {
-    "A": 43,
+    "A": 44,
     "P": 58,
-    "U": 125,
+    "U": 123,
     "C": 3,
     "E": 10,
     "V": 6,
-    "F": 12
+    "F": 12,
+    "B": 1
   },
   "cohortWalletSafetyReview20261122": {
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
@@ -6316,5 +6381,23 @@
     },
     "noRuntimeOrFinancialQualification": true,
     "noSourceIntegration": true
+  },
+  "cohortS11S12Custody": {
+    "date": "2026-11-22",
+    "evidence": "BRANCH_COHORT_S11_S12_CUSTODY_20261122.md",
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "stagePRs": [
+      47,
+      48
+    ],
+    "stagePathsCompared": {
+      "s11": 36,
+      "s12": 190
+    },
+    "newAncestors": 1,
+    "newOwnerOrDesignBlocked": 1,
+    "unchangedOpenPrHeads": 2,
+    "unassessedAfter": 123,
+    "noRuntimeTestOrProductMerge": true
   }
 }

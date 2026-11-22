@@ -1,3 +1,9 @@
+## New source reconciliation — 2026-11-22: S11/S12 plus custody decision (verified)
+
+[Full source-bound report](BRANCH_COHORT_S11_S12_CUSTODY_20261122.md). Fresh complete GitHub enumeration remains **257 branches / 242 PRs** (60 open, 124 merged, 58 closed unmerged) on `main@01f6f4feca051d68de24a04299cd3bb444bce40c`. Exact recursive tree comparisons inspected **36 S11** stage paths (10 byte-identical main, 26 later-changed) and **190 S12** paths (185 archival docs absent main, five later-changed). Both are retained in open owner PRs **#47/#48** and each has only a historical Qodo `COMMENTED` submission, not approval. Older governance records lack current main's `historical`/`supersededBy` state and accepted-decision banner; old receipts must not overwrite current authority. A new `work/noncustodial-reconstruction-2026-10-24` ancestor is proven already in main, while the 12-file `feat/custodial-ledger-foundation` branch is a **separate unapproved custodial PostgreSQL product**, not safe to merge into this noncustodial default. Exact counters **A44 / P58 / U123 / C3 / E10 / V6 / F12 / B1**; original branches preserved. No executed tests or main merge; `ReleaseEnabled=0` unchanged.
+
+---
+
 # P2P-Offramp — branch consolidation master (live intake, 2026-11-22)
 
 ## New verified cohort: original S08–S10 stage source retained (2026-11-22)
