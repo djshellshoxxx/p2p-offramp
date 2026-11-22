@@ -11,7 +11,8 @@
     "P": "Open PR; no assertion that code is unique, merge-ready or unfinished",
     "U": "No open-PR head match; code and ancestry need semantic inspection",
     "A": "Full branch commit tip ancestor of exact main by GitHub compare; not a claim about feature acceptance",
-    "E": "Diverged branch with bounded static source-overlap evidence; full patch equivalence and review unresolved"
+    "E": "Diverged branch with bounded static source-overlap evidence; full patch equivalence and review unresolved",
+    "C": "Historical diverged docs-only branch content proven byte-for-byte included in current main; commits remain nonancestors. No software qualification implied"
   },
   "notes": [
     "Open PR metadata includes parent stacks; a PR's changed-file count can include ancestors.",
@@ -258,10 +259,10 @@
       "branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
       "sha": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
       "openPullRequests": [],
-      "classification": "V-divergent-scoped-review-pending",
-      "inspection": "2026-11-22 compare: 30 ahead/615 behind, 1 changed paths, no content-level equivalence yet",
-      "uniqueChangesVerified": false,
-      "completionVerified": false,
+      "classification": "C-document-content-in-main",
+      "inspection": "2026-11-22: 30 ahead/615 behind, one docs-only path; all 102302 historical ledger characters are exact prefix of current main 218383-character ledger; all 31 audit headings and 202/202 trimmed nonblank lines present",
+      "uniqueChangesVerified": true,
+      "completionVerified": true,
       "associatedPullRequests": [
         {
           "number": 67,
@@ -278,9 +279,13 @@
         "mergeBaseSha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
         "aheadBy": 30,
         "behindBy": 615,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-22",
+        "changedPathCount": 1,
+        "historicalLedgerBlob": "6669fbc159da99e28adde8b60b743b08c61c29cd",
+        "mainLedgerBlob": "6b1e702e5752c9c7317ed9b9e3b882178740dc5b",
+        "byteIdenticalPrefix": true
       },
-      "consolidationDecision": "Hold pending intended-delta, file-ownership and possible conflict verification; no merge"
+      "consolidationDecision": "DOCUMENT CONTENT INCLUDED; no merge. PR #67 closed unmerged, historical commits not main ancestors; text is fully preserved in newer main ledger. Not a runtime security approval."
     },
     {
       "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
@@ -1935,8 +1940,8 @@
       "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
       "sha": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
       "openPullRequests": [],
-      "classification": "V-divergent-scoped-review-pending",
-      "inspection": "2026-11-22 compare: 4 ahead/626 behind, 85 changed paths, no content-level equivalence yet",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22: 85 historical changed paths vs main full tree; 45 exact blobs, 38 different, 2 absent from main but byte-identical in open PR #40 and #26; later main EIP-1898 canonical block-hash admission differs from old branch",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [],
@@ -1945,9 +1950,13 @@
         "mergeBaseSha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
         "aheadBy": 4,
         "behindBy": 626,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-22",
+        "historicalChangedPaths": 85,
+        "identicalBlobPaths": 45,
+        "differentBlobPaths": 38,
+        "absentFromMainButPresentInOpenPR40": 2
       },
-      "consolidationDecision": "Hold pending intended-delta, file-ownership and possible conflict verification; no merge"
+      "consolidationDecision": "HOLD: do not re-merge old source. Two test-only missing blobs already present unchanged in open #40/#26; remaining 38 differing paths require policy/behavior/patch-ID analysis. No merge, no test execution."
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
@@ -5956,5 +5965,39 @@
       "F": 12
     },
     "reportPath": "docs/engineering/BRANCH_COHORT_D9_20261122.json"
+  },
+  "cohortWalletAudit": {
+    "verifiedDate": "2026-11-22",
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "report": "docs/engineering/BRANCH_COHORT_WALLET_AUDIT_20261122.md",
+    "wallet": {
+      "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
+      "sha": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+      "changedPaths": 85,
+      "exactBlobMatches": 45,
+      "differingBlobPaths": 38,
+      "missingInMain": 2,
+      "missingPresentInActivePR40": 2,
+      "disposition": "partial-review"
+    },
+    "audit": {
+      "branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
+      "sha": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+      "changedPathCount": 1,
+      "oldLedgerIsExactPrefixOfMain": true,
+      "disposition": "docs-content-included-not-commit-ancestor"
+    },
+    "runtimeExecuted": false,
+    "patchIdExecuted": false,
+    "releaseEnabled": 0
+  },
+  "currentClassificationTotals": {
+    "A": 29,
+    "P": 58,
+    "U": 146,
+    "C": 1,
+    "E": 10,
+    "V": 1,
+    "F": 12
   }
 }
