@@ -7,6 +7,7 @@ import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
 import { DiagnosticsPanel } from './DiagnosticsPanel.tsx';
 import { RecoveryReferencesPanel } from './RecoveryReferencesPanel.tsx';
 import { BackupVerificationForm } from './BackupVerificationForm.tsx';
+import { RetentionPreviewPanel } from './RetentionPreviewPanel.tsx';
 import { PrivacyStatusPanel } from './PrivacyStatusPanel.tsx';
 import { SignedUpdatePanel } from './SignedUpdatePanel.tsx';
 import type { AssetUpdateController } from '../../../../packages/security/update-view.ts';
@@ -90,6 +91,7 @@ export function Settings({ diagnostics = null, services = null, scope, updates =
   return <><p className="lead">{m.settingsIntro}</p>
     <section className="plain-section" aria-labelledby="privacy-title"><h2 id="privacy-title">{m.privacyTitle}</h2><p>{m.privacyHelp}</p></section>
     <PrivacyStatusPanel services={services} {...(scope === undefined ? {} : { scope })} />
+    <RetentionPreviewPanel services={services} />
     <section className="plain-section" aria-labelledby="trust-title"><h2 id="trust-title">{m.trustTitle}</h2><p>{m.trustHelp}</p></section>
     <SignedUpdatePanel controller={updates} />
     <section className="warning" aria-labelledby="framing-title"><h2 id="framing-title">{m.framingTitle}</h2><p>{m.framingHelp}</p></section>

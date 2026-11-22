@@ -1,0 +1,13 @@
+{
+  "file": "01-source-before-fixture-correction.patch.gz",
+  "rawSha256": "b33386bed4243fe117968fef64d886450e73765764c8ff42b4ec9e9b5039badc",
+  "gzipSha256": "c2005f53ae2cbfb28e813bf8a19de84c4a9227d9a3b683c734b0bed4f10919c4",
+  "rawBytes": 40297,
+  "gzipBytes": 10664,
+  "files": {
+    "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+    "apps/web/src/ui/locale/en.ts": "77f0f573b437cf0dee846edc4ce9c45e7fa35a7749b20a4f6ca3f379e75eebc3",
+    "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+    "apps/web/test/retention-preview-ui.test.mjs": "dce2e6daebc7684a2b74de5de1b146f749e1714ef30ed124b35fae26aa07262d"
+  }
+}

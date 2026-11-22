@@ -1,0 +1,143 @@
+{
+  "schema": "p2p-offramp.generation29-publication.v1",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "branch": "codex/retention-preview-continuation-g29-20261120",
+  "intendedTarget": "codex/main-consolidation-g28-20261120",
+  "publishedParent": {
+    "pr": 236,
+    "head": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+    "branch": "codex/main-consolidation-g28-20261120"
+  },
+  "publicationMethod": "Authenticated GitHub connector. Every complete tree and ordered parent relationship was read back. Commit metadata and IDs differ; original local commits remain preserved.",
+  "localEquivalentCheckpoint": {
+    "commit": "0389a05840453472663166a83194b084337d69f1",
+    "tree": "e4e39fbc1445d32cac16f89b6129325bea9e7161"
+  },
+  "publishedEquivalentCheckpoint": {
+    "commit": "dc8426895a6171aa6d83b4b3170abb284c2241ee",
+    "tree": "e4e39fbc1445d32cac16f89b6129325bea9e7161"
+  },
+  "testedLocalSource": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+  "testedPublishedEquivalentSource": "fa15917fbb047f1bd20d7c5e8124948456d8754d",
+  "testedTree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+  "verification": {
+    "payloadBlobCount": 67,
+    "mappedCommits": 8,
+    "allTreesMatch": true,
+    "allOrderedParentsReadBack": true,
+    "nonEvidenceEntriesIdenticalToTestedSource": 1026
+  },
+  "mergePolicy": {
+    "tier": "B",
+    "acceptedPacket": "docs/adr/proposed/D8-merge-policy-and-branch-protection.md",
+    "requiredNamedReview": "CodeRabbit or Qodo pass with findings answered",
+    "namedReviewCompletedAtCheckpoint": false,
+    "independentReview": "Completed separately on the frozen combined source; does not replace the named review."
+  },
+  "commitMap": [
+    {
+      "localSha": "fbf60f018631ff5ae6d66358d2a9413b560b822f",
+      "publishedSha": "247e2b3f26c16d4e0c0dce2d906392c65af972a6",
+      "tree": "05ff7a561aea207d6d54dad08d08fadd5cd8cf45",
+      "localParents": [
+        "d9ddcf53d82100f05de7346143a0ad00d43c2c1a"
+      ],
+      "publishedParents": [
+        "d9ddcf53d82100f05de7346143a0ad00d43c2c1a"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "5d6ae5a00c6834eb684c34c93f5a49bd9d9eee19",
+      "publishedSha": "e5c70cbabf6b6149618fbeb1370c0ca8c06f4652",
+      "tree": "59eb6a3978dafd7a6d81bb81095f34d0c133f804",
+      "localParents": [
+        "fbf60f018631ff5ae6d66358d2a9413b560b822f"
+      ],
+      "publishedParents": [
+        "247e2b3f26c16d4e0c0dce2d906392c65af972a6"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+      "publishedSha": "fa15917fbb047f1bd20d7c5e8124948456d8754d",
+      "tree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+      "localParents": [
+        "5d6ae5a00c6834eb684c34c93f5a49bd9d9eee19"
+      ],
+      "publishedParents": [
+        "e5c70cbabf6b6149618fbeb1370c0ca8c06f4652"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "61fbf4d974010071d0a3d4ee6946f55abc38ff34",
+      "publishedSha": "abe36342638fffaebb6f530fd26fb82b9fc5205d",
+      "tree": "a5f3cbb60b463d1ec2a5796373f53bd847ec5a6e",
+      "localParents": [
+        "fa7c1a11ff990be4646053731f1030d09eb8f9b6"
+      ],
+      "publishedParents": [
+        "fa15917fbb047f1bd20d7c5e8124948456d8754d"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "841908840afc9e2db65504d8b9eb7b847c1b15ce",
+      "publishedSha": "c83524b06b21553fc6aa74021e72328d708fc2cc",
+      "tree": "6d67a31a044bb34cdd171b18ee29f7ca468e5d73",
+      "localParents": [
+        "61fbf4d974010071d0a3d4ee6946f55abc38ff34"
+      ],
+      "publishedParents": [
+        "abe36342638fffaebb6f530fd26fb82b9fc5205d"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "ac56578353aa7eaa4993c27e60c4ed02417c1665",
+      "publishedSha": "a700747749c0bc5100809c334184b03fac8d8955",
+      "tree": "d6ce5549d8e65a97cdcc09e001114cfed2854486",
+      "localParents": [
+        "841908840afc9e2db65504d8b9eb7b847c1b15ce"
+      ],
+      "publishedParents": [
+        "c83524b06b21553fc6aa74021e72328d708fc2cc"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "e4eea78a385fde0bf40017563fbd694b3cbc9c7c",
+      "publishedSha": "8b6e93af01763a381e9ff17f7312b6c751e89967",
+      "tree": "5d2a5a6987c91e88f0518a6ab593aba2945cc733",
+      "localParents": [
+        "ac56578353aa7eaa4993c27e60c4ed02417c1665"
+      ],
+      "publishedParents": [
+        "a700747749c0bc5100809c334184b03fac8d8955"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "0389a05840453472663166a83194b084337d69f1",
+      "publishedSha": "dc8426895a6171aa6d83b4b3170abb284c2241ee",
+      "tree": "e4e39fbc1445d32cac16f89b6129325bea9e7161",
+      "localParents": [
+        "e4eea78a385fde0bf40017563fbd694b3cbc9c7c"
+      ],
+      "publishedParents": [
+        "8b6e93af01763a381e9ff17f7312b6c751e89967"
+      ],
+      "readBackVerified": true
+    }
+  ],
+  "limits": [
+    "This record maps the checkpoint before the publication-record commit; it intentionally does not recursively claim its own commit identity.",
+    "The actual child pull request and its proposed merge, applicable current-source/current-target hosted gates, the named automated review, and guarded merge readback remain subsequent requirements.",
+    "PR236 is the frozen main-target aggregate. Do not amend or supersede it with generation 29; after its qualified guarded merge, retarget this child to actual main and refresh target-specific qualification.",
+    "Published PR233, PR234, PR235 and PR236 retain their exact heads and branches. Local qualification and checks on a different source or target do not qualify this child.",
+    "A context renewal cleared transient tool state after three emitted mappings. The durable progress record preserved all returned commit identities and successful readbacks; continuation reused those mappings without resetting them.",
+    "No deployment, release activation, trust provisioning, native browser reachability or deletion authority follows from this read-only preview. ReleaseEnabled remains zero."
+  ]
+}

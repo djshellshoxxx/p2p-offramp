@@ -1,0 +1,229 @@
+{
+  "version": 1,
+  "baseCommit": "76d107e4e0ca1a2533636a6057d9d603861668e1",
+  "baseTree": "437323a382952b9623a875c818f8af005a5d4563",
+  "publishedBaseSameTree": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+  "backendSourceCommit": "5ad059fa8b77cfb8beffcf2f1889e5f19d727ea4",
+  "backendLocalCherryPick": "26c91f1408800e75ed50443a0bb9ee04d7c95d89",
+  "uiSourceCommit": "0d1d929d8bfb97b9772f84eb5fa3425de6fd3602",
+  "uiSourceTree": "a9010c02a383346ab7041d5549b9cb09eb7f2471",
+  "nodeVersion": "v24.22.3",
+  "releaseEnabled": 0,
+  "artifacts": [
+    {
+      "metadata": "01-retention-preview-ui.json",
+      "name": "01-retention-preview-ui",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/retention-preview-ui.test.mjs"
+      ],
+      "head": "26c91f1408800e75ed50443a0bb9ee04d7c95d89",
+      "started": "2026-11-20T18:29:21.762996+00:00",
+      "finished": "2026-11-20T18:29:24.301205+00:00",
+      "exitCode": 1,
+      "rawBytes": 23541,
+      "rawSha256": "d3e131e75a6a0d9b37729b258ca7c1782e0f0dd59e7c1cd67486f8b0bd0ce7c6",
+      "gzipBytes": 2271,
+      "gzipSha256": "7345c42173690823802e6891cc6013651c0e1cd53fb036fcd28cfe75366296b7",
+      "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/01-retention-preview-ui.log.gz"
+    },
+    {
+      "metadata": "01-source-before-fixture-correction.json",
+      "file": "01-source-before-fixture-correction.patch.gz",
+      "rawSha256": "b33386bed4243fe117968fef64d886450e73765764c8ff42b4ec9e9b5039badc",
+      "gzipSha256": "c2005f53ae2cbfb28e813bf8a19de84c4a9227d9a3b683c734b0bed4f10919c4",
+      "rawBytes": 40297,
+      "gzipBytes": 10664,
+      "files": {
+        "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+        "apps/web/src/ui/locale/en.ts": "77f0f573b437cf0dee846edc4ce9c45e7fa35a7749b20a4f6ca3f379e75eebc3",
+        "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+        "apps/web/test/retention-preview-ui.test.mjs": "dce2e6daebc7684a2b74de5de1b146f749e1714ef30ed124b35fae26aa07262d"
+      }
+    },
+    {
+      "metadata": "02-ui-typecheck.json",
+      "name": "02-ui-typecheck",
+      "argv": [
+        "node_modules/.bin/tsc",
+        "-p",
+        "apps/web/tsconfig.ui.json",
+        "--noEmit"
+      ],
+      "head": "26c91f1408800e75ed50443a0bb9ee04d7c95d89",
+      "started": "2026-11-20T18:29:21.762939+00:00",
+      "finished": "2026-11-20T18:29:23.319595+00:00",
+      "exitCode": 0,
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/02-ui-typecheck.log.gz"
+    },
+    {
+      "metadata": "03-retention-preview-ui.json",
+      "name": "03-retention-preview-ui",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/retention-preview-ui.test.mjs"
+      ],
+      "head": "0d1d929d8bfb97b9772f84eb5fa3425de6fd3602",
+      "tree": "a9010c02a383346ab7041d5549b9cb09eb7f2471",
+      "files": {
+        "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+        "apps/web/src/ui/locale/en.ts": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18",
+        "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+        "apps/web/test/retention-preview-ui.test.mjs": "e93defa7ca008de72dbbbea58ed890ff69dff9cbfd8cd01954445e96d9199b27"
+      },
+      "started": "2026-11-20T18:30:53.968337+00:00",
+      "finished": "2026-11-20T18:30:56.934952+00:00",
+      "exitCode": 0,
+      "rawBytes": 7210,
+      "rawSha256": "6d9cb24af3d256d1b4e65aeb7eb2e7158266d80ac4f06f572d45afbf45f48a8c",
+      "gzipBytes": 1556,
+      "gzipSha256": "60ef2b3ba5bd8faa084f6171aa9cd9600126ccf0ca623254cebae5f763098053",
+      "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/03-retention-preview-ui.log.gz"
+    },
+    {
+      "metadata": "04-settings-locale-adjacent.json",
+      "name": "04-settings-locale-adjacent",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-reporter=tap",
+        "apps/web/test/locale-source.test.mjs",
+        "apps/web/test/locale-runtime.test.mjs",
+        "apps/web/test/panels-misc.render.test.mjs",
+        "apps/web/test/ui-routes.test.mjs"
+      ],
+      "head": "0d1d929d8bfb97b9772f84eb5fa3425de6fd3602",
+      "tree": "a9010c02a383346ab7041d5549b9cb09eb7f2471",
+      "files": {
+        "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+        "apps/web/src/ui/locale/en.ts": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18",
+        "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+        "apps/web/test/retention-preview-ui.test.mjs": "e93defa7ca008de72dbbbea58ed890ff69dff9cbfd8cd01954445e96d9199b27"
+      },
+      "started": "2026-11-20T18:30:53.941440+00:00",
+      "finished": "2026-11-20T18:30:55.929982+00:00",
+      "exitCode": 0,
+      "rawBytes": 5905,
+      "rawSha256": "043ed05997b980e9509941934d0d33b2731e8d72d01e5592b3307080163754b3",
+      "gzipBytes": 1539,
+      "gzipSha256": "3010a8a51ccac94cc38a489d7c37d667f917ccb284c8f3216199f3f9fda5526a",
+      "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/04-settings-locale-adjacent.log.gz"
+    },
+    {
+      "metadata": "05-frozen-ui-typecheck.json",
+      "name": "05-frozen-ui-typecheck",
+      "argv": [
+        "node_modules/.bin/tsc",
+        "-p",
+        "apps/web/tsconfig.ui.json",
+        "--noEmit"
+      ],
+      "head": "0d1d929d8bfb97b9772f84eb5fa3425de6fd3602",
+      "tree": "a9010c02a383346ab7041d5549b9cb09eb7f2471",
+      "files": {
+        "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+        "apps/web/src/ui/locale/en.ts": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18",
+        "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+        "apps/web/test/retention-preview-ui.test.mjs": "e93defa7ca008de72dbbbea58ed890ff69dff9cbfd8cd01954445e96d9199b27"
+      },
+      "started": "2026-11-20T18:30:53.960538+00:00",
+      "finished": "2026-11-20T18:30:55.978578+00:00",
+      "exitCode": 0,
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/05-frozen-ui-typecheck.log.gz"
+    },
+    {
+      "metadata": "06-import-boundaries.json",
+      "name": "06-import-boundaries",
+      "argv": [
+        "node",
+        "scripts/check-import-boundaries.mjs"
+      ],
+      "head": "0d1d929d8bfb97b9772f84eb5fa3425de6fd3602",
+      "tree": "a9010c02a383346ab7041d5549b9cb09eb7f2471",
+      "files": {
+        "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+        "apps/web/src/ui/locale/en.ts": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18",
+        "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+        "apps/web/test/retention-preview-ui.test.mjs": "e93defa7ca008de72dbbbea58ed890ff69dff9cbfd8cd01954445e96d9199b27"
+      },
+      "started": "2026-11-20T18:30:53.962157+00:00",
+      "finished": "2026-11-20T18:30:55.993537+00:00",
+      "exitCode": 0,
+      "rawBytes": 160,
+      "rawSha256": "0b2551a58aa1f3a155b21de2e4771b9b2c5e2cee91e0fd866c5fffaa158a9cbd",
+      "gzipBytes": 146,
+      "gzipSha256": "f3b98c6f6522852ed46d8c9e94ad8ce0d31f10990c876a0aa42f4eb79c1ca093",
+      "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/06-import-boundaries.log.gz"
+    },
+    {
+      "metadata": "07-full-whitespace.json",
+      "name": "07-full-whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "76d107e4e0ca1a2533636a6057d9d603861668e1..HEAD"
+      ],
+      "head": "0d1d929d8bfb97b9772f84eb5fa3425de6fd3602",
+      "tree": "a9010c02a383346ab7041d5549b9cb09eb7f2471",
+      "files": {
+        "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+        "apps/web/src/ui/locale/en.ts": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18",
+        "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+        "apps/web/test/retention-preview-ui.test.mjs": "e93defa7ca008de72dbbbea58ed890ff69dff9cbfd8cd01954445e96d9199b27"
+      },
+      "started": "2026-11-20T18:30:53.952978+00:00",
+      "finished": "2026-11-20T18:30:53.964020+00:00",
+      "exitCode": 0,
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/07-full-whitespace.log.gz"
+    },
+    {
+      "metadata": "08-source-and-evidence-whitespace.json",
+      "name": "08-source-and-evidence-whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "76d107e4e0ca1a2533636a6057d9d603861668e1"
+      ],
+      "head": "0d1d929d8bfb97b9772f84eb5fa3425de6fd3602",
+      "tree": "a9010c02a383346ab7041d5549b9cb09eb7f2471",
+      "files": {
+        "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+        "apps/web/src/ui/locale/en.ts": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18",
+        "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+        "apps/web/test/retention-preview-ui.test.mjs": "e93defa7ca008de72dbbbea58ed890ff69dff9cbfd8cd01954445e96d9199b27"
+      },
+      "started": "2026-11-20T18:32:40.463034+00:00",
+      "finished": "2026-11-20T18:32:40.475510+00:00",
+      "exitCode": 0,
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipBytes": 20,
+      "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/08-source-and-evidence-whitespace.log.gz"
+    }
+  ]
+}

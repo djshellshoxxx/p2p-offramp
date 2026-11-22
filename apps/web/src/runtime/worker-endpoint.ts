@@ -1,15 +1,15 @@
 /**
  * Worker-private composition root. The narrow protocol cannot read, mutate or return private records, except the
- * purpose-bound saved terms reviews and their bounded favorites/templates (G07) and unverified scalar recovery references (G12),
+ * purpose-bound saved terms reviews and their bounded favorites/templates (G07), unverified scalar recovery references (G12) and retention counts (DATA01),
  * in the selected profile only.
  */
-import { EncryptedVaultService, EncryptedBackupService, BackupError } from '../../../../packages/storage/index.ts';
+import { EncryptedVaultService, EncryptedBackupService, BackupError, RetentionService } from '../../../../packages/storage/index.ts';
 import { createTradeDraftStore, type TradeDraftStore } from '../../../../packages/personalization/templates.ts';
 import { createSavedReviewFavorites } from '../../../../packages/personalization/favorites.ts';
 import {
   decodeBase64url, parseStrictJsonBytes, MAX_SAVED_REVIEW_BYTES, encodeBase64url, encodeSavedReviewPayload, parseSavedReviewPayload, parseRuntimeCommand, MAX_SAVED_REVIEWS, SAVED_REVIEW_SCHEMA_VERSION, parseRuntimeMessage, runtimeFailure, RuntimeBoundaryError, projectRecoveryReferences,
   RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
-  parseBackupVerificationReceipt, type BackupVerificationReceipt,
+  parseBackupVerificationReceipt, type BackupVerificationReceipt, parseRuntimeRetentionPreview, type RuntimeRetentionPreview,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeHandle, type RuntimeMessage, type RuntimeResult,
   type RuntimeStatus, type RuntimeSavedReview, type VaultSession, type VaultSessionLease, type Result, type PrivateRecordV1, type SavedReviewPayload,
 } from '../../../../packages/schemas/index.ts';
@@ -244,6 +244,28 @@ class VaultWorkerEndpoint {
           const current = this.#selected(command.profileId), fact = this.#backupVerification;
           if (fact && (fact.handle !== handle || fact.generation !== this.#generation || fact.receipt.revision !== current.revision || fact.receipt.profileId !== current.profileId)) this.#backupVerification = undefined;
           this.#reply(command, { ok: true, value: Object.freeze({ verification: this.#backupVerification?.receipt ?? null }) });
+        } else if (command.operation === 'planRetention') {
+          const vault = this.#services.vault, session = this.#selected(command.profileId), selection = this.#selection;
+          // A real selected-session service owns the opaque plan. No native authority is installed.
+          const retention = new RetentionService(vault, session);
+          let value: RuntimeRetentionPreview;
+          try {
+            const planned = await retention.planRetention(command.nowMs, job.controller.signal);
+            this.#guard(job);
+            if (!planned.ok) {
+              const code = planned.error.code;
+              throw new RuntimeBoundaryError(code === 'INVALID_INPUT' || code === 'LOCKED' || code === 'CANCELLED' ||
+                code === 'CONFLICT' || code === 'LIMIT_EXCEEDED' || code === 'NOT_FOUND' ? code : 'STORAGE_UNAVAILABLE');
+            }
+            value = parseRuntimeRetentionPreview(planned.value);
+          } finally { retention.dispose(); }
+          // Classification uses the captured snapshot. Recheck persisted state after cleanup so a
+          // concurrent tab cannot publish stale counts; cleanup leaves no plan capability in the UI.
+          const fresh = vaultValue(await vault.assertFresh(session.sessionId, job.controller.signal)); this.#guard(job);
+          const current = this.#selected(command.profileId);
+          if (this.#selection !== selection || current.sessionId !== session.sessionId || current.revision !== value.revision ||
+              fresh !== value.revision || fresh !== session.revision) throw new RuntimeBoundaryError('CONFLICT');
+          this.#reply(command, { ok: true, value });
         } else if (command.operation === 'listProfiles') {
           const value = vaultValue(await this.#services.vault.listProfiles(job.controller.signal)); this.#guard(job);
           this.#reply(command, { ok: true, value: Object.freeze({ profileIds: Object.freeze([...value.profileIds]), truncated: value.truncated }) });

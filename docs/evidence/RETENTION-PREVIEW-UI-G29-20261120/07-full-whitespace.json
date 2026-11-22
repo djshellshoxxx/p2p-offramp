@@ -1,0 +1,25 @@
+{
+  "name": "07-full-whitespace",
+  "argv": [
+    "git",
+    "diff",
+    "--check",
+    "76d107e4e0ca1a2533636a6057d9d603861668e1..HEAD"
+  ],
+  "head": "0d1d929d8bfb97b9772f84eb5fa3425de6fd3602",
+  "tree": "a9010c02a383346ab7041d5549b9cb09eb7f2471",
+  "files": {
+    "apps/web/src/ui/Pages.tsx": "f99780e5a81f62ef824491578e36fcd257337f0e0c6c149e3892b1aef73da5af",
+    "apps/web/src/ui/locale/en.ts": "0b68b6d21c46bacab54b9f2518e07b925423e6f9f9acb7db97a71acb40714b18",
+    "apps/web/src/ui/RetentionPreviewPanel.tsx": "20788126308817927e70dabbcc3a8668378f9c46fbe59672267e4ed080a0a139",
+    "apps/web/test/retention-preview-ui.test.mjs": "e93defa7ca008de72dbbbea58ed890ff69dff9cbfd8cd01954445e96d9199b27"
+  },
+  "started": "2026-11-20T18:30:53.952978+00:00",
+  "finished": "2026-11-20T18:30:53.964020+00:00",
+  "exitCode": 0,
+  "rawBytes": 0,
+  "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "gzipBytes": 20,
+  "gzipSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+  "log": "docs/evidence/RETENTION-PREVIEW-UI-G29-20261120/07-full-whitespace.log.gz"
+}
