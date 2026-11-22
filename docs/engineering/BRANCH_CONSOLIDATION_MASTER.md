@@ -76,3 +76,47 @@ Live comparison with `main@01f6f4fe` proves the following ten named historical b
 `integration/browser-mvp-20261118` is a special case: its commit `823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10` remains one ahead / 206 behind, but its **three exact source changes** (separate React private/backup keys, RPC's exact `method`/`params` shape and a fixture assertion of permitted EIP-1193 keys) are already present in current main. This unique commit does **not** represent missing feature code requiring re-merge.
 
 `validation/pr237-current-main-20261121` is ten commits ahead and zero behind `main`; it is a current-main-descended validation branch and its code has **not** been classified as uniquely missing or safe to merge from commit counts alone. Check its overlap with active PR #237 before considering any integration. Do not infer that the other unexamined branches are redundant.
+
+
+## Bounded consolidation cohort — 2026-11-22, refreshed live refs
+
+**Execution result:** source-bound ancestry and content analysis, not a main merge. New live counts: **257** remote heads, **242** total PRs (**60 open, 124 merged, 58 closed unmerged**) from complete current GitHub ref and three-page all-PR enumeration. The earlier 256/59 count above is preserved as a prior dated snapshot, not the current tally. Main is still `01f6f4feca051d68de24a04299cd3bb444bce40c` (tree `437323a382952b9623a875c818f8af005a5d4563`). The canonical [BRANCH_INVENTORY.json](BRANCH_INVENTORY.json) was advanced to schema v2 with all current refs and each associated historical/open PR; unexamined branches remain explicitly unassessed.
+
+**19 newly verified ancestor-contained heads:** GitHub compare against the exact main commit returned **ahead=0**, and the merge-base SHA equals the individual branch tip. These require no new source merge, regardless of whether their corresponding historical PR was marked merged or closed. The canonical inventory retains exact SHA, merge base and behind count for each:
+
+- `chatgpt/zero-codex/d9-cross-deployment-nonce-20261111`
+- `chatgpt/zero-codex/g12-native-withdraw-recipient-20261111`
+- `chatgpt/zero-codex/g18-final-chain-recheck-20261111`
+- `chatgpt/zero-codex/g16-bilateral-replay-20261111`
+- `chatgpt/zero-codex/g26-clear-reentrancy-20261111`
+- `codex/solana-restore-ack-20261119`
+- `integration/all-compatible-work`
+- `claude/recovery-consolidation`
+- `claude/trade-review-integration`
+- `integration/core-hardening-20261118`
+- `codex/ctutils-remediation-20261119`
+- `codex/backup-cross-browser-g13-20261120`
+- `codex/historical-recovery-20261119`
+- `integration/pages-offline-recovery-20261112`
+- `chatgpt/zero-codex/qr-jcs-array-trap-20261118`
+- `chatgpt/zero-codex/recovery-reference-identity-20261115`
+- `chatgpt/zero-codex/g20-chat-scope-regression-20261111`
+- `autonomous/completion-20261031`
+- `claude/p2p-offramp-integration-aan57u`
+
+**Two divergent D9 security/recovery branches need no automatic merge but retain a remaining patch-review task:**
+
+| Branch | Exact GitHub compare against main | Bounded three-version code evidence | Disposition |
+| --- | --- | --- | --- |
+| `chatgpt/zero-codex/d9-marker-failure-20261110` | 2 ahead / 580 behind; merge base `c87c21b915c9e175113292bb1307754ed2424166` | In `packages/wallet/src/evm-execution.ts`, all 3 newly added, nonblank source lines from base-to-branch occur in current main. In wallet regression test, 11/11 newly added lines occur in main and the test blob is byte-identical to main (SHA `d08491dabbe6c6f46a6617656bc8de5ebe2b3d31`). | Likely content-superseded; confirm removed-line semantics and patch-id before marking complete |
+| `chatgpt/zero-codex/d9-restored-account-isolation-20261111` | 13 ahead / 580 behind; same merge base | Same wallet source 3/3 and wallet regression 11/11; in `packages/domain/test/intent-journal.test.mjs`, all 191 newly added, nonblank lines occur in main (current main is larger). | Source overlap strongly indicated, but exact patch equivalence / semantic independence remains unproven |
+
+These are **source overlap observations**, not proof that all 2/13 unique commits are fully included; do not re-merge or discard the branches without full comparison. No runtime, native browser, financial, package or CI tests were run during this analysis.
+
+**Current canonical inventory disposition:** 19 newly verified ancestry heads plus 10 earlier ancestry-contained, 1 earlier source-equivalent, 2 divergent content-overlap candidates, 58 open-unintegrated PR heads, 166 other metadata-only heads, and 1 main = 257. The 58 PR-associated heads still require their own exact-source gates and decisions; the 166 metadata-only branches have not been declared integrated, harmless or complete.
+
+**Fresh PR gate readback:** PR #244 exact head `2acdaa3714b2c263291251b18742068077cc54ea` now has **12/12 completed SUCCESS** GitHub check runs including `program` and `browser`; this corrects the older pending/failed *child* status above. It does **not** rewrite PR #242's historical real-browser failure nor transfer qualification between source trees. PRs #237, #241 and #244 still have **zero submitted GitHub review records** on current readback. Parent/child stacks remain unmerged and require source/target-specific code review, named Tier B or recorded owner Tier C approvals as applicable, plus guarded tree reconciliation. The PR #245 documentation branch is draft, not merged.
+
+**Next productive cohort:** classify `chatgpt/zero-codex/d9-restored-account-isolation-20261111` and `chatgpt/zero-codex/d9-marker-failure-20261110` using exact patch-id/removal semantics and current tests; then examine the distinct `claude/*`, `chatgpt/*` and `nodata/*` metadata-only security/escrow/recovery branches, prioritizing those with no PR association. Handle #237's missing required review and exact-target integration without editing frozen parent sources. Reassess any owner-owned branch before change.
+
+**Operational boundary:** The provided `/workspace/scratch/dcf03ef9bee8` worktree is not mounted in this run; direct Git clone reports DNS resolution failure. Authenticated GitHub reads and guarded docs-only updates are available, but this is not a substitute for local Git patch-id, independent executing workers or native acceptance. No source, CI assertions, other-worker worktrees, main, optional default activation or `ReleaseEnabled=0` were modified.
