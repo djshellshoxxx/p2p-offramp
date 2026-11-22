@@ -1,0 +1,26 @@
+# Consolidation execution and test evidence — 2026-11-22
+
+## Live source identities
+
+- Observed `main`: `01f6f4feca051d68de24a04299cd3bb444bce40c` (tree `437323a382952b9623a875c818f8af005a5d4563`).
+- PR #237 `33232f62dc9cd250528ef3eb0313c0c319d99495`: GitHub Actions 12/12 completed successfully at its own exact source; Tier B named review missing and current-target merge-ref stale according to PR description.
+- PR #243 `56ca31bad8fd3d1beaa2aca0af1d6541c4280fdf`: GitHub Actions 12/12 successful, including real hosted `browser` and `program`; PR remains draft with no submitted GitHub reviews at time of inspection.
+- PR #241 `29491c2842e0aedcb00a674cbfffb9edc2424013`: PR source records 2,735/2,735 local Node cases, independent review and successful exact-head native SOL/SPL acceptance; Tier C owner sign-off still required.
+- PR #242 `00efff307b10c5ed9a8bd604a21eb2bf5816e7ef`: 11/12 hosted GitHub Actions successful, **one failed** `program` job at [run 44826827834](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44826827834/job/136601434309). The `Real validator client acceptance` step passed, but `Actual Worker encrypted Solana recovery and real-time refund` failed in Chromium. The test reached release finalized/paidOut=false, then Playwright timed out after 45s because `Review separate payout` was present but disabled. Later recovery/refund checks were not reached.
+- PR #244 `2acdaa3714b2c263291251b18742068077cc54ea`: draft follow-up changes only `scripts/test-solana-localnet-browser.mjs`, adding explicitly guarded readiness polling, journal assertions and redacted payout-blocker diagnostics. No new-hosted or local result claimed in this receipt.
+
+## Evidence type and uncertainty
+
+These results were **read from GitHub's existing CI records or source-bound PR reports**. This session did not run a checked-out Node/Agave/Chromium toolchain, did not execute a financial transaction, and did not certify the resulting combined main tree. Historical suite totals (e.g. 2,555 for PR #237 and 2,915 for PR #242) refer to their original authors' pinned sources, **not** this session's execution.
+
+Reason for withholding #242 completion: finalized escrow state does not guarantee terminal journal evidence, active wallet binding, custody rent eligibility or a ready UI action. The new test can expose a blocker; it must not weaken or mask it.
+
+## Required before any merge
+
+1. Fetch source and target SHA anew; read full check-runs and external status.
+2. Inspect Tier B/C automated and independent reviews, resolution of all findings, ownership and owner approval.
+3. Validate the final merge tree and dependency chain, not only the original child branch.
+4. Run full Node suite, TypeScript projects, policies and boundaries, default/demo builds, real Chromium/Worker and actual Solana/EVM native financial tests as applicable.
+5. Verify missing/failed tests explicitly, and read back main SHA/parents after a successful guarded merge.
+
+**Current disposition:** No source PR in this newly inventoried group has been merged by this session. All financial/release gates remain active; `ReleaseEnabled=0`.
