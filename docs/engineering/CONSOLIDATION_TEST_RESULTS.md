@@ -24,3 +24,11 @@ Reason for withholding #242 completion: finalized escrow state does not guarante
 5. Verify missing/failed tests explicitly, and read back main SHA/parents after a successful guarded merge.
 
 **Current disposition:** No source PR in this newly inventoried group has been merged by this session. All financial/release gates remain active; `ReleaseEnabled=0`.
+
+## Optional-module qualification readback
+
+All nine PRs #224–232 compare to `main@01f6f4fe` as **two commits ahead and 73 behind**. Exact-head Actions results are: #224 15/15, #225 14/14, #226 13/14 with **cancelled** `backup-verification-firefox`, #227 14/14, #228 16/16, #229 15/15, #230 14/14, #231 15/15, #232 14/14. None has a submitted GitHub review. Treat these as historical source-head checks; re-run any required tests on a qualified current-target merge result. Particularly, a cancelled job is not a passing test.
+
+## New follow-up PR CI state at initial observation
+
+PR244 and PR245 were published as **draft** and GitHub Actions began running automatically. Their check suites were still in progress at inspection, so neither is recorded as passing or ready for merge.
