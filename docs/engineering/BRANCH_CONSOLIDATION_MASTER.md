@@ -68,3 +68,11 @@ At `main@01f6f4feca05`, authenticated GitHub comparisons for each optional PR #2
 | #232 stealth | 21 added | 14/14 success |
 
 All nine PR descriptions explicitly require a **D8 Tier B CodeRabbit-or-Qodo pass with findings answered**, in addition to independent human/source review and current-target CI. No submitted GitHub review and no unresolved inline threads were found for these nine PRs at inspection. The mostly additive per-package source is promising for isolated intake, but **three packages edit package/workflow wiring, conflicts may appear in a combined tree, and no final target-specific integration gate is satisfied**. No optional main merge was attempted.
+
+## Historical source equivalence samples
+
+Live comparison with `main@01f6f4fe` proves the following ten named historical branches have **zero ahead commits**, i.e., their entire respective histories are already ancestors of `main`: `feature/public-qr-capture-20261119`, `feature/same-terms-resumption-20261119`, `feature/erc20-browser-continuation-20261118`, `codex/max-consolidation-20261119`, `integration/solana-core-qualification-20261118`, `codex/solana-browser-send-repair-20261119`, `consolidation/solana-browser-recovery-20261119`, `codex/continuation-g21-20261120`, `codex/signed-update-ui-g13-20261120`, and `codex/relay-freshness-capacity-20261120-auto2`.
+
+`integration/browser-mvp-20261118` is a special case: its commit `823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10` remains one ahead / 206 behind, but its **three exact source changes** (separate React private/backup keys, RPC's exact `method`/`params` shape and a fixture assertion of permitted EIP-1193 keys) are already present in current main. This unique commit does **not** represent missing feature code requiring re-merge.
+
+`validation/pr237-current-main-20261121` is ten commits ahead and zero behind `main`; it is a current-main-descended validation branch and its code has **not** been classified as uniquely missing or safe to merge from commit counts alone. Check its overlap with active PR #237 before considering any integration. Do not infer that the other unexamined branches are redundant.
