@@ -50,3 +50,21 @@ Before each proposed merge: fetch current source and main SHAs; inspect file own
 - [Current continuation handoff](CONSOLIDATION_HANDOFF.md)
 - [PR #242 failed native browser job](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44826827834/job/136601434309)
 - [PR #244 isolated diagnostic follow-up](https://github.com/djshellshoxxx/p2p-offramp/pull/244)
+
+## Optional-module current-main comparison (live verification)
+
+At `main@01f6f4feca05`, authenticated GitHub comparisons for each optional PR #224–232 report **two ahead / 73 behind** with common merge base `388526a474ae`. Their original CI alone is not current-main integration qualification.
+
+| PR | Source delta from merge base | Exact-head check-runs |
+| --- | --- | --- |
+| #224 proof-inputs | 10 added files; 2 modified workflow/package files | 15/15 success |
+| #225 liquidity | 14 added | 14/14 success |
+| #226 arbitration | 20 added | 13 success; 1 cancelled Firefox backup check |
+| #227 privacy-policy | 11 added | 14/14 success |
+| #228 proof-jobs | 21 added; package.json modified | 16/16 success |
+| #229 privacy-controls | 14 added; workflow/package files modified | 15/15 success |
+| #230 courier | 24 added | 14/14 success |
+| #231 meetup | 37 added; workflow/package files modified | 15/15 success |
+| #232 stealth | 21 added | 14/14 success |
+
+No submitted GitHub review and no unresolved inline threads were found for these nine PRs at inspection. The mostly additive per-package source is promising for isolated intake, but **three packages edit package/workflow wiring, conflicts may appear in a combined tree, and no final target-specific integration gate is satisfied**. No optional main merge was attempted.
