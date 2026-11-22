@@ -15,7 +15,8 @@
     "Open PR metadata includes parent stacks; a PR's changed-file count can include ancestors.",
     "Historical merged/closed PR association and per-branch patch equivalence are not yet individually established.",
     "Never delete, merge, promote to default build or deploy based only on this metadata inventory.",
-    "ReleaseEnabled=0 remains in effect."
+    "ReleaseEnabled=0 remains in effect.",
+    "Twelve selected historical branches have additional live ancestry comparisons; one diverged browser-MVP branch's three exact implementation changes were confirmed already present in current main. All remaining metadata-only branches still require code audit."
   ],
   "branches": [
     {
@@ -1233,10 +1234,17 @@
       "branch": "codex/continuation-g21-20261120",
       "sha": "92663e46508b06645111d9c713beb82d3a6d1a0f",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-contained-in-main-by-ancestry",
+      "inspection": "comparison-confirmed-no-unique-commits",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 0,
+        "behindBy": 36,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "codex/continue-completion-20261116",
@@ -1407,10 +1415,17 @@
       "branch": "codex/max-consolidation-20261119",
       "sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-contained-in-main-by-ancestry",
+      "inspection": "comparison-confirmed-no-unique-commits",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 0,
+        "behindBy": 124,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "codex/meetup-main-g19-20261120",
@@ -1819,10 +1834,17 @@
       "branch": "codex/relay-freshness-capacity-20261120-auto2",
       "sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-contained-in-main-by-ancestry",
+      "inspection": "comparison-confirmed-no-unique-commits",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 0,
+        "behindBy": 101,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "codex/retention-preview-continuation-g29-20261120",
@@ -1901,19 +1923,33 @@
       "branch": "codex/signed-update-ui-g13-20261120",
       "sha": "7d40620c8320945750bd51bf865226dadde998ca",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-contained-in-main-by-ancestry",
+      "inspection": "comparison-confirmed-no-unique-commits",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 0,
+        "behindBy": 87,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "codex/solana-browser-send-repair-20261119",
       "sha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-contained-in-main-by-ancestry",
+      "inspection": "comparison-confirmed-no-unique-commits",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 0,
+        "behindBy": 112,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "codex/solana-payout-docs-20261109",
@@ -2030,10 +2066,17 @@
       "branch": "consolidation/solana-browser-recovery-20261119",
       "sha": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-contained-in-main-by-ancestry",
+      "inspection": "comparison-confirmed-no-unique-commits",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 0,
+        "behindBy": 176,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "consolidation/tooling154-20261119",
@@ -2112,28 +2155,49 @@
       "branch": "feature/erc20-browser-continuation-20261118",
       "sha": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-contained-in-main-by-ancestry",
+      "inspection": "comparison-confirmed-no-unique-commits",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 0,
+        "behindBy": 202,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "feature/public-qr-capture-20261119",
       "sha": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-contained-in-main-by-ancestry",
+      "inspection": "comparison-confirmed-no-unique-commits",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 0,
+        "behindBy": 153,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "feature/same-terms-resumption-20261119",
       "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-contained-in-main-by-ancestry",
+      "inspection": "comparison-confirmed-no-unique-commits",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 0,
+        "behindBy": 177,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "fix/localnet-readiness-20261119",
@@ -2211,10 +2275,22 @@
       "branch": "integration/browser-mvp-20261118",
       "sha": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-equivalent-source-already-present-in-main",
+      "inspection": "semantic-hunks-confirmed-three-files-in-main",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 1,
+        "behindBy": 206,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      },
+      "equivalenceEvidence": [
+        "apps/web/src/localnet/LocalnetRoot.tsx",
+        "apps/web/src/localnet/controller.ts",
+        "scripts/lib/localnet-fixture.mjs"
+      ]
     },
     {
       "branch": "integration/core-hardening-20261118",
@@ -2283,10 +2359,17 @@
       "branch": "integration/solana-core-qualification-20261118",
       "sha": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
-      "completionVerified": false
+      "classification": "F-contained-in-main-by-ancestry",
+      "inspection": "comparison-confirmed-no-unique-commits",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 0,
+        "behindBy": 209,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "main",
@@ -2817,9 +2900,16 @@
       "sha": "92831704820a1f35867fd757bd952eea81412f0f",
       "openPullRequests": [],
       "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "inspection": "live-comparison-unique-commits-require-review",
       "uniqueChangesVerified": false,
-      "completionVerified": false
+      "completionVerified": false,
+      "comparison": {
+        "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 10,
+        "behindBy": 0,
+        "source": "GitHub compare API",
+        "checkedDate": "2026-11-22"
+      }
     },
     {
       "branch": "work/noncustodial-reconstruction-2026-10-24",
