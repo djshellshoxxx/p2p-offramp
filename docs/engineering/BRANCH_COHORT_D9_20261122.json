@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "repository": "djshellshoxxx/p2p-offramp",
+  "verifiedDate": "2026-11-22",
+  "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+  "method": "Live GitHub compare metadata and per-file PR patch hunks checked against frozen current-main file blobs. Trimmed-line containment only, not Git patch-id or test execution",
+  "ancestryAdded": [
+    {
+      "branch": "chatgpt/zero-codex/audit-compatibility-20261118",
+      "tipSha": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+      "mergeBaseSha": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+      "aheadBy": 0,
+      "behindBy": 283
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "tipSha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "mergeBaseSha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "aheadBy": 0,
+      "behindBy": 147
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-utf8-20261119-108",
+      "tipSha": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+      "mergeBaseSha": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+      "aheadBy": 0,
+      "behindBy": 158
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
+      "tipSha": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "mergeBaseSha": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "aheadBy": 0,
+      "behindBy": 611
+    },
+    {
+      "branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
+      "tipSha": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+      "mergeBaseSha": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+      "aheadBy": 0,
+      "behindBy": 298
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
+      "tipSha": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+      "mergeBaseSha": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+      "aheadBy": 0,
+      "behindBy": 613
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
+      "tipSha": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+      "mergeBaseSha": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+      "aheadBy": 0,
+      "behindBy": 613
+    },
+    {
+      "branch": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
+      "tipSha": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+      "mergeBaseSha": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+      "aheadBy": 0,
+      "behindBy": 613
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
+      "tipSha": "579b02f3775323ba273dfe2bc624b5860897431e",
+      "mergeBaseSha": "579b02f3775323ba273dfe2bc624b5860897431e",
+      "aheadBy": 0,
+      "behindBy": 273
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
+      "tipSha": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+      "mergeBaseSha": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+      "aheadBy": 0,
+      "behindBy": 295
+    }
+  ],
+  "d9PrPatchComparisons": [
+    {
+      "branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
+      "tipSha": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+      "prNumber": 69,
+      "aheadBy": 2,
+      "behindBy": 580,
+      "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "addedNonblankLines": 16,
+      "missingAddedLines": 0,
+      "removedNonblankLines": 1,
+      "removedLinesPresentInMain": 0
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
+      "tipSha": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+      "prNumber": 70,
+      "aheadBy": 3,
+      "behindBy": 580,
+      "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "addedNonblankLines": 22,
+      "missingAddedLines": 0,
+      "removedNonblankLines": 0,
+      "removedLinesPresentInMain": 0
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
+      "tipSha": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+      "prNumber": 71,
+      "aheadBy": 4,
+      "behindBy": 580,
+      "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "addedNonblankLines": 25,
+      "missingAddedLines": 0,
+      "removedNonblankLines": 0,
+      "removedLinesPresentInMain": 0
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
+      "tipSha": "92cc054ce9a2ee21936e20d103757e374f4af296",
+      "prNumber": 72,
+      "aheadBy": 5,
+      "behindBy": 580,
+      "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "addedNonblankLines": 23,
+      "missingAddedLines": 0,
+      "removedNonblankLines": 0,
+      "removedLinesPresentInMain": 0
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
+      "tipSha": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+      "prNumber": 73,
+      "aheadBy": 7,
+      "behindBy": 580,
+      "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "addedNonblankLines": 32,
+      "missingAddedLines": 0,
+      "removedNonblankLines": 0,
+      "removedLinesPresentInMain": 0
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
+      "tipSha": "146d06d81474445434070aff557ad56379ad24a3",
+      "prNumber": 74,
+      "aheadBy": 8,
+      "behindBy": 580,
+      "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "addedNonblankLines": 4,
+      "missingAddedLines": 0,
+      "removedNonblankLines": 0,
+      "removedLinesPresentInMain": 0
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
+      "tipSha": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+      "prNumber": 75,
+      "aheadBy": 9,
+      "behindBy": 580,
+      "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "addedNonblankLines": 31,
+      "missingAddedLines": 0,
+      "removedNonblankLines": 0,
+      "removedLinesPresentInMain": 0
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
+      "tipSha": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+      "prNumber": 91,
+      "aheadBy": 11,
+      "behindBy": 580,
+      "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "addedNonblankLines": 34,
+      "missingAddedLines": 0,
+      "removedNonblankLines": 0,
+      "removedLinesPresentInMain": 0
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
+      "tipSha": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+      "prNumber": 92,
+      "aheadBy": 13,
+      "behindBy": 580,
+      "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "addedNonblankLines": 34,
+      "missingAddedLines": 0,
+      "removedNonblankLines": 0,
+      "removedLinesPresentInMain": 0
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-race-20261111",
+      "tipSha": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
+      "prNumber": 93,
+      "aheadBy": 14,
+      "behindBy": 580,
+      "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "addedNonblankLines": 46,
+      "missingAddedLines": 0,
+      "removedNonblankLines": 0,
+      "removedLinesPresentInMain": 0
+    }
+  ],
+  "d9Totals": {
+    "prPatches": 10,
+    "addedNonblankLines": 267,
+    "addedLinesMissingInMain": 0,
+    "removedNonblankLines": 1,
+    "removedLinesStillInMain": 0
+  },
+  "otherDivergences": [
+    {
+      "branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
+      "tipSha": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+      "mergeBaseSha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "aheadBy": 30,
+      "behindBy": 615,
+      "changedPathCount": 1
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
+      "tipSha": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+      "mergeBaseSha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+      "aheadBy": 4,
+      "behindBy": 626,
+      "changedPathCount": 85
+    }
+  ],
+  "classificationCounts": {
+    "A": 29,
+    "P": 58,
+    "U": 146,
+    "V": 2,
+    "E": 10,
+    "F": 12
+  },
+  "limitations": [
+    "Same-line presence is not hunk-context or full patch-id equivalence",
+    "No local Git checkout, node test, native validator or browser run",
+    "All historical failures, closed PR identities and source refs retained",
+    "No approval inference, source merge, financial action or release"
+  ]
+}

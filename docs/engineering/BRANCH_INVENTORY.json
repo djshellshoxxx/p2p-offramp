@@ -20,7 +20,8 @@
     "ReleaseEnabled=0 remains in effect.",
     "Twelve selected historical branches have additional live ancestry comparisons; one diverged browser-MVP branch's three exact implementation changes were confirmed already present in current main. All remaining metadata-only branches still require code audit.",
     "2026-11-22 refresh: 257 live remote branches, 60 open PRs, 242 total PRs. This inventory is not an all-branches code review.",
-    "2026-11-22 bounded cohort: 19 previously unverified branches confirmed ancestor-contained by exact GitHub compare; two diverged D9 branches have bounded static overlap evidence only. Source details in BRANCH_CONSOLIDATION_MASTER.md."
+    "2026-11-22 bounded cohort: 19 previously unverified branches confirmed ancestor-contained by exact GitHub compare; two diverged D9 branches have bounded static overlap evidence only. Source details in BRANCH_CONSOLIDATION_MASTER.md.",
+    "2026-11-22 follow-up: 10 more exact-main-ancestor tips; 10 D9 PR patches (#69–75, 91–93) show 267/267 nonblank added lines in main, single removed wallet line absent; static overlap not git patch-id; 2 additional divergences scoped."
   ],
   "branches": [
     {
@@ -229,9 +230,9 @@
       "branch": "chatgpt/zero-codex/audit-compatibility-20261118",
       "sha": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 compare: ahead=0, exact tip equals merge-base",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -243,14 +244,22 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/138"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+        "aheadBy": 0,
+        "behindBy": 283,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Already ancestor-contained in main; no new merge"
     },
     {
       "branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
       "sha": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "V-divergent-scoped-review-pending",
+      "inspection": "2026-11-22 compare: 30 ahead/615 behind, 1 changed paths, no content-level equivalence yet",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -263,7 +272,15 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/67"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+        "aheadBy": 30,
+        "behindBy": 615,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Hold pending intended-delta, file-ownership and possible conflict verification; no merge"
     },
     {
       "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
@@ -323,9 +340,9 @@
       "branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
       "sha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 compare: ahead=0, exact tip equals merge-base",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -337,15 +354,23 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/182"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+        "aheadBy": 0,
+        "behindBy": 147,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Already ancestor-contained in main; no new merge"
     },
     {
       "branch": "chatgpt/zero-codex/audit-utf8-20261119-108",
       "sha": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 compare: ahead=0, exact tip equals merge-base",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -357,7 +382,15 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/177"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+        "aheadBy": 0,
+        "behindBy": 158,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Already ancestor-contained in main; no new merge"
     },
     {
       "branch": "chatgpt/zero-codex/d9-cross-deployment-nonce-20261111",
@@ -391,8 +424,8 @@
       "branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
       "sha": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
       "openPullRequests": [],
-      "classification": "E-diverged-source-overlap-patch-review-pending",
-      "inspection": "live compare plus baseline/branch/main file snapshots; static added-line preservation only, not full patch equivalence",
+      "classification": "E-static-pr-patch-covered-no-git-patch-id",
+      "inspection": "2026-11-22 current-main exact-source line check of PR #69: 16/16 nonblank added lines present; 1 removed lines absent; hunk/context and patch-id not executed",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -413,15 +446,24 @@
         "behindBy": 580,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Do not re-merge without full patch equivalence and semantic review",
-      "sourceEvidence": "wallet source 3/3 added lines present in main; wallet tests 11/11 added lines present (test blob identical to main)"
+      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision",
+      "sourceEvidence": "wallet source 3/3 added lines present in main; wallet tests 11/11 added lines present (test blob identical to main)",
+      "patchReview": {
+        "prNumber": 69,
+        "addedNonblankLines": 16,
+        "missingAddedLines": 0,
+        "removedNonblankLines": 1,
+        "removedLinesPresentInMain": 0,
+        "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
+        "date": "2026-11-22"
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
       "sha": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "E-static-pr-patch-covered-no-git-patch-id",
+      "inspection": "2026-11-22 current-main exact-source line check of PR #70: 22/22 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -434,14 +476,31 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/70"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+        "aheadBy": 3,
+        "behindBy": 580,
+        "verifiedDate": "2026-11-22"
+      },
+      "patchReview": {
+        "prNumber": 70,
+        "addedNonblankLines": 22,
+        "missingAddedLines": 0,
+        "removedNonblankLines": 0,
+        "removedLinesPresentInMain": 0,
+        "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
+        "date": "2026-11-22"
+      },
+      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
       "sha": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
       "openPullRequests": [],
-      "classification": "E-diverged-source-overlap-patch-review-pending",
-      "inspection": "live compare plus baseline/branch/main file snapshots; static added-line preservation only, not full patch equivalence",
+      "classification": "E-static-pr-patch-covered-no-git-patch-id",
+      "inspection": "2026-11-22 current-main exact-source line check of PR #92: 34/34 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -462,15 +521,24 @@
         "behindBy": 580,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Do not re-merge without full patch equivalence and semantic review",
-      "sourceEvidence": "wallet source 3/3, wallet tests 11/11, domain intent-journal tests 191/191 added lines present in main; source semantics and removals not fully certified"
+      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision",
+      "sourceEvidence": "wallet source 3/3, wallet tests 11/11, domain intent-journal tests 191/191 added lines present in main; source semantics and removals not fully certified",
+      "patchReview": {
+        "prNumber": 92,
+        "addedNonblankLines": 34,
+        "missingAddedLines": 0,
+        "removedNonblankLines": 0,
+        "removedLinesPresentInMain": 0,
+        "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
+        "date": "2026-11-22"
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
       "sha": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "E-static-pr-patch-covered-no-git-patch-id",
+      "inspection": "2026-11-22 current-main exact-source line check of PR #75: 31/31 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -483,14 +551,31 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/75"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+        "aheadBy": 9,
+        "behindBy": 580,
+        "verifiedDate": "2026-11-22"
+      },
+      "patchReview": {
+        "prNumber": 75,
+        "addedNonblankLines": 31,
+        "missingAddedLines": 0,
+        "removedNonblankLines": 0,
+        "removedLinesPresentInMain": 0,
+        "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
+        "date": "2026-11-22"
+      },
+      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
       "sha": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "E-static-pr-patch-covered-no-git-patch-id",
+      "inspection": "2026-11-22 current-main exact-source line check of PR #91: 34/34 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -503,14 +588,31 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/91"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+        "aheadBy": 11,
+        "behindBy": 580,
+        "verifiedDate": "2026-11-22"
+      },
+      "patchReview": {
+        "prNumber": 91,
+        "addedNonblankLines": 34,
+        "missingAddedLines": 0,
+        "removedNonblankLines": 0,
+        "removedLinesPresentInMain": 0,
+        "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
+        "date": "2026-11-22"
+      },
+      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
       "sha": "146d06d81474445434070aff557ad56379ad24a3",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "E-static-pr-patch-covered-no-git-patch-id",
+      "inspection": "2026-11-22 current-main exact-source line check of PR #74: 4/4 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -523,14 +625,31 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/74"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+        "aheadBy": 8,
+        "behindBy": 580,
+        "verifiedDate": "2026-11-22"
+      },
+      "patchReview": {
+        "prNumber": 74,
+        "addedNonblankLines": 4,
+        "missingAddedLines": 0,
+        "removedNonblankLines": 0,
+        "removedLinesPresentInMain": 0,
+        "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
+        "date": "2026-11-22"
+      },
+      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
       "sha": "94778c3282a99110922aa260b5f4ea98dd34caf9",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "E-static-pr-patch-covered-no-git-patch-id",
+      "inspection": "2026-11-22 current-main exact-source line check of PR #73: 32/32 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -543,14 +662,31 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/73"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+        "aheadBy": 7,
+        "behindBy": 580,
+        "verifiedDate": "2026-11-22"
+      },
+      "patchReview": {
+        "prNumber": 73,
+        "addedNonblankLines": 32,
+        "missingAddedLines": 0,
+        "removedNonblankLines": 0,
+        "removedLinesPresentInMain": 0,
+        "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
+        "date": "2026-11-22"
+      },
+      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
       "sha": "92cc054ce9a2ee21936e20d103757e374f4af296",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "E-static-pr-patch-covered-no-git-patch-id",
+      "inspection": "2026-11-22 current-main exact-source line check of PR #72: 23/23 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -563,14 +699,31 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/72"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+        "aheadBy": 5,
+        "behindBy": 580,
+        "verifiedDate": "2026-11-22"
+      },
+      "patchReview": {
+        "prNumber": 72,
+        "addedNonblankLines": 23,
+        "missingAddedLines": 0,
+        "removedNonblankLines": 0,
+        "removedLinesPresentInMain": 0,
+        "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
+        "date": "2026-11-22"
+      },
+      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-race-20261111",
       "sha": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "E-static-pr-patch-covered-no-git-patch-id",
+      "inspection": "2026-11-22 current-main exact-source line check of PR #93: 46/46 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -583,14 +736,31 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/93"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+        "aheadBy": 14,
+        "behindBy": 580,
+        "verifiedDate": "2026-11-22"
+      },
+      "patchReview": {
+        "prNumber": 93,
+        "addedNonblankLines": 46,
+        "missingAddedLines": 0,
+        "removedNonblankLines": 0,
+        "removedLinesPresentInMain": 0,
+        "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
+        "date": "2026-11-22"
+      },
+      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
       "sha": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "E-static-pr-patch-covered-no-git-patch-id",
+      "inspection": "2026-11-22 current-main exact-source line check of PR #71: 25/25 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -603,7 +773,24 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/71"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+        "aheadBy": 4,
+        "behindBy": 580,
+        "verifiedDate": "2026-11-22"
+      },
+      "patchReview": {
+        "prNumber": 71,
+        "addedNonblankLines": 25,
+        "missingAddedLines": 0,
+        "removedNonblankLines": 0,
+        "removedLinesPresentInMain": 0,
+        "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
+        "date": "2026-11-22"
+      },
+      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
     },
     {
       "branch": "chatgpt/zero-codex/docs-collaboration-20261117",
@@ -736,9 +923,9 @@
       "branch": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
       "sha": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 compare: ahead=0, exact tip equals merge-base",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -750,15 +937,23 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/89"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+        "aheadBy": 0,
+        "behindBy": 613,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Already ancestor-contained in main; no new merge"
     },
     {
       "branch": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
       "sha": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 compare: ahead=0, exact tip equals merge-base",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -770,7 +965,15 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/96"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+        "aheadBy": 0,
+        "behindBy": 613,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Already ancestor-contained in main; no new merge"
     },
     {
       "branch": "chatgpt/zero-codex/g12-native-withdraw-recipient-20261111",
@@ -804,9 +1007,9 @@
       "branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
       "sha": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 compare: ahead=0, exact tip equals merge-base",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -818,7 +1021,15 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/87"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+        "aheadBy": 0,
+        "behindBy": 611,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Already ancestor-contained in main; no new merge"
     },
     {
       "branch": "chatgpt/zero-codex/g16-bilateral-replay-20261111",
@@ -880,9 +1091,9 @@
       "branch": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
       "sha": "c16e7617f0c5d165902ec15c67591a230d947fd2",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 compare: ahead=0, exact tip equals merge-base",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -894,7 +1105,15 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/88"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+        "aheadBy": 0,
+        "behindBy": 613,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Already ancestor-contained in main; no new merge"
     },
     {
       "branch": "chatgpt/zero-codex/g20-chat-scope-regression-20261111",
@@ -1132,9 +1351,9 @@
       "branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
       "sha": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 compare: ahead=0, exact tip equals merge-base",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -1146,7 +1365,15 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/149"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+        "aheadBy": 0,
+        "behindBy": 298,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Already ancestor-contained in main; no new merge"
     },
     {
       "branch": "claude/adoring-wozniak-850ue6",
@@ -1708,11 +1935,19 @@
       "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
       "sha": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
+      "classification": "V-divergent-scoped-review-pending",
+      "inspection": "2026-11-22 compare: 4 ahead/626 behind, 85 changed paths, no content-level equivalence yet",
       "uniqueChangesVerified": false,
       "completionVerified": false,
-      "associatedPullRequests": []
+      "associatedPullRequests": [],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "aheadBy": 4,
+        "behindBy": 626,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Hold pending intended-delta, file-ownership and possible conflict verification; no merge"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
@@ -5047,9 +5282,9 @@
       "branch": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
       "sha": "579b02f3775323ba273dfe2bc624b5860897431e",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 compare: ahead=0, exact tip equals merge-base",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -5061,15 +5296,23 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/143"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "579b02f3775323ba273dfe2bc624b5860897431e",
+        "aheadBy": 0,
+        "behindBy": 273,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Already ancestor-contained in main; no new merge"
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
       "sha": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
       "openPullRequests": [],
-      "classification": "U-needs-code-diff-review",
-      "inspection": "metadata-only",
-      "uniqueChangesVerified": false,
+      "classification": "A-verified-ancestor-of-main",
+      "inspection": "2026-11-22 compare: ahead=0, exact tip equals merge-base",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -5081,7 +5324,15 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/141"
         }
-      ]
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+        "aheadBy": 0,
+        "behindBy": 295,
+        "verifiedDate": "2026-11-22"
+      },
+      "consolidationDecision": "Already ancestor-contained in main; no new merge"
     },
     {
       "branch": "parallel/accessibility-recovery-panels-20261113",
@@ -5688,5 +5939,22 @@
     "closedUnmerged": 58,
     "open": 60,
     "source": "GitHub REST pulls state=all, pages 1-3, per_page=100, 2026-11-22"
+  },
+  "cohortD9Followup": {
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "verificationDate": "2026-11-22",
+    "addedAncestorHeads": 10,
+    "d9BranchesCompared": 10,
+    "d9PreviouslyPartlyReviewed": 2,
+    "otherDivergencesScreened": 2,
+    "classificationCounts": {
+      "A": 29,
+      "P": 58,
+      "U": 146,
+      "V": 2,
+      "E": 10,
+      "F": 12
+    },
+    "reportPath": "docs/engineering/BRANCH_COHORT_D9_20261122.json"
   }
 }

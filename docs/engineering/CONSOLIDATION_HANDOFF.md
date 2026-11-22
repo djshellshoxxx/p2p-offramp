@@ -1,3 +1,9 @@
+# Branch consolidation follow-up — 2026-11-22 D9 source-line review
+
+Latest exact `main`: `01f6f4feca051d68de24a04299cd3bb444bce40c`. This session checked ten more historical branch tips as actual ancestors of main and re-reviewed all ten D9 security/recovery PR patches (#69–75, #91–93): **267/267 nonblank added lines exist** in current main, while one old retry-safe wallet marker line is absent and `BROADCAST_UNKNOWN` is in its place. This is static source verification only, not patch-id, runtime approval or justification to auto-close any historical PR. Two other divergent branches were screened (one audit ledger, one 85-path wallet release branch), with unique-work decisions pending. The versioned [cohort report](BRANCH_COHORT_D9_20261122.json), [master](BRANCH_CONSOLIDATION_MASTER.md), and [257-tip inventory](BRANCH_INVENTORY.json) carry SHA-level evidence and remaining classifications. Do not alter frozen financial PRs, owner/named-review D8 gates, audit/optional streams or existing history. Next productive cohort: evaluate wallet-release branch's 4 unique commits and 85 changed paths for source overlap/conflicts, then continue unexamined security and escrow branches. No main/source merges, funds, tests, deployment, or optional activation. `ReleaseEnabled=0` unchanged.
+
+---
+
 # Verified branch-consolidation continuation — 2026-11-22 (newest source-bound checkpoint)
 
 **This section supersedes only older live-count and PR #244 pending-state statements; preserve historical failures and reports below.** The repository's current main is still `01f6f4feca051d68de24a04299cd3bb444bce40c`, tree `437323a382952b9623a875c818f8af005a5d4563`. No main merges or source changes occurred in this continuation.
