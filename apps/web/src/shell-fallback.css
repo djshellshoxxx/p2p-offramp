@@ -1,3 +1,7 @@
+#root:not(:empty) + .shell-loading {
+  display: none;
+}
+
 @media (scripting: none) {
   .shell-loading {
     display: none;
