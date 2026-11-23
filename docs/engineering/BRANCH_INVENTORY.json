@@ -3,7 +3,7 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "Authenticated GitHub full REST pagination 258 branch refs, 243 PRs; main GitHub Git ref, fixed SHA native EIP-1271 source recovery comparison and checked branch/PR readback, 2026-11-23 UTC; actual hosted source-target merge checkout EIP1271 5/5 success, 14 check runs success and one running",
+  "source": "Authenticated GitHub all 258 branch names (3 pages), all 243 PRs (5 pages), main fixed SHA source/PR100 one-file parent diff and PR65 10-path content comparison, 2026-11-23 UTC",
   "branchCount": 258,
   "openPullRequestCount": 61,
   "classificationNotes": {
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23 scoped content reconciliation: PR100 historical blank-warning test only unique change is already extended in main and critical locale visible-text guard corrected; branch V -> F. PR65 T33-T35 code/test equivalent in main, two historical docs absent, remains V. No product merge or new tests. docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
     "2026-11-23 UTC EIP1271 follow-up: PR246 latest head 233a66a7c2a4, tree 38fb1a712824; after original test-only afc8eff, documentation-only link correction to source-gap report. Git compare main...head ahead=2/behind=0, original fixture/harness SHA exact, native CI pending; 258/243 unchanged.",
     "2026-11-23 UTC: New isolated current-main test-only EIP-1271 acceptance PR246 at afc8eff73df4; 2 unchanged original PR40 source blobs recovered, npm script and existing EVM CI local-trade step added, current-main wallet/release production untouched; 14 own CI check runs initially queued, native not yet accepted. Inventory 258 refs / 243 PRs; A137/P60/U0/C5/E12/V25/F18/B1/D0 = 258.",
     "2026-11-23 UTC: S04 wallet/release stage immutable source review: 18 stage-local paths (17 exact in owner PR40/1 corrected; current main 3 exact/13 updated/2 missing native EIP-1271 fixture/harness). Owner-only gzip/CORS regression test already identical on main. No native tests or source merge. BRANCH_COHORT_S04_WALLET_RELEASE_20261123.md. Counters unchanged.",
@@ -1693,7 +1694,7 @@
       "sha": "bd26833555e13408825942e9696157ed68e9980e",
       "openPullRequests": [],
       "classification": "V-divergent-partially-reconciled",
-      "inspection": "Ten changed paths. Three exact current-main blobs: saved-reviews-worker.test.mjs, worker-endpoint.test.mjs, scripts/test-evm-local-trade.mjs; old worker endpoint lacks current BUSY handling / favorites/templates / verifyBackup; old artifact policy differs, stage M2A/M2B docs absent main",
+      "inspection": "Ten changed paths. Three exact current-main blobs: saved-reviews-worker.test.mjs, worker-endpoint.test.mjs, scripts/test-evm-local-trade.mjs; old worker endpoint lacks current BUSY handling / favorites/templates / verifyBackup; old artifact policy differs, stage M2A/M2B docs absent main; 2026-11-23 scoped follow-up: 3 original test blobs equal main, historical saved review + artifact policy fixes retained/extended, 2 old docs still absent; see docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -1717,9 +1718,9 @@
       "consolidationDecision": "No mechanical old-code merge; old M2B gap table preserved, remaining 7 paths/semantic acceptance need scoped review",
       "latestSemanticVerification": {
         "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-        "checkedAt": "2026-11-22",
-        "report": "docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md",
-        "scope": "bounded partial source comparison",
+        "checkedAt": "2026-11-23",
+        "report": "docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
+        "scope": "10 PR65 branch-local paths, source blob/line comparison; old docs remain held",
         "runtimeTestsExecuted": false
       }
     },
@@ -6820,9 +6821,9 @@
       "branch": "parallel/localization-blank-warning-20261113",
       "sha": "718208880b650b03ac380d358a00878480827870",
       "openPullRequests": [],
-      "classification": "V-divergent-partially-reconciled",
-      "inspection": "2026-11-22 immutable GitHub compare and recursive Git-tree source inspection: Full 1703-file old tree vs main: 1536 identical blobs, 165 different and 2 missing old EIP-1271 fixture/test paths; branch compare carries 132 changed paths. Needs semantic tests/current-main source inspection; do not overwrite current locale or financial code.",
-      "uniqueChangesVerified": false,
+      "classification": "F-unique-test-content-in-main-with-stronger-guard",
+      "inspection": "2026-11-23 scoped PR100 parent-to-head GitHub compare: sole unique file is locale-catalog.test.mjs (+14 lines), current main preserves and strengthens identical named recovery.unverified blank warning case; current createMessage requires visible text. Earlier inherited stage artifacts are not uniquely PR100.",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -6842,7 +6843,14 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "HOLD: divergent; preserve exact old tip. No wholesale merge or source replacement. Respect owner PRs/current-main invariants, review, patch-id and executable qualification."
+      "consolidationDecision": "F: unique regression test behavior and stricter corrective source present in main; not ancestral / whole-tree equal, upstream PR41 source and historic failures separately owned. See docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
+      "latestSemanticVerification": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "checkedAt": "2026-11-23",
+        "report": "docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
+        "scope": "single PR100-exclusive test and current-main source guard, authenticated content comparison",
+        "runtimeTestsExecuted": false
+      }
     },
     {
       "branch": "parallel/portable-recovery-guide-20261113",
@@ -7490,10 +7498,10 @@
   "currentClassificationTotals": {
     "A": 137,
     "P": 60,
-    "F": 18,
+    "F": 19,
     "C": 5,
     "E": 12,
-    "V": 25,
+    "V": 24,
     "D": 0,
     "B": 1
   },
@@ -7876,5 +7884,16 @@
     "independentTierCReview": "absent at readback",
     "ownerAuthorization": "unverified/absent at readback",
     "executionReport": "docs/engineering/PR246_NATIVE_EIP1271_EXECUTED_20261123.md"
+  },
+  "cohortPr100Pr65SafetySourceProof20261123": {
+    "date": "2026-11-23",
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "report": "docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
+    "sourceOnly": true,
+    "pr100ReclassifiedFrom": "V",
+    "pr100ReclassifiedTo": "F",
+    "pr65Remains": "V",
+    "testRunsExecuted": 0,
+    "mainMerges": 0
   }
 }
