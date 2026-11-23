@@ -1,3 +1,7 @@
+## 2026-11-22/23 verified: PR244 real native browser succeeds; PR242 original failure remains
+
+See [detailed fixed-source proof](PR244_HOSTED_PAYOUT_READINESS_20261122.md). PR242 exact `00efff307b10c5ed9a8bd604a21eb2bf5816e7ef` failed job `136601434309` on the disabled `Review separate payout` control. PR244 test-only exact `2acdaa3714b2c263291251b18742068077cc54ea` succeeded all 12 check runs; actual hosted Solana job `137159396404` reached full validator plus Chromium/Worker/encrypted-IDB acceptance, real Clock refund wait, and `fixtureErrors=[]`. A 150-second bounded explicit-refresh wait and final journal/send assertions are added *only* to the test; no app/contract changes. Bounded COMMENT review `6015955813` is **not** formal independent/owner review. Preserve both distinct source outcomes. PR245 documentation predecessor `917921d73f9f8bca747e620b1f4248fe6e09a8e7` passed 14/14 checks; new documentation head requires its own checks. No main merge or release; `ReleaseEnabled=0`.
+
 # Consolidation execution and test evidence — 2026-11-22
 
 ## Live source identities

@@ -1,3 +1,9 @@
+# 2026-11-22/23 — PR244 real native payout-readiness validation / outstanding merge guards
+
+Read [PR244_HOSTED_PAYOUT_READINESS_20261122.md](PR244_HOSTED_PAYOUT_READINESS_20261122.md) first for exact source, logs, original failed PR242 run, and new successful PR244 real validator/browser proof. PR244 `2acdaa3714b2c263291251b18742068077cc54ea` has 12/12 successful current-source checks including unwarped Clock refund and no additional send during journal eligibility wait; bounded COMMENT review `6015955813` was filed. The original PR242 head's payout-button failure remains failed, and the PR244 test-only followup is NOT an approved product merge. PR245 prior head `917921d73f9f8bca747e620b1f4248fe6e09a8e7` has 14/14 successful hosted checks; do not transfer successes to any new document head. **No new merge to main.** PR237–239 Tier B named review/current-target qualification, PR241/242 Tier C owner authorization/native acceptance, and all unreviewed PR/partial branch dispositions still block completion. Existing inventory A137/P59/U0/C5/E12/V25/F18/B1/D0=257 remains a partial conservation ledger. Keep ReleaseEnabled=0 and all original records below unchanged.
+
+---
+
 # 2026-11-22 — final historical D-stage source cohort
 
 [Source report](BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md) records six immutable stage-local comparisons against original owner PR trees and current main. **D0 means the former unsampled historical branches now have bounded code/document comparisons, not 100% consolidation.** Inventory now A137/P59/U0/C5/E12/V25/F18/B1/D0=257; 59 open PR owner branches, 25 partial branch reviews, escrow payout #242/#244, Tier C #241/#242 authorization, Tier B #237–239 reviews and optional #224–232 gates remain. Source, main and release flags unchanged. Original history below is preserved.
