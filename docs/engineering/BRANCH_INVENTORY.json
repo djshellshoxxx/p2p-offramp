@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-22 source review of final six D historical stages: S02 42 paths (42 owner exact/32 main exact), S03 11 (11/6), S05 merged 40 (40/34), S05 split 40 (38/32), S11 33 (30/9), S12 190 (190/0, 185 archives absent main). D6->0 V19->25; all remain partial pending patch-ID/runtime/owner gates. See BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. ReleaseEnabled=0.",
     "2026-11-22 historic process/security cohort: 10 D-history branches received scoped code, documentation and workflow comparison. Two docs-only operational prompts deliberately superseded, hardened autonomous workflow replaces insecure legacy, one research doc exact blob included, one 595/595-line handoff already in main, four source/evidence/task branches remain partial. D16→D6, V14→V19, F14→F18, C4→C5. Detailed report BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md. No source/tests/merge/deploy/funds/release; ReleaseEnabled=0.",
     "2026-11-22 source cohort: three original S01-S03 stage branches 68 isolated paths, all present in owner PR #37/#38/#39 lineage and main. Owner stage snapshots 58 exact, 10 corrected; main 42 exact, 26 later-changed. Closed #38/#39 are NOT merged. Main relay ownership/dedup and reentrancy guards supersede old S03 pool; no remerge. Docs-collaboration exact blob already main; Python 3.12 historical one-line correction already present in expanded current operator guide. Five formerly D entries reclassified with bounded evidence: A137/P59/U0/C4/E12/V14/F14/B1/D16 = 257. Previous PR245 head 88b7be1 had 14/14 successful hosted check-runs, but this new documentation head requires independent qualification. No local Node/native/Chromium runs, product edits, releases, funds or main merges.",
     "2026-11-22: 70 former U branch tips received live fixed-main ancestry screening: 46 exact ancestors, 21 divergent semantically unreviewed, 1 full tree equivalent to unmerged PR237, 1 changed test blob exact on main, 1 PR245 self branch. Counters A137/P59/U0/C3/E11/V11/F14/B1/D21=257. U=0 is NOT completion: 21 D, 59 open PR heads and other held cohorts remain. PR245 same-source Firefox backup browser original attempt failed (profile created/unlocked status timeout), targeted retry succeeded without changes. No code merges/native local financial runs/releases.",
@@ -1860,8 +1861,8 @@
       "branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
       "sha": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
       "openPullRequests": [],
-      "classification": "D-git-diverged-source-unreviewed",
-      "inspection": "GitHub compare verified divergent history only; unique source semantics/patch-id and current native acceptance not yet audited",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22 exact stage-parent-to-tip compare + recursive Git tree blob mapping: 42 changed paths, 42 exact existing owner / 0 corrected; main 32 exact, 10 changed, 0 absent. Owner #38.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -1882,14 +1883,16 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Held for unique-patch, owner/PR, conflict and test review; do not automatically merge."
+      "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
+      "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
+      "lastVerificationDate": "2026-11-22"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
       "sha": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
       "openPullRequests": [],
-      "classification": "D-git-diverged-source-unreviewed",
-      "inspection": "GitHub compare verified divergent history only; unique source semantics/patch-id and current native acceptance not yet audited",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22 exact stage-parent-to-tip compare + recursive Git tree blob mapping: 11 changed paths, 11 exact existing owner / 0 corrected; main 6 exact, 5 changed, 0 absent. Owner #39.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -1910,7 +1913,9 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Held for unique-patch, owner/PR, conflict and test review; do not automatically merge."
+      "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
+      "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
+      "lastVerificationDate": "2026-11-22"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
@@ -1943,8 +1948,8 @@
       "branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
       "sha": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
       "openPullRequests": [],
-      "classification": "D-git-diverged-source-unreviewed",
-      "inspection": "GitHub compare verified divergent history only; unique source semantics/patch-id and current native acceptance not yet audited",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22 exact stage-parent-to-tip compare + recursive Git tree blob mapping: 40 changed paths, 40 exact existing owner / 0 corrected; main 34 exact, 6 changed, 0 absent. Owner #41.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -1965,7 +1970,9 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Held for unique-patch, owner/PR, conflict and test review; do not automatically merge."
+      "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
+      "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
+      "lastVerificationDate": "2026-11-22"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
@@ -2325,8 +2332,8 @@
       "branch": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
       "sha": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
       "openPullRequests": [],
-      "classification": "D-git-diverged-source-unreviewed",
-      "inspection": "GitHub compare verified divergent history only; unique source semantics/patch-id and current native acceptance not yet audited",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22 exact stage-parent-to-tip compare + recursive Git tree blob mapping: 40 changed paths, 38 exact existing owner / 2 corrected; main 32 exact, 8 changed, 0 absent. Owner #41 corrected.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [],
@@ -2337,7 +2344,9 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Held for unique-patch, owner/PR, conflict and test review; do not automatically merge."
+      "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
+      "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
+      "lastVerificationDate": "2026-11-22"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
@@ -2493,8 +2502,8 @@
       "branch": "claude/loving-einstein-xgzvdy-s11-governance-ci",
       "sha": "789b2b2c2644af741daa5328adf76ac2ec88599c",
       "openPullRequests": [],
-      "classification": "D-git-diverged-source-unreviewed",
-      "inspection": "GitHub compare verified divergent history only; unique source semantics/patch-id and current native acceptance not yet audited",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22 exact stage-parent-to-tip compare + recursive Git tree blob mapping: 33 changed paths, 30 exact existing owner / 3 corrected; main 9 exact, 24 changed, 0 absent. Owner #47.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [],
@@ -2505,14 +2514,16 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Held for unique-patch, owner/PR, conflict and test review; do not automatically merge."
+      "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
+      "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
+      "lastVerificationDate": "2026-11-22"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s12-evidence",
       "sha": "001c31cc868b683080e79a025b6621d900acb96a",
       "openPullRequests": [],
-      "classification": "D-git-diverged-source-unreviewed",
-      "inspection": "GitHub compare verified divergent history only; unique source semantics/patch-id and current native acceptance not yet audited",
+      "classification": "V-divergent-partially-reconciled",
+      "inspection": "2026-11-22 exact stage-parent-to-tip compare + recursive Git tree blob mapping: 190 changed paths, 190 exact existing owner / 0 corrected; main 0 exact, 5 changed, 185 absent. Owner #48.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [],
@@ -2523,7 +2534,9 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Held for unique-patch, owner/PR, conflict and test review; do not automatically merge."
+      "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
+      "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
+      "lastVerificationDate": "2026-11-22"
     },
     {
       "branch": "claude/p2p-offramp-consolidation-k5h13u",
@@ -7422,8 +7435,8 @@
     "F": 18,
     "C": 5,
     "E": 12,
-    "V": 19,
-    "D": 6,
+    "V": 25,
+    "D": 0,
     "B": 1
   },
   "cohortWalletSafetyReview20261122": {
@@ -7672,5 +7685,72 @@
     "runtimeTestsExecuted": false,
     "productChanges": false,
     "financialAcceptance": false
+  },
+  "cohortFinalDivergentStages20261122": {
+    "main": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "startHead": "01e41e65cd078b30cc70fcb34af614e2838bb105",
+    "method": "GitHub immutable compare and complete recursive Git tree/blob mapping, not patch-id or runtime",
+    "rows": [
+      {
+        "branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
+        "paths": 42,
+        "ownerExact": 42,
+        "ownerCorrected": 0,
+        "mainExact": 32,
+        "mainChanged": 10,
+        "mainAbsent": 0,
+        "owner": "#38"
+      },
+      {
+        "branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+        "paths": 11,
+        "ownerExact": 11,
+        "ownerCorrected": 0,
+        "mainExact": 6,
+        "mainChanged": 5,
+        "mainAbsent": 0,
+        "owner": "#39"
+      },
+      {
+        "branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+        "paths": 40,
+        "ownerExact": 40,
+        "ownerCorrected": 0,
+        "mainExact": 34,
+        "mainChanged": 6,
+        "mainAbsent": 0,
+        "owner": "#41"
+      },
+      {
+        "branch": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
+        "paths": 40,
+        "ownerExact": 38,
+        "ownerCorrected": 2,
+        "mainExact": 32,
+        "mainChanged": 8,
+        "mainAbsent": 0,
+        "owner": "#41 corrected"
+      },
+      {
+        "branch": "claude/loving-einstein-xgzvdy-s11-governance-ci",
+        "paths": 33,
+        "ownerExact": 30,
+        "ownerCorrected": 3,
+        "mainExact": 9,
+        "mainChanged": 24,
+        "mainAbsent": 0,
+        "owner": "#47"
+      },
+      {
+        "branch": "claude/loving-einstein-xgzvdy-s12-evidence",
+        "paths": 190,
+        "ownerExact": 190,
+        "ownerCorrected": 0,
+        "mainExact": 0,
+        "mainChanged": 5,
+        "mainAbsent": 185,
+        "owner": "#48"
+      }
+    ]
   }
 }
