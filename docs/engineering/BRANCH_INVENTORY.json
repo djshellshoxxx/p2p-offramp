@@ -3,7 +3,7 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23: fully paginated REST census 262 branches, 247 PRs (65 open/124 merged/58 closed unmerged); S02 bounded content disposition; coordinator self-ref prepublication.",
+  "source": "2026-11-23 fully paginated REST census 262 branches/247 PRs; S05 reconciliation; coordinator prepublication ref.",
   "branchCount": 262,
   "openPullRequestCount": 65,
   "classificationNotes": {
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23: S05 original/corrected 40-path source reconciliation; two V→F; S02 remains V; no new runtime execution or main merge.",
     "2026-11-23: S02 original/corrected divergent paths reviewed; V retained for both pending type-only barrel contract, no runtime or main merge; BRANCH_COHORT_S02_STORAGE_TRANSPORT_DISPOSITION_20261123.md",
     "2026-11-23: original and corrected M0 S03 relay/messaging stage-local source reconciled against exact main; two V→F, no new runtime or ancestry merge; BRANCH_COHORT_S03_RELAY_MESSAGING_SOURCE_DISPOSITION_20261123.md",
     "2026-11-23 UTC: S04 historical EVM execution test-source recovery verified directly against main, PR247 and PR248: nine historic test scenarios absent on main are present in draft PR248, five in PR247 and four added in PR248. Exact main/old/parent/child blob IDs and source-bound CI/gates are documented in BRANCH_COHORT_S04_EVM_EXECUTION_REGRESSION_RECOVERY_20261123.md. S04 remains V; counts unchanged.",
@@ -2137,9 +2138,9 @@
       "branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
       "sha": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
       "openPullRequests": [],
-      "classification": "V-divergent-partially-reconciled",
-      "inspection": "2026-11-22 exact stage-parent-to-tip compare + recursive Git tree blob mapping: 40 changed paths, 40 exact existing owner / 0 corrected; main 34 exact, 6 changed, 0 absent. Owner #41.",
-      "uniqueChangesVerified": false,
+      "classification": "F-stage-local-intended-content-in-main",
+      "inspection": "2026-11-23: 34/40 exact main blobs; all divergent paths inspected; no runtime acceptance.",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -2159,9 +2160,16 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
+      "consolidationDecision": "F: stage-local intended content retained or deliberately superseded by maintained source; original refs and PR41 preserved; whole-history patch-ID and runtime not qualified.",
       "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
-      "lastVerificationDate": "2026-11-22"
+      "lastVerificationDate": "2026-11-22",
+      "latestSemanticVerification": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "checkedAt": "2026-11-23",
+        "report": "docs/engineering/BRANCH_COHORT_S05_LOCALE_LEAF_DISPOSITION_20261123.md",
+        "scope": "40-path stage-local source comparison",
+        "runtimeTestsExecuted": false
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
@@ -2567,9 +2575,9 @@
       "branch": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
       "sha": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
       "openPullRequests": [],
-      "classification": "V-divergent-partially-reconciled",
-      "inspection": "2026-11-22 exact stage-parent-to-tip compare + recursive Git tree blob mapping: 40 changed paths, 38 exact existing owner / 2 corrected; main 32 exact, 8 changed, 0 absent. Owner #41 corrected.",
-      "uniqueChangesVerified": false,
+      "classification": "F-stage-local-intended-content-in-main",
+      "inspection": "2026-11-23: 32/40 exact main blobs; all divergent paths inspected; no runtime acceptance.",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [],
       "compareToMain": {
@@ -2579,9 +2587,16 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
+      "consolidationDecision": "F: stage-local intended content retained or deliberately superseded by maintained source; original refs and PR41 preserved; whole-history patch-ID and runtime not qualified.",
       "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
-      "lastVerificationDate": "2026-11-22"
+      "lastVerificationDate": "2026-11-22",
+      "latestSemanticVerification": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "checkedAt": "2026-11-23",
+        "report": "docs/engineering/BRANCH_COHORT_S05_LOCALE_LEAF_DISPOSITION_20261123.md",
+        "scope": "40-path stage-local source comparison",
+        "runtimeTestsExecuted": false
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
@@ -3446,11 +3461,11 @@
     },
     {
       "branch": "codex/consolidation-evidence-inventory-20261122",
-      "sha": "2edb45e87c1d7a1819ac4805eb1ec272b0fc60cd",
+      "sha": "bf5e5a493397101c743ed0ce11c1f716c7012f0b",
       "openPullRequests": [
         {
           "number": 245,
-          "headSha": "8663bf1f8135efb132421344cc3e0f746245900e",
+          "headSha": "bf5e5a493397101c743ed0ce11c1f716c7012f0b",
           "base": "main",
           "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/245"
         }
@@ -3458,7 +3473,7 @@
       "associatedPullRequests": [
         {
           "number": 245,
-          "headSha": "8663bf1f8135efb132421344cc3e0f746245900e",
+          "headSha": "bf5e5a493397101c743ed0ce11c1f716c7012f0b",
           "base": "main",
           "state": "open",
           "merged": false,
@@ -3467,7 +3482,7 @@
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "Coordinator PR245 self-reference captured before publication at 8663bf1f8135efb132421344cc3e0f746245900e; new evidence commit advances this ref.",
+      "inspection": "Coordinator prepublication bf5e5a493397101c743ed0ce11c1f716c7012f0b; new documentation commit advances self-ref.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "consolidationDecision": "Unmerged and pending current-head CI/review; own HEAD will advance upon publishing this inventory."
@@ -7786,10 +7801,10 @@
   "currentClassificationTotals": {
     "A": 137,
     "P": 64,
-    "F": 36,
+    "F": 38,
     "C": 5,
     "E": 0,
-    "V": 19,
+    "V": 17,
     "D": 0,
     "B": 1
   },
@@ -8459,6 +8474,17 @@
     "correctedExact": 32,
     "report": "docs/engineering/BRANCH_COHORT_S02_STORAGE_TRANSPORT_DISPOSITION_20261123.md",
     "unresolved": "HttpFetchPort type-only public barrel contract",
+    "runtimeTestsExecuted": false,
+    "mainMerges": 0
+  },
+  "cohortS05LocaleLeafDisposition20261123": {
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "original": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
+    "corrected": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+    "stagePaths": 40,
+    "originalExact": 32,
+    "correctedExact": 34,
+    "report": "docs/engineering/BRANCH_COHORT_S05_LOCALE_LEAF_DISPOSITION_20261123.md",
     "runtimeTestsExecuted": false,
     "mainMerges": 0
   }
