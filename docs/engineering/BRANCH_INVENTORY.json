@@ -3,9 +3,9 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "Authenticated GitHub all 258 branch names (3 pages), all 243 PRs (5 pages), main fixed SHA source/PR100 one-file parent diff and PR65 10-path content comparison, 2026-11-23 UTC",
-  "branchCount": 258,
-  "openPullRequestCount": 61,
+  "source": "2026-11-23 live GitHub complete pagination: 259 branches (100+100+59), 244 PRs (100+100+44); main fixed 01f6f4feca051d68de24a04299cd3bb444bce40c; new PR247 exact source verified",
+  "branchCount": 259,
+  "openPullRequestCount": 62,
   "classificationNotes": {
     "F": "Source already present in main by exact content/ancestry OR deliberately superseded historical guidance/workflow with explicit per-branch evidence; read branch-specific disposition, not a blanket test pass.",
     "P": "Open PR; no assertion that code is unique, merge-ready or unfinished",
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23: recovered five owner PR40 historical EVM admission regressions in current-main draft PR247 (tests-first c16dc947, scope correction 3f23c774). GitHub 13 checks: 1 success/12 running at snapshot, no local RED/GREEN, independent Tier C or owner approval; all source financial flags unchanged. Refreshed 259 branches/244 PRs/62 open.",
     "2026-11-23 scoped content reconciliation: PR100 historical blank-warning test only unique change is already extended in main and critical locale visible-text guard corrected; branch V -> F. PR65 T33-T35 code/test equivalent in main, two historical docs absent, remains V. No product merge or new tests. docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
     "2026-11-23 UTC EIP1271 follow-up: PR246 latest head 233a66a7c2a4, tree 38fb1a712824; after original test-only afc8eff, documentation-only link correction to source-gap report. Git compare main...head ahead=2/behind=0, original fixture/harness SHA exact, native CI pending; 258/243 unchanged.",
     "2026-11-23 UTC: New isolated current-main test-only EIP-1271 acceptance PR246 at afc8eff73df4; 2 unchanged original PR40 source blobs recovered, npm script and existing EVM CI local-trade step added, current-main wallet/release production untouched; 14 own CI check runs initially queued, native not yet accepted. Inventory 258 refs / 243 PRs; A137/P60/U0/C5/E12/V25/F18/B1/D0 = 258.",
@@ -5364,6 +5365,42 @@
       ]
     },
     {
+      "branch": "fix/evm-execution-admission-hardening-20261123",
+      "sha": "3f23c774b2464b04de6cfece9ab1721dd5130f86",
+      "openPullRequests": [
+        {
+          "number": 247,
+          "headSha": "3f23c774b2464b04de6cfece9ab1721dd5130f86",
+          "base": "main",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/247"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "2026-11-23: 5 original PR40 regression tests in test-first c16dc947, narrow scope-retirement code correction 3f23c774, GitHub compare 2 ahead/0 behind and tree verified. GitHub 13 current-head checks: one success/12 in progress at first read. No RED/GREEN runtime, native financial acceptance, independent Tier C or owner approval yet.",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "associatedPullRequests": [
+        {
+          "number": 247,
+          "headSha": "3f23c774b2464b04de6cfece9ab1721dd5130f86",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "owner": "djshellshoxxx",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/247"
+        }
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 2,
+        "behindBy": 0,
+        "verifiedDate": "2026-11-23",
+        "method": "GitHub immutable compare plus source blob/ref/commit tree readback"
+      },
+      "consolidationDecision": "Distinct complete scoped corrective draft, not merge-ready. Keep original PR40, D9 UNKNOWN marker and no-auto-resend; require current-head CI, independent Tier C review, PR-recorded owner authorization, guarded merge."
+    },
+    {
       "branch": "fix/localnet-readiness-20261119",
       "sha": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
       "openPullRequests": [],
@@ -7447,11 +7484,11 @@
   ],
   "lastVerifiedDate": "2026-11-23",
   "pullRequestInventory": {
-    "total": 243,
+    "total": 244,
     "merged": 124,
     "closedUnmerged": 58,
-    "open": 61,
-    "source": "GitHub REST pulls state=all, pages 1-4, per_page=100; 2026-11-23 UTC (243 total, 61 open, 124 merged, 58 closed unmerged)"
+    "open": 62,
+    "source": "2026-11-23 complete authenticated GitHub pagination 100+100+44 pull requests"
   },
   "cohortD9Followup": {
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
@@ -7497,7 +7534,7 @@
   },
   "currentClassificationTotals": {
     "A": 137,
-    "P": 60,
+    "P": 61,
     "F": 19,
     "C": 5,
     "E": 12,
@@ -7895,5 +7932,27 @@
     "pr65Remains": "V",
     "testRunsExecuted": 0,
     "mainMerges": 0
+  },
+  "cohortWalletEvmAdmission20261123": {
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "pr": 247,
+    "headSha": "3f23c774b2464b04de6cfece9ab1721dd5130f86",
+    "treeSha": "33843108065cf2a924bde6d3ec68b8d945d3d753",
+    "testFirstCommit": "c16dc9470ff1dc4a76b2a4d7b088428dd475a64b",
+    "recoveredHistoricCases": 5,
+    "changedPaths": [
+      "packages/wallet/src/evm-execution.ts",
+      "packages/wallet/test/evm-execution.test.mjs",
+      "docs/engineering/EVM_EXECUTION_ADMISSION_HARDENING_20261123.md"
+    ],
+    "executedLocalTests": 0,
+    "ciSnapshot": {
+      "success": 1,
+      "inProgress": 12,
+      "total": 13
+    },
+    "tierCApproval": false,
+    "ownerApproval": false,
+    "releaseEnabled": false
   }
 }

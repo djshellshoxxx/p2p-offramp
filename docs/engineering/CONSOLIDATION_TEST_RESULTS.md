@@ -1,3 +1,13 @@
+## 2026-11-23 UTC — concrete EVM admission-scope hardening published, draft PR247
+
+**Source-bound engineering:** current `main@01f6f4feca051d68de24a04299cd3bb444bce40c`; owner PR40's five historical EVM scope-retirement tests restored in test-first commit `c16dc9470ff1dc4a76b2a4d7b088428dd475a64b`, then narrowly repaired in [draft PR247](https://github.com/djshellshoxxx/p2p-offramp/pull/247), head `3f23c774b2464b04de6cfece9ab1721dd5130f86`, complete tree `33843108065cf2a924bde6d3ec68b8d945d3d753`. The correction rechecks disposal after `isCurrent()`, refuses foreign account index accessors and revalidates after obtaining `provider.request` before physical EVM send. Current durable marker => `BROADCAST_UNKNOWN`, no automatic resend, chain/nonce/hash and explicit physical slot constraints remain intact; old PR40 branch unchanged. [Exact-source report](https://github.com/djshellshoxxx/p2p-offramp/blob/3f23c774b2464b04de6cfece9ab1721dd5130f86/docs/engineering/EVM_EXECUTION_ADMISSION_HARDENING_20261123.md).
+
+**Gate status at published-source readback:** GitHub 13 current-head checks, 1 success and 12 in progress. No local Node/Foundry/Chromium, no executed RED or GREEN claim, no independent Tier C, owner authorization or merge. The historical hostile AbortSignal cases are not treated as fixed. Preserve all earlier failures, PR237–244 review/financial gates and PR246's prior-source acceptance separately.
+
+**Complete fresh census:** 259 remote branches and 244 PRs (62 open, 124 merged, 58 closed-unmerged). Classifications A137/P61/F19/C5/E12/V24/B1/D0=259. Main unchanged, `ReleaseEnabled=0`. No main merge, funds, deployment or release.
+
+---
+
 ## 2026-11-23 UTC — PR246 all 15 GitHub checks passed; still DRAFT and unmerged
 
 [Exact-source hosted completion record](PR246_ALL_HOSTED_CHECKS_PASS_20261123.md) supersedes only the older 14/15-in-progress observation, not its failure history. On unchanged PR246 head `233a66a7c2a465ac7b5504564c0e3b826afedcf5` (complete tree `38fb1a712824435f2bcf9fd5225d27706472a979`, base main `01f6f4feca051d68de24a04299cd3bb444bce40c`), **15/15** GitHub check-runs now report SUCCESS, plus Snyk SUCCESS. The previously outstanding Solana [program job 137488374969](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45112658714/job/137488374969) finished SUCCESS at **05:46:56Z**, including actual validator/Chromium/Worker encrypted-IDB real-time refund/recovery and `fixtureErrors=[]`. Separate same-tree native Anvil EIP-1271 **5/5** proof remains valid. **Zero GitHub review submissions; independent Tier C review and matching owner authorization remain absent.** No PR merge, source change, real funds, release or deployment; `ReleaseEnabled=0`. Historical lower snapshots are intentionally preserved.

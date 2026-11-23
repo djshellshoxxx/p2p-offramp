@@ -1,3 +1,13 @@
+## 2026-11-23 UTC — concrete EVM admission-scope hardening published, draft PR247
+
+**Source-bound engineering:** current `main@01f6f4feca051d68de24a04299cd3bb444bce40c`; owner PR40's five historical EVM scope-retirement tests restored in test-first commit `c16dc9470ff1dc4a76b2a4d7b088428dd475a64b`, then narrowly repaired in [draft PR247](https://github.com/djshellshoxxx/p2p-offramp/pull/247), head `3f23c774b2464b04de6cfece9ab1721dd5130f86`, complete tree `33843108065cf2a924bde6d3ec68b8d945d3d753`. The correction rechecks disposal after `isCurrent()`, refuses foreign account index accessors and revalidates after obtaining `provider.request` before physical EVM send. Current durable marker => `BROADCAST_UNKNOWN`, no automatic resend, chain/nonce/hash and explicit physical slot constraints remain intact; old PR40 branch unchanged. [Exact-source report](https://github.com/djshellshoxxx/p2p-offramp/blob/3f23c774b2464b04de6cfece9ab1721dd5130f86/docs/engineering/EVM_EXECUTION_ADMISSION_HARDENING_20261123.md).
+
+**Gate status at published-source readback:** GitHub 13 current-head checks, 1 success and 12 in progress. No local Node/Foundry/Chromium, no executed RED or GREEN claim, no independent Tier C, owner authorization or merge. The historical hostile AbortSignal cases are not treated as fixed. Preserve all earlier failures, PR237–244 review/financial gates and PR246's prior-source acceptance separately.
+
+**Complete fresh census:** 259 remote branches and 244 PRs (62 open, 124 merged, 58 closed-unmerged). Classifications A137/P61/F19/C5/E12/V24/B1/D0=259. Main unchanged, `ReleaseEnabled=0`. No main merge, funds, deployment or release.
+
+---
+
 ## 2026-11-23 UTC — PR100 native-locale warning source reconciliation; PR65 bounded follow-up
 
 [PR100/PR65 source/blob evidence](BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md). Refreshed **258 branches / 243 PRs** (61 open) via authenticated GitHub pagination; main remains `01f6f4feca051d68de24a04299cd3bb444bce40c`. PR100's **only unique 14-line regression test** is now present and extended on main and the production catalog enforces visible warning text; historical branch reclassified V→F **by content**, not ancestry. PR65's T33–T35 implementation/test fixes are in modern source, but its two historical documents are absent, so PR65 remains **V**, not falsely complete. New totals **A137/P60/F19/C5/E12/V24/B1/D0 = 258**. No local tests were executed, no source branch or PR was merged, and PR246 owner/Tier C gates remain outstanding. `ReleaseEnabled=0` unchanged. Previous snapshots preserved below.
