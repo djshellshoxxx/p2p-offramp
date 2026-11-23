@@ -1,3 +1,9 @@
+## 2026-11-23 UTC — PR116/PR64 historical-document reconciliation, no execution
+
+[Source report](BRANCH_COHORT_HISTORIC_DOC_TASKS_FINAL_20261123.md): 13 changed *documentation* paths across historical closed PR116 and PR64 were read against main `01f6f4feca051d68de24a04299cd3bb444bce40c`. **No new unit/native/browser/contract/financial tests executed; no CI statuses or independent approvals were transferred.** Archived task plans and dated milestone/agent guidance were deliberately superseded, not used to claim unfinished features completed. Previous test failures/skips/receipts remain intact. No main merge, funds or release.
+
+---
+
 ## 2026-11-23 — restored D9 test content proof, no execution
 
 [Source report](BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md) proves PR71–75/91–93 complete test additions in current main, PR79 complete test Git blob, PR129 operator docs line. **New tests: 0 executed; 0 new passes/failures/skips claimed.** No CI or source review approvals transferred. Existing historical results remain unmodified.

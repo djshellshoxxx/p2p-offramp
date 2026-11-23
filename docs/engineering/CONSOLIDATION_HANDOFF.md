@@ -1,3 +1,9 @@
+## 2026-11-23 UTC — historical PR116 task ownership and PR64 M2A/wiki docs resolved, no code transplant
+
+[Thirteen-path, source-bound proof](BRANCH_COHORT_HISTORIC_DOC_TASKS_FINAL_20261123.md): PR116 (closed/unmerged) adds only `tasks/plan.md` and `tasks/todo.md`. All 13 original added todo lines are exact in main; 11 old plan owner-matrix lines were intentionally superseded as live ownership while T41–T47 remain documented as unverified tasks. PR64 (closed/unmerged) changes only 11 dated documentation paths: nine have newer main counterparts, two dated 2026-11-10 instruction/status files are absent and explicitly superseded by current roadmap/wiki/status; no executable source/tests. Both original branch tips and old authors' instructions are preserved; **two V→F, A137/P62/F34/C5/E0/V21/B1/D0=260**. This is documentary disposition, not patch-ID equality, feature completion, owner review or runtime acceptance. Main `01f6f4feca051d68de24a04299cd3bb444bce40c`; no product merge/release/deployment/funds and `ReleaseEnabled=0`.
+
+---
+
 ## 2026-11-23 — ten remaining E-class D9/test/doc patches have exact content in main
 
 [Full verification report](BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md) proves the unique PR-specific D9 restored nonce tests from #71–75/#91–93 remain byte-exact in current main (PR73 contains precisely the later four PR74 lines), PR79's sole test file matches the complete Git blob, and PR129's Python baseline documentation correction is already present. **Ten E→F**: A137/P62/F32/C5/E0/V23/B1/D0=260. All historical PRs remain unmerged by ancestry; no whole-history patch-ID, native runtime acceptance, new tests or qualified integration is claimed. Keep existing financial PR gates, reviews, owner decisions, optional features disabled, `ReleaseEnabled=0`.

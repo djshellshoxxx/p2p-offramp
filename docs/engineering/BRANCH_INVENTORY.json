@@ -3,7 +3,7 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23 fully paginated live 260 remote branches/245 PRs with source-bound E10→F32 D9/doc test proofs; no main merge",
+  "source": "2026-11-23 fully paginated live GitHub 260 remote refs/245 PRs; additional PR116+PR64 historical task/document review V23→V21/F32→F34; main unchanged",
   "branchCount": 260,
   "openPullRequestCount": 63,
   "classificationNotes": {
@@ -1692,8 +1692,8 @@
       "branch": "claude/compassionate-gauss-uyhfih",
       "sha": "970ac80f08c04e8d340ee57d901e48e26a667a18",
       "openPullRequests": [],
-      "classification": "V-divergent-partially-reconciled",
-      "inspection": "Only tasks/plan.md and tasks/todo.md changed; current todo contains 88/88 nonblank historical lines, current plan contains 152/163, 11 old task-assignment/provenance lines remain historical",
+      "classification": "F-historical-ownership-record-reconciled",
+      "inspection": "2026-11-23 complete PR116 two-path patch vs main: all 13 nonblank newly added tasks/todo.md lines exactly present in main (blob 064aa038); 1/12 nonblank tasks/plan.md additions exact, 11 dated owner-assignment matrix/section lines absent from newer plan but the T41–T47 scope/statuses remain in main todo and explicit preservation note at lines 188–207. Old owner assignments are not current authority; no product feature completion inferred.",
       "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -1712,14 +1712,21 @@
         "mergeBaseSha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
         "aheadBy": 1,
         "behindBy": 614,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23",
+        "changedPaths": [
+          "tasks/plan.md",
+          "tasks/todo.md"
+        ],
+        "originalPr": 116,
+        "exactAddedTodoLinesPreserved": 13,
+        "historicalPlanLinesSuperseded": 11
       },
-      "consolidationDecision": "Keep historical task assignments in original branch; no assertion of implementation/CI parity",
+      "consolidationDecision": "Branch-specific intended documentation reconciled: actual T41–T47 task record is in main; dated November 11 single-writer assignments are historical and superseded, retained in original PR116 branch. No source merge, feature acceptance or review claim.",
       "latestSemanticVerification": {
         "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-        "checkedAt": "2026-11-22",
-        "report": "docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md",
-        "scope": "full changed-file scope or one-file documentary proof",
+        "checkedAt": "2026-11-23",
+        "report": "docs/engineering/BRANCH_COHORT_HISTORIC_DOC_TASKS_FINAL_20261123.md",
+        "scope": "all 2 PR116 changed paths, complete added-line comparison and dated authority disposition",
         "runtimeTestsExecuted": false
       }
     },
@@ -2756,9 +2763,9 @@
       "branch": "claude/p2p-offramp-prompt-lqcgno",
       "sha": "25a01987385b49e9c28199fdfb4a874b29a6ad89",
       "openPullRequests": [],
-      "classification": "V-divergent-partially-reconciled",
-      "inspection": "11 mostly docs-only changes; checked original M2A orchestration prompt (old blob a1fb2e5f) absent main, with earlier orchestration/testnet requirements; remaining 10 paths not fully reconciled",
-      "uniqueChangesVerified": false,
+      "classification": "F-deliberately-superseded-20261110-documentation",
+      "inspection": "2026-11-23 all 11 PR64 changed paths compared to current main: nine modified README/wiki/status files have later rewritten docs, two 2026-11-10 dated files (M2A orchestration prompt and Milestone Status) absent main by deliberate supersession. README current Node 24 baseline excludes obsolete Node 22 transient relay failure, current wiki Home and developer guide give newer state. The historical prompt is nonexecuting and has no source/tests. All original text preserved on unmerged PR64.",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -2776,14 +2783,18 @@
         "mergeBaseSha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
         "aheadBy": 3,
         "behindBy": 615,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23",
+        "changedPathsCount": 11,
+        "modifiedPaths": 9,
+        "absentDatedDocs": 2,
+        "originalPr": 64
       },
-      "consolidationDecision": "Archive old prompt; still pending distinct documentation comparison; no source merge",
+      "consolidationDecision": "Deliberately supersede dated 2026-11-10 automation instructions, old milestone status and stale wiki/Node22 notes in favor of current main docs, without importing expired task/agent authority. Preserve all original historical PR64 files; no product changes, tests or merge.",
       "latestSemanticVerification": {
         "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-        "checkedAt": "2026-11-22",
-        "report": "docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md",
-        "scope": "bounded partial source comparison",
+        "checkedAt": "2026-11-23",
+        "report": "docs/engineering/BRANCH_COHORT_HISTORIC_DOC_TASKS_FINAL_20261123.md",
+        "scope": "all 11 PR64 changed paths, newer-main direct file checks, explicit supersession of 2 absent dated docs",
         "runtimeTestsExecuted": false
       }
     },
@@ -7670,10 +7681,10 @@
   "currentClassificationTotals": {
     "A": 137,
     "P": 62,
-    "F": 32,
+    "F": 34,
     "C": 5,
     "E": 0,
-    "V": 23,
+    "V": 21,
     "D": 0,
     "B": 1
   },
@@ -8196,5 +8207,31 @@
     ],
     "newTestsExecuted": false,
     "wholeHistoryPatchId": false
+  },
+  "cohortHistoricDocsTasksFinal20261123": {
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "coordinatorParentHead": "d2bc94e94d7dc06c9c0fa2c705a0d0c847cea801",
+    "sourcePullRequests": [
+      64,
+      116
+    ],
+    "reclassifiedBranches": [
+      "claude/compassionate-gauss-uyhfih",
+      "claude/p2p-offramp-prompt-lqcgno"
+    ],
+    "changedPathsInspected": 13,
+    "classificationBefore": {
+      "F": 32,
+      "V": 23
+    },
+    "classificationAfter": {
+      "F": 34,
+      "V": 21
+    },
+    "report": "docs/engineering/BRANCH_COHORT_HISTORIC_DOC_TASKS_FINAL_20261123.md",
+    "newRuntimeTestsExecuted": 0,
+    "noProductMerge": true,
+    "reviewGatesInherited": false,
+    "releaseEnabledUnchanged": true
   }
 }
