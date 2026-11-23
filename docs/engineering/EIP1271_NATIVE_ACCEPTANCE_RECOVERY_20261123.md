@@ -9,7 +9,7 @@ Recovered two **unchanged original Git blobs** from the owner's still-open [PR #
 - `contracts/evm/test/mocks/Eip1271RecoveryFixture.sol`, original blob `83ba7e42eeead97a6a99455b4a82b714dbcc8701`.
 - `scripts/test-eip1271-local.mjs`, original blob `3f0ddfce4bb986b3423ecfffa40685614a16d28c`.
 
-The prior [source-gap report](BRANCH_COHORT_S04_WALLET_RELEASE_20261123.md) documented these exact two files as absent from `main@01f6f4feca051d68de24a04299cd3bb444bce40c`. They were intentionally NOT recovered by merging PR40's older product code. The main `packages/wallet/src/evm-contract-acceptance.ts` verifier, HTTP update reader, registry, financial harness and release controls remain untouched.
+The prior [source-gap report](https://github.com/djshellshoxxx/p2p-offramp/blob/cd1354d6a669d5bd45c11d08e2c2b569302efff1/docs/engineering/BRANCH_COHORT_S04_WALLET_RELEASE_20261123.md) documented these exact two files as absent from `main@01f6f4feca051d68de24a04299cd3bb444bce40c`. They were intentionally NOT recovered by merging PR40's older product code. The main `packages/wallet/src/evm-contract-acceptance.ts` verifier, HTTP update reader, registry, financial harness and release controls remain untouched.
 
 An isolated branch created from `01f6f4feca051d68de24a04299cd3bb444bce40c` adds the fixture and test harness plus precisely one `test:eip1271:local` npm script and one corresponding existing EVM workflow step. The current verifier interface and all imported paths were inspected. The script only starts Anvil on `127.0.0.1`, uses the public Anvil development key for fixture deployment, and sends no signing or funding transactions from the verifier.
 
