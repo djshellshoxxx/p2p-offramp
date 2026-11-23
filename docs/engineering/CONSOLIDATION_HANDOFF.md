@@ -1,3 +1,9 @@
+## 2026-11-23 UTC — S01 test provenance and PR251 hosted cancellation acceptance
+
+[Source and hosted-log report](BRANCH_COHORT_S01_GATE_TEST_PROVENANCE_20261123.md) compares 20 S01 stage paths and 42 historical literal test titles against current main; the two renamed cases preserve assertions or adapt to the current explicit side-entry boundary. All 20 paths exist, nine exact main blobs; S01 remains V pending broader semantic disposition and owned PR37 review. Exact PR251 hosted merge tree matches source and current main parent; both recovered tests passed, Node 2506 pass/1 skip/0 fail. 14/15 check runs success including CodeQL, Solana program still running; COMMENT review only. PR243 advanced one commit to 9a321395d89389b51c8cfbe7f12330e3b6fc8b9f, previous browser receipts do not qualify it. PR252 13/15 successful, remaining WebKit/program. 264 refs/249 PR records (67 open/124 merged/58 closed); classifications unchanged A137/P66/F40/C5/V15/B1. No new local runtime execution or merge, deployment, release or funds. Next S01 semantic changes and S07 equivalent test-intent review; preserve all owner gates.
+
+---
+
 ## November 23 — full-history branch comparison and startup recovery
 
 The [inventory](BRANCH_INVENTORY.json) records the common ancestor, ahead and behind counts, matching non-merge patches and changed-file comparisons for all 264 remote branches against `01f6f4feca051d68de24a04299cd3bb444bce40c`. Of these, 151 tips are reachable from main, including main itself. The comparison covered 1,244 non-merge commits. The PR census found 67 open, 124 merged and 58 closed without merge. The [PR38 closing decision](BRANCH_COHORT_S02_STORAGE_TRANSPORT_DISPOSITION_20261123.md) resolves the remaining S02 public type question for both historical S02 tips.

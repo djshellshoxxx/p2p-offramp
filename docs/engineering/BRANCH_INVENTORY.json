@@ -3246,7 +3246,7 @@
       "sha": "4e319013ea61ead31ae00ea9a44fa9c431cc84ce",
       "openPullRequests": [],
       "classification": "V-divergent-partially-reconciled",
-      "inspection": "2026-11-22 fixed-main recursive Git tree/blob comparison: 20 isolated stage-local paths; owner PR #37 15 exact, 5 corrected, 0 missing; main 9 exact, 11 later-changed, 0 missing. Independent full patch-id, native execution and approvals remain unverified.",
+      "inspection": "2026-11-22 fixed-main recursive Git tree/blob comparison: 20 isolated stage-local paths; owner PR #37 15 exact, 5 corrected, 0 missing; main 9 exact, 11 later-changed, 0 missing. Independent full patch-id, native execution and approvals remain unverified.; 2026-11-23: four test files, 42 historical literal test titles, two renamed cases examined at body level; trusted roots assertions unchanged and old native acceptance side-entry adapted to current security/release-context. No missing title-intent established; remaining semantic changes still V. See BRANCH_COHORT_S01_GATE_TEST_PROVENANCE_20261123.md",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [],
@@ -4456,23 +4456,23 @@
     },
     {
       "branch": "codex/browser-sharing-startup-acceptance-20261121",
-      "sha": "a2cdcc8fe2f060a178391449778c4eb04485a228",
+      "sha": "9a321395d89389b51c8cfbe7f12330e3b6fc8b9f",
       "openPullRequests": [
         {
           "number": 243,
-          "headSha": "a2cdcc8fe2f060a178391449778c4eb04485a228",
+          "headSha": "9a321395d89389b51c8cfbe7f12330e3b6fc8b9f",
           "base": "codex/startup-compatibility-continuation-g31-20261120",
           "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/243"
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "metadata-and-selected-source-reviewed",
+      "inspection": "metadata-and-selected-source-reviewed; new one-commit head changes workflow/test-sharing-startup-browser.mjs; four queued check records, previous native results not transferred.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [
         {
           "number": 243,
-          "headSha": "a2cdcc8fe2f060a178391449778c4eb04485a228",
+          "headSha": "9a321395d89389b51c8cfbe7f12330e3b6fc8b9f",
           "base": "codex/startup-compatibility-continuation-g31-20261120",
           "state": "open",
           "merged": false,
@@ -4480,7 +4480,8 @@
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/243"
         }
       ],
-      "gitComparison": {
+      "previousGitComparison": {
+        "headSha": "a2cdcc8fe2f060a178391449778c4eb04485a228",
         "mergeBase": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
         "ahead": 26,
         "behind": 1,
@@ -4490,6 +4491,14 @@
         "noPatch": 0,
         "branchDeltaPaths": 280,
         "branchDeltaPathsExactOnMain": 0
+      },
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+        "aheadBy": 27,
+        "behindBy": 1,
+        "verifiedDate": "2026-11-23",
+        "method": "GitHub compare; 281 paths; prior full patch-ID comparison preserved separately"
       }
     },
     {
@@ -4650,11 +4659,11 @@
     },
     {
       "branch": "codex/consolidation-evidence-inventory-20261122",
-      "sha": "766829bea4cf9b628d4b5d13a932f95280530baf",
+      "sha": "8dab1ff5e2c129a9fe5aef9ba9ec7367fa01832b",
       "openPullRequests": [
         {
           "number": 245,
-          "headSha": "766829bea4cf9b628d4b5d13a932f95280530baf",
+          "headSha": "8dab1ff5e2c129a9fe5aef9ba9ec7367fa01832b",
           "base": "main",
           "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/245"
         }
@@ -4662,7 +4671,7 @@
       "associatedPullRequests": [
         {
           "number": 245,
-          "headSha": "766829bea4cf9b628d4b5d13a932f95280530baf",
+          "headSha": "8dab1ff5e2c129a9fe5aef9ba9ec7367fa01832b",
           "base": "main",
           "state": "open",
           "merged": false,
@@ -4671,11 +4680,12 @@
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "Coordinator prepublication bf5e5a493397101c743ed0ce11c1f716c7012f0b; new documentation commit advances self-ref.",
+      "inspection": "Prepublication current coordinator head; self-ref advances on publication; previous comparison retained as historical.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "consolidationDecision": "Unmerged and pending current-head CI/review; own HEAD will advance upon publishing this inventory.",
-      "gitComparison": {
+      "previousGitComparison": {
+        "headSha": "766829bea4cf9b628d4b5d13a932f95280530baf",
         "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
         "ahead": 55,
         "behind": 0,
@@ -10277,7 +10287,7 @@
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "2026-11-23: historical S06 PR42 cancellation matrix recovered for current facade; one added test file, 17 current signal-taking methods, two named regression tests. Source readback verified; runtime not yet executed.",
+      "inspection": "2026-11-23: historical S06 PR42 cancellation matrix recovered for current facade; one added test file, 17 current signal-taking methods, two named regression tests. Source readback verified; runtime not yet executed.; 2026-11-23: hosted exact merge tree 7acfe2f7c7f1ebf0b13169cc2b50f4d2b946ab79, both named regressions passed, Node 2506 pass/1 skip/0 fail, 14/15 check success incl CodeQL; program running, COMMENT review recorded.",
       "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -10299,7 +10309,7 @@
         "verifiedDate": "2026-11-23",
         "method": "GitHub compare, one added test file, 124 lines"
       },
-      "consolidationDecision": "Draft test-only recovery; exact-source hosted tests and independent D8 review required.",
+      "consolidationDecision": "Draft, unmerged; current native program and all applicable D8 review/authorization gates remain. No release.",
       "gitComparison": {
         "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
         "ahead": 1,
@@ -11474,5 +11484,27 @@
     "ancestorTipsIncludingMain": 151,
     "nonMergeCommitsWithPatch": 1244,
     "description": "For each branch, Git merge-base --all returned a single base. ahead/behind include merges. Non-merge branch-only commits are compared against all non-merge main commits by git patch-id --stable, with --no-renames --full-index. noPatch counts commits producing no patch. From the merge base to the tip, branchDeltaPaths counts path changes with renames as delete/add. branchDeltaPathsExactOnMain counts equal modes and blobs or a deletion still absent. Merges can introduce separate conflict resolutions. Patch matches and paths alone do not establish functional equivalence, review or acceptance."
+  },
+  "cohortS01GateTestProvenance20261123": {
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "original": "4e319013ea61ead31ae00ea9a44fa9c431cc84ce",
+    "ownerPr": 37,
+    "stagePaths": 20,
+    "exactMain": 9,
+    "originalLiteralTestTitles": 42,
+    "renamedCasesReviewed": 2,
+    "classification": "V",
+    "report": "BRANCH_COHORT_S01_GATE_TEST_PROVENANCE_20261123.md",
+    "pr251": {
+      "head": "02f8ade4edd1aa091042d849f0498e18830a1393",
+      "checkout": "45a21bdb26d41a033cb696f577c087f084b1c932",
+      "job": 138063460403,
+      "pass": 2506,
+      "skip": 1,
+      "fail": 0,
+      "checksSuccess": 14,
+      "checksTotal": 15,
+      "program": "in_progress"
+    }
   }
 }
