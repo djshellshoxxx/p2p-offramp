@@ -1,3 +1,9 @@
+## 2026-11-23 UTC — S04 historical EVM test corpus recovered on draft PR247→PR248, main still lacks nine tests
+
+[Source-bound nine-case recovery proof](BRANCH_COHORT_S04_EVM_EXECUTION_REGRESSION_RECOVERY_20261123.md) verified all nine historical wallet-execution admission/signal regression title prefixes from S04/PR40 missing on main are represented in OPEN DRAFT PR248 (five in PR247, four added in PR248), with immutable test blobs main `d08491dabbe6c6f46a6617656bc8de5ebe2b3d31`, historical `66246d3a824c900cf7e2d714d4d66670d15fa4da`, PR247 `de53e46750c63b6a14685dbcf9bec054509bba18`, PR248 `ca324dfe61554936cd3478dc93e151c508f89179`. Live compare confirms ordered main→247→248 (two commits each, no behind). At current exact heads PR247 14/14 checks including CodeQL, PR248 11/11 reported checks but no CodeQL; no Tier C or owner approval. **S04 remains V, not merged/complete**; native EIP-1271 and other divergent S04 paths remain separately gated. Fresh fully paginated census 262 branches/247 PRs (65 open, 124 merged, 58 closed); classifications A137/P64/F34/C5/E0/V21/B1/D0. No new runtime execution or main merge; `ReleaseEnabled=0` remains unchanged.
+
+---
+
 ## 2026-11-23 UTC — unique generation-11 historical CI evidence recovered; PR250 retry passed
 
 [Source-bound preservation and hosted readback](BRANCH_COHORT_SUCCESSOR_G11_EVIDENCE_RECOVERY_20261123.md): recovered **five unique dated generation-11 source blobs** from immutable historical successor head `3b538fd4586b6fc00846262d67956a2125b6c9f1` to the still-DRAFT coordinator PR245, including original queued/cancelled/native-audit evidence and its historical handoff. No old snapshot was rewritten or promoted to live authority. The historical successor remains V, not merged or feature-complete; classifications unchanged **A137/P64/F34/C5/E0/V21/B1/D0 (262)**.
