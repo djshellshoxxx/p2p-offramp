@@ -3,7 +3,7 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23 fresh full GitHub pagination: 260 branches (100+100+60), 245 PRs (100+100+45), 63 open; new draft PR248 on PR247 with 7 restored historical signal cases, current-main ancestor verified",
+  "source": "2026-11-23 complete 260-branch/245-PR authenticated pagination, plus PR65 exact-head 10-path audit. Preserve unmerged feature work and reviewed historical snapshots.",
   "branchCount": 260,
   "openPullRequestCount": 63,
   "classificationNotes": {
@@ -1695,9 +1695,9 @@
       "branch": "claude/friendly-dijkstra-nsi310",
       "sha": "bd26833555e13408825942e9696157ed68e9980e",
       "openPullRequests": [],
-      "classification": "V-divergent-partially-reconciled",
-      "inspection": "Ten changed paths. Three exact current-main blobs: saved-reviews-worker.test.mjs, worker-endpoint.test.mjs, scripts/test-evm-local-trade.mjs; old worker endpoint lacks current BUSY handling / favorites/templates / verifyBackup; old artifact policy differs, stage M2A/M2B docs absent main; 2026-11-23 scoped follow-up: 3 original test blobs equal main, historical saved review + artifact policy fixes retained/extended, 2 old docs still absent; see docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
-      "uniqueChangesVerified": false,
+      "classification": "F-content-and-historical-process-reconciled",
+      "inspection": "2026-11-23 bounded ten-path GitHub verification: 3 exact main test blobs, updated equivalent worker/artifact policy source and regression tests, main task ledger T33–35 DONE via PR115, historical M2A/M2B documents deliberately superseded as current authority but preserved byte-for-byte on PR65. T36–T40 and modern Solana product acceptance remain explicitly unverified in branch-specific report.",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -1715,14 +1715,15 @@
         "mergeBaseSha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
         "aheadBy": 6,
         "behindBy": 615,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23",
+        "method": "GitHub immutable compare of exact PR65 head"
       },
-      "consolidationDecision": "No mechanical old-code merge; old M2B gap table preserved, remaining 7 paths/semantic acceptance need scoped review",
+      "consolidationDecision": "All ten PR65-local paths reconciled by exact content, current semantic equivalents, or documented supersession; NO PR65 merge. Do not treat obsolete 2026-11-10 execution prompt as current authority. T36–T40 are feature-backlog obligations, not completed.",
       "latestSemanticVerification": {
         "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
         "checkedAt": "2026-11-23",
-        "report": "docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
-        "scope": "10 PR65 branch-local paths, source blob/line comparison; old docs remain held",
+        "report": "docs/engineering/BRANCH_COHORT_PR65_FINAL_DOCUMENT_DISPOSITION_20261123.md",
+        "scope": "All 10 branch-local changed files; exact blob, current status, semantic/source and historical-document supersession; T36–40 deliberately unresolved",
         "runtimeTestsExecuted": false
       }
     },
@@ -7572,10 +7573,10 @@
   "currentClassificationTotals": {
     "A": 137,
     "P": 62,
-    "F": 19,
+    "F": 20,
     "C": 5,
     "E": 12,
-    "V": 24,
+    "V": 23,
     "D": 0,
     "B": 1
   },
@@ -8015,5 +8016,25 @@
     "independentTierC": false,
     "ownerApproval": false,
     "releaseEnabled": false
+  },
+  "cohortPr65FinalDocumentDisposition20261123": {
+    "date": "2026-11-23",
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "originalHead": "bd26833555e13408825942e9696157ed68e9980e",
+    "classificationBefore": "V",
+    "classificationAfter": "F",
+    "report": "docs/engineering/BRANCH_COHORT_PR65_FINAL_DOCUMENT_DISPOSITION_20261123.md",
+    "branchLocalChangedPaths": 10,
+    "mainExactTestBlobs": 3,
+    "deliberatelySupersededHistoricalDocs": 2,
+    "unresolvedFeatureTasks": [
+      "T36",
+      "T37",
+      "T38",
+      "T39",
+      "T40"
+    ],
+    "sourceTestsExecuted": 0,
+    "mainMerges": 0
   }
 }
