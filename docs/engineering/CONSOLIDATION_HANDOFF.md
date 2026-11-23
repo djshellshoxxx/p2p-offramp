@@ -1,3 +1,9 @@
+# 2026-11-22 — final historical D-stage source cohort
+
+[Source report](BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md) records six immutable stage-local comparisons against original owner PR trees and current main. **D0 means the former unsampled historical branches now have bounded code/document comparisons, not 100% consolidation.** Inventory now A137/P59/U0/C5/E12/V25/F18/B1/D0=257; 59 open PR owner branches, 25 partial branch reviews, escrow payout #242/#244, Tier C #241/#242 authorization, Tier B #237–239 reviews and optional #224–232 gates remain. Source, main and release flags unchanged. Original history below is preserved.
+
+---
+
 ## 2026-11-22 — New ten-branch historical security/process cohort
 
 Current main `01f6f4feca051d68de24a04299cd3bb444bce40c`, prior coordinator `0fdd504a202971ed339ae8ecec863dfdb2bfd91b`. Source-bound report: [docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md](docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md). All 16 remaining D branches were compared; ten received bounded source/line/blob review. The old autonomous workflow's in-job write credentials and unpinned CLI are superseded by current main's separated read-only/verification/publish design; never reintroduce old code. One exact document blob already in main, 595 historical handoff nonblank lines preserved in main, two dated advisory/run prompts deliberately not imported, five historic worktrees retained as partial. Classification **A137/P59/U0/C5/E12/V19/F18/B1/D6=257**. Six stage variants and 59 open PR heads still require semantic/test and D8 gate review; `U0` is not completion. No financial/native/browser execution, source merge, deployment or release; `ReleaseEnabled=0`. Preserve earlier evidence below verbatim.
