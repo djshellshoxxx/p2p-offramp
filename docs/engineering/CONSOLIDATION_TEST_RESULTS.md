@@ -1,3 +1,9 @@
+## 2026-11-23 — restored D9 test content proof, no execution
+
+[Source report](BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md) proves PR71–75/91–93 complete test additions in current main, PR79 complete test Git blob, PR129 operator docs line. **New tests: 0 executed; 0 new passes/failures/skips claimed.** No CI or source review approvals transferred. Existing historical results remain unmodified.
+
+---
+
 ## 2026-11-23 UTC — PR69/PR70 source reconciliation (no new test execution)
 
 [Patch-content proof](BRANCH_COHORT_D9_MARKER_RESTORE_EXACT_20261123.md): PR69's 15-line original marker-error regression and PR70's 21-line fresh-key restoration regression, and their associated production/import additions, are preserved verbatim in current main. **Zero tests executed in this cohort; no CI passed result transferred to a new source.** Previous hosted/native financial receipts and earlier skips remain source-bound. Main 01f6f4feca051d68de24a04299cd3bb444bce40c; no main merge, no release.

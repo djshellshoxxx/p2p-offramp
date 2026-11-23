@@ -1,3 +1,9 @@
+## 2026-11-23 — ten remaining E-class D9/test/doc patches have exact content in main
+
+[Full verification report](BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md) proves the unique PR-specific D9 restored nonce tests from #71–75/#91–93 remain byte-exact in current main (PR73 contains precisely the later four PR74 lines), PR79's sole test file matches the complete Git blob, and PR129's Python baseline documentation correction is already present. **Ten E→F**: A137/P62/F32/C5/E0/V23/B1/D0=260. All historical PRs remain unmerged by ancestry; no whole-history patch-ID, native runtime acceptance, new tests or qualified integration is claimed. Keep existing financial PR gates, reviews, owner decisions, optional features disabled, `ReleaseEnabled=0`.
+
+---
+
 ## 2026-11-23 UTC — PR69/PR70 D9 marker and encrypted recovery unique additions verified in main
 
 [Exact changed-scope and immutable Git proof](BRANCH_COHORT_D9_MARKER_RESTORE_EXACT_20261123.md): Both closed **unmerged** PR69 and PR70 remain Git-divergent (ahead 2/3, behind 580; common merge base `c87c21b9`), but **all unique contiguous patch additions** are already verbatim in `main@01f6f4feca051d68de24a04299cd3bb444bce40c`: PR69's fail-closed `BROADCAST_UNKNOWN` on a possibly durable marker plus 15-line test, and PR70's fresh-key encrypted restore import plus 21-line test. No obsolete source re-merge. **Two branch records E→F**; totals **A137/P62/F22/C5/E10/V23/B1/D0=260**. This is branch-local source/content proof, **not Git patch-id equivalence, native test execution or overall D9 feature acceptance**. Historical branches and failed results remain preserved. Main/ReleaseEnabled unchanged; no merge/deployment/funds.

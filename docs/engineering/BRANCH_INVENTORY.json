@@ -3,7 +3,7 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23 fully paginated 260-branch/245-PR authenticated GitHub remote census and complete PR69/PR70 changed-scope contiguous-source proof; no current-main merge.",
+  "source": "2026-11-23 fully paginated live 260 remote branches/245 PRs with source-bound E10→F32 D9/doc test proofs; no main merge",
   "branchCount": 260,
   "openPullRequestCount": 63,
   "classificationNotes": {
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23 ten E→F source-content dispositions: PR71–75 and PR91–93 complete D9 test blocks present in main (PR73 reconstructed with PR74 four new lines); PR79 full blob matches; PR129 Python 3.12 docs correction present. A137/P62/F32/C5/E0/V23/B1/D0=260. No new test execution or whole-history patch-ID proof.",
     "2026-11-23: PR69 and stacked PR70 closed-unmerged D9 marker/recovery fixes: unique PR69 wallet production three-line guard and 15-line test, plus PR70 one import/21-line encrypted fresh-key restore test, all verbatim contiguous in current main. E12→E10; F20→F22. This is source content reconciliation without ancestry/patch-id/runtime claim. No source merge, new test execution, funds or deployment. ReleaseEnabled=0.",
     "2026-11-23 UTC: drafted PR248 stacked on fully hosted-successful PR247 (14/14), test-first caab74ad for seven original PR40 hostile AbortSignal regression declarations, narrow test-only executor correction 4fc269e4. Own CI incomplete at first read, no local RED/GREEN, no independent Tier C or owner approval; no parent/main merge. 260 branches/245 PRs/63 open. ReleaseEnabled=0.",
     "2026-11-23: recovered five owner PR40 historical EVM admission regressions in current-main draft PR247 (tests-first c16dc947, scope correction 3f23c774). GitHub 13 checks: 1 success/12 running at snapshot, no local RED/GREEN, independent Tier C or owner approval; all source financial flags unchanged. Refreshed 259 branches/244 PRs/62 open.",
@@ -601,9 +602,9 @@
       "branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
       "sha": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "2026-11-22 current-main exact-source line check of PR #92: 34/34 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
-      "uniqueChangesVerified": false,
+      "classification": "F-full-unique-added-test-content-present-in-main",
+      "inspection": "2026-11-23 entire PR92 original contiguous addition from its only changed test path occurs byte-for-byte exactly once in current-main blob 56f65a853a4a9c09a2c07d69fa5827017e2892b2",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -621,9 +622,9 @@
         "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
         "aheadBy": 13,
         "behindBy": 580,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23"
       },
-      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision",
+      "consolidationDecision": "Unique intended changed-scope content already present in current main. Preserve historical closed/unmerged branch and do not copy obsolete implementation; full history patch-ID and new test acceptance not established.",
       "sourceEvidence": "wallet source 3/3, wallet tests 11/11, domain intent-journal tests 191/191 added lines present in main; source semantics and removals not fully certified",
       "patchReview": {
         "prNumber": 92,
@@ -633,15 +634,22 @@
         "removedLinesPresentInMain": 0,
         "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
         "date": "2026-11-22"
+      },
+      "exactContentProof": {
+        "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "date": "2026-11-23",
+        "runtimeTestsExecuted": false,
+        "prNumber": 92
       }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
       "sha": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "2026-11-22 current-main exact-source line check of PR #75: 31/31 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
-      "uniqueChangesVerified": false,
+      "classification": "F-full-unique-added-test-content-present-in-main",
+      "inspection": "2026-11-23 entire PR75 original contiguous addition from its only changed test path occurs byte-for-byte exactly once in current-main blob 56f65a853a4a9c09a2c07d69fa5827017e2892b2",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -659,7 +667,7 @@
         "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
         "aheadBy": 9,
         "behindBy": 580,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23"
       },
       "patchReview": {
         "prNumber": 75,
@@ -670,15 +678,22 @@
         "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
         "date": "2026-11-22"
       },
-      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
+      "consolidationDecision": "Unique intended changed-scope content already present in current main. Preserve historical closed/unmerged branch and do not copy obsolete implementation; full history patch-ID and new test acceptance not established.",
+      "exactContentProof": {
+        "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "date": "2026-11-23",
+        "runtimeTestsExecuted": false,
+        "prNumber": 75
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
       "sha": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "2026-11-22 current-main exact-source line check of PR #91: 34/34 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
-      "uniqueChangesVerified": false,
+      "classification": "F-full-unique-added-test-content-present-in-main",
+      "inspection": "2026-11-23 entire PR91 original contiguous addition from its only changed test path occurs byte-for-byte exactly once in current-main blob 56f65a853a4a9c09a2c07d69fa5827017e2892b2",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -696,7 +711,7 @@
         "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
         "aheadBy": 11,
         "behindBy": 580,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23"
       },
       "patchReview": {
         "prNumber": 91,
@@ -707,15 +722,22 @@
         "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
         "date": "2026-11-22"
       },
-      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
+      "consolidationDecision": "Unique intended changed-scope content already present in current main. Preserve historical closed/unmerged branch and do not copy obsolete implementation; full history patch-ID and new test acceptance not established.",
+      "exactContentProof": {
+        "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "date": "2026-11-23",
+        "runtimeTestsExecuted": false,
+        "prNumber": 91
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
       "sha": "146d06d81474445434070aff557ad56379ad24a3",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "2026-11-22 current-main exact-source line check of PR #74: 4/4 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
-      "uniqueChangesVerified": false,
+      "classification": "F-full-unique-added-test-content-present-in-main",
+      "inspection": "2026-11-23 entire PR74 original contiguous addition from its only changed test path occurs byte-for-byte exactly once in current-main blob 56f65a853a4a9c09a2c07d69fa5827017e2892b2",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -733,7 +755,7 @@
         "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
         "aheadBy": 8,
         "behindBy": 580,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23"
       },
       "patchReview": {
         "prNumber": 74,
@@ -744,15 +766,22 @@
         "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
         "date": "2026-11-22"
       },
-      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
+      "consolidationDecision": "Unique intended changed-scope content already present in current main. Preserve historical closed/unmerged branch and do not copy obsolete implementation; full history patch-ID and new test acceptance not established.",
+      "exactContentProof": {
+        "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "date": "2026-11-23",
+        "runtimeTestsExecuted": false,
+        "prNumber": 74
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
       "sha": "94778c3282a99110922aa260b5f4ea98dd34caf9",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "2026-11-22 current-main exact-source line check of PR #73: 32/32 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
-      "uniqueChangesVerified": false,
+      "classification": "F-full-unique-added-test-content-present-in-main",
+      "inspection": "2026-11-23 main test blob 56f65a85 contains the complete PR73 original test in order with only four later PR74 source lines inserted into the middle; verified reconstructed 32-line body identical",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -770,7 +799,7 @@
         "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
         "aheadBy": 7,
         "behindBy": 580,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23"
       },
       "patchReview": {
         "prNumber": 73,
@@ -781,15 +810,22 @@
         "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
         "date": "2026-11-22"
       },
-      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
+      "consolidationDecision": "Unique intended changed-scope content already present in current main. Preserve historical closed/unmerged branch and do not copy obsolete implementation; full history patch-ID and new test acceptance not established.",
+      "exactContentProof": {
+        "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "date": "2026-11-23",
+        "runtimeTestsExecuted": false,
+        "prNumber": 73
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
       "sha": "92cc054ce9a2ee21936e20d103757e374f4af296",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "2026-11-22 current-main exact-source line check of PR #72: 23/23 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
-      "uniqueChangesVerified": false,
+      "classification": "F-full-unique-added-test-content-present-in-main",
+      "inspection": "2026-11-23 entire PR72 original contiguous addition from its only changed test path occurs byte-for-byte exactly once in current-main blob 56f65a853a4a9c09a2c07d69fa5827017e2892b2",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -807,7 +843,7 @@
         "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
         "aheadBy": 5,
         "behindBy": 580,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23"
       },
       "patchReview": {
         "prNumber": 72,
@@ -818,15 +854,22 @@
         "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
         "date": "2026-11-22"
       },
-      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
+      "consolidationDecision": "Unique intended changed-scope content already present in current main. Preserve historical closed/unmerged branch and do not copy obsolete implementation; full history patch-ID and new test acceptance not established.",
+      "exactContentProof": {
+        "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "date": "2026-11-23",
+        "runtimeTestsExecuted": false,
+        "prNumber": 72
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-race-20261111",
       "sha": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "2026-11-22 current-main exact-source line check of PR #93: 46/46 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
-      "uniqueChangesVerified": false,
+      "classification": "F-full-unique-added-test-content-present-in-main",
+      "inspection": "2026-11-23 entire PR93 original contiguous addition from its only changed test path occurs byte-for-byte exactly once in current-main blob 56f65a853a4a9c09a2c07d69fa5827017e2892b2",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -844,7 +887,7 @@
         "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
         "aheadBy": 14,
         "behindBy": 580,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23"
       },
       "patchReview": {
         "prNumber": 93,
@@ -855,15 +898,22 @@
         "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
         "date": "2026-11-22"
       },
-      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
+      "consolidationDecision": "Unique intended changed-scope content already present in current main. Preserve historical closed/unmerged branch and do not copy obsolete implementation; full history patch-ID and new test acceptance not established.",
+      "exactContentProof": {
+        "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "date": "2026-11-23",
+        "runtimeTestsExecuted": false,
+        "prNumber": 93
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
       "sha": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "2026-11-22 current-main exact-source line check of PR #71: 25/25 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
-      "uniqueChangesVerified": false,
+      "classification": "F-full-unique-added-test-content-present-in-main",
+      "inspection": "2026-11-23 entire PR71 original contiguous addition from its only changed test path occurs byte-for-byte exactly once in current-main blob 56f65a853a4a9c09a2c07d69fa5827017e2892b2",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -881,7 +931,7 @@
         "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
         "aheadBy": 4,
         "behindBy": 580,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23"
       },
       "patchReview": {
         "prNumber": 71,
@@ -892,7 +942,14 @@
         "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
         "date": "2026-11-22"
       },
-      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
+      "consolidationDecision": "Unique intended changed-scope content already present in current main. Preserve historical closed/unmerged branch and do not copy obsolete implementation; full history patch-ID and new test acceptance not established.",
+      "exactContentProof": {
+        "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "date": "2026-11-23",
+        "runtimeTestsExecuted": false,
+        "prNumber": 71
+      }
     },
     {
       "branch": "chatgpt/zero-codex/docs-collaboration-20261117",
@@ -927,8 +984,8 @@
       "branch": "chatgpt/zero-codex/docs-python-baseline-20261116",
       "sha": "75a5e35b56310a9660aa7c6a3855db3c64e759f4",
       "openPullRequests": [],
-      "classification": "E-document-patch-contained-no-whole-file-equivalence",
-      "inspection": "2026-11-22 exact one-line historical commit diff removes Python 3.11+ and adds Python 3.12+; current main docs/OPERATOR.md retains the same added line while having additional newer changes. Old branch blob 0179f2ca58a45ffc14629c65071fce951f56cf1c; main c3013a8322ad9b34863cbcadbb14b5885b09779d.",
+      "classification": "F-unique-document-line-present-in-main",
+      "inspection": "2026-11-23 PR129 Python 3.12 requirement line exact in modern docs/OPERATOR.md; removed 3.11 baseline absent",
       "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -947,10 +1004,17 @@
         "mergeBaseSha": "2dfd09011611447306b7038483683d8bddcc46af",
         "aheadBy": 1,
         "behindBy": 585,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23"
       },
-      "consolidationDecision": "Historical one-line correction present in current main, but branch/whole-file patch equivalence is not claimed. No duplicate docs merge; PR #129 remains closed unmerged.",
-      "latestVerificationDate": "2026-11-22"
+      "consolidationDecision": "Unique intended changed-scope content already present in current main. Preserve historical closed/unmerged branch and do not copy obsolete implementation; full history patch-ID and new test acceptance not established.",
+      "latestVerificationDate": "2026-11-22",
+      "exactContentProof": {
+        "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "date": "2026-11-23",
+        "runtimeTestsExecuted": false,
+        "prNumber": 129
+      }
     },
     {
       "branch": "chatgpt/zero-codex/docs-static-offers-status-20261116",
@@ -1291,9 +1355,9 @@
       "branch": "chatgpt/zero-codex/g25-public-endpoint-regression-20261110",
       "sha": "e0a9033158d1ae874c78de7f25d0be0aa3a13157",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "Sole changed test Git blob byte-identical with current main, commits not ancestor",
-      "uniqueChangesVerified": false,
+      "classification": "F-identical-complete-regression-test-blob",
+      "inspection": "2026-11-23 complete sole changed test Git blob e0f7962d3a48b48ff697de2d5c7aaae89a73a013 exact on current main",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -1311,14 +1375,21 @@
         "mergeBaseSha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
         "aheadBy": 1,
         "behindBy": 614,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23"
       },
       "exactBlobEquivalence": {
         "path": "scripts/tests/deployment-record.test.mjs",
         "sha": "e0f7962d3a48b48ff697de2d5c7aaae89a73a013",
         "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c"
       },
-      "consolidationDecision": "Duplicate final test blob already present in main; do not re-add. Git patch-id still unverified."
+      "consolidationDecision": "Unique intended changed-scope content already present in current main. Preserve historical closed/unmerged branch and do not copy obsolete implementation; full history patch-ID and new test acceptance not established.",
+      "exactContentProof": {
+        "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "date": "2026-11-23",
+        "runtimeTestsExecuted": false,
+        "prNumber": 79
+      }
     },
     {
       "branch": "chatgpt/zero-codex/g26-clear-reentrancy-20261111",
@@ -7599,9 +7670,9 @@
   "currentClassificationTotals": {
     "A": 137,
     "P": 62,
-    "F": 22,
+    "F": 32,
     "C": 5,
-    "E": 10,
+    "E": 0,
     "V": 23,
     "D": 0,
     "B": 1
@@ -8096,5 +8167,34 @@
         "noRuntimeTest": true
       }
     ]
+  },
+  "cohortD9RestoreStackExact20261123": {
+    "report": "docs/engineering/BRANCH_COHORT_D9_RESTORE_STACK_EXACT_20261123.md",
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "testBlob": "56f65a853a4a9c09a2c07d69fa5827017e2892b2",
+    "pr79Blob": "e0f7962d3a48b48ff697de2d5c7aaae89a73a013",
+    "operatorBlob": "c3013a8322ad9b34863cbcadbb14b5885b09779d",
+    "previous": {
+      "E": 10,
+      "F": 22
+    },
+    "current": {
+      "E": 0,
+      "F": 32
+    },
+    "prs": [
+      71,
+      72,
+      73,
+      74,
+      75,
+      91,
+      92,
+      93,
+      79,
+      129
+    ],
+    "newTestsExecuted": false,
+    "wholeHistoryPatchId": false
   }
 }
