@@ -41,9 +41,20 @@ try{
  const create=(request=({method,params=[]})=>{methods.push(method);return rpc(method,params);})=>{const verifier=createContractAcceptanceVerifier({registry,request,isCurrent:()=>current});verifiers.push(verifier);return verifier;};
  const verifier=create();await send(approval(true));const good=val(await verifier.verify(input));assert.equal(good.termsHash,digest);assert.equal(good.account,wallet);assert.equal(good.economicPreparationAllowed,false);
  pass('actual contract-wallet arbitrary signature verifies the exact native ABI magic at a pinned block');
- await send(approval(false));assert.equal((await verifier.verify(input)).ok,false);await send(approval(true));val(await verifier.verify(input));
- assert.equal((await verifier.verify({...input,terms:{...input.terms,amountBaseUnits:'2'}})).ok,false);pass('revoked state and changed terms invalidate acceptance; no cached receipt grants authority');
- for(const n of [1,2,3,4,5]){await mode(n);assert.equal((await verifier.verify(input)).ok,false,`native mode${n}`);}await mode(0);val(await verifier.verify(input));
+ // A false result alone can hide an unrelated RPC or setup failure. Prove each negative
+ // exercise reached the actual contract-wallet eth_call, and check its reason.
+ const refusedAtWalletCall=async(candidate,expectedCode,label)=>{
+  const from=methods.length,outcome=await verifier.verify(candidate),used=methods.slice(from);
+  assert.equal(outcome.ok,false,`${label}: unexpected contract-wallet acceptance`);
+  assert.equal(outcome.error.code,expectedCode,`${label}: wrong failure reason`);
+  assert.ok(used.includes('eth_call'),`${label}: rejection never exercised native isValidSignature`);
+ };
+ await send(approval(false));await refusedAtWalletCall(input,'UNAUTHORIZED','revoked approval');await send(approval(true));val(await verifier.verify(input));
+ await refusedAtWalletCall({...input,terms:{...input.terms,amountBaseUnits:'2'}},'UNAUTHORIZED','changed terms');pass('revoked state and changed terms invalidate acceptance; no cached receipt grants authority');
+ for(const [n,code] of [[1,'UNAUTHORIZED'],[2,'UNAVAILABLE'],[3,'UNAVAILABLE'],[4,'UNAUTHORIZED'],[5,'UNAUTHORIZED']]){
+  await mode(n);await refusedAtWalletCall(input,code,`native mode ${n}`);
+ }
+ await mode(0);val(await verifier.verify(input));
  pass('native wrong magic, revert, gas exhaustion, short and oversized returns are refused');
  const snapshot=await rpc('evm_snapshot',[]);await rpc('anvil_mine',['0x1']);let reorged=false;
  const reorg=create(async({method,params=[]})=>{methods.push(method);const result=await rpc(method,params);if(method==='eth_call'&&!reorged){reorged=true;assert.equal(await rpc('evm_revert',[snapshot]),true);}return result;});
