@@ -53,6 +53,32 @@ function selectedAccount(value: unknown): string | null {
     return ADDRESS.test(account) ? account : null;
   } catch { return null; }
 }
+
+/** Use intrinsic native signal operations rather than caller-supplied property hooks. */
+const nativeAborted = Object.getOwnPropertyDescriptor(AbortSignal.prototype,'aborted')?.get;
+const nativeAddAbort = EventTarget.prototype.addEventListener;
+const nativeRemoveAbort = EventTarget.prototype.removeEventListener;
+function isolateAbortSignal(untrusted: AbortSignal | undefined): {signal:AbortSignal|undefined; close:()=>void}|null {
+  if (untrusted === undefined) return {signal:undefined,close:()=>{}};
+  const owned = new AbortController(), stop = () => owned.abort();
+  let linked = false;
+  try {
+    if (!nativeAborted) return null;
+    const aborted: unknown = nativeAborted.call(untrusted);
+    if (typeof aborted !== 'boolean') return null;
+    if (aborted) stop();
+    else {
+      nativeAddAbort.call(untrusted,'abort',stop,{once:true});
+      linked = true;
+      if (nativeAborted.call(untrusted)) stop();
+    }
+    return {signal:owned.signal,close:()=>{if(linked)try{nativeRemoveAbort.call(untrusted,'abort',stop);}catch{}}};
+  } catch {
+    if (linked) try {nativeRemoveAbort.call(untrusted,'abort',stop);}catch{}
+    return null;
+  }
+}
+
 /** The physical slot is held until the provider settles, even when it ignores cancellation. */
 export function createEvmExecution(options: EvmExecutionOptions) {
   let active = false, disposed = false;
@@ -76,10 +102,15 @@ export function createEvmExecution(options: EvmExecutionOptions) {
   return Object.freeze({
     async submit(input: Intent, expectedRevision: number, signal?: AbortSignal): Promise<CoreResult<{readonly hash:string}>> {
       if (!current()) return fail('LOCKED');
-      if (signal?.aborted) return fail('CANCELLED');
-      if (active) return fail('CONFLICT');
+      const isolated = isolateAbortSignal(signal);
+      if (!isolated) return fail('INVALID_INPUT');
+      const privateSignal = isolated.signal;
+      // A reflective input proxy can retire the owner during native brand checking.
+      if (signal !== undefined && !current()) {isolated.close();return fail('LOCKED');}
+      if (privateSignal?.aborted) {isolated.close();return fail('CANCELLED');}
+      if (active) {isolated.close();return fail('CONFLICT');}
       active=true; let sent=false, marking=false;
-      const guard = (): CoreResult<never> | undefined => !current() ? fail('LOCKED') : signal?.aborted ? fail('CANCELLED') : undefined;
+      const guard = (): CoreResult<never> | undefined => !current() ? fail('LOCKED') : privateSignal?.aborted ? fail('CANCELLED') : undefined;
       const work = async (): Promise<CoreResult<{readonly hash:string}>> => {
       try {
         let intent:Intent,request:PreparedEvmRequestV1;
@@ -99,12 +130,12 @@ export function createEvmExecution(options: EvmExecutionOptions) {
         const chain=await options.provider.request({method:'eth_chainId'});
         const changed=guard();if(changed)return changed;
         if(typeof chain!=='string' || !/^0x[0-9a-f]+$/.test(chain) || BigInt(chain).toString()!==session.chainId)return fail('WRONG_CHAIN');
-        const reserved=await options.journal.reserve(intent,expectedRevision,signal);if(!reserved.ok)return reserved;
+        const reserved=await options.journal.reserve(intent,expectedRevision,privateSignal);if(!reserved.ok)return reserved;
         const afterReserve=guard();if(afterReserve)return afterReserve;
         marking=true;
         // The marker may have reached durable storage even if the journal reports an error.
         // Never surface a retry-safe code after a send-capable marker attempt.
-        const marked=await options.journal.markSending(intent.intentId,signal);if(!marked.ok)return fail('BROADCAST_UNKNOWN');
+        const marked=await options.journal.markSending(intent.intentId,privateSignal);if(!marked.ok)return fail('BROADCAST_UNKNOWN');
         const afterMarker=guard();if(afterMarker)return fail('BROADCAST_UNKNOWN');
         // A wallet may omit change events while durable preparation waits on storage.
         const finalAccount=selectedAccount(await options.provider.request({method:'eth_accounts'}));
@@ -120,7 +151,7 @@ export function createEvmExecution(options: EvmExecutionOptions) {
         if(typeof result!=='string' || !HASH.test(result))return fail('BROADCAST_UNKNOWN');
         const late=guard();if(late)return fail('BROADCAST_UNKNOWN');
         const canonicalHash=result.toLowerCase();
-        const recorded=await options.journal.recordBroadcast(intent.intentId,canonicalHash,signal);
+        const recorded=await options.journal.recordBroadcast(intent.intentId,canonicalHash,privateSignal);
         if(!recorded.ok || guard())return fail('BROADCAST_UNKNOWN');
         return Object.freeze({ok:true,value:Object.freeze({hash:canonicalHash})});
       } catch(error) {
@@ -137,10 +168,12 @@ export function createEvmExecution(options: EvmExecutionOptions) {
         running.finally(() => lifecycle.signal.removeEventListener('abort', stop));
         if (lifecycle.signal.aborted) stop();
       });
-      if (!signal) return Promise.race([running, disposedResult]);
-      const cancelled=new Promise<CoreResult<never>>(resolve=>{onAbort=()=>resolve(fail(sent || marking?'BROADCAST_UNKNOWN':'CANCELLED'));signal.addEventListener('abort',onAbort,{once:true});if(signal.aborted)onAbort();});
-      try {return await Promise.race([running,cancelled,disposedResult]);}
-      finally {if(onAbort)signal.removeEventListener('abort',onAbort);}
+      try {
+        if (!privateSignal) return await Promise.race([running, disposedResult]);
+        const cancelled=new Promise<CoreResult<never>>(resolve=>{onAbort=()=>resolve(fail(sent || marking?'BROADCAST_UNKNOWN':'CANCELLED'));privateSignal.addEventListener('abort',onAbort,{once:true});if(privateSignal.aborted)onAbort();});
+        try {return await Promise.race([running,cancelled,disposedResult]);}
+        finally {if(onAbort)privateSignal.removeEventListener('abort',onAbort);}
+      } finally {isolated.close();}
     },
     dispose(){disposed=true;lifecycle.abort();},
   });
