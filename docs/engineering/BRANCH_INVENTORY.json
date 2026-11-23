@@ -1,11 +1,11 @@
 {
   "schemaVersion": 3,
   "repository": "djshellshoxxx/p2p-offramp",
-  "capturedDate": "2026-11-22",
+  "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "Authenticated GitHub 257-branch full pagination and 242-PR full pagination; exact GitHub comparison at fixed main, source tree/blob verification",
-  "branchCount": 257,
-  "openPullRequestCount": 60,
+  "source": "Authenticated GitHub full REST pagination 258 branch refs, 243 PRs; main GitHub Git ref, fixed SHA native EIP-1271 source recovery comparison and checked branch/PR readback, 2026-11-23 UTC",
+  "branchCount": 258,
+  "openPullRequestCount": 61,
   "classificationNotes": {
     "F": "Source already present in main by exact content/ancestry OR deliberately superseded historical guidance/workflow with explicit per-branch evidence; read branch-specific disposition, not a blanket test pass.",
     "P": "Open PR; no assertion that code is unique, merge-ready or unfinished",
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23 UTC: New isolated current-main test-only EIP-1271 acceptance PR246 at afc8eff73df4; 2 unchanged original PR40 source blobs recovered, npm script and existing EVM CI local-trade step added, current-main wallet/release production untouched; 14 own CI check runs initially queued, native not yet accepted. Inventory 258 refs / 243 PRs; A137/P60/U0/C5/E12/V25/F18/B1/D0 = 258.",
     "2026-11-23 UTC: S04 wallet/release stage immutable source review: 18 stage-local paths (17 exact in owner PR40/1 corrected; current main 3 exact/13 updated/2 missing native EIP-1271 fixture/harness). Owner-only gzip/CORS regression test already identical on main. No native tests or source merge. BRANCH_COHORT_S04_WALLET_RELEASE_20261123.md. Counters unchanged.",
     "2026-11-22 source review of final six D historical stages: S02 42 paths (42 owner exact/32 main exact), S03 11 (11/6), S05 merged 40 (40/34), S05 split 40 (38/32), S11 33 (30/9), S12 190 (190/0, 185 archives absent main). D6->0 V19->25; all remain partial pending patch-ID/runtime/owner gates. See BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. ReleaseEnabled=0.",
     "2026-11-22 historic process/security cohort: 10 D-history branches received scoped code, documentation and workflow comparison. Two docs-only operational prompts deliberately superseded, hardened autonomous workflow replaces insecure legacy, one research doc exact blob included, one 595/595-line handoff already in main, four source/evidence/task branches remain partial. D16→D6, V14→V19, F14→F18, C4→C5. Detailed report BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md. No source/tests/merge/deploy/funds/release; ReleaseEnabled=0.",
@@ -3501,6 +3502,42 @@
         "verifiedDate": "2026-11-22"
       },
       "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+    },
+    {
+      "branch": "codex/eip1271-native-acceptance-recovery-20261123",
+      "sha": "afc8eff73df48dace2c4650a7a9c4f4a81be7fdb",
+      "openPullRequests": [
+        {
+          "number": 246,
+          "headSha": "afc8eff73df48dace2c4650a7a9c4f4a81be7fdb",
+          "base": "main",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/246"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "2026-11-23 actual current-main test-only code: 2 original PR40 blob identities, exact tree, 5 files, Git ancestry and CI queued; source recovered but not native-qualified",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "associatedPullRequests": [
+        {
+          "number": 246,
+          "headSha": "afc8eff73df48dace2c4650a7a9c4f4a81be7fdb",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "owner": "djshellshoxxx",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/246"
+        }
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 1,
+        "behindBy": 0,
+        "verifiedDate": "2026-11-23",
+        "method": "GitHub immutable commit compare; native runtime pending"
+      },
+      "consolidationDecision": "New isolated draft PR246 recovers test-only native EIP-1271 coverage, preserves PR40 and all current main wallet/release code; DO NOT merge until actual current-target hosted Anvil/Foundry and Tier C independent/owner approval."
     },
     {
       "branch": "codex/foundation-gates-20261104",
@@ -7399,13 +7436,13 @@
       "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     }
   ],
-  "lastVerifiedDate": "2026-11-22",
+  "lastVerifiedDate": "2026-11-23",
   "pullRequestInventory": {
-    "total": 242,
+    "total": 243,
     "merged": 124,
     "closedUnmerged": 58,
-    "open": 60,
-    "source": "GitHub REST pulls state=all, pages 1-3, per_page=100, 2026-11-22"
+    "open": 61,
+    "source": "GitHub REST pulls state=all, pages 1-4, per_page=100; 2026-11-23 UTC (243 total, 61 open, 124 merged, 58 closed unmerged)"
   },
   "cohortD9Followup": {
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
@@ -7451,7 +7488,7 @@
   },
   "currentClassificationTotals": {
     "A": 137,
-    "P": 59,
+    "P": 60,
     "F": 18,
     "C": 5,
     "E": 12,
@@ -7786,5 +7823,32 @@
     "mainAbsent": 2,
     "reviewOnly": true,
     "classificationTotalsUnchanged": true
+  },
+  "cohortEip1271NativeRecovery20261123": {
+    "verifiedDate": "2026-11-23",
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "branch": "codex/eip1271-native-acceptance-recovery-20261123",
+    "headSha": "afc8eff73df48dace2c4650a7a9c4f4a81be7fdb",
+    "treeSha": "939e6b7c0fdc0be869bed3c602da7224498eda91",
+    "sourcePR": 40,
+    "sourceFixtureBlob": "83ba7e42eeead97a6a99455b4a82b714dbcc8701",
+    "sourceHarnessBlob": "3f0ddfce4bb986b3423ecfffa40685614a16d28c",
+    "draftPR": 246,
+    "status": "P-open-unmerged-unqualified",
+    "nativeExecuted": false,
+    "hostedChecksInitial": "14 queued",
+    "mainMerge": false,
+    "releaseEnabled": false,
+    "classificationCounts": {
+      "A": 137,
+      "P": 60,
+      "F": 18,
+      "C": 5,
+      "E": 12,
+      "V": 25,
+      "D": 0,
+      "B": 1
+    },
+    "report": "docs/engineering/EIP1271_NATIVE_ACCEPTANCE_RECOVERY_20261123.md"
   }
 }
