@@ -3,7 +3,7 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "Authenticated GitHub full REST pagination 258 branch refs, 243 PRs; main GitHub Git ref, fixed SHA native EIP-1271 source recovery comparison and checked branch/PR readback, 2026-11-23 UTC",
+  "source": "Authenticated GitHub full REST pagination 258 branch refs, 243 PRs; main GitHub Git ref, fixed SHA native EIP-1271 source recovery comparison and checked branch/PR readback, 2026-11-23 UTC; actual hosted source-target merge checkout EIP1271 5/5 success, 14 check runs success and one running",
   "branchCount": 258,
   "openPullRequestCount": 61,
   "classificationNotes": {
@@ -3516,7 +3516,7 @@
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "2026-11-23 current-main test-only exact original PR40 blobs, five paths, native CI pending; second documentation-only commit corrects evidence link to immutable PR245 URL",
+      "inspection": "2026-11-23 exact-main PR246 merge checkout tree-identity verified; hosted Anvil native EIP-1271 5/5 cases passed, adapter 90 reads / zero sends; 14 CI checks passed, Solana program in progress; no independent Tier C or owner approval; branch remains unmerged",
       "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -3536,9 +3536,9 @@
         "aheadBy": 2,
         "behindBy": 0,
         "verifiedDate": "2026-11-23",
-        "method": "GitHub immutable commit compare; native runtime pending"
+        "method": "GitHub live immutable compare (ahead2/behind0) plus exact proposed merge tree and actual hosted local-trade job 137488330411"
       },
-      "consolidationDecision": "Draft PR246 unmerged; native EIP-1271 test restored, exact branch tip 233a66a7c2a465ac7b5504564c0e3b826afedcf5; Tier C reviews/native CI/owner approval still pending, never merge old PR40 production reader"
+      "consolidationDecision": "Preserve draft PR246; EIP-1271 native test ran on exact checkout and passed 5/5, but Solana program in progress and independent Tier C review/owner authorization absent; do not merge PR40 historical product code"
     },
     {
       "branch": "codex/foundation-gates-20261104",
@@ -7835,8 +7835,8 @@
     "sourceFixtureBlob": "83ba7e42eeead97a6a99455b4a82b714dbcc8701",
     "sourceHarnessBlob": "3f0ddfce4bb986b3423ecfffa40685614a16d28c",
     "draftPR": 246,
-    "status": "P-open-unmerged-unqualified",
-    "nativeExecuted": false,
+    "status": "P-open-unmerged-native-EVM-executed-review-gated",
+    "nativeExecuted": true,
     "hostedChecksInitial": "14 queued",
     "mainMerge": false,
     "releaseEnabled": false,
@@ -7851,6 +7851,30 @@
       "B": 1
     },
     "report": "docs/engineering/EIP1271_NATIVE_ACCEPTANCE_RECOVERY_20261123.md",
-    "sourceOnlyFix": "Docs-only second commit corrected previously dangling relative evidence URL to immutable PR245 file; original fixture and script blob identities remain exact"
+    "sourceOnlyFix": "Docs-only second commit corrected previously dangling relative evidence URL to immutable PR245 file; original fixture and script blob identities remain exact",
+    "nativeExecutedOnCheckout": "e26d135f8e8b3f8f3a1fc8cae57998721c21e747",
+    "nativeCheckoutTree": "38fb1a712824435f2bcf9fd5225d27706472a979",
+    "nativeRun": {
+      "workflowRun": 45112658538,
+      "jobId": 137488330411,
+      "step": "EIP-1271 contract-wallet native negative-mode acceptance (loopback Anvil)",
+      "conclusion": "success",
+      "namedChecksPassed": 5,
+      "namedChecksFailed": 0,
+      "adapterReads": 90,
+      "adapterSendsOrSigns": 0,
+      "actualAnvil": true,
+      "externalNetwork": false
+    },
+    "hostedChecksAtRead": {
+      "headSha": "233a66a7c2a465ac7b5504564c0e3b826afedcf5",
+      "success": 14,
+      "inProgress": 1,
+      "program": "in_progress",
+      "total": 15
+    },
+    "independentTierCReview": "absent at readback",
+    "ownerAuthorization": "unverified/absent at readback",
+    "executionReport": "docs/engineering/PR246_NATIVE_EIP1271_EXECUTED_20261123.md"
   }
 }
