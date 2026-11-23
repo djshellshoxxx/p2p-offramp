@@ -24,3 +24,9 @@ Original and corrected scopes overlap; do not sum the two as separate features. 
 ## Census and gates
 
 Authenticated REST pages 100+100+62 branches, 100+100+47 PRs; 65 open, 124 merged, 58 closed unmerged. Compared with stored inventory only the coordinator self-ref changed. Classification totals unchanged A137/P64/F36/C5/E0/V19/B1/D0. AGENTS.md, docs/ai/WORKFLOW.md, docs/ai/HANDOFF.md returned 404 on exact main; current canonical master/handoff read from coordinator. No changes to main, funds, deployment, release, trust or feature defaults. Next: confirm the private type boundary and historical caller requirements; examine remaining independent S05/S06/S07 cohort. No claim of current-head CI, independent Tier C review or owner acceptance.
+
+## Resolution of the public type question
+
+The maintainer explicitly excluded the `HttpFetchPort` re-export when closing PR #38. The rationale and intended replacement appear in the [PR disposition](https://github.com/djshellshoxxx/p2p-offramp/pull/38#issuecomment-6978067799) and the [November 18 consolidation result](../execution/CONSOLIDATION-RESULT-2026-11-18.md).
+
+At main `01f6f4feca051d68de24a04299cd3bb444bce40c`, the transport driver uses its own local type. The release update consumer imports a structurally defined port from its sibling `release-update-http.ts`. A search through the tracked app, package and test sources found no consumer importing this name from the transport package root. Both historical S02 stages are therefore accounted for. Their inherited S01 work keeps its separate assessment.

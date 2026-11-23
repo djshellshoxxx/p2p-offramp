@@ -3,9 +3,9 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23 fully paginated branch/PR census after PR251; coordinator prepublication ref.",
-  "branchCount": 263,
-  "openPullRequestCount": 66,
+  "source": "Full-history Git origin heads and live GitHub PR inventory, November 23. Coordinator tip is the parent of this publication.",
+  "branchCount": 264,
+  "openPullRequestCount": 67,
   "classificationNotes": {
     "F": "Source already present in main by exact content/ancestry OR deliberately superseded historical guidance/workflow with explicit per-branch evidence; read branch-specific disposition, not a blanket test pass.",
     "P": "Open PR; no assertion that code is unique, merge-ready or unfinished",
@@ -85,7 +85,18 @@
         "verifiedDate": "2026-11-23",
         "method": "GitHub compare main...PR250 head; parent PR249...head ahead=1/behind=0"
       },
-      "consolidationDecision": "DRAFT child of #249 on #246. Source-only native-test oracle, not production acceptance or merged. Require exact-head hosted Anvil/Foundry/Node/CodeQL and independent review, parent ordering, current-target compatibility and owner authorization. Do not deploy or enable release. Native case code executed in original job, but full PR gate remains pending/failure-history retained; do not transfer 10/11 into full success."
+      "consolidationDecision": "DRAFT child of #249 on #246. Source-only native-test oracle, not production acceptance or merged. Require exact-head hosted Anvil/Foundry/Node/CodeQL and independent review, parent ordering, current-target compatibility and owner authorization. Do not deploy or enable release. Native case code executed in original job, but full PR gate remains pending/failure-history retained; do not transfer 10/11 into full success.",
+      "gitComparison": {
+        "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ahead": 4,
+        "behind": 0,
+        "nonMergeCommits": 4,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 4,
+        "noPatch": 0,
+        "branchDeltaPaths": 5,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "audit/eip1271-negative-oracle-20261123",
@@ -121,7 +132,18 @@
         "verifiedDate": "2026-11-23",
         "method": "GitHub compare main...head: parent PR246 plus one current-source child commit; child parent compare ahead=1/behind=0"
       },
-      "consolidationDecision": "Keep draft stacked on PR246. Source-only test oracle, hosted green; bounded review finds generic UNAVAILABLE/eth_call telemetry is insufficient to independently certify native revert and gas modes. Require negative transport control and independent Tier C/owner authorization; do not merge directly into main."
+      "consolidationDecision": "Keep draft stacked on PR246. Source-only test oracle, hosted green; bounded review finds generic UNAVAILABLE/eth_call telemetry is insufficient to independently certify native revert and gas modes. Require negative transport control and independent Tier C/owner authorization; do not merge directly into main.",
+      "gitComparison": {
+        "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ahead": 3,
+        "behind": 0,
+        "nonMergeCommits": 3,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 3,
+        "noPatch": 0,
+        "branchDeltaPaths": 5,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "autonomous/completion-20261031",
@@ -149,7 +171,18 @@
         "behindBy": 654,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+        "ahead": 0,
+        "behind": 654,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "autonomous/completion-20261102",
@@ -176,7 +209,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/26"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+        "ahead": 68,
+        "behind": 627,
+        "nonMergeCommits": 68,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 68,
+        "noPatch": 0,
+        "branchDeltaPaths": 617,
+        "branchDeltaPathsExactOnMain": 101
+      }
     },
     {
       "branch": "autonomous/continuation-20261031",
@@ -204,7 +248,18 @@
         "behindBy": 638,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+        "ahead": 0,
+        "behind": 638,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "autonomous/guidance-20261101",
@@ -232,7 +287,18 @@
         "behindBy": 634,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "c8494b05e36cda43ac3f73e0feab831cfa00647d",
+        "ahead": 0,
+        "behind": 634,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "autonomous/journey-20261101",
@@ -260,7 +326,18 @@
         "behindBy": 628,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "3947074c95fa1e0facd65a8947a2c7e70363c708",
+        "ahead": 0,
+        "behind": 628,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex-continuation-spec-20261109",
@@ -295,6 +372,17 @@
         "report": "docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md",
         "scope": "full changed-file scope or one-file documentary proof",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+        "ahead": 1,
+        "behind": 615,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 0
       }
     },
     {
@@ -323,7 +411,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "2ba1a4e18f4673f006b195e822b5f984effb48e8",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/acceptance-review-boolean-20261110",
@@ -351,7 +450,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "08a9cf1e9abc0fb703b14964062a3da2234fdbb6",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
@@ -378,7 +488,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/185"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+        "ahead": 0,
+        "behind": 145,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/audit-compatibility-20261118",
@@ -406,7 +527,18 @@
         "behindBy": 283,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already ancestor-contained in main; no new merge"
+      "consolidationDecision": "Already ancestor-contained in main; no new merge",
+      "gitComparison": {
+        "mergeBase": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+        "ahead": 0,
+        "behind": 283,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
@@ -438,7 +570,18 @@
         "mainLedgerBlob": "6b1e702e5752c9c7317ed9b9e3b882178740dc5b",
         "byteIdenticalPrefix": true
       },
-      "consolidationDecision": "DOCUMENT CONTENT INCLUDED; no merge. PR #67 closed unmerged, historical commits not main ancestors; text is fully preserved in newer main ledger. Not a runtime security approval."
+      "consolidationDecision": "DOCUMENT CONTENT INCLUDED; no merge. PR #67 closed unmerged, historical commits not main ancestors; text is fully preserved in newer main ledger. Not a runtime security approval.",
+      "gitComparison": {
+        "mergeBase": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+        "ahead": 30,
+        "behind": 615,
+        "nonMergeCommits": 30,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 30,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
@@ -465,7 +608,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/184"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "bfed3af3fa53425084f99efa18916433a5868fd1",
+        "ahead": 0,
+        "behind": 146,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
@@ -492,7 +646,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/186"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+        "ahead": 0,
+        "behind": 144,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
@@ -520,7 +685,18 @@
         "behindBy": 147,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already ancestor-contained in main; no new merge"
+      "consolidationDecision": "Already ancestor-contained in main; no new merge",
+      "gitComparison": {
+        "mergeBase": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+        "ahead": 0,
+        "behind": 147,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/audit-utf8-20261119-108",
@@ -548,7 +724,18 @@
         "behindBy": 158,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already ancestor-contained in main; no new merge"
+      "consolidationDecision": "Already ancestor-contained in main; no new merge",
+      "gitComparison": {
+        "mergeBase": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+        "ahead": 0,
+        "behind": 158,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-cross-deployment-nonce-20261111",
@@ -576,7 +763,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "c153a99dd5c876c23bdb115f7037a4bf63cb57d4",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
@@ -627,6 +825,17 @@
         "patchIdExecuted": false,
         "runtimeTestsExecuted": false,
         "allUniquePatchAdditionsExact": true
+      },
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 2,
+        "behind": 580,
+        "nonMergeCommits": 2,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 2,
+        "noPatch": 0,
+        "branchDeltaPaths": 2,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -676,6 +885,17 @@
         "patchIdExecuted": false,
         "runtimeTestsExecuted": false,
         "allUniquePatchAdditionsExact": true
+      },
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 3,
+        "behind": 580,
+        "nonMergeCommits": 3,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 3,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -721,6 +941,17 @@
         "date": "2026-11-23",
         "runtimeTestsExecuted": false,
         "prNumber": 92
+      },
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 13,
+        "behind": 580,
+        "nonMergeCommits": 13,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 13,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -765,6 +996,17 @@
         "date": "2026-11-23",
         "runtimeTestsExecuted": false,
         "prNumber": 75
+      },
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 9,
+        "behind": 580,
+        "nonMergeCommits": 9,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 9,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -809,6 +1051,17 @@
         "date": "2026-11-23",
         "runtimeTestsExecuted": false,
         "prNumber": 91
+      },
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 11,
+        "behind": 580,
+        "nonMergeCommits": 11,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 11,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -853,6 +1106,17 @@
         "date": "2026-11-23",
         "runtimeTestsExecuted": false,
         "prNumber": 74
+      },
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 8,
+        "behind": 580,
+        "nonMergeCommits": 8,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 8,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -897,6 +1161,17 @@
         "date": "2026-11-23",
         "runtimeTestsExecuted": false,
         "prNumber": 73
+      },
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 7,
+        "behind": 580,
+        "nonMergeCommits": 7,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 7,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -941,6 +1216,17 @@
         "date": "2026-11-23",
         "runtimeTestsExecuted": false,
         "prNumber": 72
+      },
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 5,
+        "behind": 580,
+        "nonMergeCommits": 5,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 5,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -985,6 +1271,17 @@
         "date": "2026-11-23",
         "runtimeTestsExecuted": false,
         "prNumber": 93
+      },
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 14,
+        "behind": 580,
+        "nonMergeCommits": 14,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 14,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -1029,6 +1326,17 @@
         "date": "2026-11-23",
         "runtimeTestsExecuted": false,
         "prNumber": 71
+      },
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 4,
+        "behind": 580,
+        "nonMergeCommits": 4,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 4,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -1058,7 +1366,18 @@
         "verifiedDate": "2026-11-22"
       },
       "consolidationDecision": "Exact historical documentary file is already present in main; do not duplicate or claim historical PR #131 was merged.",
-      "latestVerificationDate": "2026-11-22"
+      "latestVerificationDate": "2026-11-22",
+      "gitComparison": {
+        "mergeBase": "2dfd09011611447306b7038483683d8bddcc46af",
+        "ahead": 1,
+        "behind": 585,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 1
+      }
     },
     {
       "branch": "chatgpt/zero-codex/docs-python-baseline-20261116",
@@ -1094,6 +1413,17 @@
         "date": "2026-11-23",
         "runtimeTestsExecuted": false,
         "prNumber": 129
+      },
+      "gitComparison": {
+        "mergeBase": "2dfd09011611447306b7038483683d8bddcc46af",
+        "ahead": 1,
+        "behind": 585,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 0
       }
     },
     {
@@ -1122,7 +1452,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "30efa0e158c6b50525c8e0dced494faa9f54eb08",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/docs-status-20261118",
@@ -1150,7 +1491,18 @@
         "behindBy": 289,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "708d937df7e4799e4ad212b3293bec923f619940",
+        "ahead": 0,
+        "behind": 289,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/docs-wiki-20261110",
@@ -1178,7 +1530,18 @@
         "behindBy": 546,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "c14cfd07a440f03b5f57e35c8d39e63cdabfd5bf",
+        "ahead": 0,
+        "behind": 546,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
@@ -1205,7 +1568,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/178"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "80375193f16082c582a1faf2c6ba598f9eca532a",
+        "ahead": 6,
+        "behind": 159,
+        "nonMergeCommits": 6,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 6,
+        "noPatch": 0,
+        "branchDeltaPaths": 5,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
@@ -1233,7 +1607,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already ancestor-contained in main; no new merge"
+      "consolidationDecision": "Already ancestor-contained in main; no new merge",
+      "gitComparison": {
+        "mergeBase": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
@@ -1261,7 +1646,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already ancestor-contained in main; no new merge"
+      "consolidationDecision": "Already ancestor-contained in main; no new merge",
+      "gitComparison": {
+        "mergeBase": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/g12-native-withdraw-recipient-20261111",
@@ -1289,7 +1685,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "84bb67f6e438b26bd1d321995c427d6a86a58930",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
@@ -1317,7 +1724,18 @@
         "behindBy": 611,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already ancestor-contained in main; no new merge"
+      "consolidationDecision": "Already ancestor-contained in main; no new merge",
+      "gitComparison": {
+        "mergeBase": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+        "ahead": 0,
+        "behind": 611,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/g16-bilateral-replay-20261111",
@@ -1345,7 +1763,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "969d02aecf86c6be18dde509b5cf0016345b0fe4",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/g18-final-chain-recheck-20261111",
@@ -1373,7 +1802,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "921f067769188f53c2d379f035695a40ae978083",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
@@ -1401,7 +1841,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already ancestor-contained in main; no new merge"
+      "consolidationDecision": "Already ancestor-contained in main; no new merge",
+      "gitComparison": {
+        "mergeBase": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/g20-chat-scope-regression-20261111",
@@ -1429,7 +1880,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "a5c74990f0f5e9162a23450db5e9af00f37d88e8",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/g25-public-endpoint-regression-20261110",
@@ -1469,6 +1931,17 @@
         "date": "2026-11-23",
         "runtimeTestsExecuted": false,
         "prNumber": 79
+      },
+      "gitComparison": {
+        "mergeBase": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+        "ahead": 1,
+        "behind": 614,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 1,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -1497,7 +1970,18 @@
         "behindBy": 613,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "548495515c83fc1389837f00eb0468758cd232fd",
+        "ahead": 0,
+        "behind": 613,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
@@ -1529,7 +2013,18 @@
         "blobSha": "85984e592582ab4700cfc9b4fdc6d8f995e22bcb",
         "patchIdVerified": false
       },
-      "consolidationDecision": "Net unique source absent; no source transplant. Original divergent commit retained."
+      "consolidationDecision": "Net unique source absent; no source transplant. Original divergent commit retained.",
+      "gitComparison": {
+        "mergeBase": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+        "ahead": 1,
+        "behind": 614,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 1,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 1
+      }
     },
     {
       "branch": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
@@ -1558,7 +2053,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "5984dc823c25399a001b5f059c79db89f51a1324",
+        "ahead": 0,
+        "behind": 233,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
@@ -1586,7 +2092,18 @@
         "behindBy": 233,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+        "ahead": 0,
+        "behind": 233,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/qualify-pr61-20261110",
@@ -1621,6 +2138,17 @@
         "report": "docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md",
         "scope": "full changed-file scope or one-file documentary proof",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+        "ahead": 30,
+        "behind": 615,
+        "nonMergeCommits": 30,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 30,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 0
       }
     },
     {
@@ -1649,7 +2177,18 @@
         "behindBy": 611,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "85849f7b267dddceffc35ef5253da4a23ef9be05",
+        "ahead": 0,
+        "behind": 611,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/registry-concurrency-20261110",
@@ -1681,7 +2220,18 @@
         "blobSha": "2e5ed07bdb76725b64883e48bd7c9580e32a8579",
         "patchIdVerified": false
       },
-      "consolidationDecision": "Net unique source absent; no source transplant. Original divergent commit retained."
+      "consolidationDecision": "Net unique source absent; no source transplant. Original divergent commit retained.",
+      "gitComparison": {
+        "mergeBase": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+        "ahead": 1,
+        "behind": 614,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 1,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 1
+      }
     },
     {
       "branch": "chatgpt/zero-codex/review-read-bounds-20261119-119",
@@ -1710,7 +2260,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+        "ahead": 0,
+        "behind": 144,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
@@ -1738,7 +2299,18 @@
         "behindBy": 298,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already ancestor-contained in main; no new merge"
+      "consolidationDecision": "Already ancestor-contained in main; no new merge",
+      "gitComparison": {
+        "mergeBase": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+        "ahead": 0,
+        "behind": 298,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/adoring-wozniak-850ue6",
@@ -1766,7 +2338,18 @@
         "behindBy": 809,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+        "ahead": 0,
+        "behind": 809,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/compassionate-gauss-uyhfih",
@@ -1808,6 +2391,17 @@
         "report": "docs/engineering/BRANCH_COHORT_HISTORIC_DOC_TASKS_FINAL_20261123.md",
         "scope": "all 2 PR116 changed paths, complete added-line comparison and dated authority disposition",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+        "ahead": 1,
+        "behind": 614,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 2,
+        "branchDeltaPathsExactOnMain": 0
       }
     },
     {
@@ -1845,7 +2439,18 @@
         "behindBy": 343,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "64c7c1861779ea34632f2f800b80bdaecbaefa03",
+        "ahead": 0,
+        "behind": 343,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/docs-screenshots",
@@ -1873,7 +2478,18 @@
         "behindBy": 783,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+        "ahead": 0,
+        "behind": 783,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/friendly-dijkstra-nsi310",
@@ -1909,6 +2525,17 @@
         "report": "docs/engineering/BRANCH_COHORT_PR65_FINAL_DOCUMENT_DISPOSITION_20261123.md",
         "scope": "All 10 branch-local changed files; exact blob, current status, semantic/source and historical-document supersession; T36–40 deliberately unresolved",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+        "ahead": 6,
+        "behind": 615,
+        "nonMergeCommits": 6,
+        "samePatchOnMain": 2,
+        "unmatchedPatch": 4,
+        "noPatch": 0,
+        "branchDeltaPaths": 10,
+        "branchDeltaPathsExactOnMain": 3
       }
     },
     {
@@ -1937,7 +2564,18 @@
         "behindBy": 614,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "8fb081b492ccf9ecef4dc47525c753cac670dacb",
+        "ahead": 0,
+        "behind": 614,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy",
@@ -1964,7 +2602,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/28"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+        "ahead": 93,
+        "behind": 627,
+        "nonMergeCommits": 93,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 93,
+        "noPatch": 0,
+        "branchDeltaPaths": 632,
+        "branchDeltaPathsExactOnMain": 113
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-decisions",
@@ -1992,7 +2641,18 @@
         "behindBy": 616,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "89d0a928e9e1127a4c8911f9437359260bd06ab6",
+        "ahead": 0,
+        "behind": 616,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-journey",
@@ -2019,7 +2679,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/35"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+        "ahead": 103,
+        "behind": 627,
+        "nonMergeCommits": 100,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 100,
+        "noPatch": 0,
+        "branchDeltaPaths": 632,
+        "branchDeltaPathsExactOnMain": 111
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
@@ -2046,15 +2717,26 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/37"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 3,
+        "behind": 626,
+        "nonMergeCommits": 3,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 3,
+        "noPatch": 0,
+        "branchDeltaPaths": 20,
+        "branchDeltaPathsExactOnMain": 9
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
       "sha": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
       "openPullRequests": [],
-      "classification": "V-divergent-partially-reconciled",
+      "classification": "F-stage-local-intended-content-in-main",
       "inspection": "2026-11-22 exact stage-parent-to-tip compare + recursive Git tree blob mapping: 42 changed paths, 42 exact existing owner / 0 corrected; main 32 exact, 10 changed, 0 absent. Owner #38. 2026-11-23: all differing stage-local paths examined; later recovery/retention and preflight cleanup preserved; historical type-only HttpFetchPort barrel export absent, intended contract/callers not yet resolved. See BRANCH_COHORT_S02_STORAGE_TRANSPORT_DISPOSITION_20261123.md; V remains.",
-      "uniqueChangesVerified": false,
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -2074,9 +2756,20 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Keep V pending historical type export contract/caller proof; no obsolete source transplant, runtime acceptance or main merge.",
+      "consolidationDecision": "The maintainer explicitly excluded the HttpFetchPort barrel export in PR38's closing disposition. Main uses a separate local release-update port. See BRANCH_COHORT_S02_STORAGE_TRANSPORT_DISPOSITION_20261123.md.",
       "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
-      "lastVerificationDate": "2026-11-22"
+      "lastVerificationDate": "2026-11-22",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 7,
+        "behind": 626,
+        "nonMergeCommits": 5,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 5,
+        "noPatch": 0,
+        "branchDeltaPaths": 62,
+        "branchDeltaPathsExactOnMain": 41
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
@@ -2106,7 +2799,18 @@
       },
       "consolidationDecision": "Stage-local intended source/test content retained in main or deliberately superseded by maintained implementation; no whole-history equivalence, parent qualification, runtime pass or ancestry merge. Preserve historical ref.",
       "lastVerificationSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-      "lastVerificationDate": "2026-11-23"
+      "lastVerificationDate": "2026-11-23",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 11,
+        "behind": 626,
+        "nonMergeCommits": 7,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 7,
+        "noPatch": 0,
+        "branchDeltaPaths": 73,
+        "branchDeltaPathsExactOnMain": 47
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
@@ -2133,7 +2837,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/40"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 14,
+        "behind": 626,
+        "nonMergeCommits": 8,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 8,
+        "noPatch": 0,
+        "branchDeltaPaths": 91,
+        "branchDeltaPathsExactOnMain": 51
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
@@ -2170,6 +2885,17 @@
         "report": "docs/engineering/BRANCH_COHORT_S05_LOCALE_LEAF_DISPOSITION_20261123.md",
         "scope": "40-path stage-local source comparison",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 18,
+        "behind": 626,
+        "nonMergeCommits": 10,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 10,
+        "noPatch": 0,
+        "branchDeltaPaths": 131,
+        "branchDeltaPathsExactOnMain": 85
       }
     },
     {
@@ -2197,7 +2923,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/42"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 23,
+        "behind": 626,
+        "nonMergeCommits": 13,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 13,
+        "noPatch": 0,
+        "branchDeltaPaths": 185,
+        "branchDeltaPathsExactOnMain": 91
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
@@ -2224,7 +2961,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/43"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 28,
+        "behind": 626,
+        "nonMergeCommits": 16,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 16,
+        "noPatch": 0,
+        "branchDeltaPaths": 206,
+        "branchDeltaPathsExactOnMain": 91
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
@@ -2251,7 +2999,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/44"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 33,
+        "behind": 626,
+        "nonMergeCommits": 19,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 19,
+        "noPatch": 0,
+        "branchDeltaPaths": 245,
+        "branchDeltaPathsExactOnMain": 102
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
@@ -2278,7 +3037,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/45"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 37,
+        "behind": 626,
+        "nonMergeCommits": 21,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 21,
+        "noPatch": 0,
+        "branchDeltaPaths": 272,
+        "branchDeltaPathsExactOnMain": 102
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
@@ -2305,7 +3075,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/46"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 43,
+        "behind": 626,
+        "nonMergeCommits": 24,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 24,
+        "noPatch": 0,
+        "branchDeltaPaths": 406,
+        "branchDeltaPathsExactOnMain": 102
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
@@ -2351,7 +3132,18 @@
         "review": "Qodo COMMENTED only; not accepted",
         "status": "open and unmerged"
       },
-      "consolidationDecision": "Preserve owned PR #47; exact stage-local source retention proven, but do not merge old stage over newer main without target-specific review and applicable CI"
+      "consolidationDecision": "Preserve owned PR #47; exact stage-local source retention proven, but do not merge old stage over newer main without target-specific review and applicable CI",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 49,
+        "behind": 626,
+        "nonMergeCommits": 27,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 27,
+        "noPatch": 0,
+        "branchDeltaPaths": 440,
+        "branchDeltaPathsExactOnMain": 112
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
@@ -2397,7 +3189,18 @@
         "review": "Qodo COMMENTED only; not accepted",
         "status": "open and unmerged"
       },
-      "consolidationDecision": "Preserve owned PR #48; exact stage-local source retention proven, but do not merge old stage over newer main without target-specific review and applicable CI"
+      "consolidationDecision": "Preserve owned PR #48; exact stage-local source retention proven, but do not merge old stage over newer main without target-specific review and applicable CI",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 53,
+        "behind": 626,
+        "nonMergeCommits": 28,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 28,
+        "noPatch": 0,
+        "branchDeltaPaths": 630,
+        "branchDeltaPathsExactOnMain": 112
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s00-ci-triggers",
@@ -2425,7 +3228,18 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 0,
+        "behind": 626,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s01-tooling",
@@ -2444,15 +3258,26 @@
         "verifiedDate": "2026-11-22"
       },
       "consolidationDecision": "Stage-local files preserved in PR #37 lineage and current main at path level, but upstream PR #26/#37-40 is NOT qualified/integrated by this proof. Historical branch remains divergent and is not safe to merge wholesale. See docs/engineering/BRANCH_COHORT_CORE_RELAY_PROVENANCE_20261122.md.",
-      "latestVerificationDate": "2026-11-22"
+      "latestVerificationDate": "2026-11-22",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 1,
+        "behind": 626,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 20,
+        "branchDeltaPathsExactOnMain": 9
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s02-core-contracts-storage",
       "sha": "01344cbd6655f509f3e2e3903333cdb579228d37",
       "openPullRequests": [],
-      "classification": "V-divergent-partially-reconciled",
+      "classification": "F-stage-local-intended-content-in-main",
       "inspection": "2026-11-22 fixed-main recursive Git tree/blob comparison: 40 isolated stage-local paths; owner PR #38 37 exact, 3 corrected, 0 missing; main 29 exact, 11 later-changed, 0 missing. Independent full patch-id, native execution and approvals remain unverified. 2026-11-23: all differing stage-local paths examined; later recovery/retention and preflight cleanup preserved; historical type-only HttpFetchPort barrel export absent, intended contract/callers not yet resolved. See BRANCH_COHORT_S02_STORAGE_TRANSPORT_DISPOSITION_20261123.md; V remains.",
-      "uniqueChangesVerified": false,
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [],
       "compareToMain": {
@@ -2462,8 +3287,19 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Keep V pending historical type export contract/caller proof; no obsolete source transplant, runtime acceptance or main merge.",
-      "latestVerificationDate": "2026-11-22"
+      "consolidationDecision": "The maintainer explicitly excluded the HttpFetchPort barrel export in PR38's closing disposition. Main uses a separate local release-update port. See BRANCH_COHORT_S02_STORAGE_TRANSPORT_DISPOSITION_20261123.md.",
+      "latestVerificationDate": "2026-11-22",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 2,
+        "behind": 626,
+        "nonMergeCommits": 2,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 2,
+        "noPatch": 0,
+        "branchDeltaPaths": 60,
+        "branchDeltaPathsExactOnMain": 38
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s03-core-messaging",
@@ -2484,7 +3320,18 @@
       "consolidationDecision": "Stage-local intended source/test content retained in main or deliberately superseded by maintained implementation; no whole-history equivalence, parent qualification, runtime pass or ancestry merge. Preserve historical ref.",
       "latestVerificationDate": "2026-11-22",
       "lastVerificationDate": "2026-11-23",
-      "lastVerificationSha": "01f6f4feca051d68de24a04299cd3bb444bce40c"
+      "lastVerificationSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 3,
+        "behind": 626,
+        "nonMergeCommits": 3,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 3,
+        "noPatch": 0,
+        "branchDeltaPaths": 68,
+        "branchDeltaPathsExactOnMain": 42
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
@@ -2570,6 +3417,17 @@
         "completionVerified": false,
         "remaining": "Other divergent S04 paths and independent Tier C / owner / exact-target native/security gates",
         "report": "docs/engineering/BRANCH_COHORT_S04_EVM_EXECUTION_REGRESSION_RECOVERY_20261123.md"
+      },
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 4,
+        "behind": 626,
+        "nonMergeCommits": 4,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 4,
+        "noPatch": 0,
+        "branchDeltaPaths": 85,
+        "branchDeltaPathsExactOnMain": 45
       }
     },
     {
@@ -2597,6 +3455,17 @@
         "report": "docs/engineering/BRANCH_COHORT_S05_LOCALE_LEAF_DISPOSITION_20261123.md",
         "scope": "40-path stage-local source comparison",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 5,
+        "behind": 626,
+        "nonMergeCommits": 5,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 5,
+        "noPatch": 0,
+        "branchDeltaPaths": 125,
+        "branchDeltaPathsExactOnMain": 77
       }
     },
     {
@@ -2624,7 +3493,18 @@
         "sourceRetention": "all stage-local path names present in current owner PR; source not merged into main",
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Partially reconciled via existing active PR #42; do not duplicate/merge original historical branch; missing main code remains gated by owner, D8 and fresh current-target tests Current-interface subset staged in #251; remaining old APIs and source under #42."
+      "consolidationDecision": "Partially reconciled via existing active PR #42; do not duplicate/merge original historical branch; missing main code remains gated by owner, D8 and fresh current-target tests Current-interface subset staged in #251; remaining old APIs and source under #42.",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 6,
+        "behind": 626,
+        "nonMergeCommits": 6,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 6,
+        "noPatch": 0,
+        "branchDeltaPaths": 178,
+        "branchDeltaPathsExactOnMain": 82
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s07-native-journey",
@@ -2651,6 +3531,17 @@
         "activeOwnerPr": 43,
         "sourceRetention": "all stage-local path names present in current owner PR; source not merged into main",
         "verifiedDate": "2026-11-22"
+      },
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 7,
+        "behind": 626,
+        "nonMergeCommits": 7,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 7,
+        "noPatch": 0,
+        "branchDeltaPaths": 199,
+        "branchDeltaPathsExactOnMain": 82
       }
     },
     {
@@ -2683,7 +3574,18 @@
         "verification": "authenticated recursive Git tree SHA",
         "evidencePath": "docs/engineering/BRANCH_COHORT_S08_S10_20261122.md"
       },
-      "consolidationDecision": "Hold without merge. Exact stage-local content preserved by existing PR #44; full commit/semantic equivalence and current-source acceptance unresolved; respect active PR owner."
+      "consolidationDecision": "Hold without merge. Exact stage-local content preserved by existing PR #44; full commit/semantic equivalence and current-source acceptance unresolved; respect active PR owner.",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 8,
+        "behind": 626,
+        "nonMergeCommits": 8,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 8,
+        "noPatch": 0,
+        "branchDeltaPaths": 238,
+        "branchDeltaPathsExactOnMain": 93
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s09-intake",
@@ -2715,7 +3617,18 @@
         "verification": "authenticated recursive Git tree SHA",
         "evidencePath": "docs/engineering/BRANCH_COHORT_S08_S10_20261122.md"
       },
-      "consolidationDecision": "Hold without merge. Exact stage-local content preserved by existing PR #45; full commit/semantic equivalence and current-source acceptance unresolved; respect active PR owner."
+      "consolidationDecision": "Hold without merge. Exact stage-local content preserved by existing PR #45; full commit/semantic equivalence and current-source acceptance unresolved; respect active PR owner.",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 9,
+        "behind": 626,
+        "nonMergeCommits": 9,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 9,
+        "noPatch": 0,
+        "branchDeltaPaths": 264,
+        "branchDeltaPathsExactOnMain": 93
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s10-optional-packages",
@@ -2747,7 +3660,18 @@
         "verification": "authenticated recursive Git tree SHA",
         "evidencePath": "docs/engineering/BRANCH_COHORT_S08_S10_20261122.md"
       },
-      "consolidationDecision": "Hold without merge. Exact stage-local content preserved by existing PR #46; full commit/semantic equivalence and current-source acceptance unresolved; respect active PR owner."
+      "consolidationDecision": "Hold without merge. Exact stage-local content preserved by existing PR #46; full commit/semantic equivalence and current-source acceptance unresolved; respect active PR owner.",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 10,
+        "behind": 626,
+        "nonMergeCommits": 10,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 10,
+        "noPatch": 0,
+        "branchDeltaPaths": 398,
+        "branchDeltaPathsExactOnMain": 93
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s11-governance-ci",
@@ -2767,7 +3691,18 @@
       },
       "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
       "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
-      "lastVerificationDate": "2026-11-22"
+      "lastVerificationDate": "2026-11-22",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 11,
+        "behind": 626,
+        "nonMergeCommits": 11,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 11,
+        "noPatch": 0,
+        "branchDeltaPaths": 429,
+        "branchDeltaPathsExactOnMain": 102
+      }
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s12-evidence",
@@ -2787,7 +3722,18 @@
       },
       "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
       "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
-      "lastVerificationDate": "2026-11-22"
+      "lastVerificationDate": "2026-11-22",
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 12,
+        "behind": 626,
+        "nonMergeCommits": 12,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 12,
+        "noPatch": 0,
+        "branchDeltaPaths": 619,
+        "branchDeltaPathsExactOnMain": 102
+      }
     },
     {
       "branch": "claude/p2p-offramp-consolidation-k5h13u",
@@ -2814,7 +3760,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/142"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "af4835b58146fc970af90790b635ea7c75a724af",
+        "ahead": 3,
+        "behind": 299,
+        "nonMergeCommits": 3,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 3,
+        "noPatch": 0,
+        "branchDeltaPaths": 8,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/p2p-offramp-evm-escrow-vc7stk",
@@ -2850,7 +3807,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/84"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "af4835b58146fc970af90790b635ea7c75a724af",
+        "ahead": 4,
+        "behind": 299,
+        "nonMergeCommits": 4,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 4,
+        "noPatch": 0,
+        "branchDeltaPaths": 31,
+        "branchDeltaPathsExactOnMain": 5
+      }
     },
     {
       "branch": "claude/p2p-offramp-integration-aan57u",
@@ -2878,7 +3846,18 @@
         "behindBy": 805,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+        "ahead": 0,
+        "behind": 805,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/p2p-offramp-prompt-lqcgno",
@@ -2917,6 +3896,17 @@
         "report": "docs/engineering/BRANCH_COHORT_HISTORIC_DOC_TASKS_FINAL_20261123.md",
         "scope": "all 11 PR64 changed paths, newer-main direct file checks, explicit supersession of 2 absent dated docs",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+        "ahead": 3,
+        "behind": 615,
+        "nonMergeCommits": 3,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 3,
+        "noPatch": 0,
+        "branchDeltaPaths": 11,
+        "branchDeltaPathsExactOnMain": 0
       }
     },
     {
@@ -2945,7 +3935,18 @@
         "behindBy": 785,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "ec65012dbb94189180d3da52de2619cc22fe0482",
+        "ahead": 0,
+        "behind": 785,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/quirky-knuth-3s6ysy",
@@ -2980,6 +3981,17 @@
         "report": "docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md",
         "scope": "full changed-file scope or one-file documentary proof",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+        "ahead": 1,
+        "behind": 627,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 0
       }
     },
     {
@@ -3008,7 +4020,18 @@
         "behindBy": 773,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+        "ahead": 0,
+        "behind": 773,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/sleepy-fermat-4s6ocx",
@@ -3045,7 +4068,18 @@
         "behindBy": 298,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "f1d9dd63a2ac9d55912899f8c6233456ebf8a499",
+        "ahead": 0,
+        "behind": 298,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/sweet-noether-arf6ne",
@@ -3082,7 +4116,18 @@
         "behindBy": 696,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "391653eaba946f77057b01fd03d3c234958bcf1d",
+        "ahead": 0,
+        "behind": 696,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/sweet-shannon-grykla",
@@ -3110,7 +4155,18 @@
         "behindBy": 710,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+        "ahead": 0,
+        "behind": 710,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/tender-goodall-db3cot",
@@ -3138,7 +4194,18 @@
         "behindBy": 611,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "8783636e7a1739b5e884cec62fbecf9c77a0ceaf",
+        "ahead": 0,
+        "behind": 611,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/trade-review-integration",
@@ -3166,7 +4233,18 @@
         "behindBy": 790,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+        "ahead": 0,
+        "behind": 790,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "claude/vibrant-cray-ny4gum",
@@ -3208,7 +4286,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/56"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "c87c21b915c9e175113292bb1307754ed2424166",
+        "ahead": 20,
+        "behind": 580,
+        "nonMergeCommits": 13,
+        "samePatchOnMain": 2,
+        "unmatchedPatch": 11,
+        "noPatch": 0,
+        "branchDeltaPaths": 149,
+        "branchDeltaPathsExactOnMain": 55
+      }
     },
     {
       "branch": "codex/arbitration-main-g19-20261120",
@@ -3235,7 +4324,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/226"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "ahead": 2,
+        "behind": 73,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 20,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/backup-cross-browser-g13-20261120",
@@ -3263,7 +4363,18 @@
         "behindBy": 87,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+        "ahead": 0,
+        "behind": 87,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/backup-verification-ui-g12-20261120",
@@ -3292,7 +4403,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+        "ahead": 0,
+        "behind": 88,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/browser-funding-continuation-g37-20261120",
@@ -3319,15 +4441,26 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/242"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+        "ahead": 73,
+        "behind": 1,
+        "nonMergeCommits": 73,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 73,
+        "noPatch": 0,
+        "branchDeltaPaths": 1252,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/browser-sharing-startup-acceptance-20261121",
-      "sha": "56ca31bad8fd3d1beaa2aca0af1d6541c4280fdf",
+      "sha": "a2cdcc8fe2f060a178391449778c4eb04485a228",
       "openPullRequests": [
         {
           "number": 243,
-          "headSha": "56ca31bad8fd3d1beaa2aca0af1d6541c4280fdf",
+          "headSha": "a2cdcc8fe2f060a178391449778c4eb04485a228",
           "base": "codex/startup-compatibility-continuation-g31-20261120",
           "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/243"
         }
@@ -3339,14 +4472,25 @@
       "associatedPullRequests": [
         {
           "number": 243,
-          "headSha": "56ca31bad8fd3d1beaa2aca0af1d6541c4280fdf",
+          "headSha": "a2cdcc8fe2f060a178391449778c4eb04485a228",
           "base": "codex/startup-compatibility-continuation-g31-20261120",
           "state": "open",
           "merged": false,
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/243"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+        "ahead": 26,
+        "behind": 1,
+        "nonMergeCommits": 26,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 26,
+        "noPatch": 0,
+        "branchDeltaPaths": 280,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/canonical-handoff-postmerge-g17-20261120",
@@ -3374,7 +4518,18 @@
         "behindBy": 74,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "2730d83154e54ef53e939965b1fa5f3d0de18bc9",
+        "ahead": 0,
+        "behind": 74,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/ci-oracle-g12-20261120",
@@ -3402,7 +4557,18 @@
         "behindBy": 89,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+        "ahead": 0,
+        "behind": 89,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/completion-20261116",
@@ -3430,7 +4596,18 @@
         "behindBy": 401,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "88f9e40bbf8ea086705edd554a2555865429b54a",
+        "ahead": 0,
+        "behind": 401,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/consolidation-20261116",
@@ -3458,15 +4635,26 @@
         "behindBy": 397,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "274d4fe533f47ffa15aed936bd095f82ad10d9ce",
+        "ahead": 0,
+        "behind": 397,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/consolidation-evidence-inventory-20261122",
-      "sha": "771d5d0650657dd1beda4e1e3268f73bb5a3c703",
+      "sha": "766829bea4cf9b628d4b5d13a932f95280530baf",
       "openPullRequests": [
         {
           "number": 245,
-          "headSha": "771d5d0650657dd1beda4e1e3268f73bb5a3c703",
+          "headSha": "766829bea4cf9b628d4b5d13a932f95280530baf",
           "base": "main",
           "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/245"
         }
@@ -3474,7 +4662,7 @@
       "associatedPullRequests": [
         {
           "number": 245,
-          "headSha": "771d5d0650657dd1beda4e1e3268f73bb5a3c703",
+          "headSha": "766829bea4cf9b628d4b5d13a932f95280530baf",
           "base": "main",
           "state": "open",
           "merged": false,
@@ -3486,7 +4674,18 @@
       "inspection": "Coordinator prepublication bf5e5a493397101c743ed0ce11c1f716c7012f0b; new documentation commit advances self-ref.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
-      "consolidationDecision": "Unmerged and pending current-head CI/review; own HEAD will advance upon publishing this inventory."
+      "consolidationDecision": "Unmerged and pending current-head CI/review; own HEAD will advance upon publishing this inventory.",
+      "gitComparison": {
+        "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ahead": 55,
+        "behind": 0,
+        "nonMergeCommits": 55,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 55,
+        "noPatch": 0,
+        "branchDeltaPaths": 40,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/consolidation-handoff-20261119",
@@ -3513,7 +4712,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/200"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "f0773c2c91ec271b86c84baf3745c9cd56d1cf36",
+        "ahead": 9,
+        "behind": 111,
+        "nonMergeCommits": 9,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 9,
+        "noPatch": 0,
+        "branchDeltaPaths": 106,
+        "branchDeltaPathsExactOnMain": 102
+      }
     },
     {
       "branch": "codex/consolidation-ledger-20261104",
@@ -3541,7 +4751,18 @@
         "behindBy": 621,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "d5b959b5ed732ab3e6f7adfd37e872a841470225",
+        "ahead": 0,
+        "behind": 621,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/continuation-g21-20261120",
@@ -3568,7 +4789,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/233"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "92663e46508b06645111d9c713beb82d3a6d1a0f",
+        "ahead": 0,
+        "behind": 36,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/continue-completion-20261116",
@@ -3596,7 +4828,18 @@
         "behindBy": 393,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "e7506c22e6b0bc405a9e51f1c809fa30c2fe5861",
+        "ahead": 0,
+        "behind": 393,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/core-continuation-20261104",
@@ -3624,7 +4867,18 @@
         "behindBy": 606,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+        "ahead": 0,
+        "behind": 606,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/courier-main-g19-20261120",
@@ -3651,7 +4905,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/230"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "ahead": 2,
+        "behind": 73,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 24,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/ctutils-remediation-20261119",
@@ -3679,7 +4944,18 @@
         "behindBy": 104,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+        "ahead": 0,
+        "behind": 104,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/d9-migration-20261116",
@@ -3707,7 +4983,18 @@
         "behindBy": 398,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "c1f8e750beb7e22d5b9a7f0e47cca9f8cd8bdb65",
+        "ahead": 0,
+        "behind": 398,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/dependency-g12-20261120",
@@ -3735,7 +5022,18 @@
         "behindBy": 89,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+        "ahead": 0,
+        "behind": 89,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/eip1271-native-acceptance-recovery-20261123",
@@ -3771,7 +5069,18 @@
         "verifiedDate": "2026-11-23",
         "method": "GitHub live immutable compare (ahead2/behind0) plus exact proposed merge tree and actual hosted local-trade job 137488330411"
       },
-      "consolidationDecision": "Preserve draft PR246; EIP-1271 native test ran on exact checkout and passed 5/5, but Solana program in progress and independent Tier C review/owner authorization absent; do not merge PR40 historical product code"
+      "consolidationDecision": "Preserve draft PR246; EIP-1271 native test ran on exact checkout and passed 5/5, but Solana program in progress and independent Tier C review/owner authorization absent; do not merge PR40 historical product code",
+      "gitComparison": {
+        "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ahead": 2,
+        "behind": 0,
+        "nonMergeCommits": 2,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 2,
+        "noPatch": 0,
+        "branchDeltaPaths": 5,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/foundation-gates-20261104",
@@ -3799,7 +5108,18 @@
         "behindBy": 620,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "77fb7c52dcdde58cad17ceee45a0f43e7e22ad43",
+        "ahead": 0,
+        "behind": 620,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/generation5-core-20261119",
@@ -3827,7 +5147,18 @@
         "behindBy": 106,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "cd7d54ba075118a7ec043788c17718be842ee405",
+        "ahead": 0,
+        "behind": 106,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/generation8-core-20261120",
@@ -3855,7 +5186,18 @@
         "behindBy": 105,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+        "ahead": 0,
+        "behind": 105,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/generation9-backup-verification-20261120",
@@ -3883,7 +5225,18 @@
         "behindBy": 104,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "0e148564743b1ee353abdbdf8931fec464f09870",
+        "ahead": 0,
+        "behind": 104,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/generic-share-continuation-g30-20261120",
@@ -3910,7 +5263,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/238"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+        "ahead": 16,
+        "behind": 1,
+        "nonMergeCommits": 16,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 16,
+        "noPatch": 0,
+        "branchDeltaPaths": 174,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/historical-recovery-20261119",
@@ -3938,7 +5302,18 @@
         "behindBy": 113,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+        "ahead": 0,
+        "behind": 113,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/liquidity-main-g19-20261120",
@@ -3965,7 +5340,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/225"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "ahead": 2,
+        "behind": 73,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 14,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/main-consolidation-g12-20261120",
@@ -3993,7 +5379,18 @@
         "behindBy": 90,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "ahead": 0,
+        "behind": 90,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/main-consolidation-g28-20261120",
@@ -4021,7 +5418,18 @@
         "behindBy": 1,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+        "ahead": 0,
+        "behind": 1,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/max-consolidation-20261119",
@@ -4048,7 +5456,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/188"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+        "ahead": 0,
+        "behind": 124,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/meetup-main-g19-20261120",
@@ -4075,7 +5494,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/231"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "ahead": 2,
+        "behind": 73,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 39,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/native-funding-consolidation-g34-20261120",
@@ -4102,7 +5532,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/241"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+        "ahead": 48,
+        "behind": 1,
+        "nonMergeCommits": 48,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 48,
+        "noPatch": 0,
+        "branchDeltaPaths": 620,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/native-update-locale-continuation-g24-20261120",
@@ -4130,7 +5571,18 @@
         "behindBy": 13,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "bca96b796db18d69563ae5f0395452494a0dacd5",
+        "ahead": 0,
+        "behind": 13,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/optional-arbitration-20261119",
@@ -4157,7 +5609,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/193"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+        "ahead": 1,
+        "behind": 115,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 20,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/optional-complete-evidence-g10-20261120",
@@ -4182,6 +5645,17 @@
         "report": "docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md",
         "scope": "bounded partial source comparison",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "ahead": 19,
+        "behind": 93,
+        "nonMergeCommits": 10,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 10,
+        "noPatch": 0,
+        "branchDeltaPaths": 177,
+        "branchDeltaPathsExactOnMain": 3
       }
     },
     {
@@ -4207,6 +5681,17 @@
         "report": "docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md",
         "scope": "bounded partial source comparison",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "cd7d54ba075118a7ec043788c17718be842ee405",
+        "ahead": 10,
+        "behind": 106,
+        "nonMergeCommits": 9,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 9,
+        "noPatch": 0,
+        "branchDeltaPaths": 174,
+        "branchDeltaPathsExactOnMain": 0
       }
     },
     {
@@ -4225,7 +5710,18 @@
         "behindBy": 104,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "HOLD: divergent; preserve exact old tip. No wholesale merge or source replacement. Respect owner PRs/current-main invariants, review, patch-id and executable qualification."
+      "consolidationDecision": "HOLD: divergent; preserve exact old tip. No wholesale merge or source replacement. Respect owner PRs/current-main invariants, review, patch-id and executable qualification.",
+      "gitComparison": {
+        "mergeBase": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+        "ahead": 19,
+        "behind": 104,
+        "nonMergeCommits": 10,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 10,
+        "noPatch": 0,
+        "branchDeltaPaths": 178,
+        "branchDeltaPathsExactOnMain": 4
+      }
     },
     {
       "branch": "codex/optional-courier-20261119",
@@ -4252,7 +5748,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/195"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+        "ahead": 1,
+        "behind": 115,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 24,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/optional-current-core-evidence-g11-20261120",
@@ -4270,7 +5777,18 @@
         "behindBy": 90,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "HOLD: divergent; preserve exact old tip. No wholesale merge or source replacement. Respect owner PRs/current-main invariants, review, patch-id and executable qualification."
+      "consolidationDecision": "HOLD: divergent; preserve exact old tip. No wholesale merge or source replacement. Respect owner PRs/current-main invariants, review, patch-id and executable qualification.",
+      "gitComparison": {
+        "mergeBase": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "ahead": 19,
+        "behind": 90,
+        "nonMergeCommits": 10,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 10,
+        "noPatch": 0,
+        "branchDeltaPaths": 177,
+        "branchDeltaPathsExactOnMain": 3
+      }
     },
     {
       "branch": "codex/optional-liquidity-20261119",
@@ -4297,7 +5815,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/192"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+        "ahead": 1,
+        "behind": 115,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 14,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/optional-meetup-20261119",
@@ -4324,7 +5853,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/196"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+        "ahead": 1,
+        "behind": 115,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 39,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/optional-privacy-controls-20261119",
@@ -4351,7 +5891,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/197"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+        "ahead": 1,
+        "behind": 115,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 16,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/optional-privacy-policy-20261119",
@@ -4378,7 +5929,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/194"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+        "ahead": 1,
+        "behind": 115,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 11,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/optional-proof-inputs-20261119",
@@ -4405,7 +5967,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/191"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+        "ahead": 1,
+        "behind": 115,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 12,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/optional-proof-jobs-20261119",
@@ -4432,7 +6005,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/199"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+        "ahead": 1,
+        "behind": 115,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 22,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/optional-stealth-20261119",
@@ -4459,7 +6043,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/198"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ac9a4b0ffc3ca50a299398e72554e7964a634cd4",
+        "ahead": 1,
+        "behind": 115,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 21,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/peer-acceptance-20261116",
@@ -4488,7 +6083,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "b3f508420e63329ab30e1b646f61337020a1ebad",
+        "ahead": 0,
+        "behind": 388,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/personalization-favorites-ui-20261119",
@@ -4517,7 +6123,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+        "ahead": 0,
+        "behind": 112,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/personalization-templates-ui-20261119",
@@ -4546,7 +6163,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "98d33db64622eab3f5f4ece6141d445d255245e7",
+        "ahead": 0,
+        "behind": 111,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/post-send-reconcile-20261109",
@@ -4574,7 +6202,18 @@
         "behindBy": 590,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "af0e1789889790c2050142ed508b5042ef5bcc85",
+        "ahead": 0,
+        "behind": 590,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/postmerge-state-reconciliation-g18-20261120",
@@ -4602,7 +6241,18 @@
         "behindBy": 72,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+        "ahead": 0,
+        "behind": 72,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/pr242-payout-readiness-diagnostics-20261122",
@@ -4629,7 +6279,55 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/244"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+        "ahead": 74,
+        "behind": 1,
+        "nonMergeCommits": 74,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 74,
+        "noPatch": 0,
+        "branchDeltaPaths": 1252,
+        "branchDeltaPathsExactOnMain": 0
+      }
+    },
+    {
+      "branch": "codex/preserve-startup-recovery-guidance",
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "Workspace recovery guidance and missing-module browser regression in PR252.",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "associatedPullRequests": [
+        {
+          "number": 252,
+          "headSha": "5de3606ed0c91d2795c3ca5964b92e41142ac9d1",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/252"
+        }
+      ],
+      "sha": "5de3606ed0c91d2795c3ca5964b92e41142ac9d1",
+      "openPullRequests": [
+        {
+          "number": 252,
+          "headSha": "5de3606ed0c91d2795c3ca5964b92e41142ac9d1",
+          "base": "main",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/252"
+        }
+      ],
+      "gitComparison": {
+        "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ahead": 1,
+        "behind": 0,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/privacy-controls-main-g19-20261120",
@@ -4656,7 +6354,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/229"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "ahead": 2,
+        "behind": 73,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 16,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/privacy-policy-main-g19-20261120",
@@ -4683,7 +6392,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/227"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "ahead": 2,
+        "behind": 73,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 11,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/proof-inputs-main-g19-20261120",
@@ -4710,7 +6430,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/224"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "ahead": 2,
+        "behind": 73,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 12,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/proof-jobs-main-g19-20261120",
@@ -4737,7 +6468,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/228"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "ahead": 2,
+        "behind": 73,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 22,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/qr-camera-fixture-20261119",
@@ -4766,7 +6508,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+        "ahead": 0,
+        "behind": 122,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/relay-freshness-capacity-20261120-auto2",
@@ -4793,7 +6546,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/206"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+        "ahead": 0,
+        "behind": 101,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/retention-preview-continuation-g29-20261120",
@@ -4820,7 +6584,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/237"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+        "ahead": 9,
+        "behind": 1,
+        "nonMergeCommits": 9,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 9,
+        "noPatch": 0,
+        "branchDeltaPaths": 86,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/review-consolidate-20261116",
@@ -4857,7 +6632,18 @@
         "behindBy": 383,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "5eadddd54f6db6e755e658c1982c95f95b37a823",
+        "ahead": 0,
+        "behind": 383,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/reviewed-main-consolidation-g15-20261120",
@@ -4885,7 +6671,18 @@
         "behindBy": 82,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+        "ahead": 0,
+        "behind": 82,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/reviewed-main-consolidation-g17-20261120",
@@ -4913,7 +6710,18 @@
         "behindBy": 79,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "24b67bb2db7c74654b9a5b9496279b4d44380d28",
+        "ahead": 0,
+        "behind": 79,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/rq00-evidence-20261109",
@@ -4941,7 +6749,18 @@
         "behindBy": 590,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+        "ahead": 0,
+        "behind": 590,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/runtime-update-continuation-g22-20261120",
@@ -4970,7 +6789,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+        "ahead": 0,
+        "behind": 23,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/setup-autonomous-agent-20261104",
@@ -5005,6 +6835,17 @@
         "report": "docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md",
         "scope": "full changed-file scope or one-file documentary proof",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "f87343287199b1c32c443daf2e4e901476729e6d",
+        "ahead": 2,
+        "behind": 623,
+        "nonMergeCommits": 2,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 2,
+        "noPatch": 0,
+        "branchDeltaPaths": 2,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -5032,7 +6873,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/218"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "7d40620c8320945750bd51bf865226dadde998ca",
+        "ahead": 0,
+        "behind": 87,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/solana-browser-send-repair-20261119",
@@ -5059,7 +6911,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/202"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+        "ahead": 0,
+        "behind": 112,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/solana-payout-docs-20261109",
@@ -5091,7 +6954,18 @@
         "removedLinesStillMain": 0,
         "removedLinesTotal": 2
       },
-      "consolidationDecision": "Documentary correction included in newer main; no duplicate merge. No Solana runtime or payout acceptance inferred."
+      "consolidationDecision": "Documentary correction included in newer main; no duplicate merge. No Solana runtime or payout acceptance inferred.",
+      "gitComparison": {
+        "mergeBase": "26bf00bef107673734212738d90160385285c81e",
+        "ahead": 1,
+        "behind": 621,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 1,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/solana-prepared-funding-continuation-g32-20261120",
@@ -5118,7 +6992,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/240"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+        "ahead": 34,
+        "behind": 1,
+        "nonMergeCommits": 34,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 34,
+        "noPatch": 0,
+        "branchDeltaPaths": 424,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/solana-public-export-g14-20261120",
@@ -5136,7 +7021,18 @@
         "behindBy": 89,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "09c3d94aedab3c78a4397e3cb80786fb5eb4fd4a",
+        "ahead": 0,
+        "behind": 89,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/solana-restore-ack-20261119",
@@ -5164,7 +7060,18 @@
         "behindBy": 111,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+        "ahead": 0,
+        "behind": 111,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/startup-compatibility-continuation-g31-20261120",
@@ -5191,7 +7098,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/239"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "d9ddcf53d82100f05de7346143a0ad00d43c2c1a",
+        "ahead": 23,
+        "behind": 1,
+        "nonMergeCommits": 23,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 23,
+        "noPatch": 0,
+        "branchDeltaPaths": 278,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/stealth-main-g19-20261120",
@@ -5218,7 +7136,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/232"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "ahead": 2,
+        "behind": 73,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 21,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "codex/successor-handoff-20261120",
@@ -5236,7 +7165,18 @@
         "behindBy": 104,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "PARTIAL/HOLD: 5 historical evidence files are included with exact immutable blobs in the unmerged coordinator PR245; 6 G11 paths already byte-exact on main and 4 other paths have newer main revisions. Do not call reconciled/merged until PR245 is qualified, integrated or evidence deliberately superseded. Historical queued/cancelled state not live authority."
+      "consolidationDecision": "PARTIAL/HOLD: 5 historical evidence files are included with exact immutable blobs in the unmerged coordinator PR245; 6 G11 paths already byte-exact on main and 4 other paths have newer main revisions. Do not call reconciled/merged until PR245 is qualified, integrated or evidence deliberately superseded. Historical queued/cancelled state not live authority.",
+      "gitComparison": {
+        "mergeBase": "0e148564743b1ee353abdbdf8931fec464f09870",
+        "ahead": 2,
+        "behind": 104,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 15,
+        "branchDeltaPathsExactOnMain": 6
+      }
     },
     {
       "branch": "codex/transport-qualification-20261120",
@@ -5265,7 +7205,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "ahead": 0,
+        "behind": 90,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "consolidation/qualified-regressions-20261116",
@@ -5293,7 +7244,18 @@
         "behindBy": 590,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "f2375dba1b249912ac434ed9da3998e4cb0a40f0",
+        "ahead": 0,
+        "behind": 590,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "consolidation/solana-browser-recovery-20261119",
@@ -5320,7 +7282,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/179"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+        "ahead": 0,
+        "behind": 176,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "consolidation/tooling154-20261119",
@@ -5348,7 +7321,18 @@
         "behindBy": 174,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+        "ahead": 0,
+        "behind": 174,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "docs/consolidation-20261119",
@@ -5375,7 +7359,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/176"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "80375193f16082c582a1faf2c6ba598f9eca532a",
+        "ahead": 2,
+        "behind": 159,
+        "nonMergeCommits": 2,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 2,
+        "noPatch": 0,
+        "branchDeltaPaths": 78,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "docs/lean-release-handoff-2026-10-24",
@@ -5403,7 +7398,18 @@
         "behindBy": 827,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+        "ahead": 0,
+        "behind": 827,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "docs/offramp-research-tools-execution-plan-20261106",
@@ -5428,6 +7434,17 @@
         "report": "docs/engineering/BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md",
         "scope": "full changed-file scope or one-file documentary proof",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+        "ahead": 2,
+        "behind": 615,
+        "nonMergeCommits": 2,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 2,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 1
       }
     },
     {
@@ -5456,7 +7473,18 @@
         "behindBy": 860,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+        "ahead": 0,
+        "behind": 860,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "docs/spec-readiness-and-foundations",
@@ -5484,7 +7512,18 @@
         "behindBy": 857,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "6b6004bdf35b7aea14530f965756ca6d54336682",
+        "ahead": 0,
+        "behind": 857,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "feat/custodial-ledger-foundation",
@@ -5512,7 +7551,18 @@
         ],
         "distinctFromCurrentProduct": true
       },
-      "consolidationDecision": "Blocked on explicit owner decision to operate a separate custodial product; never add custodial balance/cash-out authority to noncustodial default"
+      "consolidationDecision": "Blocked on explicit owner decision to operate a separate custodial product; never add custodial balance/cash-out authority to noncustodial default",
+      "gitComparison": {
+        "mergeBase": "28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa",
+        "ahead": 16,
+        "behind": 918,
+        "nonMergeCommits": 16,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 16,
+        "noPatch": 0,
+        "branchDeltaPaths": 12,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "feature/erc20-browser-continuation-20261118",
@@ -5539,7 +7589,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/170"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+        "ahead": 0,
+        "behind": 202,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "feature/public-qr-capture-20261119",
@@ -5566,7 +7627,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/183"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+        "ahead": 0,
+        "behind": 153,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "feature/same-terms-resumption-20261119",
@@ -5593,7 +7665,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/175"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+        "ahead": 0,
+        "behind": 177,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "fix/evm-abort-signal-hook-hardening-20261123",
@@ -5629,7 +7712,18 @@
         "verifiedDate": "2026-11-23",
         "method": "GitHub immutable compare from main and parent plus source/tree/commit ref readback"
       },
-      "consolidationDecision": "Distinct stacked test-only code correction; do not merge before parent PR247. Current-source CI, independent Tier C review, owner-recorded authorization, target-specific acceptance and expected-head/base/tree guards required."
+      "consolidationDecision": "Distinct stacked test-only code correction; do not merge before parent PR247. Current-source CI, independent Tier C review, owner-recorded authorization, target-specific acceptance and expected-head/base/tree guards required.",
+      "gitComparison": {
+        "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ahead": 4,
+        "behind": 0,
+        "nonMergeCommits": 4,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 4,
+        "noPatch": 0,
+        "branchDeltaPaths": 4,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "fix/evm-execution-admission-hardening-20261123",
@@ -5665,7 +7759,18 @@
         "verifiedDate": "2026-11-23",
         "method": "GitHub immutable compare plus source blob/ref/commit tree readback"
       },
-      "consolidationDecision": "Distinct complete scoped corrective draft, not merge-ready. Keep original PR40, D9 UNKNOWN marker and no-auto-resend; require current-head CI, independent Tier C review, PR-recorded owner authorization, guarded merge."
+      "consolidationDecision": "Distinct complete scoped corrective draft, not merge-ready. Keep original PR40, D9 UNKNOWN marker and no-auto-resend; require current-head CI, independent Tier C review, PR-recorded owner authorization, guarded merge.",
+      "gitComparison": {
+        "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ahead": 2,
+        "behind": 0,
+        "nonMergeCommits": 2,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 2,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "fix/localnet-readiness-20261119",
@@ -5694,7 +7799,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+        "ahead": 0,
+        "behind": 151,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "fix/qr-async-expiry-20261120",
@@ -5723,7 +7839,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "e7397f45f68f18fae8857ea31b58a04e248df404",
+        "ahead": 0,
+        "behind": 102,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "fix/remediation-09f20d73-9524c0",
@@ -5751,7 +7878,18 @@
         "behindBy": 645,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+        "ahead": 0,
+        "behind": 645,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "fix/remediation-f84468d6-0a97ed",
@@ -5779,7 +7917,18 @@
         "behindBy": 631,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "dba5072d7a67f67e223432c48aefabc07f31f005",
+        "ahead": 0,
+        "behind": 631,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "fix/signed-update-unconfigured-lifecycle-g16-20261120",
@@ -5807,7 +7956,18 @@
         "behindBy": 80,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "eaa7914ad2f10e932afc877e9e742e0a3117d9c4",
+        "ahead": 0,
+        "behind": 80,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "fix/transport-preflight-zeroization-20261120",
@@ -5835,7 +7995,18 @@
         "behindBy": 91,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+        "ahead": 0,
+        "behind": 91,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "gpt/p2p-beta-spec-20261109",
@@ -5863,7 +8034,18 @@
         "behindBy": 583,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "c4fb7b590639e2a1d0a3220cf6bf7936156cc8e4",
+        "ahead": 0,
+        "behind": 583,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "integration/all-compatible-work",
@@ -5891,7 +8073,18 @@
         "behindBy": 657,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+        "ahead": 0,
+        "behind": 657,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "integration/browser-mvp-20261118",
@@ -5923,7 +8116,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/168"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "a0be1b656b977d0356768817d99d8aeb42c7bcba",
+        "ahead": 1,
+        "behind": 206,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 3,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "integration/core-hardening-20261118",
@@ -5951,7 +8155,18 @@
         "behindBy": 233,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+        "ahead": 0,
+        "behind": 233,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "integration/docs-reconciliation-20261118",
@@ -5979,7 +8194,18 @@
         "behindBy": 217,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+        "ahead": 0,
+        "behind": 217,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "integration/m2a-safe-fixes-20261114",
@@ -6008,7 +8234,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+        "ahead": 0,
+        "behind": 435,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "integration/p2p-consolidated-20261109",
@@ -6037,7 +8274,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+        "ahead": 0,
+        "behind": 382,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "integration/pages-beta-qualification-20261112",
@@ -6074,7 +8322,18 @@
         "behindBy": 442,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "4dcddf2b4bcc9890e50647cea067f81b1b734cdd",
+        "ahead": 0,
+        "behind": 442,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "integration/pages-offline-recovery-20261112",
@@ -6102,7 +8361,18 @@
         "behindBy": 480,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already included by ancestry; no new merge required"
+      "consolidationDecision": "Already included by ancestry; no new merge required",
+      "gitComparison": {
+        "mergeBase": "9550d4b182806170ee28149e9d46ffbccef56c33",
+        "ahead": 0,
+        "behind": 480,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "integration/privacy-endpoint-disclosures-20261109",
@@ -6130,7 +8400,18 @@
         "behindBy": 578,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "07b3b2abfc548a1b69621396b1d45a52dfe79063",
+        "ahead": 0,
+        "behind": 578,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "integration/solana-core-qualification-20261118",
@@ -6157,7 +8438,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/167"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+        "ahead": 0,
+        "behind": 209,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "main",
@@ -6167,7 +8459,18 @@
       "inspection": "metadata-only",
       "uniqueChangesVerified": false,
       "completionVerified": false,
-      "associatedPullRequests": []
+      "associatedPullRequests": [],
+      "gitComparison": {
+        "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ahead": 0,
+        "behind": 0,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/affectionate-ritchie-xq4bon",
@@ -6195,7 +8498,18 @@
         "behindBy": 363,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+        "ahead": 0,
+        "behind": 363,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/doc-sweep-20261118",
@@ -6223,7 +8537,18 @@
         "behindBy": 276,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "436b591a3a750bcca2327117e487336f6dd77470",
+        "ahead": 0,
+        "behind": 276,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/epic-goldberg-sg8n96",
@@ -6251,7 +8576,18 @@
         "behindBy": 317,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "1df700355e5199c69e84d5b41b12005677b5f5ee",
+        "ahead": 0,
+        "behind": 317,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/epic-newton-7bowm4",
@@ -6315,7 +8651,18 @@
         "behindBy": 263,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "1fe5ae00ed2105633081d71a67db2b5436da9c8d",
+        "ahead": 0,
+        "behind": 263,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx",
@@ -6343,7 +8690,18 @@
         "behindBy": 302,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "014a10a148f8b3b69c9d650fbcb083c8142e7d28",
+        "ahead": 0,
+        "behind": 302,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b1-reader-test-flake",
@@ -6371,7 +8729,18 @@
         "behindBy": 275,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "b7d06fed31fb7d2793da99c23f15bf6795a82b8a",
+        "ahead": 0,
+        "behind": 275,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b1a-reader",
@@ -6400,7 +8769,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "37f074dd1d65d5f12b73182420998a152374b813",
+        "ahead": 0,
+        "behind": 270,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
@@ -6429,7 +8809,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+        "ahead": 0,
+        "behind": 270,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b1c-acceptance",
@@ -6457,7 +8848,18 @@
         "behindBy": 272,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "236f815e79a852643d8dfa61d6d4895c8a93f54a",
+        "ahead": 0,
+        "behind": 272,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
@@ -6484,7 +8886,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/147"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "af4835b58146fc970af90790b635ea7c75a724af",
+        "ahead": 2,
+        "behind": 299,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 18,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
@@ -6511,7 +8924,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/146"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+        "ahead": 5,
+        "behind": 155,
+        "nonMergeCommits": 3,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 3,
+        "noPatch": 0,
+        "branchDeltaPaths": 22,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
@@ -6538,7 +8962,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/145"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "af4835b58146fc970af90790b635ea7c75a724af",
+        "ahead": 2,
+        "behind": 299,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 12,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
@@ -6565,7 +9000,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/163"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+        "ahead": 3,
+        "behind": 155,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 36,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
@@ -6592,7 +9038,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/160"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+        "ahead": 3,
+        "behind": 155,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 14,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
@@ -6619,7 +9076,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/148"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "af4835b58146fc970af90790b635ea7c75a724af",
+        "ahead": 2,
+        "behind": 299,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 8,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
@@ -6646,7 +9114,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/144"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "af4835b58146fc970af90790b635ea7c75a724af",
+        "ahead": 2,
+        "behind": 299,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 10,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
@@ -6673,7 +9152,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/162"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "539ad540731be82c5499e9d3446482bfa1a1a51d",
+        "ahead": 5,
+        "behind": 153,
+        "nonMergeCommits": 3,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 3,
+        "noPatch": 0,
+        "branchDeltaPaths": 20,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
@@ -6700,7 +9190,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/161"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+        "ahead": 2,
+        "behind": 277,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 19,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b3-formal",
@@ -6728,7 +9229,18 @@
         "behindBy": 254,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "39096586e1160c3c8434a2d081339bb70aeb4c1b",
+        "ahead": 0,
+        "behind": 254,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
@@ -6755,7 +9267,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/156"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+        "ahead": 10,
+        "behind": 272,
+        "nonMergeCommits": 4,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 4,
+        "noPatch": 0,
+        "branchDeltaPaths": 64,
+        "branchDeltaPathsExactOnMain": 28
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b4-intake",
@@ -6782,7 +9305,18 @@
           "owner": "djshellshoxxx",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/155"
         }
-      ]
+      ],
+      "gitComparison": {
+        "mergeBase": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+        "ahead": 4,
+        "behind": 272,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 28,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
@@ -6810,7 +9344,18 @@
         "behindBy": 272,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+        "ahead": 0,
+        "behind": 272,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
@@ -6838,7 +9383,18 @@
         "behindBy": 273,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already ancestor-contained in main; no new merge"
+      "consolidationDecision": "Already ancestor-contained in main; no new merge",
+      "gitComparison": {
+        "mergeBase": "579b02f3775323ba273dfe2bc624b5860897431e",
+        "ahead": 0,
+        "behind": 273,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
@@ -6866,7 +9422,18 @@
         "behindBy": 295,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already ancestor-contained in main; no new merge"
+      "consolidationDecision": "Already ancestor-contained in main; no new merge",
+      "gitComparison": {
+        "mergeBase": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+        "ahead": 0,
+        "behind": 295,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/accessibility-recovery-panels-20261113",
@@ -6894,7 +9461,18 @@
         "behindBy": 483,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "db38fba65be8b6e19c880c78e439e712ffe7e974",
+        "ahead": 0,
+        "behind": 483,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/browser-cold-nonce-20261113",
@@ -6922,7 +9500,18 @@
         "behindBy": 466,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "2cacd1d5219a82d984a75668838204e3160d5791",
+        "ahead": 0,
+        "behind": 466,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/browser-cold-recovery-20261113",
@@ -6950,7 +9539,18 @@
         "behindBy": 465,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "65efc3428ff01d4f091600baee85edfff094b347",
+        "ahead": 0,
+        "behind": 465,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/browser-peer-offer-20261113",
@@ -6978,7 +9578,18 @@
         "behindBy": 465,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "d6d65a47b99e68d00f82153d83fef366e532cf67",
+        "ahead": 0,
+        "behind": 465,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/browser-runtime-engines-20261113",
@@ -7007,7 +9618,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+        "ahead": 0,
+        "behind": 483,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/cli-argument-regression-20261113",
@@ -7035,7 +9657,18 @@
         "behindBy": 610,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "605bcd24ef3d239f6a080c129761132482029ef7",
+        "ahead": 0,
+        "behind": 610,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/diagnostics-20261113",
@@ -7063,7 +9696,18 @@
         "behindBy": 578,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "330fa1ede8b70e532a02230e4895b0711579491e",
+        "ahead": 0,
+        "behind": 578,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/docs-web-profile-recovery-20261113",
@@ -7091,7 +9735,18 @@
         "behindBy": 481,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "3524096c0ff1f4d743b01f06421bc56bbe07b9b3",
+        "ahead": 0,
+        "behind": 481,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/locale-20261113",
@@ -7119,7 +9774,18 @@
         "behindBy": 579,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "c4b13ddccc5bd78406762c656df5af35958e83f9",
+        "ahead": 0,
+        "behind": 579,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/localization-blank-warning-20261113",
@@ -7154,6 +9820,17 @@
         "report": "docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
         "scope": "single PR100-exclusive test and current-main source guard, authenticated content comparison",
         "runtimeTestsExecuted": false
+      },
+      "gitComparison": {
+        "mergeBase": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "ahead": 19,
+        "behind": 626,
+        "nonMergeCommits": 11,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 11,
+        "noPatch": 0,
+        "branchDeltaPaths": 132,
+        "branchDeltaPathsExactOnMain": 85
       }
     },
     {
@@ -7182,7 +9859,18 @@
         "behindBy": 579,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "05794e754c8bf588fc6781100e8af99675418629",
+        "ahead": 0,
+        "behind": 579,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/recovery-builder-help-20261113",
@@ -7210,7 +9898,18 @@
         "behindBy": 579,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "4f75e00d0c8e7eb9f61efd633b684ca0a47b9d76",
+        "ahead": 0,
+        "behind": 579,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/spec-tool-20261113",
@@ -7238,7 +9937,18 @@
         "behindBy": 577,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "6d48c9b0695cacd2a166a7386f24b61a6248bc10",
+        "ahead": 0,
+        "behind": 577,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "parallel/tooling-source-correspondence-20261113",
@@ -7266,7 +9976,18 @@
         "behindBy": 506,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated."
+      "consolidationDecision": "Already contained by exact commit ancestry; no new merge required. Product acceptance remains separately gated.",
+      "gitComparison": {
+        "mergeBase": "32a4052163553f7826d55f784ab9a6e96425e576",
+        "ahead": 0,
+        "behind": 506,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "research/code-reuse-2026-11-03",
@@ -7294,7 +10015,18 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "5fec2c6db018868a49c8ce40c21e186cdf702417",
+        "ahead": 0,
+        "behind": 626,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "research/remaining-gaps-20261103",
@@ -7322,7 +10054,18 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "922a391e429d07b0840bbbe525b3a10c6d3c830c",
+        "ahead": 0,
+        "behind": 626,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "research/security-addendum-20261103",
@@ -7350,7 +10093,18 @@
         "behindBy": 625,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "3a523a11a87d85443c484b6a4d4284b96c5f0b41",
+        "ahead": 0,
+        "behind": 625,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "research/upstream-reuse-20261103",
@@ -7378,7 +10132,18 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "977b36654bab2d00ca20c6139398b60c693bab73",
+        "ahead": 0,
+        "behind": 626,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "review/codebase-security-20261104-94554ec",
@@ -7408,7 +10173,18 @@
         "historicalPathCount": 5,
         "exactBlobCount": 5
       },
-      "consolidationDecision": "No duplicate documentary merge: all historical review blobs are byte-identical in current main. This is NOT a claim its security findings were fixed or reverified."
+      "consolidationDecision": "No duplicate documentary merge: all historical review blobs are byte-identical in current main. This is NOT a claim its security findings were fixed or reverified.",
+      "gitComparison": {
+        "mergeBase": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+        "ahead": 2,
+        "behind": 627,
+        "nonMergeCommits": 2,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 2,
+        "noPatch": 0,
+        "branchDeltaPaths": 5,
+        "branchDeltaPathsExactOnMain": 5
+      }
     },
     {
       "branch": "test/erc20-browser-recovery-20261119",
@@ -7436,7 +10212,18 @@
         "behindBy": 199,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied."
+      "consolidationDecision": "No merge required: whole commit history of this tip is already in main; feature/release qualification not implied.",
+      "gitComparison": {
+        "mergeBase": "c7f462c6688c78c35514808177ff7cfed32b9961",
+        "ahead": 0,
+        "behind": 199,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "test/nostr-relay-interop-20261119",
@@ -7465,7 +10252,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+        "ahead": 0,
+        "behind": 157,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "test/s06-facade-abort-recovery-20261123",
@@ -7501,7 +10299,18 @@
         "verifiedDate": "2026-11-23",
         "method": "GitHub compare, one added test file, 124 lines"
       },
-      "consolidationDecision": "Draft test-only recovery; exact-source hosted tests and independent D8 review required."
+      "consolidationDecision": "Draft test-only recovery; exact-source hosted tests and independent D8 review required.",
+      "gitComparison": {
+        "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ahead": 1,
+        "behind": 0,
+        "nonMergeCommits": 1,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 1,
+        "noPatch": 0,
+        "branchDeltaPaths": 1,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "validation/pr237-current-main-20261121",
@@ -7537,7 +10346,18 @@
           "33232f62dc9cd250528ef3eb0313c0c319d99495"
         ]
       },
-      "consolidationDecision": "Identical to PR237 source; do not merge until mandatory named Tier B review and current-target acceptance."
+      "consolidationDecision": "Identical to PR237 source; do not merge until mandatory named Tier B review and current-target acceptance.",
+      "gitComparison": {
+        "mergeBase": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ahead": 10,
+        "behind": 0,
+        "nonMergeCommits": 9,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 9,
+        "noPatch": 0,
+        "branchDeltaPaths": 86,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "work/noncustodial-reconstruction-2026-10-24",
@@ -7555,7 +10375,18 @@
         "behindBy": 841,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Entire branch history included by main ancestry; no additional merge"
+      "consolidationDecision": "Entire branch history included by main ancestry; no additional merge",
+      "gitComparison": {
+        "mergeBase": "bc996aac828ce63856193c9114edfef480153325",
+        "ahead": 0,
+        "behind": 841,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "work/p2p-client-shell-2026-10-24",
@@ -7583,7 +10414,18 @@
         "behindBy": 834,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+        "ahead": 0,
+        "behind": 834,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "work/p2p-consolidated-20261030",
@@ -7611,7 +10453,18 @@
         "behindBy": 683,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "68fb46920431e3311c78f931432bc4a21d066c17",
+        "ahead": 0,
+        "behind": 683,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "work/p2p-exchange-close-20261030",
@@ -7640,7 +10493,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+        "ahead": 0,
+        "behind": 697,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "work/p2p-exchange-test-repair-20261030",
@@ -7669,7 +10533,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+        "ahead": 0,
+        "behind": 700,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "work/p2p-gate-reconciliation-20261030",
@@ -7688,7 +10563,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "e762e649600493221e3bd10f0c3525858722bc94",
+        "ahead": 0,
+        "behind": 702,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "work/p2p-independent-branch-review-20261030",
@@ -7716,7 +10602,18 @@
         "behindBy": 702,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "9f80c9b27b943b30409710dea76a53d97a761832",
+        "ahead": 0,
+        "behind": 702,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "work/p2p-pr14-finish-handoff-20261030",
@@ -7734,7 +10631,18 @@
         "behindBy": 694,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred."
+      "consolidationDecision": "Already represented by exact ancestry in main; no duplicate branch merge. Feature acceptance not inferred.",
+      "gitComparison": {
+        "mergeBase": "8c8911e2dd3c7af4d515e645a6501eedc6178111",
+        "ahead": 0,
+        "behind": 694,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "work/p2p-relay-lifetime-20261030",
@@ -7763,7 +10671,18 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+        "ahead": 0,
+        "behind": 698,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     },
     {
       "branch": "work/p2p-validation-20261030",
@@ -7782,16 +10701,27 @@
         "verifiedDate": "2026-11-22",
         "method": "GitHub immutable-commit compare, full-tip ancestry"
       },
-      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
+      "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification.",
+      "gitComparison": {
+        "mergeBase": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+        "ahead": 0,
+        "behind": 696,
+        "nonMergeCommits": 0,
+        "samePatchOnMain": 0,
+        "unmatchedPatch": 0,
+        "noPatch": 0,
+        "branchDeltaPaths": 0,
+        "branchDeltaPathsExactOnMain": 0
+      }
     }
   ],
   "lastVerifiedDate": "2026-11-23",
   "pullRequestInventory": {
-    "total": 248,
+    "total": 249,
+    "open": 67,
     "merged": 124,
     "closedUnmerged": 58,
-    "open": 66,
-    "source": "2026-11-23 fully paginated REST /pulls?state=all pages 1-3"
+    "source": "GitHub REST all pull requests, three pages, 2026-11-23"
   },
   "cohortD9Followup": {
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
@@ -7836,11 +10766,11 @@
     "releaseEnabled": 0
   },
   "currentClassificationTotals": {
-    "P": 65,
+    "P": 66,
     "A": 137,
-    "F": 38,
+    "F": 40,
     "C": 5,
-    "V": 17,
+    "V": 15,
     "B": 1,
     "E": 0,
     "D": 0,
@@ -7915,7 +10845,7 @@
       47,
       48
     ],
-    "stagePathsCompared": {
+    "branchDeltaPathsCompared": {
       "s11": 36,
       "s12": 190
     },
@@ -8165,7 +11095,7 @@
     "ownerPr": 40,
     "owner": "7706859d2385cae0f8e49615392de08dfee83f84",
     "main": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-    "stagePaths": 18,
+    "branchDeltaPaths": 18,
     "ownerExact": 17,
     "ownerUpdated": 1,
     "mainExact": 3,
@@ -8519,7 +11449,7 @@
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
     "original": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
     "corrected": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
-    "stagePaths": 40,
+    "branchDeltaPaths": 40,
     "originalExact": 32,
     "correctedExact": 34,
     "report": "docs/engineering/BRANCH_COHORT_S05_LOCALE_LEAF_DISPOSITION_20261123.md",
@@ -8537,5 +11467,12 @@
     "localRuntimeExecuted": false,
     "checksAtReadback": "14 queued",
     "stageDisposition": "V retained; S07 remains owner-gated"
+  },
+  "gitComparisonMethod": {
+    "main": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "refCount": 264,
+    "ancestorTipsIncludingMain": 151,
+    "nonMergeCommitsWithPatch": 1244,
+    "description": "For each branch, Git merge-base --all returned a single base. ahead/behind include merges. Non-merge branch-only commits are compared against all non-merge main commits by git patch-id --stable, with --no-renames --full-index. noPatch counts commits producing no patch. From the merge base to the tip, branchDeltaPaths counts path changes with renames as delete/add. branchDeltaPathsExactOnMain counts equal modes and blobs or a deletion still absent. Merges can introduce separate conflict resolutions. Patch matches and paths alone do not establish functional equivalence, review or acceptance."
   }
 }
