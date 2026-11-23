@@ -1,13 +1,16 @@
-/** Native Chromium acceptance of the ordinary built offline shell; no wallet/device/release attestation. */
+/** Browser acceptance of sharing and private-workspace startup in the ordinary built shell. */
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { extname, resolve, sep } from 'node:path';
-import { chromium } from 'playwright-core';
+import { chromium, firefox, webkit } from 'playwright-core';
 import { buildWeb } from '../apps/web/scripts/build.mjs';
 import { resolveChromiumPath } from './lib/chromium-path.mjs';
 
+const engines = { chromium, firefox, webkit };
+const engine = process.env.P2P_SHARING_BROWSER ?? 'chromium';
+if (!Object.hasOwn(engines, engine)) throw new Error('Unsupported sharing test browser');
 const directory = await mkdtemp(resolve(tmpdir(), 'p2p-sharing-startup-native-'));
 const bases = ['/nested/project/', '/ipfs/bafy-local-share-fixture/', '/'];
 const failures = [];
@@ -33,7 +36,9 @@ try {
   });
   await listen(server);
   const origin = 'http://127.0.0.1:' + server.address().port;
-  browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
+  browser = await engines[engine].launch(engine === 'chromium'
+    ? { executablePath: resolveChromiumPath(), args: ['--no-sandbox'] } : {});
+  console.log('Sharing and startup browser:', engine, browser.version());
 
   async function scenario(label, setup, check, { base = '/', setupArg } = {}) {
     const context = await browser.newContext({ serviceWorkers: 'block' });

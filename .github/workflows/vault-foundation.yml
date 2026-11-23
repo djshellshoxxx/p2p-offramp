@@ -140,6 +140,10 @@ jobs:
         run: npm run test:backup:browser
         env:
           P2P_BACKUP_BROWSER: ${{ matrix.browser }}
+      - name: Verify app sharing and startup recovery in the same engine
+        run: node scripts/test-sharing-startup-browser.mjs
+        env:
+          P2P_SHARING_BROWSER: ${{ matrix.browser }}
   docs-tooling:
     runs-on: ubuntu-latest
     steps:
