@@ -1,3 +1,10 @@
+## 2026-11-23 UTC — unique generation-11 historical CI evidence recovered; PR250 retry passed
+
+- PR250 unchanged source `d75d2a00d4cfdd83fd681c361eefce69bc91c617`: 11/11 GitHub checks and Snyk success at this read. Original hosted job 137844763914 FAILED at separate Chromium external-wallet connection; native EIP-1271 step within that job SUCCESS. **Targeted rerun** job 137847864848 (attempt 2) completed 2026-11-23T16:45:21Z SUCCESS, including native EIP-1271 and localnet browser, no source/test weakening. See [report](BRANCH_COHORT_SUCCESSOR_G11_EVIDENCE_RECOVERY_20261123.md) for scope. CodeQL/Tier C/owner authorization are not inferred.
+- Five G11 historical evidence blobs staged exactly in coordinator PR245 (not main), source `3b538fd4586b6fc00846262d67956a2125b6c9f1`; JSON source validated. No local runtime test performed by this checkpoint.
+
+---
+
 ## 2026-11-23 UTC — PR250 native negative controls executed; unrelated browser timeout keeps full CI held
 
 On exact child source `d75d2a00d4cfdd83fd681c361eefce69bc91c617`, real GitHub [local-trade job 137844763914](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45218137585/job/137844763914) completed the new `npm run test:eip1271:local` step **SUCCESS** at 16:36:27 UTC: five named native Anvil cases, `adapterReads=96`, `adapterSendsOrSigns=0`, `externalNetwork=false`, `releaseAcceptance=false`. The transport-failure negative-control assertion is part of the actually executed harness. This is more than parse-only evidence, but **not** a full-suite pass.

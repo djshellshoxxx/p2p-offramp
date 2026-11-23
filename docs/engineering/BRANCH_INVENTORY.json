@@ -3,7 +3,7 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23 live fully paginated 262 branch refs via four search cursor pages; previous full 246-PR census plus confirmed newly created PR250 (247 total; 65 open) without asserting full PR re-pagination.",
+  "source": "2026-11-23: full three-page REST branch census (100+100+62), full three-page PR census (100+100+47). 262 refs, 247 PRs (65 open/124 merged/58 closed). Original successor G11 five missing historical blobs staged exact in unmerged PR245, without branch reclassification. PR250 retry current head completed all 11 reported checks; no CodeQL/Tier C/approval implied.",
   "branchCount": 262,
   "openPullRequestCount": 65,
   "classificationNotes": {
@@ -5179,7 +5179,7 @@
       "sha": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
       "openPullRequests": [],
       "classification": "V-divergent-partially-reconciled",
-      "inspection": "2026-11-22 immutable GitHub compare and recursive Git-tree source inspection: 15 stage-local documentation files: six blob-identical to main, four modified in newer main and five absent main. No code changes; preserve archival documentation, do not overwrite newer state.",
+      "inspection": "2026-11-22 immutable GitHub compare and recursive Git-tree source inspection: 15 stage-local documentation files: six blob-identical to main, four modified in newer main and five absent main. No code changes; preserve archival documentation, do not overwrite newer state. 2026-11-23: five previously absent G11 historical JSON/Markdown files now staged byte-exactly in DRAFT PR245 by original Git blob SHA; current main still lacks them; four edited current documents and old process instructions remain subject to deliberate review. Preserve original historical ref.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [],
@@ -5190,7 +5190,7 @@
         "behindBy": 104,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "HOLD: divergent; preserve exact old tip. No wholesale merge or source replacement. Respect owner PRs/current-main invariants, review, patch-id and executable qualification."
+      "consolidationDecision": "PARTIAL/HOLD: 5 historical evidence files are included with exact immutable blobs in the unmerged coordinator PR245; 6 G11 paths already byte-exact on main and 4 other paths have newer main revisions. Do not call reconciled/merged until PR245 is qualified, integrated or evidence deliberately superseded. Historical queued/cancelled state not live authority."
     },
     {
       "branch": "codex/transport-qualification-20261120",
@@ -7709,7 +7709,7 @@
     "merged": 124,
     "closedUnmerged": 58,
     "open": 65,
-    "source": "Prior full census of 246 PRs plus independently fetched new open PR250; complete fresh PR re-pagination pending"
+    "source": "2026-11-23 REST /pulls?state=all per_page=100 pages 1-3, fully enumerated"
   },
   "cohortD9Followup": {
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
@@ -8367,5 +8367,38 @@
       "snyk": "success",
       "currentHeadFullyQualified": false
     }
+  },
+  "cohortSuccessorG11EvidenceRecovery20261123": {
+    "date": "2026-11-23",
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "historicalSourceSha": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+    "historicalBranch": "codex/successor-handoff-20261120",
+    "stagedInPr": 245,
+    "reportPath": "docs/engineering/BRANCH_COHORT_SUCCESSOR_G11_EVIDENCE_RECOVERY_20261123.md",
+    "immutableSourceBlobs": {
+      "HOSTED_REVIEW_GENERATION11_20261120.md": "a94f1e753df123b1fb348289f07b3bd165370444",
+      "HOSTED_REVIEW_GENERATION11_20261120.json": "cac39a02a3b7faaf30ce21d4acf5188aae4d8155",
+      "INDEPENDENT_PUBLICATION_AUDIT_GENERATION11_20261120.md": "25354ea5df882c3ae5f82e4ec24880583531dbee",
+      "SUCCESSOR_HANDOFF_GENERATION11_20261120.md": "d241d039cfa6685849a521500f83e64e9b2ea4eb",
+      "hosted-published-status-generation11.json": "fa86b2bc0585265f82bb8ac14aeca24da92e7c0f"
+    },
+    "oldBranchClassification": "V-divergent-partially-reconciled",
+    "currentMainIntegrated": false,
+    "ci250": {
+      "head": "d75d2a00d4cfdd83fd681c361eefce69bc91c617",
+      "reportedCheckSuccess": 11,
+      "reportedChecksTotal": 11,
+      "snyk": "success",
+      "originalLocalTradeJob": 137844763914,
+      "originalResult": "failure",
+      "retryLocalTradeJob": 137847864848,
+      "retryResult": "success",
+      "retryCompletedAt": "2026-11-23T16:45:21Z",
+      "codeqlChildProven": false,
+      "tierCProven": false,
+      "ownerAuthorizationProven": false
+    },
+    "noRuntimeTestsLocally": true,
+    "releaseEnabled": false
   }
 }

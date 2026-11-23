@@ -1,3 +1,11 @@
+## 2026-11-23 UTC — unique generation-11 historical CI evidence recovered; PR250 retry passed
+
+[Source-bound preservation and hosted readback](BRANCH_COHORT_SUCCESSOR_G11_EVIDENCE_RECOVERY_20261123.md): recovered **five unique dated generation-11 source blobs** from immutable historical successor head `3b538fd4586b6fc00846262d67956a2125b6c9f1` to the still-DRAFT coordinator PR245, including original queued/cancelled/native-audit evidence and its historical handoff. No old snapshot was rewritten or promoted to live authority. The historical successor remains V, not merged or feature-complete; classifications unchanged **A137/P64/F34/C5/E0/V21/B1/D0 (262)**.
+
+PR250 exact head `d75d2a00d4cfdd83fd681c361eefce69bc91c617` now has **11/11 check runs success** and separate Snyk success. First hosted local-trade attempt **failed** after native EIP-1271 success on unrelated Chromium wallet connection; one same-head retry **completed success**, job [137847864848](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45218137585/job/137847864848), at 16:45:21Z, including native, controller, ERC-20 and browser acceptance steps. No CodeQL child check or independent Tier C/owner PR approval was established; #246→#249→#250 remain unmerged. Fully paginated inventory this run **262 branches / 247 PRs (65 open/124 merged/58 closed)**. Main `01f6f4feca051d68de24a04299cd3bb444bce40c`, `ReleaseEnabled=0` unchanged; no financial execution locally, deployment, funds or release.
+
+---
+
 ## 2026-11-23 UTC — PR250 native negative controls executed; unrelated browser timeout keeps full CI held
 
 On exact child source `d75d2a00d4cfdd83fd681c361eefce69bc91c617`, real GitHub [local-trade job 137844763914](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45218137585/job/137844763914) completed the new `npm run test:eip1271:local` step **SUCCESS** at 16:36:27 UTC: five named native Anvil cases, `adapterReads=96`, `adapterSendsOrSigns=0`, `externalNetwork=false`, `releaseAcceptance=false`. The transport-failure negative-control assertion is part of the actually executed harness. This is more than parse-only evidence, but **not** a full-suite pass.
