@@ -3,9 +3,9 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23 fully paginated REST census 262 branches/247 PRs; S05 reconciliation; coordinator prepublication ref.",
-  "branchCount": 262,
-  "openPullRequestCount": 65,
+  "source": "2026-11-23 fully paginated branch/PR census after PR251; coordinator prepublication ref.",
+  "branchCount": 263,
+  "openPullRequestCount": 66,
   "classificationNotes": {
     "F": "Source already present in main by exact content/ancestry OR deliberately superseded historical guidance/workflow with explicit per-branch evidence; read branch-specific disposition, not a blanket test pass.",
     "P": "Open PR; no assertion that code is unique, merge-ready or unfinished",
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23: S06 current facade cancellation coverage staged in draft PR251; historical classification unchanged.",
     "2026-11-23: S05 original/corrected 40-path source reconciliation; two V→F; S02 remains V; no new runtime execution or main merge.",
     "2026-11-23: S02 original/corrected divergent paths reviewed; V retained for both pending type-only barrel contract, no runtime or main merge; BRANCH_COHORT_S02_STORAGE_TRANSPORT_DISPOSITION_20261123.md",
     "2026-11-23: original and corrected M0 S03 relay/messaging stage-local source reconciled against exact main; two V→F, no new runtime or ancestry merge; BRANCH_COHORT_S03_RELAY_MESSAGING_SOURCE_DISPOSITION_20261123.md",
@@ -2603,7 +2604,7 @@
       "sha": "14be5a1c1ec69d91b0affe8a87811c681269fb6c",
       "openPullRequests": [],
       "classification": "V-divergent-partially-reconciled",
-      "inspection": "2026-11-22: exact historical single-stage 55-path Git blob comparison to main and active owned PR #42; see BRANCH_COHORT_S06_S07_20261122.md",
+      "inspection": "2026-11-22: exact historical single-stage 55-path Git blob comparison to main and active owned PR #42; see BRANCH_COHORT_S06_S07_20261122.md; 2026-11-23: current-facade cancellation regression staged in draft PR251; original 55-path stage remains V. See BRANCH_COHORT_S06_FACADE_ABORT_RECOVERY_20261123.md.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "associatedPullRequests": [],
@@ -2623,7 +2624,7 @@
         "sourceRetention": "all stage-local path names present in current owner PR; source not merged into main",
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Partially reconciled via existing active PR #42; do not duplicate/merge original historical branch; missing main code remains gated by owner, D8 and fresh current-target tests"
+      "consolidationDecision": "Partially reconciled via existing active PR #42; do not duplicate/merge original historical branch; missing main code remains gated by owner, D8 and fresh current-target tests Current-interface subset staged in #251; remaining old APIs and source under #42."
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s07-native-journey",
@@ -3461,11 +3462,11 @@
     },
     {
       "branch": "codex/consolidation-evidence-inventory-20261122",
-      "sha": "bf5e5a493397101c743ed0ce11c1f716c7012f0b",
+      "sha": "771d5d0650657dd1beda4e1e3268f73bb5a3c703",
       "openPullRequests": [
         {
           "number": 245,
-          "headSha": "bf5e5a493397101c743ed0ce11c1f716c7012f0b",
+          "headSha": "771d5d0650657dd1beda4e1e3268f73bb5a3c703",
           "base": "main",
           "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/245"
         }
@@ -3473,7 +3474,7 @@
       "associatedPullRequests": [
         {
           "number": 245,
-          "headSha": "bf5e5a493397101c743ed0ce11c1f716c7012f0b",
+          "headSha": "771d5d0650657dd1beda4e1e3268f73bb5a3c703",
           "base": "main",
           "state": "open",
           "merged": false,
@@ -7467,6 +7468,42 @@
       "consolidationDecision": "Already in main by exact Git ancestry; no duplicate merge. Do not infer feature acceptance from this classification."
     },
     {
+      "branch": "test/s06-facade-abort-recovery-20261123",
+      "sha": "02f8ade4edd1aa091042d849f0498e18830a1393",
+      "openPullRequests": [
+        {
+          "number": 251,
+          "headSha": "02f8ade4edd1aa091042d849f0498e18830a1393",
+          "base": "main",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/251"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "2026-11-23: historical S06 PR42 cancellation matrix recovered for current facade; one added test file, 17 current signal-taking methods, two named regression tests. Source readback verified; runtime not yet executed.",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "associatedPullRequests": [
+        {
+          "number": 251,
+          "headSha": "02f8ade4edd1aa091042d849f0498e18830a1393",
+          "base": "main",
+          "state": "open",
+          "merged": false,
+          "owner": "djshellshoxxx",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/251"
+        }
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 1,
+        "behindBy": 0,
+        "verifiedDate": "2026-11-23",
+        "method": "GitHub compare, one added test file, 124 lines"
+      },
+      "consolidationDecision": "Draft test-only recovery; exact-source hosted tests and independent D8 review required."
+    },
+    {
       "branch": "validation/pr237-current-main-20261121",
       "sha": "92831704820a1f35867fd757bd952eea81412f0f",
       "openPullRequests": [],
@@ -7750,11 +7787,11 @@
   ],
   "lastVerifiedDate": "2026-11-23",
   "pullRequestInventory": {
-    "total": 247,
+    "total": 248,
     "merged": 124,
     "closedUnmerged": 58,
-    "open": 65,
-    "source": "2026-11-23 REST /pulls?state=all per_page=100 pages 1-3, fully enumerated"
+    "open": 66,
+    "source": "2026-11-23 fully paginated REST /pulls?state=all pages 1-3"
   },
   "cohortD9Followup": {
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
@@ -7799,14 +7836,15 @@
     "releaseEnabled": 0
   },
   "currentClassificationTotals": {
+    "P": 65,
     "A": 137,
-    "P": 64,
     "F": 38,
     "C": 5,
-    "E": 0,
     "V": 17,
+    "B": 1,
+    "E": 0,
     "D": 0,
-    "B": 1
+    "U": 0
   },
   "cohortWalletSafetyReview20261122": {
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
@@ -8487,5 +8525,17 @@
     "report": "docs/engineering/BRANCH_COHORT_S05_LOCALE_LEAF_DISPOSITION_20261123.md",
     "runtimeTestsExecuted": false,
     "mainMerges": 0
+  },
+  "cohortS06FacadeAbortRecovery20261123": {
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "pr": 251,
+    "head": "02f8ade4edd1aa091042d849f0498e18830a1393",
+    "sourceBlob": "33ca98303364ebe9734f904aede586bb35e8eed9",
+    "historicalBlob": "0b73b460802f39588580916750335f403b133604",
+    "methods": 17,
+    "namedTests": 2,
+    "localRuntimeExecuted": false,
+    "checksAtReadback": "14 queued",
+    "stageDisposition": "V retained; S07 remains owner-gated"
   }
 }

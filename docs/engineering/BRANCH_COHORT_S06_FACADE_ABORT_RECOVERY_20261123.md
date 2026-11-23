@@ -1,0 +1,16 @@
+# S06 current-facade cancellation regression recovery — 2026-11-23
+
+## 2026-11-23 UTC — S06 current-facade cancellation regression recovery
+
+Draft [PR #251](https://github.com/djshellshoxxx/p2p-offramp/pull/251) at `02f8ade4edd1aa091042d849f0498e18830a1393` recovers the historical S06 PR42 pre-aborted facade matrix and post-durable-commit abort/reopen intent in one added test file. All 17 current signal-taking methods accounted for; two named tests, no production changes. Exact source blob `33ca98303364ebe9734f904aede586bb35e8eed9`; current main `01f6f4feca051d68de24a04299cd3bb444bce40c`. Historical S06/S07 remain V, PR42/43 retain ownership. All 14 reported PR251 checks initially queued; full current-source hosted tests and independent D8 review required. No local runtime execution, native browser, main merge or release. Previous coordinator head 14/14 reported success including CodeQL. Census 263 branches/248 PRs (66 open/124 merged/58 closed unmerged); A137/P65/F38/C5/E0/V17/B1/D0. [Evidence](BRANCH_COHORT_S06_FACADE_ABORT_RECOVERY_20261123.md). Next verify exact PR251 hosted results; examine S07 via its owned PR43 without importing obsolete financial code.
+
+---
+
+## Source and provenance
+
+- S06 original 14be5a1c1ec69d91b0affe8a87811c681269fb6c: 55 stage paths (5 exact on main, 31 changed, 19 absent). PR42 frozen 58b3c876ae6036114a195af6b2dcc4c9cc2a09ad retains historical abort test blob 0b73b460802f39588580916750335f403b133604.
+- S07 original 8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7: 24 stage paths (0 exact, 3 changed, 21 absent). PR43 frozen bc549f477f86e27516f554c7f1923a7147b82ea4 owns its existing native journey; do not duplicate.
+- Current fixture apps/web/test/trade-templates-runtime.test.mjs blob 060aec1afa63930a050b05c9e5fb94a2e6a7cec9; current facade blob 59d25937b0e365e6da0870f768360025e3313c44; runtime blob 5c6daffc86ad2946713d3a300bf49a4ea28c661f. Reuses real runtime/endpoint/encrypted vault/CAS test fixture rather than old incompatible APIs.
+- PR251 exact parent main, one added file, 124 lines, ahead 1 behind 0. Tests cover every current signal-taking facade method refusing pre-aborted requests without Worker posts/writes, and abort after durable template commit locking, ignoring stale acknowledgement and reconciling without retry. Matrix verified against all 17 method signatures; old retention and transport-selection methods absent on main, excluded. Asserts unchanged encrypted rows and selection before posting; exact single commit, acknowledged Worker lock and stale response rejection after durable write.
+- New filename checked absent from main, #42, #43, #244 trees; original branches unchanged. Source readback exactly matches authored content. No local test execution or confirmed production defect; native or physical wallet acceptance not implied. Workspace absent and git DNS unavailable. No red-green claim. Hosted checks initially 14 queued. Independent review and applicable exact-target CI required before merge.
+- Lowercase agents.md, D8 accepted ADR, gameplan and existing handoff reviewed; uppercase AGENTS.md and docs/ai paths unavailable (404). ReleaseEnabled=0 remains in unchanged production source. No force push, branch deletion, deployment or funds.
