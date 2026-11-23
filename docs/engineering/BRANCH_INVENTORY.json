@@ -3,7 +3,7 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23 complete 260-branch/245-PR authenticated pagination, plus PR65 exact-head 10-path audit. Preserve unmerged feature work and reviewed historical snapshots.",
+  "source": "2026-11-23 fully paginated 260-branch/245-PR authenticated GitHub remote census and complete PR69/PR70 changed-scope contiguous-source proof; no current-main merge.",
   "branchCount": 260,
   "openPullRequestCount": 63,
   "classificationNotes": {
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23: PR69 and stacked PR70 closed-unmerged D9 marker/recovery fixes: unique PR69 wallet production three-line guard and 15-line test, plus PR70 one import/21-line encrypted fresh-key restore test, all verbatim contiguous in current main. E12→E10; F20→F22. This is source content reconciliation without ancestry/patch-id/runtime claim. No source merge, new test execution, funds or deployment. ReleaseEnabled=0.",
     "2026-11-23 UTC: drafted PR248 stacked on fully hosted-successful PR247 (14/14), test-first caab74ad for seven original PR40 hostile AbortSignal regression declarations, narrow test-only executor correction 4fc269e4. Own CI incomplete at first read, no local RED/GREEN, no independent Tier C or owner approval; no parent/main merge. 260 branches/245 PRs/63 open. ReleaseEnabled=0.",
     "2026-11-23: recovered five owner PR40 historical EVM admission regressions in current-main draft PR247 (tests-first c16dc947, scope correction 3f23c774). GitHub 13 checks: 1 success/12 running at snapshot, no local RED/GREEN, independent Tier C or owner approval; all source financial flags unchanged. Refreshed 259 branches/244 PRs/62 open.",
     "2026-11-23 scoped content reconciliation: PR100 historical blank-warning test only unique change is already extended in main and critical locale visible-text guard corrected; branch V -> F. PR65 T33-T35 code/test equivalent in main, two historical docs absent, remains V. No product merge or new tests. docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
@@ -500,9 +501,9 @@
       "branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
       "sha": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "2026-11-22 current-main exact-source line check of PR #69: 16/16 nonblank added lines present; 1 removed lines absent; hunk/context and patch-id not executed",
-      "uniqueChangesVerified": false,
+      "classification": "F-exact-unique-patch-content-present-in-main",
+      "inspection": "2026-11-23 fixed-main complete PR69 changed-scope review: 3 contiguous production lines and 15 contiguous test lines occur as verbatim contiguous additions in current main; PR69 is closed unmerged, not an ancestor. Source-specific regression tests already in main; no new test execution.",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -520,9 +521,14 @@
         "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
         "aheadBy": 2,
         "behindBy": 580,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23",
+        "changedPaths": [
+          "packages/wallet/src/evm-execution.ts",
+          "packages/wallet/test/evm-execution.test.mjs"
+        ],
+        "inspectionMode": "GitHub PR patch contiguous addition ranges in exact current-main file blobs, stacked PR context"
       },
-      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision",
+      "consolidationDecision": "Branch-local intended unique additions already represented verbatim in current main and regression files. Do not merge obsolete divergent PR69; preserve historical ref. This is content reconciliation only, not owner/Tier C approval, fresh runtime proof or product completion.",
       "sourceEvidence": "wallet source 3/3 added lines present in main; wallet tests 11/11 added lines present (test blob identical to main)",
       "patchReview": {
         "prNumber": 69,
@@ -532,15 +538,23 @@
         "removedLinesPresentInMain": 0,
         "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
         "date": "2026-11-22"
+      },
+      "latestSemanticVerification": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "checkedAt": "2026-11-23",
+        "report": "docs/engineering/BRANCH_COHORT_D9_MARKER_RESTORE_EXACT_20261123.md",
+        "patchIdExecuted": false,
+        "runtimeTestsExecuted": false,
+        "allUniquePatchAdditionsExact": true
       }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
       "sha": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
       "openPullRequests": [],
-      "classification": "E-static-pr-patch-covered-no-git-patch-id",
-      "inspection": "2026-11-22 current-main exact-source line check of PR #70: 22/22 nonblank added lines present; 0 removed lines absent; hunk/context and patch-id not executed",
-      "uniqueChangesVerified": false,
+      "classification": "F-exact-unique-patch-content-present-in-main",
+      "inspection": "2026-11-23 fixed-main complete PR70 changed-scope review: one import line and a 21-line contiguous fresh-key restore test occur as verbatim contiguous additions in current main; PR70 is closed unmerged, not an ancestor. Source-specific regression tests already in main; no new test execution.",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -558,7 +572,11 @@
         "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
         "aheadBy": 3,
         "behindBy": 580,
-        "verifiedDate": "2026-11-22"
+        "verifiedDate": "2026-11-23",
+        "changedPaths": [
+          "packages/domain/test/intent-journal.test.mjs"
+        ],
+        "inspectionMode": "GitHub PR patch contiguous addition ranges in exact current-main file blobs, stacked PR context"
       },
       "patchReview": {
         "prNumber": 70,
@@ -569,7 +587,15 @@
         "mode": "GitHub per-PR patch, exact trimmed-line matching to current main files",
         "date": "2026-11-22"
       },
-      "consolidationDecision": "Static full PR patch-line overlap, content likely superseded; retain branch and require context/patch-id and tests for final decision"
+      "consolidationDecision": "Branch-local intended unique additions already represented verbatim in current main and regression files. Do not merge obsolete divergent PR70; preserve historical ref. This is content reconciliation only, not owner/Tier C approval, fresh runtime proof or product completion.",
+      "latestSemanticVerification": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "checkedAt": "2026-11-23",
+        "report": "docs/engineering/BRANCH_COHORT_D9_MARKER_RESTORE_EXACT_20261123.md",
+        "patchIdExecuted": false,
+        "runtimeTestsExecuted": false,
+        "allUniquePatchAdditionsExact": true
+      }
     },
     {
       "branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
@@ -7573,9 +7599,9 @@
   "currentClassificationTotals": {
     "A": 137,
     "P": 62,
-    "F": 20,
+    "F": 22,
     "C": 5,
-    "E": 12,
+    "E": 10,
     "V": 23,
     "D": 0,
     "B": 1
@@ -8036,5 +8062,39 @@
     ],
     "sourceTestsExecuted": 0,
     "mainMerges": 0
+  },
+  "cohortD9MarkerRecovery20261123": {
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "report": "docs/engineering/BRANCH_COHORT_D9_MARKER_RESTORE_EXACT_20261123.md",
+    "previous": {
+      "E": 12,
+      "F": 20
+    },
+    "current": {
+      "E": 10,
+      "F": 22
+    },
+    "branches": [
+      {
+        "branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
+        "sha": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+        "pr": 69,
+        "ahead": 2,
+        "behind": 580,
+        "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+        "disposition": "F-content-present-by-verbatim-contiguous-PR-patch",
+        "noRuntimeTest": true
+      },
+      {
+        "branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
+        "sha": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+        "pr": 70,
+        "ahead": 3,
+        "behind": 580,
+        "mergeBaseSha": "c87c21b915c9e175113292bb1307754ed2424166",
+        "disposition": "F-content-present-by-verbatim-contiguous-PR-patch",
+        "noRuntimeTest": true
+      }
+    ]
   }
 }

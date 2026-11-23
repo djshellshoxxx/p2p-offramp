@@ -1,3 +1,9 @@
+## 2026-11-23 UTC — PR69/PR70 source reconciliation (no new test execution)
+
+[Patch-content proof](BRANCH_COHORT_D9_MARKER_RESTORE_EXACT_20261123.md): PR69's 15-line original marker-error regression and PR70's 21-line fresh-key restoration regression, and their associated production/import additions, are preserved verbatim in current main. **Zero tests executed in this cohort; no CI passed result transferred to a new source.** Previous hosted/native financial receipts and earlier skips remain source-bound. Main 01f6f4feca051d68de24a04299cd3bb444bce40c; no main merge, no release.
+
+---
+
 ## 2026-11-23 — PR65 branch-local document reconciliation (no execution)
 
 [Evidence](BRANCH_COHORT_PR65_FINAL_DOCUMENT_DISPOSITION_20261123.md) classifies closed PR65 source/docs by content equivalence or deliberate dated-document supersession. This cohort executed **zero** runtime/unit/native/browser/financial tests; previously recorded PR115 and other historical check results are unchanged, not transferred. Main SHA `01f6f4feca051d68de24a04299cd3bb444bce40c`; no new source merge/CI claims.
