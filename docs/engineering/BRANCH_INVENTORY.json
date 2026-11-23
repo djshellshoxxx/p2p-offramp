@@ -3,9 +3,9 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23 fully paginated live GitHub 260 remote refs/245 PRs; additional PR116+PR64 historical task/document review V23→V21/F32→F34; main unchanged",
-  "branchCount": 260,
-  "openPullRequestCount": 63,
+  "source": "2026-11-23 fully paginated live GitHub: 261 refs via branches pages [100,100,61], 246 PRs via pulls pages [100,100,46] (64 open,124 merged,58 closed-unmerged); current coordinator head captured before publication",
+  "branchCount": 261,
+  "openPullRequestCount": 64,
   "classificationNotes": {
     "F": "Source already present in main by exact content/ancestry OR deliberately superseded historical guidance/workflow with explicit per-branch evidence; read branch-specific disposition, not a blanket test pass.",
     "P": "Open PR; no assertion that code is unique, merge-ready or unfinished",
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23: new PR249 one-file native EIP1271 negative oracle at bd860c66, stacked on PR246 and 11/11 reported hosted checks successful. Bounded source review submitted COMMENT #6024392085: for revert and gas modes the UNAVAILABLE+eth_call-method-only oracle can pass if generic RPC transport fails after call invocation. This is a test-coverage concern, not an established production defect; owner/independent Tier C and case-specific negative transport control outstanding. Counts A137/P63/F34/C5/E0/V21/B1/D0=261, 246 total PRs/64 open. No main merge or release.",
     "2026-11-23 ten E→F source-content dispositions: PR71–75 and PR91–93 complete D9 test blocks present in main (PR73 reconstructed with PR74 four new lines); PR79 full blob matches; PR129 Python 3.12 docs correction present. A137/P62/F32/C5/E0/V23/B1/D0=260. No new test execution or whole-history patch-ID proof.",
     "2026-11-23: PR69 and stacked PR70 closed-unmerged D9 marker/recovery fixes: unique PR69 wallet production three-line guard and 15-line test, plus PR70 one import/21-line encrypted fresh-key restore test, all verbatim contiguous in current main. E12→E10; F20→F22. This is source content reconciliation without ancestry/patch-id/runtime claim. No source merge, new test execution, funds or deployment. ReleaseEnabled=0.",
     "2026-11-23 UTC: drafted PR248 stacked on fully hosted-successful PR247 (14/14), test-first caab74ad for seven original PR40 hostile AbortSignal regression declarations, narrow test-only executor correction 4fc269e4. Own CI incomplete at first read, no local RED/GREEN, no independent Tier C or owner approval; no parent/main merge. 260 branches/245 PRs/63 open. ReleaseEnabled=0.",
@@ -43,6 +44,42 @@
     "2026-11-22 follow-up: 10 more exact-main-ancestor tips; 10 D9 PR patches (#69–75, 91–93) show 267/267 nonblank added lines in main, single removed wallet line absent; static overlap not git patch-id; 2 additional divergences scoped."
   ],
   "branches": [
+    {
+      "branch": "audit/eip1271-negative-oracle-20261123",
+      "sha": "bd860c66c3f50deda72392523ac8fc8860703f84",
+      "openPullRequests": [
+        {
+          "number": 249,
+          "headSha": "bd860c66c3f50deda72392523ac8fc8860703f84",
+          "base": "codex/eip1271-native-acceptance-recovery-20261123",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/249"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "2026-11-23 one-file PR249 patch and exact hosted EVM/Anvil evidence examined; COMMENT review 6024392085 identifies possible false-positive UNAVAILABLE on transport failure in native modes 2/3; hold for independent/original-owner remediation and approval.",
+      "uniqueChangesVerified": false,
+      "completionVerified": false,
+      "associatedPullRequests": [
+        {
+          "number": 249,
+          "headSha": "bd860c66c3f50deda72392523ac8fc8860703f84",
+          "base": "codex/eip1271-native-acceptance-recovery-20261123",
+          "state": "open",
+          "merged": false,
+          "owner": "djshellshoxxx",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/249"
+        }
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 3,
+        "behindBy": 0,
+        "verifiedDate": "2026-11-23",
+        "method": "GitHub compare main...head: parent PR246 plus one current-source child commit; child parent compare ahead=1/behind=0"
+      },
+      "consolidationDecision": "Keep draft stacked on PR246. Source-only test oracle, hosted green; bounded review finds generic UNAVAILABLE/eth_call telemetry is insufficient to independently certify native revert and gas modes. Require negative transport control and independent Tier C/owner authorization; do not merge directly into main."
+    },
     {
       "branch": "autonomous/completion-20261031",
       "sha": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
@@ -3341,7 +3378,7 @@
     },
     {
       "branch": "codex/consolidation-evidence-inventory-20261122",
-      "sha": "5b7511d517070cb857ac2675a8fd724350771cc0",
+      "sha": "6876a8d06b9b11e8c4084886bbcc33908c00f384",
       "openPullRequests": [
         {
           "number": 245,
@@ -3362,7 +3399,7 @@
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "Open documentation PR245, self-index SHA captured immediately before a new documentation commit",
+      "inspection": "Open documentation PR245, self-index SHA captured immediately before a new documentation commit; latest coordinator prepublication ref 6876a8d06b9b11e8c4084886bbcc33908c00f384 (this report is an additive child; self-ref will advance after write)",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "consolidationDecision": "Unmerged and pending current-head CI/review; own HEAD will advance upon publishing this inventory."
@@ -7630,11 +7667,11 @@
   ],
   "lastVerifiedDate": "2026-11-23",
   "pullRequestInventory": {
-    "total": 245,
+    "total": 246,
     "merged": 124,
     "closedUnmerged": 58,
-    "open": 63,
-    "source": "2026-11-23 authenticated GitHub full pages (100+100+45 PRs), 260 branches (100+100+60); no open PR marked merged without proof"
+    "open": 64,
+    "source": "2026-11-23 authenticated GitHub GET pulls?state=all per_page=100 pages 1–3; before this coordinator publication"
   },
   "cohortD9Followup": {
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
@@ -7680,7 +7717,7 @@
   },
   "currentClassificationTotals": {
     "A": 137,
-    "P": 62,
+    "P": 63,
     "F": 34,
     "C": 5,
     "E": 0,
@@ -8233,5 +8270,25 @@
     "noProductMerge": true,
     "reviewGatesInherited": false,
     "releaseEnabledUnchanged": true
+  },
+  "cohortEip1271NegativeOracle20261123": {
+    "report": "docs/engineering/PR249_NATIVE_EIP1271_NEGATIVE_ORACLE_20261123.md",
+    "sourceHead": "bd860c66c3f50deda72392523ac8fc8860703f84",
+    "parentHead": "233a66a7c2a465ac7b5504564c0e3b826afedcf5",
+    "diff": "1 modified native test harness path; +14/-3",
+    "reportedHostedChecks": {
+      "success": 11,
+      "total": 11,
+      "head": "bd860c66c3f50deda72392523ac8fc8860703f84"
+    },
+    "review": {
+      "event": "COMMENT",
+      "id": 6024392085,
+      "issue": "Modes 2 and 3 can satisfy UNAVAILABLE and a recorded eth_call without proving native revert/gas, if transport fails before execution"
+    },
+    "nativeLog": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45197686980/job/137772433812",
+    "mergeBlocked": true,
+    "classification": "P",
+    "noNewLocalExecution": true
   }
 }

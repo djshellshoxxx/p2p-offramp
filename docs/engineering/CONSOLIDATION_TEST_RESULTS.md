@@ -1,3 +1,9 @@
+## 2026-11-23 UTC — PR249 exact-child native Anvil oracle and review (no coordinator-local execution)
+
+[Proof and limits](PR249_NATIVE_EIP1271_NEGATIVE_ORACLE_20261123.md): [hosted local-trade](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45197686980/job/137772433812) on PR249 `bd860c66c3f50deda72392523ac8fc8860703f84` executed `test:eip1271:local`: **5 named checks**, receipt adapterReads=90/adapterSendsOrSigns=0, success. All **11** reported child-head check contexts succeeded. Separate coordinator-local runtime tests: **zero**. PR249 source review COMMENT #6024392085 notes a possible generic-RPC-failure false positive for expected `UNAVAILABLE` in modes 2/3 despite recording `eth_call`; add a negative transport control before claiming full proof. No Tier C, owner approval, main merge or release. Reported contexts omit CodeQL (not waived). Older PR246 native tests and all historical failures/skips remain unchanged.
+
+---
+
 ## 2026-11-23 UTC — PR116/PR64 historical-document reconciliation, no execution
 
 [Source report](BRANCH_COHORT_HISTORIC_DOC_TASKS_FINAL_20261123.md): 13 changed *documentation* paths across historical closed PR116 and PR64 were read against main `01f6f4feca051d68de24a04299cd3bb444bce40c`. **No new unit/native/browser/contract/financial tests executed; no CI statuses or independent approvals were transferred.** Archived task plans and dated milestone/agent guidance were deliberately superseded, not used to claim unfinished features completed. Previous test failures/skips/receipts remain intact. No main merge, funds or release.
