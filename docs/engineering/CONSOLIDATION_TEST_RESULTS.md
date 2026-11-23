@@ -1,3 +1,9 @@
+## 2026-11-23 UTC — S03 relay/messaging stage-local content reconciliation
+
+[Source-bound report](BRANCH_COHORT_S03_RELAY_MESSAGING_SOURCE_DISPOSITION_20261123.md) accounts for all eight original and eleven corrected M0 S03 stage-local paths against exact main `01f6f4feca051d68de24a04299cd3bb444bce40c`. Original S03 shared snapshot logic is retained by the corrected M0 helper; main preserves exact M0 parser/helper blobs, durable chat and local-pool code/tests, relay test additions and contiguous subscription tests, and later maintained handler and per-recipient exchange fixture behavior. **Two V→F** (stage-local content, not ancestry merge or new runtime qualification): A137/P64/F36/C5/E0/V19/B1/D0 = 262. Full REST census: 247 PRs (65 open, 124 merged, 58 closed unmerged). PR237 12/12, PR247 14/14 including CodeQL, PR248 and PR250 11/11 each reported successful; required named/independent reviews and owner authorization remain unfulfilled. No product source changes, test executions, main merge, release, deployment or real funds. Next: disjoint unblocked historical stage or exact-source reviewed integration; do not revert newer safety changes.
+
+---
+
 ## 2026-11-23 UTC — unique generation-11 historical CI evidence recovered; PR250 retry passed
 
 - PR250 unchanged source `d75d2a00d4cfdd83fd681c361eefce69bc91c617`: 11/11 GitHub checks and Snyk success at this read. Original hosted job 137844763914 FAILED at separate Chromium external-wallet connection; native EIP-1271 step within that job SUCCESS. **Targeted rerun** job 137847864848 (attempt 2) completed 2026-11-23T16:45:21Z SUCCESS, including native EIP-1271 and localnet browser, no source/test weakening. See [report](BRANCH_COHORT_SUCCESSOR_G11_EVIDENCE_RECOVERY_20261123.md) for scope. CodeQL/Tier C/owner authorization are not inferred.

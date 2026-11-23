@@ -3,7 +3,7 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23: full three-page REST branch census (100+100+62), full three-page PR census (100+100+47). 262 refs, 247 PRs (65 open/124 merged/58 closed). Original successor G11 five missing historical blobs staged exact in unmerged PR245, without branch reclassification. PR250 retry current head completed all 11 reported checks; no CodeQL/Tier C/approval implied.",
+  "source": "2026-11-23: fully paginated REST census 262 branches (100+100+62), 247 PRs (100+100+47; 65 open/124 merged/58 closed unmerged); two S03 stage-local content dispositions; coordinator self-ref is prepublication.",
   "branchCount": 262,
   "openPullRequestCount": 65,
   "classificationNotes": {
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23: original and corrected M0 S03 relay/messaging stage-local source reconciled against exact main; two V→F, no new runtime or ancestry merge; BRANCH_COHORT_S03_RELAY_MESSAGING_SOURCE_DISPOSITION_20261123.md",
     "2026-11-23 UTC: S04 historical EVM execution test-source recovery verified directly against main, PR247 and PR248: nine historic test scenarios absent on main are present in draft PR248, five in PR247 and four added in PR248. Exact main/old/parent/child blob IDs and source-bound CI/gates are documented in BRANCH_COHORT_S04_EVM_EXECUTION_REGRESSION_RECOVERY_20261123.md. S04 remains V; counts unchanged.",
     "2026-11-23 UTC: PR250 exact-head actual Anvil negative controls executed successfully in job 137844763914: five named EIP-1271 checks, 96 adapter reads, zero verifier sends/signatures. Same local-trade job then failed an unrelated localnet Chromium external wallet connection timeout at scripts/test-localnet-browser.mjs:28. Targeted exact-head rerun approved (new job 137847864848 queued); preserve original failed job. Other 10 of 11 reported hosted contexts successful, Snyk successful at latest. Child remains draft/unmerged, Tier C and owner approval absent.",
     "2026-11-23: new test-only DRAFT PR250 head d75d2a00, stacked directly on PR249 bd860c66; 262 remote refs fully paginated, PR count 247 from previous 246 plus new PR250. Restored actual RPC execution-error vs transport-fault distinction in native EIP-1271 oracle, checked full GitHub blob and parse-only syntax. Hosted Anvil/Forge/Node/CodeQL, Tier C, owner acceptance unverified. No main merge/production source/release.",
@@ -2078,9 +2079,9 @@
       "branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
       "sha": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
       "openPullRequests": [],
-      "classification": "V-divergent-partially-reconciled",
-      "inspection": "2026-11-22 exact stage-parent-to-tip compare + recursive Git tree blob mapping: 11 changed paths, 11 exact existing owner / 0 corrected; main 6 exact, 5 changed, 0 absent. Owner #39.",
-      "uniqueChangesVerified": false,
+      "classification": "F-content-reconciled",
+      "inspection": "2026-11-23: exact stage-local compare (8 original / 11 M0 paths), immutable main blobs and added-line comparison; shared snapshot extraction, descriptor lookup and exchange helper replacements reviewed; see BRANCH_COHORT_S03_RELAY_MESSAGING_SOURCE_DISPOSITION_20261123.md",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
@@ -2100,9 +2101,9 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Partially source-reconciled only; see BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. Original branch and owner PR preserved; no whole-history patch-ID, executed tests or merge approval.",
-      "lastVerificationSha": "01e41e65cd078b30cc70fcb34af614e2838bb105",
-      "lastVerificationDate": "2026-11-22"
+      "consolidationDecision": "Stage-local intended source/test content retained in main or deliberately superseded by maintained implementation; no whole-history equivalence, parent qualification, runtime pass or ancestry merge. Preserve historical ref.",
+      "lastVerificationSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+      "lastVerificationDate": "2026-11-23"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
@@ -2458,9 +2459,9 @@
       "branch": "claude/loving-einstein-xgzvdy-s03-core-messaging",
       "sha": "5a747ded358ee9fcca393bb4a0616fd4e8632296",
       "openPullRequests": [],
-      "classification": "V-divergent-partially-reconciled",
-      "inspection": "2026-11-22 fixed-main recursive Git tree/blob comparison: 8 isolated stage-local paths; owner PR #39 6 exact, 2 corrected, 0 missing; main 4 exact, 4 later-changed, 0 missing. Independent full patch-id, native execution and approvals remain unverified.",
-      "uniqueChangesVerified": false,
+      "classification": "F-content-reconciled",
+      "inspection": "2026-11-23: exact stage-local compare (8 original / 11 M0 paths), immutable main blobs and added-line comparison; shared snapshot extraction, descriptor lookup and exchange helper replacements reviewed; see BRANCH_COHORT_S03_RELAY_MESSAGING_SOURCE_DISPOSITION_20261123.md",
+      "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [],
       "compareToMain": {
@@ -2470,8 +2471,10 @@
         "behindBy": 626,
         "verifiedDate": "2026-11-22"
       },
-      "consolidationDecision": "Stage-local files preserved in PR #39 lineage and current main at path level, but upstream PR #26/#37-40 is NOT qualified/integrated by this proof. Historical branch remains divergent and is not safe to merge wholesale. See docs/engineering/BRANCH_COHORT_CORE_RELAY_PROVENANCE_20261122.md.",
-      "latestVerificationDate": "2026-11-22"
+      "consolidationDecision": "Stage-local intended source/test content retained in main or deliberately superseded by maintained implementation; no whole-history equivalence, parent qualification, runtime pass or ancestry merge. Preserve historical ref.",
+      "latestVerificationDate": "2026-11-22",
+      "lastVerificationDate": "2026-11-23",
+      "lastVerificationSha": "01f6f4feca051d68de24a04299cd3bb444bce40c"
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
@@ -3442,11 +3445,11 @@
     },
     {
       "branch": "codex/consolidation-evidence-inventory-20261122",
-      "sha": "6876a8d06b9b11e8c4084886bbcc33908c00f384",
+      "sha": "8663bf1f8135efb132421344cc3e0f746245900e",
       "openPullRequests": [
         {
           "number": 245,
-          "headSha": "5b7511d517070cb857ac2675a8fd724350771cc0",
+          "headSha": "8663bf1f8135efb132421344cc3e0f746245900e",
           "base": "main",
           "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/245"
         }
@@ -3454,7 +3457,7 @@
       "associatedPullRequests": [
         {
           "number": 245,
-          "headSha": "5b7511d517070cb857ac2675a8fd724350771cc0",
+          "headSha": "8663bf1f8135efb132421344cc3e0f746245900e",
           "base": "main",
           "state": "open",
           "merged": false,
@@ -3463,7 +3466,7 @@
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "Open documentation PR245, self-index SHA captured immediately before a new documentation commit; latest coordinator prepublication ref 6876a8d06b9b11e8c4084886bbcc33908c00f384 (this report is an additive child; self-ref will advance after write)",
+      "inspection": "Coordinator PR245 self-reference captured before publication at 8663bf1f8135efb132421344cc3e0f746245900e; new evidence commit advances this ref.",
       "uniqueChangesVerified": false,
       "completionVerified": false,
       "consolidationDecision": "Unmerged and pending current-head CI/review; own HEAD will advance upon publishing this inventory."
@@ -7782,10 +7785,10 @@
   "currentClassificationTotals": {
     "A": 137,
     "P": 64,
-    "F": 34,
+    "F": 36,
     "C": 5,
     "E": 0,
-    "V": 21,
+    "V": 19,
     "D": 0,
     "B": 1
   },
@@ -8426,5 +8429,23 @@
     },
     "noRuntimeTestsLocally": true,
     "releaseEnabled": false
+  },
+  "cohortS03RelayMessagingSourceDisposition20261123": {
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "coordinatorPrepublicationSha": "8663bf1f8135efb132421344cc3e0f746245900e",
+    "report": "docs/engineering/BRANCH_COHORT_S03_RELAY_MESSAGING_SOURCE_DISPOSITION_20261123.md",
+    "branches": [
+      {
+        "branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+        "sha": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+        "decision": "stage-local content-reconciled"
+      },
+      {
+        "branch": "claude/loving-einstein-xgzvdy-s03-core-messaging",
+        "sha": "5a747ded358ee9fcca393bb4a0616fd4e8632296",
+        "decision": "stage-local content-reconciled"
+      }
+    ],
+    "runtimeTestsExecuted": false
   }
 }
