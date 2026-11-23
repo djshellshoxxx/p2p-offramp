@@ -3,9 +3,9 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23 fully paginated live GitHub: 261 refs via branches pages [100,100,61], 246 PRs via pulls pages [100,100,46] (64 open,124 merged,58 closed-unmerged); current coordinator head captured before publication",
-  "branchCount": 261,
-  "openPullRequestCount": 64,
+  "source": "2026-11-23 live fully paginated 262 branch refs via four search cursor pages; previous full 246-PR census plus confirmed newly created PR250 (247 total; 65 open) without asserting full PR re-pagination.",
+  "branchCount": 262,
+  "openPullRequestCount": 65,
   "classificationNotes": {
     "F": "Source already present in main by exact content/ancestry OR deliberately superseded historical guidance/workflow with explicit per-branch evidence; read branch-specific disposition, not a blanket test pass.",
     "P": "Open PR; no assertion that code is unique, merge-ready or unfinished",
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23: new test-only DRAFT PR250 head d75d2a00, stacked directly on PR249 bd860c66; 262 remote refs fully paginated, PR count 247 from previous 246 plus new PR250. Restored actual RPC execution-error vs transport-fault distinction in native EIP-1271 oracle, checked full GitHub blob and parse-only syntax. Hosted Anvil/Forge/Node/CodeQL, Tier C, owner acceptance unverified. No main merge/production source/release.",
     "2026-11-23: new PR249 one-file native EIP1271 negative oracle at bd860c66, stacked on PR246 and 11/11 reported hosted checks successful. Bounded source review submitted COMMENT #6024392085: for revert and gas modes the UNAVAILABLE+eth_call-method-only oracle can pass if generic RPC transport fails after call invocation. This is a test-coverage concern, not an established production defect; owner/independent Tier C and case-specific negative transport control outstanding. Counts A137/P63/F34/C5/E0/V21/B1/D0=261, 246 total PRs/64 open. No main merge or release.",
     "2026-11-23 ten E→F source-content dispositions: PR71–75 and PR91–93 complete D9 test blocks present in main (PR73 reconstructed with PR74 four new lines); PR79 full blob matches; PR129 Python 3.12 docs correction present. A137/P62/F32/C5/E0/V23/B1/D0=260. No new test execution or whole-history patch-ID proof.",
     "2026-11-23: PR69 and stacked PR70 closed-unmerged D9 marker/recovery fixes: unique PR69 wallet production three-line guard and 15-line test, plus PR70 one import/21-line encrypted fresh-key restore test, all verbatim contiguous in current main. E12→E10; F20→F22. This is source content reconciliation without ancestry/patch-id/runtime claim. No source merge, new test execution, funds or deployment. ReleaseEnabled=0.",
@@ -44,6 +45,42 @@
     "2026-11-22 follow-up: 10 more exact-main-ancestor tips; 10 D9 PR patches (#69–75, 91–93) show 267/267 nonblank added lines in main, single removed wallet line absent; static overlap not git patch-id; 2 additional divergences scoped."
   ],
   "branches": [
+    {
+      "branch": "audit/eip1271-execution-fault-negative-control-20261123",
+      "sha": "d75d2a00d4cfdd83fd681c361eefce69bc91c617",
+      "openPullRequests": [
+        {
+          "number": 250,
+          "headSha": "d75d2a00d4cfdd83fd681c361eefce69bc91c617",
+          "base": "audit/eip1271-negative-oracle-20261123",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/250"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "2026-11-23: one-file native EIP-1271 test-only follow-up to PR249; validated GitHub source blob and parent→head compare, V8 parse-only syntax after excluding module imports; no native Anvil execution or complete CI. Synthetic RPC_UNREACHABLE fault must fail a strengthened native JSON-RPC error oracle, independently probes deployed mode(), and checks canonical call target/data/anchor/gas.",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "associatedPullRequests": [
+        {
+          "number": 250,
+          "headSha": "d75d2a00d4cfdd83fd681c361eefce69bc91c617",
+          "base": "audit/eip1271-negative-oracle-20261123",
+          "state": "open",
+          "merged": false,
+          "owner": "djshellshoxxx",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/250"
+        }
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 4,
+        "behindBy": 0,
+        "verifiedDate": "2026-11-23",
+        "method": "GitHub compare main...PR250 head; parent PR249...head ahead=1/behind=0"
+      },
+      "consolidationDecision": "DRAFT child of #249 on #246. Source-only native-test oracle, not production acceptance or merged. Require exact-head hosted Anvil/Foundry/Node/CodeQL and independent review, parent ordering, current-target compatibility and owner authorization. Do not deploy or enable release."
+    },
     {
       "branch": "audit/eip1271-negative-oracle-20261123",
       "sha": "bd860c66c3f50deda72392523ac8fc8860703f84",
@@ -7667,11 +7704,11 @@
   ],
   "lastVerifiedDate": "2026-11-23",
   "pullRequestInventory": {
-    "total": 246,
+    "total": 247,
     "merged": 124,
     "closedUnmerged": 58,
-    "open": 64,
-    "source": "2026-11-23 authenticated GitHub GET pulls?state=all per_page=100 pages 1–3; before this coordinator publication"
+    "open": 65,
+    "source": "Prior full census of 246 PRs plus independently fetched new open PR250; complete fresh PR re-pagination pending"
   },
   "cohortD9Followup": {
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
@@ -7717,7 +7754,7 @@
   },
   "currentClassificationTotals": {
     "A": 137,
-    "P": 63,
+    "P": 64,
     "F": 34,
     "C": 5,
     "E": 0,
@@ -8290,5 +8327,28 @@
     "mergeBlocked": true,
     "classification": "P",
     "noNewLocalExecution": true
+  },
+  "cohortEip1271TransportNegativeControl20261123": {
+    "report": "docs/engineering/PR250_EIP1271_TRANSPORT_NEGATIVE_CONTROL_20261123.md",
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "parentPr": 249,
+    "parentHead": "bd860c66c3f50deda72392523ac8fc8860703f84",
+    "childPr": 250,
+    "headSha": "d75d2a00d4cfdd83fd681c361eefce69bc91c617",
+    "blobSha": "d0921a48ac0722511eb18e2fc405c20be5c26b1a",
+    "changedPaths": [
+      "scripts/test-eip1271-local.mjs"
+    ],
+    "mainCompare": {
+      "mergeBaseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+      "ahead": 4,
+      "behind": 0
+    },
+    "nativeTestsExecuted": false,
+    "syntaxParseOnly": true,
+    "independentTierC": false,
+    "ownerApproval": false,
+    "mainMerged": false,
+    "releaseEnabled": false
   }
 }

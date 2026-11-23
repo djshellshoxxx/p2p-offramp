@@ -1,3 +1,8 @@
+## 2026-11-23 UTC — PR250 native EIP-1271 negative control published, not executed
+[Details](docs/engineering/PR250_EIP1271_TRANSPORT_NEGATIVE_CONTROL_20261123.md): source head `d75d2a00d4cfdd83fd681c361eefce69bc91c617`, exactly one test harness path changed, full blob readback `d0921a48ac0722511eb18e2fc405c20be5c26b1a`. Parse-only V8 async wrapper succeeded after excluding module imports; this is **not** Node/Anvil/Forge runtime execution. No new local RED, GREEN or hosted CI pass reported. PR249 11/11 prior-source success remains valid for PR249 **only**, not the child. Await PR250 actual current-source native/CI, case-specific validation, Tier C review and owner authorization. No product change/main merge/funds/release.
+
+---
+
 ## 2026-11-23 UTC — PR249 exact-child native Anvil oracle and review (no coordinator-local execution)
 
 [Proof and limits](PR249_NATIVE_EIP1271_NEGATIVE_ORACLE_20261123.md): [hosted local-trade](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45197686980/job/137772433812) on PR249 `bd860c66c3f50deda72392523ac8fc8860703f84` executed `test:eip1271:local`: **5 named checks**, receipt adapterReads=90/adapterSendsOrSigns=0, success. All **11** reported child-head check contexts succeeded. Separate coordinator-local runtime tests: **zero**. PR249 source review COMMENT #6024392085 notes a possible generic-RPC-failure false positive for expected `UNAVAILABLE` in modes 2/3 despite recording `eth_call`; add a negative transport control before claiming full proof. No Tier C, owner approval, main merge or release. Reported contexts omit CodeQL (not waived). Older PR246 native tests and all historical failures/skips remain unchanged.
