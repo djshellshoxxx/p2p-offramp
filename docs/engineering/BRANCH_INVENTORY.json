@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23 UTC: S04 wallet/release stage immutable source review: 18 stage-local paths (17 exact in owner PR40/1 corrected; current main 3 exact/13 updated/2 missing native EIP-1271 fixture/harness). Owner-only gzip/CORS regression test already identical on main. No native tests or source merge. BRANCH_COHORT_S04_WALLET_RELEASE_20261123.md. Counters unchanged.",
     "2026-11-22 source review of final six D historical stages: S02 42 paths (42 owner exact/32 main exact), S03 11 (11/6), S05 merged 40 (40/34), S05 split 40 (38/32), S11 33 (30/9), S12 190 (190/0, 185 archives absent main). D6->0 V19->25; all remain partial pending patch-ID/runtime/owner gates. See BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. ReleaseEnabled=0.",
     "2026-11-22 historic process/security cohort: 10 D-history branches received scoped code, documentation and workflow comparison. Two docs-only operational prompts deliberately superseded, hardened autonomous workflow replaces insecure legacy, one research doc exact blob included, one 595/595-line handoff already in main, four source/evidence/task branches remain partial. D16→D6, V14→V19, F14→F18, C4→C5. Detailed report BRANCH_COHORT_HISTORIC_PROCESS_SECURITY_20261122.md. No source/tests/merge/deploy/funds/release; ReleaseEnabled=0.",
     "2026-11-22 source cohort: three original S01-S03 stage branches 68 isolated paths, all present in owner PR #37/#38/#39 lineage and main. Owner stage snapshots 58 exact, 10 corrected; main 42 exact, 26 later-changed. Closed #38/#39 are NOT merged. Main relay ownership/dedup and reentrancy guards supersede old S03 pool; no remerge. Docs-collaboration exact blob already main; Python 3.12 historical one-line correction already present in expanded current operator guide. Five formerly D entries reclassified with bounded evidence: A137/P59/U0/C4/E12/V14/F14/B1/D16 = 257. Previous PR245 head 88b7be1 had 14/14 successful hosted check-runs, but this new documentation head requires independent qualification. No local Node/native/Chromium runs, product edits, releases, funds or main merges.",
@@ -2326,6 +2327,25 @@
           "old captures provider.request capability then guard-checks before eth_sendTransaction; main reads and invokes provider.request directly",
           "old native AbortSignal hooks/owned cancellation differ; do not import without preserving main marker failure => BROADCAST_UNKNOWN"
         ]
+      },
+      "s04SourceReview20261123": {
+        "inspectedAt": "2026-11-23 UTC",
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "ownerPr": 40,
+        "ownerHeadSha": "7706859d2385cae0f8e49615392de08dfee83f84",
+        "stageLocalPaths": 18,
+        "ownerExactBlobs": 17,
+        "ownerCorrectedBlobs": 1,
+        "mainExactBlobs": 3,
+        "mainChangedBlobs": 13,
+        "mainAbsentPaths": [
+          "contracts/evm/test/mocks/Eip1271RecoveryFixture.sol",
+          "scripts/test-eip1271-local.mjs"
+        ],
+        "preservedOwnerOnlyRegressionTest": "packages/security/test/release-update-http-encoding.test.mjs",
+        "decision": "V-partially reconciled; preserve owner PR40; no new merge; unique historical native EIP-1271 fixture/harness absent on main, port and native-test only through independent guarded follow-up",
+        "report": "docs/engineering/BRANCH_COHORT_S04_WALLET_RELEASE_20261123.md",
+        "qualification": "GitHub immutable tree and compare only; local native and patch-ID not executed"
       }
     },
     {
@@ -7752,5 +7772,19 @@
         "owner": "#48"
       }
     ]
+  },
+  "cohortS04WalletRelease20261123": {
+    "stage": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+    "ownerPr": 40,
+    "owner": "7706859d2385cae0f8e49615392de08dfee83f84",
+    "main": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "stagePaths": 18,
+    "ownerExact": 17,
+    "ownerUpdated": 1,
+    "mainExact": 3,
+    "mainUpdated": 13,
+    "mainAbsent": 2,
+    "reviewOnly": true,
+    "classificationTotalsUnchanged": true
   }
 }
