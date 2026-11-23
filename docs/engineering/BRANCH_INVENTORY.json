@@ -3,9 +3,9 @@
   "repository": "djshellshoxxx/p2p-offramp",
   "capturedDate": "2026-11-23",
   "baseMainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-  "source": "2026-11-23 live GitHub complete pagination: 259 branches (100+100+59), 244 PRs (100+100+44); main fixed 01f6f4feca051d68de24a04299cd3bb444bce40c; new PR247 exact source verified",
-  "branchCount": 259,
-  "openPullRequestCount": 62,
+  "source": "2026-11-23 fresh full GitHub pagination: 260 branches (100+100+60), 245 PRs (100+100+45), 63 open; new draft PR248 on PR247 with 7 restored historical signal cases, current-main ancestor verified",
+  "branchCount": 260,
+  "openPullRequestCount": 63,
   "classificationNotes": {
     "F": "Source already present in main by exact content/ancestry OR deliberately superseded historical guidance/workflow with explicit per-branch evidence; read branch-specific disposition, not a blanket test pass.",
     "P": "Open PR; no assertion that code is unique, merge-ready or unfinished",
@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23 UTC: drafted PR248 stacked on fully hosted-successful PR247 (14/14), test-first caab74ad for seven original PR40 hostile AbortSignal regression declarations, narrow test-only executor correction 4fc269e4. Own CI incomplete at first read, no local RED/GREEN, no independent Tier C or owner approval; no parent/main merge. 260 branches/245 PRs/63 open. ReleaseEnabled=0.",
     "2026-11-23: recovered five owner PR40 historical EVM admission regressions in current-main draft PR247 (tests-first c16dc947, scope correction 3f23c774). GitHub 13 checks: 1 success/12 running at snapshot, no local RED/GREEN, independent Tier C or owner approval; all source financial flags unchanged. Refreshed 259 branches/244 PRs/62 open.",
     "2026-11-23 scoped content reconciliation: PR100 historical blank-warning test only unique change is already extended in main and critical locale visible-text guard corrected; branch V -> F. PR65 T33-T35 code/test equivalent in main, two historical docs absent, remains V. No product merge or new tests. docs/engineering/BRANCH_COHORT_PR100_PR65_SAFETY_SOURCE_PROOF_20261123.md",
     "2026-11-23 UTC EIP1271 follow-up: PR246 latest head 233a66a7c2a4, tree 38fb1a712824; after original test-only afc8eff, documentation-only link correction to source-gap report. Git compare main...head ahead=2/behind=0, original fixture/harness SHA exact, native CI pending; 258/243 unchanged.",
@@ -5365,6 +5366,42 @@
       ]
     },
     {
+      "branch": "fix/evm-abort-signal-hook-hardening-20261123",
+      "sha": "4fc269e4fe17b8aaa9f315c29f726071f3834f5e",
+      "openPullRequests": [
+        {
+          "number": 248,
+          "headSha": "4fc269e4fe17b8aaa9f315c29f726071f3834f5e",
+          "base": "fix/evm-execution-admission-hardening-20261123",
+          "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/248"
+        }
+      ],
+      "classification": "P-open-unintegrated-pr",
+      "inspection": "2026-11-23 live: parent PR247@3f23c774 (14/14 current-head checks success); 7 original owner PR40 hostile AbortSignal tests in test-first caab74ad, isolated native-hook fix 4fc269e4. GitHub exact compare to parent ahead2/behind0, parent main ancestor verified; own first CI checks partial, no independent review or owner Tier C approval. Original PR40/247 refs frozen.",
+      "uniqueChangesVerified": true,
+      "completionVerified": false,
+      "associatedPullRequests": [
+        {
+          "number": 248,
+          "headSha": "4fc269e4fe17b8aaa9f315c29f726071f3834f5e",
+          "base": "fix/evm-execution-admission-hardening-20261123",
+          "state": "open",
+          "merged": false,
+          "owner": "djshellshoxxx",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/248"
+        }
+      ],
+      "compareToMain": {
+        "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "mergeBaseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "aheadBy": 4,
+        "behindBy": 0,
+        "verifiedDate": "2026-11-23",
+        "method": "GitHub immutable compare from main and parent plus source/tree/commit ref readback"
+      },
+      "consolidationDecision": "Distinct stacked test-only code correction; do not merge before parent PR247. Current-source CI, independent Tier C review, owner-recorded authorization, target-specific acceptance and expected-head/base/tree guards required."
+    },
+    {
       "branch": "fix/evm-execution-admission-hardening-20261123",
       "sha": "3f23c774b2464b04de6cfece9ab1721dd5130f86",
       "openPullRequests": [
@@ -7484,11 +7521,11 @@
   ],
   "lastVerifiedDate": "2026-11-23",
   "pullRequestInventory": {
-    "total": 244,
+    "total": 245,
     "merged": 124,
     "closedUnmerged": 58,
-    "open": 62,
-    "source": "2026-11-23 complete authenticated GitHub pagination 100+100+44 pull requests"
+    "open": 63,
+    "source": "2026-11-23 authenticated GitHub full pages (100+100+45 PRs), 260 branches (100+100+60); no open PR marked merged without proof"
   },
   "cohortD9Followup": {
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
@@ -7534,7 +7571,7 @@
   },
   "currentClassificationTotals": {
     "A": 137,
-    "P": 61,
+    "P": 62,
     "F": 19,
     "C": 5,
     "E": 12,
@@ -7952,6 +7989,30 @@
       "total": 13
     },
     "tierCApproval": false,
+    "ownerApproval": false,
+    "releaseEnabled": false
+  },
+  "cohortEvmAbortSignal20261123": {
+    "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+    "parentPr": 247,
+    "parentHead": "3f23c774b2464b04de6cfece9ab1721dd5130f86",
+    "draftChildPr": 248,
+    "headSha": "4fc269e4fe17b8aaa9f315c29f726071f3834f5e",
+    "treeSha": "19bd218ca957f119c0299b4fc9fb1045b9327b20",
+    "testFirstCommit": "caab74ad1ff737625e365f099b1c4e672b5231dc",
+    "recoveredHistoricalDeclarations": 7,
+    "sourceOwnerPr": 40,
+    "sourceFiles": [
+      "packages/wallet/src/evm-execution.ts",
+      "packages/wallet/test/evm-execution.test.mjs",
+      "docs/engineering/EVM_ABORT_SIGNAL_HOOK_RECOVERY_20261123.md"
+    ],
+    "ciAtInitialPublication": {
+      "completedSuccess": 7,
+      "inProgress": 4,
+      "total": 11
+    },
+    "independentTierC": false,
     "ownerApproval": false,
     "releaseEnabled": false
   }
