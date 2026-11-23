@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23 UTC: PR250 exact-head actual Anvil negative controls executed successfully in job 137844763914: five named EIP-1271 checks, 96 adapter reads, zero verifier sends/signatures. Same local-trade job then failed an unrelated localnet Chromium external wallet connection timeout at scripts/test-localnet-browser.mjs:28. Targeted exact-head rerun approved (new job 137847864848 queued); preserve original failed job. Other 10 of 11 reported hosted contexts successful, Snyk successful at latest. Child remains draft/unmerged, Tier C and owner approval absent.",
     "2026-11-23: new test-only DRAFT PR250 head d75d2a00, stacked directly on PR249 bd860c66; 262 remote refs fully paginated, PR count 247 from previous 246 plus new PR250. Restored actual RPC execution-error vs transport-fault distinction in native EIP-1271 oracle, checked full GitHub blob and parse-only syntax. Hosted Anvil/Forge/Node/CodeQL, Tier C, owner acceptance unverified. No main merge/production source/release.",
     "2026-11-23: new PR249 one-file native EIP1271 negative oracle at bd860c66, stacked on PR246 and 11/11 reported hosted checks successful. Bounded source review submitted COMMENT #6024392085: for revert and gas modes the UNAVAILABLE+eth_call-method-only oracle can pass if generic RPC transport fails after call invocation. This is a test-coverage concern, not an established production defect; owner/independent Tier C and case-specific negative transport control outstanding. Counts A137/P63/F34/C5/E0/V21/B1/D0=261, 246 total PRs/64 open. No main merge or release.",
     "2026-11-23 ten E→F source-content dispositions: PR71–75 and PR91–93 complete D9 test blocks present in main (PR73 reconstructed with PR74 four new lines); PR79 full blob matches; PR129 Python 3.12 docs correction present. A137/P62/F32/C5/E0/V23/B1/D0=260. No new test execution or whole-history patch-ID proof.",
@@ -57,7 +58,7 @@
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "2026-11-23: one-file native EIP-1271 test-only follow-up to PR249; validated GitHub source blob and parent→head compare, V8 parse-only syntax after excluding module imports; no native Anvil execution or complete CI. Synthetic RPC_UNREACHABLE fault must fail a strengthened native JSON-RPC error oracle, independently probes deployed mode(), and checks canonical call target/data/anchor/gas.",
+      "inspection": "2026-11-23: one-file native EIP-1271 test-only follow-up to PR249; validated GitHub source blob and parent→head compare, V8 parse-only syntax after excluding module imports; no native Anvil execution or complete CI. Synthetic RPC_UNREACHABLE fault must fail a strengthened native JSON-RPC error oracle, independently probes deployed mode(), and checks canonical call target/data/anchor/gas. Exact PR250 hosted original local-trade job 137844763914 actually PASSED the 5 named native EIP-1271 checks (96 verifier reads, 0 verifier sends/signs), including synthetic outage rejection. Same job FAILED later in unrelated localnet Chromium external-wallet connection timeout; a single targeted same-head job rerun was requested (new job 137847864848 queued at snapshot). All other 10/11 reported check contexts succeeded at read; Snyk succeeded. No full acceptance claim.",
       "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
@@ -79,7 +80,7 @@
         "verifiedDate": "2026-11-23",
         "method": "GitHub compare main...PR250 head; parent PR249...head ahead=1/behind=0"
       },
-      "consolidationDecision": "DRAFT child of #249 on #246. Source-only native-test oracle, not production acceptance or merged. Require exact-head hosted Anvil/Foundry/Node/CodeQL and independent review, parent ordering, current-target compatibility and owner authorization. Do not deploy or enable release."
+      "consolidationDecision": "DRAFT child of #249 on #246. Source-only native-test oracle, not production acceptance or merged. Require exact-head hosted Anvil/Foundry/Node/CodeQL and independent review, parent ordering, current-target compatibility and owner authorization. Do not deploy or enable release. Native case code executed in original job, but full PR gate remains pending/failure-history retained; do not transfer 10/11 into full success."
     },
     {
       "branch": "audit/eip1271-negative-oracle-20261123",
@@ -8344,11 +8345,27 @@
       "ahead": 4,
       "behind": 0
     },
-    "nativeTestsExecuted": false,
+    "nativeTestsExecuted": true,
     "syntaxParseOnly": true,
     "independentTierC": false,
     "ownerApproval": false,
     "mainMerged": false,
-    "releaseEnabled": false
+    "releaseEnabled": false,
+    "nativeProof": {
+      "jobId": 137844763914,
+      "runId": 45218137585,
+      "checks": 5,
+      "adapterReads": 96,
+      "verifierSendsOrSigns": 0,
+      "originalJobConclusion": "failure",
+      "originalFailure": "unrelated browser external wallet connection timeout",
+      "originalFailureStep": "Qualify separate buyer and seller browser profiles",
+      "rerunJobId": 137847864848,
+      "rerunStatusAtRead": "queued",
+      "otherSuccesses": 10,
+      "reportedContexts": 11,
+      "snyk": "success",
+      "currentHeadFullyQualified": false
+    }
   }
 }

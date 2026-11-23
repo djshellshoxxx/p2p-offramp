@@ -1,3 +1,13 @@
+## 2026-11-23 UTC — PR250 native negative controls executed; unrelated browser timeout keeps full CI held
+
+On exact child source `d75d2a00d4cfdd83fd681c361eefce69bc91c617`, real GitHub [local-trade job 137844763914](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45218137585/job/137844763914) completed the new `npm run test:eip1271:local` step **SUCCESS** at 16:36:27 UTC: five named native Anvil cases, `adapterReads=96`, `adapterSendsOrSigns=0`, `externalNetwork=false`, `releaseAcceptance=false`. The transport-failure negative-control assertion is part of the actually executed harness. This is more than parse-only evidence, but **not** a full-suite pass.
+
+The very same original job subsequently **FAILED** at 16:38:41 UTC during the separate localnet Chromium buyer/seller workflow: `Error: Timed out: external wallet connection` at `scripts/test-localnet-browser.mjs:28` while connection is driven from line 90, unrelated to the one-file PR250 change. Do not relabel that failed job as successful. A **single targeted job rerun** was requested without changing the source or assertions (replacement job `137847864848` queued at read). Other 10/11 reported current-head check contexts completed SUCCESS, plus Snyk SUCCESS; no CodeQL result reported among those 11. The original browser timeout and any later rerun outcome remain separate.
+
+PR250 remains DRAFT and unmerged; independent Tier C, recorded owner authorization, exact-target CodeQL/native financial/browser acceptance and parent ordering PR246→PR249→PR250 remain mandatory. Main `01f6f4feca051d68de24a04299cd3bb444bce40c` and `ReleaseEnabled=0` remain unchanged. No deployment, release or real funds.
+
+---
+
 ## 2026-11-23 — PR250 focused native-test correction published (unmerged)
 - New [DRAFT PR250](https://github.com/djshellshoxxx/p2p-offramp/pull/250), head `d75d2a00d4cfdd83fd681c361eefce69bc91c617`, directly atop PR249 head `bd860c66c3f50deda72392523ac8fc8860703f84`. **One test-only file**, no production source change. This addresses the concrete PR249 reviewer concern: generic `UNAVAILABLE` transport failure must not masquerade as an executed native revert/gas test.
 - Added injected `RPC_UNREACHABLE` rejection, JSON-RPC execution error classification, deployed fixture mode() read and exact wallet/canonical-anchor/data/gas assertions. [Evidence](docs/engineering/PR250_EIP1271_TRANSPORT_NEGATIVE_CONTROL_20261123.md). Verified code blob and GitHub compare, V8 syntax parse-only. No new local native/browser/financial suite or final CI acceptance claimed.

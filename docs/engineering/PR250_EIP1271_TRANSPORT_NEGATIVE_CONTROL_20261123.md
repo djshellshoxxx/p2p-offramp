@@ -23,3 +23,9 @@ The control **does not establish exact revert-versus-out-of-gas causal attributi
 
 ## Full census and handoff
 A new fully paginated GitHub branch scan counted **262 refs** (unique). The preceding complete PR inventory had 246 PRs; PR250 is the one new confirmed open PR in this run, giving **247 total / 65 open by delta**, not a full PR re-pagination. Master classification: A137/P64/F34/C5/E0/V21/B1/D0 (262 total). Keep previous snapshots unchanged. Next: inspect PR250 exact-head CI/native failure artifacts; if a concrete failure occurs, correct only the child on a new reviewed SHA. Continue other disjoint branch reconciliation while Tier B/Tier C and owner approvals block merging the financial stack.
+
+## Later source-bound hosted execution readback (2026-11-23 UTC)
+
+At exact PR250 SHA `d75d2a00d4cfdd83fd681c361eefce69bc91c617`, hosted `local-trade` job [137844763914](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45218137585/job/137844763914) actually executed the corrected native harness and printed all five `ok` scenario groups. Final receipt: `{"fixture":"local-native-eip1271","checks":5,"adapterReads":96,"adapterSendsOrSigns":0,"externalNetwork":false,"tradingEnabled":false,"releaseAcceptance":false}`. Native step succeeded. The same job later failed its unrelated `test-localnet-browser.mjs` buyer/seller connection workflow with `Error: Timed out: external wallet connection` (16:38:41Z); original failure is retained, not counted as green.
+
+At readback: 10/11 current PR250 check contexts SUCCESS, `local-trade` replacement job `137847864848` QUEUED after one targeted rerun of original job `137844763914`; separate Snyk SUCCESS. The prior successful parent #249's checks are not transferred to child. No independent Tier C or owner approval; final source/target checks and native financial acceptance remain outstanding. No new production code or funds.
