@@ -17,6 +17,7 @@
     "V": "Git-divergent, bounded partial source/blob/ownership comparison completed; no full patch-id, feature acceptance or required runtime merge gates inferred."
   },
   "notes": [
+    "2026-11-23 UTC EIP1271 follow-up: PR246 latest head 233a66a7c2a4, tree 38fb1a712824; after original test-only afc8eff, documentation-only link correction to source-gap report. Git compare main...head ahead=2/behind=0, original fixture/harness SHA exact, native CI pending; 258/243 unchanged.",
     "2026-11-23 UTC: New isolated current-main test-only EIP-1271 acceptance PR246 at afc8eff73df4; 2 unchanged original PR40 source blobs recovered, npm script and existing EVM CI local-trade step added, current-main wallet/release production untouched; 14 own CI check runs initially queued, native not yet accepted. Inventory 258 refs / 243 PRs; A137/P60/U0/C5/E12/V25/F18/B1/D0 = 258.",
     "2026-11-23 UTC: S04 wallet/release stage immutable source review: 18 stage-local paths (17 exact in owner PR40/1 corrected; current main 3 exact/13 updated/2 missing native EIP-1271 fixture/harness). Owner-only gzip/CORS regression test already identical on main. No native tests or source merge. BRANCH_COHORT_S04_WALLET_RELEASE_20261123.md. Counters unchanged.",
     "2026-11-22 source review of final six D historical stages: S02 42 paths (42 owner exact/32 main exact), S03 11 (11/6), S05 merged 40 (40/34), S05 split 40 (38/32), S11 33 (30/9), S12 190 (190/0, 185 archives absent main). D6->0 V19->25; all remain partial pending patch-ID/runtime/owner gates. See BRANCH_COHORT_FINAL_DIVERGENT_STAGE_20261122.md. ReleaseEnabled=0.",
@@ -3505,23 +3506,23 @@
     },
     {
       "branch": "codex/eip1271-native-acceptance-recovery-20261123",
-      "sha": "afc8eff73df48dace2c4650a7a9c4f4a81be7fdb",
+      "sha": "233a66a7c2a465ac7b5504564c0e3b826afedcf5",
       "openPullRequests": [
         {
           "number": 246,
-          "headSha": "afc8eff73df48dace2c4650a7a9c4f4a81be7fdb",
+          "headSha": "233a66a7c2a465ac7b5504564c0e3b826afedcf5",
           "base": "main",
           "htmlUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/246"
         }
       ],
       "classification": "P-open-unintegrated-pr",
-      "inspection": "2026-11-23 actual current-main test-only code: 2 original PR40 blob identities, exact tree, 5 files, Git ancestry and CI queued; source recovered but not native-qualified",
+      "inspection": "2026-11-23 current-main test-only exact original PR40 blobs, five paths, native CI pending; second documentation-only commit corrects evidence link to immutable PR245 URL",
       "uniqueChangesVerified": true,
       "completionVerified": false,
       "associatedPullRequests": [
         {
           "number": 246,
-          "headSha": "afc8eff73df48dace2c4650a7a9c4f4a81be7fdb",
+          "headSha": "233a66a7c2a465ac7b5504564c0e3b826afedcf5",
           "base": "main",
           "state": "open",
           "merged": false,
@@ -3532,12 +3533,12 @@
       "compareToMain": {
         "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
         "mergeBaseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
-        "aheadBy": 1,
+        "aheadBy": 2,
         "behindBy": 0,
         "verifiedDate": "2026-11-23",
         "method": "GitHub immutable commit compare; native runtime pending"
       },
-      "consolidationDecision": "New isolated draft PR246 recovers test-only native EIP-1271 coverage, preserves PR40 and all current main wallet/release code; DO NOT merge until actual current-target hosted Anvil/Foundry and Tier C independent/owner approval."
+      "consolidationDecision": "Draft PR246 unmerged; native EIP-1271 test restored, exact branch tip 233a66a7c2a465ac7b5504564c0e3b826afedcf5; Tier C reviews/native CI/owner approval still pending, never merge old PR40 production reader"
     },
     {
       "branch": "codex/foundation-gates-20261104",
@@ -7828,8 +7829,8 @@
     "verifiedDate": "2026-11-23",
     "mainSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
     "branch": "codex/eip1271-native-acceptance-recovery-20261123",
-    "headSha": "afc8eff73df48dace2c4650a7a9c4f4a81be7fdb",
-    "treeSha": "939e6b7c0fdc0be869bed3c602da7224498eda91",
+    "headSha": "233a66a7c2a465ac7b5504564c0e3b826afedcf5",
+    "treeSha": "38fb1a712824435f2bcf9fd5225d27706472a979",
     "sourcePR": 40,
     "sourceFixtureBlob": "83ba7e42eeead97a6a99455b4a82b714dbcc8701",
     "sourceHarnessBlob": "3f0ddfce4bb986b3423ecfffa40685614a16d28c",
@@ -7849,6 +7850,7 @@
       "D": 0,
       "B": 1
     },
-    "report": "docs/engineering/EIP1271_NATIVE_ACCEPTANCE_RECOVERY_20261123.md"
+    "report": "docs/engineering/EIP1271_NATIVE_ACCEPTANCE_RECOVERY_20261123.md",
+    "sourceOnlyFix": "Docs-only second commit corrected previously dangling relative evidence URL to immutable PR245 file; original fixture and script blob identities remain exact"
   }
 }

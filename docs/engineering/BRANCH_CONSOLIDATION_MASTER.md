@@ -1,3 +1,9 @@
+## 2026-11-23 UTC — PR246 documentation-link correction, code blobs unchanged
+
+The live draft [PR246](https://github.com/djshellshoxxx/p2p-offramp/pull/246) advanced from source commit `afc8eff73df48dace2c4650a7a9c4f4a81be7fdb` to **`233a66a7c2a465ac7b5504564c0e3b826afedcf5`** solely to replace a report-relative Markdown link (absent on current main) with the verified immutable PR245 source-gap URL. Git readback: complete tree `38fb1a712824435f2bcf9fd5225d27706472a979`, parent `afc8eff73df48dace2c4650a7a9c4f4a81be7fdb`, current main merge base `01f6f4feca051d68de24a04299cd3bb444bce40c`, ahead=2/behind=0, and the same **five changed paths**. Original source blobs and workflow/npm test code were not altered. Fresh CI on this actual head is needed; earlier checks cannot transfer. New census unchanged at **258 branches / 243 PRs**. No main merge, no native acceptance claimed, `ReleaseEnabled=0`.
+
+---
+
 ## 2026-11-23 UTC — Actual engineering: native EIP-1271 test recovery (draft PR246)
 
 Current `main@01f6f4feca051d68de24a04299cd3bb444bce40c` remains unchanged. Recovered two exact Git blobs from frozen original [PR40](https://github.com/djshellshoxxx/p2p-offramp/pull/40) into a separate **current-main-only test** [PR246](https://github.com/djshellshoxxx/p2p-offramp/pull/246): fixture `83ba7e42eeead97a6a99455b4a82b714dbcc8701` and harness `3f0ddfce4bb986b3423ecfffa40685614a16d28c`. Added just one npm script and one existing EVM workflow step; **no product logic or release settings changed**. Current branch commit `afc8eff73df48dace2c4650a7a9c4f4a81be7fdb`, tree `939e6b7c0fdc0be869bed3c602da7224498eda91`, sole parent `01f6f4feca051d68de24a04299cd3bb444bce40c`, GitHub compare ahead **1**, behind **0**, exactly **5 changed paths**. The owner PR40/legacy stage/frozen stacks were not modified.
