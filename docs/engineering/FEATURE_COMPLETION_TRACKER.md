@@ -1,3 +1,14 @@
+## Live overlay — 2026-11-24 UTC, actual current-source unsigned staging qualified
+
+| Capability | Verified evidence | Remaining gate |
+| --- | --- | --- |
+| Unsigned staging #265 | Exact current-main proposal 69e4aaa1, 14/14 checks + Snyk; docs/tooling 50/50, zero stale bindings/claims; actual Chromium current-source distribution qualified, 3 checks, 42 assets, two build passes, zero unexpected requests. | Fresh independent review, draft disposition, guarded integration; #253 preserved; #255 follows integration. No signed release, host-header attestation, semantic approval or publication. |
+| S08 historical test intent | Seven test/script files, 29 of 32 historical literal titles retained, three revised; scriptless browser file exact. Current-source smoke now executed on #265; repeated-stage/tamper fixture remains historical-bound-client/current-tooling. | #44 remains partially reconciled; do not duplicate #255/#259 or infer full semantic equivalence. |
+| Startup #252 | Historical 15/15 checks; actual proposal has old main parent. | Named review and actual-current-target qualification; existing owner retained. |
+| External gates | D2 trust material, D8 financial approval, actual devices, #237 named review, optional package intake remain distinct. | ReleaseEnabled=0; no signing, deployment or real funds. |
+
+---
+
 ## Live overlay — 2026-11-24 UTC, current-target staging composition
 
 | Capability | Evidence | Remaining gate |

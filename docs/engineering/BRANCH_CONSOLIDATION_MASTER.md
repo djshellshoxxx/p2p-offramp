@@ -1,3 +1,9 @@
+## 2026-11-24 UTC — #265 unsigned staging qualified on current-target candidate; S08 test provenance
+
+#265 exact proposal 69e4aaa1b8feea917b5a79ceed929762d64ea516, same tree 44a24e8443f548a42cbd07d7ce6481fbd549e35f, ordered current main and head. 14/14 checks plus Snyk; actual tooling 50/50, docs bindings clear; current-source Chromium distribution 3/3 with 42 assets, two build passes and zero unexpected requests. No historical fallback, signed release or independent witness. #265 remains draft pending independent review; original #253 preserved, #255 follows record-refresh integration. S08 seven-file source review: 29/32 historical literal titles preserved, three evolved, 46 current titles; exact scriptless browser blob. Historical repeated-stage/tamper fixture remains separate from current-source acceptance, #44 remains V. Live census 277 refs/262 PRs, 152 ancestor-proven/125 not ancestry-proven. See [handoff](CONSOLIDATION_HANDOFF.md) and inventory overlay liveExactRefDelta20261124CurrentStagingQualified. No merge or release activation.
+
+---
+
 ## 2026-11-24 UTC — current-main unsigned staging integration candidate
 
 New draft #265 head 236c38d674a25c2712b5e1171806934ebe659cc5 retains #253's exact two record blobs on actual main 8cff44909752f5e8b99eecec44ebaa44360c7b5d, including #251's new regression test. All 2833 non-tree path/mode/type/SHA entries compared to expected union; zero mismatches. Proposal 69e4aaa1b8feea917b5a79ceed929762d64ea516 same tree, correct ordered parents. 13 retrieved checks queued, independent review pending; #253 frozen original preserved. #255 follows successful record-refresh integration, not vice versa. Current census 277 refs/262 PRs, 152 ancestor-proven, 125 not ancestry-proven; see latest inventory overlay and handoff. No runtime source, release, deployment or main merge.
