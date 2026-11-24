@@ -6,9 +6,16 @@ release. Keep `ReleaseEnabled=0` and the default empty network allowlist.
 
 ## Reproduce local evidence
 
-Use Node 24+, Python 3.12+ and an installed Chromium. From the repository root:
+Use Node 24+ and an installed Chromium. The independent OpenSSL oracle run by
+`npm run test:specs` requires `cryptography`; the hash-pinned development
+closure targets CPython 3.12 on Linux x86_64 (Ubuntu amd64). Other tool
+platforms are not qualified by that lock. From the repository root, create and
+activate an owned virtual environment before running the checks:
 
 ```sh
+python3.12 -m venv .venv-oracle
+. .venv-oracle/bin/activate
+python -m pip --isolated install --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt
 npm ci --ignore-scripts
 npm ci --ignore-scripts --prefix packages/escrow-evm
 npm test
