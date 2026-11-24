@@ -1,3 +1,12 @@
+## Live overlay — 2026-11-24 UTC, #262 original failure and correction
+
+| Capability | Evidence | Remaining gate |
+| --- | --- | --- |
+| Pending exit consent on fresh-key restore #262 | Original hosted Node run 2506 pass / 1 fail / 1 skip: BUSY instead of REVIEW_EXPIRED on first direct confirmation. Corrected head 12123046232496ad38decefa861029f76960b68d waits for exact ready state; strict refusal and effect oracles retained. Exact source/proposal verified; test-only. | Corrected hosted Node/native checks and independent review; no production defect or completed feature claimed. |
+| Other roadmap items | Main and branch counts unchanged; prior verified evidence retained. | Existing independent/named reviews, D2 trust, D8 recorded approvals, actual devices and optional-package gates. |
+
+---
+
 ## Live overlay — 2026-11-24 UTC, pending exit consent and native recovery
 
 Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`, 274 refs, 259 PRs (76 open, 125 merged, 58 closed unmerged), 152 ancestor-proven tips; 122 not ancestry-proven. Prior full census and historical comparison retained with exact delta.
