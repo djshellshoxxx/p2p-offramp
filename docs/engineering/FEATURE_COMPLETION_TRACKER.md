@@ -1,3 +1,12 @@
+## Live overlay — 2026-11-24 UTC, corrected #262 executed and targeted #258 retry
+
+| Capability | Evidence | Remaining gate |
+| --- | --- | --- |
+| Pending release consent on fresh-key restore #262 | Exact corrected proposal f62510be660027f590131a8fc83bff114513d516: new test passes, 2507 Node pass / 0 fail / 1 skip, all seven foundation jobs pass. | Native Solana job 138445982930 still running, independent review, draft and integration. Controlled fixture, not full native composition. |
+| Opt-in local screen counts #258 | Exact unchanged proposal 7afdaa08936f848d6e7bf23d4c1157f124dabc4e; targeted retry of cancelled WebKit job 138172829136 accepted, attempt 2 in progress. | WebKit result and named Tier B review. |
+| Expired cold funding reservation | Historical S07 browser oracle requires cancellation after deadline; current D9 localnet-resumption lines 108–118 require imported prepared funding hold, domain tx-lifecycle lines 578–593 require native classification rather than trusting marker metadata. | Native exact-proof composition; do not restore old unconditional cancellation or bypass D9. |
+| Final durable marker read | Domain tx-lifecycle lines 206–226 cover abort immediately after durable marking with zero sends, null hash, preserved unknown and conflict on replay. | Historical native final-read expiry/revocation remains a separate composition gap. Do not duplicate #247/#248 executor hardening. |
+
 ## Live overlay — 2026-11-24 UTC, #262 original failure and correction
 
 | Capability | Evidence | Remaining gate |
