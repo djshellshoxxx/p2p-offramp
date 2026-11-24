@@ -139,37 +139,41 @@ function mounted(t) {
   };
 }
 
-test('QR controls reference their visible instructions in the selected locale', async t => {
+for (const locale of ['en', 'fixture-rtl']) test('QR controls reference visible ' + locale + ' instructions before and after review', async t => {
   const ui = mounted(t);
+  // Capture the English source before selection so the expected descriptions cannot silently fall back.
+  const instructions = [
+    ['qr-image-file', q.imageLimits],
+    ['qr-public-file', q.fileLimits],
+    ['qr-public-text', q.textHelp],
+    ['qr-fingerprint-format', q.fingerprintHelp],
+    ['qr-fingerprint-file', q.fingerprintHelp],
+  ];
+  const cameraHelp = q.cameraHelp, compareHelp = q.compareHelp;
+  const idle = ui.select(locale);
+  assert.equal(localeStore.getSnapshot().id, locale);
+  assert.equal(idle.props['data-qr-phase'], 'idle');
+  const byId = (root, id) => nodes(root, node => node.props.id === id);
+  const assertDescription = (root, controls, englishText) => {
+    assert.equal(controls.length, 1, 'the control is rendered once');
+    const id = controls[0].props['aria-describedby'];
+    assert.ok(id, 'the control references its instructions');
+    const descriptions = byId(root, id);
+    assert.equal(descriptions.length, 1, 'the description has a unique target');
+    const expected = locale === 'en' ? englishText : '[DRAFT ' + englishText + ']';
+    assert.equal(words(descriptions[0]), expected);
+  };
+  for (const [id, help] of instructions) assertDescription(idle, byId(idle, id), help);
+  assertDescription(idle, nodes(idle, node => node.type === 'button' && words(node) === q.cameraStart), cameraHelp);
+  assert.equal(byId(idle, 'qr-compare-file').length, 0);
+
   const created = await createQrEnvelope(INPUTS['recovery-fingerprint'], deps('described-fingerprint'));
   const encoded = await encodeQrText(created.envelope, encodeDeps());
   const fingerprint = await decodeQrText(encoded.text, qrContext());
   assert.equal(fingerprint.ok, true);
-  ui.review(fingerprint.review);
-
-  for (const locale of ['en', 'fixture-rtl']) {
-    const root = ui.select(locale);
-    const instructions = [
-      ['qr-image-file', q.imageLimits],
-      ['qr-public-file', q.fileLimits],
-      ['qr-public-text', q.textHelp],
-      ['qr-fingerprint-format', q.fingerprintHelp],
-      ['qr-fingerprint-file', q.fingerprintHelp],
-      ['qr-compare-file', q.compareHelp],
-    ];
-    const assertDescription = (controls, expected) => {
-      assert.equal(controls.length, 1, 'the control is rendered once');
-      const id = controls[0].props['aria-describedby'];
-      assert.ok(id, 'the control references its instructions');
-      const descriptions = nodes(root, node => node.props.id === id);
-      assert.equal(descriptions.length, 1, 'the description has a unique target');
-      assert.equal(words(descriptions[0]), expected);
-    };
-    for (const [id, expected] of instructions) {
-      assertDescription(nodes(root, node => node.props.id === id), expected);
-    }
-    assertDescription(nodes(root, node => node.type === 'button' && words(node) === q.cameraStart), q.cameraHelp);
-  }
+  const confirmed = ui.review(fingerprint.review);
+  assert.equal(confirmed.props['data-qr-confirmed'], 'true');
+  assertDescription(confirmed, byId(confirmed, 'qr-compare-file'), compareHelp);
 });
 
 function followsLocale(ui, expected) {
