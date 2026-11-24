@@ -21913,5 +21913,87 @@
       "independentReview": false,
       "merged": false
     }
+  },
+  "liveExactRefDelta20261124G15Guide": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "coordinatorTipBeforePublication": "a8e3c2237ac3ed3ea39389ab971ac9a032e29fb1",
+    "method": "Complete REST ref and PR pagination; unchanged previously proven ancestor tips carried forward; no new full-history calculation.",
+    "branchPageSizes": [
+      100,
+      100,
+      75,
+      0
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      60,
+      0
+    ],
+    "branchCount": 275,
+    "pullRequestCount": 260,
+    "openPullRequestCount": 77,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 123,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "cff7593a350d0de78b448d5c66e0ef5f8a7af013",
+        "sha": "a8e3c2237ac3ed3ea39389ab971ac9a032e29fb1",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "a8e3c2237ac3ed3ea39389ab971ac9a032e29fb1",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "cb249f7d4791669a89d24fa189a06cbbe1ccd738"
+          }
+        ]
+      },
+      {
+        "branch": "docs/s12-spec-oracle-reproduction-20261124",
+        "previous": "9a07203b73fab01ba9eb5b88ffda57591315562a",
+        "sha": "61d3eb154f60186d8ccc91d02736ab32ab337470",
+        "associatedPullRequests": [
+          {
+            "number": 263,
+            "headSha": "61d3eb154f60186d8ccc91d02736ab32ab337470",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "c365cb76b19dcd4cc9a2b2317cb611112756c525"
+          }
+        ]
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr263": {
+      "previousHead": "9a07203b73fab01ba9eb5b88ffda57591315562a",
+      "previousChecks": "14 successful plus combined status success; no independent review",
+      "head": "61d3eb154f60186d8ccc91d02736ab32ab337470",
+      "tree": "5aa8f3bce8253709f329ad9fb7d517031ac4d9a7",
+      "proposal": "c365cb76b19dcd4cc9a2b2317cb611112756c525",
+      "sourceBlob": "1a9870485d1333fb2d0dfedb3ec80ed225060c52",
+      "path": "docs/LOCAL_DEVELOPMENT_AND_RELEASE_GATES.md",
+      "ahead": 2,
+      "behind": 0,
+      "additions": 15,
+      "deletions": 5,
+      "scope": "Correct stale missing-G15 wording with accepted D3 and unresolved D2/release gates; docs only",
+      "independentReview": false,
+      "merged": false
+    }
   }
 }
