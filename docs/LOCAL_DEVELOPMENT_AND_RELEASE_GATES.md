@@ -43,10 +43,13 @@ server and no external-chain connection. Never transfer assets to those accounts
    Preserve emitted third-party attribution and policy files.
 2. Confirm default build exclusion checks pass. Never publish `dist-demo` as a
    trading product. Local evidence files are not signed manifests or approval.
-3. An enabled release requires the missing common G15 manifest schema, selected
-   signing policy, independently reviewed cryptography/contracts, approved registry,
-   native deployments/endpoints, host-header smoke tests and supported-device
-   evidence. The local test registry is not a substitute.
+3. The common G15 manifest and D3 Option A testnet registry/ABI binding are
+   implemented; see [accepted owner decisions](adr/ACCEPTED-DECISIONS-2026-11-04.md).
+   D2 owner-authorized public trust material, the first signed testnet release,
+   independently reviewed cryptography/contracts, approved registry and native
+   deployments/endpoints, host-header smoke tests and supported-device evidence
+   remain separate gates. Testnet release verification is not production release
+   approval. The local test registry is not a substitute; keep `ReleaseEnabled=0`.
 4. When deployment is explicitly authorized, first retain the prior immutable
    artifact and its policy/asset digests. Deploy the exact reviewed artifact and
    check the final host, cache behavior, CSP, MIME types and framing headers.
