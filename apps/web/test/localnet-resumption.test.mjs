@@ -166,6 +166,12 @@ test('fresh-key restore retires a pending release review and never restores its 
   // Use the controller boundary directly: the fixture helper requires a current
   // review to grant the synthetic bridge permission before issuing confirmation.
   const refuseRetiredReview = async () => {
+    // Restore/reconnect can leave signed relay history draining. Wait for the
+    // normal ready phase, just as the fixture command helper does, so BUSY
+    // cannot mask the exact retired-review refusal being tested.
+    await until(() => seller.snapshot.phase === 'ready', 'restored controller ready for stale-review refusal');
+    assert.equal(seller.snapshot.profileId, destinationId);
+    assert.equal(seller.snapshot.review, null);
     const count = seller.external.calls.length, effects = { ...chain.counts };
     const refused = await seller.controller.dispatch({ type: 'review.confirm', reviewId: pending.id });
     assert.equal(refused.ok, false);
