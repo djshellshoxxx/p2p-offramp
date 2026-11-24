@@ -11902,5 +11902,44 @@
       "merged": false
     },
     "handoffCommit": "1716b8c2fbd1592d67d01c501b8c89b8f9236afa"
+  },
+  "liveRestCensus20261124Run9": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "method": "Exhausted branch-name cursors; partitioned PR search (73 indexed open, 58 closed unmerged, 68+34+23 merged) plus direct PR260 readback because search indexing had not included it. No refreshed exact-tip or patch-ID census.",
+    "branchCount": 272,
+    "pullRequestCount": 257,
+    "openPullRequestCount": 74,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "fullHistoryRecomputed": false,
+    "changedOrNewRefs": [
+      {
+        "branch": "test/s08-retained-backup-origin-outage-20261124",
+        "sha": "f3b0d907edef0e7dd13b89d33ab65b85ba7d9744",
+        "classification": "P-open-unintegrated-pr",
+        "openPullRequests": [
+          {
+            "number": 260,
+            "headSha": "f3b0d907edef0e7dd13b89d33ab65b85ba7d9744",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "compareToMain": {
+          "mainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "mergeBaseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "aheadBy": 1,
+          "behindBy": 0,
+          "method": "GitHub immutable compare"
+        },
+        "changedPaths": [
+          "scripts/test-vault-browser.mjs"
+        ],
+        "sourceBlob": "096eba5f44b89d9a5a06907ff186c74f016cb42d",
+        "scope": "S07/S08 nonfinancial storage-layer retained-file origin-outage acceptance only; draft, four retrieved workflows queued, no actual new browser execution, independent review pending",
+        "completionVerified": false
+      }
+    ]
   }
 }
