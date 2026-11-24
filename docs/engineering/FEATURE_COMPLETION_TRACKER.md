@@ -1,3 +1,9 @@
+## 2026-11-24 — current-target startup recovery browser evidence
+
+#266 hosted Chromium job 138826454718 passed on exact proposal d310a4e7; all five startup-failure modes preserved encrypted source (missing entry, missing app chunk, missing worker, unsupported document crypto, unsupported worker storage), with zero unexpected requests or automatic wallet prompts. Four workflows completed successfully, native Solana program still running; named and independent reviews absent, draft and unmerged. This qualifies the hosted browser scope only, not devices or production activation. S08 lab/portal source reconciliation: seven exact blobs, two newer safety-preserving changes (per-run exclusive evidence output and directory-identity-aware cleanup); no rollback or full S08 equivalence claim. See handoff for source identities. #265 precedes #255; D2, D8, actual devices and optional gates remain distinct.
+
+---
+
 ## 2026-11-24 — startup recovery acceptance
 
 #252 source and historical browser proof preserved in draft #266; exact current-target composition verified, hosted checks queued, independent/named review and main integration remain pending. S06 regression retained. #265 unsigned staging remains candidate-only; #255 follows integration. D2, D8, actual devices and optional gates remain separate.
