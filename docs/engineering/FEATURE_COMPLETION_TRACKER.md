@@ -1,3 +1,15 @@
+## Live overlay — 2026-11-24 UTC, pending exit consent and native recovery
+
+Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`, 274 refs, 259 PRs (76 open, 125 merged, 58 closed unmerged), 152 ancestor-proven tips; 122 not ancestry-proven. Prior full census and historical comparison retained with exact delta.
+
+| Capability | Evidence | Remaining gate |
+| --- | --- | --- |
+| Deleted review recovery #257/#261 | #261 exact corrected proposal 6924297a: nine persistent Chromium checkpoints previously passed; all 12 retrieved checks now successful, 62 validator checks, 13 sends, 1853 real refund-wait seconds, six native browser checks, zero fixture errors. | Independent review, draft/parent integration and current-main qualification; no physical-device/release claim. |
+| Pending exit review on fresh-key restore #262 | One new controlled LocalnetController regression, head 1b391d25, test-only +54/-0; exact source readback; five workflows queued. | Executed current-target test and independent review, native app composition remains separate. |
+| Other candidates and accepted roadmap | Previous overlay unchanged except updated census and #261/#262. | #237 named review, D2 public trust, D8 specific approvals, physical acceptance, optional-package gates remain. |
+
+---
+
 ## Live overlay — 2026-11-24 UTC, exact-ref census and persistent recovery
 
 Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. Exact live census: 273 refs, 258 PRs (75 open, 125 merged, 58 closed unmerged); 152 current tips proven ancestors including main and #251 by transitive unchanged-tip ancestry or direct comparison. Remaining 121 not ancestry-proven in this increment, not necessarily unique. Prior patch-ID snapshot remains historical. No product merge in this increment.

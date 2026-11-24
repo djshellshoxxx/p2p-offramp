@@ -21478,5 +21478,177 @@
       "merged": false,
       "independentReview": false
     }
+  },
+  "liveExactRefDelta20261124PendingExit": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "coordinatorTipBeforePublication": "f5ae889ac3f0e55117d6e6285424c2cdb421aa3b",
+    "method": "Complete paginated REST branch census (100/100/74), PR census (100/100/59); unchanged prior exact tips plus recorded delta; no fresh full-history patch-id.",
+    "branchCount": 274,
+    "pullRequestCount": 259,
+    "openPullRequestCount": 76,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 122,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "e76f2e4094f09c8bb85d4868558ba5609131010f",
+        "sha": "f5ae889ac3f0e55117d6e6285424c2cdb421aa3b"
+      },
+      {
+        "branch": "test/s07-pending-exit-review-restore-20261124",
+        "previous": null,
+        "sha": "1b391d25ccf843b65372ad95c3ba5ee1fe6e6b98"
+      }
+    ],
+    "missingRefs": [],
+    "pr262": {
+      "number": 262,
+      "branch": "test/s07-pending-exit-review-restore-20261124",
+      "head": "1b391d25ccf843b65372ad95c3ba5ee1fe6e6b98",
+      "tree": "3bde3198cfc0ab39285ed0db0c776a909d91474c",
+      "mergeProposal": "0601c8e4e0cef644ad2712eb0f8ad6a8443e3ac6",
+      "base": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+      "ahead": 1,
+      "behind": 0,
+      "path": "apps/web/test/localnet-resumption.test.mjs",
+      "sourceBlob": "3f484d530b31b50e8fd5709a55e4af8ebf621a6e",
+      "additions": 54,
+      "deletions": 0,
+      "draft": true,
+      "executed": false,
+      "reviewed": false,
+      "classification": "P-open-unintegrated-pr"
+    },
+    "pr261": {
+      "head": "5a13625db76e7ee9e5256be288a51d6f0e4ae70b",
+      "proposal": "6924297a86f090f4919a7b6f8bec02ed6f05fdcb",
+      "tree": "2c5a386e0879e67effe9ffc465f8dc678ddc0405",
+      "validatorChecks": 62,
+      "validatorSends": 13,
+      "refundWaitSeconds": 1853,
+      "browserChecks": 6,
+      "browserDurationSeconds": 2054,
+      "reportedChecksSuccess": 12,
+      "reportedChecksTotal": 12,
+      "fixtureErrors": [],
+      "nativeJob": 138326502865,
+      "independentReview": false,
+      "merged": false
+    },
+    "comparisonCohort": {
+      "main": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+      "method": "Immutable REST compare, 15 previously V-partial branch tips. All remain divergent; path count capped at 300 for larger diffs. Not semantic or patch-ID equivalence.",
+      "rows": [
+        {
+          "branch": "claude/loving-einstein-xgzvdy-s01-tooling",
+          "sha": "4e319013ea61ead31ae00ea9a44fa9c431cc84ce",
+          "ahead": 1,
+          "behind": 628,
+          "returnedPaths": 20
+        },
+        {
+          "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
+          "sha": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+          "ahead": 4,
+          "behind": 628,
+          "returnedPaths": 85
+        },
+        {
+          "branch": "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
+          "sha": "14be5a1c1ec69d91b0affe8a87811c681269fb6c",
+          "ahead": 6,
+          "behind": 628,
+          "returnedPaths": 178
+        },
+        {
+          "branch": "claude/loving-einstein-xgzvdy-s07-native-journey",
+          "sha": "8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7",
+          "ahead": 7,
+          "behind": 628,
+          "returnedPaths": 199
+        },
+        {
+          "branch": "claude/loving-einstein-xgzvdy-s08-portal-lab-docs",
+          "sha": "c950dad4b387cb4b33910789c454eb8f2ab0ae81",
+          "ahead": 8,
+          "behind": 628,
+          "returnedPaths": 238
+        },
+        {
+          "branch": "claude/loving-einstein-xgzvdy-s09-intake",
+          "sha": "389c0ea69e24615d0f1d7595942514300cd855f9",
+          "ahead": 9,
+          "behind": 628,
+          "returnedPaths": 264
+        },
+        {
+          "branch": "claude/loving-einstein-xgzvdy-s10-optional-packages",
+          "sha": "c696c02b94eb6b90da2ed76f93c383fcd8a7f703",
+          "ahead": 10,
+          "behind": 628,
+          "returnedPaths": 300
+        },
+        {
+          "branch": "claude/loving-einstein-xgzvdy-s11-governance-ci",
+          "sha": "789b2b2c2644af741daa5328adf76ac2ec88599c",
+          "ahead": 11,
+          "behind": 628,
+          "returnedPaths": 300
+        },
+        {
+          "branch": "claude/loving-einstein-xgzvdy-s12-evidence",
+          "sha": "001c31cc868b683080e79a025b6621d900acb96a",
+          "ahead": 12,
+          "behind": 628,
+          "returnedPaths": 300
+        },
+        {
+          "branch": "codex/optional-complete-evidence-g10-20261120",
+          "sha": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+          "ahead": 19,
+          "behind": 95,
+          "returnedPaths": 177
+        },
+        {
+          "branch": "codex/optional-composition-evidence-g8-20261120",
+          "sha": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+          "ahead": 10,
+          "behind": 108,
+          "returnedPaths": 174
+        },
+        {
+          "branch": "codex/optional-corrected-evidence-g9-20261120",
+          "sha": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+          "ahead": 19,
+          "behind": 106,
+          "returnedPaths": 178
+        },
+        {
+          "branch": "codex/optional-current-core-evidence-g11-20261120",
+          "sha": "db531cb03ad303821a3625f6858941de1ac07606",
+          "ahead": 19,
+          "behind": 92,
+          "returnedPaths": 177
+        },
+        {
+          "branch": "codex/successor-handoff-20261120",
+          "sha": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+          "ahead": 2,
+          "behind": 106,
+          "returnedPaths": 15
+        },
+        {
+          "branch": "validation/pr237-current-main-20261121",
+          "sha": "92831704820a1f35867fd757bd952eea81412f0f",
+          "ahead": 10,
+          "behind": 2,
+          "returnedPaths": 86
+        }
+      ]
+    }
   }
 }
