@@ -125,29 +125,29 @@ export function QrPanel({ services, trade, scope }: { readonly services: AppServ
   const noticeText = notice ? ('code' in notice ? q.errors[notice.code] : q[notice.key]) : null;
   return <section className="panel qr-panel" aria-labelledby="qr-title" data-qr-phase={snapshot.phase} data-qr-confirmed={snapshot.confirmed ? 'true' : 'false'}>
     <h2 id="qr-title">{q.title}</h2><p>{q.intro}</p><p>{q.physical}</p><p>{q.chainScope}</p>
-    <h3>{q.captureTitle}</h3><p>{q.cameraHelp}</p>
+    <h3>{q.captureTitle}</h3><p id="qr-camera-help">{q.cameraHelp}</p>
     <video ref={video} className="qr-camera" muted playsInline aria-label={q.cameraPreview} hidden={camera.state !== 'live'} />
     <div className="actions">
-      <button type="button" disabled={snapshot.busy || camera.state === 'requesting' || camera.state === 'live'} onClick={() => void cameraStart()}>{q.cameraStart}</button>
+      <button type="button" aria-describedby="qr-camera-help" disabled={snapshot.busy || camera.state === 'requesting' || camera.state === 'live'} onClick={() => void cameraStart()}>{q.cameraStart}</button>
       <button type="button" disabled={snapshot.busy || camera.state !== 'live'} onClick={capture}>{q.cameraCapture}</button>
       <button type="button" disabled={camera.state === 'idle'} onClick={() => bundle.camera.cancel()}>{q.cameraStop}</button>
     </div>
     {camera.state === 'requesting' ? <p role="status">{q.cameraPending}</p> : null}
     <div className="qr-input-grid" key={fileEpoch}>
-      <div><label htmlFor="qr-image-file">{q.imageFile}</label><input id="qr-image-file" type="file" accept="image/png,image/jpeg" disabled={snapshot.busy} onChange={event => setImageFile(event.currentTarget.files?.[0] ?? null)} />
-        <p>{q.imageLimits}</p><button type="button" disabled={snapshot.busy || !imageFile} onClick={() => { const selected = imageFile; if (selected) void run(() => bundle.controller.reviewImage(selected)); }}>{q.imageRead}</button></div>
-      <div><label htmlFor="qr-public-file">{q.publicFile}</label><input id="qr-public-file" type="file" accept="text/plain,.txt" disabled={snapshot.busy} onChange={event => setPublicFile(event.currentTarget.files?.[0] ?? null)} />
-        <p>{q.fileLimits}</p><button type="button" disabled={snapshot.busy || !publicFile} onClick={() => { const selected = publicFile; if (selected) void run(() => bundle.controller.readEnvelopeFile(selected)); }}>{q.publicFileRead}</button></div>
+      <div><label htmlFor="qr-image-file">{q.imageFile}</label><input id="qr-image-file" aria-describedby="qr-image-limits" type="file" accept="image/png,image/jpeg" disabled={snapshot.busy} onChange={event => setImageFile(event.currentTarget.files?.[0] ?? null)} />
+        <p id="qr-image-limits">{q.imageLimits}</p><button type="button" disabled={snapshot.busy || !imageFile} onClick={() => { const selected = imageFile; if (selected) void run(() => bundle.controller.reviewImage(selected)); }}>{q.imageRead}</button></div>
+      <div><label htmlFor="qr-public-file">{q.publicFile}</label><input id="qr-public-file" aria-describedby="qr-public-file-limits" type="file" accept="text/plain,.txt" disabled={snapshot.busy} onChange={event => setPublicFile(event.currentTarget.files?.[0] ?? null)} />
+        <p id="qr-public-file-limits">{q.fileLimits}</p><button type="button" disabled={snapshot.busy || !publicFile} onClick={() => { const selected = publicFile; if (selected) void run(() => bundle.controller.readEnvelopeFile(selected)); }}>{q.publicFileRead}</button></div>
     </div>
     <form onSubmit={event => { event.preventDefault(); const entered = text; void run(() => bundle.controller.reviewText(entered)); }}>
-      <label htmlFor="qr-public-text">{q.text}</label><textarea id="qr-public-text" value={text} maxLength={MAX_QR_TEXT_LENGTH + 1} spellCheck={false} autoComplete="off" disabled={snapshot.busy} onChange={event => setText(event.currentTarget.value)} />
-      <p>{q.textHelp}</p><button type="submit" disabled={snapshot.busy || text.length === 0}>{q.textRead}</button>
+      <label htmlFor="qr-public-text">{q.text}</label><textarea id="qr-public-text" aria-describedby="qr-public-text-help" value={text} maxLength={MAX_QR_TEXT_LENGTH + 1} spellCheck={false} autoComplete="off" disabled={snapshot.busy} onChange={event => setText(event.currentTarget.value)} />
+      <p id="qr-public-text-help">{q.textHelp}</p><button type="submit" disabled={snapshot.busy || text.length === 0}>{q.textRead}</button>
     </form>
-    <h3>{q.fingerprintTitle}</h3><p>{q.fingerprintHelp}</p>
-    <label htmlFor="qr-fingerprint-format">{q.fingerprintFormat}</label><select id="qr-fingerprint-format" value={format} disabled={snapshot.busy} onChange={event => setFormat(event.currentTarget.value as RecoveryFingerprintFormat)}>
+    <h3>{q.fingerprintTitle}</h3><p id="qr-fingerprint-help">{q.fingerprintHelp}</p>
+    <label htmlFor="qr-fingerprint-format">{q.fingerprintFormat}</label><select id="qr-fingerprint-format" aria-describedby="qr-fingerprint-help" value={format} disabled={snapshot.busy} onChange={event => setFormat(event.currentTarget.value as RecoveryFingerprintFormat)}>
       <option value="p2p-offramp-backup/v1">{q.formatBackup}</option><option value="p2p-offramp/offline-recovery-references/v1">{q.formatReferences}</option>
     </select>
-    <label htmlFor="qr-fingerprint-file">{q.fingerprintFile}</label><input id="qr-fingerprint-file" key={`fingerprint-${fileEpoch}`} type="file" disabled={snapshot.busy} onChange={event => setFingerprintFile(event.currentTarget.files?.[0] ?? null)} />
+    <label htmlFor="qr-fingerprint-file">{q.fingerprintFile}</label><input id="qr-fingerprint-file" aria-describedby="qr-fingerprint-help" key={`fingerprint-${fileEpoch}`} type="file" disabled={snapshot.busy} onChange={event => setFingerprintFile(event.currentTarget.files?.[0] ?? null)} />
     <button type="button" disabled={snapshot.busy || !fingerprintFile} onClick={() => { const selected = fingerprintFile, selectedFormat = format; if (selected) void run(() => bundle.controller.createFingerprint(selected, selectedFormat)); }}>{q.fingerprintCreate}</button>
     <div className="actions"><button type="button" onClick={discard}>{q.cancel}</button></div>
     {snapshot.busy ? <p role="status">{q.busy}</p> : null}
@@ -160,8 +160,8 @@ export function QrPanel({ services, trade, scope }: { readonly services: AppServ
           <button type="button" disabled={snapshot.busy} onClick={() => void copy()}>{q.copy}</button><button type="button" disabled={snapshot.busy} onClick={download}>{q.download}</button></div>
         {showSymbol && snapshot.matrix ? <><QrSymbol matrix={snapshot.matrix} label={q.symbolLabel} />
           {snapshot.review.envelopeBytes > GENERATION_TARGET_BYTES ? <p>{q.generationTarget}</p> : null}</> : null}
-        {snapshot.review.type === 'recovery-fingerprint' ? <div className="qr-compare"><h4>{q.compareTitle}</h4><p>{q.compareHelp}</p>
-          <label htmlFor="qr-compare-file">{q.compareFile}</label><input id="qr-compare-file" key={`compare-${fileEpoch}`} type="file" disabled={snapshot.busy} onChange={event => setCompareFile(event.currentTarget.files?.[0] ?? null)} />
+        {snapshot.review.type === 'recovery-fingerprint' ? <div className="qr-compare"><h4>{q.compareTitle}</h4><p id="qr-compare-help">{q.compareHelp}</p>
+          <label htmlFor="qr-compare-file">{q.compareFile}</label><input id="qr-compare-file" aria-describedby="qr-compare-help" key={`compare-${fileEpoch}`} type="file" disabled={snapshot.busy} onChange={event => setCompareFile(event.currentTarget.files?.[0] ?? null)} />
           <button type="button" disabled={snapshot.busy || !compareFile} onClick={() => { const selected = compareFile; if (selected) void run(() => bundle.controller.compareFingerprint(selected)); }}>{q.compare}</button>
           {snapshot.comparison ? <p role="status" data-qr-comparison={snapshot.comparison}>{snapshot.comparison === 'match' ? q.match : q.different}</p> : null}
         </div> : null}

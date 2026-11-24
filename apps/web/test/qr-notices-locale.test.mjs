@@ -129,7 +129,7 @@ function mounted(t) {
       target.props.onClick(); return view(); },
     read() { nodes(view(), node => node.props.id === 'qr-public-text')[0].props.onChange({ currentTarget: { value: PUBLIC_TEXT } });
       nodes(view(), node => node.type === 'form')[0].props.onSubmit({ preventDefault() {} }); return view(); },
-    review() { publish({ phase: 'review', review: PUBLIC_REVIEW, confirmed: true, matrix: { size: 1, modules: [true] } }); return view(); },
+    review(review = PUBLIC_REVIEW) { publish({ phase: 'review', review, confirmed: true, matrix: { size: 1, modules: [true] } }); return view(); },
     decline(code) { readyCode = code; },
     failDownload() { downloadFailure = true; },
     liveCamera() { cameraState = { state: 'live', error: null }; notify(); return view(); },
@@ -138,6 +138,39 @@ function mounted(t) {
     nextScope() { scope++; dirty = true; return view(); },
   };
 }
+
+test('QR controls reference their visible instructions in the selected locale', async t => {
+  const ui = mounted(t);
+  const created = await createQrEnvelope(INPUTS['recovery-fingerprint'], deps('described-fingerprint'));
+  const encoded = await encodeQrText(created.envelope, encodeDeps());
+  const fingerprint = await decodeQrText(encoded.text, qrContext());
+  assert.equal(fingerprint.ok, true);
+  ui.review(fingerprint.review);
+
+  for (const locale of ['en', 'fixture-rtl']) {
+    const root = ui.select(locale);
+    const instructions = [
+      ['qr-image-file', q.imageLimits],
+      ['qr-public-file', q.fileLimits],
+      ['qr-public-text', q.textHelp],
+      ['qr-fingerprint-format', q.fingerprintHelp],
+      ['qr-fingerprint-file', q.fingerprintHelp],
+      ['qr-compare-file', q.compareHelp],
+    ];
+    const assertDescription = (controls, expected) => {
+      assert.equal(controls.length, 1, 'the control is rendered once');
+      const id = controls[0].props['aria-describedby'];
+      assert.ok(id, 'the control references its instructions');
+      const descriptions = nodes(root, node => node.props.id === id);
+      assert.equal(descriptions.length, 1, 'the description has a unique target');
+      assert.equal(words(descriptions[0]), expected);
+    };
+    for (const [id, expected] of instructions) {
+      assertDescription(nodes(root, node => node.props.id === id), expected);
+    }
+    assertDescription(nodes(root, node => node.type === 'button' && words(node) === q.cameraStart), q.cameraHelp);
+  }
+});
 
 function followsLocale(ui, expected) {
   assert.deepEqual(ui.alerts(), [expected()]);
