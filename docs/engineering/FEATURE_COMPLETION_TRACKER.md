@@ -1,3 +1,13 @@
+## Live overlay — 2026-11-24 UTC, #262 native and #258 WebKit green
+
+| Capability | Evidence | Remaining gate |
+| --- | --- | --- |
+| Pending release consent on fresh-key restore #262 | Exact proposal f62510be: 15/15 checks and Snyk successful; native validator 62 checks, 13 sends, 1853 real refund-wait seconds; browser six checks, seven app sends, no fixture errors. | Independent review, draft disposition and integration; added consent test is controlled, not a native consent journey. |
+| Opt-in local screen counts #258 | Exact proposal 7afdaa08: actual WebKit 27.2 backup verification retry passed, all 15 retrieved checks and Snyk successful. | Named Tier B review, draft and integration. |
+| S09 candidate intake | Five owner #45 evaluation reports inspected; historical receiver and experimental Semaphore observations, Waku/mobile failed cases, XMTP blocked. | Research-only, provider selection and separate approval/qualification; do not activate. |
+
+---
+
 ## Live overlay — 2026-11-24 UTC, corrected #262 executed and targeted #258 retry
 
 | Capability | Evidence | Remaining gate |

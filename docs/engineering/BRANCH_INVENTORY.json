@@ -21760,5 +21760,76 @@
       "namedReview": false,
       "merged": false
     }
+  },
+  "liveExactRefDelta20261124NativeAndWebKitGreen": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261124PendingExitGreen",
+    "method": "Complete REST exact-ref and all-state PR census; unchanged-tip ancestry retained; patch IDs not recomputed.",
+    "branchCount": 274,
+    "pullRequestCount": 259,
+    "openPullRequestCount": 76,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 122,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "3af25c38a8ea829a8fdbafe14f22f6539aac4631",
+        "sha": "fa4c4a9e5213fb71f83b127c44141e9d3a1083e2"
+      }
+    ],
+    "missingRefs": [],
+    "pr262": {
+      "head": "12123046232496ad38decefa861029f76960b68d",
+      "proposal": "f62510be660027f590131a8fc83bff114513d516",
+      "tree": "9990e4ca33d2db8a10b87e1322bb57b23c737cf6",
+      "checksSuccess": 15,
+      "snyk": "success",
+      "nativeJob": 138445982930,
+      "validatorChecks": 62,
+      "validatorSends": 13,
+      "refundWaitSeconds": 1853,
+      "validatorDurationSeconds": 1908,
+      "browserChecks": 6,
+      "browserDurationSeconds": 2055,
+      "appSends": 7,
+      "fixtureErrors": [],
+      "actualModuleWorker": true,
+      "encryptedIndexedDB": true,
+      "clockWarped": false,
+      "publicNetworkQualification": false,
+      "freshNegotiationQualification": false,
+      "independentReview": false,
+      "merged": false
+    },
+    "pr258": {
+      "head": "26127d310e49ab6ab956ab2b7bc168a1a550ce0e",
+      "proposal": "7afdaa08936f848d6e7bf23d4c1157f124dabc4e",
+      "tree": "ac322e3bc64c3da9d687c5411412481128210c5a",
+      "checksSuccess": 15,
+      "snyk": "success",
+      "webKitRetryJob": 138481062065,
+      "webKitVersion": "27.2",
+      "actualFileAuthenticated": true,
+      "displayedDigestMatched": true,
+      "explicitRecheck": true,
+      "wrongPassphraseRefused": true,
+      "lockAndReloadClear": true,
+      "restoredProfileRequiresOwnBackup": true,
+      "walletPrompts": 0,
+      "namedReview": false,
+      "merged": false
+    },
+    "s09Intake": {
+      "ownerPR": 45,
+      "ownerHead": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "historicalEvidenceOnly": true,
+      "readFiveEvaluationDocs": true,
+      "productionAdoption": false,
+      "classificationUnchanged": true
+    }
   }
 }
