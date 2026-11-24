@@ -1,3 +1,12 @@
+## Live overlay — 2026-11-24 UTC, S12 oracle reproduction
+
+| Capability | Evidence | Remaining gate |
+| --- | --- | --- |
+| Local specification qualification setup #263 | Recovered CPython 3.12 Ubuntu amd64 isolated hash-pinned oracle setup in local development guide, head 9a07203b73fab01ba9eb5b88ffda57591315562a; one docs path +8/-1; exact readback. | Draft; current-target hosted checks and independent review. No runtime execution or production qualification claim. |
+| Accepted product features | #251 remains merged; existing #237/#253/#258–262 retain their recorded gates. | D2 public authorized trust, D8 financial approvals, actual devices and optional independent package intake remain separate. |
+
+---
+
 ## Live overlay — 2026-11-24 UTC, #262 native and #258 WebKit green
 
 | Capability | Evidence | Remaining gate |
