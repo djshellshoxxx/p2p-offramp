@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,readFile,writeFile,rm,symlink,chmod,lstat} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve,join} from 'node:path';
-import {execFileSync} from 'node:child_process';
+import {execFileSync,spawnSync} from 'node:child_process';
 import {stageUnsignedDistribution,verifyDistribution} from './stage.mjs';
 import {inspectDocs} from '../docs/validate.mjs';
 import {createBoundDistributionFixture} from './test-fixture.mjs';
@@ -86,7 +86,7 @@ test('current unsigned staging binds matching evidence or refuses stale records 
   const staged=await stageUnsignedDistribution({outDir});assert.equal(await verifyDistribution(staged.directory,staged.manifest),true);
  }
 });
-test('draft record generation takes copy text from the selected immutable catalog, not later source edits',async t=>{
+test('draft generation keeps the immutable copy and staging diagnoses later drift before building',async t=>{
  const fixture=await createBoundDistributionFixture();t.after(()=>fixture.dispose());
  const registerPath=resolve(fixture.root,'docs/wiki-source/claims-register.json'),manifestPath=resolve(fixture.root,'docs/wiki-source/docs-manifest.json');
  const before=await readFile(registerPath),manifest=await readFile(manifestPath),register=JSON.parse(before);
@@ -98,6 +98,13 @@ test('draft record generation takes copy text from the selected immutable catalo
  const report=await inspectDocs(fixture.root);assert.deepEqual(report.stale,[register.copySource.path]);
  assert.ok(report.claimsRegister.every(claim=>claim.evidenceCurrent===false));
  assert.equal(report.semanticApproval,false);assert.equal(report.published,false);
+ // This syntax error would stop the client build if it ran before the binding check.
+ await writeFile(path,changed+'\nexport const invalidClientSyntax = ;\n');
+ const outDir=resolve(fixture.root,'..','refused');
+ const result=spawnSync(process.execPath,['scripts/distribution/stage.mjs','--out',outDir],{cwd:fixture.root,encoding:'utf8',timeout:30000});
+ assert.equal(result.status,1,result.stderr);
+ assert.deepEqual(JSON.parse(result.stdout),{ok:false,error:{code:'DISTRIBUTION_STAGE_REFUSED',diagnostic:'npm run check:docs:bindings'},releaseEnabled:false,published:false});
+ await assert.rejects(lstat(outDir),{code:'ENOENT'});
 });
 test('historical bound client with current tooling stages twice exactly; current-source distribution remains separate',async t=>{
  const parent=await mkdtemp(join(tmpdir(),'p2p-stage-real-'));t.after(()=>rm(parent,{recursive:true,force:true}));

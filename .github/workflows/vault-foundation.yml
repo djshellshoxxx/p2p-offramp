@@ -151,6 +151,8 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci --ignore-scripts
+      - name: Check unsigned staging documentation bindings
+        run: npm run check:docs:bindings -- ${{ github.event_name == 'pull_request' && '--pull-request' || '' }}
       - run: npm run test:tooling
       - run: npm run check:docs
       - run: npm run check:governance

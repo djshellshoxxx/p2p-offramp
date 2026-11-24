@@ -1,5 +1,15 @@
 # Unpublished documentation consistency
 
+## Before unsigned staging
+
+Run `npm run check:docs:bindings` after editing the English UI catalog, claim evidence, or wiki source. It reads the working tree and the recorded Git commit. A nonzero exit means the bindings need attention. The pull-request CI step prints a warning for readable source drift because the generator requires an immutable commit already on `origin/main`. Invalid records, missing bound files and unreadable catalog definitions fail the step on pull requests too. On pushes to `main` all drift fails the check.
+
+- If all monitored strings still match, review the catalog diff. Its full-file digest still makes every associated claim stale.
+- If the report names a key and claim ID, review the changed wording, scope and supporting evidence before refreshing. A changed evidence file requires review of the claims that cite it.
+- Once the reviewed source is on `origin/main`, fetch it and run `python scripts/docs/generate.py <reviewed-main-commit>` in a checkout containing the matching inputs. Inspect the diffs to `docs/wiki-source/claims-register.json` and `docs/wiki-source/docs-manifest.json`, then rerun `npm run check:docs:bindings`. A passing preflight covers documentation bindings only. Unsigned staging performs its own checks, and publication requires separate approval.
+
+## Generating draft records
+
 Run `python scripts/docs/generate.py [commit]` (the bound commit defaults to HEAD and must be reachable from `origin/main`; pass `--allow-local` only for fixtures), then `node --import ./scripts/test-support/register-tsx.mjs scripts/docs/validate.mjs`. On an unmerged integration branch, pass its chosen main baseline explicitly. Regeneration reads the existing seven hand-maintained wiki pages (it never rewrites them) and writes only their two JSON records. It binds the exact six source/test files and the real UI source catalog to that immutable commit. Recorded evidence hashes must match the selected commit; later working-tree changes are reported as stale as described below. It intentionally emits `dirtyDraft=true`, empty reviewers, null approved release and null last verified release. Do not interpret dirtyDraft as a clean-build assertion.
 
 The manifest binds each page's locale, topic, known capability IDs and UTF-8 SHA-256. The link report binds local target bytes and heading anchors; HTTPS links, if present, are explicitly unverified. Inputs, symlink components, nonregular files, changing files, oversized files, unknown fields/IDs, duplicate keys/IDs and missing or stale hashes fail closed. Local Markdown links use the bounded inline `[label](path#anchor)` grammar; these authored pages contain no reference links, HTML links or executable examples. New Markdown grammars or examples need an explicit checker extension before use.

@@ -7,6 +7,7 @@ import{fileURLToPath}from'node:url';
 import{execFileSync}from'node:child_process';
 import{resolveTool}from'../lib/tool-path.mjs';
 import{inspectDocs}from'./validate.mjs';
+import {preflight} from './preflight.mjs';
 import{claimCopyTextsFromSource}from'./copy-source.mjs';
 import * as docs from './validate.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
@@ -269,4 +270,64 @@ test('later current copy edits stay stale while the recorded text remains bound 
   await writeFile(resolve(temp,'docs/wiki-source/claims-register.json'),JSON.stringify(register));
   await assert.rejects(inspectDocs(temp),{message:'DOCS_STALE'});
  }finally{await rm(temp,{recursive:true,force:true});}
+});
+
+test('preflight distinguishes an ordinary catalog edit from changed claim wording while both block staging',async t=>{
+  const {temp,register}=await gitFixture();
+  t.after(()=>rm(temp,{recursive:true,force:true}));
+  const path=resolve(temp,register.copySource.path);
+  const before=await readFile(path,'utf8');
+  assert.equal((await preflight(temp)).exitCode,0);
+  // Add an unmonitored label in the literal catalog, as a localization PR would.
+  const ordinary=before.replace('const definitions = {',"const definitions = { testLabels: { apply: 'Apply changes' },");
+  assert.notEqual(ordinary,before);
+  await writeFile(path,ordinary);
+  const drift=await inspectDocs(temp);
+  assert.deepEqual(drift.bindingDrift,{changedCopyKeys:[],unreadable:[]});
+  assert.deepEqual(drift.staleClaims,register.claims.map(claim=>claim.id).sort());
+  const local=await preflight(temp);
+  assert.equal(local.exitCode,1);
+  assert.match(local.message,/All monitored strings match/);
+  assert.match(local.message,/generate\.py <reviewed-main-commit>/);
+  const pr=await preflight(temp,{pullRequest:true});
+  assert.equal(pr.exitCode,0);
+  assert.match(pr.message,/^::warning::Unsigned staging blocked/);
+
+  const edited=ordinary.replace('Authenticated encryption observed','Changed draft wording');
+  assert.notEqual(edited,ordinary);
+  await writeFile(path,edited);
+  const changed=await inspectDocs(temp);
+  assert.deepEqual(changed.bindingDrift.changedCopyKeys,['privacy.authenticated']);
+  assert.deepEqual(changed.staleClaims,drift.staleClaims);
+  assert.ok(changed.claimsRegister.every(claim=>!claim.evidenceCurrent));
+  assert.equal(changed.semanticApproval,false);
+  assert.equal(changed.approvedRelease,null);
+  const wording=await preflight(temp);
+  assert.equal(wording.exitCode,1);
+  assert.match(wording.message,/Review changed wording and evidence: privacy\.authenticated \(vault-at-rest\)\./);
+  await writeFile(path,before);
+  assert.equal((await preflight(temp)).exitCode,0);
+});
+
+test('preflight differentiates evidence drift and fails unreadable, unparseable or forged inputs even in PR mode',async t=>{
+  const {temp,register}=await gitFixture();
+  t.after(()=>rm(temp,{recursive:true,force:true}));
+  const evidence=register.evidence[0].path;
+  await writeFile(resolve(temp,evidence),'later evidence');
+  const result=await preflight(temp);
+  assert.equal(result.exitCode,1);
+  assert.ok(result.message.includes(evidence));
+  assert.doesNotMatch(result.message,/English catalog changed/);
+  await rm(resolve(temp,evidence));
+  let invalid=await preflight(temp,{pullRequest:true});
+  assert.equal(invalid.exitCode,1);
+  assert.match(invalid.message,/Restore readable, regular bound files/);
+  await writeFile(resolve(temp,register.copySource.path),'const definitions = {};');
+  invalid=await preflight(temp,{pullRequest:true});
+  assert.equal(invalid.exitCode,1);
+  assert.match(invalid.message,/Cannot compare monitored wording/);
+  assert.doesNotMatch(invalid.message,/All monitored strings match|generate\.py/);
+  register.copyKeys[0].sourceTextSha256='0'.repeat(64);
+  await writeFile(resolve(temp,'docs/wiki-source/claims-register.json'),JSON.stringify(register));
+  await assert.rejects(preflight(temp,{pullRequest:true}),{message:'DOCS_STALE'});
 });
