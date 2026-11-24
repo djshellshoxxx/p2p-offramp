@@ -11,3 +11,4 @@ dist-testnet/
 .venv*/
 .formal-evidence/
 .formal-partition-evidence/
+/dist-lab/
