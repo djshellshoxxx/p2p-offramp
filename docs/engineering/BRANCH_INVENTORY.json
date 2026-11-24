@@ -11941,5 +11941,61 @@
         "completionVerified": false
       }
     ]
+  },
+  "liveRestCensus20261124Run10": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "method": "Exhausted branch name cursor; partitioned PR search (75 open, 58 closed unmerged, 35+67+23 merged). Direct #261 PR metadata and immutable compare; full Git history baseline retained.",
+    "branchCount": 273,
+    "pullRequestCount": 258,
+    "openPullRequestCount": 75,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "fullHistoryRecomputed": false,
+    "changedOrNewRefs": [
+      {
+        "branch": "test/pr257-browser-persistence-20261124",
+        "sha": "5a13625db76e7ee9e5256be288a51d6f0e4ae70b",
+        "classification": "P-open-unintegrated-pr",
+        "openPullRequests": [
+          {
+            "number": 261,
+            "headSha": "5a13625db76e7ee9e5256be288a51d6f0e4ae70b",
+            "base": "test/s07-saved-review-backup-retention-20261124",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "compareToMain": {
+          "mainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "mergeBaseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "aheadBy": 3,
+          "behindBy": 0
+        },
+        "changedPaths": [
+          "apps/web/test/saved-reviews-worker.test.mjs",
+          "package.json",
+          "scripts/test-saved-review-recovery-browser.mjs"
+        ],
+        "scope": "Separate existing owner stack on #257; first browser failed after three successful checkpoints; corrected head five workflows pending/queued; no completion or new owner action",
+        "completionVerified": false
+      }
+    ],
+    "pr260": {
+      "head": "f3b0d907edef0e7dd13b89d33ab65b85ba7d9744",
+      "checkout": "0fcd9285a91933ed2b1442a1ff7b86a6d69c899b",
+      "sourceBlob": "096eba5f44b89d9a5a06907ff186c74f016cb42d",
+      "workflows": [
+        45357013513,
+        45357013516,
+        45357013512,
+        45357013483
+      ],
+      "allRetrievedSuccessful": true,
+      "foundationJobsSuccessful": 7,
+      "chromiumJob": 138317230893,
+      "storageOriginOutagePassed": true,
+      "independentReview": false,
+      "merged": false
+    }
   }
 }
