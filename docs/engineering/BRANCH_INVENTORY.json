@@ -22277,5 +22277,88 @@
       "classification": "V-partially-reconciled",
       "ownerPR": 44
     }
+  },
+  "liveExactRefDelta20261124CurrentTargetStartup": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261124CurrentStagingQualified",
+    "coordinatorTipBeforePublication": "488453630738625ce00c6f4f1844597d53fa1d50",
+    "method": "Complete paginated REST census performed earlier in this run; unchanged prior ancestor proofs retained. No new patch-ID/range-diff.",
+    "branchPageSizes": [
+      100,
+      100,
+      78,
+      0
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      63,
+      0
+    ],
+    "branchCount": 278,
+    "pullRequestCount": 263,
+    "openPullRequestCount": 80,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 126,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "3fe63ae580c52279d3d6e22fadbbbcc607ec8f71",
+        "sha": "488453630738625ce00c6f4f1844597d53fa1d50",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "488453630738625ce00c6f4f1844597d53fa1d50",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "811285dc194b4d3187d2fbd763a866934aed4f0e"
+          }
+        ]
+      },
+      {
+        "branch": "codex/current-target-startup-recovery-20261124",
+        "previous": null,
+        "sha": "5d4ffb31cf8dfb6e96f85cd98af0dd25dc7142ab",
+        "associatedPullRequests": [
+          {
+            "number": 266,
+            "headSha": "5d4ffb31cf8dfb6e96f85cd98af0dd25dc7142ab",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "d310a4e7eff39da6166ffb5d13dde2846d61d9d3"
+          }
+        ]
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr266": {
+      "head": "5d4ffb31cf8dfb6e96f85cd98af0dd25dc7142ab",
+      "tree": "55c3ee83ba6ccae3d52d10ef29dfb1c48cb863cd",
+      "parents": [
+        "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+        "5de3606ed0c91d2795c3ca5964b92e41142ac9d1"
+      ],
+      "proposal": "d310a4e7eff39da6166ffb5d13dde2846d61d9d3",
+      "verifiedNonTreeEntries": 2833,
+      "mismatches": 0,
+      "checksQueuedAtFirstRead": 14,
+      "independentReview": false,
+      "namedReview": false,
+      "merged": false,
+      "originalCoordinationComment": 7146334877
+    }
   }
 }

@@ -1,3 +1,9 @@
+## 2026-11-24 — startup recovery acceptance
+
+#252 source and historical browser proof preserved in draft #266; exact current-target composition verified, hosted checks queued, independent/named review and main integration remain pending. S06 regression retained. #265 unsigned staging remains candidate-only; #255 follows integration. D2, D8, actual devices and optional gates remain separate.
+
+---
+
 ## Live overlay — 2026-11-24 UTC, actual current-source unsigned staging qualified
 
 | Capability | Verified evidence | Remaining gate |
