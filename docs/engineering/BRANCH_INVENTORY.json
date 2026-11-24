@@ -22085,5 +22085,110 @@
       "independentReview": false,
       "merged": false
     }
+  },
+  "liveExactRefDelta20261124CurrentTargetStaging": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261124D3Runbook",
+    "coordinatorTipBeforePublication": "0d71e13b25c59d8ac1b24495e94687262a6be0df",
+    "method": "Complete paginated GitHub REST ref and all-state PR inventory; unchanged-tip ancestry retained. No new patch-ID/range-diff computation.",
+    "branchPageSizes": [
+      100,
+      100,
+      77,
+      0
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      62,
+      0
+    ],
+    "branchCount": 277,
+    "pullRequestCount": 262,
+    "openPullRequestCount": 79,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 125,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "213c2a9042dbc2e3bcc048f51153545395421abb",
+        "sha": "0d71e13b25c59d8ac1b24495e94687262a6be0df",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "0d71e13b25c59d8ac1b24495e94687262a6be0df",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "c80c706927ccd86d6fd04ec1fb4f01d856db3e51"
+          }
+        ]
+      },
+      {
+        "branch": "codex/current-target-unsigned-staging-consolidation-20261124",
+        "previous": null,
+        "sha": "236c38d674a25c2712b5e1171806934ebe659cc5",
+        "associatedPullRequests": [
+          {
+            "number": 265,
+            "headSha": "236c38d674a25c2712b5e1171806934ebe659cc5",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "69e4aaa1b8feea917b5a79ceed929762d64ea516"
+          }
+        ]
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr265": {
+      "head": "236c38d674a25c2712b5e1171806934ebe659cc5",
+      "tree": "44a24e8443f548a42cbd07d7ce6481fbd549e35f",
+      "parents": [
+        "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+        "ae4d49bf035eaaf57625fe7cf0c5ce0bd9dfaa51"
+      ],
+      "proposal": "69e4aaa1b8feea917b5a79ceed929762d64ea516",
+      "nonTreeEntries": 2833,
+      "unionMismatches": 0,
+      "changedPaths": [
+        "docs/wiki-source/claims-register.json",
+        "docs/wiki-source/docs-manifest.json"
+      ],
+      "sourceReview": 6031271905,
+      "coordinationComment": 7143707221,
+      "checksQueuedAtObservation": 13,
+      "independentReview": false,
+      "merged": false
+    },
+    "pr264": {
+      "head": "0021808c2f03c5a703b50de1152ca5c0bc8efcc4",
+      "checksSuccessful": 14,
+      "independentReview": false,
+      "merged": false
+    },
+    "pr255": {
+      "head": "b403d3bcb794d31ff813592d5625f485c0c59a14",
+      "checksSuccessful": 15,
+      "reviewCount": 0,
+      "requiresRecordRefreshFirst": true
+    },
+    "pr256": {
+      "head": "d9428598ef1bec09a2741ab4a071aab2c9e1f552",
+      "checksSuccessful": 15,
+      "reviewCount": 0,
+      "physicalDeviceAcceptance": false
+    }
   }
 }

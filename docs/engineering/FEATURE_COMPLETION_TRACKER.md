@@ -1,3 +1,15 @@
+## Live overlay — 2026-11-24 UTC, current-target staging composition
+
+| Capability | Evidence | Remaining gate |
+| --- | --- | --- |
+| Unsigned staging #253 / #265 | New draft #265 exact tree 44a24e8443f548a42cbd07d7ce6481fbd549e35f retains #253's two reviewed record blobs plus current main's S06 regression; 2833 entries, zero union mismatches. | 13 queued checks at observation, fresh independent review and guarded integration; original #253 stays unchanged until disposition. No signing or publication. |
+| Binding preflight #255 | 15/15 retrieved checks successful, zero submitted reviews. | Integrate record refresh first; requalify exact current target and review. |
+| QR accessibility #256 | 15/15 retrieved checks successful, zero submitted reviews. | Named Tier B review, physical camera/device acceptance separate. |
+| D3 runbook #264 | 14/14 retrieved checks successful, no submitted reviews. | Draft, independent Tier A review and integration. |
+| Other product work | #237 named review absent. D2 and D8 owner inputs, actual device acceptance and independent optional package intake remain distinct. | ReleaseEnabled=0, no release or funds. |
+
+---
+
 ## Live overlay — 2026-11-24 UTC, D3 runbook reconciliation
 
 | Capability | Evidence | Remaining gate |

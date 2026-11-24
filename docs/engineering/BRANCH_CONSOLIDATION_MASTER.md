@@ -1,3 +1,9 @@
+## 2026-11-24 UTC — current-main unsigned staging integration candidate
+
+New draft #265 head 236c38d674a25c2712b5e1171806934ebe659cc5 retains #253's exact two record blobs on actual main 8cff44909752f5e8b99eecec44ebaa44360c7b5d, including #251's new regression test. All 2833 non-tree path/mode/type/SHA entries compared to expected union; zero mismatches. Proposal 69e4aaa1b8feea917b5a79ceed929762d64ea516 same tree, correct ordered parents. 13 retrieved checks queued, independent review pending; #253 frozen original preserved. #255 follows successful record-refresh integration, not vice versa. Current census 277 refs/262 PRs, 152 ancestor-proven, 125 not ancestry-proven; see latest inventory overlay and handoff. No runtime source, release, deployment or main merge.
+
+---
+
 ## 2026-11-24 UTC — S12 actionable document delta recovered
 
 The S12 owner #48 remains divergent; previous archive index preserves 185 absent historical blobs and five live-path differences. One concrete prerequisite missing from current guide recovered in draft #263, head 9a07203b73fab01ba9eb5b88ffda57591315562a, exact current main parent 8cff44909752f5e8b99eecec44ebaa44360c7b5d. Scope: local Python oracle setup only, +8/-1, not production release or complete stage equivalence. No change to original branches. Current live census 275 exact refs, 260 PRs, 152 ancestor-proven unchanged tips, 123 not ancestry-proven; see BRANCH_INVENTORY.json overlay liveExactRefDelta20261124S12OracleRecovery. No merges. Historical README/task status and G15 guide wording remain separately reviewed; no old policy or missing trust material restored.
