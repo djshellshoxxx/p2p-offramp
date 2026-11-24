@@ -11818,5 +11818,89 @@
       "reviewScope": "Coordinator COMMENT, not independent worker or approval"
     },
     "fullHistoryRecomputed": false
+  },
+  "liveRestCensus20261124Run6": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "method": "Branch name cursor exhaustion, partitioned PR search before publication and open-PR search after #259, immutable compare for new branch; previous exact refs and full Git history snapshot preserved.",
+    "branchCount": 271,
+    "pullRequestCount": 256,
+    "openPullRequestCount": 73,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "branchPageSizes": [
+      100,
+      100,
+      71,
+      0
+    ],
+    "fullHistoryRecomputed": false,
+    "changedOrNewRefs": [
+      {
+        "branch": "fix/s08-ignore-local-lab-output-20261124",
+        "sha": "db792ae45b50e13b9fdd49da40c2860969a96a8f",
+        "classification": "P-open-unintegrated-pr",
+        "openPullRequests": [
+          {
+            "number": 259,
+            "headSha": "db792ae45b50e13b9fdd49da40c2860969a96a8f",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "compareToMain": {
+          "mainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "mergeBaseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "aheadBy": 1,
+          "behindBy": 0,
+          "method": "GitHub compare immutable refs"
+        },
+        "changedPaths": [
+          ".gitignore"
+        ],
+        "scope": "S08 lab output root ignore, isolated Git red/green; no tracked files removed; draft review and hosted checks pending",
+        "completionVerified": false
+      },
+      {
+        "branch": "codex/browser-sharing-startup-acceptance-20261121",
+        "sha": "9a321395d89389b51c8cfbe7f12330e3b6fc8b9f",
+        "openPullRequests": [
+          {
+            "number": 243,
+            "headSha": "9a321395d89389b51c8cfbe7f12330e3b6fc8b9f",
+            "base": "codex/startup-compatibility-continuation-g31-20261120",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "classification": "P-open-unintegrated-pr",
+        "comparisonStatus": "live head read, 5 retrieved workflows success; no independent or parent integration qualification",
+        "completionVerified": false
+      },
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "sha": "1716b8c2fbd1592d67d01c501b8c89b8f9236afa",
+        "classification": "P-open-unintegrated-pr",
+        "openPullRequests": [
+          {
+            "number": 245,
+            "headSha": "1716b8c2fbd1592d67d01c501b8c89b8f9236afa",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "comparisonStatus": "coordinator parent before inventory publication",
+        "completionVerified": false
+      }
+    ],
+    "pr258": {
+      "head": "26127d310e49ab6ab956ab2b7bc168a1a550ce0e",
+      "nativeJob": 138172826932,
+      "nativeConclusion": "success",
+      "checkout": "7afdaa08936f848d6e7bf23d4c1157f124dabc4e",
+      "webKit": "cancelled",
+      "namedReview": "absent",
+      "merged": false
+    },
+    "handoffCommit": "1716b8c2fbd1592d67d01c501b8c89b8f9236afa"
   }
 }
