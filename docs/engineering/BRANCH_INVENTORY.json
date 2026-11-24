@@ -11506,5 +11506,138 @@
       "checksTotal": 15,
       "program": "in_progress"
     }
+  },
+  "liveRestCensus20261124": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "method": "Paginated authenticated GitHub REST branches and pulls, including empty terminal pages; overlay on preserved 264-ref full Git baseline",
+    "branchCount": 266,
+    "pullRequestCount": 251,
+    "openPullRequestCount": 68,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "branchPageSizes": [
+      100,
+      100,
+      66,
+      0
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      51,
+      0
+    ],
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previousSha": "8dab1ff5e2c129a9fe5aef9ba9ec7367fa01832b",
+        "sha": "924166c61bd782a12fddebc3ac4a7ae58d9df716",
+        "openPullRequests": [
+          {
+            "number": 245,
+            "headSha": "924166c61bd782a12fddebc3ac4a7ae58d9df716",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "classification": "P-open-unintegrated-pr",
+        "comparisonBase": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+        "comparisonStatus": "metadata only; prior full-history comparison remains bound to older main"
+      },
+      {
+        "branch": "codex/restore-current-unsigned-staging",
+        "previousSha": null,
+        "sha": "ae4d49bf035eaaf57625fe7cf0c5ce0bd9dfaa51",
+        "openPullRequests": [
+          {
+            "number": 253,
+            "headSha": "ae4d49bf035eaaf57625fe7cf0c5ce0bd9dfaa51",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "classification": "P-open-unintegrated-pr",
+        "comparisonBase": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+        "comparisonStatus": "metadata only; prior full-history comparison remains bound to older main"
+      },
+      {
+        "branch": "main",
+        "previousSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+        "sha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+        "openPullRequests": [],
+        "classification": "A-main",
+        "comparisonBase": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+        "comparisonStatus": "main identity"
+      },
+      {
+        "branch": "test/s07-d9-identical-approval-restart-20261124",
+        "previousSha": null,
+        "sha": "d364642d09d04da864fe56db78245a4133db2c18",
+        "openPullRequests": [
+          {
+            "number": 254,
+            "headSha": "d364642d09d04da864fe56db78245a4133db2c18",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "classification": "P-open-unintegrated-pr",
+        "comparisonBase": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+        "comparisonStatus": "ahead 1, behind 0; 1 test file; exact proposal tree, CI queued"
+      }
+    ],
+    "missingRefs": [],
+    "newOrChangedPRs": [
+      {
+        "number": 254,
+        "headSha": "d364642d09d04da864fe56db78245a4133db2c18",
+        "base": "main",
+        "state": "open",
+        "merged": false,
+        "owner": "djshellshoxxx",
+        "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/254"
+      },
+      {
+        "number": 253,
+        "headSha": "ae4d49bf035eaaf57625fe7cf0c5ce0bd9dfaa51",
+        "base": "main",
+        "state": "open",
+        "merged": false,
+        "owner": "djshellshoxxx",
+        "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/253"
+      },
+      {
+        "number": 251,
+        "headSha": "02f8ade4edd1aa091042d849f0498e18830a1393",
+        "base": "main",
+        "state": "closed",
+        "merged": true,
+        "owner": "djshellshoxxx",
+        "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/251"
+      },
+      {
+        "number": 245,
+        "headSha": "924166c61bd782a12fddebc3ac4a7ae58d9df716",
+        "base": "main",
+        "state": "open",
+        "merged": false,
+        "owner": "djshellshoxxx",
+        "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/245"
+      }
+    ],
+    "note": "Historical baseMainSha, branchCount, classification totals and gitComparison stay source-bound; no fresh full-history patch IDs. PR251 head verified as direct parent of main. PR254 remains DRAFT with exact compare and initial queued CI. Coordinator SHA is this publication's parent."
+  },
+  "cohortS07D9ApprovalMatrix20261124": {
+    "historicalHead": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+    "stageBase": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+    "mainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "stagePaths": 24,
+    "exactPathBlobs": 0,
+    "absentPaths": 21,
+    "pr": 254,
+    "headSha": "d364642d09d04da864fe56db78245a4133db2c18",
+    "decision": "V historical stage; controlled test-only matrix pending execution and review; no product integration",
+    "report": "docs/engineering/BRANCH_COHORT_S07_D9_APPROVAL_MATRIX_20261124.md"
   }
 }
