@@ -1,3 +1,27 @@
+## 2026-11-24 UTC — PR254 native completion, S08 test-intent comparison and PR257 review
+
+Main readback remains `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; PR251 is closed/merged. No source merge in this run.
+
+**PR254:** [native program job 138149251551](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45305809212/job/138149251551) finished successfully on actual hosted checkout `9553eccca2d3b0ba0db3d4d9f4d58837a15afb38` (log explicitly shows current main and head `d364642d09d04da864fe56db78245a4133db2c18`). Parsed the two completed JSON receipts: validator ok=true, 62 checks, 13 transaction sends, 1850 real refund-wait seconds, 1906s duration, local synthetic-genesis shim explicitly disclosed. Native browser ok=true, six named checks, 8 wallet prompts, 7 app sends, 2045s duration, actual module Worker/encrypted IndexedDB, actual genesis RPC/real Clock, no clock warp, no fixture errors, ReleaseEnabled=0, public-network/fresh-negotiation qualification false. All five retrieved pull-request workflow runs (12 jobs across them) succeeded; separate Snyk success. CodeQL not exposed by these workflow-run queries; do not infer fresh check-run coverage beyond the recorded prior snapshot. Previous 2506 Node pass/1 skip remains source-bound. The PR is still draft with explicit hold; existing review 6032797846 is a coordinator COMMENT, not independent approval. No merge or bypass.
+
+**S08 historical stage #44:** Compared exact owner head `f8a9aa1430129fd57fd9217402577106bebeca7a` to current main in five maintained test files. Original/current literal test counts and blobs:
+
+| Path | Original blob | Current main blob | Historical/current named cases |
+| --- | --- | --- | --- |
+| packages/claims/test/claims.test.mjs | a20cbc9996acaf0ff3985b5619300b0dd788987f | 3a4185873980bc818db7bb2359f26457ccbd9939 | 6/8 |
+| scripts/distribution/stage.test.mjs | e6039fecda35f15cec3cdd07c488f15c47b13575 | dd0089b5c37414088a49a8811b64824ca93675e5 | 5/9 |
+| scripts/docs/validate.test.mjs | 01f94cd597666d064c6e411e972a223921d8a4ca | 0fc95f1955e164e16eba905439e6b21b9bedd553 | 12/16 |
+| scripts/lab/recipe.test.mjs | 6ed2af7c8595311f2d4134771f5dc833f69aae83 | 94da3f738d26c080570c4e69d3d1bb6641a75dd8 | 6/8 |
+| scripts/portal/build.test.mjs | 2c536036d7bc0a60e1a6a9d772b6f3325a504d35 | 9e22944d6fc6dd7fc3ab8da1d8d12871c918e989 | 2/4 |
+
+31 historical and 45 current named cases; 29 historical titles unchanged, two renamed with body comparison. Historical two-pass staging moved to a historical-bound-client fixture while retaining repeat manifest/bytes, public copy, no approval, KEY_UNPINNED and tampered asset/mode/symlink/FIFO/extra-file refusals. Current-source staging is tested separately and remains bound to #253/#255, not qualified by the historical fixture. Global link limit deliberately changed from 128 to 256 while retaining 240-character and overflow assertions (per-page limit remains 128 in validator). Same-title changed cases account for explicitly unverified HTTPS links, immutable source drift reporting versus rejecting forged recorded hashes, stale symlinked evidence, and fixture cross-page link hash refresh; the 64KiB and private frontend/no RPC forwarding cases retain original bodies with new helpers following them. No missing named regression identified in this bounded comparison; do not transplant old semantics. S08 remains V pending broader changed-source/browser/governance and owner #44 Tier C review. No test run claimed for this source comparison.
+
+**Other lanes:** #255 at `b403d3bcb794d31ff813592d5625f485c0c59a14` now has all five retrieved workflows/12 jobs completed success, including docs-tooling and program. Its draft and #253 staging dependency remain; #253 older-target evidence cannot be transferred. #257 at `75e0b0430ff0c3e33395ce86513083868d0a5c2a` received [scoped coordinator COMMENT review 6033248026](https://github.com/djshellshoxxx/p2p-offramp/pull/257#pullrequestreview-6033248026): cloned CAS reads and afterEach disposal, exact review bytes in distinct restored profile, explicit source re-unlock, unchanged source ciphertext/backup. No finding in the test diff, but same in-process Worker fixture, not actual IndexedDB/fresh process proof or independent approval. #256/#257 hosted workflows still incomplete, #258 foundation/native queued at read. #237 zero submitted reviews; named CodeRabbit/Qodo remains mandatory. D2 trust, D8 financial owner approval, physical device and independent optional-package gates unchanged.
+
+All 270 branch names independently enumerated through cursor exhaustion; latest PR search returns 100 of the historical records (latest #258, no new PR discovered). Prior authenticated complete 255-PR census (72 open/125 merged/58 closed) remains dated, not a new full pagination or exact SHA inventory. Direct git ls-remote failed DNS and the historical workspace is absent here, so no new full-history Git patch-ID comparison or local full runtime execution. Preserve the earlier inventory, original failures, and active branch ownership. Next: #254 draft/independent gate; #253/#255 current-target and review; #256–258 exact hosted checks; additional stage-local source/acceptance comparison where unowned. No deployment, release, live funds or optional default activation.
+
+---
+
 ## 2026-11-24 UTC — Recovery QR, saved review restoration and Settings screen counts
 
 Main was `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. The final GitHub proposal for each PR had main as first parent, the published head as second parent, and a tree identical to its head.
