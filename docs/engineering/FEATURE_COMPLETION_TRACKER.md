@@ -1,3 +1,14 @@
+## Live overlay — 2026-11-24 UTC, D3 runbook reconciliation
+
+| Capability | Evidence | Remaining gate |
+| --- | --- | --- |
+| D3 / G15 manifest and two-asset registry/ABI binding | Accepted decision index f12c56fb records merged Option A, v2 bundle and signed-deployment ledger under 2026-11-18 approval. Main source inspected; implementation is distinct from activation. | D2 owner-authorized public trust remains proposed; null pin, no first signed testnet release or production activation. |
+| Owner runbook #264 | Documentation-only correction 0021808c2f03c5a703b50de1152ca5c0bc8efcc4 distinguishes D3 accepted from D2 pending; exact current-main proposal a72f7a3cd72e81292eb6fa2baef539d29641c6a2, same tree. Existing commands unchanged; no owner actions executed. | Draft, independent Tier A review, 2/14 checks completed successfully at last read; 11 running and 1 queued. |
+| Local qualification guide #263 | Corrected head 61d3eb154f60186d8ccc91d02736ab32ab337470, 14/14 retrieved checks successful and combined status success; proposal matches current main and source tree. | Independent review remains absent, draft and unmerged. |
+| Other accepted features | #251 merged; #237 still has zero submitted reviews. Prior source-bound native and browser receipts retained. | Named Tier B review, D8 specific financial approval, actual devices, independent optional-package gates and current-target qualification remain separate. |
+
+---
+
 ## Live overlay — 2026-11-24 UTC, S12 oracle reproduction
 
 | Capability | Evidence | Remaining gate |
