@@ -21831,5 +21831,87 @@
       "productionAdoption": false,
       "classificationUnchanged": true
     }
+  },
+  "liveExactRefDelta20261124S12OracleRecovery": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "coordinatorTipBeforePublication": "cff7593a350d0de78b448d5c66e0ef5f8a7af013",
+    "method": "Complete authenticated REST exact-tip and all-state PR pagination, including terminal empty pages; unchanged-tip ancestry carried forward, not fresh patch-ID computation.",
+    "branchPageSizes": [
+      100,
+      100,
+      75,
+      0
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      60,
+      0
+    ],
+    "branchCount": 275,
+    "pullRequestCount": 260,
+    "openPullRequestCount": 77,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 123,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "fa4c4a9e5213fb71f83b127c44141e9d3a1083e2",
+        "sha": "cff7593a350d0de78b448d5c66e0ef5f8a7af013",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "cff7593a350d0de78b448d5c66e0ef5f8a7af013",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "2af09063ec1ff349ce0de9c393f4499b6fb799ca"
+          }
+        ]
+      },
+      {
+        "branch": "docs/s12-spec-oracle-reproduction-20261124",
+        "previous": null,
+        "sha": "9a07203b73fab01ba9eb5b88ffda57591315562a",
+        "associatedPullRequests": [
+          {
+            "number": 263,
+            "headSha": "9a07203b73fab01ba9eb5b88ffda57591315562a",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "08ac9daf545a41bf4a378e190d1661198ddf7dbc"
+          }
+        ]
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr263": {
+      "head": "9a07203b73fab01ba9eb5b88ffda57591315562a",
+      "tree": "f98d30834422f0591b2f50da572c404305ea9599",
+      "path": "docs/LOCAL_DEVELOPMENT_AND_RELEASE_GATES.md",
+      "historicalSourcePr": 48,
+      "sourceBlob": "1e9c4e80a5ecf95721bfb56f51f75d2ee352a671",
+      "ahead": 1,
+      "behind": 0,
+      "additions": 8,
+      "deletions": 1,
+      "classification": "P-open-unintegrated-pr",
+      "scope": "Recover local CPython 3.12 Linux x86_64 pinned oracle environment prerequisite from S12; no runtime or release policy changes",
+      "executed": false,
+      "independentReview": false,
+      "merged": false
+    }
   }
 }
