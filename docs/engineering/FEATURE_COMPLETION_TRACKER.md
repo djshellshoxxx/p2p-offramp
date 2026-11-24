@@ -1,3 +1,21 @@
+## Live overlay — 2026-11-24 UTC
+
+This overlay updates integration status without replacing the initial tracker below. Main: `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. All newly listed PRs remain open except #251.
+
+| Capability | Evidence and remaining gate |
+| --- | --- |
+| S06 cancellation recovery #251 | Merged; current main readback confirmed; no whole S06 completion claim. |
+| S07 D9 approval restart #254 | All four variants passed within one hosted test, 2506 Node pass / 1 skip; native program and independent review pending; controlled fixture only. |
+| S07 saved-review backup retention #257 | Draft; source checks source/destination reopen and ciphertext/backup preservation. Author reports 16 local passes; hosted checks pending. Not native destructive retention. |
+| S06 local screen counts #258 | Draft ordinary app connection; author reports focused 26 passes; hosted browser and named Tier B review pending. |
+| QR recovery accessibility #256 | Draft; author reports 127 focused passes; hosted browser and named Tier B review pending. Physical camera/device remains separate. |
+| Unsigned staging #253 and preflight #255 | Old-target #253 staging evidence remains source-bound; #255 is separate diagnostic/workflow proposal, not signing or production release. Exact target and review required. |
+| Startup #252 and sharing #243 | Prior hosted checks complete; current main or ordered parent qualification and named reviews still needed. |
+| Native retention / financial stacks | Existing #237 preview is not destructive authority; #241–244 require ordered current-native qualification and recorded D8 financial owner approval. |
+| D2 signed distribution / actual devices / optional nine packages | Public owner-authorized trust input, actual physical acceptance, and separately gated optional integrations remain outstanding. ReleaseEnabled=0. |
+
+---
+
 # Feature completion tracker — 2026-11-22 live checkpoint
 
 **Evidence meanings:** `present-in-open-PR` is source/PR existence, **not** feature acceptance. `verified` requires executed tests at the exact current source and target. Repository `main` is still `01f6f4feca051d68de24a04299cd3bb444bce40c` at initial capture.

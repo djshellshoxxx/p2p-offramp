@@ -11639,5 +11639,184 @@
     "headSha": "d364642d09d04da864fe56db78245a4133db2c18",
     "decision": "V historical stage; controlled test-only matrix pending execution and review; no product integration",
     "report": "docs/engineering/BRANCH_COHORT_S07_D9_APPROVAL_MATRIX_20261124.md"
+  },
+  "liveRestCensus20261124Run3": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "method": "Authenticated REST exact refs/all PR records, four pages including empty terminal pages. Delta against prior 266-ref overlay; historical full-history baseline preserved.",
+    "branchCount": 270,
+    "pullRequestCount": 255,
+    "openPullRequestCount": 72,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "branchPageSizes": [
+      100,
+      100,
+      70,
+      0
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      55,
+      0
+    ],
+    "missingPreviouslyRecordedRefs": [],
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previousSha": "924166c61bd782a12fddebc3ac4a7ae58d9df716",
+        "sha": "3b14b0ddb08691461afd2eb4b249fb1d48fa6a1b",
+        "openPullRequests": [
+          {
+            "number": 245,
+            "headSha": "3b14b0ddb08691461afd2eb4b249fb1d48fa6a1b",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "classification": "P-open-unintegrated-pr",
+        "comparisonStatus": "metadata only; own source checkpoint before this publication"
+      },
+      {
+        "branch": "codex/docs-binding-preflight-20261123",
+        "previousSha": null,
+        "sha": "b403d3bcb794d31ff813592d5625f485c0c59a14",
+        "openPullRequests": [
+          {
+            "number": 255,
+            "headSha": "b403d3bcb794d31ff813592d5625f485c0c59a14",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "classification": "P-open-unintegrated-pr",
+        "compareToMain": {
+          "mainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "mergeBaseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "aheadBy": 1,
+          "behindBy": 0,
+          "method": "GitHub compare metadata and changed path inventory"
+        },
+        "changedPaths": [
+          ".github/workflows/vault-foundation.yml",
+          "docs/distribution/README.md",
+          "package.json",
+          "scripts/distribution/stage.mjs",
+          "scripts/distribution/stage.test.mjs",
+          "scripts/docs/README.md",
+          "scripts/docs/preflight.mjs",
+          "scripts/docs/validate.mjs",
+          "scripts/docs/validate.test.mjs"
+        ],
+        "scope": "Documentation binding drift diagnostic; workflow change requires own review; not signing or distribution activation.",
+        "checksAtRead": "14 success, 1 in progress",
+        "completionVerified": false
+      },
+      {
+        "branch": "codex/qr-recovery-accessible-help-20261124",
+        "previousSha": null,
+        "sha": "d9428598ef1bec09a2741ab4a071aab2c9e1f552",
+        "openPullRequests": [
+          {
+            "number": 256,
+            "headSha": "d9428598ef1bec09a2741ab4a071aab2c9e1f552",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "classification": "P-open-unintegrated-pr",
+        "compareToMain": {
+          "mainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "mergeBaseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "aheadBy": 2,
+          "behindBy": 0,
+          "method": "GitHub compare metadata and changed path inventory"
+        },
+        "changedPaths": [
+          "apps/web/README.md",
+          "apps/web/src/ui/QrPanel.tsx",
+          "apps/web/test/qr-notices-locale.test.mjs"
+        ],
+        "scope": "Recovery QR accessible help, distinct from physical camera/device acceptance; named Tier B review.",
+        "checksAtRead": "14 queued",
+        "completionVerified": false
+      },
+      {
+        "branch": "test/s07-saved-review-backup-retention-20261124",
+        "previousSha": null,
+        "sha": "75e0b0430ff0c3e33395ce86513083868d0a5c2a",
+        "openPullRequests": [
+          {
+            "number": 257,
+            "headSha": "75e0b0430ff0c3e33395ce86513083868d0a5c2a",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "classification": "P-open-unintegrated-pr",
+        "compareToMain": {
+          "mainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "mergeBaseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "aheadBy": 1,
+          "behindBy": 0,
+          "method": "GitHub compare metadata and changed path inventory"
+        },
+        "changedPaths": [
+          "apps/web/test/saved-reviews-worker.test.mjs"
+        ],
+        "scope": "S07 saved review deletion and older encrypted backup restoration in separate profile; source fixture review, not browser persistence/native destructive authority.",
+        "checksAtRead": "1 success, 1 neutral, 13 queued",
+        "completionVerified": false
+      },
+      {
+        "branch": "feat/opt-in-session-screen-counts",
+        "previousSha": null,
+        "sha": "26127d310e49ab6ab956ab2b7bc168a1a550ce0e",
+        "openPullRequests": [
+          {
+            "number": 258,
+            "headSha": "26127d310e49ab6ab956ab2b7bc168a1a550ce0e",
+            "base": "main",
+            "owner": "djshellshoxxx"
+          }
+        ],
+        "classification": "P-open-unintegrated-pr",
+        "compareToMain": {
+          "mainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "mergeBaseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+          "aheadBy": 2,
+          "behindBy": 0,
+          "method": "GitHub compare metadata and changed path inventory"
+        },
+        "changedPaths": [
+          "apps/web/README.md",
+          "apps/web/src/ui/App.tsx",
+          "apps/web/test/app-shell-locale.test.mjs",
+          "scripts/test-locale-layout-browser.mjs",
+          "scripts/test-web-build-browser.mjs"
+        ],
+        "scope": "S06 ordinary Settings opt-in screen counts; page-memory only as claimed; independent review/native browser required.",
+        "checksAtRead": "14 queued",
+        "completionVerified": false
+      }
+    ],
+    "pr254": {
+      "head": "d364642d09d04da864fe56db78245a4133db2c18",
+      "checkout": "9553eccca2d3b0ba0db3d4d9f4d58837a15afb38",
+      "job": 138149251171,
+      "tests": 2507,
+      "pass": 2506,
+      "skip": 1,
+      "fail": 0,
+      "expandedTestPassed": true,
+      "checksSuccess": 14,
+      "checksTotal": 15,
+      "nativeProgramJob": 138149251551,
+      "nativeProgramStatus": "in_progress",
+      "reviewId": 6032797846,
+      "reviewScope": "Coordinator COMMENT, not independent worker or approval"
+    },
+    "fullHistoryRecomputed": false
   }
 }
