@@ -4,6 +4,8 @@ The client starts with the local vault locked. The default build supports encryp
 
 ## User guide
 
+In **Settings**, choose **Start local screen counts** to count foreground visits to Home, Offers, Trade review, Recovery and Settings. Counting starts off. The five totals stay in memory and can be reviewed before an explicit JSON download. Stopping counts, changing profiles, locking the vault or leaving the page erases them.
+
 | Task | Where | What to do |
 |---|---|---|
 | Create a profile | Home (`#/home`) | Choose **Create new profile**, enter and confirm a passphrase, accept the notice, then choose **Create encrypted profile**. Success opens the empty profile and displays its ID. Keep the ID and passphrase for later. |
