@@ -21650,5 +21650,60 @@
         }
       ]
     }
+  },
+  "liveExactRefDelta20261124PendingExitCorrection": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261124PendingExit",
+    "method": "Complete REST branches and pulls pagination (100/100/74 and 100/100/59). Unchanged-tip ancestry retained; no fresh full-history patch-ID.",
+    "branchCount": 274,
+    "pullRequestCount": 259,
+    "openPullRequestCount": 76,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 122,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "f5ae889ac3f0e55117d6e6285424c2cdb421aa3b",
+        "sha": "8f075af7ce42b1a90d59ed161ce86253ea4988b4"
+      },
+      {
+        "branch": "test/s07-pending-exit-review-restore-20261124",
+        "previous": "1b391d25ccf843b65372ad95c3ba5ee1fe6e6b98",
+        "sha": "12123046232496ad38decefa861029f76960b68d"
+      }
+    ],
+    "missingRefs": [],
+    "pr262": {
+      "originalHead": "1b391d25ccf843b65372ad95c3ba5ee1fe6e6b98",
+      "originalProposal": "0601c8e4e0cef644ad2712eb0f8ad6a8443e3ac6",
+      "failedJob": 138414598984,
+      "failedAssertion": "BUSY != REVIEW_EXPIRED at first post-restore direct confirmation",
+      "originalNode": {
+        "tests": 2508,
+        "pass": 2506,
+        "fail": 1,
+        "skip": 1
+      },
+      "originalSolana": "cancelled after head advance",
+      "newHead": "12123046232496ad38decefa861029f76960b68d",
+      "newTree": "9990e4ca33d2db8a10b87e1322bb57b23c737cf6",
+      "newProposal": "f62510be660027f590131a8fc83bff114513d516",
+      "newBlob": "5cbcc2cb3d7d75a073c92772f798cd50687bb407",
+      "ahead": 2,
+      "behind": 0,
+      "additions": 60,
+      "deletions": 0,
+      "correction": "Wait for ready phase before both direct stale confirmations; require destination profile and no review, retain exact REVIEW_EXPIRED and zero-effect assertions. No production changes.",
+      "newFoundation": 45394294936,
+      "newSpec": 45394294997,
+      "newSolana": 45394294954,
+      "correctedNodeExecuted": false,
+      "independentReview": false,
+      "merged": false
+    }
   }
 }
