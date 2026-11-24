@@ -21995,5 +21995,95 @@
       "independentReview": false,
       "merged": false
     }
+  },
+  "liveExactRefDelta20261124D3Runbook": {
+    "capturedDate": "2026-11-24",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "coordinatorTipBeforePublication": "213c2a9042dbc2e3bcc048f51153545395421abb",
+    "method": "Complete paginated GitHub REST branch/PR census; carry only unchanged proven ancestor tips from full census; no new patch-ID or range-diff calculation.",
+    "branchPageSizes": [
+      100,
+      100,
+      76,
+      0
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      61,
+      0
+    ],
+    "branchCount": 276,
+    "pullRequestCount": 261,
+    "openPullRequestCount": 78,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 124,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "a8e3c2237ac3ed3ea39389ab971ac9a032e29fb1",
+        "sha": "213c2a9042dbc2e3bcc048f51153545395421abb",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "213c2a9042dbc2e3bcc048f51153545395421abb",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "945e8a3ef5516ff6439bd9d53a0a9b6e58ad96d2"
+          }
+        ]
+      },
+      {
+        "branch": "docs/d3-owner-runbook-status-20261124",
+        "previous": null,
+        "sha": "0021808c2f03c5a703b50de1152ca5c0bc8efcc4",
+        "associatedPullRequests": [
+          {
+            "number": 264,
+            "headSha": "0021808c2f03c5a703b50de1152ca5c0bc8efcc4",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "a72f7a3cd72e81292eb6fa2baef539d29641c6a2"
+          }
+        ]
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr263": {
+      "head": "61d3eb154f60186d8ccc91d02736ab32ab337470",
+      "checksSuccessful": 14,
+      "combinedStatus": "success",
+      "independentReview": false,
+      "merged": false
+    },
+    "pr264": {
+      "head": "0021808c2f03c5a703b50de1152ca5c0bc8efcc4",
+      "tree": "e1c2c6073077638ee81673c51387699d2a221809",
+      "parents": [
+        "8cff44909752f5e8b99eecec44ebaa44360c7b5d"
+      ],
+      "proposal": "a72f7a3cd72e81292eb6fa2baef539d29641c6a2",
+      "sourceBlob": "f36057b51557e4a5f455c62b23530ae9addb246f",
+      "path": "docs/recovery/OWNER-TESTNET-RELEASE-RUNBOOK.md",
+      "ahead": 1,
+      "behind": 0,
+      "additions": 15,
+      "deletions": 10,
+      "scope": "D3 accepted and implemented; D2 remains proposed; no release authority; documentation only",
+      "independentReview": false,
+      "merged": false
+    }
   }
 }
