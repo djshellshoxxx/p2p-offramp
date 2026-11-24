@@ -1,11 +1,14 @@
 # Owner runbook: Sepolia testnet release and recovery packages
 
-Status: PROPOSED. This runbook implements D3 Option A
-(`docs/adr/proposed/D3-maintained-recovery-manifest.md`) on top of D2 Option A
-(`docs/adr/proposed/D2-testnet-trust-root-and-sepolia-record.md`). Neither decision
-is accepted yet, so nothing here is approved, and no step below has been run with
-a real key. The source pin `SEPOLIA_RELEASE_KEY_ID` is still `null`, production
-trust is still null and `ReleaseEnabled` stays `0`. Testnet only: no real funds.
+Status: D3 Option A is implemented and merged under the owner's 2026-11-18
+approval; see the [accepted decision index](../adr/ACCEPTED-DECISIONS-2026-11-04.md).
+The original [D3 packet](../adr/proposed/D3-maintained-recovery-manifest.md)
+retains historical analysis. [D2](../adr/proposed/D2-testnet-trust-root-and-sepolia-record.md)
+remains proposed, including its Option A key model. The steps below are conditional
+owner guidance, not authorization to generate or pin keys, deploy, sign, accept
+or publish a release. No step is claimed to have run with a real key. The source
+pin `SEPOLIA_RELEASE_KEY_ID` is still `null`, production trust is still null and
+`ReleaseEnabled` stays `0`. Testnet only: no real funds.
 
 Every command below exists in this repository at the commit that adds this file.
 Run owner steps on your own machine, in a clean clone at a commit you reviewed,
@@ -29,8 +32,9 @@ exactly two assets, and every verifier supplies exactly these two:
   every deployment id signed on this channel).
 
 The testnet build embeds the registry and the ABI in a bundle named
-`p2p-offramp/testnet-trust/v2`. That name is a proposal for you to confirm.
-Registry-only manifests and `v1` bundles are refused everywhere.
+`p2p-offramp/testnet-trust/v2`. This format was merged as implemented under
+D3 Option A on 2026-11-18. Registry-only manifests and `v1` bundles are refused
+everywhere.
 
 A manifest is valid for at most 30 days. After `expiresAt`, the testnet build
 stops with `MANIFEST_EXPIRED`, the app shows a failed registry, and no recovery
@@ -229,8 +233,9 @@ signs, the verifiers accept only a registry that names Sepolia alone.
 
 ## Still to be decided by the owner
 
-- Accept or reject D3 Option A and its rules, and D2 Option A (the key model).
-- The bundle format name (`p2p-offramp/testnet-trust/v2` is proposed).
+- Resolve D2, including the testnet key model and owner-authorized public trust
+  material. D3 Option A, the v2 bundle format and signed-deployment ledger are
+  already accepted and merged; they do not authorize the first release.
 - The naming rule for new deployment ids.
 - Where archived packages and their `checksums.json` are published.
 - Whether to schedule per-reference ABI and manifest digests (D3 Option C).
