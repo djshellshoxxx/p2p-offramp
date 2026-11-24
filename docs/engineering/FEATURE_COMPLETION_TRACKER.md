@@ -1,3 +1,20 @@
+## Live overlay — 2026-11-24 UTC, exact-ref census and persistent recovery
+
+Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. Exact live census: 273 refs, 258 PRs (75 open, 125 merged, 58 closed unmerged); 152 current tips proven ancestors including main and #251 by transitive unchanged-tip ancestry or direct comparison. Remaining 121 not ancestry-proven in this increment, not necessarily unique. Prior patch-ID snapshot remains historical. No product merge in this increment.
+
+| Capability | Current evidence | Remaining gate |
+| --- | --- | --- |
+| Deleted saved-review recovery #257 + #261 | #257 15/15 reported checks successful, draft. #261 corrected exact checkout `6924297a86f090f4919a7b6f8bec02ed6f05fdcb`: all nine real Chromium checkpoints passed, native Worker/encrypted IndexedDB, four retained-profile process restarts, clean-browser restoration, zero unexpected requests/errors. | Separate owner stack; #261 11/12 reported checks successful, Solana program running, fresh independent review, parent and current-main integration qualification. Not device/release acceptance. |
+| Retained backup during origin outage #260 | Exact proposal previously passed actual Chromium storage fixture, now all 14 reported check contexts successful (including CodeQL). | Draft, independent review, integration. Not full app Worker or D2 signed-origin acceptance. |
+| D9 approval restart #254 | 15/15 reported checks successful, prior native receipt retained. | Draft, independent review. |
+| S08 lab output exclusion #259 | 14/14 reported checks successful including CodeQL. | Draft, independent review. |
+| Screen counts #258 | 14/15 reported checks successful; WebKit cancelled, not a pass. | Named review, exact-current WebKit acceptance, draft disposition. |
+| Startup guidance #252 and unsigned staging #253 | 15/15 and 14/14 reported checks respectively; actual proposal parents still old main `01f6f4fe`. | Current target qualification and applicable independent review; do not merge stale proposals. |
+| Retention preview #237 | Actual new proposal includes current main, 12/12 historical head check contexts successful; do not transfer to new merge tree. | Required named review remains absent, actual checkout/current-tree evidence needed. |
+| D2, D8, devices, optional packages | No new authorization or physical evidence. | Maintain distinct gates and ReleaseEnabled=0. |
+
+---
+
 ## Live overlay — 2026-11-24 UTC
 
 This overlay updates integration status without replacing the initial tracker below. Main: `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. All newly listed PRs remain open except #251.
