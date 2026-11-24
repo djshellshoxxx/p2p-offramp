@@ -162,9 +162,15 @@ async function restoreBackup() {
   await status.waitFor();
   const receipt = await lastResponse('restore');
   assert.equal(receipt.ok, true);
+  assert.deepEqual(Object.keys(receipt.value).sort(), ['newProfileId', 'records']);
   assert.equal(receipt.value.records, 1);
-  assert.equal(receipt.value.revision, 0);
   assert.ok((await status.innerText()).includes(receipt.value.newProfileId));
+  // The public Worker receipt deliberately omits key ID and revision. Inspect the durable envelope instead.
+  const restoredEnvelope = (await vaultRows()).find(item => item.profileId === receipt.value.newProfileId);
+  assert.ok(restoredEnvelope, 'restore receipt identifies an actually persisted profile');
+  assert.equal(restoredEnvelope.revision, 0);
+  assert.match(restoredEnvelope.keyId, /^[0-9a-f]{32}$/);
+  assert.notEqual(restoredEnvelope.keyId, JSON.parse(await readFile(backupPath)).envelope.keyId);
   return receipt.value;
 }
 async function screenshot(name) {
@@ -239,9 +245,8 @@ try {
 
   const restored = await restoreBackup();
   assert.notEqual(restored.newProfileId, sourceId);
-  assert.notEqual(restored.newKeyId, sourceAfterDeletion.keyId);
   const restoredRow = (await vaultRows()).find(item => item.profileId === restored.newProfileId);
-  assert.equal(restoredRow.keyId, restored.newKeyId); assert.equal(restoredRow.revision, 0);
+  assert.notEqual(restoredRow.keyId, sourceAfterDeletion.keyId); assert.equal(restoredRow.revision, 0);
   await sourceUnchanged(sourceId, sourceAfterDeletionText);
   assert.equal((await vaultRows()).length, 2);
   await lock();
