@@ -1,6 +1,7 @@
 /** Real Chromium/IndexedDB boundary tests. Only loopback is permitted; no wallet/network adapter exists here. */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -14,6 +15,9 @@ const output = await mkdtemp(resolve(tmpdir(), 'p2p-vault-browser-'));
 let browser;
 let server;
 let recoveryServer;
+let outageDestinationServer;
+let sourceUnavailable = false;
+const outageRequests = [];
 try {
   execFileSync(resolve(root, 'node_modules/.bin/tsc'), [
     '--ignoreConfig', '--target', 'ES2023', '--module', 'ESNext', '--moduleResolution', 'Bundler',
@@ -30,7 +34,13 @@ try {
     if (!target.startsWith(`${output}${sep}`) || !target.endsWith('.js')) { response.writeHead(404); response.end(); return; }
     void readFile(target).then((contents) => { response.setHeader('Content-Type', 'text/javascript'); response.end(contents); }, () => { response.writeHead(404); response.end(); });
   };
-  server = createServer(handler);
+  server = createServer((request, response) => {
+    response.setHeader('Cache-Control', 'no-store');
+    if (!sourceUnavailable) return handler(request, response);
+    outageRequests.push(request.url);
+    response.writeHead(503, { 'Content-Type': 'text/plain' });
+    response.end('Fixture source unavailable');
+  });
   await new Promise((resolveListen, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolveListen); });
   const address = server.address();
   assert.ok(address && typeof address === 'object');
@@ -627,9 +637,147 @@ try {
   console.log(`reseal interruption outcomes by delay: ${interruptions.join(',')}`);
   assert.deepEqual(unexpected, []);
   await resealContext.close();
+
+  // S08 retained-backup recovery: the original origin must remain unavailable during
+  // restoration at a third, independent origin. Storage-layer acceptance only;
+  // no release signing, trusted-origin configuration, app Worker or wallet is exercised.
+  outageDestinationServer = createServer(handler);
+  await new Promise((resolveListen, reject) => {
+    outageDestinationServer.once('error', reject);
+    outageDestinationServer.listen(0, '127.0.0.1', resolveListen);
+  });
+  const outageAddress = outageDestinationServer.address();
+  assert.ok(outageAddress && typeof outageAddress === 'object');
+  const outageOrigin = `http://127.0.0.1:${outageAddress.port}`;
+  assert.equal(new Set([origin, recoveryOrigin, outageOrigin]).size, 3);
+  const outageContext = await browser.newContext({ serviceWorkers: 'block' });
+  const outageErrors = [];
+  const openOutagePage = async (targetOrigin) => {
+    const page = await outageContext.newPage();
+    page.on('pageerror', error => outageErrors.push(String(error)));
+    await page.route('**/*', route => {
+      if (new URL(route.request().url()).origin === targetOrigin) return route.continue();
+      unexpected.push(route.request().url()); return route.abort();
+    });
+    assert.equal((await page.goto(targetOrigin)).status(), 200);
+    return page;
+  };
+  const outageSource = await openOutagePage(origin);
+  const sourceBackup = await outageSource.evaluate(async () => {
+    const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+    const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+    const { EncryptedBackupService } = await import('/storage/src/backup-service.js');
+    const store = new IndexedDbVaultStore(), vault = new EncryptedVaultService(store, crypto, { lifecycle: false }), backup = new EncryptedBackupService(store);
+    try {
+      const created = await vault.create('source outage fixture passphrase');
+      if (!created.ok) throw new Error('source create failed');
+      const { profileId, sessionId } = created.value;
+      const record = { id: 'f'.repeat(32), kind: 'preference', schemaVersion: 1, payload: 'b3BhcXVlLW91dGFnZS1maXh0dXJl' };
+      const committed = await vault.commit(sessionId, 0, [{ op: 'put', record }]);
+      if (!committed.ok) throw new Error('source commit failed');
+      const listed = await vault.list(sessionId);
+      if (!listed.ok) throw new Error('source list failed');
+      const exported = await backup.exportWithStatus(profileId);
+      return { profileId, bytes: [...exported.bytes], records: listed.value, row: await store.get(profileId) };
+    } finally { backup.dispose(); vault.dispose(); store.close(); }
+  });
+  assert.equal(sourceBackup.row.revision, 1);
+  assert.equal(sourceBackup.records.length, 1);
+  assert.equal(sourceBackup.records[0].payload, 'b3BhcXVlLW91dGFnZS1maXh0dXJl');
+  const retainedBytes = Object.freeze(sourceBackup.bytes.slice());
+  const digest = bytes => createHash('sha256').update(Uint8Array.from(bytes)).digest('hex');
+  const retainedDigest = digest(retainedBytes);
+  // Read the existing opaque row without importing any source modules, including
+  // after the unavailable-origin reload. Abort any accidental database creation.
+  const readOpaqueRow = (page, id) => page.evaluate(profileId => new Promise((resolveRow, reject) => {
+    const request = indexedDB.open('p2p-offramp-vault');
+    request.onupgradeneeded = () => request.transaction.abort();
+    request.onerror = () => reject(request.error);
+    request.onblocked = () => reject(new Error('source database unexpectedly blocked'));
+    request.onsuccess = () => {
+      const db = request.result;
+      let row;
+      const tx = db.transaction('vaults', 'readonly');
+      const read = tx.objectStore('vaults').get(profileId);
+      read.onsuccess = () => { row = read.result; };
+      tx.oncomplete = () => { db.close(); resolveRow(row); };
+      tx.onabort = () => { db.close(); reject(tx.error); };
+    };
+  }), id);
+  const sourceCheckpoint = await readOpaqueRow(outageSource, sourceBackup.profileId);
+  assert.equal(sourceCheckpoint.profileId, sourceBackup.profileId);
+  const restoreAt = async (page, passphrase) => page.evaluate(async ({ bytes, profileId, passphrase }) => {
+    const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+    const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+    const { EncryptedBackupService } = await import('/storage/src/backup-service.js');
+    const store = new IndexedDbVaultStore(), vault = new EncryptedVaultService(store, crypto, { lifecycle: false }), backup = new EncryptedBackupService(store);
+    try {
+      const count = async () => {
+        const result = await vault.listProfiles();
+        if (!result.ok) throw new Error('inventory failed');
+        return result.value.profileIds.length;
+      };
+      const before = await count();
+      let wrongPass = 'unexpected-success';
+      try { await backup.restore(new Uint8Array(bytes), 'wrong source fixture passphrase', passphrase); }
+      catch (error) { wrongPass = error.code; }
+      const afterWrong = await count();
+      const receipt = await backup.restore(new Uint8Array(bytes), 'source outage fixture passphrase', passphrase);
+      const opened = await vault.unlock(receipt.newProfileId, passphrase);
+      if (!opened.ok) throw new Error('destination authentication failed');
+      const records = await vault.list(opened.value.sessionId);
+      if (!records.ok) throw new Error('destination list failed');
+      return { before, wrongPass, afterWrong, after: await count(), receipt,
+        records: records.value, row: await store.get(receipt.newProfileId),
+        sourceAbsent: await store.get(profileId) === undefined };
+    } finally { backup.dispose(); vault.dispose(); store.close(); }
+  }, { bytes: retainedBytes, profileId: sourceBackup.profileId, passphrase });
+  const checkRestored = result => {
+    assert.deepEqual([result.before, result.wrongPass, result.afterWrong, result.after, result.sourceAbsent],
+      [0, 'AUTHENTICATION_FAILED', 0, 1, true]);
+    assert.equal(result.receipt.sourceProfileId, sourceBackup.profileId);
+    assert.equal(result.row.revision, 0);
+    assert.deepEqual(result.records, sourceBackup.records);
+  };
+  const firstDestination = await openOutagePage(recoveryOrigin);
+  const firstRestore = await restoreAt(firstDestination, 'first destination fixture passphrase');
+  checkRestored(firstRestore);
+  assert.notEqual(firstRestore.row.profileId, sourceBackup.profileId);
+  await firstDestination.close();
+  sourceUnavailable = true;
+  const unavailablePaths = ['/', '/storage/src/idb-vault-store.js', '/storage/src/vault-service.js', '/storage/src/backup-service.js'];
+  const assertUnavailable = async () => {
+    for (const path of unavailablePaths) {
+      assert.equal((await outageContext.request.get(origin + path)).status(), 503);
+    }
+  };
+  await assertUnavailable();
+  assert.equal((await outageSource.reload()).status(), 503);
+  assert.equal(await outageSource.locator('script').count(), 0);
+  assert.deepEqual(await readOpaqueRow(outageSource, sourceBackup.profileId), sourceCheckpoint);
+  const outageDestination = await openOutagePage(outageOrigin);
+  const finalRestore = await restoreAt(outageDestination, 'outage destination fixture passphrase');
+  checkRestored(finalRestore);
+  for (const prior of [sourceBackup.row, firstRestore.row]) {
+    for (const field of ['profileId', 'keyId']) assert.notEqual(finalRestore.row[field], prior[field]);
+    for (const field of ['salt', 'nonce', 'ciphertext']) {
+      assert.notEqual(finalRestore.row.wrappedKey[field], prior.wrappedKey[field]);
+    }
+    for (const field of ['nonce', 'ciphertext']) assert.notEqual(finalRestore.row.snapshot[field], prior.snapshot[field]);
+  }
+  await assertUnavailable();
+  for (const path of unavailablePaths) assert.ok(outageRequests.filter(request => request === path).length >= 2);
+  assert.deepEqual(await readOpaqueRow(outageSource, sourceBackup.profileId), sourceCheckpoint);
+  assert.equal(digest(retainedBytes), retainedDigest);
+  assert.deepEqual(outageErrors, []);
+  assert.deepEqual(unexpected, []);
+  await outageContext.close();
+  console.log('PASS: retained authenticated backup bytes restore at an independent third origin while source serves only 503; source opaque row unchanged, destination fresh-key, wrong-pass refusal, no external egress (storage layer only).');
+
   console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, saturated-origin export to fresh-origin fresh-key locked restore with source retained, two-tab G03 reseal stale-source conflict and source-retaining fresh-key copy, document-close interruption at five points leaving source intact and no partial copy, two-tab G09 stale empty-plan conflict without write, no external egress.');
 } finally {
   await browser?.close();
+  if (outageDestinationServer) await new Promise((resolveClose) => outageDestinationServer.close(resolveClose));
   if (recoveryServer) await new Promise((resolveClose) => recoveryServer.close(resolveClose));
   if (server) await new Promise((resolveClose) => server.close(resolveClose));
   await rm(output, { recursive: true, force: true });
