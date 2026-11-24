@@ -86,14 +86,19 @@ export async function inspectDocs(root=ROOT ) {
   // then, for example a later edit by another owner, are reported stale and never presented as current.
   const committedBytes=(path)=>execFileSync(resolveTool('git'),['show',`${register.sourceCommit}:${path}`],{cwd:root,maxBuffer:1048576,stdio:['ignore','pipe','pipe']});
   const committedHash=(path)=>sha(committedBytes(path));
-  const currentHash=async(path)=>{try{return sha(await file(root,path));}catch{return null;}};
+  const unreadable=[];
+  const currentBytes=async path=>{
+    try { return await file(root,path); }
+    catch { unreadable.push(path); return null; }
+  };
   for(const item of register.evidence ) {
     exact(item,['path','sha256']);
     if(paths.has(item.path)||! /^[0-9a-f]{64}$/.test(item.sha256))refuse();
     paths.add(item.path);
     safeClaimPath(item.path);
     if(committedHash(item.path)!==item.sha256)refuse();
-    if(await currentHash(item.path)!==item.sha256)stale.add(item.path);
+    const bytes=await currentBytes(item.path);
+    if(!bytes||sha(bytes)!==item.sha256)stale.add(item.path);
   }
   for(const claim of claims)if(claim.evidencePaths.some(p=>!paths.has(p)))refuse();
   exact(register.copySource,['path','sha256']);
@@ -101,8 +106,17 @@ export async function inspectDocs(root=ROOT ) {
   const copyBytes=committedBytes(register.copySource.path);
   if(sha(copyBytes)!==register.copySource.sha256)refuse();
   const copyTexts=claimCopyTextsFromSource(copyBytes);
-  const copyStale=await currentHash(register.copySource.path)!==register.copySource.sha256;
-  if(copyStale)stale.add(register.copySource.path);
+  const workingCopy=await currentBytes(register.copySource.path);
+  const copyStale=!workingCopy||sha(workingCopy)!==register.copySource.sha256;
+  let changedCopyKeys=[];
+  if(copyStale){
+    stale.add(register.copySource.path);
+    // Diagnose the same bytes we hashed. Text equality never clears whole-file staleness.
+    try {
+      const currentTexts=claimCopyTextsFromSource(workingCopy);
+      changedCopyKeys=Object.keys(copyTexts).filter(key=>currentTexts[key]!==copyTexts[key]).sort();
+    } catch { changedCopyKeys=null; }
+  }
 
   const keys=new Set(),staleClaimIds=new Set();
   for(const item of register.copyKeys ) {
@@ -154,6 +168,7 @@ export async function inspectDocs(root=ROOT ) {
     claims:claims.length, copySource:register.copySource, copyKeys:register.copyKeys, sourceEvidence:register.evidence,
     claimsRegister:claims.map(c => ({...projectClaimsRegister(c,sha(JSON.stringify(register.evidence.filter(e => c.evidencePaths.includes(e.path))))),evidenceCurrent:!staleClaimIds.has(c.id)})),
     stale:[...stale].sort(), staleClaims:[...staleClaimIds].sort(),
+    ...(stale.size ? {bindingDrift:{changedCopyKeys,unreadable:unreadable.sort()}} : {}),
     sourceCommit:register.sourceCommit, dirtyDraft:true,
     excludedAuthority:['semantic-review','professional-crypto-review','wiki-publication','release-approval'],
     documents:seen.size, linkReportDigest:digest, links:reports,

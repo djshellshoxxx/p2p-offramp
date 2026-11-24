@@ -73,7 +73,9 @@ async function nodeDigest(){
 const CHILD=`import{writeFile,readFile}from'node:fs/promises';import{resolve}from'node:path';import{execFileSync}from'node:child_process';
 import{buildWeb}from'./apps/web/scripts/build.mjs';import{buildPortal}from'./scripts/portal/build.mjs';import{inspectDocs}from'./scripts/docs/validate.mjs';
 const work=process.argv[1];let phase='DOCS_STALE';try{
-const docs=await inspectDocs();phase='CLIENT_BUILD_REFUSED';const client=await buildWeb({delivery:'meta',outDir:resolve(work,'client')});
+const docs=await inspectDocs();
+if(docs.stale.length){phase='SOURCE_CHANGED';throw Error('stale documentation bindings');}
+phase='CLIENT_BUILD_REFUSED';const client=await buildWeb({delivery:'meta',outDir:resolve(work,'client')});
 phase='PORTAL_BUILD_REFUSED';const portal=await buildPortal({outDir:resolve(work,'portal')});phase='TOOLS_UNAVAILABLE';
 const version=async name=>JSON.parse(await readFile(resolve('node_modules',name,'package.json'),'utf8')).version;
 const tools={node:process.version,npm:execFileSync('npm',['--version'],{encoding:'utf8',timeout:10000}).trim(),vite:await version('vite'),typescript:await version('typescript'),react:await version('react'),reactDom:await version('react-dom'),platform:process.platform,arch:process.arch};
@@ -85,7 +87,7 @@ async function buildPass(path,env){
  catch{
   let code='BUILD_OR_DOCS_REFUSED';
   try{const result=parseStrictJsonBytes(new Uint8Array(await readRegular(resolve(path,'builder-error.json'),{max:1024})),1024);
-   if(Object.keys(result).length===1&&['DOCS_STALE','CLIENT_BUILD_REFUSED','PORTAL_BUILD_REFUSED','TOOLS_UNAVAILABLE','BUILD_RESULT_INVALID'].includes(result.code))code=result.code;
+   if(Object.keys(result).length===1&&['DOCS_STALE','SOURCE_CHANGED','CLIENT_BUILD_REFUSED','PORTAL_BUILD_REFUSED','TOOLS_UNAVAILABLE','BUILD_RESULT_INVALID'].includes(result.code))code=result.code;
   }catch{/* Never surface child stderr, environment, credentials or raw provider details. */}
   fail('DISTRIBUTION_'+code);
  }
@@ -180,5 +182,8 @@ export async function stageUnsignedDistribution({outDir}={}){
 if(isMain(import.meta.url)){
  try{const{values,positionals}=parseArgs({options:{out:{type:'string'}},strict:true,allowPositionals:true});if(positionals.length||!values.out)fail('DISTRIBUTION_ARGUMENTS');
   const result=await stageUnsignedDistribution({outDir:values.out});console.log(JSON.stringify({ok:true,sourceCommit:result.manifest.source.commit,sourceDirty:result.manifest.source.dirty,assets:result.manifest.assets.length,releaseEnabled:false,signedRelease:false,published:false}));
- }catch{console.log(JSON.stringify({ok:false,error:{code:'DISTRIBUTION_STAGE_REFUSED'},releaseEnabled:false,published:false}));process.exitCode=1;}
+ }catch(error){
+  const check=['DISTRIBUTION_SOURCE_CHANGED','DISTRIBUTION_DOCS_STALE'].includes(error.message)?{diagnostic:'npm run check:docs:bindings'}:{};
+  console.log(JSON.stringify({ok:false,error:{code:'DISTRIBUTION_STAGE_REFUSED',...check},releaseEnabled:false,published:false}));process.exitCode=1;
+ }
 }

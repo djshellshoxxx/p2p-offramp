@@ -4,6 +4,7 @@ From the maintained Node 24 checkout with installed locked dependencies, create 
 new local directory under an existing real parent:
 
 ```sh
+npm run check:docs:bindings
 node scripts/distribution/stage.mjs --out /tmp/new-p2p-distribution
 node --test scripts/distribution/stage.test.mjs
 node scripts/distribution/browser.test.mjs
