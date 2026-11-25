@@ -186,7 +186,7 @@ test('replacing the persistence port at the same numeric scope retires a held fa
     assert.equal(signal.aborted, false);
     trade.setPersistence(second);
     assert.equal(signal.aborted, true);
-    assert.equal(trade.find(oldRoute), undefined);
+    assert.equal(trade.find(oldRoute), null);
     assert.deepEqual(trade.getSnapshot().favorites, { kind: 'idle' });
     assert.equal(trade.getSnapshot().reviews.length, 0);
     await trade.loadFavorites();
