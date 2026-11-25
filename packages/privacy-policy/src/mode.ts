@@ -33,7 +33,7 @@ export function createModeController(options: ModeControllerOptions): ModeContro
   const context = options.context ?? Object.freeze({ readTrade: () => null, proposeIntent: () => failure('UNSUPPORTED_PROVIDER') });
   let generation = 0, closed = false, busy = false;
   let registry: ExtensionRegistry | undefined, controller: AbortController | undefined;
-  let physical: Promise<void> | undefined;
+  let physical: Promise<void> | undefined, disposal: Promise<void> | undefined;
   let cleanup: Promise<void> | undefined, activePolicy: FeaturePolicy | undefined, activeBrokerGeneration = -1;
   let snapshot: ModeSnapshot = Object.freeze({ state: 'inactive', policyGeneration: generation, requestedMode: null, preparationFrozen: true, reason: null, evaluation: null });
   const publish = (state: ModePhase, reason: CoreErrorCode | null = null, evaluation: PolicyEvaluation | null = null): void => {
@@ -49,10 +49,13 @@ export function createModeController(options: ModeControllerOptions): ModeContro
     if (closed || busy) return;
     busy = true; nextGeneration();
     publish(activePolicy?.mode === 'strict-private' ? 'blocked' : 'degraded', reason);
-    controller?.abort(); broker.invalidate();
     const previous = registry; registry = undefined;
-    const drain = closeRegistry(previous); cleanup = drain;
+    // Own the retirement drain before abort, revocation or registry cleanup can reenter disposal.
+    let finishDrain!: () => void;
+    const drain = new Promise<void>(resolve => { finishDrain = resolve; }); cleanup = drain;
     void drain.finally(() => { if (cleanup === drain) { cleanup = undefined; busy = false; } });
+    try { controller?.abort(); broker.invalidate(); }
+    finally { void closeRegistry(previous).then(finishDrain); }
   };
   const evidenceChanged = (): void => {
     if (closed || busy || snapshot.state !== 'active' || !activePolicy || !registry) return;
@@ -81,6 +84,8 @@ export function createModeController(options: ModeControllerOptions): ModeContro
       publish(broker.mode === 'strict' && activePolicy.mode === 'ordinary' ? 'leaving' : 'validating');
       previousControl?.abort();
       let candidate: ExtensionRegistry | undefined, retained = false, brokerGeneration = -1;
+      let previousDrain: Promise<void> | undefined;
+      const drainPrevious = (): Promise<void> => previousDrain ??= closeRegistry(previous);
       const current = (): boolean => !closed && generation === mine && !control.signal.aborted && broker.generation === brokerGeneration;
       try {
         // Revoke real native scopes before the first await, including same-mode policy replacements.
@@ -88,7 +93,7 @@ export function createModeController(options: ModeControllerOptions): ModeContro
         if (closed || generation !== mine || control.signal.aborted) invalid('CANCELLED');
         if (broker.setMode(activePolicy.mode === 'strict-private' ? 'strict' : 'ordinary') !== undefined) invalid('UNAVAILABLE');
         brokerGeneration = broker.generation;
-        await closeRegistry(previous);
+        await drainPrevious();
         if (!current()) invalid('CANCELLED'); publish('validating');
         const created = factory(mine, expected => current() && expected === mine);
         if (!created.ok) invalid(created.error.code); candidate = created.value;
@@ -115,6 +120,7 @@ export function createModeController(options: ModeControllerOptions): ModeContro
         if (generation === mine && !closed) publish('blocked', code);
         return failure(code);
       } finally {
+        await drainPrevious();
         if (!retained) { control.abort(); await closeRegistry(candidate); }
       }
       } finally {
@@ -127,12 +133,19 @@ export function createModeController(options: ModeControllerOptions): ModeContro
       nextGeneration(); publish('blocked', 'CANCELLED'); controller?.abort(); broker.invalidate();
     },
     inspectMode(): ModeSnapshot { evidenceChanged(); return snapshot; },
-    async dispose(): Promise<void> {
-      if (closed) { await Promise.all([...(cleanup ? [cleanup] : []), ...(physical ? [physical] : [])]); return; }
-      closed = true; nextGeneration(); publish('inactive', 'CANCELLED'); controller?.abort(); broker.invalidate();
-      try { unsubscribe(); } catch { /* Finish native resource revocation. */ } unsubscribe = () => undefined;
-      publish('inactive', 'CANCELLED'); const previous = registry; registry = undefined;
-      const drained = closeRegistry(previous); await Promise.all([drained, ...(cleanup ? [cleanup] : []), ...(physical ? [physical] : [])]);
+    dispose(): Promise<void> {
+      if (disposal) return disposal;
+      // Publish the completion promise before synchronous abort/revocation callbacks can reenter.
+      let finish!: () => void, reject!: (reason: unknown) => void;
+      disposal = new Promise<void>((resolve, fail) => { finish = resolve; reject = fail; });
+      void (async () => {
+        if (closed) { await Promise.all([...(cleanup ? [cleanup] : []), ...(physical ? [physical] : [])]); return; }
+        closed = true; nextGeneration(); publish('inactive', 'CANCELLED'); controller?.abort(); broker.invalidate();
+        try { unsubscribe(); } catch { /* Finish native resource revocation. */ } unsubscribe = () => undefined;
+        publish('inactive', 'CANCELLED'); const previous = registry; registry = undefined;
+        const drained = closeRegistry(previous); await Promise.all([drained, ...(cleanup ? [cleanup] : []), ...(physical ? [physical] : [])]);
+      })().then(finish, reject);
+      return disposal;
     },
   });
 }
