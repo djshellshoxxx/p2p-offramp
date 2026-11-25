@@ -22473,5 +22473,106 @@
       "independentReview": false,
       "merged": false
     }
+  },
+  "liveExactRefDelta20261125FavoritesNativeConflict": {
+    "capturedDate": "2026-11-25",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261125FavoritesRestore",
+    "coordinatorTipBeforePublication": "312f3f8161d4e0ae53e10f67fbafb5fdb323c1d6",
+    "method": "Complete REST branch and all-state PR pagination; unchanged ancestor-proven tips retained at same main. No full-history recomputation.",
+    "branchPageSizes": [
+      100,
+      100,
+      81,
+      0
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      66,
+      0
+    ],
+    "branchCount": 281,
+    "pullRequestCount": 266,
+    "openPullRequestCount": 83,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 129,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "9a0634d60e6e8ba7627fc98e01f67ee669f62e92",
+        "sha": "312f3f8161d4e0ae53e10f67fbafb5fdb323c1d6",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "312f3f8161d4e0ae53e10f67fbafb5fdb323c1d6",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "4d4e3639b298687809460a85e4d6e22a1d237c00"
+          }
+        ]
+      },
+      {
+        "branch": "test/favorites-native-two-document-conflict-20261125",
+        "previous": null,
+        "sha": "b93a431a49088872d3bcdb229a448b8ebac6dd2c",
+        "associatedPullRequests": [
+          {
+            "number": 269,
+            "headSha": "b93a431a49088872d3bcdb229a448b8ebac6dd2c",
+            "base": "test/favorites-fresh-key-restore-browser-20261125",
+            "baseSha": "05664b3d1e0bb3716784564b05901b865bc69adf",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "8faa0ef20e04187b5901145697ecd249976b0f37"
+          }
+        ]
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr268": {
+      "head": "05664b3d1e0bb3716784564b05901b865bc69adf",
+      "tree": "e1edde3be4b0a044241d09c84457e877f7d44a18",
+      "proposal": "d3244d7e0e53edb8d16d7adb7c3b5d248c1d7825",
+      "parents": [
+        "8fbe66e965823a6e4622f4d38d194fd3c16c9b88",
+        "05664b3d1e0bb3716784564b05901b865bc69adf"
+      ],
+      "browserJob": 139049428271,
+      "journeyLabels": 14,
+      "unexpectedRequests": 0,
+      "checksPassed": 11,
+      "checksObserved": 11,
+      "snyk": "success",
+      "independentReview": false,
+      "merged": false
+    },
+    "pr269": {
+      "head": "b93a431a49088872d3bcdb229a448b8ebac6dd2c",
+      "tree": "b9b2c953708ae589302bd7f6c29ebbb93f4cc93f",
+      "proposal": "8faa0ef20e04187b5901145697ecd249976b0f37",
+      "parents": [
+        "05664b3d1e0bb3716784564b05901b865bc69adf",
+        "b93a431a49088872d3bcdb229a448b8ebac6dd2c"
+      ],
+      "sourceBlob": "e13231dcf14c7d0ecee79e3b680c4a235476ca08",
+      "checkSummary": {
+        "queued": 10,
+        "in_progress": 1
+      },
+      "runtimeExecuted": false,
+      "independentReview": false,
+      "merged": false
+    }
   }
 }
