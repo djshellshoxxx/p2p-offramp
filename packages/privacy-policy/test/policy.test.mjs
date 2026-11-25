@@ -152,3 +152,28 @@ test('controller disposal awaits detached actual G14 registry after synchronous 
   assert.equal(f.controller.inspectMode().state,'inactive');bad(await f.controller.requestMode(policy()),'LOCKED');
  }finally{f.held.resolve();await Promise.allSettled([replacement,disposal].filter(Boolean));await f.controller.dispose();f.broker.dispose()}
 });
+
+for(const reentrant of [false,true])test(reentrant?'reentrant disposal joins active G14 registry drain during G05 revocation':'concurrent disposal joins active G14 registry drain',{timeout:10000},async()=>{
+ const {broker}=makeBroker({mode:'ordinary',coverage:'direct'});
+ const held=deferred();let starts=0,stops=0,drained=false,first,second,firstDone=false,secondDone=false;
+ const controller=createModeController({broker,catalog:[node()],unbrokeredPaths:[],createRegistry:(generation,isCurrent)=>createExtensionRegistry({
+  generation,isCurrent,registeredCapabilities:[ref.name],entries:[{instance:instance({
+   initialize:async()=>{starts++;return{ok:true,value:undefined}},
+   dispose:async()=>{stops++;await held.promise;drained=true}
+  })}]
+ })});
+ try{
+  val(await controller.requestMode(policy({required:[ref]})));assert.equal(starts,1);
+  const join=()=>{second=controller.dispose().then(()=>{secondDone=true})};
+  const permit=broker.authorize({channel:'relay',endpointId:'relay-a',method:'read'});assert.equal(typeof permit,'object');
+  const live=broker.capture(permit,{onRevoked:()=>{if(reentrant)join()}});assert.equal(typeof live,'object');assert.equal(live.current(),true);
+  first=controller.dispose().then(()=>{firstDone=true});if(!reentrant)join();
+  assert.ok(second,'second disposal was invoked');assert.equal(live.current(),false);assert.equal(live.signal.aborted,true);
+  await tick();assert.equal(stops,1);assert.equal(drained,false);assert.equal(firstDone,false);
+  assert.equal(secondDone,false,'every caller must await physical completion');
+  assert.equal(controller.inspectMode().state,'inactive');bad(await controller.requestMode(policy()),'LOCKED');
+  held.resolve();await Promise.all([first,second]);
+  assert.equal(firstDone,true);assert.equal(secondDone,true);assert.equal(drained,true);assert.equal(stops,1);
+  await controller.dispose();assert.equal(stops,1);
+ }finally{held.resolve();await Promise.allSettled([first,second].filter(Boolean));await controller.dispose();broker.dispose()}
+});
