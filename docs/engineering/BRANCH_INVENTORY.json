@@ -22670,5 +22670,164 @@
       "independentReview": false,
       "merged": false
     }
+  },
+  "liveExactRefDelta20261125NativeMixedPreference": {
+    "capturedDate": "2026-11-25",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261125ForeignPreferenceOracle",
+    "coordinatorTipBeforePublication": "78c0e1b31d99eb47360183cf2a081ba379b52eb1",
+    "method": "Complete REST branch and all-state PR pagination; unchanged ancestor-proven tips retained against same main; no full-history recomputation.",
+    "branchPageSizes": [
+      100,
+      100,
+      83
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      68
+    ],
+    "branchCount": 283,
+    "pullRequestCount": 268,
+    "openPullRequestCount": 85,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 131,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "0ddefcd7bf344a557b9a6dfe684970fb3a114063",
+        "sha": "78c0e1b31d99eb47360183cf2a081ba379b52eb1",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "78c0e1b31d99eb47360183cf2a081ba379b52eb1",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "3638b5baf1ba535d4ee9335a4b3654e7346710f6"
+          }
+        ]
+      },
+      {
+        "branch": "test/native-mixed-favorites-restore-20261125",
+        "previous": null,
+        "sha": "7c70384031361d592d0ef54e33512e860cdf0598",
+        "associatedPullRequests": [
+          {
+            "number": 271,
+            "headSha": "7c70384031361d592d0ef54e33512e860cdf0598",
+            "base": "test/s08-retained-backup-origin-outage-20261124",
+            "baseSha": "f3b0d907edef0e7dd13b89d33ab65b85ba7d9744",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "412f2bb417e1ae4ed7a90866ee3817e8c202ae73"
+          }
+        ]
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr270": {
+      "head": "42def54e792b25d1b5cbad6e2cc3a7b226499357",
+      "tree": "4dccae53623869827c2c4104de7d9530972b1e2e",
+      "proposal": "51db8925e104472c0b270c25f571a391deabd5be",
+      "parents": [
+        "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+        "42def54e792b25d1b5cbad6e2cc3a7b226499357"
+      ],
+      "checksObserved": 14,
+      "checksPassed": 14,
+      "snyk": "success",
+      "nodeJob": 139110865775,
+      "nodeTests": 2507,
+      "nodePass": 2506,
+      "nodeFail": 0,
+      "nodeSkip": 1,
+      "foreignPreferenceTestPassed": true,
+      "independentReview": false,
+      "merged": false
+    },
+    "pr271": {
+      "head": "7c70384031361d592d0ef54e33512e860cdf0598",
+      "tree": "8fb6373e5682b9d364718c05a3b2fa0c87e226b1",
+      "proposal": {
+        "sha": "412f2bb417e1ae4ed7a90866ee3817e8c202ae73",
+        "tree": "8fb6373e5682b9d364718c05a3b2fa0c87e226b1",
+        "parents": [
+          "f3b0d907edef0e7dd13b89d33ab65b85ba7d9744",
+          "7c70384031361d592d0ef54e33512e860cdf0598"
+        ]
+      },
+      "sourceBlob": "a5072f58af1f6755ccf13ab5c597ba1b49203f19",
+      "parent": "f3b0d907edef0e7dd13b89d33ab65b85ba7d9744",
+      "checkRecords": [
+        {
+          "name": "backup-verification-webkit",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "specs",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "backup-verification-firefox",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "browser",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "local-evm",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "docs-tooling",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "local-trade",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "schemas-and-crypto",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "forge",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "native-nostr-relay",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "inventory",
+          "status": "queued",
+          "conclusion": null
+        }
+      ],
+      "runtimeExecuted": false,
+      "independentReview": false,
+      "merged": false
+    }
   }
 }
