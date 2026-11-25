@@ -1,3 +1,11 @@
+## 2026-11-25 UTC — favorite recovery acceptance progression
+
+- #267 exact hosted proposal 360c7dfa passed all 14 returned check-runs plus Snyk; actual Chromium favorite journey includes durable read/refusal row preservation with zero unexpected requests. Draft and no independent Tier B review; not merged or financial acceptance.
+- #268 implements the native emitted-app fresh-key favorite restore regression as a separate child: real backup download/restore UI, fresh identity/key/salt/nonces, revision zero, original and unrelated profile ciphertext preserved, restored favorite recheck with correct synthetic terms and no durable write. Source 05664b3d, tree e1edde3b, source readback verified; hosted execution queued, independent review absent. Package-level foreign preference restore already tested; native foreign-record import and actual controller replacement remain separate. No production defect established.
+- Main unchanged; #251 merged. #265 precedes #255; D2, D8, actual devices and named reviews remain outstanding. ReleaseEnabled=0.
+
+---
+
 ## 2026-11-25 UTC (November 24 Pacific) — S06 favorites read-only browser durability
 
 - [Draft #267](https://github.com/djshellshoxxx/p2p-offramp/pull/267) recovers the historical read-only durability oracle in the maintained real Worker/IndexedDB browser driver: four durable encrypted-row comparisons covering favorite listing, valid recheck, deleted-review refusal and invalid-terms refusal. Exact head `8fbe66e965823a6e4622f4d38d194fd3c16c9b88`; one file, +8/-1; exact source readback. Actual hosted execution and independent Tier B review pending. No production defect established and no runtime change.

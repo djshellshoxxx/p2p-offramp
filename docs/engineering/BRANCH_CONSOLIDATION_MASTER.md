@@ -1,3 +1,9 @@
+## 2026-11-25 UTC — S06 favorites #267 / #268
+
+Complete paginated REST census: 280 exact branch tips and 265 PRs (82 open, 125 merged, 58 closed unmerged). 152 unchanged ancestor-proven tips retained against unchanged main; 128 not ancestry-proven, not an unfinished-feature count. 0 prior refs missing. No full-history recomputation. See BRANCH_INVENTORY.json overlay liveExactRefDelta20261125FavoritesRestore. Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. #267 exact current-target hosted 14/14 retrieved checks plus Snyk, native Chromium job 139025258193, proposal 360c7dfa same tree and ordered parents. #268 isolated child `05664b3d1e0bb3716784564b05901b865bc69adf`, one test file, tree e1edde3b, proposal d3244d7e same tree, real backup/favorite restore acceptance implemented but unexecuted at publication. #42 remains partially reconciled, no native foreign-record or controller replacement completion claim. Both draft/unmerged; independent Tier B and ordered guarded integration outstanding. See [handoff](CONSOLIDATION_HANDOFF.md). No production change or release activation.
+
+---
+
 ## 2026-11-24 UTC — current-target startup recovery composition #266
 
 Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 remains merged. Full REST census 278 exact branch tips, 263 PRs (80 open, 125 merged, 58 closed unmerged); 152 unchanged ancestor-proven tips, 126 not ancestry-proven. Only coordinator and new #266 ref changed versus previous overlays; no missing refs. No new full-history patch-ID/range-diff. See inventory overlay liveExactRefDelta20261124CurrentTargetStartup.

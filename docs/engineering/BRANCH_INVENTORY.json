@@ -22360,5 +22360,118 @@
       "merged": false,
       "originalCoordinationComment": 7146334877
     }
+  },
+  "liveExactRefDelta20261125FavoritesRestore": {
+    "capturedDate": "2026-11-25",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261124CurrentTargetStartup",
+    "coordinatorTipBeforePublication": "9a0634d60e6e8ba7627fc98e01f67ee669f62e92",
+    "method": "Complete paginated REST branch/PR census including terminating empty pages. All previous ancestor-proven exact tips unchanged, same main; no fresh full-history patch-id/range-diff. Changed/new refs and current PR associations below. Prior history retained.",
+    "branchPageSizes": [
+      100,
+      100,
+      80,
+      0
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      65,
+      0
+    ],
+    "branchCount": 280,
+    "pullRequestCount": 265,
+    "openPullRequestCount": 82,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 128,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "488453630738625ce00c6f4f1844597d53fa1d50",
+        "sha": "9a0634d60e6e8ba7627fc98e01f67ee669f62e92",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "9a0634d60e6e8ba7627fc98e01f67ee669f62e92",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "d8978df8a42af00ebcd5e45ff36c4a9e126211ef"
+          }
+        ]
+      },
+      {
+        "branch": "test/favorites-fresh-key-restore-browser-20261125",
+        "previous": null,
+        "sha": "05664b3d1e0bb3716784564b05901b865bc69adf",
+        "associatedPullRequests": [
+          {
+            "number": 268,
+            "headSha": "05664b3d1e0bb3716784564b05901b865bc69adf",
+            "base": "test/favorites-readonly-browser-regression-20261125",
+            "baseSha": "8fbe66e965823a6e4622f4d38d194fd3c16c9b88",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "d3244d7e0e53edb8d16d7adb7c3b5d248c1d7825"
+          }
+        ]
+      },
+      {
+        "branch": "test/favorites-readonly-browser-regression-20261125",
+        "previous": null,
+        "sha": "8fbe66e965823a6e4622f4d38d194fd3c16c9b88",
+        "associatedPullRequests": [
+          {
+            "number": 267,
+            "headSha": "8fbe66e965823a6e4622f4d38d194fd3c16c9b88",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "360c7dfa67d6d8f62ecc8b3a41cabadf892114a4"
+          }
+        ]
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr267": {
+      "head": "8fbe66e965823a6e4622f4d38d194fd3c16c9b88",
+      "tree": "0c260eee867b509e36f5ae043effd3a9435c70a3",
+      "proposal": "360c7dfa67d6d8f62ecc8b3a41cabadf892114a4",
+      "parents": [
+        "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+        "8fbe66e965823a6e4622f4d38d194fd3c16c9b88"
+      ],
+      "browserJob": 139025258193,
+      "checksPassed": 14,
+      "checksObserved": 14,
+      "snyk": "success",
+      "independentReview": false,
+      "merged": false
+    },
+    "pr268": {
+      "head": "05664b3d1e0bb3716784564b05901b865bc69adf",
+      "tree": "e1edde3be4b0a044241d09c84457e877f7d44a18",
+      "proposal": "d3244d7e0e53edb8d16d7adb7c3b5d248c1d7825",
+      "parents": [
+        "8fbe66e965823a6e4622f4d38d194fd3c16c9b88",
+        "05664b3d1e0bb3716784564b05901b865bc69adf"
+      ],
+      "sourceBlob": "c67aa5c6d1ceffafa0c53077f636be1be1d29bdd",
+      "runtimeExecuted": false,
+      "independentReview": false,
+      "merged": false
+    }
   }
 }
