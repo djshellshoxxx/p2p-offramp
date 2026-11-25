@@ -1,3 +1,9 @@
+## 2026-11-25 UTC — PR227 controlled controller reproduction
+
+PR227 exact mode.ts blob `13763f9d0147bfb55f4dce3e50b3744dd688b2ba`: Node controlled dependency probe RED 0 pass / 2 fail; local memoized previous-registry cleanup correction GREEN 2 pass / 0 fail / 0 skip. [Reproduction and patch](PR227_CONTROLLED_DRAIN_REGRESSION_20261125.md). One controller transition ownership gap reproduced under doubles; no native G05/G14 execution or production impact established. Local corrected blob `b46c0331eea2bf29d71b22a53d1c19347b6b460d` remains unpublished to source. Optional privacy-policy #227 still held pending owner-coordinated actual G05/G14 red-green, full applicable current-target tests, independent and named review. No source merge or activation. Live main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`, 284 branch names, 86 open / 125 merged / 58 closed unmerged PRs. Prior exact-tip ancestry 152/132 remains dated. ReleaseEnabled=0.
+
+---
+
 ## 2026-11-25 — #227 optional privacy-policy transition drain
 
 Source-level finding on exact head `7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0`: cancellation during synchronous transport revocation can bypass the awaited drain of the detached previous extension registry. Prior abort starts disposal but does not establish physical completion. See [owner-lane finding and proposed regression](https://github.com/djshellshoxxx/p2p-offramp/pull/227#issuecomment-7167048099). Classification: static candidate, reproduction/repair pending; no demonstrated production or financial effect. Do not advance integration until held-cleanup cancellation and disposal regression passes, exact current-target qualification and standalone named review complete. Preserve separately owned branch and optional default-unwired state. Twelve bounded dependency/configuration files match old base and current main by blob identity and content, not complete merge-tree proof. No change to branch/feature completion counts; ReleaseEnabled=0.
