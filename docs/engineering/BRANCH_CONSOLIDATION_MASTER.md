@@ -1,3 +1,11 @@
+## 2026-11-25 UTC — native favorites restore qualified; two-document conflict candidate
+
+Complete REST pagination: 281 exact branch tips, 266 PR records (83 open, 125 merged, 58 closed unmerged); 152 unchanged ancestor-proven tips against unchanged main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`, 129 not ancestry-proven, zero missing prior refs. #251 remains merged. No fresh full-history comparison. Inventory overlay liveExactRefDelta20261125FavoritesNativeConflict published at `9e9b231c0c121f602ed3090db9cb315296c259ae`.
+
+#268 native fresh-key favorites restore passed 11/11 reported checks plus Snyk, exact Chromium receipt. #269 new isolated test-only candidate `b93a431a49088872d3bcdb229a448b8ebac6dd2c`, exact tree/parents and readback verified; native two-document conflict pending. #267–269 draft; independent Tier B and ordered guarded main integration required. #42 partially reconciled; see handoff for controller lifetime boundary. No main merge or release activation.
+
+---
+
 ## 2026-11-25 UTC — S06 favorites #267 / #268
 
 Complete paginated REST census: 280 exact branch tips and 265 PRs (82 open, 125 merged, 58 closed unmerged). 152 unchanged ancestor-proven tips retained against unchanged main; 128 not ancestry-proven, not an unfinished-feature count. 0 prior refs missing. No full-history recomputation. See BRANCH_INVENTORY.json overlay liveExactRefDelta20261125FavoritesRestore. Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. #267 exact current-target hosted 14/14 retrieved checks plus Snyk, native Chromium job 139025258193, proposal 360c7dfa same tree and ordered parents. #268 isolated child `05664b3d1e0bb3716784564b05901b865bc69adf`, one test file, tree e1edde3b, proposal d3244d7e same tree, real backup/favorite restore acceptance implemented but unexecuted at publication. #42 remains partially reconciled, no native foreign-record or controller replacement completion claim. Both draft/unmerged; independent Tier B and ordered guarded integration outstanding. See [handoff](CONSOLIDATION_HANDOFF.md). No production change or release activation.
