@@ -33,7 +33,7 @@ export function createModeController(options: ModeControllerOptions): ModeContro
   const context = options.context ?? Object.freeze({ readTrade: () => null, proposeIntent: () => failure('UNSUPPORTED_PROVIDER') });
   let generation = 0, closed = false, busy = false;
   let registry: ExtensionRegistry | undefined, controller: AbortController | undefined;
-  let physical: Promise<void> | undefined;
+  let physical: Promise<void> | undefined, disposal: Promise<void> | undefined;
   let cleanup: Promise<void> | undefined, activePolicy: FeaturePolicy | undefined, activeBrokerGeneration = -1;
   let snapshot: ModeSnapshot = Object.freeze({ state: 'inactive', policyGeneration: generation, requestedMode: null, preparationFrozen: true, reason: null, evaluation: null });
   const publish = (state: ModePhase, reason: CoreErrorCode | null = null, evaluation: PolicyEvaluation | null = null): void => {
@@ -130,12 +130,19 @@ export function createModeController(options: ModeControllerOptions): ModeContro
       nextGeneration(); publish('blocked', 'CANCELLED'); controller?.abort(); broker.invalidate();
     },
     inspectMode(): ModeSnapshot { evidenceChanged(); return snapshot; },
-    async dispose(): Promise<void> {
-      if (closed) { await Promise.all([...(cleanup ? [cleanup] : []), ...(physical ? [physical] : [])]); return; }
-      closed = true; nextGeneration(); publish('inactive', 'CANCELLED'); controller?.abort(); broker.invalidate();
-      try { unsubscribe(); } catch { /* Finish native resource revocation. */ } unsubscribe = () => undefined;
-      publish('inactive', 'CANCELLED'); const previous = registry; registry = undefined;
-      const drained = closeRegistry(previous); await Promise.all([drained, ...(cleanup ? [cleanup] : []), ...(physical ? [physical] : [])]);
+    dispose(): Promise<void> {
+      if (disposal) return disposal;
+      // Publish the completion promise before synchronous abort/revocation callbacks can reenter.
+      let finish!: () => void, reject!: (reason: unknown) => void;
+      disposal = new Promise<void>((resolve, fail) => { finish = resolve; reject = fail; });
+      void (async () => {
+        if (closed) { await Promise.all([...(cleanup ? [cleanup] : []), ...(physical ? [physical] : [])]); return; }
+        closed = true; nextGeneration(); publish('inactive', 'CANCELLED'); controller?.abort(); broker.invalidate();
+        try { unsubscribe(); } catch { /* Finish native resource revocation. */ } unsubscribe = () => undefined;
+        publish('inactive', 'CANCELLED'); const previous = registry; registry = undefined;
+        const drained = closeRegistry(previous); await Promise.all([drained, ...(cleanup ? [cleanup] : []), ...(physical ? [physical] : [])]);
+      })().then(finish, reject);
+      return disposal;
     },
   });
 }
