@@ -22574,5 +22574,101 @@
       "independentReview": false,
       "merged": false
     }
+  },
+  "liveExactRefDelta20261125ForeignPreferenceOracle": {
+    "capturedDate": "2026-11-25",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261125FavoritesNativeConflict",
+    "coordinatorTipBeforePublication": "0ddefcd7bf344a557b9a6dfe684970fb3a114063",
+    "method": "Complete REST branch and all-state PR pagination; count only unchanged prior ancestry-proven tips at unchanged main; no full-history recomputation.",
+    "branchPageSizes": [
+      100,
+      100,
+      82
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      67
+    ],
+    "branchCount": 282,
+    "pullRequestCount": 267,
+    "openPullRequestCount": 84,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 130,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "312f3f8161d4e0ae53e10f67fbafb5fdb323c1d6",
+        "sha": "0ddefcd7bf344a557b9a6dfe684970fb3a114063",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "0ddefcd7bf344a557b9a6dfe684970fb3a114063",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "d3f5adddf74bf1567c0d839d8fc94528ae598b96"
+          }
+        ]
+      },
+      {
+        "branch": "test/favorites-foreign-preference-restore-oracle-20261125",
+        "previous": null,
+        "sha": "42def54e792b25d1b5cbad6e2cc3a7b226499357",
+        "associatedPullRequests": [
+          {
+            "number": 270,
+            "headSha": "42def54e792b25d1b5cbad6e2cc3a7b226499357",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "51db8925e104472c0b270c25f571a391deabd5be"
+          }
+        ]
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr269": {
+      "head": "b93a431a49088872d3bcdb229a448b8ebac6dd2c",
+      "tree": "b9b2c953708ae589302bd7f6c29ebbb93f4cc93f",
+      "proposal": "8faa0ef20e04187b5901145697ecd249976b0f37",
+      "parents": [
+        "05664b3d1e0bb3716784564b05901b865bc69adf",
+        "b93a431a49088872d3bcdb229a448b8ebac6dd2c"
+      ],
+      "browserJob": 139076046366,
+      "journeyLabels": 15,
+      "unexpectedRequests": 0,
+      "checksObserved": 11,
+      "checksPassed": 11,
+      "snyk": "success",
+      "independentReview": false,
+      "merged": false
+    },
+    "pr270": {
+      "head": "42def54e792b25d1b5cbad6e2cc3a7b226499357",
+      "tree": "4dccae53623869827c2c4104de7d9530972b1e2e",
+      "proposal": "51db8925e104472c0b270c25f571a391deabd5be",
+      "parents": [
+        "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+        "42def54e792b25d1b5cbad6e2cc3a7b226499357"
+      ],
+      "sourceBlob": "fb110cc3eaf0cbb14b0a52b0c50d031892506470",
+      "checksQueuedAtInitialRead": 13,
+      "runtimeExecuted": false,
+      "independentReview": false,
+      "merged": false
+    }
   }
 }
