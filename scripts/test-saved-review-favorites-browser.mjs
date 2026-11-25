@@ -211,11 +211,86 @@ try {
   await favorites().getByRole('button', { name: 'Remove favorite', exact: true }).click();
   await page.getByText('No favorite saved reviews in this profile.', { exact: true }).waitFor();
   assert.doesNotMatch(await rawVault(), new RegExp(`synthetic-favorite-invalid|${invalidRecord}|saved-review-favorites`));
+  // Two distinct documents own actual emitted module Workers with independent vault leases.
+  // The already-created synthetic wrapper remains a valid preference target, not valid trade terms.
+  await lock();
+  const conflictBefore = await rawVault();
+  const competing = await context.newPage();
+  competing.on('dialog', dialog => { unexpected.push('UNEXPECTED_DIALOG'); void dialog.dismiss(); });
+  competing.on('pageerror', () => unexpected.push('PAGE_ERROR'));
+  const attachFavoriteWorker = document => document.evaluate(async ({ workerURL, profileId, passphrase }) => {
+    const worker = new Worker(workerURL, { type: 'module' }); let requestId = 0;
+    const request = (operation, fields = {}, generation = 0) => new Promise((resolve, reject) => {
+      const mine = ++requestId;
+      const cleanup = () => { clearTimeout(timer); worker.removeEventListener('message', reply); worker.removeEventListener('error', failed); };
+      const reply = event => {
+        if (event.data.kind !== 'response' || event.data.requestId !== mine) return;
+        cleanup(); resolve(event.data.result);
+      };
+      const failed = () => { cleanup(); reject(new Error('FAVORITE_WORKER_ERROR')); };
+      const timer = setTimeout(() => { cleanup(); reject(new Error('FAVORITE_WORKER_TIMEOUT')); }, 30_000);
+      worker.addEventListener('message', reply); worker.addEventListener('error', failed);
+      worker.postMessage({ version: 1, requestId: mine, generation, operation, ...fields });
+    });
+    const value = result => { if (!result.ok) throw new Error(result.error.code); return result.value; };
+    try {
+      value(await request('init', { config: { version: 1, ReleaseEnabled: 0, connectOrigins: [] } }));
+      value(await request('unlock', { profileId, passphrase }));
+      const observed = value(await request('listFavoriteReviews', { profileId }));
+      window.favoriteCasFixture = { request, terminate: () => worker.terminate() };
+      return observed;
+    } catch (error) { worker.terminate(); throw error; }
+  }, { workerURL: `${origin}/assets/${workerName}`, profileId: profileA, passphrase: PASS });
+  const favoriteCommand = (document, operation, fields = {}, generation = 0) =>
+    document.evaluate(({ operation, fields, generation }) => window.favoriteCasFixture.request(operation, fields, generation),
+      { operation, fields, generation });
+  try {
+    await competing.goto(origin + '/#/offers');
+    await competing.getByText('Vault locked', { exact: true }).waitFor();
+    const staleObserved = await attachFavoriteWorker(page), currentObserved = await attachFavoriteWorker(competing);
+    assert.deepEqual(staleObserved, currentObserved); assert.deepEqual(staleObserved.recordIds, []);
+    assert.ok((await rawVault()) === conflictBefore, 'opening two leases and listing favorites does not write');
+    const winner = await favoriteCommand(competing, 'setReviewFavorite', {
+      profileId: profileA, recordId: invalidRecord, favorite: true, expectedRevision: currentObserved.revision,
+    });
+    assert.equal(winner.ok, true);
+    assert.deepEqual(winner.value, { recordId: invalidRecord, favorite: true, revision: currentObserved.revision + 1 });
+    const committedRows = await rawVault();
+    assert.notEqual(committedRows, conflictBefore);
+    const beforeRows = JSON.parse(conflictBefore), afterRows = JSON.parse(committedRows);
+    assert.equal(afterRows.length, beforeRows.length);
+    for (const row of beforeRows.filter(row => row.profileId !== profileA)) {
+      assert.ok(JSON.stringify(afterRows.find(candidate => candidate.profileId === row.profileId)) === JSON.stringify(row),
+        'winner preserves each unrelated encrypted profile');
+    }
+    const stale = await favoriteCommand(page, 'setReviewFavorite', {
+      profileId: profileA, recordId: invalidRecord, favorite: false, expectedRevision: staleObserved.revision,
+    });
+    assert.equal(stale.ok, false); assert.equal(stale.error.code, 'CONFLICT');
+    const staleStatus = await favoriteCommand(page, 'status');
+    assert.equal(staleStatus.ok, true); assert.equal(staleStatus.value.state, 'locked');
+    assert.ok((await rawVault()) === committedRows, 'stale favorite operation cannot alter the winning ciphertext');
+    const observedWinner = await favoriteCommand(competing, 'listFavoriteReviews', { profileId: profileA });
+    assert.equal(observedWinner.ok, true);
+    assert.deepEqual(observedWinner.value, { revision: winner.value.revision, recordIds: [invalidRecord] });
+    assert.ok((await rawVault()) === committedRows, 'winner readback does not write');
+    for (const document of [page, competing]) {
+      const disposed = await favoriteCommand(document, 'dispose', {}, 1);
+      assert.equal(disposed.ok, true);
+    }
+  } finally {
+    try { await page.evaluate(() => { window.favoriteCasFixture?.terminate(); delete window.favoriteCasFixture; }); }
+    finally { await competing.close(); }
+  }
+  await unlock(profileA); await offers(); await loadFavorites(1);
+  assert.equal(await reviews().count(), 0, 'fresh unlock observes winner without implicitly reviewing terms');
+  await favorites().getByRole('button', { name: 'Remove favorite', exact: true }).click();
+  await page.getByText('No favorite saved reviews in this profile.', { exact: true }).waitFor();
   assert.deepEqual(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length })), { local: 0, session: 0 });
   assert.deepEqual(unexpected, []); await context.close();
   console.log(JSON.stringify({ fixture: 'synthetic-emitted-favorites-native-worker-idb', browser: browser.version(),
     journey: ['locked', 'explicit-load-revision', 'star', 'encrypted-at-rest', 'reload', 'current-registry-open', 'lock-revokes-route', 'profile-isolation',
-      'unstar-persists', 'delete-retains-dangling-reference', 'explicit-dangling-removal', 'invalid-terms-favorite-refused', 'read-and-refusal-preserve-durable-rows', 'fresh-key-favorite-restore-preserves-source-and-unrelated-profile'],
+      'unstar-persists', 'delete-retains-dangling-reference', 'explicit-dangling-removal', 'invalid-terms-favorite-refused', 'read-and-refusal-preserve-durable-rows', 'fresh-key-favorite-restore-preserves-source-and-unrelated-profile', 'two-document-native-favorite-conflict-preserves-winner'],
     workerOnlyFavorites: true, unexpectedRequests: unexpected.length, tradingEnabled: false, releaseAcceptance: false }));
 } finally {
   await browser?.close(); if (server) { server.closeAllConnections(); await new Promise(done => server.close(done)); }
