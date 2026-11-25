@@ -12,6 +12,7 @@ import { buildWeb } from '../apps/web/scripts/build.mjs';
 
 const temporary = await mkdtemp(resolve(tmpdir(), 'p2p-favorites-'));
 const PASS = 'encrypted favorites browser fixture passphrase';
+const RESTORED = 'independent restored favorites browser fixture passphrase';
 const SAMPLE = 'Core native sample (deadlines from now)';
 const unexpected = [];
 let browser, server;
@@ -38,7 +39,7 @@ try {
   await new Promise((done, fail) => { server.once('error', fail); server.listen(0, '127.0.0.1', done); });
   const origin = `http://127.0.0.1:${server.address().port}`;
   browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
-  const context = await browser.newContext({ serviceWorkers: 'block' });
+  const context = await browser.newContext({ acceptDownloads: true, serviceWorkers: 'block' });
   await context.route('**/*', route => {
     if (new URL(route.request().url()).origin === origin) return route.continue();
     unexpected.push('UNEXPECTED_NETWORK'); return route.abort();
@@ -63,10 +64,10 @@ try {
     const status = page.getByRole('status').filter({ hasText: 'was created and unlocked' }); await status.waitFor();
     const id = /Profile ([0-9a-f]{32}) was created/.exec(await status.innerText())?.[1]; assert.ok(id); return id;
   };
-  const unlock = async profileId => {
+  const unlock = async (profileId, passphrase = PASS) => {
     await page.getByRole('link', { name: 'Home', exact: true }).click();
     await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
-    await page.getByLabel('Profile ID', { exact: true }).fill(profileId); await page.getByLabel('Passphrase', { exact: true }).fill(PASS);
+    await page.getByLabel('Profile ID', { exact: true }).fill(profileId); await page.getByLabel('Passphrase', { exact: true }).fill(passphrase);
     await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click(); await page.getByText('Vault unlocked', { exact: true }).waitFor();
   };
   const lock = async () => { await page.getByRole('button', { name: 'Lock vault', exact: true }).click(); await page.getByText('Vault locked', { exact: true }).waitFor(); };
@@ -109,6 +110,57 @@ try {
   assert.equal(await reviews().count(), 0);
   await lock(); await unlock(profileA); await offers(); assert.equal(await favorites().count(), 0, 'a selection change never carries favorites across profiles');
   await loadFavorites(1);
+
+  // Recover the historical favorite restore oracle through the maintained ordinary UI.
+  // All profile material is synthetic. Observe only durable encrypted envelopes.
+  const beforeRestore = JSON.parse(await rawVault());
+  const sourceEnvelope = beforeRestore.find(row => row.profileId === profileA);
+  const foreignEnvelope = beforeRestore.find(row => row.profileId === profileB);
+  assert.ok(sourceEnvelope && foreignEnvelope && beforeRestore.length === 2);
+  await page.getByRole('link', { name: 'Recovery', exact: true }).click();
+  const exportForm = page.getByRole('form', { name: 'Export an encrypted file', exact: true });
+  await exportForm.getByLabel('Profile ID', { exact: true }).fill(profileA);
+  await exportForm.getByRole('checkbox').check();
+  const downloadWaiting = page.waitForEvent('download');
+  await exportForm.getByRole('button', { name: 'Download unchecked encrypted backup', exact: true }).click();
+  const download = await downloadWaiting;
+  assert.equal(await download.failure(), null);
+  const backup = await readFile(await download.path());
+  const restoreForm = page.getByRole('form', { name: 'Restore an encrypted file', exact: true });
+  await restoreForm.getByLabel('Encrypted backup file', { exact: true }).setInputFiles({
+    name: 'synthetic-favorites-backup.json', mimeType: 'application/json', buffer: backup,
+  });
+  await restoreForm.getByLabel('Backup passphrase', { exact: true }).fill(PASS);
+  await restoreForm.getByLabel('New passphrase', { exact: true }).fill(RESTORED);
+  await restoreForm.getByLabel('Confirm new passphrase', { exact: true }).fill(RESTORED);
+  await restoreForm.getByRole('checkbox').check();
+  await restoreForm.getByRole('button', { name: 'Restore as new profile', exact: true }).click();
+  const restored = restoreForm.getByRole('status').filter({ hasText: 'Restored as a new locked profile' });
+  await restored.waitFor();
+  const restoredId = /Restored as a new locked profile ([0-9a-f]{32})/.exec(await restored.innerText())?.[1];
+  assert.ok(restoredId && restoredId !== profileA && restoredId !== profileB);
+  const afterRestore = JSON.parse(await rawVault());
+  const destination = afterRestore.find(row => row.profileId === restoredId);
+  assert.ok(destination && afterRestore.length === 3);
+  assert.equal(destination.revision, 0);
+  assert.ok(destination.keyId !== sourceEnvelope.keyId, 'restore uses a fresh key identity');
+  assert.ok(destination.wrappedKey.salt !== sourceEnvelope.wrappedKey.salt, 'restore uses a fresh salt');
+  assert.ok(destination.wrappedKey.nonce !== sourceEnvelope.wrappedKey.nonce, 'restore uses a fresh wrapping nonce');
+  assert.ok(destination.snapshot.nonce !== sourceEnvelope.snapshot.nonce, 'restore uses a fresh snapshot nonce');
+  const preserveOriginals = rows => {
+    assert.ok(JSON.stringify(rows.find(row => row.profileId === profileA)) === JSON.stringify(sourceEnvelope), 'source ciphertext preserved');
+    assert.ok(JSON.stringify(rows.find(row => row.profileId === profileB)) === JSON.stringify(foreignEnvelope), 'unrelated profile ciphertext preserved');
+  };
+  preserveOriginals(afterRestore);
+  await lock(); await unlock(restoredId, RESTORED); await offers(); await loadFavorites(1);
+  assert.equal(await reviews().count(), 0, 'restored favorite listing does not open terms');
+  await favorites().getByRole('button', { name: 'Open and recheck favorite', exact: true }).click();
+  await page.waitForURL(/#\/trade\//);
+  assert.ok((await page.locator('main').innerText()).includes('0.25 native'));
+  const restoredRead = JSON.parse(await rawVault());
+  preserveOriginals(restoredRead);
+  assert.ok(JSON.stringify(restoredRead.find(row => row.profileId === restoredId)) === JSON.stringify(destination), 'restored favorite recheck preserves destination ciphertext');
+  await lock(); await unlock(profileA); await offers(); await loadFavorites(1);
   await favorites().getByRole('button', { name: 'Remove favorite', exact: true }).click();
   await page.getByText('No favorite saved reviews in this profile.', { exact: true }).waitFor();
   await page.reload(); await unlock(profileA); await offers(); await loadFavorites(0);
@@ -163,7 +215,7 @@ try {
   assert.deepEqual(unexpected, []); await context.close();
   console.log(JSON.stringify({ fixture: 'synthetic-emitted-favorites-native-worker-idb', browser: browser.version(),
     journey: ['locked', 'explicit-load-revision', 'star', 'encrypted-at-rest', 'reload', 'current-registry-open', 'lock-revokes-route', 'profile-isolation',
-      'unstar-persists', 'delete-retains-dangling-reference', 'explicit-dangling-removal', 'invalid-terms-favorite-refused', 'read-and-refusal-preserve-durable-rows'],
+      'unstar-persists', 'delete-retains-dangling-reference', 'explicit-dangling-removal', 'invalid-terms-favorite-refused', 'read-and-refusal-preserve-durable-rows', 'fresh-key-favorite-restore-preserves-source-and-unrelated-profile'],
     workerOnlyFavorites: true, unexpectedRequests: unexpected.length, tradingEnabled: false, releaseAcceptance: false }));
 } finally {
   await browser?.close(); if (server) { server.closeAllConnections(); await new Promise(done => server.close(done)); }
