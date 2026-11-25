@@ -94,9 +94,12 @@ try {
   await page.reload(); await page.getByText('Vault locked', { exact: true }).waitFor();
   assert.equal(await favorites().count(), 0);
   await unlock(profileA); await offers(); assert.equal(await reviews().count(), 0);
+  const beforeFavoriteRead = await rawVault();
   await loadFavorites(1); assert.equal(await reviews().count(), 0, 'loading favorite IDs never opens terms');
+  assert.ok((await rawVault()) === beforeFavoriteRead, 'loading favorites leaves durable encrypted rows unchanged');
   await favorites().getByRole('button', { name: 'Open and recheck favorite', exact: true }).click(); await page.waitForURL(/#\/trade\//);
   assert.ok((await page.locator('main').innerText()).includes('0.25 native'));
+  assert.ok((await rawVault()) === beforeFavoriteRead, 'opening and rechecking a favorite leaves durable encrypted rows unchanged');
   const oldRoute = page.url(); await lock();
   await page.getByRole('heading', { name: 'Review not in this session', exact: true }).waitFor();
   assert.equal(await favorites().count(), 0);
@@ -116,8 +119,10 @@ try {
   await reviews().getByRole('button', { name: 'Delete from profile', exact: true }).click();
   await page.getByRole('status').filter({ hasText: 'Deleted from the open profile.' }).waitFor();
   assert.equal(await favorites().count(), 0); await loadFavorites(1);
+  const beforeDanglingRead = await rawVault();
   await favorites().getByRole('button', { name: 'Open and recheck favorite', exact: true }).click();
   await page.getByRole('alert').waitFor(); assert.ok(page.url().endsWith('#/offers')); assert.equal(await reviews().count(), 0);
+  assert.ok((await rawVault()) === beforeDanglingRead, 'refusing a deleted review leaves durable encrypted rows unchanged');
   await favorites().getByRole('button', { name: 'Remove favorite', exact: true }).click();
   await page.getByText('No favorite saved reviews in this profile.', { exact: true }).waitFor(); await lock();
 
@@ -145,8 +150,10 @@ try {
   }, { workerURL: `${origin}/assets/${workerName}`, profileId: profileA, passphrase: PASS });
   assert.match(invalidRecord, /^[0-9a-f]{32}$/);
   await unlock(profileA); await offers(); await loadFavorites(1);
+  const beforeInvalidRead = await rawVault();
   await favorites().getByRole('button', { name: 'Open and recheck favorite', exact: true }).click();
   await page.getByRole('heading', { name: 'Saved files that no longer pass review', exact: true }).waitFor();
+  assert.ok((await rawVault()) === beforeInvalidRead, 'refusing invalid terms leaves durable encrypted rows unchanged');
   assert.ok(page.url().endsWith('#/offers')); assert.equal(await reviews().count(), 0);
   assert.equal(await favorites().count(), 1, 'rejection never rewrites the favorite preference');
   await favorites().getByRole('button', { name: 'Remove favorite', exact: true }).click();
@@ -156,7 +163,7 @@ try {
   assert.deepEqual(unexpected, []); await context.close();
   console.log(JSON.stringify({ fixture: 'synthetic-emitted-favorites-native-worker-idb', browser: browser.version(),
     journey: ['locked', 'explicit-load-revision', 'star', 'encrypted-at-rest', 'reload', 'current-registry-open', 'lock-revokes-route', 'profile-isolation',
-      'unstar-persists', 'delete-retains-dangling-reference', 'explicit-dangling-removal', 'invalid-terms-favorite-refused'],
+      'unstar-persists', 'delete-retains-dangling-reference', 'explicit-dangling-removal', 'invalid-terms-favorite-refused', 'read-and-refusal-preserve-durable-rows'],
     workerOnlyFavorites: true, unexpectedRequests: unexpected.length, tradingEnabled: false, releaseAcceptance: false }));
 } finally {
   await browser?.close(); if (server) { server.closeAllConnections(); await new Promise(done => server.close(done)); }
