@@ -1,3 +1,9 @@
+## 2026-11-25 UTC — PR227 controlled controller reproduction
+
+Actual Node 22.16.0 execution of the exact PR227 mode.ts blob `13763f9d0147bfb55f4dce3e50b3744dd688b2ba` with explicitly controlled broker/registry/evaluator doubles reproduced the previous cleanup finding: RED 0 pass / 2 fail (premature next admission and premature disposal); a local memoized previous-registry drain awaited in finally passed the identical tests GREEN 2 pass / 0 fail / 0 skip. Local corrected blob `b46c0331eea2bf29d71b22a53d1c19347b6b460d` is unpublished to source. [Reproduction, proposed diff, fixture and log hashes](PR227_CONTROLLED_DRAIN_REGRESSION_20261125.md). This is controlled controller evidence only, not real G05/G14 integration or production impact. Existing separately owned #227 head unchanged; actual G05/G14 red-green, owner repair, current-target qualification and named review remain required. No new production defect count or merge. Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`, #251 merged. Live branch-name census 284, PRs 86 open/125 merged/58 closed unmerged; exact-tip ancestry remains dated 152/132. Direct Git DNS unavailable, historical checkout absent. #237 and checked optional/favorites reviews still empty. D2 trust, D8 financial approval and physical-device evidence remain separate. ReleaseEnabled=0; no deployment/funds/default activation.
+
+---
+
 ## 2026-11-25 UTC — optional privacy-policy physical-drain finding
 
 Current main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` identical by live compare; #251 merged. Exhausted branch-name pagination: 284 distinct names. PR partitions: 86 open, 125 merged, 58 closed unmerged = 269. No fresh exact-tip/patch-ID census: prior 152 ancestor-proven / 132 not ancestry-proven remain dated. Historical workspace absent; Node 22.16.0; direct git ls-remote failed DNS exit 128. Lowercase agents.md read; uppercase and requested docs/ai paths unavailable.
