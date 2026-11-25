@@ -22989,5 +22989,192 @@
       "independentReview": false,
       "merged": false
     }
+  },
+  "liveExactRefDelta20261125DrainCandidate": {
+    "capturedDate": "2026-11-25",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261125FavoritesPortReplacement",
+    "coordinatorTipBeforePublication": "7ffd9c5840fadc125c4a6e5c038808f37d4687a3",
+    "method": "Complete REST exact branch-tip and all-state PR pagination; compare to prior full census and chained overlays. All 152 previously ancestor-proven tips unchanged against identical main. Two earlier known branches absent from chained overlay are explicitly recovered here; no new patch-ID/range-diff recomputation.",
+    "branchPageSizes": [
+      100,
+      100,
+      85
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      70
+    ],
+    "branchCount": 285,
+    "pullRequestCount": 270,
+    "openPullRequestCount": 87,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 133,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "a1f0ea291e3ed1f41f01ab9f897b644af13f0ad1",
+        "sha": "7ffd9c5840fadc125c4a6e5c038808f37d4687a3",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "7ffd9c5840fadc125c4a6e5c038808f37d4687a3",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "262b3a44c32c486bb8eded3091c1e42330eaed9c"
+          }
+        ],
+        "ancestorOfCurrentMain": null
+      },
+      {
+        "branch": "docs/s12-spec-oracle-reproduction-20261124",
+        "previous": null,
+        "sha": "61d3eb154f60186d8ccc91d02736ab32ab337470",
+        "associatedPullRequests": [
+          {
+            "number": 263,
+            "headSha": "61d3eb154f60186d8ccc91d02736ab32ab337470",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "c365cb76b19dcd4cc9a2b2317cb611112756c525"
+          }
+        ],
+        "ancestorOfCurrentMain": null
+      },
+      {
+        "branch": "fix/optional-privacy-policy-drain-20261125",
+        "previous": null,
+        "sha": "60cd22de4e5296df595e8dbb7e24a4a19f34b467",
+        "associatedPullRequests": [
+          {
+            "number": 273,
+            "headSha": "60cd22de4e5296df595e8dbb7e24a4a19f34b467",
+            "base": "codex/privacy-policy-main-g19-20261120",
+            "baseSha": "7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "a048d2fe0e97390b0d92323ef4978afcd3e6512c"
+          }
+        ],
+        "ancestorOfCurrentMain": null
+      },
+      {
+        "branch": "test/s07-pending-exit-review-restore-20261124",
+        "previous": null,
+        "sha": "12123046232496ad38decefa861029f76960b68d",
+        "associatedPullRequests": [
+          {
+            "number": 262,
+            "headSha": "12123046232496ad38decefa861029f76960b68d",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "f62510be660027f590131a8fc83bff114513d516"
+          }
+        ],
+        "ancestorOfCurrentMain": null
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr273": {
+      "head": "60cd22de4e5296df595e8dbb7e24a4a19f34b467",
+      "base": "7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0",
+      "tree": "92e374467add2adffce184d42b25d63c906adf29",
+      "proposal": "a048d2fe0e97390b0d92323ef4978afcd3e6512c",
+      "proposalParents": [
+        "7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0",
+        "60cd22de4e5296df595e8dbb7e24a4a19f34b467"
+      ],
+      "testFirst": "eb24258ad2a5aa9bfd75e066a57aa4f780d020f9",
+      "modeBlob": "b46c0331eea2bf29d71b22a53d1c19347b6b460d",
+      "testBlob": "8201c25a8a663ae2238531ee9f712514b68aba89",
+      "paths": [
+        "packages/privacy-policy/src/mode.ts",
+        "packages/privacy-policy/test/policy.test.mjs"
+      ],
+      "checkRecords": [
+        {
+          "name": "backup-verification-webkit",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "local-evm",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "specs",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "backup-verification-firefox",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "docs-tooling",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "schemas-and-crypto",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "browser",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "inventory",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "forge",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "native-nostr-relay",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "local-trade",
+          "status": "queued",
+          "conclusion": null
+        }
+      ],
+      "currentMainCompare": {
+        "ahead": 4,
+        "behind": 75,
+        "mergeBase": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      },
+      "actualG05G14RedGreenExecuted": false,
+      "ownerCoordinationComment": 7171035794,
+      "merged": false
+    }
   }
 }
