@@ -1,3 +1,15 @@
+## 2026-11-25 UTC (November 24 Pacific) — S08 live owner source and lab documentation gap
+
+| Capability | Current evidence | Remaining gate |
+| --- | --- | --- |
+| Pinned fake-funds development lab | Exact current main contains `.devcontainer/devcontainer.json` and `.devcontainer/Dockerfile` with pinned Node 24.19.0 image, Foundry 1.5.1 and solc 0.8.30 checksum; post-create lockfile install and foundation runner; per-run evidence output. | Fresh Codespace execution, measured private port visibility and device acceptance remain unverified. No paid provisioning. |
+| Lab guide semantic drift | Current `docs/wiki-source/Codespaces-Test-Lab.md` still describes the old 300287dc snapshot and says pinned lab is future-only and devcontainer absent; current source contradicts that as a current status statement. Historical #44 already described the implemented recipe. | Correct the wiki page while retaining all scope limits, regenerate both draft records on an approved main baseline, revalidate exact page/link bindings and current-source staging. Coordinate #265 record refresh then #255 preflight and #178 wiki-owner work; do not disturb their qualified heads. |
+| S08 staging/validation | Compared exact live #44 owner head to current main: staging now includes QR decoder graph, validation reports stale claims and preserves immutable evidence, scripts docs and lab/distribution guides preserve newer scope. | #44 remains partial; #259 owns root lab ignore restoration. No old code restoration or redundant implementation. |
+
+Fresh review lists for #237 and #262–266 remain empty. #265 and #266 are still draft/unmerged; their previously recorded successful hosted tests remain source-specific, not independent approval. Main unchanged. No new local runtime execution or independent worker available; Git DNS failure reproduced. D2, D8, actual devices and optional-package gates remain separate. ReleaseEnabled=0.
+
+---
+
 ## 2026-11-25 UTC (November 24 Pacific) — #266 native qualification completed
 
 #266 exact hosted proposal `d310a4e7eff39da6166ffb5d13dde2846d61d9d3` completed [Solana program job 138826453164](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45501723830/job/138826453164): validator 62/62 checks, 13 sends, 1853 real refund-wait seconds, 1908-second validator run, no error; six browser checks, 8 wallet prompts, 7 app sends, 2052-second native browser run, actual module Worker and encrypted IndexedDB, actual chain clock, no clock warp and zero fixture errors. All five returned PR-triggered workflows and all 12 jobs returned by their job lists succeeded; Snyk success. This listing excludes other check-run contexts; do not infer a 14/14 result from it. Prior five startup failure browser cases remain qualified at the same proposal. Draft, unmerged; independent peer and named Tier B review remain missing. No physical-device, public-network, fresh-negotiation or production activation claim.
