@@ -81,6 +81,8 @@ export function createModeController(options: ModeControllerOptions): ModeContro
       publish(broker.mode === 'strict' && activePolicy.mode === 'ordinary' ? 'leaving' : 'validating');
       previousControl?.abort();
       let candidate: ExtensionRegistry | undefined, retained = false, brokerGeneration = -1;
+      let previousDrain: Promise<void> | undefined;
+      const drainPrevious = (): Promise<void> => previousDrain ??= closeRegistry(previous);
       const current = (): boolean => !closed && generation === mine && !control.signal.aborted && broker.generation === brokerGeneration;
       try {
         // Revoke real native scopes before the first await, including same-mode policy replacements.
@@ -88,7 +90,7 @@ export function createModeController(options: ModeControllerOptions): ModeContro
         if (closed || generation !== mine || control.signal.aborted) invalid('CANCELLED');
         if (broker.setMode(activePolicy.mode === 'strict-private' ? 'strict' : 'ordinary') !== undefined) invalid('UNAVAILABLE');
         brokerGeneration = broker.generation;
-        await closeRegistry(previous);
+        await drainPrevious();
         if (!current()) invalid('CANCELLED'); publish('validating');
         const created = factory(mine, expected => current() && expected === mine);
         if (!created.ok) invalid(created.error.code); candidate = created.value;
@@ -115,6 +117,7 @@ export function createModeController(options: ModeControllerOptions): ModeContro
         if (generation === mine && !closed) publish('blocked', code);
         return failure(code);
       } finally {
+        await drainPrevious();
         if (!retained) { control.abort(); await closeRegistry(candidate); }
       }
       } finally {
