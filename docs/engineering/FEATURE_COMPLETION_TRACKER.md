@@ -1,3 +1,9 @@
+## 2026-11-25 UTC — optional package integration preflight
+
+All nine separately owned optional PRs #224–232 are open, unmerged, zero submitted reviews, two commits ahead and 75 behind current main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` relative to common merge base `388526a474aea0e08f9c04178c2b7f9e1d4bee3f`. Five (#225, #226, #227, #230, #232) have no returned direct path overlap with intervening main changes; four (#224, #228, #229, #231) share package.json and three also share vault-foundation.yml. Exact source heads, file counts, and script/CI union requirements are recorded in [the handoff checkpoint](CONSOLIDATION_HANDOFF.md#2026-11-25-utc--optional-package-current-main-integration-preflight). No merge-tree, independent review, or current-target runtime qualification claimed. Preserve one-package intake and ownership, keep optional default activation off. Branch-name census 284, PR records 269 (86 open, 125 merged, 58 closed unmerged); 152/132 ancestry counts remain previous exact-tip evidence. No new runtime/source change or main merge; ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-25 UTC — PR272 native qualification completed; review intake advanced
 
 Live main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` and #251 merged status reverified. Branch-name pagination returned 284 distinct names; PR search returned 86 open, 125 merged (66 before Nov 15, 59 on/after), 58 closed unmerged = 269. Connector supplies branch names rather than exact tips; previous exact-tip snapshot remains 152 ancestry-proven / 132 not ancestry-proven. No new full-history comparison.
