@@ -1,3 +1,12 @@
+## 2026-11-25 UTC (November 24 Pacific) — documentation binding integration dependencies
+
+- **Wiki guide updates (#178 and lab correction):** current validator binds Home page bytes and local destination bytes of both User/Developer guides; #178 changes all three without refreshing records. Current-target semantic reconciliation and regenerated records required. Its historical review is not current acceptance. Page/link hashes can be generated from the working tree while retaining the approved immutable main baseline for claim evidence and catalog.
+- **Retention preview (#237):** its current proposal changes the bound English catalog from main blob 7b90d918 to e461e2f8. After the qualified #265 record refresh, integrating such catalog changes requires reviewed baseline refresh and renewed unsigned staging; #255 strict main check must not be bypassed. Named independent review remains absent; both bot requests already posted.
+- **Startup recovery (#266) and screen counts (#258):** their shared browser-test file has disjoint patch hunks. Preserve both assertions on eventual current-target composition and execute combined hosted browser qualification.
+- Audit of 18 candidate changed-file lists against 20 bound source paths documented in handoff commit c8084cc3. This is static dependency evidence, not a new executed check, approved feature, or merge. #251 remains merged, #262–266 drafts and #237 named gate absent. D2, D8, actual devices and optional activation remain separate. ReleaseEnabled=0.
+
+---
+
 ## 2026-11-25 UTC (November 24 Pacific) — S08 live owner source and lab documentation gap
 
 | Capability | Current evidence | Remaining gate |
