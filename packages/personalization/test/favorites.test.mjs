@@ -58,7 +58,11 @@ test('star, unstar and reload preserve encrypted IDs and unrelated preferences t
   const freshSession = val(await s.vault.unlock(restored.newProfileId, 'independent favorite restored passphrase'));
   const fresh = val(api.createSavedReviewFavorites({ vault: s.vault, session: freshSession })); t.after(() => fresh.dispose());
   const loaded = val(await fresh.list()); assert.deepEqual(loaded, { revision: 0, recordIds: [rid(1)] });
+  assert.deepEqual(val(await s.vault.list(freshSession.sessionId)).find(row => row.id === foreign.id), foreign,
+    'fresh-key restoration retains the unrelated future preference exactly');
   val(await fresh.set(rid(1), false, loaded.revision)); assert.deepEqual(val(await fresh.list()).recordIds, []);
+  assert.deepEqual(val(await s.vault.list(freshSession.sessionId)).find(row => row.id === foreign.id), foreign,
+    'mutating restored favorites preserves the unrelated future preference exactly');
   assert.deepEqual(s.store.rows.get(s.session.profileId), source, 'restore and unstar do not modify the source');
 });
 
