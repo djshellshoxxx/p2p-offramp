@@ -1,3 +1,27 @@
+## 2026-11-25 UTC — optional package current-main integration preflight
+
+Live main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` identical by compare; #251 merged. Four branch-name pages returned 284 distinct names, PR partitions 86 open / 125 merged / 58 closed unmerged = 269. Connector branch names do not establish exact tips; prior 152 ancestor-proven / 132 not ancestry-proven remain dated. Direct Git DNS failed, historical workspace absent, Node 22.16.0. No fresh local test or native independent worker.
+
+**New bounded optional-lane reconciliation:** all nine existing one-package PRs #224–232 remain open/non-draft/unmerged with zero submitted reviews. Every source comparison to current main diverges by 2 ahead / 75 behind, merge base `388526a474aea0e08f9c04178c2b7f9e1d4bee3f`. Old-base-to-current-main compare returned 280 changed paths; all nine optional candidate comparisons returned the expected small per-package path sets. PR metadata still reports an old base (388526a4 for #224–231, 8e836baa for #232); mergeable=true does not qualify the current target. No proposal parent/tree evidence available from the normalized commit response. Do not transfer earlier CI.
+
+| PR | Optional package | Exact source head | Paths | Overlap with intervening main paths |
+|---|---|---|---:|---|
+| #224 | proof-inputs | e1bf579169aff082cf796cfa6dd0912c255d05a6 | 12 | package.json, vault-foundation.yml |
+| #225 | liquidity | edcfe4500951eb21fcaec38a551ce85abdb9bd0d | 14 | none returned |
+| #226 | arbitration | 6937cb01c34c0df38055a41a5c487ecf5ac0446d | 20 | none returned |
+| #227 | privacy-policy | 7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0 | 11 | none returned |
+| #228 | proof-jobs | ded1952e50683c10edcba54236ac606fff18fd83 | 22 | package.json |
+| #229 | privacy-controls | 4a8f7bb02d5799d622fa71ab489591c2b557fa8d | 16 | package.json, vault-foundation.yml |
+| #230 | courier | 16a62533925fe7b4e0aa5daf0f5ca11ef2255ab5 | 24 | none returned |
+| #231 | meetup | efc1e3f09e19a2622c45cd3cc63ebe22734cf64d | 39 | package.json, vault-foundation.yml |
+| #232 | stealth | a99141d51af52b17faf357e341c5aad5685f2e2f | 21 | none returned |
+
+Five candidates have no returned direct path overlap (not proof of semantic compatibility or merge-tree equality). Four need shared-file reconciliation. Read actual old-base/current package.json: only main's test:tooling command extension and new test:update:runtime:browser differ by script key; no other top-level key changes. Read the four exact PR patches: #224 adds typecheck:proof-inputs; #228 adds test:proof:memory, test:proof:browser and typecheck:proof-jobs; #229 adds test:privacy-controls:browser; #231 adds test:meetup:browser. No script-key collision with main, but #228/#229/#231 all add at the same historical final-script anchor. Current workflow retains typecheck and npm test at lines 37–38, new updater browser test at 106, locale at 115 and isolated-peer driver at 119, backup engine job at 122. Preserve those main steps while adding #224 typecheck, #229 browser step after peer discovery and #231 browser step before peer discovery. Maintain #228's separate optional workflow. These are integration instructions, not a computed merge or executed build. Existing 153-file provenance record remains authoritative for package preservation.
+
+Recommended separately owned lane ordering: qualify path-disjoint packages first (e.g. #227), then shared-script candidates individually, recomputing the base, exact tree, default/demo import graphs, package-specific tests, applicable hosted gates and independent CodeRabbit/Qodo review for every package. Preserve original branch ownership and source histories; no bulk PR, no optional activation, no changes to frozen sources. These are diagnostic/package intake scopes, not completed production integrations. #237, #260, #267–272 review lists still empty; previous review requests are not approvals. D2 public owner-authorized trust, D8 financial approval, physical device acceptance remain separate. No code changes, main merge, real funds, deployment, release or new test execution. ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-25 UTC — PR272 native qualification completed; review intake advanced
 
 Live main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` and #251 merged status reverified. Branch-name pagination returned 284 distinct names; PR search returned 86 open, 125 merged (66 before Nov 15, 59 on/after), 58 closed unmerged = 269. Connector supplies branch names rather than exact tips; previous exact-tip snapshot remains 152 ancestry-proven / 132 not ancestry-proven. No new full-history comparison.
