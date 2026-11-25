@@ -155,3 +155,56 @@ test('malformed lists and mismatched change receipts never become UI favorites',
     assert.deepEqual(trade.getSnapshot().favorites, { kind: 'failed', code: 'PROTOCOL_ERROR' });
   }
 });
+
+test('replacing the persistence port at the same numeric scope retires a held favorite open', async () => {
+  const trade = await setup(), first = memoryStore(), second = memoryStore();
+  const oldId = (await first.saveTermsReview('file', encode('first profile review'))).value.recordId;
+  const newId = (await second.saveTermsReview('file', encode('second profile review'))).value.recordId;
+  assert.equal(oldId, newId, 'record IDs deliberately collide across independent fixture ports');
+  assert.equal(first.selectionScope(), second.selectionScope());
+  assert.equal((await first.setReviewFavorite(oldId, true, 1)).ok, true);
+  assert.equal((await second.setReviewFavorite(newId, true, 1)).ok, true);
+  const gate = deferred(), entered = deferred();
+  let hold = false, signal, transferred;
+  const oldPort = { ...first, async listTermsReviews(incoming) {
+    const response = await first.listTermsReviews();
+    if (hold) {
+      signal = incoming; transferred = response.value.items[0].bytes; entered.resolve();
+      await gate.promise; // Intentionally ignore abort to deliver the stale physical reply.
+    }
+    return response;
+  } };
+  trade.setPersistence(oldPort);
+  await trade.loadFavorites();
+  const oldRoute = await trade.openFavorite(oldId, oldPort);
+  assert.ok(oldRoute);
+  assert.equal(trade.find(oldRoute).review.orderId, 'first profile review');
+  hold = true;
+  const pending = trade.openFavorite(oldId, oldPort);
+  try {
+    await entered.promise;
+    assert.equal(signal.aborted, false);
+    trade.setPersistence(second);
+    assert.equal(signal.aborted, true);
+    assert.equal(trade.find(oldRoute), undefined);
+    assert.deepEqual(trade.getSnapshot().favorites, { kind: 'idle' });
+    assert.equal(trade.getSnapshot().reviews.length, 0);
+    await trade.loadFavorites();
+    const currentRoute = await trade.openFavorite(newId, second);
+    assert.ok(currentRoute);
+    assert.notEqual(currentRoute, oldRoute);
+    assert.equal(trade.find(currentRoute).review.orderId, 'second profile review');
+    gate.resolve();
+    assert.equal(await pending, null);
+    assert.ok(transferred.length > 0);
+    assert.ok(transferred.every(byte => byte === 0), 'late transferred bytes are wiped');
+    assert.equal(trade.getSnapshot().reviews.length, 1);
+    assert.equal(trade.find(currentRoute).review.orderId, 'second profile review');
+    assert.deepEqual(trade.getSnapshot().favorites, { kind: 'ready', revision: 2, recordIds: [newId] });
+    assert.equal(first.commands.filter(command => command.operation === 'set').length, 1);
+    assert.equal(second.commands.filter(command => command.operation === 'set').length, 1);
+  } finally {
+    gate.resolve();
+    await pending;
+  }
+});
