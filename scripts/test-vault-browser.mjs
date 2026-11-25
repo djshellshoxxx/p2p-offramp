@@ -25,6 +25,7 @@ try {
     '--rootDir', 'packages', '--outDir', output, 'packages/storage/src/vault-service.ts',
     'packages/storage/src/backup-service.ts', 'packages/storage/src/migration-service.ts',
     'packages/domain/src/intent-journal.ts', 'packages/domain/src/authority.ts', 'packages/domain/src/trade-composition.ts',
+    'packages/personalization/src/favorites.ts',
   ], { cwd: root, stdio: 'inherit' });
   const handler = (request, response) => {
     const pathname = new URL(request.url ?? '/', 'http://127.0.0.1').pathname;
@@ -637,6 +638,98 @@ try {
   console.log(`reseal interruption outcomes by delay: ${interruptions.join(',')}`);
   assert.deepEqual(unexpected, []);
   await resealContext.close();
+
+  // S06 mixed-record restore: native IndexedDB plus the actual favorites service.
+  // Fixture-only storage admission; no general-purpose mutation is exposed in the app.
+  const mixedContext = await browser.newContext({ serviceWorkers: 'block' });
+  try {
+    const mixedPage = await mixedContext.newPage();
+    const mixedErrors = [];
+    mixedPage.on('pageerror', error => mixedErrors.push(String(error)));
+    await mixedPage.route('**/*', route => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      unexpected.push(route.request().url()); return route.abort();
+    });
+    assert.equal((await mixedPage.goto(origin)).status(), 200);
+    const mixed = await mixedPage.evaluate(async () => {
+      const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+      const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+      const { EncryptedBackupService } = await import('/storage/src/backup-service.js');
+      const { createSavedReviewFavorites } = await import('/personalization/src/favorites.js');
+      const { encodeBase64url, encodeSavedReviewPayload } = await import('/schemas/index.js');
+      const store = new IndexedDbVaultStore();
+      const vault = new EncryptedVaultService(store, crypto, { lifecycle: false });
+      const backup = new EncryptedBackupService(store);
+      const val = result => {
+        if (!result.ok) throw new Error('mixed fixture operation failed: ' + result.error.code);
+        return result.value;
+      };
+      const foreign = { id: 'a'.repeat(32), kind: 'preference', schemaVersion: 9,
+        payload: encodeBase64url(new TextEncoder().encode('future foreign data')) };
+      const saved = { id: 'b'.repeat(32), kind: 'trade', schemaVersion: 1,
+        payload: encodeSavedReviewPayload('file', new TextEncoder().encode('{"saved":1}')) };
+      const sameRecord = row => !!row && Object.keys(row).length === Object.keys(foreign).length &&
+        Object.entries(foreign).every(([key, value]) => Object.hasOwn(row, key) && row[key] === value);
+      const equalRow = (left, right) => JSON.stringify(left) === JSON.stringify(right);
+      const foreignPresent = async session =>
+        sameRecord(val(await vault.list(session.sessionId)).find(row => row.id === foreign.id));
+      let originalFavorites, restoredFavorites, reopenedFavorites;
+      try {
+        const original = val(await vault.create('mixed original fixture passphrase'));
+        val(await vault.commit(original.sessionId, 0, [saved, foreign].map(record => ({ op: 'put', record }))));
+        originalFavorites = val(createSavedReviewFavorites({ vault, session: original }));
+        const initial = val(await originalFavorites.list());
+        const starred = val(await originalFavorites.set(saved.id, true, initial.revision));
+        const sourceBefore = await store.get(original.profileId);
+        const sourceForeign = await foreignPresent(original);
+        const bytes = await backup.export(original.profileId);
+        const receipt = await backup.restore(bytes, 'mixed original fixture passphrase', 'mixed restored fixture passphrase');
+        const destinationBefore = await store.get(receipt.newProfileId);
+        const restored = val(await vault.unlock(receipt.newProfileId, 'mixed restored fixture passphrase'));
+        restoredFavorites = val(createSavedReviewFavorites({ vault, session: restored }));
+        const loaded = val(await restoredFavorites.list());
+        const restoredForeign = await foreignPresent(restored);
+        const readPreserved = equalRow(await store.get(restored.profileId), destinationBefore);
+        const removed = val(await restoredFavorites.set(saved.id, false, loaded.revision));
+        const mutatedForeign = await foreignPresent(restored);
+        const destinationAfter = await store.get(restored.profileId);
+        const after = val(await restoredFavorites.list());
+        restoredFavorites.dispose();
+        vault.lockAll();
+        const reopened = val(await vault.unlock(restored.profileId, 'mixed restored fixture passphrase'));
+        reopenedFavorites = val(createSavedReviewFavorites({ vault, session: reopened }));
+        const reopenedList = val(await reopenedFavorites.list());
+        const reopenedForeign = await foreignPresent(reopened);
+        return {
+          initialEmpty: initial.recordIds.length === 0 && initial.revision === 1,
+          starPersisted: starred.persisted && starred.revision === 2 && starred.favorite,
+          sourceForeign, restoredForeign, mutatedForeign, reopenedForeign, readPreserved,
+          loadedFavorite: loaded.revision === 0 && loaded.recordIds.length === 1 && loaded.recordIds[0] === saved.id,
+          freshKey: destinationBefore.revision === 0 && destinationBefore.profileId !== sourceBefore.profileId &&
+            destinationBefore.keyId !== sourceBefore.keyId &&
+            destinationBefore.wrappedKey.salt !== sourceBefore.wrappedKey.salt &&
+            destinationBefore.snapshot.nonce !== sourceBefore.snapshot.nonce,
+          removedOnce: removed.persisted && removed.revision === 1 && !removed.favorite && destinationAfter.revision === 1,
+          emptyAfter: after.revision === 1 && after.recordIds.length === 0,
+          emptyReopened: reopenedList.revision === 1 && reopenedList.recordIds.length === 0,
+          reopenedRowPreserved: equalRow(await store.get(restored.profileId), destinationAfter),
+          sourcePreserved: equalRow(await store.get(original.profileId), sourceBefore),
+        };
+      } finally {
+        reopenedFavorites?.dispose(); restoredFavorites?.dispose(); originalFavorites?.dispose();
+        backup.dispose(); vault.dispose(); store.close();
+      }
+    });
+    assert.deepEqual(mixed, {
+      initialEmpty: true, starPersisted: true, sourceForeign: true, restoredForeign: true,
+      mutatedForeign: true, reopenedForeign: true, readPreserved: true, loadedFavorite: true,
+      freshKey: true, removedOnce: true, emptyAfter: true, emptyReopened: true,
+      reopenedRowPreserved: true, sourcePreserved: true,
+    });
+    assert.deepEqual(mixedErrors, []);
+    assert.deepEqual(unexpected, []);
+    console.log('PASS: native IndexedDB mixed favorite and future preference survive fresh-key restore, mutation and reopen; source row unchanged (storage service only).');
+  } finally { await mixedContext.close(); }
 
   // S08 retained-backup recovery: the original origin must remain unavailable during
   // restoration at a third, independent origin. Storage-layer acceptance only;
