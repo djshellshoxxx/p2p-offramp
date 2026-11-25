@@ -49,10 +49,13 @@ export function createModeController(options: ModeControllerOptions): ModeContro
     if (closed || busy) return;
     busy = true; nextGeneration();
     publish(activePolicy?.mode === 'strict-private' ? 'blocked' : 'degraded', reason);
-    controller?.abort(); broker.invalidate();
     const previous = registry; registry = undefined;
-    const drain = closeRegistry(previous); cleanup = drain;
+    // Own the retirement drain before abort, revocation or registry cleanup can reenter disposal.
+    let finishDrain!: () => void;
+    const drain = new Promise<void>(resolve => { finishDrain = resolve; }); cleanup = drain;
     void drain.finally(() => { if (cleanup === drain) { cleanup = undefined; busy = false; } });
+    try { controller?.abort(); broker.invalidate(); }
+    finally { void closeRegistry(previous).then(finishDrain); }
   };
   const evidenceChanged = (): void => {
     if (closed || busy || snapshot.state !== 'active' || !activePolicy || !registry) return;
