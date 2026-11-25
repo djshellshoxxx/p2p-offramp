@@ -95,3 +95,60 @@ test('disposal during policy reflection refuses activation and drains its admiss
  const input=new Proxy(policy(),{ownKeys(target){disposal=controller.dispose();return Reflect.ownKeys(target)}});
  try{bad(await controller.requestMode(input),'CANCELLED');await disposal;assert.equal(starts,0);bad(await controller.requestMode(policy()),'LOCKED')}finally{await controller.dispose();broker.dispose()}
 });
+
+/** Actual G05 policy and G14 registry; provider and extension are the maintained local fixtures. */
+function drainCancellationFixture(){
+ const {broker}=makeBroker({mode:'ordinary',coverage:'direct'});
+ const held=deferred();let factories=0,starts=0,stops=0,drained=false,revocations=0,frozenAtRevocation=false;
+ const controller=createModeController({broker,catalog:[node()],unbrokeredPaths:[],createRegistry:(generation,isCurrent)=>{
+  const number=++factories;
+  return createExtensionRegistry({generation,isCurrent,registeredCapabilities:[ref.name],entries:[{instance:instance({
+   initialize:async()=>{starts++;return{ok:true,value:undefined}},
+   dispose:async()=>{stops++;if(number===1){await held.promise;drained=true}}
+  })}]});
+ }});
+ const activate=async()=>{
+  val(await controller.requestMode(policy({required:[ref]})));assert.equal(starts,1);
+  const permit=broker.authorize({channel:'relay',endpointId:'relay-a',method:'read'});assert.equal(typeof permit,'object');
+  const live=broker.capture(permit,{onRevoked:()=>{
+   revocations++;const snapshot=controller.inspectMode();frozenAtRevocation=snapshot.preparationFrozen;
+   controller.cancelTransition(snapshot.policyGeneration);
+  }});
+  assert.equal(typeof live,'object');assert.equal(live.current(),true);return live;
+ };
+ return {broker,controller,held,activate,stats:()=>({factories,starts,stops,drained,revocations,frozenAtRevocation})};
+}
+test('synchronous G05 revocation cancellation retains admission until detached G14 registry drains',{timeout:10000},async()=>{
+ const f=drainCancellationFixture();let replacement,other,settled=false;
+ try{
+  const live=await f.activate();
+  replacement=f.controller.requestMode(policy({required:[ref],revision:1})).then(result=>{settled=true;return result});
+  assert.equal(live.current(),false);assert.equal(live.signal.aborted,true);
+  await tick();
+  assert.deepEqual(f.stats(),{factories:1,starts:1,stops:1,drained:false,revocations:1,frozenAtRevocation:true});
+  other=f.controller.requestMode(policy({required:[ref],revision:2}));
+  bad(await other,'LIMIT_EXCEEDED');assert.equal(settled,false);
+  assert.equal(f.stats().factories,1);assert.equal(f.stats().starts,1);
+  assert.equal(f.controller.inspectMode().preparationFrozen,true);
+  f.held.resolve();bad(await replacement,'CANCELLED');assert.equal(f.stats().drained,true);assert.equal(f.stats().stops,1);
+  assert.equal(f.controller.inspectMode().state,'blocked');
+  val(await f.controller.requestMode(policy({required:[ref],revision:2})));
+  assert.equal(f.stats().factories,2);assert.equal(f.stats().starts,2);
+  assert.equal(f.controller.inspectMode().state,'active');
+ }finally{f.held.resolve();await Promise.allSettled([replacement,other].filter(Boolean));await f.controller.dispose();f.broker.dispose()}
+});
+test('controller disposal awaits detached actual G14 registry after synchronous G05 cancellation',{timeout:10000},async()=>{
+ const f=drainCancellationFixture();let replacement,disposal,disposed=false;
+ try{
+  const live=await f.activate();
+  replacement=f.controller.requestMode(policy({required:[ref],revision:1}));
+  assert.equal(live.current(),false);assert.equal(live.signal.aborted,true);
+  await tick();assert.equal(f.stats().stops,1);assert.equal(f.stats().drained,false);assert.equal(f.stats().revocations,1);
+  disposal=f.controller.dispose().then(()=>{disposed=true});
+  await tick();assert.equal(disposed,false);assert.equal(f.stats().drained,false);
+  assert.equal(f.stats().factories,1);assert.equal(f.stats().starts,1);
+  f.held.resolve();bad(await replacement,'CANCELLED');await disposal;
+  assert.equal(disposed,true);assert.equal(f.stats().drained,true);assert.equal(f.stats().stops,1);
+  assert.equal(f.controller.inspectMode().state,'inactive');bad(await f.controller.requestMode(policy()),'LOCKED');
+ }finally{f.held.resolve();await Promise.allSettled([replacement,disposal].filter(Boolean));await f.controller.dispose();f.broker.dispose()}
+});
