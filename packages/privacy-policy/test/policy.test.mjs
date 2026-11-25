@@ -177,3 +177,27 @@ for(const reentrant of [false,true])test(reentrant?'reentrant disposal joins act
   await controller.dispose();assert.equal(stops,1);
  }finally{held.resolve();await Promise.allSettled([first,second].filter(Boolean));await controller.dispose();broker.dispose()}
 });
+
+test('reentrant disposal joins evidence retirement while an unused actual G14 registration drains',{timeout:10000},async()=>{
+ const {broker,registry:issuer}=makeBroker({mode:'ordinary',coverage:'direct'});
+ const held=deferred(),unused={...ref,name:'local:unused'};
+ let activeStarts=0,activeStops=0,idleStarts=0,idleStops=0,drained=false,joined,done=false;
+ const controller=createModeController({broker,catalog:[node({channels:['relay'],profileId:'local-fixture'}),node({...unused,moduleId:'unused'})],unbrokeredPaths:[],
+  createRegistry:(generation,isCurrent)=>createExtensionRegistry({generation,isCurrent,registeredCapabilities:[ref.name,unused.name],entries:[
+   {instance:instance({initialize:async()=>{activeStarts++;return{ok:true,value:undefined}},dispose:async()=>{activeStops++}})},
+   {instance:instance({manifest:{...manifest,id:'unused',capabilities:[unused.name]},initialize:async()=>{idleStarts++;return{ok:true,value:undefined}},
+    dispose:async()=>{idleStops++;joined=controller.dispose().then(()=>{done=true});await held.promise;drained=true}})}
+  ]})
+ });
+ try{
+  val(await controller.requestMode(policy({required:[ref],profileIds:['local-fixture']})));
+  assert.equal(activeStarts,1);assert.equal(idleStarts,0);assert.equal(controller.inspectMode().state,'active');
+  const before=broker.generation;issuer.coverage='unknown';assert.equal(broker.generation,before);
+  controller.onEvidenceChanged();assert.ok(joined,'unused G14 cleanup synchronously reentered disposal');
+  await tick();assert.equal(activeStops,1);assert.equal(idleStops,1);assert.equal(drained,false);
+  assert.equal(done,false,'reentrant disposal must await evidence retirement drain');
+  assert.equal(controller.inspectMode().state,'inactive');bad(await controller.requestMode(policy()),'LOCKED');
+  held.resolve();await joined;assert.equal(done,true);assert.equal(drained,true);assert.equal(idleStops,1);
+  await controller.dispose();assert.equal(activeStops,1);assert.equal(idleStops,1);assert.equal(idleStarts,0);
+ }finally{held.resolve();await Promise.allSettled([joined].filter(Boolean));await controller.dispose();broker.dispose()}
+});
