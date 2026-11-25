@@ -23176,5 +23176,158 @@
       "ownerCoordinationComment": 7171035794,
       "merged": false
     }
+  },
+  "liveExactRefDelta20261125SharedDisposal": {
+    "capturedDate": "2026-11-25",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261125DrainCandidate",
+    "coordinatorTipBeforePublication": "cecbb87d011533a3cfc9820c29a489361455eb21",
+    "method": "Complete REST exact branch-tip and all-state PR pagination; 152 earlier proven ancestor tips unchanged against same main; no new patch-ID recomputation.",
+    "branchPageSizes": [
+      100,
+      100,
+      85
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      70
+    ],
+    "branchCount": 285,
+    "pullRequestCount": 270,
+    "openPullRequestCount": 87,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 133,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "7ffd9c5840fadc125c4a6e5c038808f37d4687a3",
+        "sha": "cecbb87d011533a3cfc9820c29a489361455eb21",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "cecbb87d011533a3cfc9820c29a489361455eb21",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "8b3dcfa5f34f62c00bff4ce977b1bb4984f46a43"
+          }
+        ],
+        "ancestorOfCurrentMain": null
+      },
+      {
+        "branch": "fix/optional-privacy-policy-drain-20261125",
+        "previous": "60cd22de4e5296df595e8dbb7e24a4a19f34b467",
+        "sha": "d3829da7d885f9c6c4a5bdf784fddc5ee4ce33c3",
+        "associatedPullRequests": [
+          {
+            "number": 273,
+            "headSha": "d3829da7d885f9c6c4a5bdf784fddc5ee4ce33c3",
+            "base": "codex/privacy-policy-main-g19-20261120",
+            "baseSha": "7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "merged": false,
+            "draft": true,
+            "mergeCommitSha": "ef838451611edbeba61c77b819a6d08b7a0ac3bc"
+          }
+        ],
+        "ancestorOfCurrentMain": null
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr273": {
+      "head": "d3829da7d885f9c6c4a5bdf784fddc5ee4ce33c3",
+      "previousHead": "60cd22de4e5296df595e8dbb7e24a4a19f34b467",
+      "base": "7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0",
+      "tree": "0369f9204ce8f2f1d84026a2efbd16241a562b70",
+      "proposal": "ef838451611edbeba61c77b819a6d08b7a0ac3bc",
+      "proposalParents": [
+        "7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0",
+        "d3829da7d885f9c6c4a5bdf784fddc5ee4ce33c3"
+      ],
+      "testFirst": "849da6feba7ffc6a67ef19e2c24df21b325a758f",
+      "modeBlob": "b96c51bdc4b0a675fda32bec7d945f46e198c4a3",
+      "testBlob": "712727acfbf2f98abc1be461dca09be0fcb1660f",
+      "controlledRed": {
+        "passed": 0,
+        "failed": 2
+      },
+      "controlledGreen": {
+        "passed": 2,
+        "failed": 0
+      },
+      "combinedControlled": {
+        "passed": 4,
+        "failed": 0
+      },
+      "actualNewG05G14Executed": false,
+      "checkRecords": [
+        {
+          "name": "local-trade",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "backup-verification-webkit",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "schemas-and-crypto",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "backup-verification-firefox",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "forge",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "browser",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "docs-tooling",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "name": "local-evm",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "specs",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "native-nostr-relay",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "inventory",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "comment": 7173850776,
+      "merged": false
+    }
   }
 }
