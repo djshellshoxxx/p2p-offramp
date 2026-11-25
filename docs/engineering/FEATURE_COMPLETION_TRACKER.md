@@ -1,3 +1,11 @@
+## 2026-11-25 UTC (November 24 Pacific) — S06 favorites read-only browser durability
+
+- [Draft #267](https://github.com/djshellshoxxx/p2p-offramp/pull/267) recovers the historical read-only durability oracle in the maintained real Worker/IndexedDB browser driver: four durable encrypted-row comparisons covering favorite listing, valid recheck, deleted-review refusal and invalid-terms refusal. Exact head `8fbe66e965823a6e4622f4d38d194fd3c16c9b88`; one file, +8/-1; exact source readback. Actual hosted execution and independent Tier B review pending. No production defect established and no runtime change.
+- Historical native favorite restore and controller lifetime coverage remain to be reconciled against current tests, distinct from saved-review recovery #257/#261. #42 remains partially reconciled.
+- Main remains `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 merged. Independent reviews, D2 public trust, D8 approval, physical devices and optional-package gates remain separate. ReleaseEnabled=0.
+
+---
+
 ## 2026-11-25 UTC (November 24 Pacific) — documentation binding integration dependencies
 
 - **Wiki guide updates (#178 and lab correction):** current validator binds Home page bytes and local destination bytes of both User/Developer guides; #178 changes all three without refreshing records. Current-target semantic reconciliation and regenerated records required. Its historical review is not current acceptance. Page/link hashes can be generated from the working tree while retaining the approved immutable main baseline for claim evidence and catalog.
