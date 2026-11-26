@@ -23414,5 +23414,36 @@
     "newRuntimeTests": 0,
     "mainMerges": 0,
     "releaseEnabled": 0
+  },
+  "liveExactRefDelta20261126LaneBReviewReconciliation": {
+    "capturedDate": "2026-11-26",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "coordinatorTipBeforePublication": "775442709cc5c6e857f97cc0a0d69d863228982c",
+    "method": "Fully paginated authenticated REST branch and all-state PR inventory; reconstructed prior ref overlay and compared all names and exact tips; 152 earlier ancestor proofs retained at unchanged tips and unchanged main, not a fresh full-history proof.",
+    "branchCount": 286,
+    "distinctTips": 285,
+    "pullRequestCount": 271,
+    "openPullRequestCount": 88,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProvenThisRun": 134,
+    "fullHistoryRecomputed": false,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "sha": "775442709cc5c6e857f97cc0a0d69d863228982c",
+        "previousSha": "3ed45c53437efc078ce07985347e86488b7a760c"
+      },
+      {
+        "branch": "nodata/youthful-maxwell-uwy8hx-progress-2",
+        "sha": "bf1bc12a822f35d45600f03994001f2179a6977d",
+        "previousSha": null,
+        "pullRequest": 274,
+        "disposition": "Open draft documentation-only Lane B handoff; preserve owner and reconcile findings, no merge"
+      }
+    ],
+    "missingRefs": [],
+    "coordination": "https://github.com/djshellshoxxx/p2p-offramp/pull/274#issuecomment-7200639630"
   }
 }
