@@ -1,3 +1,11 @@
+## 2026-11-26 UTC — #273 bounded lifecycle review
+
+[Coordinator COMMENT review 6067779577](https://github.com/djshellshoxxx/p2p-offramp/pull/273#pullrequestreview-6067779577) submitted at exact head `5b074513704d4c8c75ef0b93069d004c76d82665`, read back COMMENTED. Parent #227 `7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0`: compare 6 ahead/0 behind; only mode.ts (+23/-10) and policy.test.mjs (+106/-0). Controller and registry blobs and all five added tests examined; no actionable High/Medium identified in bounded diff. Physical admission and shared drain promises now precede reentrant callbacks. Contract limitations: trusted extension stop callbacks must not await their own registry/controller drain (cyclic wait); the reentrant test starts the join without awaiting it within stop. Normalized stop failures mean settled cleanup promises, not proof of physical external resource closure. Four current-head workflows and all 11 returned jobs success; Snyk success. No fresh execution or independent worker; actual-dependency RED, owner adoption, exact current-main qualification and named D8 review remain required. No merge or feature activation.
+
+Main readback `8cff44909752f5e8b99eecec44ebaa44360c7b5d` unchanged. #267/#270/#272 retain coordinator COMMENT reviews only; #237/#227 still zero submitted reviews. No fresh exhaustive census or exact-tip reconciliation; previous 285 names and 152/133 ancestry split remain dated. D2 trust material, D8 financial approval and actual device acceptance remain separate. No production edits, deployment, real funds or release. ReleaseEnabled=0 required. Next: owner coordination and independent review on existing candidates; do not duplicate reviewed code or waive gates.
+
+---
+
 ## 2026-11-26 UTC — favorites coordinator review submissions
 
 Three previously unreviewed test-only candidates now have SHA-anchored coordinator COMMENT reviews, each confirmed as COMMENTED via review-list readback. These are not fresh independent worker or CodeRabbit/Qodo approvals and do not qualify a merge.
