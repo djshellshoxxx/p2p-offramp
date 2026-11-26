@@ -23329,5 +23329,90 @@
       "comment": 7173850776,
       "merged": false
     }
+  },
+  "liveExactRefDelta20261126GitObjects": {
+    "capturedDate": "2026-11-26",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "mainTree": "7acfe2f7c7f1ebf0b13169cc2b50f4d2b946ab79",
+    "priorFullCensus": "liveExactRefCensus20261124Run11",
+    "priorDelta": "liveExactRefDelta20261125SharedDisposal",
+    "coordinatorTipBeforePublication": "3ed45c53437efc078ce07985347e86488b7a760c",
+    "method": "Complete raw REST branch-tip and all-state PR pagination; exact unchanged tips compared with prior proofs at same main. Actual refs/pull/N/merge and raw commit tree/ordered parents verified for bounded cohort. No local patch-ID recomputation.",
+    "branchPageSizes": [
+      100,
+      100,
+      85
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      70
+    ],
+    "branchCount": 285,
+    "distinctTipCount": 284,
+    "pullRequestCount": 270,
+    "openPullRequestCount": 87,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 133,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previous": "cecbb87d011533a3cfc9820c29a489361455eb21",
+        "sha": "3ed45c53437efc078ce07985347e86488b7a760c",
+        "ancestorOfCurrentMain": null
+      },
+      {
+        "branch": "fix/optional-privacy-policy-drain-20261125",
+        "previous": "d3829da7d885f9c6c4a5bdf784fddc5ee4ce33c3",
+        "sha": "5b074513704d4c8c75ef0b93069d004c76d82665",
+        "ancestorOfCurrentMain": null
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "duplicateTip": {
+      "sha": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "branches": [
+        "codex/transport-qualification-20261120",
+        "codex/main-consolidation-g12-20261120"
+      ]
+    },
+    "currentMainProposals": [
+      257,
+      259,
+      263,
+      264,
+      267,
+      270,
+      265,
+      266
+    ],
+    "stackedProposals": [
+      261,
+      273
+    ],
+    "duplicateCandidatePairs": [
+      [
+        252,
+        266
+      ],
+      [
+        253,
+        265
+      ]
+    ],
+    "s01": {
+      "changedPaths": 20,
+      "exactOnMain": 9,
+      "exactInRecordedOwnerTree": 15,
+      "classification": "V",
+      "semanticReviewComplete": false
+    },
+    "handoffCommit": "e4888f8e5c781d63042636786898c6f74988837f",
+    "newRuntimeTests": 0,
+    "mainMerges": 0,
+    "releaseEnabled": 0
   }
 }
