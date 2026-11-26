@@ -1,3 +1,9 @@
+## 2026-11-26 UTC — S09 / B4 retained evaluator blocker
+
+#45 and draft #155 share exact evaluator blob `19ca4cb668e4d029f9aca828d391bea6ed09e1e4`; [original Medium thread](https://github.com/djshellshoxxx/p2p-offramp/pull/45#discussion_r4465034972) remains unresolved, not outdated. #155 is 4 ahead/274 behind current main. Main does not contain this research evaluator. [Owner coordination](https://github.com/djshellshoxxx/p2p-offramp/pull/155#issuecomment-7199200046) records required verified input ownership and regression before executable intake or explicit archival disposition. Not a newly reproduced runtime or default app defect. No branch classification changes. Exact source and scope evidence in [handoff](CONSOLIDATION_HANDOFF.md) at `41bcfb139f01422ba608e458e6b963bd4cb177a8`. Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`, 285 refs / 284 tips, 270 PRs (87 open/125 merged/58 closed unmerged); historical 152/133 ancestry split not recalculated. No source modifications or merges. ReleaseEnabled=0.
+
+---
+
 ## 2026-11-26 UTC — current unsigned distribution navigation gap
 
 Exact-ref reconciliation: main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`, 285 refs / 284 distinct tips, 270 PRs (87 open / 125 merged / 58 closed unmerged). All 152 previously ancestry-proven tips carry forward on unchanged main; 133 are not ancestry-proven. Only the coordinator advanced since the last exact-ref inventory. No new patch-ID computation or merge.
