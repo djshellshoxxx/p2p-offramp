@@ -23475,5 +23475,100 @@
     ],
     "coordination": "https://github.com/djshellshoxxx/p2p-offramp/pull/156#issuecomment-7201664492",
     "handoff": "186634119592915ef6e64966c1df34396e2d4225"
+  },
+  "liveExactRefDelta20261126SolanaTermsComment": {
+    "capturedDate": "2026-11-26",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "coordinatorTipBeforePublication": "eb2f685b1f6ca84023f7cbca2138744c63e3eb78",
+    "method": "Complete authenticated paginated REST branches and all-state PRs, exact-tip comparison against reconstructed prior full census and subsequent delta overlays. Only unchanged exact-tip proofs on unchanged main retained; no new full-history patch-id comparison.",
+    "branchPageSizes": [
+      100,
+      100,
+      87,
+      0
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      72,
+      0
+    ],
+    "branchCount": 287,
+    "distinctTips": 286,
+    "pullRequestCount": 272,
+    "openPullRequestCount": 89,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 135,
+    "fullHistoryRecomputed": false,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "sha": "eb2f685b1f6ca84023f7cbca2138744c63e3eb78",
+        "previousSha": "775442709cc5c6e857f97cc0a0d69d863228982c",
+        "associatedPullRequests": [
+          {
+            "number": 245,
+            "headSha": "eb2f685b1f6ca84023f7cbca2138744c63e3eb78",
+            "base": "main",
+            "baseSha": "01f6f4feca051d68de24a04299cd3bb444bce40c",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "draft": true,
+            "merged": false
+          }
+        ]
+      },
+      {
+        "branch": "docs/solana-terms-signing-comment-20261126",
+        "sha": "9dfef1b642407a62f3e082a4e954224c49a304ca",
+        "previousSha": null,
+        "associatedPullRequests": [
+          {
+            "number": 275,
+            "headSha": "9dfef1b642407a62f3e082a4e954224c49a304ca",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "draft": true,
+            "merged": false
+          }
+        ]
+      },
+      {
+        "branch": "nodata/youthful-maxwell-uwy8hx-progress-2",
+        "sha": "3782272a72ff3b0d2522274b8d17e4088689dfe8",
+        "previousSha": "021d14ec935c21b2a9d179b8511225b2b93bd8f2",
+        "associatedPullRequests": [
+          {
+            "number": 274,
+            "headSha": "3782272a72ff3b0d2522274b8d17e4088689dfe8",
+            "base": "main",
+            "baseSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+            "owner": "djshellshoxxx",
+            "state": "open",
+            "draft": true,
+            "merged": false
+          }
+        ]
+      }
+    ],
+    "missingRefs": [],
+    "pr275": {
+      "head": "9dfef1b642407a62f3e082a4e954224c49a304ca",
+      "tree": "f788924709df55b96749fa0102571323d3587855",
+      "base": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+      "oldBlob": "1e8a714bf9afe8fd9a701328e6272f127f091c18",
+      "newBlob": "3926b8faf567ffc5c6157c822244ac51e1ae62df",
+      "disposition": "New draft comment-only change; exact reverse substitution restores original complete source text; one path +3/-1, ahead 1 behind 0. No code behavior changed; independent review and exact-source hosted qualification required.",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/275"
+    },
+    "pr274": {
+      "head": "3782272a72ff3b0d2522274b8d17e4088689dfe8",
+      "blob": "d42058f1c9464cedc2ec6cf46af22bc679488867",
+      "disposition": "Lane B incorporates GOV-1 reproduction and explicitly assigns CLI integration to its owner. No code fix integrated."
+    }
   }
 }
