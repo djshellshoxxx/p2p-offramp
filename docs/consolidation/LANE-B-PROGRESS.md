@@ -22,6 +22,95 @@ Original progress PR #136 is preserved as a merge ancestor of this documentation
 candidate. Its initial table below remains historical. No optional-package or audit
 source branch was changed by this reconciliation.
 
+## Status update — November 26, 2026 (Lane B session)
+
+Observed on GitHub at `main@8cff449`:
+
+- Merged: #141 (B6), #143 (B5), #137 (B3), #151, #152, #153 and #158 (B1), #154 (B4 tooling), #136 (this file).
+- Open:
+  - #155 (B4 intake, draft) and #156 (B4 governance, draft).
+  - The B2 optional packages are being integrated by #191–#199 and #224–#232. The Lane B drafts #144–#148 and #160–#163 are their source.
+
+The Lane B session's container ran out of its disk allowance after the 2026-11-18 run, so no further local work was possible. Everything Lane B produced is pushed. The findings below were never recorded anywhere else.
+
+### Feature matrix (implementation versus qualification)
+
+| Track | Implemented | Local evidence | Not yet qualified |
+| --- | --- | --- | --- |
+| B1a Solana reader policy | C-L3 frozen vault reads as funded; per-read identity checks plus a deploy-slot pin; freeze-authority permits; payout plans; proposed margins; solana-escrow.yml cache scope | 129/129 chain-solana tests, LiteSVM 48, real Agave 4.1.2 localnet run with 186/186 checks | Real cluster, wallets, browser; owner margin and permit decisions; open Medium B1A-T1 |
+| B1b Solana lifecycle | Legacy message serializer; sign-only wallet port; C-L2 sequencing; durable send marker; dropped-versus-uncertain rule; portable recovery; `createSolanaEscrowClient` | 150/150 tests, 8 mutants caught, localnet client run 62/62 twice | `apps/web` wiring (Lane A); browser; public cluster; open Mediums F1–F3 |
+| B1c Solana acceptance | Off-chain message v1 envelope; strict Ed25519; acceptance statement; bounded replay and tombstone ledger | TS and Python vectors byte-identical; real `@solana/offchain-messages` 8.6.0 cross-check | No physical or browser wallet; exchange carrier (Lane A); open Mediums M1 and F1 |
+| B3 formal harness | Fail-closed SMTChecker classification and the evidence pipeline | 22/22 unit tests, forge 89; evidence rerun: NativeConstructor is PROOF_UNKNOWN | Second independent review of fix commits `05b9d22..59d091f` never ran (usage limit) |
+| B4 tooling | Lab, docs validator, claims, tool-path; evidence bound to `sourceCommit` | `check:docs` ok at bind time | Open Mediums (see below) |
+| B5 chain-evm | EIP-1898 hash-pinned `eth_getCode`/`eth_call`; receipt check at the anchored height | 25/25 tests; real anvil load-balancer probe | Other number-pinned readers (Lane A) |
+| B6 verifier | Scan mode from the CLI only; one file handle; exit codes | 7 tests, 0/6 pass on pre-fix code | Release approval remains separate |
+
+### Open findings from the 2026-11-18 independent reviews
+
+These are AI-assisted reviews, not a professional audit. "Verified" means at least one of two independent skeptics reproduced the finding. "Unverified" means skeptic verification was cut short by a usage limit. Treat unverified findings as leads to reproduce first, not as established defects.
+
+| Unit (PR) | ID | Sev | Status | Finding | Suggested fix |
+| --- | --- | --- | --- | --- | --- |
+| B1a (#152, merged) | B1A-T1 | Medium | verified | `packages/chain-solana/src/reader.ts:233,445`: the freeze-authority permit check runs on every SPL read, including for an existing funded or released escrow. If the issuer rotates the mint's freeze authority, or a later release drops the permit, `read`, `readValidated` and `readPayout` fail with `UNSUPPORTED_PROVIDER`. G08 then shows the chain as unavailable and the client loses every exit for that trade, although release, refund and payout would succeed on chain. This is the same class as C-L3. | Apply the permit refusal only to the funding decision (escrow absent or a System pre-init donation). For an existing escrow, keep the observation and report a `freezeAuthorityPermitted: false` flag. Add a regression test with a rotated authority. Tier C. |
+| B1b (#158, merged) | F1 | Medium | unverified | `journal.ts:231,289,329`: every record counts toward the 32-intent cap, including cancelled, failed and dropped ones. After 32 failed attempts a trade is locked for every action, including refund and payout. | Count only live (non-terminal) intents, or exempt the exits, and test 33 failed attempts. |
+| B1b | F2 | Medium | unverified | `adapter.ts:90-95`: a cancelled or dropped record without a signature maps to Lane A `failed`/`expired`, but `fromLaneAIntent` refuses the same record, so a wallet rejection cannot round-trip through the shared IntentV2. | Make the mapping symmetric and add a round-trip test for each terminal state. |
+| B1b | F3 | Medium | unverified | `submit.ts:236-238,276,296-300`: three D9/expiry properties have no regression test; mutants survived 150/150. The properties: the status re-read after the height check; treating any `confirmationStatus` as landed; sending after a `CONFLICT` on the `sendMarked` CAS. | Add one test per property and show each fails on its mutant. |
+| B1b | L1–L3, F4–F6 | Low | unverified | A comment off by one on `lastValidBlockHeight`; `planPayout` ignores `rent-unknown`; `recoveryExits` shows payout open when rent-blocked; a hostile-RPC test passes for the wrong reason; unmarked signed intents are cancellable while the transaction stays valid; `sendTransaction` goes through a read port that may retry. | Address with F1–F3. |
+| B1c (#151, merged) | M1 | Medium | reported | `replay.ts:231-232,272-274`: a cancel or reject is not durable when `tombstone()` refuses with `LIMIT_EXCEEDED` (acceptBefore beyond the 7-day horizon, or capacity). The ledger later records the peer's acceptance for the cancelled `termsHash`. | Refuse such terms before negotiation, or always record local tombstones; regression test: tombstone far terms, move the clock, admit, expect `CONFLICT`. |
+| B1c | F1 | Medium | reported | `acceptance.ts:268-270`, `acceptance.py:411-414`: no vector isolates the verifier's role check or its counterparty-key check; every wrong-role and swapped-key negative is caught earlier, so mutants of those checks survive in both implementations. | Add negatives that pass the wallet and own-key checks but fail only role or counterparty binding. |
+| B4 tooling (#154, merged) | F1 | Medium | verified | `scripts/docs/validate.test.mjs:19,57,68,82`: the fixture tests copy live repository files and assert exact stale counts. A normal Lane A edit to `apps/web/src/ui/locale/en.ts`, or a rename of `docs/OPERATOR.md`, turns the docs-tooling job red on every PR. | Run the drift tests on the self-contained git fixture, or compare against the baseline report; remove non-target files from the copy list. |
+| B4 tooling | F2 | Medium→Low | verified | `packages/claims/src/claims.ts:80-82,90,103`: the claims API ignores staleness when only `en.ts` changed, and the stale list defaults to `[]`. | Take the validator's `staleClaims` (required argument) and refuse listed ids. |
+| B4 tooling | F1 (extraction) | Medium | unverified | `dist-lab/` is not ignored (the s08 `.gitignore` line was not extracted), so every lab run after the first records `sourceDirty: true`. | Appears to be addressed by #259. |
+| B4 intake (#155, draft) | F1 | Medium | unverified | `semaphore-v4-evaluation.test.mjs:94-100`: the "changed lock" refusal test never changes the lock; an earlier check fails first. | Make each refusal case reach its own check. |
+| B4 intake | Qodo (#45 thread) | Medium | open | The evaluator verifies inputs, then mounts the caller-controlled `node_modules`/artifacts read-only and rechecks only after execution. | **Owner decision:** isolate verified input snapshots before execution, or archive the tool. |
+| B4 governance (#156, draft) | GOV-1 | Medium | unverified | `scripts/governance/evidence.mjs:70,88-106`: `check:governance` never checks that `sourceCommit` is reachable from `origin/main`; only the refresh script does. | Check reachability in CI (the job already has full history). |
+| B4 governance | F2 | Medium | unverified | `scripts/tests/tool-path.test.mjs:23-24`: the relative-PATH rejection is never exercised. | Put a fixture tool in the relative entries. |
+| B2 (superseded drafts) | several | Medium | unverified | Boundary tests miss Worker URLs, Vite references and regex evasions; the only resolved-graph guard is `NON_CORE_MODULE` in `apps/web/scripts/static-build-plugin.mjs:41` (Lane A). Authority tests check names, not behaviour. The liquidity trap test never runs its traps. The courier locker accepts any non-null profile. The arbitration regex misses `crypto.subtle`. In privacy-policy, `retire()` invalidates every G05 broker permit, including core (PP-A2; #273 appears to address it). | Reviewers of #191–#199/#224–#232 should check each against the integrated source. |
+
+### Needs Lane A (consolidated)
+
+1. `scripts/recovery/evm-recovery.mjs` `readRecovery`, plus `packages/wallet/src/{evm-payment-preflight,evm-submit,evm-contract-acceptance}.ts`: state reads are still pinned by block number. Use `{blockHash: anchor.hash, requireCanonical: true}` (the C-L1 remainder).
+2. `packages/schemas/src/registry.ts`: an SPL `AssetV1.freezeAuthority: string | null`, so the freeze permits derive from the signed registry.
+3. `packages/schemas/src/intent.ts` and `packages/domain/src/intent-journal.ts`: Solana `payout`, `released|refunded`, the signature written in the `markSending` CAS, Solana observe/reconcile branches and successor reservation. The proposed hunks are in `packages/chain-solana/docs/lifecycle.md` §6.
+4. `packages/exchange`: a v2 carrier for `{statement, termsSignature, acceptanceSignature}`.
+5. `apps/web`: `signOffchainMessage` with an exact-bytes check; replay-ledger wiring; `createSolanaEscrowClient` with explicit margins.
+6. `apps/web/scripts/static-build-plugin.mjs:41`: list every optional package in `NON_CORE_MODULE`, the only check that sees resolved module ids.
+7. `scripts/sepolia/lib.mjs`: pin the forge binary SHA-256 (today only version and commit).
+8. Unowned: the receipt race in `scripts/test-evm-viem-oracle-local.mjs` (~line 267; use `waitForTransactionReceipt`), and the stale comment at `packages/domain/src/trade-terms.ts:167`.
+
+### Owner decisions and external materials
+
+- D5 client deadline margins: proposed 300 s for funding and release (`packages/chain-solana/src/policy.ts`).
+- Freeze-authority permits per allowlisted SPL mint.
+- D1 open item: whether a separate Solana terms consent is wanted in addition to the peer acceptance.
+- Solana acceptance ledger bounds (64 entries per space, 7-day horizon).
+- #155 Semaphore evaluator: isolate-and-verify, or archival-only.
+- External materials, none of which an agent can supply:
+  - physical and browser Solana wallets for signing and interoperability tests;
+  - a public Solana cluster profile (genesis, program id, mint list);
+  - proving artifacts and providers for the optional packages.
+
+## Handoff prompt (for a fresh Lane B session)
+
+```text
+You are continuing Lane B of djshellshoxxx/p2p-offramp. Read agents.md, docs/adr/ACCEPTED-DECISIONS-2026-11-04.md,
+docs/consolidation/LANE-B-PROMPT.md and this file first. Lane ownership, invariants and D8 tiers are unchanged.
+Your own push branch prefix is nodata/youthful-maxwell-uwy8hx-<unit>. Many PRs from other agents are open (#191-#273):
+check each before starting so you do not duplicate it.
+
+1. Reproduce, then fix each "Open findings" row for Lane B files, starting with B1A-T1 (Tier C: funded trades must stay
+   readable after a freeze-authority rotation), then B1b F1-F3 and B1c M1/F1 (Tier C), then B4 tooling F1/F2 (Tier A).
+   Write a regression test that fails on the current main for each.
+2. Run the second independent review of the B3 fix commits 05b9d22..59d091f (scripts/formal/evm.mjs): first-review
+   findings are in the #137 description; check that the fail-closed classification has no new fail-open path.
+3. For #155/#156: rebase is not allowed. Merge main, refresh the bound manifests at an origin/main commit, fix GOV-1/F2
+   and the intake F1, and record the owner's decision on the Semaphore evaluator before any execution.
+4. Post one review comment per finding on the matching codex B2 integration PR (#224-#232) if it is still open there.
+Gates per PR: npm ci --ignore-scripts; typecheck, test, test:specs, check:specs, check:boundaries, test:build-policy,
+build, plus affected workflow suites; Foundry 1.5.1 and solc 0.8.30 hash-checked; Agave 4.1.2/Anchor 1.2.2 for Solana.
+Keep the disk allowance in mind: remove worktree node_modules, cargo target dirs and review scratch copies when done.
+```
+
 ## Historical start state (2026-11-18)
 
 - Gate: `git merge-base --is-ancestor 7be1dbe origin/main` is true. PR #134 merged as `eef9a80`.
