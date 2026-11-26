@@ -71,7 +71,7 @@ These are AI-assisted reviews, not a professional audit. "Verified" means at lea
 | B4 tooling | F1 (extraction) | Medium | unverified | `dist-lab/` is not ignored (the s08 `.gitignore` line was not extracted), so every lab run after the first records `sourceDirty: true`. | Appears to be addressed by #259. |
 | B4 intake (#155, draft) | F1 | Medium | unverified | `semaphore-v4-evaluation.test.mjs:94-100`: the "changed lock" refusal test never changes the lock; an earlier check fails first. | Make each refusal case reach its own check. |
 | B4 intake | Qodo (#45 thread) | Medium | open | The evaluator verifies inputs, then mounts the caller-controlled `node_modules`/artifacts read-only and rechecks only after execution. | **Owner decision:** isolate verified input snapshots before execution, or archive the tool. |
-| B4 governance (#156, draft) | GOV-1 | Medium | unverified | `scripts/governance/evidence.mjs:70,88-106`: `check:governance` never checks that `sourceCommit` is reachable from `origin/main`; only the refresh script does. | Check reachability in CI (the job already has full history). |
+| B4 governance (#156, draft; same blob on main) | GOV-1 | Medium | **reproduced 2026-11-26** (coordinator, real isolated Git fixtures; [#156 comment](https://github.com/djshellshoxxx/p2p-offramp/pull/156#issuecomment-7201664492)) | `scripts/governance/evidence.mjs` (blob `ae171065`, identical on main `8cff449`) `checkEvidenceBinding`: an unmerged commit with identical bound file hashes is accepted, and a missing `origin/main` is accepted (baseline 2 pass / 2 fail). `check-all.mjs` calls it with no reachability guard, and `refresh-evidence-manifest.mjs --check` without `--commit` uses `manifest.sourceCommit` directly. Main's real manifest points to `8649b7a`, which is an ancestor of main, so there is no evidence the current packet is invalid. | Make both production entry points (`check-all.mjs` and `refresh-evidence-manifest.mjs --check`) run `git merge-base --is-ancestor <sourceCommit> refs/remotes/origin/main` before row checks. They must refuse a nonzero result or a missing or shallow ref, never silently accept it. Keep injected fixtures behind an explicit test-only scope, and keep every existing stale/hash/path/size/refusal check. Add CLI-level regressions (the four reproduction cases) and test the exact target. A local proof of concept (helper blob `e185ae9e`) passed 4/4. |
 | B4 governance | F2 | Medium | unverified | `scripts/tests/tool-path.test.mjs:23-24`: the relative-PATH rejection is never exercised. | Put a fixture tool in the relative entries. |
 | B2 (superseded drafts) | several | Medium | unverified | Boundary tests miss Worker URLs, Vite references and regex evasions; the only resolved-graph guard is `NON_CORE_MODULE` in `apps/web/scripts/static-build-plugin.mjs:41` (Lane A). Authority tests check names, not behaviour. The liquidity trap test never runs its traps. The courier locker accepts any non-null profile. The arbitration regex misses `crypto.subtle`. In privacy-policy, `retire()` invalidates every G05 broker permit, including core (PP-A2; #273 appears to address it). | Reviewers of #191–#199/#224–#232 should check each against the integrated source. |
 
@@ -107,14 +107,18 @@ docs/consolidation/LANE-B-PROMPT.md and this file first. Lane ownership, invaria
 Your own push branch prefix is nodata/youthful-maxwell-uwy8hx-<unit>. Many PRs from other agents are open (#191-#273):
 check each before starting so you do not duplicate it. Do not reimplement anything under "Findings already mitigated".
 
-1. Reproduce each "Open findings" row against current main before changing anything. Start with B1b F1 (exact native
-   funded-trade exit reproduction first, then a bounded-retention design for owner approval; Tier C), then F3
-   (regression tests that fail on their mutants), B1c F1 (role/counterparty negatives) and M1 (through the carrier).
-2. Run the second independent review of the B3 fix commits 05b9d22..59d091f (scripts/formal/evm.mjs): first-review
+1. GOV-1 is reproduced (#156 comment 7201664492). On #156: merge main (no rebase), then make check-all.mjs and
+   refresh-evidence-manifest.mjs --check refuse a sourceCommit that is not an ancestor of refs/remotes/origin/main
+   (and a missing or shallow ref). Keep test-only injection explicit, keep every existing check, add the four
+   CLI-level regression cases, run the gates at the exact head.
+2. Reproduce each other "Open findings" row against current main before changing anything: B1b F1 (exact native
+   funded-trade exit reproduction first, then a bounded-retention design for owner approval; Tier C), F3 (regression
+   tests that fail on their mutants), B1c F1 (role/counterparty negatives) and M1 (through the carrier).
+3. Run the second independent review of the B3 fix commits 05b9d22..59d091f (scripts/formal/evm.mjs): first-review
    findings are in the #137 description; check that the fail-closed classification has no new fail-open path.
-3. For #155/#156: rebase is not allowed. Merge main, refresh the bound manifests at an origin/main commit, fix GOV-1/F2
-   and the intake F1, and record the owner's decision on the Semaphore evaluator before any execution.
-4. Post one review comment per B2 finding on the matching codex integration PR (#224-#232) if it is still open there.
+4. For #155: merge main, refresh the bound manifests at an origin/main commit, fix the intake F1, and record the
+   owner's decision on the Semaphore evaluator before any execution. Fix governance F2 on #156.
+5. Post one review comment per B2 finding on the matching codex integration PR (#224-#232) if it is still open there.
 Gates per PR: npm ci --ignore-scripts; typecheck, test, test:specs, check:specs, check:boundaries, test:build-policy,
 build, plus affected workflow suites; Foundry 1.5.1 and solc 0.8.30 hash-checked; Agave 4.1.2/Anchor 1.2.2 for Solana.
 Keep the disk allowance in mind: remove worktree node_modules, cargo target dirs and review scratch copies when done.
