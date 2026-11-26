@@ -1,3 +1,30 @@
+## 2026-11-26 UTC — S08 source and tooling reconciliation
+
+Live main readback `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 merged 2026-11-24, #245 draft. Current branch-name enumeration exhausted cursor: 285 unique names; PR search returned 87 open, 78+47 merged (creation partitions at 2026-11-18), 58 closed unmerged = 270. No exact-tip/patch-ID census this run; previous 152/133 ancestry accounting remains historical.
+
+Historical S08 stage `c950dad4b387cb4b33910789c454eb8f2ab0ae81` versus exact main: 11 additional paths inspected (distinct from five test paths in preceding checkpoint). Eight byte-identical blobs:
+
+| Path | Shared Git blob |
+| --- | --- |
+| .devcontainer/Dockerfile | 32f9162c5d2ee2704b6d1112ee9bf80620d39263 |
+| .devcontainer/devcontainer.json | 8f3c17b78f84aa33f4ddc8293ff215400c0ed743 |
+| apps/portal/index.html | f6f6efd6f571d328c4b7d6fbe6ed50e3f6881d24 |
+| apps/portal/portal.css | 3a642d02e927c03565456812e5ffd74dc19ca92e |
+| packages/claims/index.ts | 02e819250bfd9b742a71df32ee1a18386743ed19 |
+| scripts/portal/policy.mjs | 29e80affe0fb6a0f9f78101573206f48fadc1d36 |
+| scripts/lab/command.mjs | 19cd852a4b442fa0ed32b3e6e91d938f67026d56 |
+| scripts/lab/recipe.mjs | c8b14a48100f62d363a18bc0fbc60acd29f6167e |
+
+Three revised source paths, bounded static comparison only:
+
+- scripts/docs/generate.py: old fc6714fd97b1838e95be5d8d83288caca1ff9f24 → main f131e084533aba5421c9758f66b4329e6c7074ed. Preserves six draft claim definitions, immutable commit-bound evidence and copy hashes rather than live worktree bytes; maintained pages no longer overwritten by generator, remote links explicitly unverified. Preserve newer implementation and existing #255/#265 staging lane; no generated approval.
+- scripts/lab/run.mjs: old b9aa9e834bc0b7cadc7809513c11e5b6ae1904a9 → main f26e447bc0bfdc9f3c4276528bd1895e11542c00. Existing command table, environment cleanup and local-fake-funds-only qualification retained. Current run uses a fresh mkdtemp directory and exclusive recipe/log writes rather than replacing previous evidence in shared output. Preserve current behavior; no new lab execution or confidentiality claim.
+- packages/claims/src/claims.ts: old bd5141e2070953692420cad247f324721e4a9af6 → main 4889befea077fef5ddd16e08a1eb1b49f9014acf. Current bounds use own length descriptor and safe integer check; stale evidence disqualifies tested claim and claimFor downgrades to proposed. Preserve stronger controls. No whole-program equivalence or runtime pass.
+
+S08 cumulative 16/41 stage-local paths inspected (five previous tests + 11 source/tooling paths); 25 remain. No missing intended work established in this subset; #44 ownership retained, stage remains V-partial. #272 already has source-specific coordinator COMMENT; do not duplicate review. #254 and #273 remain draft, #237 remains open. Independent workers/named review, D2 public trust, D8 financial approval, physical devices and #273 owner adoption still gate integration. Direct Git ls-remote failed DNS; historical workspace absent. No source modification, new application/runtime tests, merge, deployment, funds, release, or optional activation. ReleaseEnabled=0 required. Next inspect remaining S08 stage-local sources (distribution, portal build, docs validator, workflow and wiki bindings) and independent qualification of existing candidates.
+
+---
+
 ## 2026-11-26 UTC — S08 test-oracle reconciliation and D9 native receipt
 
 Main readback `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 confirmed merged. #245 draft. Complete branch-name pagination returned 285 unique names; PR searches 87 open, 66+59 merged (creation-date partitions), 58 closed unmerged = 270. No fresh exact-tip/patch-ID census; 152/133 earlier ancestry count remains historical. Lowercase agents.md read; uppercase AGENTS.md and docs/ai/WORKFLOW.md/HANDOFF.md unavailable in main.
