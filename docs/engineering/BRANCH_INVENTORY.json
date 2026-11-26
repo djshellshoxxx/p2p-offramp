@@ -23445,5 +23445,35 @@
     ],
     "missingRefs": [],
     "coordination": "https://github.com/djshellshoxxx/p2p-offramp/pull/274#issuecomment-7200639630"
+  },
+  "partialLiveCensus20261126Gov1": {
+    "capturedDate": "2026-11-26",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "method": "Fully paginated branch-name search and five disjoint PR creation-date windows, all below result cap. Exact ref comparison only on selected PR heads, not exhaustive; previous full exact-ref overlay remains historical.",
+    "branchCount": 286,
+    "pullRequestCount": 271,
+    "openPullRequestCount": 88,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "previousAncestryProvenCount": 152,
+    "previousNotAncestryProvenCount": 134,
+    "fullHistoryRecomputed": false,
+    "selectedRefObservations": [
+      {
+        "branch": "nodata/youthful-maxwell-uwy8hx-progress-2",
+        "previousSha": "bf1bc12a822f35d45600f03994001f2179a6977d",
+        "sha": "021d14ec935c21b2a9d179b8511225b2b93bd8f2",
+        "pullRequest": 274,
+        "disposition": "One normal commit, only Lane B-owned handoff document changed, draft unmerged; not an ancestry reclassification."
+      },
+      {
+        "branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+        "sha": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+        "pullRequest": 156,
+        "disposition": "GOV-1 reproduced on identical main/PR evidence helper; local bounded prototype passed, not published source or CLI qualification; owner adoption required."
+      }
+    ],
+    "coordination": "https://github.com/djshellshoxxx/p2p-offramp/pull/156#issuecomment-7201664492",
+    "handoff": "186634119592915ef6e64966c1df34396e2d4225"
   }
 }
