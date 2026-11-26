@@ -1,3 +1,29 @@
+## 2026-11-26 UTC — S08 final documentary path reconciliation and owner coordination
+
+Current main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 confirmed merged 2026-11-24. Three REST pages each enumerate 285 branch refs (100+100+85) and 270 PR records (87 open, 183 closed; prior merged/closed-unmerged split 125/58). Full ancestry/patch-ID census not recomputed; 152/133 historical. Main and S08 recursive Git trees returned untruncated. Lowercase agents.md read; requested uppercase/AI docs paths unavailable. Previous workspace absent; Git 2.47.3 ls-remote failed DNS exit 128; Node 22.16.0 is below maintained Node 24 target. No fresh product/runtime execution.
+
+S08 stage-local `8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7...c950dad4b387cb4b33910789c454eb8f2ab0ae81` has 41 changed paths. Last 13 compared against exact main: one exact blob, 12 revised. Cumulative 41/41 paths inspected, not all intended differences resolved.
+
+| Path | Historical blob | Current main blob | Disposition |
+| --- | --- | --- | --- |
+| docs/DEVELOPMENT_STATUS.md | 8990852e4f6a79e31c10b98374e9217debee91d5 | 4bd2b588aff22718e7ce2e9f7a09f57e7e1acfaa | Expanded dated history; preserve current historical receipts, not old wholesale replacement. |
+| docs/wiki-source/Architecture-and-Development.md | ed999fead0a735b345e825f75e346214583f5fae | 5ff9f848b975c40764fb700a52f281f664d56b74 | Current architecture links retained; stale statement that #61 unmerged must be corrected (live #61 merged). |
+| docs/wiki-source/Codespaces-Test-Lab.md | 3c55f085d8cf343b88a25ad71a669e0b6b53ed8d | 38d57c93ffbd504c46289477779ebe32f3a3a5e5 | Historical future-only statement is stale; actual pinned optional devcontainer and lab runner present. Fresh hosted Codespace/device/visibility acceptance unproven. |
+| docs/wiki-source/Getting-Started.md | f2934a3b1acd2a4f7e391ff39b084d2bcc22d4e1 | ae55d1ed9b8c1261b5bc62886b31ed866ddd0f4f | Updated local explicit backup authentication/recheck/restore and QR review; preserve current workflows, historic manual trade risk not runtime approval. |
+| docs/wiki-source/Home.md | 0d1ebf8e7e21425dc1a0667fc8c5762a1f58d539 | 094e6bc52776dcd357c9cb992cbb6cf547df2989 | Expanded user/developer guides and dated source qualification; retain disabled-release notice. |
+| docs/wiki-source/Privacy-and-Recovery.md | d4e81156911c4243906415d4761d2c337bb58fc3 | 6847c28c93e554c4968c3b536f195fc8f97764e2 | Expanded explicit restore, public/private recovery separation and unconfigured signed update; no wallet/chain/release approval. |
+| docs/wiki-source/README.md | 80f60d5dd19568889201bd4e473845d1905868aa | 23ac11c8d4bfd21b234e2c2a794255e9d1d51013 | Correct hand-maintained pages and immutable evidence binding; retain. |
+| docs/wiki-source/Security-and-Release.md | 7e6cd527abb5606fa151121682c9a5df9fe83dbf | 71ac85b90db2d8ebfaa0fca673b2ec0e88c78b34 | Expanded dated receipts and release holds; retain all history; no exhaustive semantic review of all dated PR assertions. |
+| docs/wiki-source/Wallet-and-QR-Safety.md | 44c901cfbd30260c4b924d35b682c9a82047e737 | ab16a02d8406f5bd72811f3111a8565d4c169612 | Updated explicit public QR review, fingerprint and no-payment boundary; retain. |
+| docs/wiki-source/claims-register.json | 3274297b4ec4454d65c1da7271a8d83c6ac951b6 | 2beaedd25999ac6e4ceb765dc8ac17096a568249 | All six claim objects and six copy-key objects exactly equal by parsed JSON; five of six evidence rows equal; immutable source baseline changes from f25de72b to 84814328 and copy-source hash changes. No promotion; three proposed/three unsupported, reviewers empty, approvedRelease null. |
+| docs/wiki-source/docs-manifest.json | 5129f8e10e15b491b45ef29ecbb1a2e28b76c440 | 06774cbdfd36e79970e85bf6b94ce18aea8b6019 | Same seven-page schema, revised bindings and digest; dirtyDraft true, approvedRelease null; no validator run or current evidence approval. |
+| packages/claims/README.md | 3a636ea2df75055c6d3093014d0dd817a15e4009 | same | Exact blob. |
+| scripts/docs/README.md | 4485d06b7dc8aaa69c2475176d704445c2027aad | 1aeee2cca43d2b713ba87e08e350acd2ae530a49 | Maintained immutable evidence and staleness handling; preserve stronger tool contract. |
+
+Actual `scripts/docs/generate.py` and `validate.mjs` confirm all seven maintained page bytes and local link targets are bound; wiki edits require regeneration and validation rather than manually modifying hashes. #178 currently changes five docs, not the two newly identified stale pages; #253/#265 own register/manifest updates, #255 owns tooling. [Coordination comment](https://github.com/djshellshoxxx/p2p-offramp/pull/178#issuecomment-7196449380) published and read back with exact source evidence, correction scope and acceptance criteria. #44 still open Tier C; no recorded alias-retirement decision in its body. Three absent aliases remain open compatibility questions; #259 owns ignore rule. Do not duplicate or overwrite existing owners. S08 remains V-partial with documentation corrections, alias disposition, #259/#255/#265 qualification and #44 Tier C disposition outstanding; 41/41 inspection is not 100% consolidation. No code, tests, source merge, deployment, live funds, credential or release changes; ReleaseEnabled=0 required. Next disjoint unblocked feature or actual independent qualification; no repeat S08 inventory-only passes.
+
+---
+
 ## 2026-11-26 UTC — S08 distribution, portal and command-entry reconciliation
 
 Live main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 confirmed merged, #245 draft. Branch search exhausted cursor: 285 unique names; PR partitions 87 open, 78+47 merged, 58 closed unmerged = 270. Prior ancestry 152/133 remains historical, not a new exact-tip census. Lowercase agents.md read; uppercase AGENTS.md and docs/ai/WORKFLOW.md and HANDOFF.md returned 404. Previous worktree absent, direct Git ls-remote failed DNS again.
