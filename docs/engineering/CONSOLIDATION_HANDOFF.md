@@ -1,3 +1,36 @@
+## 2026-11-26 UTC — S01 retained tooling and financial-test oracle reconciliation
+
+Main exact readback `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 is merged on 2026-11-24, merge commit equals main. #245 remains draft. Historical S01 stage `4e319013ea61ead31ae00ea9a44fa9c431cc84ce` is one commit ahead and 628 behind, merge base `a88560741e60146a424cc18fcb2cc1043756ae3e`. Current GitHub comparison lists 20 paths. New bounded direct-source comparison, not executed runtime or whole patch-ID equivalence.
+
+Nine historical blobs are identical to main, including these exact identities:
+
+| Path | Shared blob |
+| --- | --- |
+| .github/workflows/specifications.yml | 9ca2d40309e4cbe71ff86f1017c0835c022f6125 |
+| contracts/evm/formal/CanonicalRefinement.t.sol | 485c4f2563ce9d3fffdc6ee96832bde852e159a0 |
+| contracts/evm/formal/partitions/EarlyRefund.sol | 46fa39117eda60c960d439973d3dfa712f5af26f |
+| contracts/evm/formal/partitions/NativeConstructor.sol | 9b336767938cb0004067c824fdcd36841c06dfe1 |
+| contracts/evm/formal/partitions/UnauthorizedRelease.sol | 4ce9d94e9bc46f7ae7d834914560c2c66f5e3155 |
+| contracts/evm/formal/properties.json | ed89a3f6c83c7c3829477a40cedab1a9f6138b23 |
+| scripts/tests/requirements-crypto.txt | 5629f24a4b45db54fe0549be37a374446b65f5d6 |
+| scripts/tests/test_g16_vectors.py | dab835eec0e524830e6e2dcf51e1baa0465c1cb5 |
+| scripts/vectors/check_g16_evm_openssl.py | b33d64fd1e6de5c8c0b01e05830063d84ce2ccea |
+
+Other bounded comparisons:
+
+- vault-foundation.yml old 5bf7413e07d835ce4521056ee9d39dfabaa6204c, main c539e5e80c6f534429c942894031336d6db9938f. All 95 old lines (including blanks) are an ordered subsequence of 169 current lines. Additional gates include formal unit, browser backup/recovery, peer and docs checks. Line retention is not YAML job semantic or execution equivalence.
+- package.json old 9f8a169483558bb1f699a37c885e8c67fbbe9a49, main 9bb6a80bcea23db82555085914b96eb02dbd3487. Parsed 36 historical script keys and 58 current; none missing, 31 identical values, five revised commands (test, test:recovery:evm, test:sepolia:kit, test:web:browser, test:build-policy). Do not restore older commands; full command execution not attempted.
+- scripts/tests/sepolia-hygiene.test.mjs old 1e1f6f5c30c9fa48db4c22670b0b1abcb687b284, main 8b622d389b7906f39fb93e90adbff11a2ab2ff74. All 12 historical top-level test blocks equal matching current blocks in bounded text extraction; current 18. This does not prove unchanged shared fixtures.
+- scripts/tests/sepolia-trade-state.test.mjs old 8555628115d11127cc071a62aaeb3134554e948f, main 75fca6ce1f0228cf0ee49f9afc0546306c384014. All eight historical test titles retained in 14 current. Five extracted blocks identical. Existing saved-attempt refusal case now includes malformed histories and repeated refusal, with preserved no-estimation assertions. Two other blocks differ in extraction, including adjacent helper text; do not infer full assertion equivalence from titles or truncated display.
+- scripts/formal/evm.mjs old 7854961e028e981a2290b2b95ac58103982cbc5f, main cf6d93cca2d1753951559eba2b016e99dc745a68. Current classifier refuses incomplete, conflicting or unrecognized diagnostics; whole-target classification also checks clean bridge execution. Output ownership requires a fresh/empty in-checkout directory and exclusive marker. Preserve newer controls, not old diagnostic shortcuts. Whole-file semantic equivalence remains unproved.
+- scripts/check-import-boundaries.mjs old 26a67e6fb0c346b4e4f81458f9092b98b88244cc, main 4455ec624a97724c4c04fd3801b5bcbfc642ad12. Current narrow public facades differ from historical wallet acceptance allowlist; preserve current architecture.
+- scripts/sepolia/lib.mjs old 5b3b2db8e77b8baf844d2c403e75db83d05b359c, main e1c701da04a5e91e6e6bcf4df1b0f9393de0cd22: bounded decoding and malformed-input refusal supersede earlier single decode.
+- scripts/sepolia/trade.mjs old 1b99259d2c904d34959b671da7d7820b59e88ae1, main 850a64338b221d27210cce931f6337513e1984a6: exclusive state lock, durable file write/sync, explicit deployment binding, fail-closed legacy attempt reconciliation. Static observations only; do not restore old weaker code or exercise public network.
+
+S01 stays V-partially-reconciled; all 20 paths have been inspected across this and preceding checkpoints, but remaining whole-file/fixture/patch equivalence and owner #37 disposition are unproved. No missing intended code established in this cohort. Keep original branches. No new financial tests or main merges. Current branch-name search exhausted four pages, 285 unique names; open PR search returned 87, closed query capped at 100 so no new all-state total asserted. Prior exact ancestry 152/133 historical. #237 and #259/#267 remain open (latter two draft); no review gate waived. Next prioritize genuinely unreviewed source or current independent acceptance, not old code restoration. D2 owner public trust, D8 financial authorization, physical-device acceptance and #237 named review remain gates. No deployment, funds, release or default activation; ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-26 UTC — S01 formal/boundary test semantics and recovery-lane composition
 
 Main readback: `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. #251 confirmed merged, #245 remains draft. All 285 branch names freshly enumerated through cursor exhaustion; exact full tip comparison and all-state PR pagination not repeated here. Prior exact census of 152 ancestry-proven / 133 not ancestry-proven remains historical; no classification changes.
