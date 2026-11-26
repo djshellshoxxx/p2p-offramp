@@ -1,3 +1,34 @@
+## 2026-11-26 UTC — exact Git-object qualification and duplicate-stack reconciliation
+
+The earlier normalized-commit limitation is resolved for this run by authenticated raw Git data reads. Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` has tree `7acfe2f7c7f1ebf0b13169cc2b50f4d2b946ab79`, ordered parents [`01f6f4feca051d68de24a04299cd3bb444bce40c`, `02f8ade4edd1aa091042d849f0498e18830a1393`]. #251 merged and its source is the second parent. Full REST branch pages 100/100/85 and all-state PR pages 100/100/70: 285 distinct branch names, 284 distinct tips, 270 PRs (87 open/125 merged/58 closed unmerged). Prior exact-ref census plus every recorded delta reconciled against every current name/SHA: 152 previously proven ancestor tips are unchanged at the SAME main and therefore remain proven; 133 are not ancestry-proven (not necessarily 133 unique changes). No missing refs. Only two changed refs since last machine overlay: coordinator `cecbb87d011533a3cfc9820c29a489361455eb21` → `3ed45c53437efc078ce07985347e86488b7a760c`; #273 `d3829da7d885f9c6c4a5bdf784fddc5ee4ce33c3` → `5b074513704d4c8c75ef0b93069d004c76d82665`. Two branch names share the exact tip `d30152336bb687b31ae547ab3fcecb8835a02ef4`: codex/transport-qualification-20261120 and codex/main-consolidation-g12-20261120. Keep both; do not count as two unique tips. Full local Git patch-ID/range-diff not recomputed.
+
+Actual refs/pull/N/merge, Git commit tree and ordered parents read directly. In each row below, second parent is the exact head listed; proposal tree equals the head tree; first parent is live main except as noted. These are source/target object proofs, not fresh CI or independent approvals.
+
+| PR | Head | Actual proposal | Tree |
+| --- | --- | --- | --- |
+|257|75e0b0430ff0c3e33395ce86513083868d0a5c2a|cedc7487b1691861ec1da4791bf43d991e22f555|56cab31f305e5cd064c6901914d3d30adcc426b9|
+|259|db792ae45b50e13b9fdd49da40c2860969a96a8f|86d0af9b4f045e788e4421482d4e9c74d39ad384|d6c10bfc735308c79430edeaac678bb4ab6105a2|
+|263|61d3eb154f60186d8ccc91d02736ab32ab337470|c365cb76b19dcd4cc9a2b2317cb611112756c525|5aa8f3bce8253709f329ad9fb7d517031ac4d9a7|
+|264|0021808c2f03c5a703b50de1152ca5c0bc8efcc4|a72f7a3cd72e81292eb6fa2baef539d29641c6a2|e1c2c6073077638ee81673c51387699d2a221809|
+|267|8fbe66e965823a6e4622f4d38d194fd3c16c9b88|360c7dfa67d6d8f62ecc8b3a41cabadf892114a4|0c260eee867b509e36f5ae043effd3a9435c70a3|
+|270|42def54e792b25d1b5cbad6e2cc3a7b226499357|51db8925e104472c0b270c25f571a391deabd5be|4dccae53623869827c2c4104de7d9530972b1e2e|
+|265|236c38d674a25c2712b5e1171806934ebe659cc5|69e4aaa1b8feea917b5a79ceed929762d64ea516|44a24e8443f548a42cbd07d7ce6481fbd549e35f|
+|266|5d4ffb31cf8dfb6e96f85cd98af0dd25dc7142ab|d310a4e7eff39da6166ffb5d13dde2846d61d9d3|55c3ee83ba6ccae3d52d10ef29dfb1c48cb863cd|
+|261 (parent #257)|5a13625db76e7ee9e5256be288a51d6f0e4ae70b|6924297a86f090f4919a7b6f8bec02ed6f05fdcb|2c5a386e0879e67effe9ffc465f8dc678ddc0405|
+|273 (parent #227)|5b074513704d4c8c75ef0b93069d004c76d82665|617c82ea9caedfdf7a980006294bef0e5dee205b|f4684dfb719fab923fe943fce06fb378f0be0e69|
+
+#257 five returned PR workflows all successful (45312436005, 45312436040, 45312436030, 45312435973, 45312436079), but only submitted coordinator COMMENT review; PR body reports earlier independent test review, separate evidence must be resolved for final gate. It remains draft. Preserve #257→#261 and #267→#268→#269. All listed draft holds and review conditions remain; no inferred approval.
+
+#237 raw actual proposed merge `42db87c8ad1c10f2d7f3ddf6d9cae87e79e07efb` has ordered parents [live main, `33232f62dc9cd250528ef3eb0313c0c319d99495`] and tree `7f265907478be38f8cc2d8b331b0a02ed2aa9fef`, NOT the old head tree `452b08d0c279a82ea3076371723a2dbd12ef9596`. PR base metadata still reports old 01f6f4fe. Compare old head→actual proposal is 4 ahead/0 behind, exactly one additional file (apps/web/test/s06-facade-abort-recovery.test.mjs +124), the already merged #251 regression. Structural current-main merge proof now exists; do not transfer old hosted checks to it. Submitted review list still empty, named review and fresh current-target qualification remain.
+
+#252→#266 and #253→#265 each compare 3 ahead/0 behind, merge base exactly original owner head, only one additional file (the same +124 line #251 test). #252/#253 original actual proposals still have old 01f6f4fe first parent. #266/#265 preserve original owner ancestry and have current-main exact proposal proof above. Coordinate one integration candidate per feature with the original owners; no duplicate reimplementation, no automatic closure, no double merge. #265/#253 staging binding before #255 strict preflight remains the dependency. #273 exact stacked tree verified but owner adoption and named gate still needed.
+
+S01 remaining path-level comparison completed: three complete non-truncated recursive Git trees (historical stage `c3cc4bf689a5eb3450be755f963f95424970d59c` 2077 entries, current main 3379, recorded PR37 tree `0a5b9d65a133bdd1dd4dbb1a4a64d46b9495ed33` 2077). All 20 stage-local paths present in both; 9 exact on main, 15 exact in recorded owner tree. Eleven nonidentical main paths: .github/workflows/vault-foundation.yml, package.json, scripts/check-import-boundaries.mjs, scripts/formal/README.md, scripts/formal/evm.mjs, scripts/sepolia/lib.mjs, scripts/sepolia/trade.mjs, scripts/tests/formal-evm.test.mjs, scripts/tests/import-boundaries.test.mjs, scripts/tests/sepolia-hygiene.test.mjs, scripts/tests/sepolia-trade-state.test.mjs. No semantic equivalence inferred; keep V classification and existing owner. Prior report retains detailed test-title/body evidence. No new test or source integration.
+
+Read main agents.md and accepted D8 policy. Independent native worker unavailable here; no new runtime tests or production edits, no merges. Direct Git access previously failed DNS; not retried in this run. D2 public owner trust, D8 written financial authorization, actual device acceptance, #237 named review, #273 adoption remain distinct. ReleaseEnabled=0 required; no deployment, real funds, release, optional activation or settings/schedule changes. Next: obtain independent reviews, owner coordination for duplicate-stack candidates, qualify existing candidates at exact target, then guarded integration; retain all source refs.
+
+---
+
 ## 2026-11-26 UTC — Settings screen counts, persistent-browser recovery and binding preflight
 
 Main read back at `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 merged, its exact branch tip `02f8ade4edd1aa091042d849f0498e18830a1393` independently compared to main (0 ahead/1 behind, merge base equal tip, no branch-side delta). Three existing candidates received SHA-specific coordinator COMMENT reviews, read back COMMENTED; not independent or named-service approval:
