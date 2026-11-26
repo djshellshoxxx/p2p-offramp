@@ -1,3 +1,9 @@
+## Storage recovery review checkpoint — #260 and #271
+
+[#260](https://github.com/djshellshoxxx/p2p-offramp/pull/260#pullrequestreview-6068203950) and [#271](https://github.com/djshellshoxxx/p2p-offramp/pull/271#pullrequestreview-6068204301) now have source-specific coordinator COMMENT reviews, no actionable High/Medium in the bounded test changes. Both remain draft/unmerged; independent/named review and exact current-target qualification are outstanding. #260 must integrate before #271 retargets to main. Actual hosted storage-layer browser results confirmed at source heads `f3b0d907edef0e7dd13b89d33ab65b85ba7d9744` and `7c70384031361d592d0ef54e33512e860cdf0598`; no new execution, app Worker/UI, physical-device or financial acceptance. Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` unchanged at read. No new ancestry classification; 285 branch names freshly enumerated, earlier exact-tip 152/133 split historical. See [handoff](CONSOLIDATION_HANDOFF.md) for exact jobs, limitations and review identities. ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-25 UTC — #273 evidence retirement follow-up
 
 #273 advanced normally to 5b074513704d4c8c75ef0b93069d004c76d82665 (test-first 45b9b814e364b0988f57d32352124bc8e3a76540). Controlled exact-controller RED 0/1 → GREEN 1/1; actual G05/G14 unused-registration retirement test added but unexecuted, new workflow list initially empty. Previous hosted 11/11 is source-bound to d3829da7. #227 remains unchanged, separately owned and unwired. No main integration; actual-dependency RED/GREEN, independent review, owner adoption, final current-main qualification and named Tier B gate outstanding. Main 8cff4490 unchanged; 285 branch names / 270 PR records freshly enumerated, 152/133 historical ancestry counts not recalculated. See [handoff](CONSOLIDATION_HANDOFF.md) and [PR receipt](https://github.com/djshellshoxxx/p2p-offramp/pull/273#issuecomment-7176583246). ReleaseEnabled=0.
