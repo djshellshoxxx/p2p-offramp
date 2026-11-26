@@ -82,9 +82,18 @@ These are AI-assisted reviews, not a professional audit. "Verified" means at lea
 3. `packages/schemas/src/intent.ts` and `packages/domain/src/intent-journal.ts`: Solana `payout`, `released|refunded`, the signature written in the `markSending` CAS, Solana observe/reconcile branches and successor reservation. The proposed hunks are in `packages/chain-solana/docs/lifecycle.md` §6.
 4. `packages/exchange`: a v2 carrier for `{statement, termsSignature, acceptanceSignature}`.
 5. `apps/web`: `signOffchainMessage` with an exact-bytes check; replay-ledger wiring; `createSolanaEscrowClient` with explicit margins.
-6. `apps/web/scripts/static-build-plugin.mjs:41`: list every optional package in `NON_CORE_MODULE`, the only check that sees resolved module ids.
+6. `apps/web/scripts/static-build-plugin.mjs`: the resolved-module admission layer does not refuse the optional packages.
+   - **Reproduced 2026-11-26** ([#274 comment](https://github.com/djshellshoxxx/p2p-offramp/pull/274#issuecomment-7205566130)). The plugin blob `423671c2` is byte-identical on `main` and on all nine intake heads #224–#232.
+   - The extracted `assertModuleAdmitted` admitted all 108 optional-package cases across offline, EVM-localnet and Solana-localnet, document and Worker. These were the nine package roots plus nested look-alikes; all 24 controls passed.
+   - A prototype that refuses the exact package roots before profile branching passed 132/132.
+   - Not a shipped exposure: the AST gate `scripts/check-import-boundaries.mjs` still rejects statically reachable optional packages.
+   - Scope:
+     - share one explicit optional-name inventory across the graph guards;
+     - refuse all nine roots and their nested look-alikes before every profile branch, keeping QR role separation, permitted core paths and the localnet exceptions;
+     - extend the `generateBundle` fixture to assert refusal before any file is read or emitted, for each profile and Worker, with positive controls.
+   - **Ordering: land this shared guard before the individual optional intake merges.**
 7. `scripts/sepolia/lib.mjs`: pin the forge binary SHA-256 (today only version and commit).
-8. Unowned: the stale comment at `packages/domain/src/trade-terms.ts:167`. (The viem receipt race is already fixed; see above.)
+8. Unowned: the stale comment at `packages/domain/src/trade-terms.ts:167` is being fixed in draft #275 (one JSDoc line). The viem receipt race is already fixed; see above.
 
 ### Owner decisions and external materials
 
@@ -104,7 +113,7 @@ These are AI-assisted reviews, not a professional audit. "Verified" means at lea
 ```text
 You are continuing Lane B of djshellshoxxx/p2p-offramp. Read agents.md, docs/adr/ACCEPTED-DECISIONS-2026-11-04.md,
 docs/consolidation/LANE-B-PROMPT.md and this file first. Lane ownership, invariants and D8 tiers are unchanged.
-Your own push branch prefix is nodata/youthful-maxwell-uwy8hx-<unit>. Many PRs from other agents are open (#191-#273):
+Your own push branch prefix is nodata/youthful-maxwell-uwy8hx-<unit>. Many PRs from other agents are open (#191-#275):
 check each before starting so you do not duplicate it. Do not reimplement anything under "Findings already mitigated".
 
 1. GOV-1 is reproduced (#156 comment 7201664492). On #156: merge main (no rebase), then make check-all.mjs and
@@ -119,6 +128,8 @@ check each before starting so you do not duplicate it. Do not reimplement anythi
 4. For #155: merge main, refresh the bound manifests at an origin/main commit, fix the intake F1, and record the
    owner's decision on the Semaphore evaluator before any execution. Fix governance F2 on #156.
 5. Post one review comment per B2 finding on the matching codex integration PR (#224-#232) if it is still open there.
+   Needs Lane A #6 (the resolved-module guard in apps/web/scripts/static-build-plugin.mjs) is Lane A's file and should
+   land before those intake merges; do not edit it, only point to it.
 Gates per PR: npm ci --ignore-scripts; typecheck, test, test:specs, check:specs, check:boundaries, test:build-policy,
 build, plus affected workflow suites; Foundry 1.5.1 and solc 0.8.30 hash-checked; Agave 4.1.2/Anchor 1.2.2 for Solana.
 Keep the disk allowance in mind: remove worktree node_modules, cargo target dirs and review scratch copies when done.
