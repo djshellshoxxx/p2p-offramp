@@ -1,3 +1,38 @@
+## 2026-11-26 — GOV-1 actual local reproduction and bounded corrective prototype
+
+Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` unchanged (GitHub compare identical). #251 is merged. #245 remains draft. #274 moved normally from `bf1bc12a822f35d45600f03994001f2179a6977d` to `021d14ec935c21b2a9d179b8511225b2b93bd8f2` (one commit; only Lane B progress document +24/-15). New Lane B doc blob `d23bc1c8d961507dbf380a4a109d0ff9d12ac0ea` explicitly retains GOV-1 as an unverified lead and requests owner-owned reproduction. Coordinator reproduction below advances that evidence without editing Lane B branches.
+
+**Actual executed result:** current main and #156 head `7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b` share exact evidence helper blob `ae1710650fc0e869890b7c39bebf139ed13ed4f9`. Downloaded source was reconstructed byte-for-byte locally and Git hash-object verified that identity and exact tool-path blob `682194abefa6ee10df90be60431c16077173d797`. Node 22.16.0 actual isolated real Git fixture, no injected committed-read port, no network or real funds. Six non-owned synthetic files committed to main; local origin/main ref set to that commit; separate unmerged empty commit has identical file bytes. Git merge-base independently confirms accepted ancestor and rejects the unmerged commit. Manifest hashes match all six rows. Four maintained-oracle cases:
+
+| Case | Original helper | Local candidate |
+| --- | --- | --- |
+| Reachable ancestor, all hashes equal | PASS | PASS |
+| Unmerged commit, identical hashes, must refuse | FAIL: Missing expected rejection | PASS |
+| Missing origin/main, must refuse | FAIL: Missing expected rejection | PASS |
+| Reachable ancestor, changed working-tree file reported stale | PASS | PASS |
+
+Baseline exit 1, 2 pass/2 fail; local candidate exit 0, 4 pass/0 fail, no skips. Candidate exact helper blob `e185ae9eee7630e272fa130722815c727c7ccd73` adds explicit opt-in `requireMainAncestry = false` to preserve existing low-level test ports, and inserts before row verification:
+
+```js
+if (requireMainAncestry) {
+  try {
+    execFileSync(resolveTool('git'), ['merge-base', '--is-ancestor', manifest.sourceCommit, 'refs/remotes/origin/main'], {
+      cwd: base, stdio: ['ignore', 'pipe', 'pipe'],
+    });
+  } catch { refuse('COMMIT_NOT_ON_MAIN', manifest.sourceCommit); }
+}
+```
+
+Regression source SHA256 `6f82b18b8ce1b481efb463af641604fca08dae296ffe37e30d06f5116154eb26`; RED raw log SHA256 `1d54880a7336b7e7bd2bef849dab772b56dfbfbabcb7af9e41333410eb4e9cb0`; GREEN `6b7124cc8c01960d70fc922ebcf7559ebbe8ed8a8273aa841415a8be18cafa94`. Raw files were generated in ephemeral local storage; hashes and summarized outcomes are durable, raw files are not published. Reproduction uses `checkEvidenceBinding({root,requireMainAncestry:true})` on both original and candidate, where original ignores the additional option. This is a proof-of-concept helper correction, not the complete CLI integration or independent approval. Existing tests use injected fixtures or temporary repositories without origin/main; preserve explicit fixture semantics and do not silently weaken real gate.
+
+**Production entry-point finding:** current check-all blob `5c287dcd24b28ee4c82bd5c14c6c9daef93b648c` calls helper without requiring ancestry. Refresh blob `8f1ffbd3fd81df320b1ed51d86c697186ce24cca` only validates reachability when --commit is supplied, not ordinary --check; package.json check:governance invokes both. Both entry points need deliberate main-bound enforcement, CLI-level tests (reachable, unmerged, missing ref, stale and tampered hashes) and full current-source qualification. No production integration executed. Current actual manifest blob `8277c2df3041b1599ccc6c3d946c8ae6a0a2ff84` has 57 rows and sourceCommit `8649b7a1994ec21fe5557179d44e861b746bcda8`; GitHub confirms 0 ahead/279 behind main, so no evidence current packet uses unmerged history. Inert governance provenance gap, not established default client or financial vulnerability.
+
+**Owner coordination:** [#156 GOV-1 reproduction](https://github.com/djshellshoxxx/p2p-offramp/pull/156#issuecomment-7201664492). Do not duplicate Lane B or modify its frozen branch. Require Lane B adoption, independent review, actual CLI checks and source/target qualification. No deployment, release, funds, activation or main merge.
+
+Inventory: fully paginated branch-name search 286 unique names; partitioned all-state PR search (five disjoint creation-date windows, none capped) 271 unique PRs: 88 open, 125 merged, 58 closed unmerged. Prior 152 proven / 134 not-proven ancestry counts remain historical; no full exact-tip refresh or patch-ID calculation claimed. Original worktree absent; git ls-remote still DNS failure exit 128; isolated exact-blob execution succeeded despite remote cloning unavailable. Next: Lane B GOV-1 owner adoption and other independent recovery/qualification work; do not repeat this reproduction unless source changes. D2/D8/device/named-review blockers unchanged. ReleaseEnabled=0 remains required.
+
+---
+
 ## 2026-11-26 — Lane B review reconciliation and S07 intent coverage
 
 Live main: `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. New owner draft #274 (`bf1bc12a822f35d45600f03994001f2179a6977d`) is a separate documentation handoff. Fully paginated authenticated branch/PR census: 286 branches, 285 distinct tips; 271 PRs (88 open, 125 merged, 58 closed unmerged). Compared the reconstructed previous exact-ref map with all current tips: only coordinator advance and the new #274 branch, no missing refs. All 152 prior ancestry-proven branch tips remain unchanged on the same main; 134 not ancestry-proven. No new full-history patch-ID calculation. Inventory checkpoint `fb29a5a3529a1927357c665429688ff6ef968c6b`.
