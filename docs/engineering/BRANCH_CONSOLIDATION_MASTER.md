@@ -1,3 +1,31 @@
+## 2026-11-26 — Lane B review reconciliation and S07 intent coverage
+
+Live main: `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. New owner draft #274 (`bf1bc12a822f35d45600f03994001f2179a6977d`) is a separate documentation handoff. Fully paginated authenticated branch/PR census: 286 branches, 285 distinct tips; 271 PRs (88 open, 125 merged, 58 closed unmerged). Compared the reconstructed previous exact-ref map with all current tips: only coordinator advance and the new #274 branch, no missing refs. All 152 prior ancestry-proven branch tips remain unchanged on the same main; 134 not ancestry-proven. No new full-history patch-ID calculation. Inventory checkpoint `fb29a5a3529a1927357c665429688ff6ef968c6b`.
+
+### Lane B historical findings versus current source
+
+- B1A-T1 freeze-authority exit refusal: source mitigation already present. `packages/chain-solana/src/reader.ts` blob `07b2e85cc66b3ec84d8a622b33c15be1ce8339d5` lines 226–239 and 482 check the permit only for absent escrow. readValidated delegates to read and readPayout uses the same observation path. Policy test blob `db04a7be9db0a770468025ec0a8024ff41d4d4f8` checks funded-without-permit reads, absent refusal, rotated/other-mint pre-funding refusal and finalized identity/block checks. Do not duplicate the fix. Fresh full rotated-permit funded/released/refunded payout matrix and native qualification not established.
+- Viem receipt race: source correction already present, `scripts/test-evm-viem-oracle-local.mjs` blob `920f9290b1e42a0f9d5ffd7ca1ed851bd0432177` lines 263–278; bounded waitForTransactionReceipt plus existing finality and principal assertions.
+- B4 F1 docs drift: source mitigation in `scripts/docs/validate.test.mjs` blob `0fc95f1955e164e16eba905439e6b21b9bedd553`, dynamically derived link fixture and baseline-relative stale list. No exhaustive drift execution claimed.
+- B1b F1: source-level lead remains: `journal.ts` blob `23e1e1b46b54b6a36f0359fa8400aba7e0bc825f` lines 79/119 caps all records at 32; `submit.ts` blob `f8800065f34e9a74bfbf9ec51b5530a6209be63a` lines 194–215 applies admission before CAS on every action. Reproduce actual funded-trade exit refusal before changing admission; bounded recovery preserving all evidence and Tier C approval required. No cap removal or terminal evidence deletion.
+- B1b F2: asymmetric null-signature terminal mapping remains in `adapter.ts` blob `69ebb8c2e73d4e14eaa39d6d16c9c775814edcc8`. Distinguish deliberate terminal re-observation from valid unmarked terminal compatibility before changing shared schema; no runtime reproduction.
+- B1c M1: `replay.ts` blob `84057cfbfc5b7d3142a71d0982fcb88b62a4b0a1` lines 231/272–274 refuses out-of-horizon/full tombstones. Existing `replay.test.mjs` blob `e374082c5718ba7b4d249722206b020b463fef37` lines 127–134 checks refusal and later explicit retry. Accepted cancel/carrier UI must never claim durable cancellation on refusal; end-to-end behavior not verified.
+
+Coordinated these findings with existing Lane B owner on [#274](https://github.com/djshellshoxxx/p2p-offramp/pull/274#issuecomment-7200639630), comment readback verified. Other historical findings remain leads, not adjudicated or closed. No Lane B source edits or independent approval.
+
+### S07 historical test intent comparison
+
+Historical journey-vault-composition test blob `89145daf0f39dd6d66006132244c2b0d355c6ca8` has four test intentions partly represented by modern backup verification runtime `07647ff81b1f0a65d64e2a371d7dd1e317fdb3bc`, independent cases `e54e00a97fdc2b489a8010a35e9323851cb93fea`, schema `bf3112235dad5e02a5c423db99b884788c372b5d` and backup-selection `cb51d63a1eb10ce1333b189fc2395d34288a8aed`: no authority from unlock/export, mutation invalidation, cross-tab conflict/lock, held freshness, receipt import refusal and opaque generation/own-lock checks. Does not establish historical native journey connection or complete authority equivalence.
+
+Historical transport-selection-runtime test blob `3a7651f09eb4bb870302fb02505cfd8a163deff6` has eight cases; modern schema tests `96e08df2d8aec66072be9d34e9f63404ef601ef6` and controller tests `f34d1b57d1414b41378039a61f5eb24221f5d64d` cover scalar, consent, stale and reentrant behavior. Main runtime schema `0bf114bc267b99633b96674a36c97189489c1864` and Worker endpoint `3de5bd379d3c1360bf5292e2153d39d8b2efd288` do not expose historical transport-selection IPC. Preserve optional isolation and #227/#273 ownership; no transplant or default activation. Historical retention deletion and #237 read-only preview are not equivalent; main storage tests `5e5939b2c93da6e416e458354f1c5ca59b0c7b8d` do not prove native UI deletion. S07 remains partial.
+
+### Gates and next cohort
+
+#251 merged; #245 remains draft coordinator. #237 still lacks named review; #273 coordinator COMMENT is not independent review/adoption. Continue with reproducible funded-trade exit acceptance and exact optional-package gates in their owned lanes; no duplicating frozen work or claiming approval. D2 trust material, D8 financial authorization and real device acceptance remain separate. Original workspace absent; direct Git DNS failure exit 128; connector source/ref reads available. No fresh runtime tests, production modifications, merges, deployment, release, funds or optional activation. ReleaseEnabled=0 remains required.
+
+
+---
+
 ## 2026-11-26 UTC — S09 / B4 retained evaluator blocker
 
 #45 and draft #155 share exact evaluator blob `19ca4cb668e4d029f9aca828d391bea6ed09e1e4`; [original Medium thread](https://github.com/djshellshoxxx/p2p-offramp/pull/45#discussion_r4465034972) remains unresolved, not outdated. #155 is 4 ahead/274 behind current main. Main does not contain this research evaluator. [Owner coordination](https://github.com/djshellshoxxx/p2p-offramp/pull/155#issuecomment-7199200046) records required verified input ownership and regression before executable intake or explicit archival disposition. Not a newly reproduced runtime or default app defect. No branch classification changes. Exact source and scope evidence in [handoff](CONSOLIDATION_HANDOFF.md) at `41bcfb139f01422ba608e458e6b963bd4cb177a8`. Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`, 285 refs / 284 tips, 270 PRs (87 open/125 merged/58 closed unmerged); historical 152/133 ancestry split not recalculated. No source modifications or merges. ReleaseEnabled=0.
