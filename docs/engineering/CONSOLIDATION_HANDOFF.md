@@ -1,3 +1,40 @@
+## 2026-11-26 UTC — S01 formal/boundary test semantics and recovery-lane composition
+
+Main readback: `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. #251 confirmed merged, #245 remains draft. All 285 branch names freshly enumerated through cursor exhaustion; exact full tip comparison and all-state PR pagination not repeated here. Prior exact census of 152 ancestry-proven / 133 not ancestry-proven remains historical; no classification changes.
+
+### S01: resolve two misleading missing-title signals and four changed formal test bodies
+
+Historical stage `4e319013ea61ead31ae00ea9a44fa9c431cc84ce` versus current main. These are static source observations, not executed formal proofs or full patch equivalence.
+
+- `scripts/tests/formal-evm.test.mjs`: historical blob `2fd2f861869077ce8a2e27af8f083ec76c7f864d`, main `87bf6b8ca982dc46371cfd11c4e8d25015a19de0`. 14 historical top-level test blocks, 22 current. Nine retain matching title/body text in the bounded extraction; one renamed test retains identical body (trusted tool roots / Foundry compiler resolution). Four remaining tests retain their title but changed bodies. The compiler assertion test now requires exact diagnostic wording, source span and completeness, refusing contradictory, duplicate or unanswered diagnostic claims. The operational probe uses recorded compiler outputs and rejects missing query, stop reason, abstraction or contaminated stderr. The process-group test retains success/timeout/overflow and descendant-death assertions, extends child lifetime to 60s and adjusts bounded test timing to avoid a natural-exit false positive. The partition test preserves refusal cases and expands incomplete/limited/error/wrong-span checks; a bare 6328 code no longer establishes violation. Do not restore the weaker old expectations.
+- `scripts/tests/import-boundaries.test.mjs`: historical `bb545a664531b770e867cc03793daa0b00b2d960`, main `b043ede5878608aa1595f90bf692f7fde3f559b0`. Eight historical blocks, fifteen current. Seven retain matching title/body text. Remaining historical native-acceptance fixture now uses the existing release-context entry rather than the obsolete wallet/contract-acceptance entry. Its assertions still refuse private/similar entries, meetup, privacy-policy, privacy-controls, proof-jobs and liquidity dependencies, while allowing core domain helpers. Current checker blob `4455ec624a97724c4c04fd3801b5bcbfc642ad12` explicitly allows the release-context, update-view, personalization and constrained localnet facades, not the old wallet/contract-acceptance path. Preserve current boundary policy; no restoration of the older allowlist.
+- `scripts/formal/README.md`: historical `871149d3e758526b0a74b1255d62263177641ce8`, main `413510a0ad7a6d79ee78c011e69b71d8a907fcc6`. New guide records exact diagnostic classification, satisfiable guard controls, pinned-versus-version-only tool trust, bounded output ownership, and withdrawal of the earlier abstraction-contaminated proof classification. Retain newer guide rather than overwriting it. Whole-contract proof, financial acceptance and Tier C authorization remain distinct.
+
+Disposition: these three S01 paths have a bounded semantic supersession rationale. Do not copy old assertions or allowlists. Keep S01 V-partially-reconciled: remaining workflow, package, implementation and Sepolia path semantics are not cleared by this review. #37 remains unmerged and separately owned; its body identifies Tier C scope. No old PR closure or branch deletion.
+
+### Recovery test lanes: current-main compare
+
+Eight exact PR heads compared to main, every merge base equals main and every behind count is zero. Five disjoint changed-file lanes (no cross-lane path collision, not proof of combined runtime compatibility).
+
+| Lane / PR | Exact head | Ahead | Main-relative delta |
+| --- | --- | --- | --- |
+| #257 | 75e0b0430ff0c3e33395ce86513083868d0a5c2a | 1 | apps/web/test/saved-reviews-worker.test.mjs +35/-0 |
+| #260 | f3b0d907edef0e7dd13b89d33ab65b85ba7d9744 | 1 | scripts/test-vault-browser.mjs +149/-1 |
+| #271 child of #260 | 7c70384031361d592d0ef54e33512e860cdf0598 | 2 | same path +242/-1 cumulative |
+| #267 | 8fbe66e965823a6e4622f4d38d194fd3c16c9b88 | 1 | scripts/test-saved-review-favorites-browser.mjs +8/-1 |
+| #268 child of #267 | 05664b3d1e0bb3716784564b05901b865bc69adf | 2 | same path +63/-4 cumulative |
+| #269 child of #268 | b93a431a49088872d3bcdb229a448b8ebac6dd2c | 3 | same path +138/-4 cumulative |
+| #270 | 42def54e792b25d1b5cbad6e2cc3a7b226499357 | 1 | packages/personalization/test/favorites.test.mjs +4/-0 |
+| #272 | 00838f9308bbaa31b729189393e591743ac11eaa | 2 | apps/web/test/saved-review-favorites-controller.test.mjs +53/-0 |
+
+All eight remain draft/unmerged; none of these deltas modifies runtime production source. Preserve #257→#261, #260→#271 and #267→#268→#269, do not replace individual gates with a bulk test-only merge. #270 and #272 can qualify independently. Each main movement requires fresh final-target review and CI checks. No independent worker launched in this environment.
+
+### Gate refresh and operational limits
+
+#273 remains draft at `5b074513704d4c8c75ef0b93069d004c76d82665` on unchanged #227 `7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0`. Re-read actual hosted log 139557771747: all five G05/G14 tests passed; full Node 2393 total / 2392 pass / 0 fail / 0 cancelled / 1 skip / 0 todo. Same 11 jobs and Snyk success; not a new execution or independent review. Current PR #237 submitted reviews remain empty. #227 adoption and actual-dependency RED remain outstanding. Direct Git ls-remote reattempt failed DNS resolution; previous local workspace is not mounted. Main agents.md read; uppercase AGENTS.md and docs/ai/WORKFLOW.md and docs/ai/HANDOFF.md returned 404. No new production changes, native execution, source merge, deployment, funds, release, settings change or optional activation. ReleaseEnabled=0 required. Next: complete remaining S01 source-semantic review or another unblocked feature, obtain independent reviews for draft test lanes; preserve named #237 and #227 gates and owner D2/D8/device decisions.
+
+---
+
 ## 2026-11-26 UTC — exact Git-object qualification and duplicate-stack reconciliation
 
 The earlier normalized-commit limitation is resolved for this run by authenticated raw Git data reads. Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` has tree `7acfe2f7c7f1ebf0b13169cc2b50f4d2b946ab79`, ordered parents [`01f6f4feca051d68de24a04299cd3bb444bce40c`, `02f8ade4edd1aa091042d849f0498e18830a1393`]. #251 merged and its source is the second parent. Full REST branch pages 100/100/85 and all-state PR pages 100/100/70: 285 distinct branch names, 284 distinct tips, 270 PRs (87 open/125 merged/58 closed unmerged). Prior exact-ref census plus every recorded delta reconciled against every current name/SHA: 152 previously proven ancestor tips are unchanged at the SAME main and therefore remain proven; 133 are not ancestry-proven (not necessarily 133 unique changes). No missing refs. Only two changed refs since last machine overlay: coordinator `cecbb87d011533a3cfc9820c29a489361455eb21` → `3ed45c53437efc078ce07985347e86488b7a760c`; #273 `d3829da7d885f9c6c4a5bdf784fddc5ee4ce33c3` → `5b074513704d4c8c75ef0b93069d004c76d82665`. Two branch names share the exact tip `d30152336bb687b31ae547ab3fcecb8835a02ef4`: codex/transport-qualification-20261120 and codex/main-consolidation-g12-20261120. Keep both; do not count as two unique tips. Full local Git patch-ID/range-diff not recomputed.
