@@ -1,3 +1,30 @@
+## 2026-11-26 UTC — S08 distribution, portal and command-entry reconciliation
+
+Live main `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 confirmed merged, #245 draft. Branch search exhausted cursor: 285 unique names; PR partitions 87 open, 78+47 merged, 58 closed unmerged = 270. Prior ancestry 152/133 remains historical, not a new exact-tip census. Lowercase agents.md read; uppercase AGENTS.md and docs/ai/WORKFLOW.md and HANDOFF.md returned 404. Previous worktree absent, direct Git ls-remote failed DNS again.
+
+Historical S08 `c950dad4b387cb4b33910789c454eb8f2ab0ae81` (stage parent `8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7`) versus exact main: 12 additional paths inspected, excluding previous 16. Static bounded comparison, no new executable test or whole-program equivalence.
+
+| Path | Historical blob | Main blob | Disposition |
+| --- | --- | --- | --- |
+| scripts/distribution/manifest.mjs | bb67c22526b07d8c1940848045b2e3f6e53bd73b | b0e088e48bd2e237955a07ea7f30a1e9f34f00e3 | New QR graph, pinned jsQR inputs, bounded personalization source allowlist, OfflineRoot and decoder Worker required. Keep current manifest rules. |
+| scripts/distribution/stage.mjs | b08169ccacee8f4d6a97f99c38cd7325971c157f | 1d049d96904b06cc02e4d7e68b2e3545b96bb5a3 | Existing reproducible staging retained; separate exact QR decoder graph allowlist, all three graph inventories. No unsigned current-source qualification inferred. |
+| scripts/portal/build.mjs | 6b718ed3a40201f094c9b6ccc278a0fc2564d1d5 | d7b4d913e35647da9c6ce1865e9d181e59296525 | Current cleanup verifies directory type/device/inode before removal, preserving replacement output in maintained regression. Do not restore old unconditional cleanup; no general concurrent filesystem safety claim. |
+| scripts/docs/validate.mjs | 3b61f2b0e4fb102837640e8ec07f15fb3809ce47 | 27f3451f22b0598f240631675a665d5eefd31648 | Immutable committed bytes checked strictly, current drift reported stale, copy text extracted from immutable source; 256 global/128 per-page link limits. Retain stronger current behavior. |
+| scripts/distribution/browser.test.mjs | 7be54081fd7547084015341f1b77eced04deb085 | 684657274fd8349445612d6971fbf0d0ad1f60ea | Current test explicitly refuses stale current source before historical-bound positive fixture; original nested smoke logic retained. No transfer of historical fixture qualification. |
+| scripts/test-scriptless-portal-browser.mjs | 5bcae9a3796d32b72633f50a968ab0780948a670 | same | Exact blob. |
+| .github/workflows/vault-foundation.yml | 7b83ab57fbb468ac881798ebe8610d6dc2abb397 | c539e5e80c6f534429c942894031336d6db9938f | Stage-added portal and distribution browser commands retained; immutable full history checkout retained; distribution unit test moved to docs-tooling test:tooling. No workflow changes. |
+| package.json | bd02fbae0344b758ac303daa3cb02374499da9c3 | 9bb6a80bcea23db82555085914b96eb02dbd3487 | See command reconciliation below. |
+| .gitignore | b2b815abf10aaa7952d86516ec2cdb85cac7630d | 5be9a215d8a993b3d4e6faa52ba8a1d91255850a | Missing dist-lab rule already recovered and tested in #259; do not duplicate. |
+| docs/distribution/README.md | 90ca8e4d7782ff81d7f844472bed359f109181b6 | 3565518e6a5e03c121ce1b1ce778e02866e3d6c6 | Updated offline chunk/QR graph and jsQR attribution. |
+| docs/lab/README.md | 4382e866713c1598009c771d8b108d5529ce4a21 | 861342cca6392163c1f3bd8a31bb9dec9a7d4395 | Exclusive per-run evidence directories and separate Solana scope documented. |
+| docs/portal/README.md | 6eb4384b9ec3bd670205056f01f051b5440e7ced | same | Exact blob. |
+
+Stage-local three-way package comparison: six new S08 script names, two exact values retained (test:portal:browser, check:docs), one revised invocation retained (test:distribution:browser), three absent aliases (build:portal, stage:distribution, test:distribution). Current docs/portal/README.md and docs/distribution/README.md document direct Node entry points for both builds; test:tooling contains scripts/distribution/stage.test.mjs and scripts/portal/build.test.mjs. This is evidence of supported alternative entry points, not proof that the historical npm aliases were deliberately retired or that direct commands run in this environment. Remaining seven missing script names in the full S08 snapshot predate the stage and must not be assigned to S08. Preserve existing #44 owner and #255/#265 current staging work; alias compatibility disposition remains open, no package.json edit or duplicate PR.
+
+S08 cumulative 28/41 stage-local paths inspected, 13 remain (development status, wiki and claims/docs README records). Two exact and ten revised/known-gap paths this increment. #254 and #273 draft; #237 open; independent and named-service reviews, D2 public trust, D8 financial approval, physical-device acceptance, #273 adoption via #227 remain outstanding. No new source modifications, runtime tests, independent worker, merges, deployment, real funds or optional activation. ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-26 UTC — S08 source and tooling reconciliation
 
 Live main readback `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 merged 2026-11-24, #245 draft. Current branch-name enumeration exhausted cursor: 285 unique names; PR search returned 87 open, 78+47 merged (creation partitions at 2026-11-18), 58 closed unmerged = 270. No exact-tip/patch-ID census this run; previous 152/133 ancestry accounting remains historical.
