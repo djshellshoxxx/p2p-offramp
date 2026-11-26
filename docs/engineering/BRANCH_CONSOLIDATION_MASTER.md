@@ -1,3 +1,11 @@
+## 2026-11-26 — GOV-1 reproduced against exact current helper
+
+Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` remains unchanged; #251 merged. #156 and main share evidence helper blob `ae1710650fc0e869890b7c39bebf139ed13ed4f9`. Actual Node 22.16.0 execution on byte-verified source and real local synthetic Git fixtures: RED 2 pass / 2 fail (unmerged identical-content commit and absent origin/main incorrectly accepted), GREEN 4/4 after bounded local opt-in ancestry check, accepted ancestor and stale reporting retained. Exact candidate blob `e185ae9eee7630e272fa130722815c727c7ccd73`. [Source and receipt](CONSOLIDATION_HANDOFF.md) at `186634119592915ef6e64966c1df34396e2d4225`. [Owner coordination](https://github.com/djshellshoxxx/p2p-offramp/pull/156#issuecomment-7201664492). The real current 57-row manifest references a proven main ancestor; no invalid current packet or financial/release vulnerability demonstrated. Both maintained CLI check paths still need enforcement, regression and independent qualification; prototype not pushed to source. No changes to Lane B source or draft state.
+
+#274 head `021d14ec935c21b2a9d179b8511225b2b93bd8f2` one commit ahead of prior recorded tip; only Lane B progress doc changed, GOV-1 remains assigned there. Fresh names/PR census: 286 unique branches, 271 distinct PRs (88 open/125 merged/58 closed unmerged). 152/134 ancestry split historical, not refreshed all exact tips. Direct remote Git DNS failure persists, but bounded local tests are feasible using verified source blobs. No runtime app/native/financial test, source merge, release, funds or optional activation. ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-26 — Lane B review reconciliation and S07 intent coverage
 
 Live main: `8cff44909752f5e8b99eecec44ebaa44360c7b5d`. New owner draft #274 (`bf1bc12a822f35d45600f03994001f2179a6977d`) is a separate documentation handoff. Fully paginated authenticated branch/PR census: 286 branches, 285 distinct tips; 271 PRs (88 open, 125 merged, 58 closed unmerged). Compared the reconstructed previous exact-ref map with all current tips: only coordinator advance and the new #274 branch, no missing refs. All 152 prior ancestry-proven branch tips remain unchanged on the same main; 134 not ancestry-proven. No new full-history patch-ID calculation. Inventory checkpoint `fb29a5a3529a1927357c665429688ff6ef968c6b`.
