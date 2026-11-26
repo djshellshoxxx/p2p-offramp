@@ -1,3 +1,27 @@
+## 2026-11-26 UTC — S08 test-oracle reconciliation and D9 native receipt
+
+Main readback `8cff44909752f5e8b99eecec44ebaa44360c7b5d`; #251 confirmed merged. #245 draft. Complete branch-name pagination returned 285 unique names; PR searches 87 open, 66+59 merged (creation-date partitions), 58 closed unmerged = 270. No fresh exact-tip/patch-ID census; 152/133 earlier ancestry count remains historical. Lowercase agents.md read; uppercase AGENTS.md and docs/ai/WORKFLOW.md/HANDOFF.md unavailable in main.
+
+### S08 historical test coverage
+
+Stage-local compare `8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7...c950dad4b387cb4b33910789c454eb8f2ab0ae81`: 1 ahead, 0 behind, 41 paths. Owner #44 still separate (head `f8a9aa1430129fd57fd9217402577106bebeca7a`, Tier C). Five historical test files compared against current main using exact blob identifiers and bounded top-level test-block extraction:
+
+| Path | Old blob | Main blob | Old/current top-level tests | Disposition |
+| --- | --- | --- | --- | --- |
+| scripts/lab/recipe.test.mjs | 6ed2af7c8595311f2d4134771f5dc833f69aae83 | 94da3f738d26c080570c4e69d3d1bb6641a75dd8 | 6/8 | All old titles and lines retained in matching blocks; final extraction also contains new helper definitions. New tests cover non-overwrite and failure evidence. |
+| scripts/portal/build.test.mjs | 2c536036d7bc0a60e1a6a9d772b6f3325a504d35 | 9e22944d6fc6dd7fc3ab8da1d8d12871c918e989 | 2/4 | Both old blocks identical; two new owned-output cleanup cases. |
+| scripts/distribution/stage.test.mjs | 888eee19901eccc7a3752324dc23124d1b3cf648 | dd0089b5c37414088a49a8811b64824ca93675e5 | 5/9 | Four old blocks identical. Historical two-pass test replaced by historical-bound client/current tooling fixture retaining repeat-equality, key-unpinned, no executables, tamper/symlink/FIFO/extra-file refusals; current-source test stages or refuses stale evidence. Do not restore old unqualified current-source assumption. #265/#255 still separate. |
+| scripts/docs/validate.test.mjs | 01f94cd597666d064c6e411e972a223921d8a4ca | 0fc95f1955e164e16eba905439e6b21b9bedd553 | 12/16 | Five matching blocks identical, six matching titles with revised bodies or adjacent helpers, one renamed 128→256 global link boundary with corresponding exact acceptance/overflow checks. Current drift reports stale, symlink evidence never current, immutable recorded hash tampering refuses; remote links explicitly unverified. Do not reinstate old drift semantics or 128 limit without owner decision. |
+| packages/claims/test/claims.test.mjs | a20cbc9996acaf0ff3985b5619300b0dd788987f | 3a4185873980bc818db7bb2359f26457ccbd9939 | 6/8 | All six original blocks identical; two additional stale-evidence and bounded own-data length cases. |
+
+31 historical top-level cases accounted for by title/body/replacement in these five files; 45 current cases. Extraction is not parser-level assertion equivalence, fixture identity, or a runtime pass. No missing intended test established in this subset. S08 remains V-partial; remaining 36 stage-local paths and owner disposition not cleared. Existing #259 ignore correction not duplicated.
+
+### #254 completed native evidence
+
+Exact head `d364642d09d04da864fe56db78245a4133db2c18`, draft; five returned PR workflows completed success. Actual [program job 138149251551](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/45305809212/job/138149251551) checked out `9553eccca2d3b0ba0db3d4d9f4d58837a15afb38` (commit message identifies head and current main). Parsed validator receipt ok=true, 62/62 checks, 1906 seconds; browser receipt ok=true, 6 check entries, 2045 seconds, 8 prompts, 7 app sends, realClock=true, fixtureErrors=[], ReleaseEnabled=0, publicNetworkQualification=false, freshNegotiationQualification=false. This closes the earlier *running* observation, not the independent review or exact ordered-parent/tree gate. Existing coordinator COMMENT is not a new independent review. #237 named review, #273 adoption via #227, D2 trust, D8 financial approval, physical-device evidence remain outstanding. No new runtime execution or production/test changes, merges, release, deployments, funds, or default optional activation. Next S08 remaining source/fixture paths and actual independent reviews of existing candidates; no duplicate implementation.
+
+---
+
 ## 2026-11-26 UTC — pending-consent recovery review and validation-branch reconciliation
 
 Live main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` unchanged; #251 merged; #245 remains draft. Exhausted branch-name pagination: 285 unique names; PR search partitions 87 open, 66+59 merged, 58 closed unmerged = 270. Previous exact-tip 152/133 ancestry count remains historical; no new full-history computation.
