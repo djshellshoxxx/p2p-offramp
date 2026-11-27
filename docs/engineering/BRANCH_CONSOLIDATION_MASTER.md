@@ -1,3 +1,37 @@
+## 2026-11-27 — historical recovery and acceptance regression disposition
+
+Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`, coordinator parent `d82a979f5bdd6bf71aadc96787a784cca7179301`. Fresh branch-name pagination returned 293 distinct names; disjoint PR searches returned 92 open, 58 closed unmerged and 128 merged (34 before Nov 15, 94 on/after), total 278. Exact-tip census for all refs and full-history patch-ID were not refreshed. Eleven named tips resolved individually; comparisons against pinned main returned ahead=0, zero changed files and merge base equal to the exact tip in each case.
+
+| Branch | Exact tip and merge base | Behind main |
+| --- | --- | ---: |
+| `chatgpt/zero-codex/acceptance-cli-input-bounds-20261110` | `2ba1a4e18f4673f006b195e822b5f984effb48e8` | 639 |
+| `chatgpt/zero-codex/acceptance-review-boolean-20261110` | `08a9cf1e9abc0fb703b14964062a3da2234fdbb6` | 639 |
+| `chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111` | `9786b221552fbbc12ea5d4fe644d1a3b45cd36a0` | 639 |
+| `chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111` | `619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b` | 637 |
+| `chatgpt/zero-codex/g18-receipt-own-data-20261111` | `c16e7617f0c5d165902ec15c67591a230d947fd2` | 639 |
+| `chatgpt/zero-codex/g05-transport-path-binding-20261111` | `053056975ed0e6e7ff02345f0291ae7f71cb3eb9` | 639 |
+| `autonomous/continuation-20261031` | `320fc4bcc90069cf1d8c869af78caf63efe5b9ea` | 664 |
+| `autonomous/guidance-20261101` | `c8494b05e36cda43ac3f73e0feab831cfa00647d` | 660 |
+| `autonomous/journey-20261101` | `3947074c95fa1e0facd65a8947a2c7e70363c708` | 654 |
+| `chatgpt/zero-codex/qr-display-chunk-regression-20261118` | `5984dc823c25399a001b5f059c79db89f51a1324` | 259 |
+| `chatgpt/zero-codex/review-read-bounds-20261119-119` | `6537693eb526969c46d94cfa7f24a5fe02e82116` | 170 |
+
+Three further divergent branches each have one commit ahead, 640 behind, merge base `cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e` and exactly one changed test path. Their entire changed file at the historical tip has the same reported Git blob identity as pinned main:
+
+| Branch / tip | Path | Exact blob on both refs |
+| --- | --- | --- |
+| `chatgpt/zero-codex/g25-public-endpoint-regression-20261110` / `e0a9033158d1ae874c78de7f25d0be0aa3a13157` | scripts/tests/deployment-record.test.mjs | `e0f7962d3a48b48ff697de2d5c7aaae89a73a013` |
+| `chatgpt/zero-codex/http-buffer-lifecycle-20261110` / `5f2381ab42c27984dbb1cc872468dd3e09771690` | packages/transport/test/http-driver.test.mjs | `85984e592582ab4700cfc9b4fdc6d8f995e22bcb` |
+| `chatgpt/zero-codex/registry-concurrency-20261110` / `a213166ea83a0c5ec0768f693ff583413e8e976b` | packages/domain/test/registry.test.mjs | `2e5ed07bdb76725b64883e48bd7c9580e32a8579` |
+
+Inspected original commit patches and maintained current test titles: public endpoint canonical URL/refusal and diagnostic-redaction cases, detached HTTP copy cleanup on success/refusal and oversize refusal, and both distinct/identical concurrent registry pinning cases are retained. No separate merge or duplicate test implementation for these fourteen refs is justified by this evidence. This is ancestry or changed-file equivalence, not fresh runtime qualification. Preserve original refs and any historical failed results.
+
+Screened `autonomous/completion-20261102` at `94554ecf9854e4604f9f56afe5bebedeee931994` (68 ahead/653 behind; merge base `e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa`); compare returned 300 paths, so do not infer completeness. It needs stage-local content comparison against accepted current features, not a wholesale merge. No disposition yet.
+
+#251 confirmed merged; #237/#280/#281 submitted review lists empty. Prior #228 acceptance gap remains owner-coordinated, not implemented here. Lowercase agents.md and Lane B progress read; requested uppercase AGENTS.md and docs/ai/WORKFLOW.md, HANDOFF.md returned 404 at pinned main. Direct git ls-remote DNS failed (exit 128), historical checkout absent, Node v22.16.0 below main's >=24 requirement. No new runtime tests, source edits, independent executing worker, main merge, release, deployment, funds or optional activation. ReleaseEnabled=0 required. Full remaining branch-equivalence count unknown.
+
+---
+
 ## 2026-11-27 — S10 revised package paths: remaining documentary and diagnostic reconciliation
 
 Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`, coordinator parent `d05d7dfa022d46e9970c2be0a63838cce2a91c8f`. Fresh paginated REST census returned 293 branches and 278 PRs (92 open/128 merged/58 closed unmerged); the only branch-tip change relative to BRANCH_REF_SNAPSHOT_20261127_b4e03314.json is the coordinator. All nine #224–232 candidate heads remain those in the preceding S10 table. This is not a new full-history patch-ID census.
