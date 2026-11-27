@@ -1,3 +1,11 @@
+## 2026-11-27 — successor historical row identities reconciled
+
+Live main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; direct coordinator branch readback `0af78525f7eac52312a7bcb41432a13fd6ec5842` (PR metadata lagged at prior head). [Master ledger](BRANCH_CONSOLIDATION_MASTER.md) now records the four historical repair-ID aliases with identical repair commit SHAs, two relay repairs already present under identical IDs, and archival references for historical 207/208/206 source-specific results. No six new defects or duplicate repair work. Fresh compare verifies exact current heads of #207/#208/#206/#209/#251 each 0 ahead and their own SHA as merge base, respectively 131/130/127/130/25 behind main. #208/#206/#209 closed unmerged but ancestry included. Historical successor's five missing-main added reports remain on #245, with exact historical mutable state retained by immutable ref 3b538fd4586b6fc00846262d67956a2125b6c9f1. No wholesale replacement of later state or worker-count aggregation; full patch equivalence and row-by-row archival completeness remain unproven.
+
+Fresh branch-name pagination 291 distinct; PR searches 90 open, 128 merged, 58 closed unmerged (276 total), exact-tip census not repeated. #237/#278/#279 submitted review lists empty, #265/#275 coordinator COMMENT only. Preserve all independent/named reviews, Tier C owner and current-target requirements, D2 public trust material, D5 design and actual device acceptance. Direct Git DNS still fails exit 128, historical workspace absent. No new runtime tests, independent executing workers, product code changes or main merges. No deployment, release, funds or optional activation; ReleaseEnabled=0 required. Next: prioritize disjoint actionable engineering or remaining historical repair/test coverage, avoid repeating this alias reconciliation, and recheck live refs and ownership before any edits.
+
+---
+
 ## 2026-11-27 — historical evidence and workflow disposition, current review holds
 
 Main readback `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; #251 closed/merged at `8cff44909752f5e8b99eecec44ebaa44360c7b5d`, proven ancestral (0 ahead/24 behind). #245 remains draft. Complete branch-name search pagination returned 291 distinct names; exact per-tip and all-state PR census was not repeated, so prior 155/136 ancestry split and 90/128/58 PR counts remain historical.
