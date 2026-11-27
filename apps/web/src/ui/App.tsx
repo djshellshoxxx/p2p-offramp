@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
-import type { AppServices } from '../app-services.ts';
+import type { AppServices, RuntimeErrorCode } from '../app-services.ts';
 import { messages as m } from './messages.ts';
 import { localeStore } from './locale/runtime.ts';
 import { errorMessage, isProfileId, parseRoute } from './routes.ts';
@@ -15,7 +15,8 @@ const locked = Object.freeze({ state: 'locked' as const });
 const noSubscription = () => () => {};
 const lockedSnapshot = () => locked;
 const noScope = () => 0;
-const links = [{ page: 'home', text: m.home }, { page: 'offers', text: m.offers }, { page: 'recovery', text: m.recovery }, { page: 'settings', text: m.settings }] as const;
+const links = ['home', 'offers', 'recovery', 'settings'] as const;
+type Command = 'lock' | 'status';
 
 export interface AppProps {
   readonly services: AppServices | null; readonly starting?: boolean; readonly startupError?: string | undefined;
@@ -42,8 +43,8 @@ export function App({ services, starting = false, startupError, trade = null, di
   const locale = useSyncExternalStore(localeStore.subscribe, localeStore.getSnapshot, localeStore.getSnapshot);
   useLayoutEffect(() => { document.documentElement.lang = locale.locale; document.documentElement.dir = locale.direction; }, [locale.locale, locale.direction]);
   const [online, setOnline] = useState(() => navigator.onLine);
-  const [notice, setNotice] = useState('');
-  const [pending, setPending] = useState('');
+  const [notice, setNotice] = useState<RuntimeErrorCode | null>(null);
+  const [pending, setPending] = useState<Command | null>(null);
   // A confirmed restore may offer an explicit handoff; never persist selection or put it in a route.
   const [restoredProfileId, setRestoredProfileId] = useState('');
   const current = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.getSnapshot ?? lockedSnapshot, lockedSnapshot);
@@ -63,7 +64,7 @@ export function App({ services, starting = false, startupError, trade = null, di
     mounted.current = true;
     const navigate = () => {
       const next = parseRoute(window.location.hash);
-      setRoute(next); setNotice('');
+      setRoute(next); setNotice(null);
       if (next.page !== 'home') setRestoredProfileId('');
     };
     const connectivity = () => setOnline(navigator.onLine);
@@ -81,18 +82,18 @@ export function App({ services, starting = false, startupError, trade = null, di
     else title.current?.focus();
   }, [route]);
 
-  async function command(kind: 'lock' | 'status') {
+  async function command(kind: Command) {
     if (!services || (kind === 'status' && pending) || (kind === 'lock' && locking.current)) return;
     const sequence = ++commandSequence.current;
     if (kind === 'lock') locking.current = true;
-    setPending(kind === 'lock' ? m.locking : m.refreshing); setNotice('');
+    setPending(kind); setNotice(null);
     try {
       const result = await services[kind]();
-      if (mounted.current && sequence === commandSequence.current && !result.ok) setNotice(errorMessage(result.error.code));
-    } catch { if (mounted.current && sequence === commandSequence.current) setNotice(errorMessage('PROTOCOL_ERROR')); }
+      if (mounted.current && sequence === commandSequence.current && !result.ok) setNotice(result.error.code);
+    } catch { if (mounted.current && sequence === commandSequence.current) setNotice('PROTOCOL_ERROR'); }
     finally {
       if (kind === 'lock') locking.current = false;
-      if (mounted.current && sequence === commandSequence.current) setPending('');
+      if (mounted.current && sequence === commandSequence.current) setPending(null);
     }
   }
 
@@ -100,7 +101,7 @@ export function App({ services, starting = false, startupError, trade = null, di
     <a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); main.current?.focus(); }}>{m.skip}</a>
     <aside className="sidebar">
       <a className="brand" href="#/home"><span className="brand-symbol" aria-hidden="true">↔</span><span>{m.appName}<small>{m.development}</small></span></a>
-      <nav aria-label={m.navLabel}>{links.map(link => <a key={link.page} href={`#/${link.page}`} aria-current={route.page === link.page ? 'page' : undefined}>{link.text}</a>)}</nav>
+      <nav aria-label={m.navLabel}>{links.map(page => <a key={page} href={`#/${page}`} aria-current={route.page === page ? 'page' : undefined}>{m[page]}</a>)}</nav>
       <div className="sidebar-note"><span className="status-dot" aria-hidden="true" />{m.fundsDisabled}</div>
     </aside>
     <div className="workspace">
@@ -110,15 +111,15 @@ export function App({ services, starting = false, startupError, trade = null, di
           {testnetLocalProof ? <strong className="demo-badge">{m.testnetLocalProof}</strong> : null}{testnet ? <strong className="demo-badge">{m.testnet}</strong> : null}</div>
         <div className="vault-controls"><span role="status">{current.state === 'unlocked' ? m.unlocked : m.locked}</span>
           {services ? <button type="button" onClick={() => void command('status')} disabled={!!pending}>{m.refresh}</button> : null}
-          {services && current.state === 'unlocked' ? <button type="button" onClick={() => void command('lock')} disabled={pending === m.locking}>{m.lock}</button> : null}
+          {services && current.state === 'unlocked' ? <button type="button" onClick={() => void command('lock')} disabled={pending === 'lock'}>{m.lock}</button> : null}
         </div>
       </header>
       <main id="main-content" ref={main} tabIndex={-1}>
         <p className="eyebrow">{m.development}</p><h1 ref={title} tabIndex={-1}>{pageTitle[route.page]}</h1>
         <p className="network-note">{m.networkHelp}</p>
         {starting ? <p className="notice" role="status">{m.starting}</p> : !services ? <p className="notice error" role="alert">{startupError ? errorMessage(startupError) : m.unavailable}</p> : null}
-        {pending ? <p role="status">{pending}</p> : null}
-        {notice ? <p className="notice error" role="alert">{notice}</p> : null}
+        {pending ? <p role="status">{pending === 'lock' ? m.locking : m.refreshing}</p> : null}
+        {notice ? <p className="notice error" role="alert">{errorMessage(notice)}</p> : null}
         {route.page === 'home' ? <Home services={services} unlocked={current.state === 'unlocked'} restoredProfileId={restoredProfileId} onSelectionConsumed={() => setRestoredProfileId('')} /> :
           route.page === 'recovery' ? <><Recovery services={services} onOpenRestored={id => {
             if (!isProfileId(id)) return;

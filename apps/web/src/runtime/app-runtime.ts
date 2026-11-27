@@ -16,6 +16,14 @@ export interface AppRuntimeOptions {
   readonly lifecycle?: boolean;
   readonly now?: () => number;
 }
+/** Opaque local ownership, including one exact acknowledged lock. It supplies no
+ * trust, wallet, navigation or imported-backup authority. */
+export interface RuntimeBackupSelection {
+  current(): boolean;
+  requireVerifiedBackup(signal: AbortSignal): Promise<void>;
+  lock(signal: AbortSignal): Promise<void>;
+  dispose(): void;
+}
 interface Pending {
   readonly metadata: PendingMetadata;
   readonly resolve: (result: RuntimeResult<RuntimeValue>) => void;
@@ -33,6 +41,9 @@ export class AppRuntime {
   #pending = new Map<number, Pending>();
   #generation = 0;
   #sequence = 0;
+  // Unlike the UI selection scope, this changes on every admitted opening and
+  // every invalidation, including repeated locks with no visible state change.
+  #selectionEpoch: object = {};
   #current: RuntimeStatus = locked();
   #closed = false;
   #disposing = false;
@@ -120,7 +131,8 @@ export class AppRuntime {
     const pending = this.#pending.get(id); if (!pending) return;
     this.#pending.delete(id); clearTimeout(pending.timer); pending.removeAbort(); pending.resolve(result);
   }
-  #invalidate(code: RuntimeErrorCode): boolean {
+  #invalidate(code: RuntimeErrorCode, selectionEpoch: object = {}): boolean {
+    this.#selectionEpoch = selectionEpoch;
     this.#resetStatus();
     for (const id of [...this.#pending.keys()]) this.#settle(id, runtimeFailure(code));
     if (this.#generation >= MAX_RUNTIME_SEQUENCE) { this.#close('LIMIT_EXCEEDED'); return false; }
@@ -212,7 +224,7 @@ export class AppRuntime {
     try { command = parseRuntimeCommand({ version: 1, requestId: this.#sequence + 1, generation: this.#generation, operation, ...fields }); }
     catch { return Promise.resolve(runtimeFailure('INVALID_INPUT')); }
     this.#sequence++;
-    if (operation === 'unlock' || operation === 'create') this.#resetStatus();
+    if (operation === 'unlock' || operation === 'create') { this.#selectionEpoch = {}; this.#resetStatus(); }
     return new Promise(resolve => {
       const abort = (): void => { if (!this.#closed && !this.#disposing && this.#invalidate('CANCELLED')) void this.#request('lock', {}, undefined, true); };
       const timer = setTimeout(() => this.#close('TIMEOUT'), operation === 'dispose' ? RUNTIME_DISPOSE_TIMEOUT_MS : RUNTIME_REQUEST_TIMEOUT_MS);
@@ -227,6 +239,63 @@ export class AppRuntime {
   }
   get current(): RuntimeStatus { this.#checkIdle(); return this.#current; }
   isCurrent(handle: RuntimeHandle): boolean { this.#checkIdle(); return !this.#closed && !this.#disposing && this.#current.state === 'unlocked' && this.#current.handle === handle; }
+  /** Capture locally owned selection identity; no Worker handle or lifecycle
+   * counter leaves the runtime. A later opening is retirement even if it fails. */
+  captureBackupSelection(): RuntimeBackupSelection | null {
+    this.#checkIdle();
+    const selected = this.#current;
+    if (this.#closed || this.#disposing || selected.state !== 'unlocked') return null;
+    const runtime = this;
+    let epoch = this.#selectionEpoch, generation = this.#generation;
+    let phase: 'selected' | 'locking' | 'locked' | 'retired' = 'selected';
+    const retire = () => { phase = 'retired'; };
+    const owns = () => !this.#closed && !this.#disposing && epoch === this.#selectionEpoch && generation === this.#generation;
+    const current = (): boolean => {
+      this.#checkIdle();
+      if (!owns()) { retire(); return false; }
+      if (phase === 'selected') {
+        if (this.#current.state === 'unlocked' && this.#current.handle === selected.handle) return true;
+        retire(); return false;
+      }
+      return phase === 'locked' && this.#current.state === 'locked';
+    };
+    const refuse = (code: RuntimeErrorCode): never => { throw new RuntimeBoundaryError(code); };
+    return Object.freeze({
+      current,
+      async requireVerifiedBackup(signal: AbortSignal): Promise<void> {
+        if (signal.aborted) { retire(); return refuse('CANCELLED'); }
+        if (phase !== 'selected' || !current()) return refuse('LOCKED');
+        if (signal.aborted) { retire(); return refuse('CANCELLED'); }
+        signal.addEventListener('abort', retire, { once: true });
+        try {
+          const result = await runtime.checkBackupVerification(signal);
+          if (signal.aborted) return refuse('CANCELLED');
+          if (!result.ok) return refuse(result.error.code);
+          if (phase !== 'selected' || !current()) return refuse('LOCKED');
+          if (result.value.verification === null) return refuse('CONFLICT');
+        } finally { signal.removeEventListener('abort', retire); }
+      },
+      async lock(signal: AbortSignal): Promise<void> {
+        if (signal.aborted) { retire(); return refuse('CANCELLED'); }
+        if (phase !== 'selected' || !current()) return refuse('LOCKED');
+        if (signal.aborted) { retire(); return refuse('CANCELLED'); }
+        // Capture the owned transition before dispatch, never infer it from the
+        // public locked snapshot after an await or a reentrant Worker callback.
+        epoch = {}; generation = runtime.#generation + 1; phase = 'locking';
+        signal.addEventListener('abort', retire, { once: true });
+        try {
+          const result = await runtime.#lock(epoch);
+          if (signal.aborted) return refuse('CANCELLED');
+          if (!result.ok) return refuse(result.error.code);
+          if (phase !== 'locking' || !owns() || runtime.#current.state !== 'locked') return refuse('LOCKED');
+          phase = 'locked';
+          if (!current()) return refuse('LOCKED');
+        } catch (error) { retire(); throw error; }
+        finally { signal.removeEventListener('abort', retire); }
+      },
+      dispose: retire,
+    });
+  }
   async unlock(profileId: string, passphrase: string, signal?: AbortSignal): Promise<RuntimeResult<RuntimeHandle>> {
     const generation = this.#generation;
     const result = await this.#request('unlock', { profileId, passphrase }, signal);
@@ -333,10 +402,11 @@ export class AppRuntime {
     return this.#profileCommand('listRecoveryReferences', { offset, expectedRevision }, (value): value is RuntimeRecoveryReferences => 'authority' in value && value.offset === offset &&
       (expectedRevision === null || value.revision === expectedRevision), signal);
   }
-  lock(): Promise<RuntimeResult<RuntimeStatus>> {
-    if (this.#closed || this.#disposing || !this.#invalidate('LOCKED')) return Promise.resolve(runtimeFailure('LOCKED'));
+  #lock(selectionEpoch: object = {}): Promise<RuntimeResult<RuntimeStatus>> {
+    if (this.#closed || this.#disposing || !this.#invalidate('LOCKED', selectionEpoch)) return Promise.resolve(runtimeFailure('LOCKED'));
     return this.#request('lock', {}, undefined, true) as Promise<RuntimeResult<RuntimeStatus>>;
   }
+  lock(): Promise<RuntimeResult<RuntimeStatus>> { return this.#lock(); }
   dispose(): Promise<void> {
     if (this.#disposal) return this.#disposal;
     if (this.#closed) return Promise.resolve();

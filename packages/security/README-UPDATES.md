@@ -63,11 +63,44 @@ gesture, fresh backup, exclusive physical wallet, transport and navigation
 authority remain the constructor composition's responsibilities.
 
 Ordinary synthetic-controller UI checks and the default static build qualify
-only this interface. The generation 10 report's missing exact-own-lock runtime
-capability remains unresolved; its historical adapter was not revived. No
-configured signed-update operation or native origin transition is qualified.
-See `docs/engineering/SIGNED_UPDATE_UI_GENERATION13_20261120.md` for exact source,
-commands and limits. F24 remains partial and trading remains disabled.
+only this interface. Generation 22 supplies the runtime-owned lease below,
+completing the specific prerequisite recorded in the
+[generation 10 report](../../docs/engineering/SECURITY_REVIEW_UPDATER_COMPOSITION_GENERATION10_20261120.md).
+Its historical browser adapter was not revived. Configured application updates
+and native origin transitions still require their own composition and qualification.
+See the [generation 13 UI report](../../docs/engineering/SIGNED_UPDATE_UI_GENERATION13_20261120.md)
+for that interface's source, commands and limits. F24 remains partial and trading
+remains disabled.
+
+## Runtime-owned backup selection
+
+[`AppServices.captureBackupSelection()`](../../apps/web/src/app-services.ts)
+returns an opaque, frozen lease for the currently unlocked selection, or `null`
+when no selection can be captured. Its four methods expose neither the Worker
+handle nor the private lifecycle identity owned by
+[`AppRuntime`](../../apps/web/src/runtime/app-runtime.ts).
+
+| Method | Contract |
+| --- | --- |
+| `current()` | Reports ownership of the captured selection or its own successfully acknowledged locked state. It is false while that acknowledgment is pending and supplies no backup-freshness proof. |
+| `requireVerifiedBackup(signal)` | Freshly checks the existing Worker-owned verification and persisted revision on every call, while the captured profile remains selected. It accepts no receipt or readiness flag. |
+| `lock(signal)` | Performs one owned lock and awaits its exact matching acknowledgment. Cancellation retires the lease while an already dispatched lock drains; it does not undo that command or manufacture success. |
+| `dispose()` | Idempotently retires the lease without sending a vault command. |
+
+An admitted `unlock` or `create` retires earlier ownership before its reply,
+including a same-profile reopen or an eventual refusal. Another lock or another
+lease's lock cannot become this lease's transition. Runtime invalidation,
+timeout, closure and disposal also retire ownership; late replies cannot revive
+it. The existing `selectionScope()` UI counter is unchanged and is not used to
+attest lock ownership. Export, restore and successful locking do not establish
+backup verification.
+
+The facade's `AppBackupSelection` structurally matches the internal
+[`UpdateBackupSelection`](src/release-update.ts) contract. Trusted composition
+can supply `backup: { capture: services.captureBackupSelection }` directly;
+no additional production adapter is needed. This binding provides only the
+backup-selection port. It does not construct an updater or supply compiled trust,
+origins, transport grants, physical-wallet ownership or navigation authority.
 
 ## Internal controller
 
@@ -150,11 +183,11 @@ Target must be the verified CID's subdomain under the exact compiled HTTPS
 gateway/root, without credentials/query/hash; no path gateway or fallback.
 
 Acceptance needs a real gesture, exact candidate, compatible schema, exclusive
-physical wallet lease and actual current T34 backup. The backup adapter captures
-the real profile/generation and calls `AppServices.checkBackupVerification`
-afresh, with no receipt parameter. Its current() stays valid after its own lock()
-only for that exact expected locked generation. Another lock/switch/unlock must
-invalidate it. This is one owned final transition, not an ignore-selection flag.
+physical wallet lease and actual current T34 backup. The backup port captures the
+runtime-owned selection described above. The controller calls its fresh
+verification before and after the durable floor write, then requires ownership
+after its exact lock acknowledgment. Neither a supplied receipt nor the UI scope
+counter substitutes for those checks.
 The separate owner tracks document/trust/config lifetime; cancellation stays fatal.
 
 Wallet owner returns no lease while any actual provider promise physically waits,
@@ -174,6 +207,7 @@ Reconciliation never automatically submits a transaction.
 ```sh
 node --import ./scripts/test-support/register-tsx.mjs --test packages/security/test/release-update*.test.mjs packages/security/test/release-manifest.test.mjs packages/security/test/release-locator.test.mjs packages/security/test/release-registry.test.mjs
 node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/signed-update-ui.test.mjs
+node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/runtime-backup-selection.test.mjs
 npm run typecheck
 npm run check:boundaries
 npm run build
@@ -184,6 +218,16 @@ synthetic signed fixtures. IndexedDB lifecycle tests model native event ordering
 they do not claim a real browser or native database execution. They cover retry,
 late blocked success, disposal, fixed errors, unchanged rollback state, CAS
 idempotence/conflicts, monotonic sequence and strict transaction durability.
+
+Generation 22's runtime lease was independently reviewed at
+`44b0caef274e52632b509a23c7f1b7c9410c0568`. Its
+[dedicated Node cases](../../apps/web/test/runtime-backup-selection.test.mjs)
+exercise ownership and cancellation, including the maintained Worker endpoint,
+encrypted vault and backup services through an in-process port and local store
+fixture. These checks qualify the runtime prerequisite; they do not establish
+native Worker/IndexedDB execution, physical-wallet or device acceptance, or a
+configured application origin transition. The default App still supplies no
+configured updater or production trust/origin inputs; `ReleaseEnabled=0` remains.
 
 The historical browser harness at `a45e932a37153590bc329c1e9012cf18e37fe12c`
 (`scripts/test-release-update-browser.mjs` and its fixture) uses synthetic HTTPS

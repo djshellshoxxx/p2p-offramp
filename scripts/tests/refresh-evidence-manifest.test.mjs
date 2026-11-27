@@ -42,8 +42,9 @@ test('a no-op run on a temp copy of the real manifest and its files is byte-iden
       await mkdir(dirname(join(root, path)), { recursive: true });
       try { await copyFile(join(repo, path), join(root, path)); } catch { /* a non-owned file may be gone; its row binds sourceCommit */ }
     }
-    // A first run settles any row made stale by uncommitted work; it may change hash strings only.
-    const first = await refreshEvidenceManifest({ root, readCommitted: (commit, path) => gitReadCommitted(repo, commit, path) });
+    // The copy has no git history, so its ancestry check is explicitly skipped; check:governance covers the real
+    // sourceCommit. A first run settles any row made stale by uncommitted work; it may change hash strings only.
+    const first = await refreshEvidenceManifest({ root, allowLocal: true, readCommitted: (commit, path) => gitReadCommitted(repo, commit, path) });
     let expected = real;
     // Anchor each expected replacement on its path: several rows can share a hash (for example of "[]").
     const escape = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -54,7 +55,7 @@ test('a no-op run on a temp copy of the real manifest and its files is byte-iden
     }
     assert.equal(await manifestText(root), expected);
     const settled = await manifestText(root);
-    const second = await refreshEvidenceManifest({ root, readCommitted: (commit, path) => gitReadCommitted(repo, commit, path) });
+    const second = await refreshEvidenceManifest({ root, allowLocal: true, readCommitted: (commit, path) => gitReadCommitted(repo, commit, path) });
     assert.deepEqual(second.changed, []);
     assert.equal(second.written, false);
     assert.equal(second.text, settled);
@@ -66,16 +67,18 @@ test('a changed file updates only its row; --check reports it without writing', 
   const { root, text, cleanup } = await fixture();
   try {
     await writeFile(join(root, names[3]), 'changed bytes\n');
-    const checked = await refreshEvidenceManifest({ root, check: true });
+    // No git repository: the main-ancestry check refuses unless a fixture opts out explicitly.
+    await assert.rejects(refreshEvidenceManifest({ root, check: true }), { code: 'MAIN_ANCESTRY_UNAVAILABLE' });
+    const checked = await refreshEvidenceManifest({ root, check: true, allowLocal: true });
     const row = { path: names[3], old: sha(`bytes of ${names[3]}\n`), new: sha('changed bytes\n') };
     assert.deepEqual(checked.changed, [row]);
     assert.equal(checked.written, false);
     assert.equal(await manifestText(root), text, 'check mode never writes');
-    const result = await refreshEvidenceManifest({ root });
+    const result = await refreshEvidenceManifest({ root, allowLocal: true });
     assert.equal(result.written, true);
     const after = await manifestText(root);
     assert.equal(after, text.replace(row.old, row.new), 'only that hash changed');
-    assert.deepEqual((await refreshEvidenceManifest({ root, check: true })).changed, []);
+    assert.deepEqual((await refreshEvidenceManifest({ root, check: true, allowLocal: true })).changed, []);
   } finally { await cleanup(); }
 });
 
@@ -83,9 +86,9 @@ test('adding or removing a path is refused and leaves the manifest unchanged', a
   const { root, text, cleanup } = await fixture();
   try {
     await mkdir(join(root, 'evidence'), { recursive: true }).then(() => writeFile(join(root, 'evidence/new.txt'), 'new\n'));
-    await assert.rejects(refreshEvidenceManifest({ root, paths: ['evidence/new.txt'] }), { code: 'NOT_IN_MANIFEST' });
+    await assert.rejects(refreshEvidenceManifest({ root, paths: ['evidence/new.txt'], allowLocal: true }), { code: 'NOT_IN_MANIFEST' });
     await unlink(join(root, names[2]));
-    await assert.rejects(refreshEvidenceManifest({ root }), { code: 'MISSING_FILE' });
+    await assert.rejects(refreshEvidenceManifest({ root, allowLocal: true }), { code: 'MISSING_FILE' });
     assert.equal(await manifestText(root), text);
   } finally { await cleanup(); }
 });
@@ -96,12 +99,12 @@ test('a path or symlink escaping the repository is refused', async () => {
   try {
     const escaping = text.replace(`"${names[1]}"`, '"evidence/../../outside.txt"');
     await writeFile(join(root, MANIFEST_PATH), escaping);
-    await assert.rejects(refreshEvidenceManifest({ root }), { code: 'INVALID_PATH' });
+    await assert.rejects(refreshEvidenceManifest({ root, allowLocal: true }), { code: 'INVALID_PATH' });
     await writeFile(join(root, MANIFEST_PATH), text);
     await writeFile(join(outside, 'secret.txt'), 'outside\n');
     await unlink(join(root, names[5]));
     await symlink(join(outside, 'secret.txt'), join(root, names[5]));
-    await assert.rejects(refreshEvidenceManifest({ root }), { code: 'ESCAPES_REPOSITORY' });
+    await assert.rejects(refreshEvidenceManifest({ root, allowLocal: true }), { code: 'ESCAPES_REPOSITORY' });
     assert.equal(await manifestText(root), text);
   } finally {
     await cleanup();
@@ -109,16 +112,21 @@ test('a path or symlink escaping the repository is refused', async () => {
   }
 });
 
-const git = (cwd, ...args) => execFileSync(resolveTool('git'), ['-c', 'user.name=fixture', '-c', 'user.email=fixture@example.invalid', '-c', 'commit.gpgsign=false', ...args], { cwd, encoding: 'utf8' }).trim();
+// The developer's own git configuration (signing, hooks, templates) must not change what the fixtures build.
+const git = (cwd, ...args) => execFileSync(resolveTool('git'), ['-c', 'user.name=fixture', '-c', 'user.email=fixture@example.invalid', '-c', 'commit.gpgsign=false', ...args], { cwd, encoding: 'utf8', env: { ...process.env, GIT_CONFIG_GLOBAL: '/dev/null', GIT_CONFIG_NOSYSTEM: '1' } }).trim();
 const BOUND = ['src/a.ts', 'src/b.ts', 'src/c.ts', 'src/d.ts', 'src/e.ts', 'src/f.ts'];
 
-/** Own temporary git repository: non-owned sources committed first, then an owned manifest binds that commit. */
+/**
+ * Own temporary git repository: non-owned sources committed first, then an owned manifest binds that commit.
+ * refs/remotes/origin/main points at the sources commit, as if it were merged.
+ */
 async function gitFixture() {
   const root = await realpath(await mkdtemp(join(tmpdir(), 'p2p-evidence-git-')));
   git(root, 'init', '-q');
   for (const name of [...BOUND]) { await mkdir(dirname(join(root, name)), { recursive: true }); await writeFile(join(root, name), `source ${name}\n`); }
   git(root, 'add', '-A'); git(root, 'commit', '-q', '-m', 'sources');
   const commit = git(root, 'rev-parse', 'HEAD');
+  git(root, 'update-ref', 'refs/remotes/origin/main', commit);
   const owned = 'docs/execution/fixture/owned.txt';
   await mkdir(dirname(join(root, owned)), { recursive: true }); await writeFile(join(root, owned), 'owned\n');
   const files = [...BOUND, owned].map(path => ({ path, sha256: sha(path === owned ? 'owned\n' : `source ${path}\n`) }));
@@ -137,6 +145,7 @@ test('a later edit to a bound non-owned file is stale, not a failure; a wrong re
   try {
     const clean = await checkEvidenceBinding({ root });
     assert.deepEqual(clean.stale, []); assert.equal(clean.sourceCommit, commit); assert.equal(clean.owned, 1); assert.equal(clean.bound, 6);
+    assert.equal(clean.mainAncestry, 'checked');
     // Another owner edits a bound file in a later commit: still passes, listed stale, never current.
     await writeFile(join(root, BOUND[2]), 'edited later\n'); git(root, 'add', '-A'); git(root, 'commit', '-q', '-m', 'later edit');
     const drifted = await checkEvidenceBinding({ root });
@@ -168,7 +177,12 @@ test('moving to a new commit rewrites bound rows to its bytes; a commit not on o
     await assert.rejects(refreshEvidenceManifest({ root, commit: '--output=x', allowLocal: true }), { code: 'INVALID_COMMIT' });
     const result = await refreshEvidenceManifest({ root, commit: next, allowLocal: true });
     assert.deepEqual(result.changed.map(change => change.path), ['sourceCommit', BOUND[1]]);
+    // A manifest moved to an unmerged commit is refused by the checker and by --check until that commit is merged.
+    await assert.rejects(checkEvidenceBinding({ root }), { code: 'COMMIT_NOT_ON_MAIN' });
+    await assert.rejects(refreshEvidenceManifest({ root, check: true }), { code: 'COMMIT_NOT_ON_MAIN' });
+    git(root, 'update-ref', 'refs/remotes/origin/main', next);
     const checked = await checkEvidenceBinding({ root });
     assert.equal(checked.sourceCommit, next); assert.notEqual(next, commit); assert.deepEqual(checked.stale, []);
+    assert.deepEqual((await refreshEvidenceManifest({ root, check: true })).changed, []);
   } finally { await cleanup(); }
 });

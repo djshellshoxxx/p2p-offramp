@@ -1,0 +1,279 @@
+{
+  "version": 1,
+  "generation": 24,
+  "kind": "independent-frozen-source-review",
+  "createdAt": "2026-11-20T17:43:19.112672+00:00",
+  "source": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+  "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+  "parent": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+  "reviewBranch": "codex/native-update-runtime-review-g24-20261120",
+  "worktree": "/workspace/scratch/dcf03ef9bee8/p2p-native-update-runtime-review-g24",
+  "diffCommand": "git diff 477777dc152cd3148ba7f25a75ce8f00dc1b03b5...bc330e07b1cad13490bb5b1880f89c55e952f97e",
+  "reviewedCommit": {
+    "sha": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+    "subject": "test: qualify native backup lease update composition"
+  },
+  "scope": [
+    {
+      "path": ".github/workflows/vault-foundation.yml",
+      "gitBlob": "c539e5e80c6f534429c942894031336d6db9938f",
+      "sha256": "0b10e5a743a3ccf5980ee5d5f2ad2ad9522bffbbc94fed8854d724e392a7c947"
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "9bb6a80bcea23db82555085914b96eb02dbd3487",
+      "sha256": "fa0c8282beaacf1bf59aa9e62489699cd2e7ecc9df201d6222a8581e7045f0dd"
+    },
+    {
+      "path": "scripts/fixtures/update-attempts.ts",
+      "gitBlob": "908e96071a865e0f983f40621eee12faed641016",
+      "sha256": "e43749878891ef2f011758ec25d490e95fa3437e67960af34d67aa8112aee743"
+    },
+    {
+      "path": "scripts/fixtures/update-runtime-browser.ts",
+      "gitBlob": "d2919741da133dba00a6e5c611ee8ca6fc39fac8",
+      "sha256": "a2a33de46ba8858b3161ad786382f0fd882b8fa1fa4854f36bcab16ac7baa70b"
+    },
+    {
+      "path": "scripts/test-update-runtime-browser.mjs",
+      "gitBlob": "55c10e507820cf211ee1e9efcb7ef1e0d707a3d2",
+      "sha256": "d120bd5f09ff77beba6394edd430a17100632f12348ef4588fed979588c0651e"
+    },
+    {
+      "path": "scripts/tests/update-attempts.test.mjs",
+      "gitBlob": "d0ff2393e0cbd7280984b0ca754f0fa00134cdf3",
+      "sha256": "25f0f09cc55f58458fe8057e9d292f266828e786c036da15cb13c86a73890ef2"
+    }
+  ],
+  "preservedSource": {
+    "parentEntries": 2704,
+    "unchangedParentEntries": 2702,
+    "modifiedParentEntries": [
+      ".github/workflows/vault-foundation.yml",
+      "package.json"
+    ],
+    "addedEntries": [
+      "scripts/fixtures/update-attempts.ts",
+      "scripts/fixtures/update-runtime-browser.ts",
+      "scripts/test-update-runtime-browser.mjs",
+      "scripts/tests/update-attempts.test.mjs"
+    ],
+    "productionFilesChanged": false,
+    "dependenciesChanged": false,
+    "packageScriptChanges": "one new browser command; append helper to existing test:tooling command",
+    "workflowChanges": "one additive four-line step in the existing Chromium job; all prior bytes preserved",
+    "ReleaseEnabled": 0
+  },
+  "standardsFindings": [],
+  "specFindings": [],
+  "disposition": "source review passed; focused Node and build-only qualification passed; native execution pending",
+  "nativeExecution": {
+    "status": "blocked_not_run",
+    "attemptedByReviewer": false,
+    "reason": "Coordinator-reported managed Unix-socket policy; no browser launch or bypass attempted.",
+    "scenariosExecuted": 0,
+    "nativeWorkerQualified": false,
+    "nativeIndexedDbQualified": false,
+    "actualOriginTransitionQualified": false,
+    "physicalWalletQualified": false,
+    "nativeAcceptedFloorQualified": false,
+    "browserActivationQualified": false
+  },
+  "testCounts": {
+    "focusedSelection": {
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "components": {
+        "runtimeBackupSelection": 28,
+        "updateRuntimeComposition": 12,
+        "attemptLedger": 6
+      }
+    },
+    "directNodeHelper": {
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "distinctCasesExecuted": 46,
+    "overlapExplanation": "The six direct-Node helper cases repeat the helper subset of the 46-case invocation."
+  },
+  "environment": {
+    "node": "v24.22.3",
+    "npm": "11.19.1",
+    "dependencies": {
+      "typescript": "7.0.2",
+      "vite": "8.3.5",
+      "playwright-core": "1.64.1"
+    },
+    "dependencySetup": "Physical copy of author node_modules into isolated worktree; no import symlink."
+  },
+  "preparation": {
+    "fixture": "native-update-runtime-controlled-composition",
+    "nativeExecuted": false,
+    "strictFixtureCompilation": true,
+    "fixtureModules": 37,
+    "fixtureModuleSha256": "b26c6c3fbac298902bb2c3c345d25ce7a1bc4b5298864d3179a7eec1ea157c28",
+    "emittedWorker": {
+      "path": "assets/vault.worker-BFynfgnx.js",
+      "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+    },
+    "defaultGraphs": [
+      {
+        "path": "core-graph-document.json",
+        "sha256": "45f1f07f356ba6316a6e6474f77610dceffa94e5a0ad31bd5b53b5ad6e0671c4",
+        "modules": 95
+      },
+      {
+        "path": "core-graph-worker.json",
+        "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+        "modules": 30
+      },
+      {
+        "path": "qr-graph-worker.json",
+        "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+        "modules": 4
+      }
+    ],
+    "publicCorpusSha256": "f02709fd881c89fd00ddb5e2edf5ee002545367a3f4075648ba98595307336e2",
+    "defaultUpdaterIncluded": false,
+    "ReleaseEnabled": 0
+  },
+  "commands": [
+    {
+      "label": "build-only",
+      "argv": [
+        "node",
+        "scripts/test-update-runtime-browser.mjs",
+        "--build-only"
+      ],
+      "command": "node scripts/test-update-runtime-browser.mjs --build-only",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-native-update-runtime-review-g24",
+      "source": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "trackedChangesBefore": "",
+      "startedAt": "2026-11-20T17:40:05.376606+00:00",
+      "endedAt": "2026-11-20T17:40:07.717908+00:00",
+      "durationSeconds": 2.341388,
+      "timeoutSeconds": 180,
+      "timedOut": false,
+      "exitCode": 0,
+      "rawLog": "docs/engineering/evidence/native-update-runtime-review-generation24/build-only.log",
+      "rawLogBytes": 2194,
+      "rawLogSha256": "e890a8684b67b54082d87515d94bc33d8ca56c37f118980831ad0ee10c5880fa",
+      "rawLogCapture": "stdout and stderr combined directly as bytes; no filtering or reconstruction"
+    },
+    {
+      "label": "focused-tests",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "scripts/tests/update-attempts.test.mjs",
+        "apps/web/test/runtime-backup-selection.test.mjs",
+        "apps/web/test/update-runtime-composition.test.mjs"
+      ],
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/update-attempts.test.mjs apps/web/test/runtime-backup-selection.test.mjs apps/web/test/update-runtime-composition.test.mjs",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-native-update-runtime-review-g24",
+      "source": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "trackedChangesBefore": "",
+      "startedAt": "2026-11-20T17:40:05.378605+00:00",
+      "endedAt": "2026-11-20T17:40:09.077659+00:00",
+      "durationSeconds": 3.700106,
+      "timeoutSeconds": 180,
+      "timedOut": false,
+      "exitCode": 0,
+      "rawLog": "docs/engineering/evidence/native-update-runtime-review-generation24/focused-tests.log",
+      "rawLogBytes": 4854,
+      "rawLogSha256": "82fbd041fb47b40c275f2f95d99176cd905e56642d40ecb580438e6528da0d03",
+      "rawLogCapture": "stdout and stderr combined directly as bytes; no filtering or reconstruction"
+    },
+    {
+      "label": "helper-direct",
+      "argv": [
+        "node",
+        "--test",
+        "scripts/tests/update-attempts.test.mjs"
+      ],
+      "command": "node --test scripts/tests/update-attempts.test.mjs",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-native-update-runtime-review-g24",
+      "source": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "trackedChangesBefore": "",
+      "startedAt": "2026-11-20T17:40:59.726059+00:00",
+      "endedAt": "2026-11-20T17:41:00.041686+00:00",
+      "durationSeconds": 0.315721,
+      "timeoutSeconds": 180,
+      "timedOut": false,
+      "exitCode": 0,
+      "rawLog": "docs/engineering/evidence/native-update-runtime-review-generation24/helper-direct.log",
+      "rawLogBytes": 641,
+      "rawLogSha256": "ec3c375a8427abc197ab0a93cfdc5329b486ba5b37728de4fbe2d751c6aac59c",
+      "rawLogCapture": "stdout and stderr combined directly as bytes; no filtering or reconstruction"
+    },
+    {
+      "label": "diff-check",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+        "bc330e07b1cad13490bb5b1880f89c55e952f97e"
+      ],
+      "command": "git diff --check 477777dc152cd3148ba7f25a75ce8f00dc1b03b5 bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-native-update-runtime-review-g24",
+      "source": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "trackedChangesBefore": "",
+      "startedAt": "2026-11-20T17:40:59.763983+00:00",
+      "endedAt": "2026-11-20T17:40:59.771861+00:00",
+      "durationSeconds": 0.007932,
+      "timeoutSeconds": 180,
+      "timedOut": false,
+      "exitCode": 0,
+      "rawLog": "docs/engineering/evidence/native-update-runtime-review-generation24/diff-check.log",
+      "rawLogBytes": 0,
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rawLogCapture": "stdout and stderr combined directly as bytes; no filtering or reconstruction"
+    },
+    {
+      "label": "source-diff",
+      "argv": [
+        "git",
+        "diff",
+        "--name-status",
+        "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+        "bc330e07b1cad13490bb5b1880f89c55e952f97e"
+      ],
+      "command": "git diff --name-status 477777dc152cd3148ba7f25a75ce8f00dc1b03b5 bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-native-update-runtime-review-g24",
+      "source": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "trackedChangesBefore": "",
+      "startedAt": "2026-11-20T17:41:30.943296+00:00",
+      "endedAt": "2026-11-20T17:41:30.947135+00:00",
+      "durationSeconds": 0.003874,
+      "timeoutSeconds": 180,
+      "timedOut": false,
+      "exitCode": 0,
+      "rawLog": "docs/engineering/evidence/native-update-runtime-review-generation24/source-diff.log",
+      "rawLogBytes": 222,
+      "rawLogSha256": "5236ec9e1f9aced005322d212fca172fa53c6d3cee7d43ae7c7faadf6b5e2af6",
+      "rawLogCapture": "stdout and stderr combined directly as bytes; no filtering or reconstruction"
+    }
+  ],
+  "evidenceCapture": "Raw stdout/stderr bytes retained without filtering. No browser execution, full-suite run, or pre-freeze development log is represented by this receipt.",
+  "sources": [
+    "docs/engineering/CONTINUATION_GENERATIONS22_23_20261120.md",
+    "packages/security/README-UPDATES.md",
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.3_system_integration/module_0.3.3_release_distribution/spec-ipfs-origin-and-update-policy.md"
+  ],
+  "reviewReport": "docs/engineering/INDEPENDENT_NATIVE_UPDATE_RUNTIME_REVIEW_GENERATION24_20261120.md",
+  "remoteMutations": false
+}

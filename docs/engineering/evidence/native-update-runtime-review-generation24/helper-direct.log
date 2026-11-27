@@ -1,0 +1,14 @@
+✔ admission owns a frozen pending state before the callback runs (2.20476ms)
+✔ a previous completed result cannot satisfy a fresh pending attempt (4.944881ms)
+✔ out-of-order and late completions retain their exact admitted identities (1.006961ms)
+✔ synchronous throws and polled-only rejections are attributed without unhandled rejection (1.726809ms)
+✔ unknown IDs fail and known IDs have one stable owned promise (0.931818ms)
+✔ completed attempts retain their IDs and total admission remains bounded (2.163808ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 196.075689

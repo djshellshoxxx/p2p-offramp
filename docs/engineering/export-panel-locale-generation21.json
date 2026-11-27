@@ -1,0 +1,109 @@
+{
+  "schema": "p2p-offramp-export-panel-locale-qualification/v1",
+  "recorded_at_utc": "2026-11-20T16:15:04.347476+00:00",
+  "base_commit": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+  "regression_commit": "3191d50658147286854ea14eae58755f8164d533",
+  "implementation_commit": "0046c8288ea18c219c4cc7be79c94d86134d56cf",
+  "implementation_tree": "92b5d9e8a795621e3ab98a132e69232d65f62e1a",
+  "branch": "codex/export-panels-locale-g21-20261120",
+  "node": "v24.22.3",
+  "source_paths": [
+    "apps/web/src/ui/DiagnosticsPanel.tsx",
+    "apps/web/src/ui/RecoveryReferencesPanel.tsx",
+    "apps/web/test/export-panels-locale.test.mjs"
+  ],
+  "base_tree_entries": 2576,
+  "unchanged_base_tree_entries": 2574,
+  "whitespace_check": "passed",
+  "commands": [
+    {
+      "label": "regression-only",
+      "source": "3191d50658147286854ea14eae58755f8164d533",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/export-panels-locale.test.mjs",
+      "log": "docs/execution/export-panel-locale-generation21-20261120/red.log",
+      "exit_code": 1,
+      "tests": 10,
+      "passed": 4,
+      "failed": 6,
+      "skipped": 0,
+      "cancelled": 0,
+      "todos": 0,
+      "interpretation": "Six ordinary stale-notice assertions fail against unchanged base panels."
+    },
+    {
+      "label": "focused-ui-and-locale",
+      "source": "0046c8288ea18c219c4cc7be79c94d86134d56cf",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/export-panels-locale.test.mjs apps/web/test/recovery-references-ui-lifecycle.test.mjs apps/web/test/panels-misc.render.test.mjs apps/web/test/locale-runtime.test.mjs apps/web/test/locale-source.test.mjs apps/web/test/locale-catalog.test.mjs",
+      "log": "docs/execution/export-panel-locale-generation21-20261120/green.log",
+      "exit_code": 0,
+      "tests": 46,
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todos": 0
+    },
+    {
+      "label": "adjacent-contracts",
+      "source": "0046c8288ea18c219c4cc7be79c94d86134d56cf",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/diagnostics/test/diagnostics.test.mjs packages/schemas/test/recovery-reference.test.mjs apps/web/test/recovery-references-worker.test.mjs apps/web/test/solana-recovery-references-worker.test.mjs",
+      "log": "docs/execution/export-panel-locale-generation21-20261120/adjacent.log",
+      "exit_code": 0,
+      "tests": 28,
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todos": 0
+    },
+    {
+      "label": "typecheck",
+      "source": "0046c8288ea18c219c4cc7be79c94d86134d56cf",
+      "command": "npm run typecheck",
+      "log": "docs/execution/export-panel-locale-generation21-20261120/typecheck.log",
+      "exit_code": 0,
+      "typescript_projects": 4
+    }
+  ],
+  "logs": [
+    {
+      "path": "docs/execution/export-panel-locale-generation21-20261120/red.log",
+      "sha256": "e02282688020bf63cd81e9ce2144b794781201f60fa97d51837d14d5b0cc5943",
+      "bytes": 7992
+    },
+    {
+      "path": "docs/execution/export-panel-locale-generation21-20261120/green.log",
+      "sha256": "4210aaf9263fc3adc98a22d3109366db23419d7b698e33880dca7017f82a3a75",
+      "bytes": 5201
+    },
+    {
+      "path": "docs/execution/export-panel-locale-generation21-20261120/adjacent.log",
+      "sha256": "181515a7e329aecee356d12a7d29124db60d65d0d3e23a074054e1456bec34ac",
+      "bytes": 3326
+    },
+    {
+      "path": "docs/execution/export-panel-locale-generation21-20261120/typecheck.log",
+      "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "bytes": 341
+    }
+  ],
+  "production_locale": "English-only draft, unchanged",
+  "semantic_approval": false,
+  "native_browser_executed": false,
+  "build_executed": false,
+  "full_suite_executed": false,
+  "remote_mutations": false,
+  "remaining": [
+    "Fresh independent source review",
+    "Final combined-source build and hosted qualification owned by coordinator"
+  ],
+  "preserved": [
+    "Existing message copy and accessibility roles",
+    "Diagnostic collect, preview, clear and explicit download operations",
+    "Recovery page/selection/consent and exact preview bytes",
+    "Fresh revision-pinned read before recovery export",
+    "Abort, sequence, scope and mounted cleanup behavior",
+    "Canonical reference fields and exported JSON",
+    "Default locale catalog, trust, release flags, workflows and dependencies"
+  ]
+}

@@ -1,0 +1,872 @@
+{
+  "schema": "p2p-offramp.main-composition-independent-review.v1",
+  "generation": 28,
+  "recordedAt": "2026-11-20T18:13:52.264579+00:00",
+  "reviewer": "main_composition_review_g28",
+  "reviewBranch": "codex/main-composition-independent-review-g28-20261120",
+  "reviewWorktree": "/workspace/scratch/dcf03ef9bee8/p2p-main-composition-review-g28",
+  "report": "docs/engineering/INDEPENDENT_MAIN_COMPOSITION_REVIEW_GENERATION28_20261120.md",
+  "reportSha256": "f9d218851395a78869da154a3343542f19685adc36fe1ae78139907d1fcf6b90",
+  "source": "2a0b26f3392d86c1cd3e056771c59438ece92927",
+  "tree": "92beca7b34957889156260d1167df81ebcf4aa84",
+  "baseline": "bca96b796db18d69563ae5f0395452494a0dacd5",
+  "mainTarget": "8e836baa877b676a863c877003e277b638fc5061",
+  "decision": "No actionable composition or qualification-evidence finding; advance the frozen aggregate to applicable current-main-target hosted qualification.",
+  "findings": {
+    "standards": [],
+    "specificationComposition": []
+  },
+  "mainTargetHostedQualified": false,
+  "freshRemoteInspectionPerformed": false,
+  "sourceScope": {
+    "baseEntries": 2763,
+    "sourceEntries": 2784,
+    "preservedBaseEntries": 2762,
+    "preservedNonDocumentationEntries": 1019,
+    "changed": [
+      {
+        "path": "apps/web/src/ui/VaultForms.tsx",
+        "before": "100644 blob d268f423be4cd49af0d9c9116ef81a7aecb9dc40",
+        "after": "100644 blob 3b63b4541be3061937a18eb1fc1975588955be96"
+      }
+    ],
+    "added": [
+      {
+        "path": "apps/web/test/unlock-form-admission.test.mjs",
+        "entry": "100644 blob 61718845f6246e4df6dbb5dc51eed033c18b888e"
+      },
+      {
+        "path": "apps/web/test/vault-form-admission.test.mjs",
+        "entry": "100644 blob 42136f64ef31c1bf646ae1d67946e363a3db48cd"
+      },
+      {
+        "path": "docs/engineering/UNLOCK_FORM_ADMISSION_GENERATION26_20261120.md",
+        "entry": "100644 blob e1e5443de8c8b425f3c98711de564fa9f4ebf5fb"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-generation26/affected-tests.log",
+        "entry": "100644 blob 08cfdf0d0cb264f66e2a437521f027500c99a3be"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-generation26/characterization-probe.mjs.txt",
+        "entry": "100644 blob 4ba209d5dfae28e12215963081a56640d2a6e38b"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-generation26/characterization.log",
+        "entry": "100644 blob 16f1b1a403f8a084de1d192d0514b91450edbde4"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-generation26/regression-green.log",
+        "entry": "100644 blob e7fbd82a4c4c31970801555b054bf3e873a1fca5"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-generation26/regression-red.log.gz",
+        "entry": "100644 blob f5af630c62c09930cd4f777a6012ac0540faf28d"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-generation26/source-diff-check.log",
+        "entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-generation26/ui-typecheck.log",
+        "entry": "100644 blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/affected-tests.log.gz",
+        "entry": "100644 blob 7c829e56936aa43b325688c377b6539996b2e7bc"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/capture-check.py.txt",
+        "entry": "100644 blob 8a39d6967c1c0e8c0394a4cdaf6e3ae31fab05ac"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/regression-green.log.gz",
+        "entry": "100644 blob 243c1505adb6280d993c7777ee756688185856da"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/regression-red.log.gz",
+        "entry": "100644 blob 367508e443116e45e73ce560d6ff77333895452a"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/source-diff-check.log.gz",
+        "entry": "100644 blob d4b9926df0b7defceb6caf0b474c4a190c5ca8f0"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/source-identity.log.gz",
+        "entry": "100644 blob 31a87645f48d215dac92fb2d790db2b9f81a62ed"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/source-identity.py.txt",
+        "entry": "100644 blob a84194657216ee1ab77b26f5aa1368fd60a19447"
+      },
+      {
+        "path": "docs/engineering/evidence/unlock-form-admission-independent-review-generation26/ui-typecheck.log.gz",
+        "entry": "100644 blob d4b9926df0b7defceb6caf0b474c4a190c5ca8f0"
+      },
+      {
+        "path": "docs/engineering/unlock-form-admission-generation26.json",
+        "entry": "100644 blob eda7417b1595c1fea8e8cf09892abbac0df1c010"
+      },
+      {
+        "path": "docs/engineering/unlock-form-admission-independent-review-generation26.json",
+        "entry": "100644 blob dba509e485acb9adc0dc62fae817d0ddc810690c"
+      },
+      {
+        "path": "docs/engineering/unlock-form-admission-independent-review-generation26.md",
+        "entry": "100644 blob 0a656ab316b10bf3f3e4e051f097178bb0b70936"
+      }
+    ],
+    "deleted": [],
+    "unchangedEntryMapSha256": "2f78e442997f17bc81892ad339732ad1c3d686759d3d382d51c8cb68fe3fc9c0",
+    "formNormalization": {
+      "reversedGuards": 4,
+      "removedComments": 1,
+      "normalizedSha256": "3937c2730ad0d4b931fbd1f7c5f64f22b8a09c1689fd8c6298aa00b27ea27466",
+      "baselineSha256": "3937c2730ad0d4b931fbd1f7c5f64f22b8a09c1689fd8c6298aa00b27ea27466"
+    },
+    "preservedUnlockForm": {
+      "bytes": 3401,
+      "sha256": "2762e054fca5f438f04bb4bf817b7b664839dc7506994ab60b48eff2111f5f96",
+      "acceptedSource": "a2a854a285563d4560610577a0df099b041643bf"
+    },
+    "newTestBindings": [
+      {
+        "path": "apps/web/test/unlock-form-admission.test.mjs",
+        "blob": "61718845f6246e4df6dbb5dc51eed033c18b888e",
+        "sha256": "55d038f4005bdd8f9c800477cec790a317e1f9342d931f51f7910bfd6d5924e7",
+        "comparedCommits": [
+          "6df5a34a7c00f8a6fa489a53ca8f783616e285f5",
+          "a2a854a285563d4560610577a0df099b041643bf",
+          "2e599d43d3072e431a3744f733dc6d655a778008",
+          "f36a0a07dff55aa83b9d01a69501d049461d9b33"
+        ],
+        "identical": true
+      },
+      {
+        "path": "apps/web/test/vault-form-admission.test.mjs",
+        "blob": "42136f64ef31c1bf646ae1d67946e363a3db48cd",
+        "sha256": "ff52ac643512849b2178977b8d07d4affe688a9b460bc91a0add033984a538b4",
+        "comparedCommits": [
+          "515a7c945b6bef136c3ede436577635b17ccd4e2",
+          "0df0e191e5829e66141d4ba9c028599ce9c91de2",
+          "dffaea3f28a67acb81bcc53dce36367beda2e221"
+        ],
+        "identical": true
+      }
+    ],
+    "retainedG21Blobs": [
+      {
+        "path": "apps/web/src/ui/App.tsx",
+        "blob": "dbe9409c37ee813e77262cfbaa948d00c6dfa886",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/src/ui/BackupVerificationForm.tsx",
+        "blob": "3265f97cacbf09326169546d77577a08ae3ea0f5",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/src/ui/DiagnosticsPanel.tsx",
+        "blob": "bcac237d9be90909d4d425067a5bfd51efe931a6",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/src/ui/QrPanel.tsx",
+        "blob": "4a7db2477f1fa8f7c238d126c3412840943a742e",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/src/ui/RecoveryReferencesPanel.tsx",
+        "blob": "99e24e5dd2a49852af2725a052c192c00c1cdf6e",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/test/app-shell-locale.test.mjs",
+        "blob": "93f73f9cdab1b6792efabd92cad0fb4599c27e89",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/test/backup-verification-ui.test.mjs",
+        "blob": "6336e69bea30828160f4310361bf31329685c49d",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/test/export-panels-locale.test.mjs",
+        "blob": "b4f45a453d747f4985c32a1867767beda26d66ea",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/test/qr-notices-locale.test.mjs",
+        "blob": "7a018d9f5a1c78cf761510e0a1bb842e776b0a3a",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/test/vault-forms-locale.test.mjs",
+        "blob": "caffc1908cafdacba3a0b5c0522870ec330eef3c",
+        "unchanged": true
+      }
+    ],
+    "preservedBoundaries": [
+      {
+        "prefix": "apps/web/src/runtime/",
+        "entries": 3,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "77164793aa9cbfa071214d66d67b9f79b4370f28082b5d29beae5ae0299f54c3"
+      },
+      {
+        "prefix": "apps/web/src/workers/",
+        "entries": 1,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "019f95cf14de6e23920ca118f7dc13deaecef05f38a43b41ef08863ae59cf1fb"
+      },
+      {
+        "prefix": "apps/web/src/privacy/",
+        "entries": 1,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "cafcab6a56c2e7e6437c36d9a888ed051de09e5e6ab6910627706c4c882a26dc"
+      },
+      {
+        "prefix": "apps/web/src/ui/locale/",
+        "entries": 4,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "258ec4df3ceb3009371f7df43ff85faf969795c24d0fe24d1ee4d423638669d7"
+      },
+      {
+        "prefix": "apps/web/src/solana-localnet/",
+        "entries": 11,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "b479d9719a8fb31cff885e37fe484bf0c1ac5a977b4ee9b5d18210dd7a1e1062"
+      },
+      {
+        "prefix": "apps/web/src/localnet/",
+        "entries": 13,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "e9ed8db3d74bb3d68890bdba3f7f652072b5a036272f4385bebdb1cee3cfa001"
+      },
+      {
+        "prefix": "packages/security/",
+        "entries": 30,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "864d8571862cfc689617eb08cd1edc4424b4ddc7b7c98731bf75939f9611063d"
+      },
+      {
+        "prefix": "packages/domain/",
+        "entries": 37,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "4d7eb8ec8cc3fbdf84c95d9b20376c6de42f8d54afeec2b1bc1a146dbbdd7ea7"
+      },
+      {
+        "prefix": "packages/schemas/",
+        "entries": 38,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "1ad6edc7e9981324a579f03cb5e1b2977c74180e7b3c4d3ee12367d7f6a58db8"
+      },
+      {
+        "prefix": "packages/storage/",
+        "entries": 19,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "0ff50797c8df56244a7f05a83abab78666aee24c4280a25fcaed8980ba87bf2c"
+      },
+      {
+        "prefix": "packages/chain-solana/",
+        "entries": 64,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "c7b564ef0d84a44b775e2529fa05a31a48db2fdfee73edf9b1818a824baeafbe"
+      },
+      {
+        "prefix": "contracts/",
+        "entries": 65,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "7d9d9fa3f7dd2fd8f76bca6fda77f0ee2a8d0bf13a00f7c04ce31542ef493fd4"
+      },
+      {
+        "prefix": ".github/workflows/",
+        "entries": 6,
+        "mismatches": [],
+        "added": [],
+        "entryMapSha256": "b42246ce8cd6576c7e96511aa9c396f7a9dae808ac7eeb31a4e003024596614b"
+      }
+    ],
+    "criticalBlobs": [
+      {
+        "path": "package.json",
+        "entry": "100644 blob 9bb6a80bcea23db82555085914b96eb02dbd3487",
+        "sha256": "fa0c8282beaacf1bf59aa9e62489699cd2e7ecc9df201d6222a8581e7045f0dd"
+      },
+      {
+        "path": "package-lock.json",
+        "entry": "100644 blob dd429efb353a01c1c25d5f6e96508e020ecb7eeb",
+        "sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72"
+      },
+      {
+        "path": "contracts/solana/Cargo.lock",
+        "entry": "100644 blob 7d9b985b90a095c0a8c248d086512a19ed21ff66",
+        "sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039"
+      },
+      {
+        "path": "apps/web/src/app-services.ts",
+        "entry": "100644 blob 59d25937b0e365e6da0870f768360025e3313c44",
+        "sha256": "5c3934ccb0a1a486e334ca58b7058f8c53ac9f0660c56ef67ce31eb2af74f0f5"
+      },
+      {
+        "path": "apps/web/src/ui/PrivacyStatusPanel.tsx",
+        "entry": "100644 blob 5ecc366a0bd39a63f52a0e3dafb6c98bc4724246",
+        "sha256": "a90286d8688f040112d696eedb17ef6418ae902eea5c02b7aee49605e1f13ee9"
+      },
+      {
+        "path": "scripts/fixtures/update-attempts.ts",
+        "entry": "100644 blob 908e96071a865e0f983f40621eee12faed641016",
+        "sha256": "e43749878891ef2f011758ec25d490e95fa3437e67960af34d67aa8112aee743"
+      },
+      {
+        "path": "scripts/fixtures/update-runtime-browser.ts",
+        "entry": "100644 blob d2919741da133dba00a6e5c611ee8ca6fc39fac8",
+        "sha256": "a2a33de46ba8858b3161ad786382f0fd882b8fa1fa4854f36bcab16ac7baa70b"
+      },
+      {
+        "path": "scripts/test-update-runtime-browser.mjs",
+        "entry": "100644 blob 55c10e507820cf211ee1e9efcb7ef1e0d707a3d2",
+        "sha256": "d120bd5f09ff77beba6394edd430a17100632f12348ef4588fed979588c0651e"
+      },
+      {
+        "path": "scripts/tests/update-attempts.test.mjs",
+        "entry": "100644 blob d0ff2393e0cbd7280984b0ca754f0fa00134cdf3",
+        "sha256": "25f0f09cc55f58458fe8057e9d292f266828e786c036da15cb13c86a73890ef2"
+      }
+    ],
+    "optionalPackages": [
+      "proof-inputs",
+      "liquidity",
+      "courier",
+      "arbitration",
+      "meetup",
+      "privacy-policy",
+      "privacy-controls",
+      "stealth",
+      "proof-jobs"
+    ],
+    "workflows": [
+      {
+        "path": ".github/workflows/evm-escrow.yml",
+        "entry": "100644 blob 26c317db158bec40a12b9ca2234b3b617780959d",
+        "sha256": "6e2308889891a592ebd911b0a400b219d99946a37741e5035e8cd27a69b435d3"
+      },
+      {
+        "path": ".github/workflows/nostr-relay.yml",
+        "entry": "100644 blob 33dce25ec4a32d564511d717bf68acfc6c34b652",
+        "sha256": "9e074eb15ff3f0a08c9896f667f7ef0ec9438fff00e41d0054945bb91d4321f7"
+      },
+      {
+        "path": ".github/workflows/openai-agents.yml",
+        "entry": "100644 blob 44ef3fc6758738888f3e6c656c1531d8121fb211",
+        "sha256": "058e5a1a02f74792c9ae4b28a26fc3e92d61283c93e01bc18a0c696e8b6af56a"
+      },
+      {
+        "path": ".github/workflows/solana-escrow.yml",
+        "entry": "100644 blob b12d8188a74f49711be858be8a44ca39119e619d",
+        "sha256": "9822f77c899c2b60b3c3335360a337b9d88ab653808afc42e8621a91190ee2e3"
+      },
+      {
+        "path": ".github/workflows/specifications.yml",
+        "entry": "100644 blob 9ca2d40309e4cbe71ff86f1017c0835c022f6125",
+        "sha256": "c2c01dab1ac22a12a7d41e95e3c2681bb479e3635c46ee69db60d87df4d13536"
+      },
+      {
+        "path": ".github/workflows/vault-foundation.yml",
+        "entry": "100644 blob c539e5e80c6f534429c942894031336d6db9938f",
+        "sha256": "0b10e5a743a3ccf5980ee5d5f2ad2ad9522bffbbc94fed8854d724e392a7c947"
+      }
+    ]
+  },
+  "preservedAncestors": [
+    {
+      "name": "main",
+      "commit": "8e836baa877b676a863c877003e277b638fc5061",
+      "tree": "9693f90d2ef73a06b3557d57ddc2239ae65065f5",
+      "ancestor": true
+    },
+    {
+      "name": "PR233",
+      "commit": "92663e46508b06645111d9c713beb82d3a6d1a0f",
+      "tree": "8a75938288a394e8e7b836eba48bf56bcd98a41d",
+      "ancestor": true
+    },
+    {
+      "name": "PR234",
+      "commit": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+      "tree": "7a474d82db7668b0ebbff26ae7a9d75d5030db7a",
+      "ancestor": true
+    },
+    {
+      "name": "PR235",
+      "commit": "bca96b796db18d69563ae5f0395452494a0dacd5",
+      "tree": "bfcdf96410df7bbb59996537c8388abaafefbb7c",
+      "ancestor": true
+    }
+  ],
+  "publicationMapsVerified": 55,
+  "sourceIdentityAssertions": 119,
+  "qualificationAssertions": 362,
+  "allReviewerAssertionsPassed": true,
+  "reviewerExecutions": [
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "docs/engineering/evidence/main-composition-independent-review-generation28/source-check.py.txt"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-main-composition-review-g28",
+      "startedAt": "2026-11-20T18:08:19.072787+00:00",
+      "completedAt": "2026-11-20T18:08:20.056927+00:00",
+      "exitCode": 0,
+      "log": "docs/engineering/evidence/main-composition-independent-review-generation28/source-check.json",
+      "bytes": 65177,
+      "sha256": "9f71aba75ec4ac66130e7bec8c4b8c4a87187c3a3bc0936a1c931c2afe7985a0",
+      "retention": "Exact combined stdout/stderr retained with deterministic gzip.",
+      "storedPath": "docs/engineering/evidence/main-composition-independent-review-generation28/source-check.json.gz",
+      "storedBytes": 12830,
+      "storedSha256": "da160c8806f72390cbb1e340eccc481a0a2c732d36c49a82c93ab74b7b68fabd"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "docs/engineering/evidence/main-composition-independent-review-generation28/qualification-check.py.txt"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-main-composition-review-g28",
+      "startedAt": "2026-11-20T18:09:56.017601+00:00",
+      "completedAt": "2026-11-20T18:09:56.707558+00:00",
+      "exitCode": 0,
+      "log": "docs/engineering/evidence/main-composition-independent-review-generation28/qualification-check.json",
+      "bytes": 315159,
+      "sha256": "9c5015ac7b029ada0b5982c6097c32c65f3f4124d218147b4b39892a2c6c2305",
+      "retention": "Exact combined stdout/stderr retained with deterministic gzip.",
+      "storedPath": "docs/engineering/evidence/main-composition-independent-review-generation28/qualification-check.json.gz",
+      "storedBytes": 41988,
+      "storedSha256": "226ba5a990ba874b424f3cde73c1368a20b3b79bad4c8bb989d7a6abdc2534e3"
+    }
+  ],
+  "rootQualification": {
+    "source": "2a0b26f3392d86c1cd3e056771c59438ece92927",
+    "tree": "92beca7b34957889156260d1167df81ebcf4aa84",
+    "startedAt": "2026-11-20T18:06:31.139630+00:00",
+    "completedAt": "2026-11-20T18:08:19.263785+00:00",
+    "receiptStored": "docs/engineering/evidence/main-composition-independent-review-generation28/root-qualification.json",
+    "receiptSha256": "e417e3f09a4e619b16453628bd29f409078316651c5ede8c0cae088d2891af4b",
+    "receiptBytes": 63249,
+    "nativeExecuted": false,
+    "commands": [
+      {
+        "name": "full-node",
+        "command": [
+          "npm",
+          "test"
+        ],
+        "source": "2a0b26f3392d86c1cd3e056771c59438ece92927",
+        "tree": "92beca7b34957889156260d1167df81ebcf4aa84",
+        "startedAt": "2026-11-20T18:06:31.152237+00:00",
+        "completedAt": "2026-11-20T18:08:07.795562+00:00",
+        "exitCode": 0,
+        "rawBytes": 253936,
+        "rawSha256": "dd3c29c48af60a466514b12d2bbc7e4ea45bf4818623e278671dcfd1e802cec1",
+        "storedPath": "docs/engineering/evidence/main-composition-independent-review-generation28/full-node.log.gz",
+        "storedBytes": 85103,
+        "storedSha256": "f832b59dbc3bb4461dc97fe0afd6d84689b931555923483d1deeea01b38fe926",
+        "directlyObservedCounts": {
+          "tests": 2505,
+          "pass": 2505,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "name": "typecheck",
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "source": "2a0b26f3392d86c1cd3e056771c59438ece92927",
+        "tree": "92beca7b34957889156260d1167df81ebcf4aa84",
+        "startedAt": "2026-11-20T18:08:07.829659+00:00",
+        "completedAt": "2026-11-20T18:08:11.084964+00:00",
+        "exitCode": 0,
+        "rawBytes": 341,
+        "rawSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+        "storedPath": "docs/engineering/evidence/main-composition-independent-review-generation28/typecheck.log.gz",
+        "storedBytes": 211,
+        "storedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+        "directlyObservedCounts": {}
+      },
+      {
+        "name": "build-policy",
+        "command": [
+          "npm",
+          "run",
+          "test:build-policy"
+        ],
+        "source": "2a0b26f3392d86c1cd3e056771c59438ece92927",
+        "tree": "92beca7b34957889156260d1167df81ebcf4aa84",
+        "startedAt": "2026-11-20T18:08:11.114172+00:00",
+        "completedAt": "2026-11-20T18:08:15.876217+00:00",
+        "exitCode": 0,
+        "rawBytes": 7609,
+        "rawSha256": "5df526220765b02ec7038daa2da8f6708054821866fd376e4c477c458d2b418b",
+        "storedPath": "docs/engineering/evidence/main-composition-independent-review-generation28/build-policy.log.gz",
+        "storedBytes": 3128,
+        "storedSha256": "f0f1568b1d313ac19684967f083665250814d661dfe5902e45a9c8bf011d7c01",
+        "directlyObservedCounts": {
+          "tests": 58,
+          "pass": 58,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "name": "boundaries",
+        "command": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "source": "2a0b26f3392d86c1cd3e056771c59438ece92927",
+        "tree": "92beca7b34957889156260d1167df81ebcf4aa84",
+        "startedAt": "2026-11-20T18:08:15.893552+00:00",
+        "completedAt": "2026-11-20T18:08:17.009809+00:00",
+        "exitCode": 0,
+        "rawBytes": 392,
+        "rawSha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+        "storedPath": "docs/engineering/evidence/main-composition-independent-review-generation28/boundaries.log.gz",
+        "storedBytes": 288,
+        "storedSha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446",
+        "directlyObservedCounts": {}
+      },
+      {
+        "name": "default-build",
+        "command": [
+          "node",
+          "apps/web/scripts/build.mjs"
+        ],
+        "source": "2a0b26f3392d86c1cd3e056771c59438ece92927",
+        "tree": "92beca7b34957889156260d1167df81ebcf4aa84",
+        "startedAt": "2026-11-20T18:08:17.024262+00:00",
+        "completedAt": "2026-11-20T18:08:18.075646+00:00",
+        "exitCode": 0,
+        "rawBytes": 1026,
+        "rawSha256": "aa2edf7610aee5d374ddecf74893ee633705136b0a83049f954b232799546e65",
+        "storedPath": "docs/engineering/evidence/main-composition-independent-review-generation28/default-build.log.gz",
+        "storedBytes": 496,
+        "storedSha256": "02513baaa91c64c252e2f3c96d7c3cef6dae676ce1562b50ea2a226b7f0fb476",
+        "directlyObservedCounts": {}
+      },
+      {
+        "name": "demo-build",
+        "command": [
+          "node",
+          "apps/web/scripts/build.mjs",
+          "demo"
+        ],
+        "source": "2a0b26f3392d86c1cd3e056771c59438ece92927",
+        "tree": "92beca7b34957889156260d1167df81ebcf4aa84",
+        "startedAt": "2026-11-20T18:08:18.090049+00:00",
+        "completedAt": "2026-11-20T18:08:19.262706+00:00",
+        "exitCode": 0,
+        "rawBytes": 1174,
+        "rawSha256": "dfc87037e9947942067ba7aeb8319195d0bf86cd695b1e36079bea43891a59ed",
+        "storedPath": "docs/engineering/evidence/main-composition-independent-review-generation28/demo-build.log.gz",
+        "storedBytes": 521,
+        "storedSha256": "89730d514a9bbaf179573fb98c01732a964be657d9598c00b07b10bd58c2d47b",
+        "directlyObservedCounts": {}
+      }
+    ]
+  },
+  "artifactVerification": {
+    "actualEmittedFiles": 27,
+    "verifiedModuleEntries": 260,
+    "countsAreGraphEntriesNotDistinctModules": true,
+    "builds": {
+      "default": {
+        "assetCountExcludingEvidence": 12,
+        "assetBytesExcludingEvidence": 795725,
+        "actualFiles": {
+          "_headers": {
+            "bytes": 342,
+            "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+          },
+          "assets/OfflineRoot-CcFGaBW7.js": {
+            "bytes": 301149,
+            "sha256": "56ebb82f7d0dc342ba1bc5c7fc3635a0ef4b22510f8964e276390117048fcfa5"
+          },
+          "assets/decode.worker-DGcSBxfL.js": {
+            "bytes": 133927,
+            "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+          },
+          "assets/index-CGv4ZlZ8.js": {
+            "bytes": 220808,
+            "sha256": "7e4c3de65873e7a05c5f8723f023f160bdd879f8fbdf5b614a766011f5ac97d5"
+          },
+          "assets/index-rPDFZ4F5.css": {
+            "bytes": 8414,
+            "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+          },
+          "assets/vault.worker-BFynfgnx.js": {
+            "bytes": 93535,
+            "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+          },
+          "content-policy.json": {
+            "bytes": 1009,
+            "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+          },
+          "core-graph-document.json": {
+            "bytes": 14266,
+            "sha256": "f5548fe987d9d9306a7d95f8d521408646841a5c8c33a88649f6811b9bbe4917"
+          },
+          "core-graph-worker.json": {
+            "bytes": 4758,
+            "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+          },
+          "index.html": {
+            "bytes": 1283,
+            "sha256": "183120623af43d7abe39d8af89ab5e8577eb0d061330f0231b8d42faccbc70c3"
+          },
+          "local-build-evidence.json": {
+            "bytes": 2525,
+            "sha256": "e3c0a686ed7380dec115843a860c0ecc3ce2998146ee26fc373afed95f86eb68"
+          },
+          "qr-graph-worker.json": {
+            "bytes": 905,
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          },
+          "third-party-licenses.json": {
+            "bytes": 15329,
+            "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+          }
+        },
+        "graphs": [
+          {
+            "path": "core-graph-document.json",
+            "sha256": "f5548fe987d9d9306a7d95f8d521408646841a5c8c33a88649f6811b9bbe4917",
+            "moduleCount": 95,
+            "pathsEqualParent": true,
+            "moduleHashChangesFromParent": [
+              "apps/web/src/ui/VaultForms.tsx"
+            ],
+            "excludedRuntimePaths": []
+          },
+          {
+            "path": "core-graph-worker.json",
+            "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+            "moduleCount": 30,
+            "pathsEqualParent": true,
+            "moduleHashChangesFromParent": [],
+            "excludedRuntimePaths": []
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+            "moduleCount": 4,
+            "pathsEqualParent": true,
+            "moduleHashChangesFromParent": [],
+            "excludedRuntimePaths": []
+          }
+        ],
+        "unchangedWorkerAssets": [
+          "assets/decode.worker-DGcSBxfL.js",
+          "assets/vault.worker-BFynfgnx.js"
+        ],
+        "releaseEnabled": 0,
+        "signedRelease": false,
+        "releaseAcceptance": false,
+        "contentPolicySha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+        "connectOrigins": [],
+        "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+      },
+      "demo": {
+        "assetCountExcludingEvidence": 13,
+        "assetBytesExcludingEvidence": 807823,
+        "actualFiles": {
+          "_headers": {
+            "bytes": 342,
+            "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+          },
+          "assets/OfflineRoot-qkCIDc0y.js": {
+            "bytes": 307193,
+            "sha256": "b1f9831c77eb2cf31ce7177239691518e4ce54a09293cd04ea4b9b73df8262be"
+          },
+          "assets/decode.worker-DGcSBxfL.js": {
+            "bytes": 133927,
+            "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+          },
+          "assets/index-BTUoykvj.js": {
+            "bytes": 220820,
+            "sha256": "8c4e9972c69d30a3eba0a9128f82a48cf2caf02d559942e5d58eee2ecb4b8794"
+          },
+          "assets/index-rPDFZ4F5.css": {
+            "bytes": 8414,
+            "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+          },
+          "assets/synthetic-local-BWsAqB1d.js": {
+            "bytes": 5743,
+            "sha256": "171b79d98ab1c8e4197661403100440ea3fff266dea7a6faf434e21831f03d15"
+          },
+          "assets/vault.worker-BFynfgnx.js": {
+            "bytes": 93535,
+            "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+          },
+          "content-policy.json": {
+            "bytes": 1009,
+            "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+          },
+          "core-graph-document.json": {
+            "bytes": 14565,
+            "sha256": "785c791618e825a4241f0b3ba5bbd1ded5eb2e9239dac1d0605ffd087677c922"
+          },
+          "core-graph-worker.json": {
+            "bytes": 4758,
+            "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+          },
+          "index.html": {
+            "bytes": 1283,
+            "sha256": "65ca8d5472fbf81efcce3d8e615c44c8860fa73df0d753fa24aa61b907dab992"
+          },
+          "local-build-evidence.json": {
+            "bytes": 2693,
+            "sha256": "5ab3f32c3ae66512ea66e5934600375b8f9715394cb43735a7d61a8af7a4e1af"
+          },
+          "qr-graph-worker.json": {
+            "bytes": 905,
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+          },
+          "third-party-licenses.json": {
+            "bytes": 15329,
+            "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+          }
+        },
+        "graphs": [
+          {
+            "path": "core-graph-document.json",
+            "sha256": "785c791618e825a4241f0b3ba5bbd1ded5eb2e9239dac1d0605ffd087677c922",
+            "moduleCount": 97,
+            "pathsEqualParent": true,
+            "moduleHashChangesFromParent": [
+              "apps/web/src/ui/VaultForms.tsx"
+            ],
+            "excludedRuntimePaths": []
+          },
+          {
+            "path": "core-graph-worker.json",
+            "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+            "moduleCount": 30,
+            "pathsEqualParent": true,
+            "moduleHashChangesFromParent": [],
+            "excludedRuntimePaths": []
+          },
+          {
+            "path": "qr-graph-worker.json",
+            "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+            "moduleCount": 4,
+            "pathsEqualParent": true,
+            "moduleHashChangesFromParent": [],
+            "excludedRuntimePaths": []
+          }
+        ],
+        "unchangedWorkerAssets": [
+          "assets/decode.worker-DGcSBxfL.js",
+          "assets/vault.worker-BFynfgnx.js"
+        ],
+        "releaseEnabled": 0,
+        "signedRelease": false,
+        "releaseAcceptance": false,
+        "contentPolicySha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+        "connectOrigins": [],
+        "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+      }
+    }
+  },
+  "gatePreservation": {
+    "allWorkflowBlobsEqualPR235": true,
+    "aggregateUiDeltaMatchesSolanaEventPathFilters": true,
+    "solanaTimeoutMinutes": {
+      "job": 150,
+      "validator": 50,
+      "browser": 60
+    },
+    "realRefundMinimaSeconds": 1800,
+    "codeqlTrackedWorkflowProofNotClaimed": true,
+    "currentTargetCompletionRequired": true,
+    "oldComponentChecksNotTransferred": true
+  },
+  "ownership": {
+    "implementationEditedByReviewer": false,
+    "applicationTestsRerunByReviewer": false,
+    "nativeBrowserExecuted": false,
+    "remoteOperations": false,
+    "mainMergePerformed": false,
+    "optionalPRs224Through232TakenOver": false,
+    "auditPRs184Through186TakenOver": false,
+    "releaseEnabled": 0
+  },
+  "remainingRequirements": [
+    "Freeze and verify the final published source, actual main target, proposed merge checkout and complete tree.",
+    "Complete and inspect all applicable current-target native/browser, Solana financial, CodeQL, documentation/specification and external checks.",
+    "Preserve old component heads and supersede sequential PR233/234/235 retarget instructions with the aggregate handoff.",
+    "Preserve every tested non-documentation entry through documentation-only evidence integration and source publication mapping."
+  ],
+  "limits": [
+    "Immutable local source and actual qualification-artifact review; no fresh hosted or remote-ref observation.",
+    "Coordinator full suite plus five commands are observed execution; reviewer did not rerun them.",
+    "Controlled form fixtures do not establish native event reachability, a global rate policy or cancellation storage rollback.",
+    "G24 native fixture preparation and prior unrelated tooling/docs/Python checks are not relabeled as fresh executions on this source.",
+    "Production remains English-only/draft, updater unconfigured, trust unset and ReleaseEnabled=0. No semantic, release, origin transition, deployment, physical-device or real-funds acceptance."
+  ],
+  "packagingChecks": {
+    "scope": "Complete main-to-index and main-to-worktree diff, including all staged review documentation.",
+    "executions": [
+      {
+        "command": [
+          "git",
+          "diff",
+          "--cached",
+          "--check",
+          "8e836baa877b676a863c877003e277b638fc5061"
+        ],
+        "startedAt": "2026-11-20T18:14:31.103175+00:00",
+        "completedAt": "2026-11-20T18:14:31.152606+00:00",
+        "exitCode": 0,
+        "outputBytes": 0,
+        "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "git",
+          "diff",
+          "--check",
+          "8e836baa877b676a863c877003e277b638fc5061"
+        ],
+        "startedAt": "2026-11-20T18:14:31.152637+00:00",
+        "completedAt": "2026-11-20T18:14:31.172925+00:00",
+        "exitCode": 0,
+        "outputBytes": 0,
+        "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "retainedOutputsAndLogsVerified": true,
+    "jsonParsed": true,
+    "stagedPathsConfinedToReview": true,
+    "stagedPathCount": 15
+  }
+}

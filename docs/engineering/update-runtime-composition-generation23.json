@@ -1,0 +1,124 @@
+{
+  "schema": "p2p-offramp.update-runtime-composition.v1",
+  "generation": 23,
+  "base": "44b0caef274e52632b509a23c7f1b7c9410c0568",
+  "source": "2732f5b136987c27639db23f1c7943a278e3fa56",
+  "tree": "5a1f2969c06db1dba47a1a55d1332a099466edef",
+  "branch": "codex/update-runtime-composition-g23-20261120",
+  "changedPaths": [
+    "apps/web/test/update-runtime-composition.test.mjs"
+  ],
+  "testBlob": "d1103693d2bcbbc71dd83bcc42769172d315b2a5",
+  "existingEntriesPreserved": 2652,
+  "productionChanges": false,
+  "runs": [
+    {
+      "source": "2732f5b136987c27639db23f1c7943a278e3fa56",
+      "tree": "5a1f2969c06db1dba47a1a55d1332a099466edef",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/update-runtime-composition.test.mjs"
+      ],
+      "startedAt": "2026-11-20T17:00:19.866938+00:00",
+      "completedAt": "2026-11-20T17:00:23.188085+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-update-runtime-composition-g23-logs/baseline.log",
+      "sha256": "d0578778eb8febc94a79f2df121bb1e67c92cb28e568bf3dc0cc3ab7fd417d39",
+      "retainedLog": "docs/execution/update-runtime-composition-generation23-20261120/baseline.log.gz",
+      "decodedBytes": 1479,
+      "compressedBytes": 626,
+      "compressedSha256": "affb0577bb09c7162c8327a98a13bf1478ffb1da6565212d9b270eba7f9ededb",
+      "counts": {
+        "tests": 12,
+        "pass": 12,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 3235.820836
+      }
+    },
+    {
+      "source": "2732f5b136987c27639db23f1c7943a278e3fa56",
+      "tree": "5a1f2969c06db1dba47a1a55d1332a099466edef",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/update-runtime-composition.test.mjs",
+        "apps/web/test/runtime-backup-selection.test.mjs",
+        "apps/web/test/backup-verification-runtime.test.mjs",
+        "packages/security/test/release-update.test.mjs"
+      ],
+      "startedAt": "2026-11-20T17:01:06.156571+00:00",
+      "completedAt": "2026-11-20T17:01:10.105413+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-update-runtime-composition-g23-logs/adjacent.log",
+      "sha256": "5ef1ad5bde8cc8b08b182023e809cc9bfd12d43000ab84370edb14cfc29f0d65",
+      "retainedLog": "docs/execution/update-runtime-composition-generation23-20261120/adjacent.log.gz",
+      "decodedBytes": 7421,
+      "compressedBytes": 2835,
+      "compressedSha256": "86de21ac257a646d478334d2debbbe88b8f431b50f018254fb034a9b5436ccef",
+      "counts": {
+        "tests": 68,
+        "pass": 68,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 3851.884951
+      }
+    },
+    {
+      "source": "2732f5b136987c27639db23f1c7943a278e3fa56",
+      "tree": "5a1f2969c06db1dba47a1a55d1332a099466edef",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "44b0caef274e52632b509a23c7f1b7c9410c0568",
+        "HEAD"
+      ],
+      "startedAt": "2026-11-20T17:01:10.106612+00:00",
+      "completedAt": "2026-11-20T17:01:10.118010+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-update-runtime-composition-g23-logs/whitespace.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retainedLog": "docs/execution/update-runtime-composition-generation23-20261120/whitespace.log.gz",
+      "decodedBytes": 0,
+      "compressedBytes": 20,
+      "compressedSha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    }
+  ],
+  "actualComponents": [
+    "AppServices",
+    "AppRuntime",
+    "VaultWorkerEndpoint",
+    "EncryptedVaultService",
+    "EncryptedBackupService",
+    "AssetUpdateController",
+    "SessionTransportPolicy",
+    "release manifest and locator signature verification"
+  ],
+  "controlledFixturePorts": [
+    "in-memory vault persistence",
+    "accepted-release compare/write record",
+    "wallet ownership and disconnect",
+    "local HTTP response bytes and grant registry",
+    "gesture owner",
+    "destination observation"
+  ],
+  "interpretation": [
+    "The first composed execution passed all12 cases on unchanged generation22 production source. No RED run or product defect is claimed.",
+    "The12 dedicated cases are included in the68-case adjacent run; counts are not added.",
+    "Actual endpoint/runtime/vault/controller composition is exercised in Node. There is no native Worker, native IndexedDB, browser activation, physical wallet or real origin navigation.",
+    "Accepted-floor retention is observed in the controlled store port, not claimed as native durable-storage acceptance.",
+    "The global fetch guard asserts no external fetch in every case; only the injected fixture fetch supplies signed bytes.",
+    "No TypeScript, production or build configuration changed. Existing generation22 type/build qualification was not repeated in this test-only slice.",
+    "No new production adapter, default updater, trust source, route, wallet integration, workflow, dependency, protocol or release setting was added."
+  ]
+}

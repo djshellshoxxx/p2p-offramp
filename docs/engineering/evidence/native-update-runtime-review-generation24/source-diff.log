@@ -1,0 +1,6 @@
+M	.github/workflows/vault-foundation.yml
+M	package.json
+A	scripts/fixtures/update-attempts.ts
+A	scripts/fixtures/update-runtime-browser.ts
+A	scripts/test-update-runtime-browser.mjs
+A	scripts/tests/update-attempts.test.mjs

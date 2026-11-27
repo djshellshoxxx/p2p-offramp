@@ -1,11 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import { runInNewContext } from 'node:vm';
 import { setImmediate as turn } from 'node:timers/promises';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { transformWithOxc } from 'vite';
+import { build, transformWithOxc } from 'vite';
 import { MAX_BACKUP_BYTES } from '../../../packages/schemas/index.ts';
 import { LocalPolicyError, localPolicyCode, runBoundedImport } from '../src/content-policy/local-policy.ts';
 import { Recovery } from '../src/ui/Pages.tsx';
@@ -27,9 +28,32 @@ const nodes = (node, predicate) => Array.isArray(node) ? node.flatMap(child => n
 const words = node => Array.isArray(node) ? node.map(words).join('') : typeof node === 'string' || typeof node === 'number' ?
   String(node) : node?.props ? words(node.props.children) : '';
 
+// The maintained runtime, message views and error mapping are bundled together with one
+// explicit test-only draft fixture. English text with a marker is not a translation.
+const localPath = path => fileURLToPath(new URL(path, import.meta.url));
+const fixtureEntry = localPath('./backup-verification-locale-fixture.ts');
+const fixtureBuild = await build({ configFile: false, logLevel: 'silent', plugins: [{
+  name: 'backup-verification-locale-fixture',
+  resolveId(id) { if (id === fixtureEntry) return '\0backup-verification-locale-fixture'; },
+  load(id) {
+    if (id === '\0backup-verification-locale-fixture') return `
+      export { messages as m } from ${JSON.stringify(localPath('../src/ui/messages.ts'))};
+      export { errorMessage } from ${JSON.stringify(localPath('../src/ui/routes.ts'))};
+      export { localeStore } from ${JSON.stringify(localPath('../src/ui/locale/runtime.ts'))};`;
+    if (id === localPath('../src/ui/locale/bundled.ts')) return `
+      import { sourceCatalog } from ${JSON.stringify(localPath('../src/ui/locale/en.ts'))};
+      export const bundledLocaleConfiguration = { developmentFixtures: true, fixtures: [{
+        id: 'fixture-rtl', locale: 'ar', messages: Object.fromEntries(Object.entries(sourceCatalog)
+          .map(([key, entry]) => [key, '[DRAFT ' + entry.source + ']'])) }] };`;
+  },
+}], build: { write: false, minify: false, lib: { entry: fixtureEntry, formats: ['es'] } } });
+const fixtureOutput = Array.isArray(fixtureBuild) ? fixtureBuild[0].output : fixtureBuild.output;
+assert.equal(fixtureOutput.length, 1);
+const fixtureLocale = await import('data:text/javascript;base64,' + Buffer.from(fixtureOutput[0].code).toString('base64'));
+
 // Execute maintained TSX handlers with dependency-aware hooks and actual bounded file-import logic.
 // Facade responses are controlled here; native crypto/Worker/browser acceptance has separate suites.
-function mounted(t, initialState = 'unlocked') {
+function mounted(t, initialState = 'unlocked', copy = { m, errorMessage }) {
   const states = [], refs = [], effects = [], calls = [], readBuffers = [];
   let stateAt = 0, refAt = 0, effectAt = 0, dirty = false, active = true, scope = 1, held = null;
   let status = { state: initialState }, check = ok({ verification: receipt }), verification = ok(receipt), reads = 0;
@@ -49,7 +73,7 @@ function mounted(t, initialState = 'unlocked') {
   const form = { elements: { namedItem(name) { return name === 'verification-file' ? fileInput : input; } },
     reset() { input.value = ''; fileInput.value = ''; fileInput.files = []; } };
   const context = {
-    m, errorMessage, MAX_BACKUP_BYTES, AbortController, LocalPolicyError, localPolicyCode, runBoundedImport,
+    m: copy.m, errorMessage: copy.errorMessage, MAX_BACKUP_BYTES, AbortController, LocalPolicyError, localPolicyCode, runBoundedImport,
     ControlHelp: () => null,
     useSyncExternalStore(_subscribe, snapshot) { return snapshot(); },
     useState(initial) { const at = stateAt++; if (!(at in states)) states[at] = initial;
@@ -220,4 +244,62 @@ test('independent: cancelled physical authentication retains file admission unti
   reply.resolve(ok(receipt)); await turn(); ui.selectFile(); ui.submit(); await turn();
   assert.equal(ui.reads, 2); assert.equal(ui.calls.length, 2);
   assert.ok(words(ui.render()).includes(receipt.backupSha256));
+});
+
+const noticeCases = [
+  { name: 'missing file', key: 'backupVerifyFileRequired', role: 'alert', arrange(ui) { ui.submit(); } },
+  { name: 'oversized file', code: 'LIMIT_EXCEEDED', role: 'alert', arrange(ui) { ui.selectFile({ size: MAX_BACKUP_BYTES + 1 }); ui.submit(); } },
+  { name: 'revision mismatch', key: 'backupVerifyMismatch', role: 'alert', arrange(ui) { ui.setVerification(fail('CONFLICT')); ui.selectFile(); ui.submit(); } },
+  { name: 'authentication refusal', code: 'AUTHENTICATION_FAILED', role: 'alert', arrange(ui) { ui.setVerification(fail('AUTHENTICATION_FAILED')); ui.selectFile(); ui.submit(); } },
+  { name: 'absent verification', key: 'backupVerifyNone', role: 'status', arrange(ui) { ui.setCheck(ok({ verification: null })); ui.click(fixtureLocale.m.backupVerifyCheck); } },
+  { name: 'recheck refusal', code: 'CONFLICT', role: 'alert', arrange(ui) { ui.setCheck(fail('CONFLICT')); ui.click(fixtureLocale.m.backupVerifyCheck); } },
+  { name: 'ordinary I/O failure', code: 'STORAGE_UNAVAILABLE', role: 'alert', arrange(ui) { ui.selectFile({ reader() { throw Error('Fixture I/O failure'); } }); ui.submit(); } },
+];
+for (const scenario of noticeCases) test(`live locale selection updates the ${scenario.name} notice without repeating its action`, async t => {
+  fixtureLocale.localeStore.select('en'); t.after(() => fixtureLocale.localeStore.select('en'));
+  const ui = mounted(t, 'unlocked', fixtureLocale); scenario.arrange(ui); await turn();
+  const text = () => scenario.key ? fixtureLocale.m[scenario.key] : fixtureLocale.errorMessage(scenario.code);
+  const sourceText = text(), calls = ui.calls.length, reads = ui.reads;
+  for (const id of ['en', 'fixture-rtl', 'en']) {
+    const snapshot = fixtureLocale.localeStore.select(id), root = ui.render();
+    assert.equal(snapshot.id, id); assert.equal(snapshot.fundsLocaleEligible, false);
+    assert.equal(root.props['aria-label'], fixtureLocale.m.backupVerifyTitle);
+    const notices = nodes(root, node => node.type === 'p' && node.props.className?.startsWith('notice'));
+    assert.equal(notices.length, 1); assert.equal(notices[0].props.role, scenario.role); assert.equal(words(notices[0]), text());
+    assert.equal(text() === sourceText, id === 'en');
+    assert.equal(ui.calls.length, calls); assert.equal(ui.reads, reads);
+    assert.equal(words(root).includes(receipt.backupSha256), false);
+  }
+});
+
+test('a cancelled recheck notice follows locale selection and its late result remains discarded', async t => {
+  fixtureLocale.localeStore.select('en'); t.after(() => fixtureLocale.localeStore.select('en'));
+  const ui = mounted(t, 'unlocked', fixtureLocale), reply = ui.hold();
+  ui.click(fixtureLocale.m.backupVerifyCheck); await turn(); ui.click(fixtureLocale.m.backupVerifyCancel);
+  assert.equal(ui.calls[0].signal.aborted, true);
+  for (const id of ['fixture-rtl', 'en']) {
+    fixtureLocale.localeStore.select(id);
+    const root = ui.render(), notices = nodes(root, node => node.type === 'p' && node.props.className === 'notice');
+    assert.equal(notices.length, 1); assert.equal(notices[0].props.role, 'status');
+    assert.equal(words(notices[0]), fixtureLocale.m.backupVerifyCancelled);
+    assert.equal(ui.calls.length, 1); assert.equal(ui.reads, 0);
+  }
+  reply.resolve(ok({ verification: receipt })); await turn();
+  assert.equal(words(ui.render()).includes(receipt.backupSha256), false);
+});
+
+test('changing locale during a recheck preserves that operation and the returned receipt identity', async t => {
+  fixtureLocale.localeStore.select('en'); t.after(() => fixtureLocale.localeStore.select('en'));
+  const ui = mounted(t, 'unlocked', fixtureLocale), reply = ui.hold();
+  ui.click(fixtureLocale.m.backupVerifyCheck); await turn();
+  fixtureLocale.localeStore.select('fixture-rtl');
+  assert.ok(words(ui.render()).includes(fixtureLocale.m.backupVerifyChecking));
+  assert.equal(ui.calls.length, 1); assert.equal(ui.calls[0].signal.aborted, false);
+  reply.resolve(ok({ verification: receipt })); await turn();
+  for (const id of ['fixture-rtl', 'en']) {
+    fixtureLocale.localeStore.select(id); const root = ui.render(), text = words(root);
+    assert.ok(text.includes(fixtureLocale.m.backupVerified(receipt.profileId, receipt.revision)));
+    assert.deepEqual(nodes(root, node => node.type === 'bdi').map(words), [receipt.envelopeSha256, receipt.backupSha256]);
+    assert.equal(ui.calls.length, 1); assert.equal(ui.reads, 0);
+  }
 });

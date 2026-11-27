@@ -1,4 +1,159 @@
+# Current consolidation checkpoint — generations 26–28 (2026-11-20 UTC)
+
+**The combined source passed 2,505/2,505 tests and all five additional
+qualification commands.** Exact source
+`2a0b26f3392d86c1cd3e056771c59438ece92927`, tree
+`92beca7b34957889156260d1167df81ebcf4aa84`, retains the published PR233,
+PR234 and PR235 ancestry and repairs request ownership in all four vault forms.
+After PR235, only `VaultForms.tsx` changes in production: four existing-ref
+admission guards and one explanatory comment. Two new regressions add 27 cases.
+The same cases reproduce four G26 and twelve G27 failures on unchanged
+production; independent reviews pass the repaired cases with no findings.
+
+**One new aggregate will target main. This supersedes the older sequential
+PR233 → PR234 → PR235 merge/retarget plan preserved below.** Keep all three
+original heads frozen while the aggregate is owned and qualifying:
+
+| Preserved PR | Exact published head |
+| --- | --- |
+| [PR233](https://github.com/djshellshoxxx/p2p-offramp/pull/233) | `92663e46508b06645111d9c713beb82d3a6d1a0f` |
+| [PR234](https://github.com/djshellshoxxx/p2p-offramp/pull/234) | `477777dc152cd3148ba7f25a75ce8f00dc1b03b5` |
+| [PR235](https://github.com/djshellshoxxx/p2p-offramp/pull/235) | `bca96b796db18d69563ae5f0395452494a0dacd5` |
+
+The intended branch is `codex/main-consolidation-g28-20261120`; last observed
+main is `8e836baa877b676a863c877003e277b638fc5061`. A new published head/PR,
+actual proposed merge and hosted completion are pending at this checkpoint.
+Require every applicable gate on the actual aggregate source and current main
+target, including browser, native financial and CodeQL qualification. Earlier
+stacked results do not transfer. After an expected-head guarded merge, read back
+main/tree/ordered parents and prove each frozen PR head is an ancestor before
+reconciling those contained PRs. Retain their original branches.
+
+Read the [generations 26–28 handoff](CONTINUATION_GENERATIONS26_28_20261120.md),
+[combined receipt](qualification-generations26-28.json),
+[retained-log index](retained-logs-generations26-28.json) and
+[independent composition review](INDEPENDENT_MAIN_COMPOSITION_REVIEW_GENERATION28_20261120.md).
+The review verifies all 55 prior publication mappings, tested non-documentation
+identities, unchanged workflows, complete logs and both build artifacts. All
+1,022 tested non-documentation entries must remain exact through publication.
+
+The controlled handler/facade/runtime regressions do not establish native event
+reachability or storage rollback. Restore retains uncertainty, original-request
+settlement and complete reconciliation before the tested retry. Native updater
+scenarios remain locally unexecuted; current-target hosted acceptance is still
+required. The default updater is unconfigured, production trust is unset,
+production locales remain English-only/draft and `ReleaseEnabled=0`.
+Optional PR224–232 and audits 184–186 remain separately owned. Earlier sections
+below are retained byte-for-byte as dated history and do not override this plan
+or subsequent exact-source publication receipts.
+
+---
+
+# Current consolidation checkpoint — generations 24–25
+
+**Frozen child source passed 2,478/2,478 tests and all eleven additional
+qualification commands.** Source `1a52c1c4f53a97cbbd0937f14a4379b88fd249b8`,
+tree `26938456c4924e4792a5671183a0879e86f8b7a2`, combines native updater
+fixture preparation with a selected-catalog privacy-panel repair. Eight
+non-documentation paths change relative to PR234; only the privacy panel is
+production code. The eight new locale cases fail against the original panel
+and pass after correction.
+
+The six native scenarios are implemented but **not run locally** under the
+managed Unix-socket policy. Build-only success reports `nativeExecuted: false`.
+Hosted execution must qualify the actual Worker/native IndexedDB fixture;
+HTTP, accepted floor, wallet, gesture, destination, time and scheduling remain
+controlled. Independent selections passed 46 distinct generation 24 cases and
+51 generation 25 cases, with no findings; overlapping selections are not added
+to the full-suite total. Production remains English-only/draft.
+
+The branch is `codex/native-update-locale-continuation-g24-20261120`.
+Its published parent is [PR234](https://github.com/djshellshoxxx/p2p-offramp/pull/234)
+at `477777dc152cd3148ba7f25a75ce8f00dc1b03b5`, targeting
+[PR233](https://github.com/djshellshoxxx/p2p-offramp/pull/233)'s branch. PR233
+remains pinned at `92663e46508b06645111d9c713beb82d3a6d1a0f` against observed main
+`8e836baa877b676a863c877003e277b638fc5061`. At 17:42 UTC, PR233 had fourteen
+queued checks and PR234 twelve; current-target hosted acceptance remained pending.
+Keep both heads frozen: guarded merge of PR233, retarget and requalify PR234 on
+main, then qualify the child against its actual target. Later source-bound publication
+receipts supersede this prepublication checkpoint.
+
+Read the [generations 24–25 handoff](CONTINUATION_GENERATIONS24_25_20261120.md),
+[combined qualification](qualification-generations24-25.json) and
+[retained-log index](retained-logs-generations24-25.json). Trusted application/
+wallet/origin composition, actual navigation and release acceptance remain
+unfinished. The default updater is unconfigured, production trust is unset and
+`ReleaseEnabled=0`. Earlier content below is preserved as dated historical
+evidence; it does not override this checkpoint or later exact-source receipts.
+
+---
+
 # P2P-Offramp consolidation handoff
+
+## Generations 22–23 checkpoint — runtime lease and direct updater composition
+
+**The exact runtime backup-selection prerequisite is implemented and its direct
+updater composition passed local qualification.** Frozen child source
+`4cff269483e7372f607a8e994d35ca558d7cff00`, tree
+`c5f9d82f618a935f24603e2290ecd8c946954d66`, passed **2,470/2,470 tests** with
+zero failures/skips/cancellations and all ten additional commands. Forty new
+cases cover opaque selection ownership and actual local runtime/updater
+composition. Independent selections passed 88/88 and 59/59 with no findings.
+
+The real published parent is [PR233](https://github.com/djshellshoxxx/p2p-offramp/pull/233)
+at `92663e46508b06645111d9c713beb82d3a6d1a0f`. Main remains
+`8e836baa877b676a863c877003e277b638fc5061` at this snapshot. The child branch
+`codex/runtime-update-continuation-g22-20261120` is not yet published or merged.
+The parent had fourteen queued checks and Snyk success at the latest recorded
+snapshot; applicable hosted qualification remains pending. Keep PR233 frozen,
+target its branch for the child, and revalidate source/tree/gates before any
+later retarget to main.
+
+Read the [generations 22–23 continuation](CONTINUATION_GENERATIONS22_23_20261120.md),
+[combined qualification](qualification-generations22-23.json) and
+[retained evidence index](retained-logs-generations22-23.json). The facade binds
+directly to the existing updater backup contract; no production backup adapter
+is missing. Trusted application/wallet/source composition and native-browser
+origin qualification remain incomplete. The default updater is unconfigured,
+production trust is unset and `ReleaseEnabled=0`. Earlier sections below retain
+their dated source scope and are superseded for coordination by this checkpoint
+and subsequent exact-source publication receipts.
+
+## Generation 21 checkpoint — reviewed locale completion awaiting hosted integration
+
+**The new composed source passed 2,430/2,430 tests with zero failures or skips.**
+It completes selected-catalog notice rendering across six UI files, adds 67
+regression cases across five test files, and updates six user/developer workflow
+pages. Fresh independent reviews found two Low documentation/evidence issues;
+both were corrected and rechecked, with no open finding in those assigned scopes.
+
+The fully tested source is `758936c54d0b823b96bad99ccfa93520ee175ae6`, tree
+`dfd6384a913552c6dc7bb3c2a8bce1b815fa903d`. All 1,013 non-documentation entries
+remain exact through the independently verified evidence-packaging correction.
+The integration branch is `codex/continuation-g21-20261120`. At this dated
+prepublication checkpoint, final published-head hosted qualification and merge
+remain pending. Use the eventual PR's exact source and completed logs when
+resuming; no earlier main result qualifies this new source.
+
+Main was read back as `8e836baa877b676a863c877003e277b638fc5061` after
+[PR223](https://github.com/djshellshoxxx/p2p-offramp/pull/223) merged at
+2026-11-20T16:25:14Z with 14/14 checks plus Snyk successful. Eleven already-contained
+feature PRs were closed after exact-head verification; their original branches
+remain intact. PR178/200, separately owned audits and optional PR191–199 remain
+preserved; newer optional PR224–232 are separately owned staging work. The
+existing state JSON is a dated snapshot, not a request for an endless sequence
+of state-only PRs.
+
+Read the [generation 21 continuation](CONTINUATION_GENERATION21_20261120.md),
+[combined qualification](qualification-generation21.json),
+[PR223 completion](consolidation-completion-generation20.json) and
+[contained-PR reconciliation](contained-pr-reconciliation-generation20.json).
+The continuation identifies actual tests, source/evidence preservation,
+publication steps and unfinished scope. Production remains English-only/draft,
+the updater remains unconfigured, live Wiki publication is not claimed and
+`ReleaseEnabled=0`. The older generation headings below are preserved dated
+records, superseded for current coordination by this checkpoint and any later
+source-bound publication receipt.
 
 ## Current generation 17 — guarded main integration complete (2026-11-20 UTC)
 

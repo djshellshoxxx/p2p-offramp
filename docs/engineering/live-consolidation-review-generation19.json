@@ -1,0 +1,2333 @@
+{
+  "schema": 1,
+  "repository": "djshellshoxxx/p2p-offramp",
+  "reviewer": "live_consolidation_review_g19",
+  "observed_initial_utc": "2026-11-20T15:53:27Z",
+  "review_scope": "Read-only current source/PR inventory and independent one-file PR223 state review. No runtime audit, offensive workflow, new native/browser test or remote mutation.",
+  "main": {
+    "head": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+    "tree": "455c76e42918f570f91fb21918f4afba1801c3c8",
+    "parents": [
+      "1084a410676bc0658da97f33eba6a059493d74df",
+      "2730d83154e54ef53e939965b1fa5f3d0de18bc9"
+    ]
+  },
+  "recent_merges": [
+    {
+      "pr": 221,
+      "head": "24b67bb2db7c74654b9a5b9496279b4d44380d28",
+      "base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "merge": "1084a410676bc0658da97f33eba6a059493d74df",
+      "merged_at": "2026-11-20T12:29:29Z",
+      "changed_files": 379
+    },
+    {
+      "pr": 222,
+      "head": "2730d83154e54ef53e939965b1fa5f3d0de18bc9",
+      "base": "1084a410676bc0658da97f33eba6a059493d74df",
+      "merge": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+      "merged_at": "2026-11-20T15:43:46Z",
+      "changed_files": 62
+    }
+  ],
+  "candidate": {
+    "pr": 223,
+    "head": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+    "base": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+    "tree": "9693f90d2ef73a06b3557d57ddc2239ae65065f5",
+    "head_parents": [
+      "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+    ],
+    "merge": "c0609ccbf03c3195921f667c7ffda5c941351f4c",
+    "merge_tree": "9693f90d2ef73a06b3557d57ddc2239ae65065f5",
+    "merge_parents": [
+      "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+      "7f1c6d6b851926111accaaf3376320b44fcd138b"
+    ],
+    "draft": true,
+    "mergeable": true,
+    "actionable_source_findings": [],
+    "qualification": {
+      "base": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+      "head": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "tree_changed": [
+        "docs/engineering/consolidation-state.json"
+      ],
+      "changed_top_level_keys": [
+        "generation",
+        "updated_at_utc",
+        "phase",
+        "main_sha",
+        "current_verification_key",
+        "generation18_documentation_integration"
+      ],
+      "unchanged_tree_entries": 2575,
+      "unchanged_non_documentation_entries": 1009,
+      "base_state_sha256": "bec75a02e5aedeca3acd1b62b8f19b7dd3670ca337a2284ae5d4ae24634b9293",
+      "head_state_sha256": "2d7cfd36ded666a70b3c03ab08bfc8c20c60b4877512823288c9b56c08ad077e",
+      "retained_inventory": true,
+      "retained_generation17_evidence": true,
+      "json_roundtrip": true,
+      "release_enabled": 0
+    }
+  },
+  "initial_ci_status_observation": [
+    {
+      "id": 44767300483,
+      "name": "Specification inventory",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "created_at": "2026-11-20T15:50:28Z",
+      "actual_logs_inspected_by_this_reviewer": false
+    },
+    {
+      "id": 44767300435,
+      "name": "Vault foundation",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "created_at": "2026-11-20T15:50:28Z",
+      "actual_logs_inspected_by_this_reviewer": false
+    },
+    {
+      "id": 44767300414,
+      "name": "Nostr relay interoperability",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "created_at": "2026-11-20T15:50:28Z",
+      "actual_logs_inspected_by_this_reviewer": false
+    },
+    {
+      "id": 44767300439,
+      "name": "EVM escrow",
+      "status": "in_progress",
+      "conclusion": null,
+      "head_sha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "created_at": "2026-11-20T15:50:28Z",
+      "actual_logs_inspected_by_this_reviewer": false
+    },
+    {
+      "id": 44767290164,
+      "name": "PR #223",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+      "created_at": "2026-11-20T15:50:24Z",
+      "actual_logs_inspected_by_this_reviewer": false
+    }
+  ],
+  "inventory": {
+    "branch_count": 234,
+    "open_pr_count": 54,
+    "branch_relations": {
+      "ancestor": 145,
+      "divergent": 87,
+      "descendant": 1,
+      "equal": 1
+    },
+    "all_api_local_heads_match": true,
+    "branches": [
+      {
+        "name": "autonomous/completion-20261031",
+        "head": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+        "local_head": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "autonomous/completion-20261102",
+        "head": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "local_head": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "autonomous/continuation-20261031",
+        "head": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+        "local_head": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "autonomous/guidance-20261101",
+        "head": "c8494b05e36cda43ac3f73e0feab831cfa00647d",
+        "local_head": "c8494b05e36cda43ac3f73e0feab831cfa00647d",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "autonomous/journey-20261101",
+        "head": "3947074c95fa1e0facd65a8947a2c7e70363c708",
+        "local_head": "3947074c95fa1e0facd65a8947a2c7e70363c708",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/acceptance-cli-input-bounds-20261110",
+        "head": "2ba1a4e18f4673f006b195e822b5f984effb48e8",
+        "local_head": "2ba1a4e18f4673f006b195e822b5f984effb48e8",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/acceptance-review-boolean-20261110",
+        "head": "08a9cf1e9abc0fb703b14964062a3da2234fdbb6",
+        "local_head": "08a9cf1e9abc0fb703b14964062a3da2234fdbb6",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+        "head": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+        "local_head": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/audit-compatibility-20261118",
+        "head": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+        "local_head": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/audit-evm-schema-20261110",
+        "head": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+        "local_head": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+        "head": "bfed3af3fa53425084f99efa18916433a5868fd1",
+        "local_head": "bfed3af3fa53425084f99efa18916433a5868fd1",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+        "head": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+        "local_head": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+        "head": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+        "local_head": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/audit-utf8-20261119-108",
+        "head": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+        "local_head": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-cross-deployment-nonce-20261111",
+        "head": "c153a99dd5c876c23bdb115f7037a4bf63cb57d4",
+        "local_head": "c153a99dd5c876c23bdb115f7037a4bf63cb57d4",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-marker-failure-20261110",
+        "head": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+        "local_head": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-restore-regression-20261110",
+        "head": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+        "local_head": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
+        "head": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+        "local_head": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-restored-casefold-20261110",
+        "head": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+        "local_head": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
+        "head": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+        "local_head": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
+        "head": "146d06d81474445434070aff557ad56379ad24a3",
+        "local_head": "146d06d81474445434070aff557ad56379ad24a3",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-restored-pending-20261110",
+        "head": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+        "local_head": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-restored-prepared-20261110",
+        "head": "92cc054ce9a2ee21936e20d103757e374f4af296",
+        "local_head": "92cc054ce9a2ee21936e20d103757e374f4af296",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-restored-race-20261111",
+        "head": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
+        "local_head": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/d9-restored-terminal-20261110",
+        "head": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+        "local_head": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/docs-collaboration-20261117",
+        "head": "e21a58e6a4d09c099d3249660ddec770f2164a74",
+        "local_head": "e21a58e6a4d09c099d3249660ddec770f2164a74",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/docs-python-baseline-20261116",
+        "head": "75a5e35b56310a9660aa7c6a3855db3c64e759f4",
+        "local_head": "75a5e35b56310a9660aa7c6a3855db3c64e759f4",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/docs-static-offers-status-20261116",
+        "head": "30efa0e158c6b50525c8e0dced494faa9f54eb08",
+        "local_head": "30efa0e158c6b50525c8e0dced494faa9f54eb08",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/docs-status-20261118",
+        "head": "708d937df7e4799e4ad212b3293bec923f619940",
+        "local_head": "708d937df7e4799e4ad212b3293bec923f619940",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/docs-wiki-20261110",
+        "head": "c14cfd07a440f03b5f57e35c8d39e63cdabfd5bf",
+        "local_head": "c14cfd07a440f03b5f57e35c8d39e63cdabfd5bf",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+        "head": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+        "local_head": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
+        "head": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+        "local_head": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
+        "head": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+        "local_head": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/g12-native-withdraw-recipient-20261111",
+        "head": "84bb67f6e438b26bd1d321995c427d6a86a58930",
+        "local_head": "84bb67f6e438b26bd1d321995c427d6a86a58930",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
+        "head": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+        "local_head": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/g16-bilateral-replay-20261111",
+        "head": "969d02aecf86c6be18dde509b5cf0016345b0fe4",
+        "local_head": "969d02aecf86c6be18dde509b5cf0016345b0fe4",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/g18-final-chain-recheck-20261111",
+        "head": "921f067769188f53c2d379f035695a40ae978083",
+        "local_head": "921f067769188f53c2d379f035695a40ae978083",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
+        "head": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+        "local_head": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/g20-chat-scope-regression-20261111",
+        "head": "a5c74990f0f5e9162a23450db5e9af00f37d88e8",
+        "local_head": "a5c74990f0f5e9162a23450db5e9af00f37d88e8",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/g25-public-endpoint-regression-20261110",
+        "head": "e0a9033158d1ae874c78de7f25d0be0aa3a13157",
+        "local_head": "e0a9033158d1ae874c78de7f25d0be0aa3a13157",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/g26-clear-reentrancy-20261111",
+        "head": "548495515c83fc1389837f00eb0468758cd232fd",
+        "local_head": "548495515c83fc1389837f00eb0468758cd232fd",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
+        "head": "5f2381ab42c27984dbb1cc872468dd3e09771690",
+        "local_head": "5f2381ab42c27984dbb1cc872468dd3e09771690",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+        "head": "5984dc823c25399a001b5f059c79db89f51a1324",
+        "local_head": "5984dc823c25399a001b5f059c79db89f51a1324",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
+        "head": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+        "local_head": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/qualify-pr61-20261110",
+        "head": "a1930a3596f76eff4c29a1ee2991d6acd7f35895",
+        "local_head": "a1930a3596f76eff4c29a1ee2991d6acd7f35895",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/recovery-reference-identity-20261115",
+        "head": "85849f7b267dddceffc35ef5253da4a23ef9be05",
+        "local_head": "85849f7b267dddceffc35ef5253da4a23ef9be05",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/registry-concurrency-20261110",
+        "head": "a213166ea83a0c5ec0768f693ff583413e8e976b",
+        "local_head": "a213166ea83a0c5ec0768f693ff583413e8e976b",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "chatgpt/zero-codex/review-read-bounds-20261119-119",
+        "head": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+        "local_head": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
+        "head": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+        "local_head": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "chatgpt/zero-codex-continuation-spec-20261109",
+        "head": "62c6c14539ccc2ac2e56658a81602f6d1ba50d73",
+        "local_head": "62c6c14539ccc2ac2e56658a81602f6d1ba50d73",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/adoring-wozniak-850ue6",
+        "head": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+        "local_head": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/compassionate-gauss-uyhfih",
+        "head": "970ac80f08c04e8d340ee57d901e48e26a667a18",
+        "local_head": "970ac80f08c04e8d340ee57d901e48e26a667a18",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/confident-fermi-g6wjp3",
+        "head": "64c7c1861779ea34632f2f800b80bdaecbaefa03",
+        "local_head": "64c7c1861779ea34632f2f800b80bdaecbaefa03",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/docs-screenshots",
+        "head": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+        "local_head": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/friendly-dijkstra-nsi310",
+        "head": "bd26833555e13408825942e9696157ed68e9980e",
+        "local_head": "bd26833555e13408825942e9696157ed68e9980e",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/gifted-faraday-73kydc",
+        "head": "8fb081b492ccf9ecef4dc47525c753cac670dacb",
+        "local_head": "8fb081b492ccf9ecef4dc47525c753cac670dacb",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy",
+        "head": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+        "local_head": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-decisions",
+        "head": "89d0a928e9e1127a4c8911f9437359260bd06ab6",
+        "local_head": "89d0a928e9e1127a4c8911f9437359260bd06ab6",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-journey",
+        "head": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+        "local_head": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+        "head": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+        "local_head": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
+        "head": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+        "local_head": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+        "head": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+        "local_head": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+        "head": "7706859d2385cae0f8e49615392de08dfee83f84",
+        "local_head": "7706859d2385cae0f8e49615392de08dfee83f84",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+        "head": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+        "local_head": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+        "head": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+        "local_head": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+        "head": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+        "local_head": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+        "head": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+        "local_head": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+        "head": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+        "local_head": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+        "head": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+        "local_head": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+        "head": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+        "local_head": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+        "head": "494703e837897d04bce1cb04134fa8be6b747377",
+        "local_head": "494703e837897d04bce1cb04134fa8be6b747377",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s00-ci-triggers",
+        "head": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "local_head": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s01-tooling",
+        "head": "4e319013ea61ead31ae00ea9a44fa9c431cc84ce",
+        "local_head": "4e319013ea61ead31ae00ea9a44fa9c431cc84ce",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s02-core-contracts-storage",
+        "head": "01344cbd6655f509f3e2e3903333cdb579228d37",
+        "local_head": "01344cbd6655f509f3e2e3903333cdb579228d37",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s03-core-messaging",
+        "head": "5a747ded358ee9fcca393bb4a0616fd4e8632296",
+        "local_head": "5a747ded358ee9fcca393bb4a0616fd4e8632296",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s04-wallet-release",
+        "head": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+        "local_head": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
+        "head": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
+        "local_head": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
+        "head": "14be5a1c1ec69d91b0affe8a87811c681269fb6c",
+        "local_head": "14be5a1c1ec69d91b0affe8a87811c681269fb6c",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s07-native-journey",
+        "head": "8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7",
+        "local_head": "8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s08-portal-lab-docs",
+        "head": "c950dad4b387cb4b33910789c454eb8f2ab0ae81",
+        "local_head": "c950dad4b387cb4b33910789c454eb8f2ab0ae81",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s09-intake",
+        "head": "389c0ea69e24615d0f1d7595942514300cd855f9",
+        "local_head": "389c0ea69e24615d0f1d7595942514300cd855f9",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s10-optional-packages",
+        "head": "c696c02b94eb6b90da2ed76f93c383fcd8a7f703",
+        "local_head": "c696c02b94eb6b90da2ed76f93c383fcd8a7f703",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s11-governance-ci",
+        "head": "789b2b2c2644af741daa5328adf76ac2ec88599c",
+        "local_head": "789b2b2c2644af741daa5328adf76ac2ec88599c",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/loving-einstein-xgzvdy-s12-evidence",
+        "head": "001c31cc868b683080e79a025b6621d900acb96a",
+        "local_head": "001c31cc868b683080e79a025b6621d900acb96a",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/p2p-offramp-consolidation-k5h13u",
+        "head": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+        "local_head": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/p2p-offramp-evm-escrow-vc7stk",
+        "head": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+        "local_head": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/p2p-offramp-integration-aan57u",
+        "head": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+        "local_head": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/p2p-offramp-prompt-lqcgno",
+        "head": "25a01987385b49e9c28199fdfb4a874b29a6ad89",
+        "local_head": "25a01987385b49e9c28199fdfb4a874b29a6ad89",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/post-merge-followups",
+        "head": "ec65012dbb94189180d3da52de2619cc22fe0482",
+        "local_head": "ec65012dbb94189180d3da52de2619cc22fe0482",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/quirky-knuth-3s6ysy",
+        "head": "2f839b12768700ac6c3b674f75a144c6ec19fa93",
+        "local_head": "2f839b12768700ac6c3b674f75a144c6ec19fa93",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "claude/recovery-consolidation",
+        "head": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+        "local_head": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/sleepy-fermat-4s6ocx",
+        "head": "f1d9dd63a2ac9d55912899f8c6233456ebf8a499",
+        "local_head": "f1d9dd63a2ac9d55912899f8c6233456ebf8a499",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/sweet-noether-arf6ne",
+        "head": "391653eaba946f77057b01fd03d3c234958bcf1d",
+        "local_head": "391653eaba946f77057b01fd03d3c234958bcf1d",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/sweet-shannon-grykla",
+        "head": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+        "local_head": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/tender-goodall-db3cot",
+        "head": "8783636e7a1739b5e884cec62fbecf9c77a0ceaf",
+        "local_head": "8783636e7a1739b5e884cec62fbecf9c77a0ceaf",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/trade-review-integration",
+        "head": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+        "local_head": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "claude/vibrant-cray-ny4gum",
+        "head": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+        "local_head": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/backup-cross-browser-g13-20261120",
+        "head": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+        "local_head": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/backup-verification-ui-g12-20261120",
+        "head": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+        "local_head": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/canonical-handoff-postmerge-g17-20261120",
+        "head": "2730d83154e54ef53e939965b1fa5f3d0de18bc9",
+        "local_head": "2730d83154e54ef53e939965b1fa5f3d0de18bc9",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/ci-oracle-g12-20261120",
+        "head": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+        "local_head": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/completion-20261116",
+        "head": "88f9e40bbf8ea086705edd554a2555865429b54a",
+        "local_head": "88f9e40bbf8ea086705edd554a2555865429b54a",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/consolidation-20261116",
+        "head": "274d4fe533f47ffa15aed936bd095f82ad10d9ce",
+        "local_head": "274d4fe533f47ffa15aed936bd095f82ad10d9ce",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/consolidation-handoff-20261119",
+        "head": "45420ed6dc4e16ec55b1f76f215c211db2884e09",
+        "local_head": "45420ed6dc4e16ec55b1f76f215c211db2884e09",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/consolidation-ledger-20261104",
+        "head": "d5b959b5ed732ab3e6f7adfd37e872a841470225",
+        "local_head": "d5b959b5ed732ab3e6f7adfd37e872a841470225",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/continue-completion-20261116",
+        "head": "e7506c22e6b0bc405a9e51f1c809fa30c2fe5861",
+        "local_head": "e7506c22e6b0bc405a9e51f1c809fa30c2fe5861",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/core-continuation-20261104",
+        "head": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+        "local_head": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/ctutils-remediation-20261119",
+        "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+        "local_head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/d9-migration-20261116",
+        "head": "c1f8e750beb7e22d5b9a7f0e47cca9f8cd8bdb65",
+        "local_head": "c1f8e750beb7e22d5b9a7f0e47cca9f8cd8bdb65",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/dependency-g12-20261120",
+        "head": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+        "local_head": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/foundation-gates-20261104",
+        "head": "77fb7c52dcdde58cad17ceee45a0f43e7e22ad43",
+        "local_head": "77fb7c52dcdde58cad17ceee45a0f43e7e22ad43",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/generation5-core-20261119",
+        "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+        "local_head": "cd7d54ba075118a7ec043788c17718be842ee405",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/generation8-core-20261120",
+        "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+        "local_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/generation9-backup-verification-20261120",
+        "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+        "local_head": "0e148564743b1ee353abdbdf8931fec464f09870",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/historical-recovery-20261119",
+        "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+        "local_head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/main-consolidation-g12-20261120",
+        "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "local_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/max-consolidation-20261119",
+        "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+        "local_head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/optional-arbitration-20261119",
+        "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+        "local_head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-complete-evidence-g10-20261120",
+        "head": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+        "local_head": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-composition-evidence-g8-20261120",
+        "head": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+        "local_head": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-corrected-evidence-g9-20261120",
+        "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+        "local_head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-courier-20261119",
+        "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+        "local_head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-current-core-evidence-g11-20261120",
+        "head": "db531cb03ad303821a3625f6858941de1ac07606",
+        "local_head": "db531cb03ad303821a3625f6858941de1ac07606",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-liquidity-20261119",
+        "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+        "local_head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-meetup-20261119",
+        "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+        "local_head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-privacy-controls-20261119",
+        "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+        "local_head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-privacy-policy-20261119",
+        "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+        "local_head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-proof-inputs-20261119",
+        "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+        "local_head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-proof-jobs-20261119",
+        "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+        "local_head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/optional-stealth-20261119",
+        "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+        "local_head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/peer-acceptance-20261116",
+        "head": "b3f508420e63329ab30e1b646f61337020a1ebad",
+        "local_head": "b3f508420e63329ab30e1b646f61337020a1ebad",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/personalization-favorites-ui-20261119",
+        "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+        "local_head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/personalization-templates-ui-20261119",
+        "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+        "local_head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/post-send-reconcile-20261109",
+        "head": "af0e1789889790c2050142ed508b5042ef5bcc85",
+        "local_head": "af0e1789889790c2050142ed508b5042ef5bcc85",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/postmerge-state-reconciliation-g18-20261120",
+        "head": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+        "local_head": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+        "matches_local": true,
+        "relation_to_main": "descendant"
+      },
+      {
+        "name": "codex/qr-camera-fixture-20261119",
+        "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+        "local_head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/relay-freshness-capacity-20261120-auto2",
+        "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+        "local_head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/review-consolidate-20261116",
+        "head": "5eadddd54f6db6e755e658c1982c95f95b37a823",
+        "local_head": "5eadddd54f6db6e755e658c1982c95f95b37a823",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/reviewed-main-consolidation-g15-20261120",
+        "head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+        "local_head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/reviewed-main-consolidation-g17-20261120",
+        "head": "24b67bb2db7c74654b9a5b9496279b4d44380d28",
+        "local_head": "24b67bb2db7c74654b9a5b9496279b4d44380d28",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/rq00-evidence-20261109",
+        "head": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+        "local_head": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/setup-autonomous-agent-20261104",
+        "head": "54e632f8f472a4d26b2fdda4ebdd3f2e02a5dba0",
+        "local_head": "54e632f8f472a4d26b2fdda4ebdd3f2e02a5dba0",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/signed-update-ui-g13-20261120",
+        "head": "7d40620c8320945750bd51bf865226dadde998ca",
+        "local_head": "7d40620c8320945750bd51bf865226dadde998ca",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/solana-browser-send-repair-20261119",
+        "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+        "local_head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/solana-payout-docs-20261109",
+        "head": "7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
+        "local_head": "7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/solana-public-export-g14-20261120",
+        "head": "09c3d94aedab3c78a4397e3cb80786fb5eb4fd4a",
+        "local_head": "09c3d94aedab3c78a4397e3cb80786fb5eb4fd4a",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/solana-restore-ack-20261119",
+        "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+        "local_head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "codex/successor-handoff-20261120",
+        "head": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+        "local_head": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "codex/transport-qualification-20261120",
+        "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "local_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "consolidation/qualified-regressions-20261116",
+        "head": "f2375dba1b249912ac434ed9da3998e4cb0a40f0",
+        "local_head": "f2375dba1b249912ac434ed9da3998e4cb0a40f0",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "consolidation/solana-browser-recovery-20261119",
+        "head": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+        "local_head": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "consolidation/tooling154-20261119",
+        "head": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+        "local_head": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "docs/consolidation-20261119",
+        "head": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+        "local_head": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "docs/lean-release-handoff-2026-10-24",
+        "head": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+        "local_head": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "docs/offramp-research-tools-execution-plan-20261106",
+        "head": "0f1792f589a20efab1f629f38d2a0068d4f44193",
+        "local_head": "0f1792f589a20efab1f629f38d2a0068d4f44193",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "docs/security-spec-expansion-20261021",
+        "head": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+        "local_head": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "docs/spec-readiness-and-foundations",
+        "head": "6b6004bdf35b7aea14530f965756ca6d54336682",
+        "local_head": "6b6004bdf35b7aea14530f965756ca6d54336682",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "feat/custodial-ledger-foundation",
+        "head": "52e6987e77d9ef6bc403c0129b3f52531986ade8",
+        "local_head": "52e6987e77d9ef6bc403c0129b3f52531986ade8",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "feature/erc20-browser-continuation-20261118",
+        "head": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+        "local_head": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "feature/public-qr-capture-20261119",
+        "head": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+        "local_head": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "feature/same-terms-resumption-20261119",
+        "head": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+        "local_head": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "fix/localnet-readiness-20261119",
+        "head": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+        "local_head": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "fix/qr-async-expiry-20261120",
+        "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+        "local_head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "fix/remediation-09f20d73-9524c0",
+        "head": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+        "local_head": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "fix/remediation-f84468d6-0a97ed",
+        "head": "dba5072d7a67f67e223432c48aefabc07f31f005",
+        "local_head": "dba5072d7a67f67e223432c48aefabc07f31f005",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "fix/signed-update-unconfigured-lifecycle-g16-20261120",
+        "head": "eaa7914ad2f10e932afc877e9e742e0a3117d9c4",
+        "local_head": "eaa7914ad2f10e932afc877e9e742e0a3117d9c4",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "fix/transport-preflight-zeroization-20261120",
+        "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+        "local_head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "gpt/p2p-beta-spec-20261109",
+        "head": "c4fb7b590639e2a1d0a3220cf6bf7936156cc8e4",
+        "local_head": "c4fb7b590639e2a1d0a3220cf6bf7936156cc8e4",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "integration/all-compatible-work",
+        "head": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+        "local_head": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "integration/browser-mvp-20261118",
+        "head": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
+        "local_head": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "integration/core-hardening-20261118",
+        "head": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+        "local_head": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "integration/docs-reconciliation-20261118",
+        "head": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+        "local_head": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "integration/m2a-safe-fixes-20261114",
+        "head": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+        "local_head": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "integration/p2p-consolidated-20261109",
+        "head": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+        "local_head": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "integration/pages-beta-qualification-20261112",
+        "head": "4dcddf2b4bcc9890e50647cea067f81b1b734cdd",
+        "local_head": "4dcddf2b4bcc9890e50647cea067f81b1b734cdd",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "integration/pages-offline-recovery-20261112",
+        "head": "9550d4b182806170ee28149e9d46ffbccef56c33",
+        "local_head": "9550d4b182806170ee28149e9d46ffbccef56c33",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "integration/privacy-endpoint-disclosures-20261109",
+        "head": "07b3b2abfc548a1b69621396b1d45a52dfe79063",
+        "local_head": "07b3b2abfc548a1b69621396b1d45a52dfe79063",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "integration/solana-core-qualification-20261118",
+        "head": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+        "local_head": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "main",
+        "head": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "local_head": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "matches_local": true,
+        "relation_to_main": "equal"
+      },
+      {
+        "name": "nodata/affectionate-ritchie-xq4bon",
+        "head": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+        "local_head": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/doc-sweep-20261118",
+        "head": "436b591a3a750bcca2327117e487336f6dd77470",
+        "local_head": "436b591a3a750bcca2327117e487336f6dd77470",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/epic-goldberg-sg8n96",
+        "head": "1df700355e5199c69e84d5b41b12005677b5f5ee",
+        "local_head": "1df700355e5199c69e84d5b41b12005677b5f5ee",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/epic-newton-7bowm4",
+        "head": "1fe5ae00ed2105633081d71a67db2b5436da9c8d",
+        "local_head": "1fe5ae00ed2105633081d71a67db2b5436da9c8d",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx",
+        "head": "014a10a148f8b3b69c9d650fbcb083c8142e7d28",
+        "local_head": "014a10a148f8b3b69c9d650fbcb083c8142e7d28",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b1-reader-test-flake",
+        "head": "b7d06fed31fb7d2793da99c23f15bf6795a82b8a",
+        "local_head": "b7d06fed31fb7d2793da99c23f15bf6795a82b8a",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b1a-reader",
+        "head": "37f074dd1d65d5f12b73182420998a152374b813",
+        "local_head": "37f074dd1d65d5f12b73182420998a152374b813",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
+        "head": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+        "local_head": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b1c-acceptance",
+        "head": "236f815e79a852643d8dfa61d6d4895c8a93f54a",
+        "local_head": "236f815e79a852643d8dfa61d6d4895c8a93f54a",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+        "head": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+        "local_head": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+        "head": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+        "local_head": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+        "head": "f03ebbfb395128f839fbe069226e6d79bc143258",
+        "local_head": "f03ebbfb395128f839fbe069226e6d79bc143258",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+        "head": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+        "local_head": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+        "head": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+        "local_head": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+        "head": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+        "local_head": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+        "head": "0b681ed42330b9129502eb0097783cf5995e8382",
+        "local_head": "0b681ed42330b9129502eb0097783cf5995e8382",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+        "head": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+        "local_head": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+        "head": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+        "local_head": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b3-formal",
+        "head": "39096586e1160c3c8434a2d081339bb70aeb4c1b",
+        "local_head": "39096586e1160c3c8434a2d081339bb70aeb4c1b",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+        "head": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+        "local_head": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+        "head": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+        "local_head": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
+        "head": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+        "local_head": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
+        "head": "579b02f3775323ba273dfe2bc624b5860897431e",
+        "local_head": "579b02f3775323ba273dfe2bc624b5860897431e",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
+        "head": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+        "local_head": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/accessibility-recovery-panels-20261113",
+        "head": "db38fba65be8b6e19c880c78e439e712ffe7e974",
+        "local_head": "db38fba65be8b6e19c880c78e439e712ffe7e974",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/browser-cold-nonce-20261113",
+        "head": "2cacd1d5219a82d984a75668838204e3160d5791",
+        "local_head": "2cacd1d5219a82d984a75668838204e3160d5791",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/browser-cold-recovery-20261113",
+        "head": "65efc3428ff01d4f091600baee85edfff094b347",
+        "local_head": "65efc3428ff01d4f091600baee85edfff094b347",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/browser-peer-offer-20261113",
+        "head": "d6d65a47b99e68d00f82153d83fef366e532cf67",
+        "local_head": "d6d65a47b99e68d00f82153d83fef366e532cf67",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/browser-runtime-engines-20261113",
+        "head": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+        "local_head": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/cli-argument-regression-20261113",
+        "head": "605bcd24ef3d239f6a080c129761132482029ef7",
+        "local_head": "605bcd24ef3d239f6a080c129761132482029ef7",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/diagnostics-20261113",
+        "head": "330fa1ede8b70e532a02230e4895b0711579491e",
+        "local_head": "330fa1ede8b70e532a02230e4895b0711579491e",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/docs-web-profile-recovery-20261113",
+        "head": "3524096c0ff1f4d743b01f06421bc56bbe07b9b3",
+        "local_head": "3524096c0ff1f4d743b01f06421bc56bbe07b9b3",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/locale-20261113",
+        "head": "c4b13ddccc5bd78406762c656df5af35958e83f9",
+        "local_head": "c4b13ddccc5bd78406762c656df5af35958e83f9",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/localization-blank-warning-20261113",
+        "head": "718208880b650b03ac380d358a00878480827870",
+        "local_head": "718208880b650b03ac380d358a00878480827870",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "parallel/portable-recovery-guide-20261113",
+        "head": "05794e754c8bf588fc6781100e8af99675418629",
+        "local_head": "05794e754c8bf588fc6781100e8af99675418629",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/recovery-builder-help-20261113",
+        "head": "4f75e00d0c8e7eb9f61efd633b684ca0a47b9d76",
+        "local_head": "4f75e00d0c8e7eb9f61efd633b684ca0a47b9d76",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/spec-tool-20261113",
+        "head": "6d48c9b0695cacd2a166a7386f24b61a6248bc10",
+        "local_head": "6d48c9b0695cacd2a166a7386f24b61a6248bc10",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "parallel/tooling-source-correspondence-20261113",
+        "head": "32a4052163553f7826d55f784ab9a6e96425e576",
+        "local_head": "32a4052163553f7826d55f784ab9a6e96425e576",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "research/code-reuse-2026-11-03",
+        "head": "5fec2c6db018868a49c8ce40c21e186cdf702417",
+        "local_head": "5fec2c6db018868a49c8ce40c21e186cdf702417",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "research/remaining-gaps-20261103",
+        "head": "922a391e429d07b0840bbbe525b3a10c6d3c830c",
+        "local_head": "922a391e429d07b0840bbbe525b3a10c6d3c830c",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "research/security-addendum-20261103",
+        "head": "3a523a11a87d85443c484b6a4d4284b96c5f0b41",
+        "local_head": "3a523a11a87d85443c484b6a4d4284b96c5f0b41",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "research/upstream-reuse-20261103",
+        "head": "977b36654bab2d00ca20c6139398b60c693bab73",
+        "local_head": "977b36654bab2d00ca20c6139398b60c693bab73",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "review/codebase-security-20261104-94554ec",
+        "head": "6e9c0c5ea8881013d06892103cf87ef1c547476a",
+        "local_head": "6e9c0c5ea8881013d06892103cf87ef1c547476a",
+        "matches_local": true,
+        "relation_to_main": "divergent"
+      },
+      {
+        "name": "test/erc20-browser-recovery-20261119",
+        "head": "c7f462c6688c78c35514808177ff7cfed32b9961",
+        "local_head": "c7f462c6688c78c35514808177ff7cfed32b9961",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "test/nostr-relay-interop-20261119",
+        "head": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+        "local_head": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "work/noncustodial-reconstruction-2026-10-24",
+        "head": "bc996aac828ce63856193c9114edfef480153325",
+        "local_head": "bc996aac828ce63856193c9114edfef480153325",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "work/p2p-client-shell-2026-10-24",
+        "head": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+        "local_head": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "work/p2p-consolidated-20261030",
+        "head": "68fb46920431e3311c78f931432bc4a21d066c17",
+        "local_head": "68fb46920431e3311c78f931432bc4a21d066c17",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "work/p2p-exchange-close-20261030",
+        "head": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+        "local_head": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "work/p2p-exchange-test-repair-20261030",
+        "head": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+        "local_head": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "work/p2p-gate-reconciliation-20261030",
+        "head": "e762e649600493221e3bd10f0c3525858722bc94",
+        "local_head": "e762e649600493221e3bd10f0c3525858722bc94",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "work/p2p-independent-branch-review-20261030",
+        "head": "9f80c9b27b943b30409710dea76a53d97a761832",
+        "local_head": "9f80c9b27b943b30409710dea76a53d97a761832",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "work/p2p-pr14-finish-handoff-20261030",
+        "head": "8c8911e2dd3c7af4d515e645a6501eedc6178111",
+        "local_head": "8c8911e2dd3c7af4d515e645a6501eedc6178111",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "work/p2p-relay-lifetime-20261030",
+        "head": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+        "local_head": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      },
+      {
+        "name": "work/p2p-validation-20261030",
+        "head": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+        "local_head": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+        "matches_local": true,
+        "relation_to_main": "ancestor"
+      }
+    ],
+    "open_prs": [
+      {
+        "pr": 223,
+        "head": "7f1c6d6b851926111accaaf3376320b44fcd138b",
+        "branch": "codex/postmerge-state-reconciliation-g18-20261120",
+        "title": "docs(state): reconcile generation-18 completed main/docs consolidation",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 200,
+        "head": "45420ed6dc4e16ec55b1f76f215c211db2884e09",
+        "branch": "codex/consolidation-handoff-20261119",
+        "title": "Record current corrections, source qualifications and continuation handoff",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 210,
+        "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "branch": "codex/transport-qualification-20261120",
+        "title": "Compose reviewed core followups and transport cleanup",
+        "base": "codex/generation8-core-20261120",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 211,
+        "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+        "branch": "fix/qr-async-expiry-20261120",
+        "title": "fix(qr): recheck expiry after async hash and signature verification",
+        "base": "codex/generation8-core-20261120",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 206,
+        "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+        "branch": "codex/relay-freshness-capacity-20261120-auto2",
+        "title": "fix(relay): reject invalid ad clocks and unbounded order-book capacity",
+        "base": "codex/generation8-core-20261120",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 209,
+        "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+        "branch": "codex/ctutils-remediation-20261119",
+        "title": "Update compatible ctutils lock and retain explicit dependency findings",
+        "base": "codex/generation8-core-20261120",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 208,
+        "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+        "branch": "codex/generation9-backup-verification-20261120",
+        "title": "Complete current-runtime backup verification prerequisite",
+        "base": "codex/generation8-core-20261120",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 204,
+        "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+        "branch": "codex/personalization-templates-ui-20261119",
+        "title": "Compose encrypted templates with explicit consent and fresh draft review",
+        "base": "codex/personalization-favorites-ui-20261119",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 203,
+        "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+        "branch": "codex/solana-restore-ack-20261119",
+        "title": "Fix Solana restore acknowledgment and backup byte ownership",
+        "base": "codex/solana-browser-send-repair-20261119",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 202,
+        "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+        "branch": "codex/solana-browser-send-repair-20261119",
+        "title": "fix: complete withheld Solana acknowledgment and qualify one browser POST",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 201,
+        "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+        "branch": "codex/personalization-favorites-ui-20261119",
+        "title": "Compose encrypted saved-review favorites with fresh-review and lifecycle checks",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 199,
+        "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+        "branch": "codex/optional-proof-jobs-20261119",
+        "title": "Recover optional proof-jobs with independent source qualification",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 198,
+        "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+        "branch": "codex/optional-stealth-20261119",
+        "title": "Recover optional stealth with independent source qualification",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 190,
+        "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+        "branch": "codex/historical-recovery-20261119",
+        "title": "Recover reviewed historical modules, tooling and durable consolidation handoff",
+        "base": "codex/max-consolidation-20261119",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 197,
+        "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+        "branch": "codex/optional-privacy-controls-20261119",
+        "title": "Recover optional privacy-controls source with reviewed boundary repairs",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 196,
+        "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+        "branch": "codex/optional-meetup-20261119",
+        "title": "Recover optional meetup source with reviewed boundary repairs",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 195,
+        "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+        "branch": "codex/optional-courier-20261119",
+        "title": "Recover optional courier source with reviewed boundary repairs",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 194,
+        "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+        "branch": "codex/optional-privacy-policy-20261119",
+        "title": "Recover optional privacy-policy source with reviewed boundary repairs",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 193,
+        "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+        "branch": "codex/optional-arbitration-20261119",
+        "title": "Recover accepted optional arbitration source with independent review",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 192,
+        "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+        "branch": "codex/optional-liquidity-20261119",
+        "title": "Recover accepted optional liquidity source with independent review",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 191,
+        "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+        "branch": "codex/optional-proof-inputs-20261119",
+        "title": "Recover accepted optional proof-inputs source with independent review",
+        "base": "codex/historical-recovery-20261119",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 189,
+        "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+        "branch": "codex/qr-camera-fixture-20261119",
+        "title": "Repair synthetic QR camera frame production during browser qualification",
+        "base": "codex/max-consolidation-20261119",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 186,
+        "head": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+        "branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+        "title": "docs(audit): record static sharing and privacy endpoint inspections (113–114)",
+        "base": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 185,
+        "head": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+        "branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+        "title": "docs(audit): record Pages startup-capability review (112)",
+        "base": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 184,
+        "head": "bfed3af3fa53425084f99efa18916433a5868fd1",
+        "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+        "title": "docs(audit): rotate static-client content-admission review (110)",
+        "base": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+        "ancestor_of_main": true
+      },
+      {
+        "pr": 163,
+        "head": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+        "title": "[Lane B] B2 optional package 9/9: meetup",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 178,
+        "head": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+        "branch": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+        "title": "docs(wiki): reconcile qualified main, resumption, and merge policy",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 145,
+        "head": "f03ebbfb395128f839fbe069226e6d79bc143258",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+        "title": "[Lane B] B2 optional package 2/9: liquidity",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 162,
+        "head": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+        "title": "[Lane B] B2 optional package 8/9: proof-jobs (own optional workflow)",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 146,
+        "head": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+        "title": "[Lane B] B2 optional package 3/9: courier",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 161,
+        "head": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+        "title": "[Lane B] B2 optional package 7/9: stealth",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 147,
+        "head": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+        "title": "[Lane B] B2 optional package 4/9: arbitration",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 160,
+        "head": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+        "title": "[Lane B] B2 optional package 6/9: privacy-controls",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 144,
+        "head": "0b681ed42330b9129502eb0097783cf5995e8382",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+        "title": "[Lane B] B2 optional package 1/9: proof-inputs",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 148,
+        "head": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+        "title": "[Lane B] B2 optional package 5/9: privacy-policy",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 176,
+        "head": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+        "branch": "docs/consolidation-20261119",
+        "title": "Record comprehensive consolidation, verification and remaining MVP work",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 159,
+        "head": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+        "branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+        "title": "G1/G2: D1 peer acceptance in exchange v2, wallet signer, localnet build profile (in progress)",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 156,
+        "head": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+        "title": "[Lane B] B4 governance 3/3: inert governance records (historical), assurance packet, evidence binding",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 155,
+        "head": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+        "branch": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+        "title": "[Lane B] B4 intake 2/3: dependency intake probes and Semaphore v4 reputation evaluation",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 142,
+        "head": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+        "branch": "claude/p2p-offramp-consolidation-k5h13u",
+        "title": "Consolidation run 3: post-#134 retirement script, branching rules, ledger entry",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 28,
+        "head": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+        "branch": "claude/loving-einstein-xgzvdy",
+        "title": "Fix PR #26 browser, cancellation, relay and HTTP defects",
+        "base": "autonomous/completion-20261102",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 81,
+        "head": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+        "branch": "claude/vibrant-cray-ny4gum",
+        "title": "Integrate #56 Sonar fixes and split-stack extractions #37/#38/#40–#43",
+        "base": "integration/p2p-consolidated-20261109",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 56,
+        "head": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+        "branch": "claude/vibrant-cray-ny4gum",
+        "title": "Resolve PR #54 review findings, harden agent workflow, record live project state",
+        "base": "codex/core-continuation-20261104",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 47,
+        "head": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+        "branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+        "title": "Split PR #26 (11/12): governance records, assurance packet and final CI wiring",
+        "base": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 37,
+        "head": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+        "branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+        "title": "Split PR #26 (1/12): gate tooling, signature oracle, Sepolia and formal EVM checks",
+        "base": "main",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 45,
+        "head": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+        "branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+        "title": "Split PR #26 (9/12): dependency and candidate intake evaluations",
+        "base": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 35,
+        "head": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+        "branch": "claude/loving-einstein-xgzvdy-journey",
+        "title": "Fix PR #31 journey findings F01, F03 and F06 (parked pending D9)",
+        "base": "claude/loving-einstein-xgzvdy",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 46,
+        "head": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+        "branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+        "title": "Split PR #26 (10/12): optional reference packages (D7 recommends parking)",
+        "base": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 48,
+        "head": "494703e837897d04bce1cb04134fa8be6b747377",
+        "branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+        "title": "Split PR #26 (12/12): execution evidence, review receipts and root docs",
+        "base": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 42,
+        "head": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+        "branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+        "title": "Split PR #26 (6/12): personalization, web runtime, UI wiring and browser qualification",
+        "base": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 43,
+        "head": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+        "branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+        "title": "Split PR #26 (7/12): native private-trade journey and retention",
+        "base": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 44,
+        "head": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+        "branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+        "title": "Split PR #26 (8/12): recovery portal, test lab, docs tooling and distribution",
+        "base": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 40,
+        "head": "7706859d2385cae0f8e49615392de08dfee83f84",
+        "branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+        "title": "Split PR #26 (4/12): wallet EIP-1271 acceptance and signed asset updates",
+        "base": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+        "ancestor_of_main": false
+      },
+      {
+        "pr": 26,
+        "head": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "branch": "autonomous/completion-20261102",
+        "title": "Complete local recovery and trade workflows with whole-source audit",
+        "base": "main",
+        "ancestor_of_main": false
+      }
+    ]
+  },
+  "already_included_open_prs": [
+    {
+      "pr": 210,
+      "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "branch": "codex/transport-qualification-20261120",
+      "title": "Compose reviewed core followups and transport cleanup",
+      "base": "codex/generation8-core-20261120",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 211,
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "branch": "fix/qr-async-expiry-20261120",
+      "title": "fix(qr): recheck expiry after async hash and signature verification",
+      "base": "codex/generation8-core-20261120",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 206,
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "title": "fix(relay): reject invalid ad clocks and unbounded order-book capacity",
+      "base": "codex/generation8-core-20261120",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 209,
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "branch": "codex/ctutils-remediation-20261119",
+      "title": "Update compatible ctutils lock and retain explicit dependency findings",
+      "base": "codex/generation8-core-20261120",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 208,
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "branch": "codex/generation9-backup-verification-20261120",
+      "title": "Complete current-runtime backup verification prerequisite",
+      "base": "codex/generation8-core-20261120",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 204,
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "branch": "codex/personalization-templates-ui-20261119",
+      "title": "Compose encrypted templates with explicit consent and fresh draft review",
+      "base": "codex/personalization-favorites-ui-20261119",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 203,
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "branch": "codex/solana-restore-ack-20261119",
+      "title": "Fix Solana restore acknowledgment and backup byte ownership",
+      "base": "codex/solana-browser-send-repair-20261119",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 202,
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "branch": "codex/solana-browser-send-repair-20261119",
+      "title": "fix: complete withheld Solana acknowledgment and qualify one browser POST",
+      "base": "codex/historical-recovery-20261119",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 201,
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "title": "Compose encrypted saved-review favorites with fresh-review and lifecycle checks",
+      "base": "codex/historical-recovery-20261119",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 190,
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "branch": "codex/historical-recovery-20261119",
+      "title": "Recover reviewed historical modules, tooling and durable consolidation handoff",
+      "base": "codex/max-consolidation-20261119",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 189,
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "branch": "codex/qr-camera-fixture-20261119",
+      "title": "Repair synthetic QR camera frame production during browser qualification",
+      "base": "codex/max-consolidation-20261119",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 186,
+      "head": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+      "title": "docs(audit): record static sharing and privacy endpoint inspections (113–114)",
+      "base": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 185,
+      "head": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "title": "docs(audit): record Pages startup-capability review (112)",
+      "base": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "ancestor_of_main": true
+    },
+    {
+      "pr": 184,
+      "head": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "title": "docs(audit): rotate static-client content-admission review (110)",
+      "base": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "ancestor_of_main": true
+    }
+  ],
+  "reserved_scopes": {
+    "pr178": "User workflow documentation worker owns selective reuse; divergent head excluded from closure candidates",
+    "pr200": "Not an ancestor of main; selective documentation import is not ancestry proof. Verify content/evidence preservation before closure.",
+    "optional191_to199": "Divergent, separate accepted package scopes; no default activation or gate transfer"
+  },
+  "guards": {
+    "remote_mutations": 0,
+    "branch_deletions": 0,
+    "source_edits": 0,
+    "main_merges": 0,
+    "release_enabled": 0,
+    "scope_note": "PR223 main_sha is a dated PR222 snapshot. Do not start another reconciliation PR solely because merging223 changes the main ref."
+  }
+}

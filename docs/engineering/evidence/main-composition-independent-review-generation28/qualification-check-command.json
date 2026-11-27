@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "docs/engineering/evidence/main-composition-independent-review-generation28/qualification-check.py.txt"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-main-composition-review-g28",
+  "startedAt": "2026-11-20T18:09:56.017601+00:00",
+  "completedAt": "2026-11-20T18:09:56.707558+00:00",
+  "exitCode": 0,
+  "log": "docs/engineering/evidence/main-composition-independent-review-generation28/qualification-check.json",
+  "bytes": 315159,
+  "sha256": "9c5015ac7b029ada0b5982c6097c32c65f3f4124d218147b4b39892a2c6c2305",
+  "retention": "Exact combined stdout/stderr retained with deterministic gzip.",
+  "storedPath": "docs/engineering/evidence/main-composition-independent-review-generation28/qualification-check.json.gz",
+  "storedBytes": 41988,
+  "storedSha256": "226ba5a990ba874b424f3cde73c1368a20b3b79bad4c8bb989d7a6abdc2534e3"
+}

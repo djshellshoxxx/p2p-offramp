@@ -3,9 +3,10 @@ import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type Runtime
   type BackupVerificationReceipt, type RuntimeBackupVerification,
   type RuntimeTradeTemplates, type RuntimeTradeTemplatePreview, type RuntimeTradeTemplateReceipt, type RuntimeTradeTemplateCancelled, type RuntimeTradeTemplateConsent, type TradeDraftChangeV1,
   type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeSavedReviewFavorites, type RuntimeSavedReviewFavorite } from '../../../packages/schemas/index.ts';
-import { AppRuntime, type AppRuntimeOptions } from './runtime/app-runtime.ts';
+import { AppRuntime, type AppRuntimeOptions, type RuntimeBackupSelection } from './runtime/app-runtime.ts';
 
 export type AppResult<T> = RuntimeResult<T>;
+export type AppBackupSelection = RuntimeBackupSelection;
 export interface PublicStatus { readonly state: 'locked' | 'unlocked'; }
 /** The new opaque profile ID is public metadata the user needs to unlock later; nothing private is returned. */
 export interface CreatedProfile { readonly state: 'unlocked'; readonly profileId: string; }
@@ -30,6 +31,9 @@ export interface AppServices {
   verifyBackup(bytes: Uint8Array, passphrase: string, signal?: AbortSignal): Promise<AppResult<BackupVerificationReceipt>>;
   /** Fresh Worker/storage recheck of the current selected-profile verification, without caller-supplied facts. */
   checkBackupVerification(signal?: AbortSignal): Promise<AppResult<RuntimeBackupVerification>>;
+  /** Opaque selection lease for trusted composition, including one acknowledged
+   * own lock. It never accepts a receipt or supplies update/navigation authority. */
+  captureBackupSelection(): AppBackupSelection | null;
   /** Saved terms reviews of the open profile only (raw terms bytes; the caller re-reviews them). */
   saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>>;
   listTermsReviews(signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviews>>;
@@ -97,6 +101,7 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     checkBackupVerification: async (signal?: AbortSignal): Promise<AppResult<RuntimeBackupVerification>> => {
       try { return await runtime.checkBackupVerification(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
+    captureBackupSelection: () => runtime.captureBackupSelection(),
     saveTermsReview: async (source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>> => {
       try { return await runtime.saveTermsReview(source, bytes, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },

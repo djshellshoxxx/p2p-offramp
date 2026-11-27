@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "date": "2026-11-20",
+  "feature": "F19",
+  "status": "bounded-backup-notice-locale-display-corrected",
+  "baseCommit": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+  "implementationCommit": "c5908d04c4216fcfbf24485070f81ce7f5bfc440",
+  "implementationTree": "9875959aa4eaf94ffeddf60816e7efafee774ca7",
+  "sourceFrozenAtUtc": "2026-11-20T16:02:05Z",
+  "sourcePaths": [
+    "apps/web/src/ui/BackupVerificationForm.tsx",
+    "apps/web/test/backup-verification-ui.test.mjs"
+  ],
+  "runtime": {
+    "node": "v24.22.3",
+    "physicalNodeModules": true,
+    "installedSourceLockMatchesBase": true
+  },
+  "fixture": {
+    "productionLocaleIds": [
+      "en"
+    ],
+    "testLocaleId": "fixture-rtl",
+    "testLocaleTag": "ar",
+    "text": "Complete English source marked [DRAFT ...]; synthetic fixture only",
+    "configurationReplacedOnlyInMemoryTestBuild": true,
+    "fundsLocaleEligible": false,
+    "translatedLocaleApproved": false
+  },
+  "checks": [
+    {
+      "name": "backup-ui-before",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/backup-verification-ui.test.mjs",
+      "productionCommit": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+      "testSourceCommit": "c5908d04c4216fcfbf24485070f81ce7f5bfc440",
+      "exitCode": 1,
+      "tests": 26,
+      "passed": 18,
+      "failed": 8,
+      "expectedFailure": true,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    {
+      "name": "backup-ui-after",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/backup-verification-ui.test.mjs",
+      "exitCode": 0,
+      "tests": 26,
+      "passed": 26,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    {
+      "name": "locale-ui-regression",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/backup-verification-ui.test.mjs apps/web/test/signed-update-ui.test.mjs apps/web/test/locale-runtime.test.mjs apps/web/test/locale-selector.render.test.mjs apps/web/test/locale-source.test.mjs apps/web/test/locale-catalog.test.mjs apps/web/test/locale-stress.test.mjs",
+      "exitCode": 0,
+      "tests": 83,
+      "passed": 83,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    {
+      "name": "backup-regression",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/backup-verification-ui.test.mjs apps/web/test/backup-verification-runtime.test.mjs apps/web/test/backup-verification-publication.test.mjs apps/web/test/backup-verification-independent.test.mjs packages/schemas/test/backup-verification.test.mjs packages/storage/test/backup-verification.test.mjs",
+      "exitCode": 0,
+      "tests": 52,
+      "passed": 52,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    {
+      "name": "typecheck",
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "projects": 4
+    },
+    {
+      "name": "boundaries",
+      "command": "npm run check:boundaries",
+      "exitCode": 0,
+      "productionSources": 241,
+      "visitedCoreEntryModules": 148
+    },
+    {
+      "name": "build-policy",
+      "command": "npm run test:build-policy",
+      "exitCode": 0,
+      "tests": 58,
+      "passed": 58,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    {
+      "name": "default-build",
+      "command": "node apps/web/scripts/build.mjs",
+      "exitCode": 0,
+      "files": 12,
+      "bytes": 794380
+    },
+    {
+      "name": "source-whitespace",
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "name": "documentation-consistency",
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "semanticApproval": false
+    }
+  ],
+  "graphs": [
+    {
+      "name": "core-graph-document.json",
+      "sha256": "fc64bf39529382c1e1482979104549a5e0433f60b8cbb97c58e3794f0be22034",
+      "moduleCount": 95,
+      "hasBackupForm": true,
+      "hasSignedUpdatePanel": true,
+      "updaterModules": []
+    },
+    {
+      "name": "core-graph-worker.json",
+      "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+      "moduleCount": 30,
+      "hasBackupForm": false,
+      "hasSignedUpdatePanel": false,
+      "updaterModules": []
+    },
+    {
+      "name": "qr-graph-worker.json",
+      "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+      "moduleCount": 4,
+      "hasBackupForm": false,
+      "hasSignedUpdatePanel": false,
+      "updaterModules": []
+    }
+  ],
+  "release": {
+    "ReleaseEnabled": 0,
+    "signedRelease": false,
+    "releaseAcceptance": false,
+    "connectOrigins": [],
+    "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+  },
+  "qualification": {
+    "independentReview": "recorded separately by the reviewer and coordinator",
+    "nativeBrowserExecuted": false,
+    "accessibilityAcceptance": false,
+    "semanticTranslationReview": false,
+    "physicalDeviceQualification": false,
+    "productionTrust": false,
+    "configuredSignedUpdate": false,
+    "approvalOrEvidenceRepinning": false
+  },
+  "logs": [
+    {
+      "path": "docs/execution/backup-notice-locale-generation20-20261120/backup-ui-before.log",
+      "sha256": "82b7f85b7293944371ccbb063114755486abf25b4406695e30bd4c1c10ea256a",
+      "bytes": 11469
+    },
+    {
+      "path": "docs/execution/backup-notice-locale-generation20-20261120/backup-ui-after.log",
+      "sha256": "64a396098accd6d1ec3b79d791b1c7c291e05597690835752e592b086b099c0c",
+      "bytes": 2784
+    },
+    {
+      "path": "docs/execution/backup-notice-locale-generation20-20261120/locale-ui-regression.log",
+      "sha256": "ba9c39d7ae72cb42808252b99fe75e379c8fe165dbaa5bb8018168ae7540988b",
+      "bytes": 8594
+    },
+    {
+      "path": "docs/execution/backup-notice-locale-generation20-20261120/backup-regression.log",
+      "sha256": "7ff07b9182ff2ba3cff2b7160a76a8e764e6360abaaae747d5f84b8c461797dd",
+      "bytes": 5648
+    },
+    {
+      "path": "docs/execution/backup-notice-locale-generation20-20261120/typecheck.log",
+      "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "bytes": 341
+    },
+    {
+      "path": "docs/execution/backup-notice-locale-generation20-20261120/boundaries.log",
+      "sha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "bytes": 392
+    },
+    {
+      "path": "docs/execution/backup-notice-locale-generation20-20261120/build-policy.log",
+      "sha256": "700ad5b5b6ea8d6e40960adfda14a4e0d0355f1a35c1d443ad67aa99deeebdcb",
+      "bytes": 7652
+    },
+    {
+      "path": "docs/execution/backup-notice-locale-generation20-20261120/default-build.log",
+      "sha256": "30567a364cfa10a654cbc70cba011b6d7e9173edd0dcd2cf613ca8b040d45874",
+      "bytes": 1026
+    },
+    {
+      "path": "docs/execution/backup-notice-locale-generation20-20261120/build-graphs.json",
+      "sha256": "7b592b031cef98f56d0626e35c4e896fca848778bce1f7ae780b808544dac1a5",
+      "bytes": 7530
+    },
+    {
+      "path": "docs/execution/backup-notice-locale-generation20-20261120/docs-check.log",
+      "sha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4",
+      "bytes": 33780
+    }
+  ]
+}
