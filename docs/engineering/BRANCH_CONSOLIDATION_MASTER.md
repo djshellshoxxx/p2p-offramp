@@ -1,3 +1,22 @@
+## 2026-11-27 — successor repair identity and archival reconciliation
+
+Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; historical successor `3b538fd4586b6fc00846262d67956a2125b6c9f1`; coordinator before this entry `26e380f0c531fb7b9fef719728b113fdd66aa41d`. Follow-up to the preceding 15-path disposition: compare structured repair rows by identity and repair SHA rather than line equality. Four apparent missing repair IDs in the historical state are aliases of existing main rows with the exact same repair commits:
+
+| Historical ID | Main ID | Identical repair commit |
+| --- | --- | --- |
+| PORTAL-CLEANUP-OWNERSHIP | FIX-PORTAL-REPLACEMENT-CLEANUP | 4966938d1f5803048c55f7d698b3ad76f9be4ec0 |
+| REVIEW-NAVIGATION-OWNERSHIP | FIX-REVIEW-NAVIGATION-OWNERSHIP | 7517fe457ac8110e5e21b2944074f3c84317d554 |
+| INDEXEDDB-OPEN-CANCELLATION | FIX-UPDATE-OPEN-CANCELLATION | 8a7e5e539cd33e398daa987ddc7c5256bac8be8f |
+| SOLANA-EXPIRY-CONTEXT | FIX-SOLANA-RECONCILIATION-CONTEXT | dde7345e1ee2e722344d6f27dd8bd952c285d520 |
+
+Both relay Low repair IDs are also present in main's repairs array and share historical repair SHA `3a7d1b2e3cee26f5c9300b89d5502048b37280e4`. These six historical findings must not be counted again merely because the separate known_findings array uses different rows. Historical state blob 6a14b9873e4ad192b64c07ba22c574a7652cc710; main state blob 028db9763647fc8a142bf6c20b54b9dbe990abdd (also on #245). Historical feature-matrix JSON blob c766f312991286ef6f93e4f395822cc0cc53a862; current dffcdcad7765c55265cc408fc392a5984d7bcf92. Preserve original mutable files by their [immutable historical ref](https://github.com/djshellshoxxx/p2p-offramp/tree/3b538fd4586b6fc00846262d67956a2125b6c9f1/docs/engineering); do not overwrite newer state or add the 44 historical worker records to separately scoped worker counts.
+
+Fresh exact-head compares to pinned main establish PR207 (0 ahead/131 behind), PR208 (0/130), PR206 (0/127), PR209 (0/130), PR251 (0/25) each with its own exact head as merge base. #207/#251 merged; #208/#206/#209 closed unmerged but source ancestry included. This is not a fresh behavioral qualification or a pass for historical failed checks. Missing published_generations rows 207/208/206 are retained with exact heads and their distinct 2259/2277/2265 local test totals in [archived successor report](SUCCESSOR_HANDOFF_GENERATION11_20261120.md), blob d241d039cfa6685849a521500f83e64e9b2ea4eb, and [publication audit](INDEPENDENT_PUBLICATION_AUDIT_GENERATION11_20261120.md), blob 25354ea5df882c3ae5f82e4ec24880583531dbee. [Hosted report](HOSTED_REVIEW_GENERATION11_20261120.md) retains queued/running and ancestor evidence, not transferred approval. Current full feature matrix and later runtime/update work must remain authoritative; no restoration of old staging overlays, historical ownership or status flags. Exact worker-by-worker archive completeness and entire historical branch patch equivalence not certified.
+
+Fresh 291 distinct branch names (complete search pagination); disjoint PR searches return 90 open, 58 closed unmerged and 128 merged (78+37+13 by created-date partitions), total 276. Exact per-tip census not refreshed, no change to previous 155/136 ancestry classification. #237/#278/#279 submitted review lists empty; #265/#275 COMMENTED only. #278/#279 draft Tier C owner authorization/current-target gates remain; D2 public trust, D5 design and physical acceptance remain. Direct Git ls-remote DNS failure exit 128; old checkout unavailable. AGENTS.md and docs/ai/WORKFLOW.md and HANDOFF.md returned 404 at pinned main; read existing Lane B progress and coordinator tracker instead. No runtime tests, independent worker execution, source changes, main merge, deployment, release, funds or optional activation. ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-27 — successor historical evidence disposition (bounded, not full ancestry)
 
 See [coordinator checkpoint](https://github.com/djshellshoxxx/p2p-offramp/blob/3ce28886643e7528c4a4bc4abbfb7505c00d3bb8/docs/engineering/CONSOLIDATION_HANDOFF.md). At main fdf346ab8e6aacc60b501007ec10ec7ee840a701, the historical successor branch 3b538fd4586b6fc00846262d67956a2125b6c9f1 has 15 documentation-only delta paths, 2 ahead/130 behind. Six of 11 added documents are byte-identical on main, five absent on main are byte-identical on the existing #245 candidate. Do not open another archive PR or merge the obsolete branch wholesale. The four mutable historical documents need semantic review before final disposition.
