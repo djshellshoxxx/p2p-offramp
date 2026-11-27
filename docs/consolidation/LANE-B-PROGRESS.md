@@ -42,7 +42,7 @@ The Lane B session's container ran out of its disk allowance after the 2026-11-1
 | B1c Solana acceptance | Off-chain message v1 envelope; strict Ed25519; acceptance statement; bounded replay and tombstone ledger | TS and Python vectors byte-identical; real `@solana/offchain-messages` 8.6.0 cross-check | No physical or browser wallet; exchange carrier (Lane A); open Mediums M1 and F1 |
 | B3 formal harness | Fail-closed SMTChecker classification and the evidence pipeline | 22/22 unit tests, forge 89; evidence rerun: NativeConstructor is PROOF_UNKNOWN | Second independent review of fix commits `05b9d22..59d091f` never ran (usage limit) |
 | B4 tooling | Lab, docs validator, claims, tool-path; evidence bound to `sourceCommit` | `check:docs` ok at bind time | B4 tooling F2 (below) |
-| B5 chain-evm | EIP-1898 hash-pinned `eth_getCode`/`eth_call`; receipt check at the anchored height | 25/25 tests; real anvil load-balancer probe | Other number-pinned readers (Lane A) |
+| B5 chain-evm | EIP-1898 hash-pinned `eth_getCode`/`eth_call`; receipt check at the anchored height | 25/25 tests; real anvil load-balancer probe | Behaviour of arbitrary public RPC providers |
 | B6 verifier | Scan mode from the CLI only; one file handle; exit codes | 7 tests, 0/6 pass on pre-fix code | Release approval remains separate |
 
 ### Findings already mitigated on main (verified at source, `main@8cff449`)
@@ -54,6 +54,7 @@ These came from the 2026-11-18 reviews, and source read shows they are mitigated
 | B1A-T1 | `packages/chain-solana/src/reader.ts` (blob `07b2e85c`): `splMint` refuses a freeze-authority mint without a permit only when `existing === null`. `#observe` passes `classified.escrow`, and `readValidated` and `readPayout` both go through it. `test/policy.test.mjs` covers funded reads without a permit and pre-funding refusal. | A full rotated-permit payout matrix (funded, released, refunded) and a fresh run at the exact target. A frozen vault still cannot be paid out until it is thawed. |
 | viem oracle receipt race (unowned) | `scripts/test-evm-viem-oracle-local.mjs` (blob `920f9290`): the refund uses a bounded `waitForTransactionReceipt`, and `finalizeThrough` polls for the receipt. | None. |
 | B4 tooling F1 | `scripts/docs/validate.test.mjs` (blob `0fc95f19`): `maintainedDocumentPaths` derives link targets dynamically, and stale assertions are relative to a baseline report. | Not every docs-drift scenario is proven to pass. |
+| C-L1 remainder (was Needs Lane A #1) | Per the [coordinator reconciliation](https://github.com/djshellshoxxx/p2p-offramp/pull/274#issuecomment-7206584115), these all pin state reads to the anchored block hash with `requireCanonical: true`:<br>- `scripts/recovery/evm-recovery.mjs` (blob `a0505f98`): `getTrade` and the pending-credit call, plus repeated header checks; spot-checked here.<br>- `packages/wallet/src/evm-payment-preflight.ts` (`ae5c2cff`).<br>- `evm-submit.ts` (`92d46c3b`).<br>- `evm-contract-acceptance.ts` (`c3fa7500`).<br>Fork-refusal tests exist in `evm-payment-preflight.test.mjs:265`, `evm-submit.test.mjs:103`, `evm-contract-acceptance.test.mjs:122` and `scripts/tests/evm-recovery.test.mjs:48`. | Source and test presence were checked, not freshly executed. This is not a claim about every RPC provider's behaviour. |
 
 ### Open findings from the 2026-11-18 independent reviews
 
@@ -77,8 +78,8 @@ These are AI-assisted reviews, not a professional audit. "Verified" means at lea
 
 ### Needs Lane A (consolidated)
 
-1. `scripts/recovery/evm-recovery.mjs` `readRecovery`, plus `packages/wallet/src/{evm-payment-preflight,evm-submit,evm-contract-acceptance}.ts`: state reads are still pinned by block number. Use `{blockHash: anchor.hash, requireCanonical: true}` (the C-L1 remainder).
-2. `packages/schemas/src/registry.ts`: an SPL `AssetV1.freezeAuthority: string | null`, so the freeze permits derive from the signed registry.
+1. ~~C-L1 remainder (`scripts/recovery/evm-recovery.mjs` and the three wallet readers pinned by block number)~~: already done on `main`; see "Findings already mitigated".
+2. `packages/schemas/src/registry.ts` (blob `c6774ec9`, still no such field on `main`): an SPL `AssetV1.freezeAuthority: string | null`, so the freeze permits derive from the signed registry.
 3. `packages/schemas/src/intent.ts` and `packages/domain/src/intent-journal.ts`: Solana `payout`, `released|refunded`, the signature written in the `markSending` CAS, Solana observe/reconcile branches and successor reservation. The proposed hunks are in `packages/chain-solana/docs/lifecycle.md` §6.
 4. `packages/exchange`: a v2 carrier for `{statement, termsSignature, acceptanceSignature}`.
 5. `apps/web`: `signOffchainMessage` with an exact-bytes check; replay-ledger wiring; `createSolanaEscrowClient` with explicit margins.
@@ -92,7 +93,7 @@ These are AI-assisted reviews, not a professional audit. "Verified" means at lea
      - refuse all nine roots and their nested look-alikes before every profile branch, keeping QR role separation, permitted core paths and the localnet exceptions;
      - extend the `generateBundle` fixture to assert refusal before any file is read or emitted, for each profile and Worker, with positive controls.
    - **Ordering: land this shared guard before the individual optional intake merges.**
-7. `scripts/sepolia/lib.mjs`: pin the forge binary SHA-256 (today only version and commit).
+7. `scripts/sepolia/lib.mjs` (blob `e1c701da`, lines 81–95): pin the forge binary SHA-256. Today it checks forge's self-reported version and commit, and the solc SHA-256, but not the forge binary itself.
 8. Unowned: the stale comment at `packages/domain/src/trade-terms.ts:167` is being fixed in draft #275 (one JSDoc line). The viem receipt race is already fixed; see above.
 
 ### Owner decisions and external materials
