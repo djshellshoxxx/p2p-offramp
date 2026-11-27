@@ -1,3 +1,20 @@
+## 2026-11-27 — S01 test-network tooling source disposition (bounded)
+
+Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; original S01 `4e319013ea61ead31ae00ea9a44fa9c431cc84ce`, parent `a88560741e60146a424cc18fcb2cc1043756ae3e`; #37 still open at `81a295d5cd3936b88eded7e52b6f2a78989f6ea7`. Stage-local compare: 20 paths. Follow-up to the Nov 23 test-provenance report, not a fresh whole-history or behavioral qualification. Four differing files compared by full immutable content at all three refs. Historical nonblank added lines counted by multiset subtraction; exact-line presence is not patch equivalence.
+
+| Path | Historical added lines / present on current main | Historical blob | Main blob |
+| --- | ---: | --- | --- |
+| scripts/sepolia/trade.mjs | 39 / 36 | 1b99259d2c904d34959b671da7d7820b59e88ae1 | 850a64338b221d27210cce931f6337513e1984a6 |
+| scripts/sepolia/lib.mjs | 20 / 15 | 5b3b2db8e77b8baf844d2c403e75db83d05b359c | e1c701da04a5e91e6e6bcf4df1b0f9393de0cd22 |
+| .github/workflows/vault-foundation.yml | 3 / 3 | 5bf7413e07d835ce4521056ee9d39dfabaa6204c | c539e5e80c6f534429c942894031336d6db9938f |
+| package.json | 2 / 1 | 9f8a169483558bb1f699a37c885e8c67fbbe9a49 | 00cc394ac43806cbed577305ae6266f764146899 |
+
+All nine nonmatching lines were inspected for semantic replacement. Trade lines 277–303 and 453–469 retain the attempt ledger and tighten legacy error attribution: an uncertain legacy send requires an accounted action or matching hash-bearing failed send; non-send errors on new-format records do not falsely lock a new attempt. The prior permissive namedLegacy condition should not be restored. Maintained sepolia-trade-state.test.mjs blob 75fca6ce1f0228cf0ee49f9afc0546306c384014 lines 297–358 covers read-error origin, send attribution and legacy uncertainty with matching/nonmatching evidence; source/test presence, not execution. Lib lines 123–176 retain the old one-layer credential checks and add bounded repeated decoding, query values, form spelling and case handling. Maintained sepolia-hygiene.test.mjs blob 8b622d389b7906f39fb93e90adbff11a2ab2ff74 lines 35–108 covers those changes. The existing test:formal:unit command is identical after JSON parsing (historical last-property punctuation differs), and the three historical workflow additions remain exact. No missing intended change established in this four-path cohort; keep S01 V pending remaining semantic and owner review. No restoration of older source, and no new trust input or test-network transaction.
+
+Fresh complete branch-name pagination 100/100/91/0 gives 291; PR searches 90 open, 58 closed unmerged, 128 merged (78+47+3 disjoint created-date partitions). Exact tip census not refreshed; prior 155/136 ancestry split remains dated. #237/#278/#279 review submissions empty; #265/#275 COMMENTED only. Lowercase agents.md exists on main and was read; uppercase AGENTS.md and docs/ai/WORKFLOW.md and HANDOFF.md returned 404. Existing Lane B progress and ownership remain authoritative. Direct Git DNS fails exit 128; previous workspace absent. No runtime tests, fresh independent executing worker, code edits, main merge, deployment, release, funds or optional activation. ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-27 — successor repair identity and archival reconciliation
 
 Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; historical successor `3b538fd4586b6fc00846262d67956a2125b6c9f1`; coordinator before this entry `26e380f0c531fb7b9fef719728b113fdd66aa41d`. Follow-up to the preceding 15-path disposition: compare structured repair rows by identity and repair SHA rather than line equality. Four apparent missing repair IDs in the historical state are aliases of existing main rows with the exact same repair commits:
