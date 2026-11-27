@@ -126,6 +126,55 @@ const localnetProfile = { relayOrigin: 'ws://127.0.0.1:7447' };
 function graphContext(root, paths, emitted = []) {
   return { getModuleIds: () => paths.map(path => resolve(root, path)), getModuleInfo: () => ({ isExternal: false }), emitFile: file => { emitted.push(file); } };
 }
+test('every build profile refuses optional packages before reading their source or emitting artifacts', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-optional-module-admission-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  // Pin the accepted D7 package set independently of the implementation inventory.
+  const optionalPackages = ['proof-inputs', 'liquidity', 'courier', 'arbitration', 'privacy-policy', 'privacy-controls', 'stealth', 'proof-jobs', 'meetup'];
+  const refusedPaths = [
+    ...optionalPackages.flatMap(name => [`packages/${name}/index.ts`, `node_modules/fixture/packages/${name}/src/module.ts`]),
+    'Packages/Privacy-Policy/index.ts', 'apps/web/src/nested/PACKAGES/MEETUP/index.ts',
+  ];
+  const profiles = [
+    ['offline', null, null],
+    ['evm-localnet', localnetProfile, null],
+    ['solana-localnet', null, { rpcOrigin: 'http://127.0.0.1:8899' }],
+  ];
+  for (const [name, evm, solana] of profiles) for (const worker of [false, true]) for (const delivery of ['meta', 'header']) {
+    await t.test(`${name} ${worker ? 'Worker' : 'document'} ${delivery}`, async () => {
+      for (const path of refusedPaths) {
+        const emitted = [];
+        // These files deliberately do not exist: a source read would fail with ENOENT,
+        // not the required admission refusal. No optional package code is executed.
+        await assert.rejects(staticBuildPlugin(root, delivery, worker, evm, solana).generateBundle.call(graphContext(root, [path], emitted), {}, {}),
+          { message: 'NON_CORE_MODULE' }, path);
+        assert.deepEqual(emitted, [], `${path} must not emit a graph or policy`);
+      }
+    });
+  }
+});
+test('optional-package refusal preserves core privacy helpers and each reviewed localnet profile', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-optional-module-controls-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const core = ['packages/domain/src/privacy.ts', 'packages/domain/src/proof-inputs.ts',
+    'packages/domain/src/packages/privacy-policy-notes.ts', 'apps/web/src/packages/meetup-helper.ts',
+    'packages/storage/src/store.ts', 'apps/web/src/main.tsx'];
+  const profiles = [
+    [null, null, core],
+    [localnetProfile, null, [...core, 'packages/wallet/src/evm-adapter.ts', 'packages/chain-evm/src/reader.ts', 'packages/domain/localnet.ts']],
+    [null, { rpcOrigin: 'http://127.0.0.1:8899' }, [...core, 'packages/chain-solana/src/client.ts', 'packages/chain-solana/localnet.ts', 'apps/web/src/solana-localnet/controller.ts']],
+  ];
+  for (const path of new Set(profiles.flatMap(([, , paths]) => paths))) {
+    await mkdir(join(root, path, '..'), { recursive: true });
+    await writeFile(join(root, path), 'export const fixture = true;\n');
+  }
+  for (const [evm, solana, paths] of profiles) for (const worker of [false, true]) for (const delivery of ['meta', 'header']) {
+    const emitted = [];
+    await staticBuildPlugin(root, delivery, worker, evm, solana).generateBundle.call(graphContext(root, paths, emitted), {}, {});
+    const graph = JSON.parse(emitted.find(file => file.fileName === (worker ? 'core-graph-worker.json' : 'core-graph-document.json')).source);
+    assert.deepEqual(graph.modules.map(module => module.path).sort(), [...paths].sort());
+  }
+});
 test('favorites and templates admit only the exact private Worker graph and never the document or broad barrel', async () => {
   const favorites = ['packages/personalization/favorites.ts', 'packages/personalization/src/favorites.ts', 'packages/personalization/src/trade-draft-store.ts', 'packages/personalization/templates.ts'];
   for (const delivery of ['meta', 'header']) {

@@ -185,7 +185,7 @@ test('G07 permits only the existing release side entry and excludes parked optio
     await put(root, 'packages/security/src/native-reader.ts', "export * from '../../privacy-policy/index.ts';\n");
     result = await inspectImportBoundaries(root);
     assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === 'packages/privacy-policy/index.ts'), 'compound optional package names stay excluded');
-    for (const name of ['privacy-controls', 'proof-jobs', 'liquidity']) {
+    for (const name of ['privacy-controls', 'proof-jobs', 'liquidity', 'proof-inputs', 'courier', 'arbitration', 'stealth']) {
       await put(root, `packages/${name}/index.ts`, 'export const optional = true;\n');
       await put(root, 'packages/security/src/native-reader.ts', `export * from '../../${name}/index.ts';\n`);
       result = await inspectImportBoundaries(root);
