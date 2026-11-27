@@ -1,3 +1,23 @@
+## 2026-11-27 — shared optional build guard: hosted qualification complete, integration held
+
+[#280](https://github.com/djshellshoxxx/p2p-offramp/pull/280#issuecomment-7218299447) source `e605ae26cc1a644e0318fbd070c687271014740a` on current main `fdf346ab8e6aacc60b501007ec10ec7ee840a701` now has five successful returned workflows, 12/12 listed jobs plus Snyk; program job 140447171231 checked out `6f2584366a99b89cf1dc31ef961ba268f8e8afa6`, validator 62 successful checks/13 sends, browser six checks/zero fixture errors. D8 Tier B named review still missing. Implementation exists and hosted evidence is complete at the observed target; neither integration nor production activation is complete.
+
+| Optional package | Separate intake | Current status |
+|---|---|---|
+| proof-inputs | #224 | Guard prerequisite unmerged; named review absent |
+| liquidity | #225 | Same |
+| arbitration | #226 | Same |
+| privacy-policy | #227 | Same; #273 disposal follow-up remains separately held |
+| proof-jobs | #228 | Same |
+| privacy-controls | #229 | Same |
+| courier | #230 | Same |
+| meetup | #231 | Same |
+| stealth | #232 | Same |
+
+Each intake is open, non-draft and targets main. No submitted reviews returned for any. Requalify each separately after guard integration, retain optional defaults disabled. #281 remains draft design only; no owner approval or implementation. D2 trust material, D5 permit/schema choice, D8 financial approvals, physical devices and public-network evidence remain distinct. No new local runtime execution, code edits, merges, deployment or funds. ReleaseEnabled=0 required. See [handoff](CONSOLIDATION_HANDOFF.md) for exact refs and limitations.
+
+---
+
 ## 2026-11-27 — optional guard hosted progress and cancellation-retention decision
 
 Main remains `fdf346ab8e6aacc60b501007ec10ec7ee840a701`. Fresh branch-name search exhausted pagination: **293 distinct names**; disjoint PR searches returned **92 open, 128 merged (34 before Nov 15, 94 on/after), 58 closed unmerged = 278**. This is name/PR-state enumeration, not a fresh exact-tip or full-history patch inventory. Previous ancestry counts remain historical.
