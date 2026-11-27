@@ -31,6 +31,17 @@ Observed on GitHub at `main@8cff449`:
   - #155 (B4 intake, draft) and #156 (B4 governance, draft).
   - The B2 optional packages are being integrated by #191–#199 and #224–#232. The Lane B PRs #144–#148 and #160–#163 (open, marked ready for review on 2026-11-19) are their source. Their disposition is Lane A's to record in `LEDGER.md`.
 
+Update 2026-11-27 (Lane B session, `main@a5a432bd`):
+
+- Merged (Tier A, exact-head CI green, AI-assisted independent review with no open High or Medium):
+  - #277 (governance F2) as `bdbccfc8`;
+  - #276 (GOV-1) as `a5a432bd`.
+- Tier C drafts ready for owner approval, CI green at their heads:
+  - #278 (B1b F3), at `36b7e83c`;
+  - #279 (B1c F1), at `3cd44d50`.
+  - Both are cut from `8cff449`; merge main into them before merging.
+- B1b F1 is reproduced (see its row); it needs an owner design decision.
+
 The Lane B session's container ran out of its disk allowance after the 2026-11-18 run, so no further local work was possible then. Everything Lane B produced up to that point was pushed. Disk space returned on 2026-11-27, and the later entries below come from that session. The findings below were not consolidated anywhere else.
 
 ### Feature matrix (implementation versus qualification)
@@ -72,8 +83,8 @@ These are AI-assisted reviews, not a professional audit. "Verified" means at lea
 | B4 tooling | F1 (extraction) | Medium | unverified | `dist-lab/` is not ignored (the s08 `.gitignore` line was not extracted), so every lab run after the first records `sourceDirty: true`. | Appears to be addressed by #259. |
 | B4 intake (#155, draft) | F1 | Medium | unverified | `semaphore-v4-evaluation.test.mjs:94-100`: the "changed lock" refusal test never changes the lock; an earlier check fails first. | Make each refusal case reach its own check. |
 | B4 intake | Qodo (#45 thread) | Medium | open | The evaluator verifies inputs, then mounts the caller-controlled `node_modules`/artifacts read-only and rechecks only after execution. | **Owner decision:** isolate verified input snapshots before execution, or archive the tool. |
-| B4 governance (#156, draft; same blob on main) | GOV-1 | Medium | **reproduced 2026-11-26** (coordinator, real isolated Git fixtures; [#156 comment](https://github.com/djshellshoxxx/p2p-offramp/pull/156#issuecomment-7201664492)). **Fix proposed in draft #276** (2026-11-27, not merged) | `scripts/governance/evidence.mjs` (blob `ae171065`, identical on main `8cff449`) `checkEvidenceBinding`: an unmerged commit with identical bound file hashes is accepted, and a missing `origin/main` is accepted (baseline 2 pass / 2 fail). `check-all.mjs` calls it with no reachability guard, and `refresh-evidence-manifest.mjs --check` without `--commit` uses `manifest.sourceCommit` directly. Main's real manifest points to `8649b7a`, which is an ancestor of main, so there is no evidence the current packet is invalid. | Make both production entry points (`check-all.mjs` and `refresh-evidence-manifest.mjs --check`) run `git merge-base --is-ancestor <sourceCommit> refs/remotes/origin/main` before row checks. They must refuse a nonzero result or a missing or shallow ref, never silently accept it. Keep injected fixtures behind an explicit test-only scope, and keep every existing stale/hash/path/size/refusal check. Add CLI-level regressions (the four reproduction cases) and test the exact target. A local proof of concept (helper blob `e185ae9e`) passed 4/4. #276 does this against exact `refs/remotes/origin/main`, with CLI-level regressions that all fail on the original scripts (0/7 pass) and pass 7/7 with the fix, and an independent review with no High (findings fixed). |
-| B4 governance | F2 | Medium | reproduced 2026-11-27; fix in draft #277 | `scripts/tests/tool-path.test.mjs:23-24`: the relative-PATH rejection is never exercised. | Fix proposed in draft #277 (not merged): relative entries outside and inside the working directory now reach real fixtures. Five guard mutants fail the test. |
+| B4 governance (#156, draft; same blob on main) | GOV-1 | Medium | **reproduced 2026-11-26** (coordinator, real isolated Git fixtures; [#156 comment](https://github.com/djshellshoxxx/p2p-offramp/pull/156#issuecomment-7201664492)). **Fixed by #276**, merged 2026-11-27 as `a5a432bd` | `scripts/governance/evidence.mjs` (blob `ae171065`, identical on main `8cff449`) `checkEvidenceBinding`: an unmerged commit with identical bound file hashes is accepted, and a missing `origin/main` is accepted (baseline 2 pass / 2 fail). `check-all.mjs` calls it with no reachability guard, and `refresh-evidence-manifest.mjs --check` without `--commit` uses `manifest.sourceCommit` directly. Main's real manifest points to `8649b7a`, which is an ancestor of main, so there is no evidence the current packet is invalid. | Make both production entry points (`check-all.mjs` and `refresh-evidence-manifest.mjs --check`) run `git merge-base --is-ancestor <sourceCommit> refs/remotes/origin/main` before row checks. They must refuse a nonzero result or a missing or shallow ref, never silently accept it. Keep injected fixtures behind an explicit test-only scope, and keep every existing stale/hash/path/size/refusal check. Add CLI-level regressions (the four reproduction cases) and test the exact target. A local proof of concept (helper blob `e185ae9e`) passed 4/4. #276 does this against exact `refs/remotes/origin/main`, with CLI-level regressions that all fail on the original scripts (0/7 pass) and pass 7/7 with the fix, and an independent review with no High (findings fixed). |
+| B4 governance | F2 | Medium | reproduced 2026-11-27; **fixed by #277**, merged as `bdbccfc8` | `scripts/tests/tool-path.test.mjs:23-24`: the relative-PATH rejection is never exercised. | Fixed by #277: relative entries outside and inside the working directory now reach real fixtures. Five guard mutants fail the test. |
 | B2 (#144–#148, #160–#163; integration via #191–#199/#224–#232) | several | Medium | unverified | Boundary tests miss Worker URLs, Vite references and regex evasions; the only resolved-graph guard is `assertModuleAdmitted` (`NON_CORE_MODULE`) in `apps/web/scripts/static-build-plugin.mjs:34` (Lane A). Authority tests check names, not behaviour. The liquidity trap test never runs its traps. The courier locker accepts any non-null profile. The arbitration regex misses `crypto.subtle`. In privacy-policy, `retire()` invalidates every G05 broker permit, including core (PP-A2; still present at #227 head `7740f4d6` `mode.ts:52`; #273 changes only drain and disposal ordering and does not address it). | Reviewers of #191–#199/#224–#232 should check each against the integrated source. |
 
 #### B1b F1 reproduction script (2026-11-27)
@@ -159,21 +170,22 @@ test('B1b F1: wallet rejections fill the per-trade journal and lock the funded t
 ```text
 You are continuing Lane B of djshellshoxxx/p2p-offramp. Read agents.md, docs/adr/ACCEPTED-DECISIONS-2026-11-04.md,
 docs/consolidation/LANE-B-PROMPT.md and this file first. Lane ownership, invariants and D8 tiers are unchanged.
-Your own push branch prefix is nodata/youthful-maxwell-uwy8hx-<unit>. Many PRs from other agents are open (#191-#275):
+Your own push branch prefix is nodata/youthful-maxwell-uwy8hx-<unit>. Many PRs from other agents are open (#191-#279):
 check each before starting so you do not duplicate it. Do not reimplement anything under "Findings already mitigated".
 
-1. GOV-1 is fixed in draft #276 (cut from main, because the governance files on main equal #156's). Drive #276 to green
-   CI on its exact head and answer its review; do not merge it (Lane A/owner). Follow-up in the same tooling: the
-   short-name origin/main lookup in scripts/docs/generate.py --allow-local check.
+1. #278 (B1b F3) and #279 (B1c F1) are Tier C drafts with green CI: merge main into each (no rebase), keep CI green
+   at the exact head, answer reviews, and wait for the owner's approval; do not merge them yourself. GOV-1 (#276)
+   and governance F2 (#277) are merged. A small B4 tooling follow-up: the short-name origin/main lookup in
+   scripts/docs/generate.py (its --allow-local check). It only runs locally, so no CI gate depends on it.
 2. Reproduce each other "Open findings" row against current main before changing anything. B1b F1 is reproduced
    (32 wallet rejections lock release/refund); write the bounded-retention design for owner approval (Tier C). F3 is done in
-   #278 and B1c F1 in #279. M1 is blocked on
+   #278 and B1c F1 in #279 (both awaiting owner approval). M1 is blocked on
    Needs Lane A #4: do not build a carrier in packages/exchange; until #4 lands, only re-confirm the replay.ts refusal.
 3. Optional: an extra review of the B3 fix commits 05b9d22..59d091f (scripts/formal/evm.mjs). #137's description already
    records an independent review of head 39096586 with no new High/Medium. The first-review finding is in
    scripts/formal/README.md ("Deviation from the extracted source"); check for no new fail-open path.
 4. For #155: merge main, refresh the bound manifests at an origin/main commit, fix the intake F1, and record the
-   owner's decision on the Semaphore evaluator before any execution. Governance F2 is done in #277.
+   owner's decision on the Semaphore evaluator before any execution. Governance F2 is merged (#277).
 5. Post one review comment per B2 finding on the matching codex integration PR (#224-#232) if it is still open there.
    Needs Lane A #6 (the resolved-module guard in apps/web/scripts/static-build-plugin.mjs) is Lane A's file and should
    land before those intake merges; do not edit it, only point to it.
