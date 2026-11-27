@@ -1,3 +1,31 @@
+## 2026-11-27 — close historical successor disposition and two no-direct-PR branches
+
+Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; complete paginated REST census 293 distinct branch names/tips and 278 distinct PR numbers (92 open, 128 merged, 58 closed unmerged). Against BRANCH_REF_SNAPSHOT_20261127_b4e03314.json, only coordinator tip changed, no removed/new refs or PR numbers. Not a refreshed patch-ID census.
+
+### Successor handoff: historical evidence, not a live-state merge
+
+`codex/successor-handoff-20261120` at `3b538fd4586b6fc00846262d67956a2125b6c9f1` has 2 commits ahead/130 behind, merge base `0e148564743b1ee353abdbdf8931fec464f09870`, exactly 15 changed documentation paths, zero runtime paths. Rechecked all 11 added reports: six exact main and five exact coordinator. The remaining four files are historical variants of live-state documents, not interchangeable current snapshots:
+
+| Historical path | Exact historical blob | Disposition |
+| --- | --- | --- |
+| CONSOLIDATION_HANDOFF.md | 2a3fd7f2e2ca1256401293d3407d2babbe2ee67d | 115/153 nonblank trimmed lines present in main or coordinator, 38 differ; source-bound successor checkpoint preserved at immutable link and standalone report. Do not restore prior queue/ownership state. |
+| FEATURE_MATRIX.md | 881c1a848d1d429bdb8ad7ea51fc3df1d6aba51c | 121/141 lines present; 20 historical overlay/heading differences. Preserve earlier qualification limits, not premerge status. |
+| consolidation-state.json | 6a14b9873e4ad192b64c07ba22c574a7652cc710 | Gen11 state versus later Gen18 state. Eight identical top-level keys; distinct historical verification, ownership and snapshot fields remain in pinned historical blob; no wholesale JSON replacement. |
+| feature-matrix.json | c766f312991286ef6f93e4f395822cc0cc53a862 | All 27 baseline feature objects equal in main and successor; staging overlays differ and old successor_overlay is absent from later JSON. Preserve immutable original rather than revert later overlays. |
+
+Exact historical documents: [handoff](https://github.com/djshellshoxxx/p2p-offramp/blob/3b538fd4586b6fc00846262d67956a2125b6c9f1/docs/engineering/CONSOLIDATION_HANDOFF.md), [feature matrix](https://github.com/djshellshoxxx/p2p-offramp/blob/3b538fd4586b6fc00846262d67956a2125b6c9f1/docs/engineering/FEATURE_MATRIX.md), [state JSON](https://github.com/djshellshoxxx/p2p-offramp/blob/3b538fd4586b6fc00846262d67956a2125b6c9f1/docs/engineering/consolidation-state.json), [matrix JSON](https://github.com/djshellshoxxx/p2p-offramp/blob/3b538fd4586b6fc00846262d67956a2125b6c9f1/docs/engineering/feature-matrix.json). [Standalone source-bound report](SUCCESSOR_HANDOFF_GENERATION11_20261120.md) and the other four missing-from-main reports already exist byte-identically on this coordinator. Historical originals intentionally remain on their immutable ref; this is not a claim of byte equivalence for the four live-state files. Preserve the five report blobs through coordinator integration, and this archive index. No extra successor merge needed.
+
+Fresh Git compare confirms all four original source heads are exact main ancestors (merge base equals tip, zero ahead): #207 df10fe26a308407237f9ccbc636c8bb61f55b84f (131 behind), #208 0e148564743b1ee353abdbdf8931fec464f09870 (130), #206 825a85a55a1e0a43d6f416696fabee94913a2f18 (127), #209 c8695278c3b85ac75fc2ad3318830aa8a08f4d50 (130). #207 is reported merged; #208/#206/#209 closed unmerged individually, but their actual heads are included through ancestry. Historical full suites 2259/2277/2265 remain distinct. No transfer of old CI or inference that the retained Cargo advisory is resolved. Backup prerequisite source included; trust/configuration and actual-device release acceptance separate.
+
+### Additional dispositions
+
+- `work/noncustodial-reconstruction-2026-10-24` tip bc996aac828ce63856193c9114edfef480153325: zero ahead/867 behind, merge base equals tip, no changed paths. Exact main ancestor; no separate merge.
+- `feat/custodial-ledger-foundation` tip 52e6987e77d9ef6bc403c0129b3f52531986ade8: 16 ahead/944 behind, merge base 28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa, 12 added paths under payments/ and separate payments-ledger workflow. Unique but **not applicable to accepted noncustodial scope**. Its own [architecture](https://github.com/djshellshoxxx/p2p-offramp/blob/52e6987e77d9ef6bc403c0129b3f52531986ade8/payments/ARCHITECTURE.md) blob 3b4e57f2ec9a45bf0c7f8794dfbcac38678256d7 explicitly requires a distinct product/operating-model decision and legal review. [README](https://github.com/djshellshoxxx/p2p-offramp/blob/52e6987e77d9ef6bc403c0129b3f52531986ade8/payments/README.md) blob 0967334852acfd515bd724557f773e74ad05f3b5 reports prototype, missing auth/hold capture/settlement and unqualified database concurrency. No merging, integration, activation or separate implementation under this mission. Preserve branch and evidence; no test or security certification claimed.
+
+#251 merged; #237/#280/#281 still zero submitted reviews by REST. #280 stays held; #281 remains decision-only. Exact source/base and review gates, D2 public trust, D5 decision, D8 financial authorization, device acceptance unchanged. Direct git ls-remote exit 128 DNS; historical workspace absent, Node 22.16.0 available. No fresh runtime tests, independent executing workers, production code changes, main merges, deployment, funds or optional activation. ReleaseEnabled=0 required. Full remaining branch-equivalence count unknown. Next pursue unresolved accepted S03–S12 stage-local deltas or genuinely unowned test gaps when executable workspace is available; do not reopen these three reconciled branches.
+
+---
+
 ## 2026-11-27 — optional evidence branch and successor reconciliation
 
 Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; complete REST pagination returned 293 branch tips and 278 PRs (92 open/128 merged/58 closed unmerged). Relative to BRANCH_REF_SNAPSHOT_20261127_b4e03314.json no added/deleted refs; only coordinator tip advanced. Not a fresh full-history patch-ID census.
