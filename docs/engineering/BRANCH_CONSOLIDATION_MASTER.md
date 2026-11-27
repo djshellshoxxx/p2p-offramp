@@ -1,3 +1,24 @@
+## 2026-11-27 — S01 formal extraction disposition bound to merged #137
+
+Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; original S01 `4e319013ea61ead31ae00ea9a44fa9c431cc84ce`. [#137](https://github.com/djshellshoxxx/p2p-offramp/pull/137) is closed/merged at `6c38e641e24abcfdcf645f864bd64c9645836d75`; exact final head `39096586e1160c3c8434a2d081339bb70aeb4c1b` is 0 ahead/280 behind pinned main, with that same head as merge base. Eight formal extraction paths match the final merged #137 blobs on main:
+
+| Path | Current and #137 blob | Historical S01 disposition |
+| --- | --- | --- |
+| contracts/evm/formal/CanonicalRefinement.t.sol | 485c4f2563ce9d3fffdc6ee96832bde852e159a0 | Exact |
+| contracts/evm/formal/partitions/EarlyRefund.sol | 46fa39117eda60c960d439973d3dfa712f5af26f | Exact |
+| contracts/evm/formal/partitions/NativeConstructor.sol | 9b336767938cb0004067c824fdcd36841c06dfe1 | Exact |
+| contracts/evm/formal/partitions/UnauthorizedRelease.sol | 4ce9d94e9bc46f7ae7d834914560c2c66f5e3155 | Exact |
+| contracts/evm/formal/properties.json | ed89a3f6c83c7c3829477a40cedab1a9f6138b23 | Exact |
+| scripts/formal/README.md | 413510a0ad7a6d79ee78c011e69b71d8a907fcc6 | Corrected #137 |
+| scripts/formal/evm.mjs | cf6d93cca2d1753951559eba2b016e99dc745a68 | Corrected #137 |
+| scripts/tests/formal-evm.test.mjs | 87bf6b8ca982dc46371cfd11c4e8d25015a19de0 | Corrected #137 |
+
+The three changed historical blobs (README 871149d3, runner 7854961e, test 2fd2f861) are not missing features. Current README explicitly documents the withdrawn earlier NativeConstructor classification; the runner and tests retain a stricter shared diagnostic and complete-work gate, exact distinction between 6328 possible and actual violations, refusal of abstraction diagnostics and incomplete work, satisfiable guard controls, bounded process exit/drain, tool/source revalidation and exclusive evidence-directory use. Main and final #137 both retain the formal npm command and foundation workflow invocation. Do not restore the historical weaker classifier or old absolute evidence output example. The reported historical model gap, unknown partition proofs and guard-only proof scope remain open/limited; no new formal or native run, no production correctness certification. All four S01 specification-oracle paths independently fetched from historical and main refs also match exactly: specifications.yml 9ca2d403, requirements-crypto.txt 5629f24a, test_g16_vectors.py dab835ee, check_g16_evm_openssl.py b33d64fd. These reconfirm prior exact-blob rows, not additional integrated branches. Keep S01 V pending remaining path-level and owner disposition, not complete patch equivalence.
+
+Fresh branch-name pagination 100/100/93/0 = 293; disjoint PR searches 92 open, 58 closed unmerged and 128 merged (66+62 by date), total 278. #251 remains merged; #237/#280 submitted reviews empty; #265/#275 coordinator COMMENT only; #281 draft without submitted reviews. #259 is 1 ahead/24 behind main; its existing one-file fix remains unmerged. Direct Git DNS failure exit 128 and old workspace absent. No fresh local runtime execution, independent executing worker, production edits, main merge, deployment, release, real funds or optional activation. Preserve D2 public owner trust, D5 decisions, D8 financial approval, device and named-review gates. ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-27 — #280 hosted program complete, nine intake heads still gated
 
 Main `fdf346ab8e6aacc60b501007ec10ec7ee840a701` unchanged. #280 head `e605ae26cc1a644e0318fbd070c687271014740a`, actual hosted checkout `6f2584366a99b89cf1dc31ef961ba268f8e8afa6`: source→proposal 1 ahead/0 behind, zero changed paths; main→proposal 3 ahead/0 behind, six paths. All five returned workflows complete success, 12/12 returned jobs plus Snyk success. [Program receipt](https://github.com/djshellshoxxx/p2p-offramp/pull/280#issuecomment-7218299447) records actual validator and browser results and limits. No submitted named review at observation; hold #280, then qualify each of #224–232 independently against actual main after guard integration. Exact nine intake heads and empty submitted review lists are in [handoff](CONSOLIDATION_HANDOFF.md) checkpoint `72255e8602676d7c54a8713cbfb179fbeb5e3b8b`; individual package status in [tracker](FEATURE_COMPLETION_TRACKER.md) checkpoint `b6a099fb49478e60261b406e9c9415e87031db61`. #281 design owner decision remains absent; no implementation or financial gate waiver.
