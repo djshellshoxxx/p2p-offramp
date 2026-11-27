@@ -23570,5 +23570,63 @@
       "blob": "d42058f1c9464cedc2ec6cf46af22bc679488867",
       "disposition": "Lane B incorporates GOV-1 reproduction and explicitly assigns CLI integration to its owner. No code fix integrated."
     }
+  },
+  "liveExactRefDelta20261126RegistryCompatibility": {
+    "capturedDate": "2026-11-26",
+    "baseMainSha": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+    "coordinatorTipBeforePublication": "873aefd3873820c96d65628ff67c6f549e1dd85e",
+    "method": "Full authenticated REST branch and all-state PR pagination; exact tips against reconstructed prior census and delta overlays; no fresh patch-ID computation",
+    "branchPageSizes": [
+      100,
+      100,
+      87
+    ],
+    "pullRequestPageSizes": [
+      100,
+      100,
+      72
+    ],
+    "branchCount": 287,
+    "distinctTips": 286,
+    "pullRequestCount": 272,
+    "openPullRequestCount": 89,
+    "mergedPullRequestCount": 125,
+    "closedUnmergedPullRequestCount": 58,
+    "provenAncestorCount": 152,
+    "notAncestryProven": 135,
+    "changedOrNewRefs": [
+      {
+        "branch": "codex/consolidation-evidence-inventory-20261122",
+        "previousSha": "eb2f685b1f6ca84023f7cbca2138744c63e3eb78",
+        "sha": "873aefd3873820c96d65628ff67c6f549e1dd85e",
+        "ancestorOfCurrentMain": null
+      },
+      {
+        "branch": "nodata/youthful-maxwell-uwy8hx-progress-2",
+        "previousSha": "3782272a72ff3b0d2522274b8d17e4088689dfe8",
+        "sha": "94af75f8ca87b7ab7dfe15f15f2e64b7aad8fc29",
+        "ancestorOfCurrentMain": null
+      }
+    ],
+    "missingRefs": [],
+    "fullHistoryRecomputed": false,
+    "pr273": {
+      "head": "5b074513704d4c8c75ef0b93069d004c76d82665",
+      "proposal": "617c82ea9caedfdf7a980006294bef0e5dee205b",
+      "tree": "f4684dfb719fab923fe943fce06fb378f0be0e69",
+      "job": 139557771747,
+      "actualTestsPassed": 5,
+      "nodeTotal": 2393,
+      "nodePass": 2392,
+      "nodeFail": 0,
+      "nodeSkip": 1,
+      "workflowsPassed": 4,
+      "listedJobsPassed": 11,
+      "snyk": "success",
+      "independentReview": false,
+      "merged": false
+    },
+    "registryCompatibility": "Owner decision needed for changed strict G11 V1 contract; proposal only",
+    "releaseEnabled": 0
   }
 }
