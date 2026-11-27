@@ -3,17 +3,17 @@ import assert from 'node:assert/strict';
 import{parsePrivacyClaim,parseClaimsBytes,canDisplayTestedClaim,claimFor}from'../index.ts';
 const claim={version:1,id:'vault-at-rest',capability:'vault',exactCopy:'Selected local records are encrypted at rest.',preconditions:['Supported browser and locked vault'],exclusions:['Unlocked origin and backups remain exposed'],evidencePaths:['packages/storage/test/vault-crypto.test.mjs'],status:'tested-scoped',reviewedAt:'2026-11-02'};
 const scope={sourceCommit:'a'.repeat(40),evidenceDigest:'b'.repeat(64),runtimeProfile:'local-v1',coverage:'matched'};
-test('imported reviewed fields never confer tested authority; maintained scope is rechecked',()=>{assert.equal(canDisplayTestedClaim(claim,scope),false);
-  assert.equal(claimFor([claim],'vault',scope).status,'proposed');
+test('imported reviewed fields never confer tested authority; maintained scope is rechecked',()=>{assert.equal(canDisplayTestedClaim(claim,scope,undefined,[],[]),false);
+  assert.equal(claimFor([claim],'vault',scope,undefined,[],[]).status,'proposed');
   let current=true;
   const trust={current:()=>current,verify:(c,s)=>c.id===claim.id&&s.sourceCommit===scope.sourceCommit&&s.runtimeProfile==='local-v1'&&s.evidenceDigest===scope.evidenceDigest};
-  assert.equal(canDisplayTestedClaim(claim,scope,trust),true);
-  assert.equal(canDisplayTestedClaim(claim,{...scope,runtimeProfile:'other'},trust),false);
-  assert.equal(canDisplayTestedClaim(claim,{...scope,coverage:'unknown'},trust),false);
+  assert.equal(canDisplayTestedClaim(claim,scope,trust,[],[]),true);
+  assert.equal(canDisplayTestedClaim(claim,{...scope,runtimeProfile:'other'},trust,[],[]),false);
+  assert.equal(canDisplayTestedClaim(claim,{...scope,coverage:'unknown'},trust,[],[]),false);
   trust.verify=()=>{current=false;
     return true;
   };
-  assert.equal(canDisplayTestedClaim(claim,scope,trust),false);
+  assert.equal(canDisplayTestedClaim(claim,scope,trust,[],[]),false);
 });
 test('unknown keys duplicate IDs and hostile getters fail without invoking accessors',()=>{assert.throws(()=>parsePrivacyClaim({...claim,reviewer:'self'}));
   let calls=0;
@@ -34,9 +34,9 @@ test('unknown keys duplicate IDs and hostile getters fail without invoking acces
 test('exact canonical content participates in maintained verification; date and UTF-8 are strict',()=>{
   const expected=JSON.stringify(parsePrivacyClaim(claim));
   const trust={current:()=>true,verify:(c,s)=>JSON.stringify(c)===expected&&JSON.stringify(s)===JSON.stringify(scope)};
-  assert.equal(canDisplayTestedClaim(claim,scope,trust),true);
-  assert.equal(canDisplayTestedClaim({...claim,exactCopy:'Everything is anonymous.'},scope,trust),false);
-  assert.equal(canDisplayTestedClaim({...claim,exclusions:[]},scope,trust),false);
+  assert.equal(canDisplayTestedClaim(claim,scope,trust,[],[]),true);
+  assert.equal(canDisplayTestedClaim({...claim,exactCopy:'Everything is anonymous.'},scope,trust,[],[]),false);
+  assert.equal(canDisplayTestedClaim({...claim,exclusions:[]},scope,trust,[],[]),false);
   assert.throws(()=>parsePrivacyClaim({...claim,reviewedAt:'2026-02-30'}));
   assert.throws(()=>parsePrivacyClaim({...claim,exactCopy:'\ud800'}));
 });
@@ -47,11 +47,11 @@ test('lookup detaches registry and never evaluates array accessors or trusts dup
       calls++;
       return claim;
     },configurable:true});
-  assert.equal(claimFor(hostile,'vault',scope),null);
+  assert.equal(claimFor(hostile,'vault',scope,undefined,[],[]),null);
   assert.equal(calls,0);
-  assert.equal(claimFor([claim,claim],'vault',scope),null);
-  assert.equal(claimFor([claim],'missing',scope),null);
-  const returned=claimFor([claim],'vault',scope);
+  assert.equal(claimFor([claim,claim],'vault',scope,undefined,[],[]),null);
+  assert.equal(claimFor([claim],'missing',scope,undefined,[],[]),null);
+  const returned=claimFor([claim],'vault',scope,undefined,[],[]);
   assert.ok(Object.isFrozen(returned));
   assert.ok(Object.isFrozen(returned.exclusions));
 });
@@ -84,14 +84,13 @@ test('actual copy reader refuses unknown keys, wrong entry IDs and accessors wit
 test('a claim whose evidence is stale is never current even with matching trust and scope',()=>{
   const tested={...claim,status:'tested-scoped',reviewedAt:'2026-11-01'};
   const trust={current:()=>true,verify:()=>true};
-  assert.equal(canDisplayTestedClaim(tested,scope,trust),true);
-  assert.equal(canDisplayTestedClaim(tested,scope,trust,[]),true);
-  assert.equal(canDisplayTestedClaim(tested,scope,trust,[tested.evidencePaths[0]]),false);
-  assert.equal(canDisplayTestedClaim(tested,scope,trust,['unrelated/path.ts']),true);
-  assert.equal(canDisplayTestedClaim(tested,scope,trust,'not-a-list'),false);
-  const shown=claimFor([tested],tested.capability,scope,trust,[tested.evidencePaths[0]]);
+  assert.equal(canDisplayTestedClaim(tested,scope,trust,[],[]),true);
+  assert.equal(canDisplayTestedClaim(tested,scope,trust,[tested.evidencePaths[0]],[]),false);
+  assert.equal(canDisplayTestedClaim(tested,scope,trust,['unrelated/path.ts'],[]),true);
+  assert.equal(canDisplayTestedClaim(tested,scope,trust,'not-a-list',[]),false);
+  const shown=claimFor([tested],tested.capability,scope,trust,[tested.evidencePaths[0]],[]);
   assert.equal(shown.status,'proposed');assert.equal(shown.reviewedAt,null);
-  assert.equal(claimFor([tested],tested.capability,scope,trust,[]).status,'tested-scoped');
+  assert.equal(claimFor([tested],tested.capability,scope,trust,[],[]).status,'tested-scoped');
 });
 
 test('claim arrays use a bounded own-data length without evaluating dynamic proxy getters',()=>{
@@ -101,7 +100,7 @@ test('claim arrays use a bounded own-data length without evaluating dynamic prox
     return Reflect.get(target,key,receiver);
   }});
   assert.deepEqual(parsePrivacyClaim({...claim,preconditions:guarded(['bounded fixture'])}).preconditions,['bounded fixture']);
-  assert.equal(claimFor(guarded([claim]),claim.capability,scope).id,claim.id);
+  assert.equal(claimFor(guarded([claim]),claim.capability,scope,undefined,[],[]).id,claim.id);
   assert.equal(reads,0);
   // A changing get trap formerly admitted forty entries despite the declared thirty-two limit.
   let dynamicReads=0;
@@ -117,5 +116,5 @@ test('claim arrays use a bounded own-data length without evaluating dynamic prox
   assert.throws(()=>parsePrivacyClaim({...claim,preconditions:Array.from({length:33},(_,i)=>`condition-${i}`)}));
   const throwing=new Proxy([],{getOwnPropertyDescriptor(){throw Error('descriptor unavailable');}});
   assert.throws(()=>parsePrivacyClaim({...claim,preconditions:throwing}),/CLAIM_UNSUPPORTED/);
-  assert.equal(claimFor(throwing,claim.capability,scope),null);
+  assert.equal(claimFor(throwing,claim.capability,scope,undefined,[],[]),null);
 });

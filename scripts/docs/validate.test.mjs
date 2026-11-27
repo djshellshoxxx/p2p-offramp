@@ -8,6 +8,7 @@ import{execFileSync}from'node:child_process';
 import{resolveTool}from'../lib/tool-path.mjs';
 import{inspectDocs}from'./validate.mjs';
 import{claimCopyTextsFromSource}from'./copy-source.mjs';
+import{canDisplayTestedClaim,claimFor}from'../../packages/claims/index.ts';
 import * as docs from './validate.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 // A linked worktree has a .git file, so resolve the real git directory for the fixture's gitdir pointer.
@@ -269,4 +270,30 @@ test('later current copy edits stay stale while the recorded text remains bound 
   await writeFile(resolve(temp,'docs/wiki-source/claims-register.json'),JSON.stringify(register));
   await assert.rejects(inspectDocs(temp),{message:'DOCS_STALE'});
  }finally{await rm(temp,{recursive:true,force:true});}
+});
+
+test('actual validator copy-only drift downgrades tested claims until the bound copy is restored',async()=>{
+  const {temp,register,commit}=await gitFixture();
+  try {
+    const claim={...register.claims[0],status:'tested-scoped',reviewedAt:'2026-11-27'};
+    const scope={sourceCommit:commit,evidenceDigest:'b'.repeat(64),runtimeProfile:'local-v1',coverage:'matched'};
+    const trust={current:()=>true,verify:()=>true};
+    const clean=await inspectDocs(temp);
+    assert.equal(canDisplayTestedClaim(claim,scope,trust,clean.stale,clean.staleClaims),true);
+    const path=resolve(temp,register.copySource.path),before=await readFile(path,'utf8');
+    const after=before.replace('Authenticated encryption observed','Changed current draft label');
+    assert.notEqual(after,before);
+    await writeFile(path,after);
+    const drifted=await inspectDocs(temp);
+    assert.deepEqual(drifted.stale,[register.copySource.path]);
+    assert.equal(claim.evidencePaths.some(path=>drifted.stale.includes(path)),false);
+    assert.ok(drifted.staleClaims.includes(claim.id));
+    assert.equal(canDisplayTestedClaim(claim,scope,trust,drifted.stale,drifted.staleClaims),false);
+    const shown=claimFor([claim],claim.capability,scope,trust,drifted.stale,drifted.staleClaims);
+    assert.equal(shown.status,'proposed');
+    assert.equal(shown.reviewedAt,null);
+    await writeFile(path,before);
+    const restored=await inspectDocs(temp);
+    assert.equal(claimFor([claim],claim.capability,scope,trust,restored.stale,restored.staleClaims).status,'tested-scoped');
+  } finally {await rm(temp,{recursive:true,force:true});}
 });
