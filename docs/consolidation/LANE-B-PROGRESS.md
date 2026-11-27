@@ -79,7 +79,15 @@ These are AI-assisted reviews, not a professional audit. "Verified" means at lea
 ### Needs Lane A (consolidated)
 
 1. ~~C-L1 remainder (`scripts/recovery/evm-recovery.mjs` and the three wallet readers pinned by block number)~~: already done on `main`; see "Findings already mitigated".
-2. Unowned: in neither lane's file list, so route it through the coordinator or owner. `packages/schemas/src/registry.ts` (blob `c6774ec9`, still no such field on `main`): an SPL `AssetV1.freezeAuthority: string | null`, so the freeze permits derive from the signed registry.
+2. Unowned, and an owner design decision rather than a field addition: freeze-authority permits from a signed source ([coordinator reconciliation](https://github.com/djshellshoxxx/p2p-offramp/pull/274#issuecomment-7207433264), checked at source).
+   - The strict parser in `packages/schemas/src/registry.ts` (blob `c6774ec9`) accepts exact v1 asset keys only (`exact()`, lines 102-105). The D5 packet (`docs/adr/proposed/D5-solana-spl-custody-design.md`, line 43) keeps the registry schema unchanged. A silent `AssetV1.freezeAuthority` field would break strict clients or alter that accepted contract.
+   - Options for the owner: an explicit RegistryV2, or a separately specified G15-signed permit sidecar that preserves V1. No invented permits.
+   - Constraints either way:
+     - legacy absence grants no non-null authority;
+     - existing recovery keeps historical metadata and is never gated by a changed permit;
+     - the registry service, the Solana binding and the G15 release-registry tests migrate together;
+     - the no-authority, exact-permit, wrong-mint/authority, changed-authority, tampered-manifest and already-funded release/refund/payout cases stay separate.
+   - Needs the D5 schema/permit choice and D8 Tier C authorization.
 3. Future consolidation only, not required by the current native `SolanaVaultJournal`: `packages/schemas/src/intent.ts` and `packages/domain/src/intent-journal.ts`: Solana `payout`, `released|refunded`, the signature written in the `markSending` CAS, Solana observe/reconcile branches and successor reservation. The historical proposals are in `packages/chain-solana/docs/lifecycle.md` §6, which main marks as not current.
 4. `packages/exchange`: a v2 carrier for `{statement, termsSignature, acceptanceSignature}`.
 5. `apps/web`: `signOffchainMessage` with an exact-bytes check; replay-ledger wiring; `createSolanaEscrowClient` with explicit margins beyond the localnet profile. The `solana-localnet` controller already wires it at `controller.ts:72-73`.
@@ -99,7 +107,7 @@ These are AI-assisted reviews, not a professional audit. "Verified" means at lea
 ### Owner decisions and external materials
 
 - D5 client deadline margins: proposed 300 s for funding and release (`packages/chain-solana/src/policy.ts`).
-- Freeze-authority permits per allowlisted SPL mint.
+- Freeze-authority permits per allowlisted SPL mint, and their signed source: RegistryV2 or a G15-signed permit sidecar (Needs Lane A #2).
 - D1 open item: whether a separate Solana terms consent is wanted in addition to the peer acceptance.
 - Solana acceptance ledger bounds (64 entries per space, 7-day horizon).
 - B1b journal retention and the shared-schema terminal states (F1/F2 above).
