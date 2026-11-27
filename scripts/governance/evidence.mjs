@@ -5,7 +5,9 @@
  * working tree. Every other row belongs to another owner and is bound to the bytes at the recorded
  * `sourceCommit`: sha256(git show <sourceCommit>:<path>) must equal the recorded hash. Later edits to such a
  * file are reported as `stale`, never as a failure, and a stale row is never evidence that the bytes are current.
- * Importing this module needs no git; only the default `readCommitted` runs git, with an argument array.
+ * `sourceCommit` itself must be on main (see `gitAssertOnMain`): bytes bound to an unmerged commit prove nothing,
+ * however well their hashes match.
+ * Importing this module needs no git; only the default ports run git, always with an argument array.
  */
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -31,6 +33,33 @@ export class EvidenceRefusal extends Error {
   constructor(code, detail) { super(`${code}: ${detail}`); this.code = code; }
 }
 export const refuse = (code, detail) => { throw new EvidenceRefusal(code, detail); };
+
+/**
+ * The only ref that counts as main. It is a full ref name, so a local branch or tag called `origin/main` cannot stand
+ * in for it. Locally it is whatever was last fetched; in CI it is the fetched GitHub branch (checkout with
+ * fetch-depth 0).
+ */
+export const MAIN_REF = 'refs/remotes/origin/main';
+
+/**
+ * Refuse unless `commit` is `MAIN_REF` or one of its ancestors in `root`'s repository. Fail-closed: a shallow
+ * history, a missing ref and any other git error are refusals, never a pass.
+ */
+export function gitAssertOnMain(root, commit) {
+  if (typeof commit !== 'string' || !COMMIT_PATTERN.test(commit)) refuse('INVALID_COMMIT', String(commit));
+  const git = args => execFileSync(resolveTool('git'), args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+  let shallow;
+  try { shallow = git(['rev-parse', '--is-shallow-repository']).trim(); }
+  catch { return refuse('MAIN_ANCESTRY_UNAVAILABLE', 'no git repository'); }
+  // A shallow history can hide the path from a merged commit to main; refuse it instead of a misleading answer.
+  if (shallow !== 'false') refuse('SHALLOW_HISTORY', 'full history is required (fetch-depth 0)');
+  try { git(['rev-parse', '--verify', '--quiet', `${MAIN_REF}^{commit}`]); }
+  catch { return refuse('MAIN_REF_UNAVAILABLE', MAIN_REF); }
+  // Exit status 1 means "not an ancestor"; any other failure (for example an unknown object) is not an answer.
+  try { git(['merge-base', '--is-ancestor', commit, MAIN_REF]); }
+  catch (error) { return refuse(error?.status === 1 ? 'COMMIT_NOT_ON_MAIN' : 'MAIN_ANCESTRY_UNAVAILABLE', commit); }
+  return commit;
+}
 
 /** Bytes of `path` at `commit`, via git with an argument array and a bounded buffer. */
 export function gitReadCommitted(root, commit, path) {
@@ -82,12 +111,18 @@ export function parseManifest(original) {
 }
 
 /**
- * Verify the manifest. Throws EvidenceRefusal on a structural problem, an owned row that no longer matches the
- * working tree, or a recorded hash that does not match the bytes at sourceCommit. Returns the stale rows.
+ * Verify the manifest. Throws EvidenceRefusal on a structural problem, a sourceCommit that is not on main, an owned
+ * row that no longer matches the working tree, or a recorded hash that does not match the bytes at sourceCommit.
+ * Returns the stale rows. Only `allowLocal: true` skips the main-ancestry check; it exists for fixtures, and the
+ * maintained entry points never pass it.
  */
-export async function checkEvidenceBinding({ root, readCommitted = (commit, path) => gitReadCommitted(root, commit, path) } = {}) {
+export async function checkEvidenceBinding({
+  root, allowLocal = false, readCommitted = (commit, path) => gitReadCommitted(root, commit, path),
+} = {}) {
   const base = await realpath(root);
   const manifest = parseManifest(await readFile(await rowTarget(base, MANIFEST_PATH), 'utf8'));
+  // Ancestry comes before any row: matching hashes at an unmerged commit are not evidence.
+  const mainAncestry = allowLocal === true ? 'skipped-allow-local' : (gitAssertOnMain(base, manifest.sourceCommit), 'checked');
   const stale = [];
   let owned = 0, bound = 0;
   for (const row of manifest.files) {
@@ -103,5 +138,5 @@ export async function checkEvidenceBinding({ root, readCommitted = (commit, path
     const target = await rowTarget(base, row.path, true);
     if (target === null || sha256(await readFile(target)) !== row.sha256) stale.push(row.path);
   }
-  return { sourceCommit: manifest.sourceCommit, rows: manifest.files.length, owned, bound, stale: stale.sort() };
+  return { sourceCommit: manifest.sourceCommit, mainAncestry, rows: manifest.files.length, owned, bound, stale: stale.sort() };
 }

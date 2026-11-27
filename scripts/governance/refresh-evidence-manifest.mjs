@@ -8,8 +8,10 @@
  *
  *  - Owned rows (see evidence.mjs) bind the current working-tree bytes.
  *  - All other rows bind the bytes at `sourceCommit`. Without --commit they must already match it; with
- *    --commit <rev> the manifest is moved to that commit, which must be reachable from origin/main so CI can
- *    resolve it (pass --allow-local only for fixtures).
+ *    --commit <rev> the manifest is moved to that commit.
+ *  - Either way the target commit must be refs/remotes/origin/main or one of its ancestors, so CI can resolve it
+ *    and unmerged bytes are never bound. A shallow history or a missing ref is refused. --allow-local skips only
+ *    that ancestry check and is for fixtures; `check:governance` never passes it.
  *
  * Usage: node scripts/governance/refresh-evidence-manifest.mjs [--check] [--commit <rev>] [--allow-local] [path ...]
  */
@@ -19,23 +21,19 @@ import { fileURLToPath } from 'node:url';
 import { isMain } from '../lib/is-main.mjs';
 import { resolveTool } from '../lib/tool-path.mjs';
 import {
-  COMMIT_PATTERN, EvidenceRefusal, MANIFEST_PATH, gitReadCommitted, isOwned, parseManifest, refuse, rowTarget, sha256,
+  COMMIT_PATTERN, EvidenceRefusal, MANIFEST_PATH, gitAssertOnMain, gitReadCommitted, isOwned, parseManifest, refuse,
+  rowTarget, sha256,
 } from './evidence.mjs';
 
 export { MANIFEST_PATH, EvidenceRefusal as ManifestRefusal } from './evidence.mjs';
 const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\/-]/g, '\\$&');
 const git = (root, ...args) => execFileSync(resolveTool('git'), args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 
-function resolveCommit(root, revision, allowLocal) {
+function resolveCommit(root, revision) {
   if (typeof revision !== 'string' || !/^[A-Za-z0-9_./~^-]{1,128}$/.test(revision) || revision.startsWith('-')) refuse('INVALID_COMMIT', String(revision));
   let commit;
   try { commit = git(root, 'rev-parse', '--verify', `${revision}^{commit}`); } catch { return refuse('INVALID_COMMIT', revision); }
   if (!COMMIT_PATTERN.test(commit)) refuse('INVALID_COMMIT', revision);
-  if (!allowLocal) {
-    let reachable = true;
-    try { git(root, 'merge-base', '--is-ancestor', commit, 'origin/main'); } catch { reachable = false; }
-    if (!reachable) refuse('COMMIT_NOT_ON_MAIN', commit);
-  }
   return commit;
 }
 
@@ -57,7 +55,9 @@ export async function refreshEvidenceManifest({
   const selected = paths === null ? null : new Set(paths);
   for (const path of selected ?? []) if (!listed.has(path)) refuse('NOT_IN_MANIFEST', path);
 
-  const target = commit === null ? manifest.sourceCommit : resolveCommit(canonicalRoot, commit, allowLocal);
+  const target = commit === null ? manifest.sourceCommit : resolveCommit(canonicalRoot, commit);
+  // The recorded commit is checked as strictly as a new one: --check must not pass a manifest bound off main.
+  if (allowLocal !== true) gitAssertOnMain(canonicalRoot, target);
   const changed = [];
   let text = original;
   if (target !== manifest.sourceCommit) {
@@ -102,6 +102,7 @@ if (isMain(import.meta.url)) {
   const commit = at >= 0 ? args[at + 1] ?? '' : null;
   const paths = args.filter((arg, index) => !['--check', '--allow-local', '--commit'].includes(arg) && !(at >= 0 && index === at + 1));
   const root = fileURLToPath(new URL('../../', import.meta.url));
+  if (allowLocal) console.error('warning: --allow-local skips the origin/main ancestry check; use it only for fixtures');
   try {
     const result = await refreshEvidenceManifest({ root, paths: paths.length ? paths : null, check, commit, allowLocal });
     for (const change of result.changed) console.log(`${check ? 'stale' : 'refreshed'} ${change.path} ${change.old} -> ${change.new}`);

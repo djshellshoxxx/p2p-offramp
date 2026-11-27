@@ -30,9 +30,11 @@ core ordering, amount, signature, routing, metadata or recovery requirements.
 
 `evidence-manifest.json` binds the finite public reference set (at most64 files),
 excluding its own self-hash. Files owned by this packet bind their exact working-tree
-bytes. Every other file binds the bytes at the manifest's `sourceCommit` (a commit on
-`origin/main`): `npm run check:governance` verifies that hash against `git show` and
-lists any file whose current bytes later drifted under `stale`. A stale row is never
+bytes. Every other file binds the bytes at the manifest's `sourceCommit`. That commit
+must be `refs/remotes/origin/main` or one of its ancestors: `npm run check:governance`
+refuses any other commit, a shallow history or a missing ref before it reads a row. It
+then verifies each hash against `git show` and lists any file whose current bytes later
+drifted under `stale`. A stale row is never
 evidence that the current file was assessed, and it does not fail the check. The
 focused assurance test checks paths, containment, size and the owned-row hashes
 without git, and validates every AttackCase. Its success
