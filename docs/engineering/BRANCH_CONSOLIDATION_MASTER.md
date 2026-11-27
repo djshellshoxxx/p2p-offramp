@@ -1,3 +1,42 @@
+## 2026-11-27 — optional evidence branch and successor reconciliation
+
+Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; complete REST pagination returned 293 branch tips and 278 PRs (92 open/128 merged/58 closed unmerged). Relative to BRANCH_REF_SNAPSHOT_20261127_b4e03314.json no added/deleted refs; only coordinator tip advanced. Not a fresh full-history patch-ID census.
+
+| No-direct-PR branch | Exact tip | Ahead / behind main | Merge base | Compared paths |
+| --- | --- | ---: | --- | ---: |
+| codex/optional-composition-evidence-g8-20261120 | db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2 | 10 / 132 | cd7d54ba075118a7ec043788c17718be842ee405 | 174 |
+| codex/optional-corrected-evidence-g9-20261120 | 8af4dbc2b60b106ec80a2417ddf78d487c3f3586 | 19 / 130 | cff9eb05d77c82c82a5d22a5395b0ce63b02b265 | 178 |
+| codex/optional-complete-evidence-g10-20261120 | cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3 | 19 / 119 | 701f3866e60978c945c5a0148dcda5b65f58fdbc | 177 |
+| codex/optional-current-core-evidence-g11-20261120 | db531cb03ad303821a3625f6858941de1ac07606 | 19 / 116 | d30152336bb687b31ae547ab3fcecb8835a02ef4 | 177 |
+| codex/solana-public-export-g14-20261120 | 09c3d94aedab3c78a4397e3cb80786fb5eb4fd4a | 0 / 115 | same as tip | 0 |
+| codex/successor-handoff-20261120 | 3b538fd4586b6fc00846262d67956a2125b6c9f1 | 2 / 130 | 0e148564743b1ee353abdbdf8931fec464f09870 | 15 docs |
+
+All four optional evidence refs have exact same nine package subtree SHAs and three shared build/test files. The live individual intakes are:
+
+| PR | Package | Evidence subtree SHA | Intake disposition |
+| --- | --- | --- | --- |
+| #224 | proof-inputs | 8ce13a63a8df82b00cea3405d246babfe7f89746 | exact |
+| #225 | liquidity | ef4dace6c26423b61d98c6012e54ab56d714428e | exact |
+| #226 | arbitration | f6a8051adf0c1adeb5b655240ad478c58fac1ac6 | exact |
+| #227 | privacy-policy | 5ab375b6f3b5520bd6059ff858f48699edf53aca | exact; #273 separate correction |
+| #228 | proof-jobs | 4be7a4564974f96d8396f4901fbeb63789eaed75 | exact |
+| #229 | privacy-controls | 21480b1081bf720b21afa8277f2bfe99208790cc | exact |
+| #230 | courier | 276211811104349ad9431dae3f64f3ea83c299b6 | exact |
+| #231 | meetup | a3fd556fb78cfbf8c0546068db657c4c69a7c9c7 | exact |
+| #232 | stealth | 0a24172c193fc3f7c2f7fd8967f107e2e37b5f73 | superseded by 500bf00042bc818d702f4d1d311d818e9427de84 |
+
+Stealth recursive trees: 19 entries each, one changed blob test/profiles.test.mjs 3d46ab4cf1e45618ddd5c05b352d0ff61e71f1f6 → 5c1742ed9bd0afdbbacc3b4a4c0d99a237ac97b4. Old sparse-topic negative assertion hidden in trailing comment; #232 restores execution by moving assertion onto own line, as its PR already records. No new defect or test execution. All production bytes retained.
+
+Shared files identical across four: package.json 9acb475b773764048aea98657e463f6acbf95189; vault-foundation.yml a52bb7ea1ae120d079295172d4122f4d17102db2; optional-proof-jobs.yml 6eac5c17f2f0ab993faa63bd6225b3696e5994c6. All six intended optional npm scripts exactly retained in owned intakes (#224 typecheck:proof-inputs; #228 test:proof:memory, test:proof:browser, typecheck:proof-jobs; #229 test:privacy-controls:browser; #231 test:meetup:browser). Three matching vault workflow invocations in #224/#229/#231; #228 proof-jobs workflow blob exact. Main has newer governance/update-attempt test registration: do not replace whole shared files. Individually compose and requalify after #280.
+
+All 18 historical author/reviewer reports absent from main/coordinator are byte-identical in #224–232, two per intake (OPTIONAL_<PACKAGE>_20261119.md and INDEPENDENT_OPTIONAL_<PACKAGE>_20261119.md). Other compared engineering reports (0/4/3/3 respectively) exactly match main. No separate bulk merge or duplicate archive copy required for these four evidence refs; disposition is retained in owned candidates/main, NOT integration, approval, current-target qualification or activation. Preserve refs. #227 permit invalidation and #273 remain separate.
+
+Public-export-g14 exact main ancestor; no separate merge. Successor-handoff: six of 15 changed docs exact main, five additional exact coordinator, four differing live-state paths (CONSOLIDATION_HANDOFF.md, FEATURE_MATRIX.md, consolidation-state.json, feature-matrix.json) still require semantic disposition. No runtime delta; preserve original and do not overwrite live state.
+
+#251 merged; #237/#280/#281 review lists empty. D2 public trust, D5 owner decisions, D8 financial approval, physical-device evidence unchanged. Direct git ls-remote DNS exit 128; historical workspace absent. No new runtime tests, independent executing worker, production edits, main merge, deployment, real funds or optional activation. ReleaseEnabled=0 required. Remaining full branch-equivalence count undetermined. Next: disjoint unowned actionable work or unresolved history; no repeat of these optional comparisons.
+
+---
+
 ## 2026-11-27 — five exact-tip dispositions from no-direct-PR cohort
 
 Current main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; preceding coordinator checkpoint `704418a3793371a290b64b6deffab317acc19a38`. Complete REST pagination returned 293 distinct branch names/tips and 278 distinct PR numbers (92 open, 128 merged, 58 closed unmerged). Comparison to the immediately preceding exact census finds no added/deleted branch and only the coordinator tip advanced. This is not a full-history patch-ID refresh.

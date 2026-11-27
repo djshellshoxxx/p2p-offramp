@@ -1,3 +1,9 @@
+## 2026-11-27 — optional evidence retained in separate intakes
+
+Four G8–G11 evidence refs have identical nine package trees. Eight exact in #224–231; #232 retains production bytes and restores one commented-out sparse-topic refusal assertion. Six optional scripts, three foundation steps, proof-jobs workflow and 18 evidence reports are already retained in the individually owned intakes. No duplicate source or documentation recovery needed in this scope. **All nine unmerged/inactive**: #280 named review and integration precede individual qualification/review. #227/#273 unresolved permit/disposal scopes remain distinct. Source evidence only; no runtime acceptance. See [master ledger](BRANCH_CONSOLIDATION_MASTER.md).
+
+---
+
 ## 2026-11-27 — shared optional build guard: hosted qualification complete, integration held
 
 [#280](https://github.com/djshellshoxxx/p2p-offramp/pull/280#issuecomment-7218299447) source `e605ae26cc1a644e0318fbd070c687271014740a` on current main `fdf346ab8e6aacc60b501007ec10ec7ee840a701` now has five successful returned workflows, 12/12 listed jobs plus Snyk; program job 140447171231 checked out `6f2584366a99b89cf1dc31ef961ba268f8e8afa6`, validator 62 successful checks/13 sends, browser six checks/zero fixture errors. D8 Tier B named review still missing. Implementation exists and hosted evidence is complete at the observed target; neither integration nor production activation is complete.
