@@ -1,3 +1,9 @@
+## 2026-11-27 — corrected S10 optional-package scope disposition
+
+All 23 revised historical package paths now have scoped source/documentary dispositions (see [master ledger](BRANCH_CONSOLIDATION_MASTER.md)). The individual intakes preserve the historical files, with strengthened diagnostic admission and tests. This is not product completion or activation. **#228 remains incomplete for its historical concurrent backup authentication acceptance**: its browser test and README explicitly retain only a nonempty backup download during active proof Worker execution. The supported core Recovery verification form already exists; restore the stronger combined test on #228's owned current-target requalification, update the README, and retain physical Worker exit, CSP and no-network checks. [Existing corrective coordination](https://github.com/djshellshoxxx/p2p-offramp/pull/228#issuecomment-7227646589). All nine optional packages still need #280 integration, separate current-source/target checks and named review; no production or release enablement. No new runtime execution in this comparison.
+
+---
+
 ## 2026-11-27 — optional evidence retained in separate intakes
 
 Four G8–G11 evidence refs have identical nine package trees. Eight exact in #224–231; #232 retains production bytes and restores one commented-out sparse-topic refusal assertion. Six optional scripts, three foundation steps, proof-jobs workflow and 18 evidence reports are already retained in the individually owned intakes. No duplicate source or documentation recovery needed in this scope. **All nine unmerged/inactive**: #280 named review and integration precede individual qualification/review. #227/#273 unresolved permit/disposal scopes remain distinct. Source evidence only; no runtime acceptance. See [master ledger](BRANCH_CONSOLIDATION_MASTER.md).
