@@ -441,6 +441,22 @@ test('disposal-during-marker-write-preserves-uncertainty-without-broadcast', asy
 });
 
 
+test('conflict-on-the-marker-cas-never-broadcasts', async () => {
+  // Another writer wins the sendMarked compare-and-swap. D9 allows a send only after this client's own
+  // marker is durable, so nothing is broadcast and the record stays `signed`.
+  const env = setupClient('native', {
+    journal: { hooks: { before: record => (record.state === 'sendMarked' ? 'conflict' : undefined) } },
+  });
+  const seller = await connected(env, 'seller');
+  error(await env.client.release(env.trade, seller), 'CONFLICT');
+  assert.equal(sendCount(env), 0);
+  assert.equal(onlyRecord(env).state, 'signed');
+  assert.equal(onlyRecord(env).sendMarkedAt, null);
+  const markerWrites = env.journalFake.writes.filter(state => state === 'sendMarked');
+  assert.equal(markerWrites.length, 1, 'one marker attempt, no retry');
+});
+
+
 test('freeze-authority-admission-never-vetoes-existing-escrow-exits', async () => {
   const rotated = key('rotated-freezer');
   for (const [action, state, frozen] of [['release', 0, true], ['refund', 0, true], ['payout', 1, false]]) {
