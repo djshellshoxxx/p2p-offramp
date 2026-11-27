@@ -46,7 +46,7 @@ def require_main_ancestor(commit):
 
 
 # Records bind immutable source bytes; the validator reports later working-tree drift as stale.
-parser = argparse.ArgumentParser(description='Generate unapproved documentation records bound to a main commit.')
+parser = argparse.ArgumentParser(description='Generate unapproved documentation records bound to a main commit.', allow_abbrev=False)
 parser.add_argument('--allow-local', action='store_true', help='skip main ancestry checks for local fixtures only')
 parser.add_argument('commit', nargs='?', default='HEAD', help='source revision (default: HEAD)')
 args = parser.parse_args()

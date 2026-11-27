@@ -144,7 +144,7 @@ test('symbolic or non-commit main refs are refused before either output record c
 });
 
 test('revision normalization records the actual commit and refuses non-commits or extra arguments', async t => {
-  const { root, main } = await fixture(t);
+  const { root, main, unmerged } = await fixture(t);
   git(root, 'tag', '-a', '-m', 'annotated fixture', 'annotated', main);
   await generated(root, ['annotated'], main);
   const tree = git(root, 'rev-parse', `${main}^{tree}`);
@@ -153,7 +153,9 @@ test('revision normalization records the actual commit and refuses non-commits o
     await unchangedRefusal(root, ['--allow-local', revision], /INVALID_COMMIT/);
   }
   await unchangedRefusal(root, [main, main], /unrecognized arguments/);
-  await unchangedRefusal(root, ['--unknown'], /unrecognized arguments/);
+  for (const flag of ['--unknown', '--allow', '--allow-l', '--allow-loca']) {
+    await unchangedRefusal(root, [flag, unmerged], /unrecognized arguments/);
+  }
 });
 
 test('--allow-local explicitly admits an unmerged fixture without promoting its approval fields', async t => {
