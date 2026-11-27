@@ -1100,6 +1100,36 @@
       "expect": "UNAUTHORIZED"
     },
     {
+      "id": "role-field-only-mismatch",
+      "description": "The seller wallet signs its own statement with role buyer for a seller context.",
+      "trade": "native",
+      "context": {
+        "role": "seller",
+        "ownMessagingKey": "8cb8ff822ab4cfc8a7cd6904c49812e8f699125462daa8deb1e71fd2e3b69663",
+        "counterpartyMessagingKey": "ecce44d7b7473595ac6aaee9b6762d66c993016669583f3f7108b137967dd98c",
+        "nowSeconds": "1793782800",
+        "envelopeExpiresAtSeconds": "1793786400"
+      },
+      "proof": {
+        "statement": {
+          "v": 1,
+          "role": "buyer",
+          "wallet": "3FDUtPRfYjhQKEMTR2V1AGTQHbuu7PPUSMmTwYXDDRhW",
+          "ownMessagingKey": "8cb8ff822ab4cfc8a7cd6904c49812e8f699125462daa8deb1e71fd2e3b69663",
+          "counterpartyMessagingKey": "ecce44d7b7473595ac6aaee9b6762d66c993016669583f3f7108b137967dd98c",
+          "networkId": "solana-localnet",
+          "deploymentId": "escrow-v1",
+          "genesisHash": "7xchZ18C8Y2rfgfqR8sZ5XcjMp99jp67h5LuyqurEVHA",
+          "programId": "7q2EChqznfQea58ZfUvBzRd97Bc28kwHaey1tYy7ADjq",
+          "termsHash": "6b2a0decf88f937e1e50f24fa2817386dd23f9881c908e868d72cb0496bb3ffc",
+          "notAfterSeconds": "1793783100"
+        },
+        "termsSignatureHex": "27fbf6aa0f9f6435d90f325d6a3a2da48fbd0a8642a8b21be69728b1e25e044c9a590d681d064169367c57b4507467077291d4231b5748d304bf96a23e6e0707",
+        "acceptanceSignatureHex": "bf11b23984d4729aa41519695905d861bc85c1eb36749bcfca1a7f4c620398905e094becad298ba59c80b69c1cf9458f41245cc44d2135044931d74fd911c809"
+      },
+      "expect": "UNAUTHORIZED"
+    },
+    {
       "id": "wrong-signer-mallory",
       "description": "A third wallet signs the seller's statement.",
       "trade": "native",
@@ -1336,6 +1366,36 @@
         },
         "termsSignatureHex": "27fbf6aa0f9f6435d90f325d6a3a2da48fbd0a8642a8b21be69728b1e25e044c9a590d681d064169367c57b4507467077291d4231b5748d304bf96a23e6e0707",
         "acceptanceSignatureHex": "65ff4386d6808e2e05c567a60bb9bef5aa478a44975bc49b8c09f6c89ff8082bf610f4cc92873b2ecd397fa5c88c86ba7ab8a77b4bbf2a552fcd39212867220b"
+      },
+      "expect": "UNAUTHORIZED"
+    },
+    {
+      "id": "wrong-counterparty-messaging-key",
+      "description": "The signed counterparty key differs from the session's counterparty key.",
+      "trade": "native",
+      "context": {
+        "role": "seller",
+        "ownMessagingKey": "8cb8ff822ab4cfc8a7cd6904c49812e8f699125462daa8deb1e71fd2e3b69663",
+        "counterpartyMessagingKey": "ecce44d7b7473595ac6aaee9b6762d66c993016669583f3f7108b137967dd98c",
+        "nowSeconds": "1793782800",
+        "envelopeExpiresAtSeconds": "1793786400"
+      },
+      "proof": {
+        "statement": {
+          "v": 1,
+          "role": "seller",
+          "wallet": "3FDUtPRfYjhQKEMTR2V1AGTQHbuu7PPUSMmTwYXDDRhW",
+          "ownMessagingKey": "8cb8ff822ab4cfc8a7cd6904c49812e8f699125462daa8deb1e71fd2e3b69663",
+          "counterpartyMessagingKey": "240fb0d4c8a5f68faac53bd9ac29f713993f77bb96e58f198abf082d5f036668",
+          "networkId": "solana-localnet",
+          "deploymentId": "escrow-v1",
+          "genesisHash": "7xchZ18C8Y2rfgfqR8sZ5XcjMp99jp67h5LuyqurEVHA",
+          "programId": "7q2EChqznfQea58ZfUvBzRd97Bc28kwHaey1tYy7ADjq",
+          "termsHash": "6b2a0decf88f937e1e50f24fa2817386dd23f9881c908e868d72cb0496bb3ffc",
+          "notAfterSeconds": "1793783100"
+        },
+        "termsSignatureHex": "27fbf6aa0f9f6435d90f325d6a3a2da48fbd0a8642a8b21be69728b1e25e044c9a590d681d064169367c57b4507467077291d4231b5748d304bf96a23e6e0707",
+        "acceptanceSignatureHex": "b8d5dba3994c1804c818632c43b7e601b1c81ba9dc275f33c973bcd17d2b182e256c53691bd5b485e2ad4c13b01280898e52b29ce1dd3380cceb13683da8240a"
       },
       "expect": "UNAUTHORIZED"
     },

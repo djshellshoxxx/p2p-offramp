@@ -220,7 +220,7 @@ backup cannot restore later tombstones. Browser storage races and crash behaviou
 - Python: `contracts/solana/vectors/acceptance.py`, written from this document: its own base58, G16, envelope,
   statements, strict decoder, verifier and ledger model; Ed25519 signing and verification through `cryptography`
   50.0.0 (OpenSSL), plus its own RFC 8032 Edwards arithmetic for the strictness checks. It writes
-  `peer-acceptance-v1.json` (4 positive, 4 variant, 47 negative, 33 decoding, 10 ledger scenarios).
+  `peer-acceptance-v1.json` (4 positive, 4 variant, 49 negative, 33 decoding, 10 ledger scenarios).
 - Third check, manual: the Agave 4.1.2 CLI (`solana sign-offchain-message`) reproduces the `offchain-v0-agave-cli`
   signature exactly (`acceptance.py --agave-cli <path to solana>`), and the CLI reports it valid in its own format.
 

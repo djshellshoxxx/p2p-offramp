@@ -666,6 +666,9 @@ def build():
     neg("role-swapped-statement", "The seller wallet signs a statement claiming the buyer role.", "UNAUTHORIZED",
         ctx=context("buyer", own=keys["seller"], counterparty=keys["buyer"]),
         proof_value=proof("native", swapped_role, seller))
+    # Only the role field differs: the wallet, both messaging keys and the signatures all match the seller context.
+    neg("role-field-only-mismatch", "The seller wallet signs its own statement with role buyer for a seller context.",
+        "UNAUTHORIZED", proof_value=proof("native", {**statement("native", "seller"), "role": "buyer"}, seller))
     neg("wrong-signer-mallory", "A third wallet signs the seller's statement.", "UNAUTHORIZED",
         proof_value=proof("native", seller_stmt, mallory))
     neg("wrong-signer-buyer", "The buyer wallet signs the seller's statement.", "UNAUTHORIZED",
@@ -682,6 +685,10 @@ def build():
         ctx=context("seller", now=NOW + 100, envelope=NOW + 100))
     neg("wrong-own-messaging-key", "The session's sender key differs from the signed own key.", "UNAUTHORIZED",
         ctx=context("seller", own=keys["other"]))
+    # Only the counterparty key differs: the signed statement names a third key, the session expects the buyer's.
+    neg("wrong-counterparty-messaging-key", "The signed counterparty key differs from the session's counterparty key.",
+        "UNAUTHORIZED",
+        proof_value=proof("native", statement("native", "seller", counterpartyMessagingKey=keys["other"]), seller))
     neg("swapped-messaging-keys", "Own and counterparty keys are swapped in the session.", "UNAUTHORIZED",
         ctx=context("seller", own=keys["buyer"], counterparty=keys["seller"]))
     neg("invalid-messaging-key", "The statement's own key is not an x-only secp256k1 point.", "INVALID_INPUT",
