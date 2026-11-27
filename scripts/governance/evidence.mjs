@@ -11,6 +11,7 @@
  */
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { realpathSync } from 'node:fs';
 import { readFile, realpath, stat } from 'node:fs/promises';
 import { resolve, sep } from 'node:path';
 import { resolveTool } from '../lib/tool-path.mjs';
@@ -35,28 +36,37 @@ export class EvidenceRefusal extends Error {
 export const refuse = (code, detail) => { throw new EvidenceRefusal(code, detail); };
 
 /**
- * The only ref that counts as main. It is a full ref name, so a local branch or tag called `origin/main` cannot stand
- * in for it. Locally it is whatever was last fetched; in CI it is the fetched GitHub branch (checkout with
- * fetch-depth 0).
+ * The only ref that counts as main. It is read by its exact full name (`show-ref --verify`, no short-name lookup), so no
+ * branch or tag called `origin/main` or `refs/remotes/origin/main` can stand in for it, and a symbolic ref is refused.
+ * Locally it is whatever was last fetched; in CI it is the fetched GitHub branch (checkout with fetch-depth 0).
  */
 export const MAIN_REF = 'refs/remotes/origin/main';
 
 /**
- * Refuse unless `commit` is `MAIN_REF` or one of its ancestors in `root`'s repository. Fail-closed: a shallow
- * history, a missing ref and any other git error are refusals, never a pass.
+ * Refuse unless `commit` names a commit object that is `MAIN_REF` or one of its ancestors, in the repository whose top
+ * level is `root`. Fail-closed: another repository found above `root`, a shallow history, a missing or symbolic ref, an
+ * object that is absent or not a commit, and any other git error are refusals, never a pass.
  */
 export function gitAssertOnMain(root, commit) {
   if (typeof commit !== 'string' || !COMMIT_PATTERN.test(commit)) refuse('INVALID_COMMIT', String(commit));
-  const git = args => execFileSync(resolveTool('git'), args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
-  let shallow;
-  try { shallow = git(['rev-parse', '--is-shallow-repository']).trim(); }
-  catch { return refuse('MAIN_ANCESTRY_UNAVAILABLE', 'no git repository'); }
+  const git = args => execFileSync(resolveTool('git'), args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+  const answer = (args, code, detail) => { try { return git(args); } catch { return refuse(code, detail); } };
+  // Git would otherwise answer from any repository found by walking up from a directory without its own .git.
+  const top = answer(['rev-parse', '--show-toplevel'], 'MAIN_ANCESTRY_UNAVAILABLE', 'no git repository');
+  if (realpathSync(top) !== realpathSync(root)) refuse('MAIN_ANCESTRY_UNAVAILABLE', 'root is not the repository top level');
   // A shallow history can hide the path from a merged commit to main; refuse it instead of a misleading answer.
+  const shallow = answer(['rev-parse', '--is-shallow-repository'], 'MAIN_ANCESTRY_UNAVAILABLE', 'shallow state unknown');
   if (shallow !== 'false') refuse('SHALLOW_HISTORY', 'full history is required (fetch-depth 0)');
-  try { git(['rev-parse', '--verify', '--quiet', `${MAIN_REF}^{commit}`]); }
-  catch { return refuse('MAIN_REF_UNAVAILABLE', MAIN_REF); }
-  // Exit status 1 means "not an ancestor"; any other failure (for example an unknown object) is not an answer.
-  try { git(['merge-base', '--is-ancestor', commit, MAIN_REF]); }
+  let symbolic = true;
+  try { git(['symbolic-ref', '--quiet', MAIN_REF]); } catch { symbolic = false; }
+  if (symbolic) refuse('MAIN_REF_UNAVAILABLE', `${MAIN_REF} is a symbolic ref`);
+  const main = answer(['show-ref', '--verify', '--hash', MAIN_REF], 'MAIN_REF_UNAVAILABLE', MAIN_REF);
+  if (!COMMIT_PATTERN.test(main) || answer(['cat-file', '-t', main], 'MAIN_REF_UNAVAILABLE', MAIN_REF) !== 'commit') refuse('MAIN_REF_UNAVAILABLE', MAIN_REF);
+  // The id must be a commit itself: `git show <tree or tag id>:<path>` would read bytes no main commit binds.
+  if (answer(['cat-file', '-t', commit], 'MAIN_ANCESTRY_UNAVAILABLE', commit) !== 'commit') refuse('INVALID_COMMIT', commit);
+  // Exit status 1 means "not an ancestor". Once both ids are known commits no other failure is expected; any that
+  // happens is still not an answer.
+  try { git(['merge-base', '--is-ancestor', commit, main]); }
   catch (error) { return refuse(error?.status === 1 ? 'COMMIT_NOT_ON_MAIN' : 'MAIN_ANCESTRY_UNAVAILABLE', commit); }
   return commit;
 }

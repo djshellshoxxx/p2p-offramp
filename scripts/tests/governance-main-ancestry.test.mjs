@@ -15,11 +15,15 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import { MANIFEST_PATH, checkEvidenceBinding } from '../governance/evidence.mjs';
+import { refreshEvidenceManifest } from '../governance/refresh-evidence-manifest.mjs';
 import { resolveTool } from '../lib/tool-path.mjs';
 
 const repo = await realpath(fileURLToPath(new URL('../../', import.meta.url)));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const git = (cwd, ...args) => execFileSync(resolveTool('git'), ['-c', 'user.name=fixture', '-c', 'user.email=fixture@example.invalid', '-c', 'commit.gpgsign=false', ...args], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+// The developer's own git configuration (signing, hooks, templates) must not change what the fixtures build.
+const ISOLATED = { ...process.env, GIT_CONFIG_GLOBAL: '/dev/null', GIT_CONFIG_NOSYSTEM: '1' };
+const gitWith = (cwd, input, args) => execFileSync(resolveTool('git'), ['-c', 'user.name=fixture', '-c', 'user.email=fixture@example.invalid', '-c', 'commit.gpgsign=false', '-c', 'tag.gpgsign=false', ...args], { cwd, input, env: ISOLATED, encoding: 'utf8', stdio: [input === undefined ? 'ignore' : 'pipe', 'pipe', 'pipe'] }).trim();
+const git = (cwd, ...args) => gitWith(cwd, undefined, args);
 const BOUND = ['src/a.ts', 'src/b.ts', 'src/c.ts', 'src/d.ts', 'src/e.ts', 'src/f.ts'];
 const OWNED = 'docs/execution/fixture/owned.txt';
 const SCRIPTS = [
@@ -61,16 +65,17 @@ async function fixture() {
     await cp(join(repo, pkg, 'src'), join(root, pkg, 'src'), { recursive: true });
   }
   await mkdir(dirname(join(root, OWNED)), { recursive: true }); await writeFile(join(root, OWNED), 'owned\n');
-  const writeManifest = sourceCommit => writeFile(join(root, MANIFEST_PATH), `${JSON.stringify({
+  /** `hashes` overrides recorded row hashes by path, for objects whose bytes differ from the fixture sources. */
+  const writeManifest = (sourceCommit, hashes = {}) => writeFile(join(root, MANIFEST_PATH), `${JSON.stringify({
     format: 'p2p-offramp/assurance-local-evidence/v2', scope: 'fixture', sourceCommit,
-    files: [...BOUND, OWNED].map(path => ({ path, sha256: sha(path === OWNED ? 'owned\n' : `source ${path}\n`) })),
+    files: [...BOUND, OWNED].map(path => ({ path, sha256: hashes[path] ?? sha(path === OWNED ? 'owned\n' : `source ${path}\n`) })),
   }, null, 2)}\n`);
   await mkdir(dirname(join(root, MANIFEST_PATH)), { recursive: true });
   await writeManifest(main);
   return { root, main, unmerged, writeManifest, cleanup: () => rm(root, { recursive: true, force: true }) };
 }
 
-const node = (root, args) => spawnSync(process.execPath, args, { cwd: root, encoding: 'utf8', timeout: 60_000 });
+const node = (root, args) => spawnSync(process.execPath, args, { cwd: root, env: ISOLATED, encoding: 'utf8', timeout: 60_000 });
 /** `check:governance`'s first command, exactly as package.json runs it, against the fixture's copy. */
 function checkAll(root, ...extra) {
   const run = node(root, ['--import', join(repo, 'scripts/test-support/register-tsx.mjs'), join(root, 'scripts/governance/check-all.mjs'), ...extra]);
@@ -113,6 +118,10 @@ test('an unmerged commit with identical bound bytes is refused by both entry poi
     for (const path of BOUND) assert.equal(sha(git(root, 'show', `${unmerged}:${path}`) + '\n'), sha(`source ${path}\n`));
     const before = await readFile(join(root, MANIFEST_PATH), 'utf8');
     refusedBoth(root, 'COMMIT_NOT_ON_MAIN');
+    // Selecting rows does not skip the check.
+    const one = refresh(root, '--check', BOUND[0]);
+    assert.equal(one.status, 2);
+    assert.match(one.stderr, /^refused COMMIT_NOT_ON_MAIN: /m);
     const rewrite = refresh(root);
     assert.equal(rewrite.status, 2);
     assert.equal(await readFile(join(root, MANIFEST_PATH), 'utf8'), before, 'a refused refresh never writes');
@@ -132,6 +141,18 @@ test('a missing refs/remotes/origin/main is refused; a local branch or tag named
     await writeManifest(unmerged);
     git(root, 'branch', 'origin/main', unmerged);
     git(root, 'tag', 'origin/main', unmerged);
+    refusedBoth(root, 'MAIN_REF_UNAVAILABLE');
+    // Decoys spelled with the full name live under refs/heads/ and refs/tags/, and only a short-name lookup finds them.
+    git(root, 'branch', 'refs/remotes/origin/main', unmerged);
+    git(root, 'tag', 'refs/remotes/origin/main', unmerged);
+    refusedBoth(root, 'MAIN_REF_UNAVAILABLE');
+    // A symbolic ref is refused, even one that points at a branch holding the commit.
+    git(root, 'branch', 'side', unmerged);
+    git(root, 'symbolic-ref', 'refs/remotes/origin/main', 'refs/heads/side');
+    refusedBoth(root, 'MAIN_REF_UNAVAILABLE');
+    git(root, 'symbolic-ref', '--delete', 'refs/remotes/origin/main');
+    // A ref that names a tree rather than a commit is not main.
+    git(root, 'update-ref', 'refs/remotes/origin/main', `${main}^{tree}`);
     refusedBoth(root, 'MAIN_REF_UNAVAILABLE');
     git(root, 'update-ref', 'refs/remotes/origin/main', main);
     refusedBoth(root, 'COMMIT_NOT_ON_MAIN');
@@ -162,6 +183,43 @@ test('--allow-local is the only bypass: explicit, refresh-only and announced', a
     assert.equal(checkAll(root, '--allow-local').output.reason, 'COMMIT_NOT_ON_MAIN');
     // In the library only the literal `true` skips the check, and the result says that it was skipped.
     await assert.rejects(checkEvidenceBinding({ root, allowLocal: 'yes' }), { code: 'COMMIT_NOT_ON_MAIN' });
+    await assert.rejects(refreshEvidenceManifest({ root, check: true, allowLocal: 'yes' }), { code: 'COMMIT_NOT_ON_MAIN' });
     assert.equal((await checkEvidenceBinding({ root, allowLocal: true })).mainAncestry, 'skipped-allow-local');
+  } finally { await cleanup(); }
+});
+
+test('an id that is not a commit, or not in the repository, is refused before any row', async () => {
+  const { root, main, writeManifest, cleanup } = await fixture();
+  try {
+    // A tree whose src/a.ts differs, with hashes recorded for those bytes: `git show <tree>:<path>` would match them.
+    const evil = gitWith(root, 'evil\n', ['hash-object', '-w', '--stdin']);
+    const entries = BOUND.map(path => `100644 blob ${path === BOUND[0] ? evil : git(root, 'rev-parse', `${main}:${path}`)}\t${path.slice(4)}`);
+    const src = gitWith(root, `${entries.join('\n')}\n`, ['mktree']);
+    const tree = gitWith(root, `040000 tree ${src}\tsrc\n`, ['mktree']);
+    await writeManifest(tree, { [BOUND[0]]: sha('evil\n') });
+    assert.equal(git(root, 'show', `${tree}:${BOUND[0]}`), 'evil');
+    refusedBoth(root, 'INVALID_COMMIT');
+    // An annotated tag id is not a commit either, even when it points at main.
+    git(root, 'tag', '-a', '-m', 'tag', 'annotated', main);
+    await writeManifest(git(root, 'rev-parse', 'annotated'));
+    refusedBoth(root, 'INVALID_COMMIT');
+    // A well-formed id with no object: the answer is unavailable, never "on main" and never "not on main".
+    await writeManifest('b'.repeat(40));
+    refusedBoth(root, 'MAIN_ANCESTRY_UNAVAILABLE');
+    let reads = 0;
+    await assert.rejects(checkEvidenceBinding({ root, readCommitted: () => { reads++; return Buffer.alloc(0); } }), { code: 'MAIN_ANCESTRY_UNAVAILABLE' });
+    assert.equal(reads, 0);
+  } finally { await cleanup(); }
+});
+
+test('a root that is not the top level of its own repository is refused', async () => {
+  const { root, cleanup } = await fixture();
+  try {
+    // A directory without its own .git inside the fixture: git would otherwise answer from the enclosing repository.
+    const nested = join(root, 'nested');
+    await mkdir(dirname(join(nested, MANIFEST_PATH)), { recursive: true });
+    await cp(join(root, MANIFEST_PATH), join(nested, MANIFEST_PATH));
+    await assert.rejects(checkEvidenceBinding({ root: nested }), { code: 'MAIN_ANCESTRY_UNAVAILABLE' });
+    await assert.rejects(refreshEvidenceManifest({ root: nested, check: true }), { code: 'MAIN_ANCESTRY_UNAVAILABLE' });
   } finally { await cleanup(); }
 });
