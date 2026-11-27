@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { chmod, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { delimiter, isAbsolute, join, relative } from 'node:path';
@@ -27,6 +28,18 @@ test('tools resolve only from absolute, non-world-writable PATH entries', async 
   assert.throws(() => resolveTool('fixture-tool', reachable), /TOOL_NOT_FOUND/);
   const searchPath = ['.', 'relative/bin', reachable, open, plantedFile, notExecutable, trusted].join(delimiter);
   assert.equal(resolveTool('fixture-tool', searchPath), join(trusted, 'fixture-tool'));
+  // Entries inside the working directory ('.', 'bin', './bin') reach planted tools from a directory that holds them.
+  // A child process runs there so this test never changes its own working directory.
+  const inside = await make('inside', 0o755, 0o755);
+  await mkdir(join(inside, 'bin'));
+  await writeFile(join(inside, 'bin', 'fixture-tool'), '#!/bin/sh\n');
+  await chmod(join(inside, 'bin', 'fixture-tool'), 0o755);
+  const entries = ['.', 'bin', './bin', 'bin/', ['.', 'bin', './bin', trusted].join(delimiter)];
+  const probe = `import { resolveTool } from ${JSON.stringify(new URL('../lib/tool-path.mjs', import.meta.url).href)};
+    const results = JSON.parse(process.argv[1]).map(entry => { try { return resolveTool('fixture-tool', entry); } catch (error) { return error.message; } });
+    console.log(JSON.stringify(results));`;
+  const results = JSON.parse(execFileSync(process.execPath, ['--input-type=module', '-e', probe, JSON.stringify(entries)], { cwd: inside, encoding: 'utf8' }));
+  assert.deepEqual(results, ['TOOL_NOT_FOUND', 'TOOL_NOT_FOUND', 'TOOL_NOT_FOUND', 'TOOL_NOT_FOUND', join(trusted, 'fixture-tool')]);
   assert.throws(() => resolveTool('fixture-tool', [open, plantedFile, notExecutable].join(delimiter)), /TOOL_NOT_FOUND/);
   assert.throws(() => resolveTool('fixture-tool', ''), /TOOL_NOT_FOUND/);
   for (const name of ['../fixture-tool', 'bin/fixture-tool', '', '-x', 'a'.repeat(65), 7]) {
