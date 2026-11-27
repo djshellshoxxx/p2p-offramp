@@ -32,6 +32,7 @@ test('tools resolve only from absolute, non-world-writable PATH entries', async 
   // A child process runs there so this test never changes its own working directory.
   const inside = await make('inside', 0o755, 0o755);
   await mkdir(join(inside, 'bin'));
+  await chmod(join(inside, 'bin'), 0o755); // refused for being relative, never for being world-writable
   await writeFile(join(inside, 'bin', 'fixture-tool'), '#!/bin/sh\n');
   await chmod(join(inside, 'bin', 'fixture-tool'), 0o755);
   const entries = ['.', 'bin', './bin', 'bin/', ['.', 'bin', './bin', trusted].join(delimiter)];
