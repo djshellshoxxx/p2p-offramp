@@ -19,7 +19,7 @@ export interface ModeController {
 export interface ModeControllerOptions {
   readonly broker: SessionTransportPolicy; readonly catalog?: readonly CapabilityNode[]; readonly unbrokeredPaths?: readonly UnbrokeredPath[];
   readonly context?: ExtensionContext;
-  /** Trusted compiled factory; each returned registry must own fresh native G14 instances for this generation. */
+  /** Trusted compiled factory; each registry owns fresh G14 instances. Bind their transport work to the supplied initialization signal. */
   readonly createRegistry?: (generation: number, isCurrent: (generation: number) => boolean) => CoreResult<ExtensionRegistry>;
 }
 export function createModeController(options: ModeControllerOptions): ModeController {
@@ -54,7 +54,8 @@ export function createModeController(options: ModeControllerOptions): ModeContro
     let finishDrain!: () => void;
     const drain = new Promise<void>(resolve => { finishDrain = resolve; }); cleanup = drain;
     void drain.finally(() => { if (cleanup === drain) { cleanup = undefined; busy = false; } });
-    try { controller?.abort(); broker.invalidate(); }
+    // Retire only this controller's G14 work. Unrelated core scopes share the broker.
+    try { controller?.abort(); }
     finally { void closeRegistry(previous).then(finishDrain); }
   };
   const evidenceChanged = (): void => {
@@ -130,7 +131,7 @@ export function createModeController(options: ModeControllerOptions): ModeContro
     onEvidenceChanged: evidenceChanged,
     cancelTransition(expected: number): void {
       if (closed || !busy || !Number.isSafeInteger(expected) || expected !== generation) return;
-      nextGeneration(); publish('blocked', 'CANCELLED'); controller?.abort(); broker.invalidate();
+      nextGeneration(); publish('blocked', 'CANCELLED'); controller?.abort();
     },
     inspectMode(): ModeSnapshot { evidenceChanged(); return snapshot; },
     dispose(): Promise<void> {
@@ -140,7 +141,7 @@ export function createModeController(options: ModeControllerOptions): ModeContro
       disposal = new Promise<void>((resolve, fail) => { finish = resolve; reject = fail; });
       void (async () => {
         if (closed) { await Promise.all([...(cleanup ? [cleanup] : []), ...(physical ? [physical] : [])]); return; }
-        closed = true; nextGeneration(); publish('inactive', 'CANCELLED'); controller?.abort(); broker.invalidate();
+        closed = true; nextGeneration(); publish('inactive', 'CANCELLED'); controller?.abort();
         try { unsubscribe(); } catch { /* Finish native resource revocation. */ } unsubscribe = () => undefined;
         publish('inactive', 'CANCELLED'); const previous = registry; registry = undefined;
         const drained = closeRegistry(previous); await Promise.all([drained, ...(cleanup ? [cleanup] : []), ...(physical ? [physical] : [])]);
