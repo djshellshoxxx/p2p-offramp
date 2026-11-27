@@ -677,6 +677,10 @@ def build():
         "UNAUTHORIZED", proof_value=proof("native", statement("native", "seller", wallet=b58["mallory"]), mallory))
     neg("other-trade-terms-hash", "A valid spl acceptance replayed against the native trade.", "UNAUTHORIZED",
         proof_value=positive[2]["proof"])
+    # Only the terms hash differs: the terms signature is the genuine one for this trade.
+    other_hash = consent_of(trades["spl"])["termsHash"]
+    neg("terms-hash-field-only-mismatch", "The seller signs its statement for another trade's terms hash.",
+        "UNAUTHORIZED", proof_value=proof("native", statement("native", "seller", termsHash=other_hash), seller))
     neg("expired-not-after", "Local time equals notAfterSeconds.", "EXPIRED", ctx=context("seller", now=NOW + 300))
     late = statement("native", "seller", notAfterSeconds=str(NOW + 900))
     neg("expired-accept-before", "notAfter is later, but local time equals acceptBeforeSeconds.", "EXPIRED",
@@ -754,6 +758,19 @@ def build():
     assert cofactored_verify(mixed_r, accept_bytes, seller.public) and not strict_verify(mixed_r, accept_bytes, seller.public)
     neg("mixed-order-r", "The seller's own key signs with R = rB + T: cofactored-valid, cofactorless-invalid.",
         "UNAUTHORIZED", proof_value={**base["proof"], "acceptanceSignatureHex": mixed_r.hex()}, cofactoredValid=True)
+
+    # The seller's own key with R = identity and S = k * a: the cofactored and cofactorless equations hold and OpenSSL
+    # accepts it, so only the rule that R is not of small order refuses it.
+    r_identity = encode_point(IDENTITY)
+    k = int.from_bytes(hashlib.sha512(r_identity + seller.public + accept_bytes).digest(), "little") % L
+    identity_r = r_identity + ((k * seller.scalar) % L).to_bytes(32, "little")
+    Ed25519PublicKey.from_public_bytes(seller.public).verify(identity_r, accept_bytes)  # raises if OpenSSL refuses
+    assert cofactored_verify(identity_r, accept_bytes, seller.public)
+    assert not strict_verify(identity_r, accept_bytes, seller.public)
+    neg("identity-r", "The seller's own key signs with R = identity: every equation holds and OpenSSL accepts it; only "
+        "the small-order R rule refuses it.", "UNAUTHORIZED",
+        proof_value={**base["proof"], "acceptanceSignatureHex": identity_r.hex()},
+        cofactoredValid=True, opensslValid=True)
 
     # Same kind of key, ground until k = 0 mod 8 for both messages: every equation holds (OpenSSL accepts too), and
     # only the prime-order-subgroup rule refuses it. Deterministic: the first matching label and notAfter are used.

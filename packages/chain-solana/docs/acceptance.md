@@ -126,8 +126,9 @@ non-ASCII, uppercase hex, non-canonical base58 or decimals, unsorted or duplicat
 | Another application | Version 1 has no application-domain field, so the first body line is the application domain: `p2p-offramp/solana/...`. |
 | Terms consent vs acceptance | Distinct first lines and signer counts (2 vs 1); a terms signature in the acceptance slot is refused. |
 | Cluster, program, registry entry | `genesis`, `program`, `network` and `deployment` lines, also bound through `terms-sha256`. A statement naming another value is `WRONG_CHAIN`; a signature made for another value is `UNAUTHORIZED`. |
-| Another trade | `terms-sha256` (`other-trade-terms-hash`). |
-| Another chat identity | Both messaging keys, compared with the session (`wrong-own-messaging-key`, `swapped-messaging-keys`). |
+| Another trade | `terms-sha256` (`other-trade-terms-hash`; `terms-hash-field-only-mismatch` differs only in that line). |
+| Another chat identity | Both messaging keys, compared with the session (`wrong-own-messaging-key`, `wrong-counterparty-messaging-key`, `swapped-messaging-keys`). |
+| Another role | The `role` line, compared with the session role (`wrong-role-context`; `role-field-only-mismatch` differs only in that line). |
 | Later reuse | `not-after`, the terms `acceptBeforeSeconds`, the envelope expiry and the ledger. |
 
 The body ends each line with LF rather than the task brief's suggested NUL terminator: a NUL would make the message
@@ -154,7 +155,9 @@ not apply here.) Tests show the difference: a small-order forgery that ZIP-215 a
 refused here and by the Python oracle. `mixed-order-wallet-key-all-equations-hold` was ground until k = 0 mod 8, so it
 also satisfies the cofactorless equation and OpenSSL's verifier; only the prime-order key rule refuses it.
 `mixed-order-r` uses the seller's real key with R = rB + T: cofactored verification accepts it, the cofactorless
-equation refuses it. Disabling either rule makes a vector test fail (checked by mutation on 2026-11-18).
+equation refuses it. `identity-r` uses the seller's real key with R = identity and S = k * a: every equation holds and
+OpenSSL accepts it; only the small-order R rule refuses it. Disabling either rule makes a vector test fail (checked by
+mutation on 2026-11-18; the R rule on 2026-11-27).
 
 ## 6. Verification contract
 
@@ -220,7 +223,7 @@ backup cannot restore later tombstones. Browser storage races and crash behaviou
 - Python: `contracts/solana/vectors/acceptance.py`, written from this document: its own base58, G16, envelope,
   statements, strict decoder, verifier and ledger model; Ed25519 signing and verification through `cryptography`
   50.0.0 (OpenSSL), plus its own RFC 8032 Edwards arithmetic for the strictness checks. It writes
-  `peer-acceptance-v1.json` (4 positive, 4 variant, 49 negative, 33 decoding, 10 ledger scenarios).
+  `peer-acceptance-v1.json` (4 positive, 4 variant, 51 negative, 33 decoding, 10 ledger scenarios).
 - Third check, manual: the Agave 4.1.2 CLI (`solana sign-offchain-message`) reproduces the `offchain-v0-agave-cli`
   signature exactly (`acceptance.py --agave-cli <path to solana>`), and the CLI reports it valid in its own format.
 
