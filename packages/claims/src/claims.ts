@@ -51,8 +51,8 @@ function boundedArrayLength(value:unknown,maximum:number):number{
   if(typeof length!=='number'||!Number.isSafeInteger(length)||length<0||length>maximum||Reflect.ownKeys(value).length!==length+1)return invalid();
   return length;
 }
-function list(v:unknown,paths=false):readonly string[]{
-  const length=boundedArrayLength(v,32);
+function list(v:unknown,paths=false,maximum=32):readonly string[]{
+  const length=boundedArrayLength(v,maximum);
   const out:string[]=[];
   for (let i=0;
   i<length;
@@ -83,10 +83,13 @@ export function parseClaimsBytes(bytes:Uint8Array):readonly PrivacyClaimV1[]{try
   }
 }
 /** Scope and callback are supplied by maintained composition, never deserialized from documentation. */
-/** `staleEvidencePaths` comes from the docs checker: a claim whose evidence drifted from its recorded bytes is never current. */
-export function canDisplayTestedClaim(input:unknown,scope:ClaimScope,trust?:MaintainedClaimTrust,staleEvidencePaths:readonly string[]=[]):boolean {try {
+/** Both lists come from the current docs checker. Copy-only drift appears in `staleClaims`, even when no evidence path changed. */
+export function canDisplayTestedClaim(input:unknown,scope:ClaimScope,trust:MaintainedClaimTrust|undefined,staleEvidencePaths:readonly string[],staleClaims:readonly string[]):boolean {try {
     const claim=parsePrivacyClaim(input);
-    if(!Array.isArray(staleEvidencePaths)||claim.evidencePaths.some(p=>staleEvidencePaths.includes(p)))return false;
+    // The checker permits 128 evidence rows plus one copy source, and at most 64 claims.
+    // Detach own-data entries before querying them; caller methods and accessors are not freshness authority.
+    const stalePaths=list(staleEvidencePaths,true,129),staleIds=list(staleClaims,false,64);
+    if(staleIds.some(value=>!id.test(value))||staleIds.includes(claim.id)||claim.evidencePaths.some(p=>stalePaths.includes(p)))return false;
     const s=exact(scope,['sourceCommit','evidenceDigest','runtimeProfile','coverage']);
     if (claim.status!=='tested-scoped'||claim.reviewedAt===null||!claim.evidencePaths.length||s.coverage!=='matched'||typeof s.sourceCommit!=='string'||! /^[0-9a-f]{40}$/.test(s.sourceCommit)||typeof s.evidenceDigest!=='string'||! /^[0-9a-f]{64}$/.test(s.evidenceDigest)||typeof s.runtimeProfile!=='string'||!id.test(s.runtimeProfile)||!trust||trust.current()!==true)return false;
     const detached=Object.freeze({...s}) as unknown as ClaimScope;
@@ -94,7 +97,7 @@ export function canDisplayTestedClaim(input:unknown,scope:ClaimScope,trust?:Main
   } catch {
     return false;
   }}
-export function claimFor(claims:readonly PrivacyClaimV1[],capability:string,scope:ClaimScope,trust?:MaintainedClaimTrust,staleEvidencePaths:readonly string[]=[]):PrivacyClaimV1|null{try {
+export function claimFor(claims:readonly PrivacyClaimV1[],capability:string,scope:ClaimScope,trust:MaintainedClaimTrust|undefined,staleEvidencePaths:readonly string[],staleClaims:readonly string[]):PrivacyClaimV1|null{try {
     if(typeof capability!=='string'||!id.test(capability))return null;
     const length=boundedArrayLength(claims,64);
     const parsed:PrivacyClaimV1[]=[];
@@ -108,7 +111,7 @@ export function claimFor(claims:readonly PrivacyClaimV1[],capability:string,scop
     if (new Set(parsed.map(c=>c.id)).size!==parsed.length||new Set(parsed.map(c=>c.capability)).size!==parsed.length)return null;
     const claim=parsed.find(c=>c.capability===capability);
     if (!claim)return null;
-    return claim.status==='tested-scoped'&&!canDisplayTestedClaim(claim,scope,trust,staleEvidencePaths)?Object.freeze({...claim,status:'proposed',reviewedAt:null}):claim;
+    return claim.status==='tested-scoped'&&!canDisplayTestedClaim(claim,scope,trust,staleEvidencePaths,staleClaims)?Object.freeze({...claim,status:'proposed',reviewedAt:null}):claim;
   } catch {
     return null;
   }}
