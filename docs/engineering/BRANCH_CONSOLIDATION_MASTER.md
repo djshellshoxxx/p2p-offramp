@@ -1,3 +1,21 @@
+## 2026-11-27 — five exact-tip dispositions from no-direct-PR cohort
+
+Current main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; preceding coordinator checkpoint `704418a3793371a290b64b6deffab317acc19a38`. Complete REST pagination returned 293 distinct branch names/tips and 278 distinct PR numbers (92 open, 128 merged, 58 closed unmerged). Comparison to the immediately preceding exact census finds no added/deleted branch and only the coordinator tip advanced. This is not a full-history patch-ID refresh.
+
+| Branch | Exact tip | Ahead / behind main | Merge base | Disposition |
+| --- | --- | ---: | --- | --- |
+| work/p2p-gate-reconciliation-20261030 | e762e649600493221e3bd10f0c3525858722bc94 | 0 / 728 | same as tip | Exact ancestor; no new merge |
+| work/p2p-pr14-finish-handoff-20261030 | 8c8911e2dd3c7af4d515e645a6501eedc6178111 | 0 / 720 | same as tip | Exact ancestor; no new merge |
+| work/p2p-validation-20261030 | 11ce9e42bea9e5f27e303ee6db66e463d38ebdda | 0 / 722 | same as tip | Exact ancestor; no new merge |
+| docs/offramp-research-tools-execution-plan-20261106 | 0f1792f589a20efab1f629f38d2a0068d4f44193 | 2 / 641 | 300287dcde818a9d10ae301265d00bc7c0877bbb | Sole changed path already byte-identical in main |
+| validation/pr237-current-main-20261121 | 92831704820a1f35867fd757bd952eea81412f0f | 10 / 26 | 01f6f4feca051d68de24a04299cd3bb444bce40c | Same complete Git tree as open #237; integration held, no separate source merge |
+
+The research-plan comparison returns exactly one changed path, `docs/research/2026-11-06-tooling-execution-plan.md` (139 additions), whose exact blob `90d0132423ffdbd6ce76da45147bc194fa25bc51` matches main. This is documentary inclusion only, not execution/admission of research candidates. The validation branch is 2 ahead/0 behind #237 exact head `33232f62dc9cd250528ef3eb0313c0c319d99495` with no changed files; raw Git commit objects independently return the same tree `452b08d0c279a82ea3076371723a2dbd12ef9596`. Validation parents are ordered [`01f6f4feca051d68de24a04299cd3bb444bce40c`, `33232f62dc9cd250528ef3eb0313c0c319d99495`]. The first parent is not current main. Preserve the historical validation branch and qualify the actual current-target #237 after its named review. No approval is transferable from this equivalence. All five branch names have no direct PR head-name association in the prior exact census; #237 is the related validation PR, not a separate merge target.
+
+#251 freshly confirmed merged; #237, #280 and #281 returned no submitted reviews. #280 and #281 remain open, #281 draft; no new owner authorization. The old review request is not a review. Direct Git ls-remote again failed DNS (exit 128); historical workspace absent, Node v22.16.0 available. No new runtime test, product edit, independent executing worker, merge, deployment, real funds or optional activation. ReleaseEnabled=0 remains required. Next cohort: disjoint unowned executable accepted feature or other no-direct-PR history with an unresolved source delta; do not repeat the five dispositions. Exact remaining full-history reconciliation count is not established by this census.
+
+---
+
 ## 2026-11-27 — exact ref census and remaining S01 boundary/test reconciliation
 
 Main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`, coordinator before this update `b4e03314cecb6af44028ff14c4431baf38c72d4f`. Complete paginated REST enumeration returned **293 distinct branch names with exact tip SHAs and 278 PRs (92 open, 128 merged, 58 closed unmerged)**. 267 branches have a same-repository PR head-name association; 26 do not (includes main). See [immutable census evidence](BRANCH_REF_SNAPSHOT_20261127_b4e03314.json) for every returned branch tip, associated PR, tip/head equality and PR metadata. This is a fresh exact-tip census, not a reclassification of the historical ancestry/patch ledger; branch name matches do not prove integration. The older machine inventory retrieval returned empty content, so its existing classification rows were not overwritten.

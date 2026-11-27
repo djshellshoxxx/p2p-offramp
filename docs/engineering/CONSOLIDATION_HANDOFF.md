@@ -1,3 +1,9 @@
+## 2026-11-27 — no-direct-PR branch cohort
+
+Main `fdf346ab8e6aacc60b501007ec10ec7ee840a701` unchanged; all 293 exact branch tips and 278 PR records refreshed (92 open/128 merged/58 closed unmerged), with only coordinator tip advancing from previous census. [Master ledger](BRANCH_CONSOLIDATION_MASTER.md) records three exact-ancestor work branches, a two-commit divergent research-plan branch whose sole path is byte-identical in main, and historical #237 validation branch `92831704820a1f35867fd757bd952eea81412f0f` with identical full tree `452b08d0c279a82ea3076371723a2dbd12ef9596` to #237, no unique file delta. Validation is based on old main and cannot qualify current target. No separate merge of these five branches needed; #237 feature integration remains held. #251 merged; submitted reviews still empty for #237/#280/#281. Preserve D2 public trust material, D5 policy choice, D8 financial authorization and device acceptance gates. Direct git DNS still fails and historic workspace absent. No new runtime test, code edit, independent executing worker, main merge, release/deployment/funds or optional activation. ReleaseEnabled=0 required. Full remaining branch-equivalence count remains undetermined; select genuinely unresolved disjoint work next, no repeat of these comparisons.
+
+---
+
 ## 2026-11-27 — complete exact-tip census; S01 final test/tooling path cohort
 
 Main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; [master ledger](BRANCH_CONSOLIDATION_MASTER.md) and [exact branch/PR snapshot](BRANCH_REF_SNAPSHOT_20261127_b4e03314.json) updated together. REST pagination returned 293 distinct exact branch tips and 278 PRs (92 open/128 merged/58 closed unmerged); 267 branch names associated with a same-repository PR, 26 not associated, including main. This does not update historical per-branch patch/ancestry dispositions. Older machine inventory fetch returned empty content; preserve rather than overwrite.
