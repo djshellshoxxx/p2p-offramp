@@ -1,3 +1,24 @@
+## 2026-11-26 — Lane A C-L1 source reconciliation and adoption of optional admission finding
+
+Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` verified unchanged; #251 merged, #245 draft. #274 head `cf6b16334cb3ab7ac6077ed38757cf932f2a7c3c`, Lane B progress blob `8a8a7df6dbb408c9da8282e68a6df23279c7ee8c`, now explicitly adopts the optional resolved-module admission reproduction and records ordering: shared guard before individual optional intakes. This is owner-lane acknowledgment of a finding, not a production correction. No edits to Lane A/B code or owner branches.
+
+**Needs Lane A #1 (C-L1 remainder) already source-mitigated on main for the four named paths.** Fetched full files and maintained regression sources at the exact main ref:
+
+| Path | Blob | Source evidence |
+| --- | --- | --- |
+| scripts/recovery/evm-recovery.mjs | a0505f98bff1bac3a4c806f45f7edbe10b1dc877 | 106–123: getTrade and pending credit use frozen hash/canonical selector; repeated header checks. |
+| packages/wallet/src/evm-payment-preflight.ts | ae5c2cffe2f657d5d1c29836958b9b4de60c04c9 | 89–90, 166–185: finalized runtime/digest/trade and separately anchored latest trade. |
+| packages/wallet/src/evm-submit.ts | 92d46c3bc104afab40daa85d97a6f55730b69e53 | 65–70, 94–109: hash-bound escrow state and code fallback, repeated header verification, latest state pinned. |
+| packages/wallet/src/evm-contract-acceptance.ts | c3fa7500353bd1e6ea64be41c0e94c6b67143c0f | 64–73: EIP-1271, deployment and wallet code checks share canonical hash selector. |
+
+Maintained fork refusal regressions are present: packages/wallet/test/evm-payment-preflight.test.mjs:265 blob 8f78a36290553fa5ab0df04e13dbd346ff54cd50; evm-submit.test.mjs:103 blob edbe21f18de8869a122362b05072e565c9e2f2b1; evm-contract-acceptance.test.mjs:122 blob 61920638ec3561dd5d37fe13ef3c33f02e4296d0; scripts/tests/evm-recovery.test.mjs:48 blob 4f620cae4efed1a2216cc4cb89c4a41cb214a44e. Source/regression presence only, no new execution. Do not generalize to arbitrary RPC behavior or all provider methods. [Lane B coordination](https://github.com/djshellshoxxx/p2p-offramp/pull/274#issuecomment-7206584115) requests correcting the stale open-item status, not duplicating the implementation.
+
+Remaining distinct Lane A items: #2 registry blob c6774ec9d519e8ddfab385dd975d3bf9d0eeb5ed lacks freezeAuthority field; owner permits/public profile decisions remain separate. #7 Sepolia toolchain lib e1c701da04a5e91e6e6bcf4df1b0f9393de0cd22 lines 81–95 checks Forge reported version/commit and actual solc SHA256, not Forge binary hash. No pin invented and no Sepolia action executed. Leave existing owner scope intact.
+
+Live reviews: #237 none; #275/#266/#273 only existing coordinator COMMENT, not independent approval. #156 draft remains owner-assigned GOV-1 integration. Branch search fully paginated 287 unique names; disjoint PR search 89 open, 58 closed unmerged, 78+37+10 merged = 272. Not a full exact-tip/patch-ID refresh; historical 152/135 ancestry split not updated. Lowercase agents.md read; uppercase and docs/ai paths absent. No new runtime tests, app edits, merges, deployments, funds or optional activation. D2 public trust, D8 financial approval, real device acceptance and #237 named review remain distinct blockers. ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-26 — optional resolved-graph admission reproduction (Lane A #6)
 
 Main `8cff44909752f5e8b99eecec44ebaa44360c7b5d` unchanged; #251 merged, #245 remains draft at starting head `d9d04b6022fb079fa5bffb80c85b2fb3b5b37529`. The previously reported Lane B #274 Needs Lane A item 6 is now reproduced at the individual build admission layer. Current main and all nine separately owned optional intake PRs #224–232 share the exact `apps/web/scripts/static-build-plugin.mjs` blob `423671c2c4ca6f1b91b0c38dc87dd48a810af3bf`. Exact QR policy source blob `b047599e965e5d1badc7cfe6108f0dbe98e406d2`. No modifications to those branches.
