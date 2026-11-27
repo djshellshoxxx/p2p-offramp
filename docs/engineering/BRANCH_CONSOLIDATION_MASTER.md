@@ -1,3 +1,28 @@
+## 2026-11-27 — S10 corrected-owner package reconciliation and missing proof-job acceptance
+
+Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; complete REST census 293 branches/278 PRs (92 open/128 merged/58 closed unmerged), coordinator parent `267a9a132a365c90d13db16e6212e613eecdfa91`. Original S10 `c696c02b94eb6b90da2ed76f93c383fcd8a7f703` vs S09 `389c0ea69e24615d0f1d7595942514300cd855f9` has 136 stage-local paths. Compared full recursive package trees of corrected owner #46 `0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03` to each current individual intake; non-tree path/mode/type/SHA exact matches:
+
+| Package | PR head | Historical paths | Exact | Revised | Added |
+| --- | --- | ---: | ---: | ---: | ---: |
+| proof-inputs #224 | e1bf579169aff082cf796cfa6dd0912c255d05a6 | 7 | 6 | 1 | 1 |
+| liquidity #225 | edcfe4500951eb21fcaec38a551ce85abdb9bd0d | 10 | 9 | 1 | 2 |
+| arbitration #226 | 6937cb01c34c0df38055a41a5c487ecf5ac0446d | 16 | 15 | 1 | 2 |
+| privacy-policy #227 | 7740f4d67a0c77896d40e3bead58cf6a7e5c1cb0 | 6 | 4 | 2 | 3 |
+| proof-jobs #228 | ded1952e50683c10edcba54236ac606fff18fd83 | 16 | 14 | 2 | 2 |
+| privacy-controls #229 | 4a8f7bb02d5799d622fa71ab489591c2b557fa8d | 11 | 8 | 3 | 1 |
+| courier #230 | 16a62533925fe7b4e0aa5daf0f5ca11ef2255ab5 | 19 | 14 | 5 | 3 |
+| meetup #231 | efc1e3f09e19a2622c45cd3cc63ebe22734cf64d | 32 | 28 | 4 | 3 |
+| stealth #232 | a99141d51af52b17faf357e341c5aad5685f2e2f | 17 | 13 | 4 | 2 |
+| Total | | 134 | 111 | 23 | 19 |
+
+Zero missing historical package paths. All 16 original-to-corrected #46 variants traced: 13 exact in individual intakes and 3 evolved (courier custody, stealth pages and profiles). Courier custody adds attributed-mutual-claim requirement, with a one-versus-two-signer test in validation-regressions blob 5102f2e48e3d8c22889828b505314312bd57e190. Stealth pages adds accessor/inherited-code refusal tests; profiles restores sparse array refusal hidden in comment. Privacy-policy plan moves pruning into monotonic atomic-group closure; privacy-controls shared/sweep add descriptor-based diagnostic refusal and slot-release regression. Nine revised READMEs and remaining changed source/test paths still need semantic reconciliation; full package-path accounting does not establish semantic equivalence or current integration. The two root/workflow paths remain shared integration concerns under #280 and individual ownership.
+
+**New concrete acceptance gap:** #228 browser blob a6dc4caaaef853973592a51863b15ef6be40025c removes historical PR46 blob 79bd0bf9a7cb9eba2ec1ca73b3e1d96f7e0a4204's backup authentication while resource Worker remains busy. Its comment asserts no Recovery verification form, but exact #228 Pages blob d1a4d6a4e4277aa88b07f8ade3863567e81b41c8 mounts form b22ef6fc72c2b397e49fa912c23e8e4173134a88; actual test fixture d9d4ccd7a81a537eee94e6bb1d4b8932cd678744 renders App with real startAppServices. Main has identical Pages and updated form 3265f97cacbf09326169546d77577a08ae3ea0f5. Maintained native core test f6afc775c6bb97abc7e2950f73a98ed813303d15 has actual verification selectors and receipt. [Owner coordination on #228](https://github.com/djshellshoxxx/p2p-offramp/pull/228#issuecomment-7227646589) requests restoration of exact profile/revision authentication, cleared inputs and still-pending resource outcome before normal lock; retain nonempty download, strict CSP/no-network and physical Worker exit checks. Separate tests are not concurrent acceptance. No runtime failure or product defect demonstrated; no duplicate branch or edits to owner head.
+
+#251 merged; #237/#280/#281 submitted review lists empty. #265/#275 coordinator COMMENT only, not independent review. Direct Git DNS exit 128, historical workspace absent, Node 22.16.0 available (main requires >=24). No new runtime tests, executing worker, source merge, production change, activation, deployment or real funds. ReleaseEnabled=0 required; remaining full branch-equivalence count unknown. Next complete remaining revised S10 paths and other unowned accepted gaps, preserve D2/D5/D8 and actual device gates.
+
+---
+
 ## 2026-11-27 — close historical successor disposition and two no-direct-PR branches
 
 Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; complete paginated REST census 293 distinct branch names/tips and 278 distinct PR numbers (92 open, 128 merged, 58 closed unmerged). Against BRANCH_REF_SNAPSHOT_20261127_b4e03314.json, only coordinator tip changed, no removed/new refs or PR numbers. Not a refreshed patch-ID census.
