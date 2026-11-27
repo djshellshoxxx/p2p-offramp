@@ -217,8 +217,12 @@ test('a root that is not the top level of its own repository is refused', async 
   try {
     // A directory without its own .git inside the fixture: git would otherwise answer from the enclosing repository.
     const nested = join(root, 'nested');
-    await mkdir(dirname(join(nested, MANIFEST_PATH)), { recursive: true });
-    await cp(join(root, MANIFEST_PATH), join(nested, MANIFEST_PATH));
+    // The nested copy holds every row, so without the top-level check it would pass on the enclosing repository.
+    for (const path of [MANIFEST_PATH, OWNED, ...BOUND]) {
+      await mkdir(dirname(join(nested, path)), { recursive: true });
+      await cp(join(root, path), join(nested, path));
+    }
+    assert.equal((await checkEvidenceBinding({ root: nested, allowLocal: true })).stale.length, 0);
     await assert.rejects(checkEvidenceBinding({ root: nested }), { code: 'MAIN_ANCESTRY_UNAVAILABLE' });
     await assert.rejects(refreshEvidenceManifest({ root: nested, check: true }), { code: 'MAIN_ANCESTRY_UNAVAILABLE' });
   } finally { await cleanup(); }
