@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { relative, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
+import { isOptionalPackagePath } from '../../../scripts/lib/optional-packages.mjs';
 import { buildLocalnetContentPolicy, buildSolanaLocalnetContentPolicy, buildOfflineContentPolicy } from '../../../packages/security/src/content-policy.ts';
 import { inspectApplicationSource, inspectArtifactFiles, safeArtifactPath } from './artifact-policy.mjs';
 import { QR_DECODER_ENTRY, QR_DECODER_GRAPH, assertQrDecoderModule, assertNotQrDecoderModule, qrDecoderGraph } from './qr-build-policy.mjs';
@@ -34,6 +35,8 @@ const PERSONALIZATION_WORKER_MODULES = new Set(['packages/personalization/favori
 export function assertModuleAdmitted(path, localnet = false, solanaLocalnet = false, privateWorker = false) {
   assertNotQrDecoderModule(path);
   if (localnet && solanaLocalnet) throw new Error('LOCALNET_PROFILE_EXCLUSIVE');
+  // Optional packages have no document or private Worker exception in any profile.
+  if (isOptionalPackagePath(path)) throw new Error('NON_CORE_MODULE');
   // Exactly the reviewed favorites/templates facades and native consumers are Worker-only.
   // The broad package barrel and nested/look-alike paths never acquire this permission.
   if (/(?:^|\/)packages\/personalization(?:\/|$)/.test(path) && (!privateWorker || !PERSONALIZATION_WORKER_MODULES.has(path))) throw new Error('NON_CORE_MODULE');

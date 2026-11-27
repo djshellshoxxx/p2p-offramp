@@ -3,6 +3,7 @@
 import { lstat, readdir, realpath } from 'node:fs/promises';
 import { dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { isMain } from './lib/is-main.mjs';
+import { OPTIONAL_PACKAGE_NAMES, isOptionalPackagePath } from './lib/optional-packages.mjs';
 import { API } from 'typescript/unstable/sync';
 import {
   isCallExpression,
@@ -45,9 +46,9 @@ const NODE_BUILTINS = new Set([
   'zlib', 'test', 'readline', 'vm', 'perf_hooks', 'tty', 'querystring', 'dns', 'tls',
 ]);
 const ADVANCED_PACKAGES = new Set([
-  'advanced', 'extensions', 'proof', 'proofs', 'zk', 'zktls', 'stealth', 'reputation',
-  'maps', 'map', 'meetup', 'courier', 'couriers', 'tribunal', 'arbitration', 'arbitrator',
-  'privacy-policy', 'privacy-controls', 'proof-jobs', 'liquidity',
+  ...OPTIONAL_PACKAGE_NAMES,
+  'advanced', 'extensions', 'proof', 'proofs', 'zk', 'zktls', 'reputation',
+  'maps', 'map', 'couriers', 'tribunal', 'arbitrator',
 ]);
 
 function posix(value) { return value.split(sep).join('/'); }
@@ -155,7 +156,8 @@ function isAdvancedOrServerPath(root, path) {
   const rel = posix(relative(root, path));
   const parts = rel.toLowerCase().split('/').flatMap(part => part.split(/[-_]/));
   const packageName = packageForPath(root, path)?.toLowerCase();
-  return (packageName !== undefined && ADVANCED_PACKAGES.has(packageName))
+  return isOptionalPackagePath(rel)
+    || (packageName !== undefined && ADVANCED_PACKAGES.has(packageName))
     || parts.some(part => part === 'server' || part === 'servers' || ADVANCED_PACKAGES.has(part));
 }
 function checkGlobalReferences(root, file, source, findings) {
