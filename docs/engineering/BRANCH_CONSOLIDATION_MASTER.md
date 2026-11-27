@@ -1,3 +1,33 @@
+## 2026-11-27 — autonomous completion branch: compatibility, local policy, analytics and backup form cohort
+
+Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; coordinator parent `eb5dc41f9c94f9b805a03e48dc7f91931eac371e`. Historical `autonomous/completion-20261102` tip `94554ecf9854e4604f9f56afe5bebedeee931994`, merge base `e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa`, 68 ahead/653 behind, 300 returned changed paths (compare cap; not exhaustive). This run individually read 17 of those paths on both pinned refs: 13 exact blobs, four revised. Scope dispositions, not a complete branch disposition.
+
+| Path relative to apps/web/ | Historical blob | Main blob | Disposition |
+| --- | --- | --- | --- |
+| src/compatibility/model.ts | c42031fc1c92a91dab00858c3983a3ed4abbecc4 | e927d9da1d2e829660ba41e2b9bb09d8ed97327a | Explicit UTF-16 string comparator; exact rest of file verified by substitution. |
+| src/compatibility/probe.ts | 6da9f0c5686dc6aeb89250ff78ba2509e28b04c7 | same | Exact |
+| src/compatibility/startup.ts | 68df68dd9f901025790db84c037765d4ff75f81c | same | Exact |
+| test/compatibility-model.test.mjs | 9e78ea75c389f2af3153b6e95e29f8adbaf596ba | same | Exact |
+| test/compatibility-probe.test.mjs | dc81e9a68ca665c5d5bcd7527878b04cf47cc229 | same | Exact |
+| test/compatibility-startup.test.mjs | 76735aa03ef8c64ca6572e23c73b75f5cf9cd201 | same | Exact |
+| src/analytics/screen-counts.ts | 87f7bf7d1a6a2267215f3eb8b3d3dd12e9cf3f98 | same | Exact |
+| test/screen-counts.test.mjs | fa63e309ba67fff8fb35acab6da6a3df9b352f8f | same | Exact |
+| src/ui/LocalScreenAnalytics.tsx | cf4adc46dd93f4f9fde747c1779e3064bbf1a964 | same | Exact |
+| test/local-screen-analytics.render.test.mjs | 70569cdf761c54c31aae405ee077720aa9a65550 | same | Exact |
+| src/ui/use-screen-counts.ts | 6fa178f5c89d59896facd9387c04283a676dc9c2 | same | Exact |
+| src/content-policy/local-policy.ts | c8ec7245763679c397233b78cb0df70e2c144324 | 8121d364c208c539a74b1039b470021a96805c46 | One explanatory comment changed; exact rest verified by substitution. |
+| test/content-policy.test.mjs | af0c0ff80de48d9e7ee44ec60bf0672bf128c363 | same | Exact |
+| src/context-adapters/observations.ts | 2bc4ef1a81702a8c24b53154834504cba30987d3 | d950b42cf3f7452007e4e07b550a5a8a837f669d | Explicit UTF-16 comparator; exact remainder apart from blank-line differences verified by substitution. |
+| test/context-adapters.test.mjs | 9e86d64cdb89a34f65165f38f8108d7cbff1cd49 | same | Exact |
+| src/ui/BackupVerificationForm.tsx | a0825c6fd1155f7f638e0d96235ad0dec137ee44 | 3265f97cacbf09326169546d77577a08ae3ea0f5 | Reviewed complete old/new source: current layout-effect scope cleanup, synchronous request-ref duplicate guard, facade owner check, cleared file/passphrase fields, locale-resolved notice keys and bidi-isolated digests retain/improve prior verification UI. Do not revert to historic form. |
+| test/backup-verification-runtime.test.mjs | 07647ff81b1f0a65d64e2a371d7dd1e317fdb3bc | same | Exact |
+
+The exact historical tests retain compatibility evidence scoping, no-fingerprinting startup probes, memory-only opt-in counts, bounded import ownership and cancellation, and backup runtime verification. The revised form still calls the actual bounded import and facade verify/check methods and scopes visible receipts to owner/profile/selection. These are source comparisons only; no new behavioral qualification, measured device support, independent review or claim that this entire branch is superseded. The remaining historical paths require stage-local review against main and owned PRs; do not bulk merge.
+
+Fresh branch-name pagination exhausted after four pages: 293 distinct names. Disjoint PR searches returned 92 open, 58 closed unmerged, 34 merged before Nov 15 and 94 merged since, total 278. #251 merged; #237/#280/#281 submitted reviews empty. #228 remains owned and its prior concurrent backup authentication gap is already coordinated. Lowercase agents.md and Node >=24 package requirement read; requested uppercase AGENTS.md and docs/ai/WORKFLOW.md, HANDOFF.md returned 404. Direct git DNS exit 128; historical checkout absent and Node v22.16.0 below supported version. No new repo tests, source edits, independent executing worker, main merges, release, deployment, funds or optional activation. ReleaseEnabled=0 required. Full remaining branch-equivalence count unknown; D2 public trust, D5 policy, D8 financial approval and physical device evidence remain distinct.
+
+---
+
 ## 2026-11-27 — historical recovery and acceptance regression disposition
 
 Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`, coordinator parent `d82a979f5bdd6bf71aadc96787a784cca7179301`. Fresh branch-name pagination returned 293 distinct names; disjoint PR searches returned 92 open, 58 closed unmerged and 128 merged (34 before Nov 15, 94 on/after), total 278. Exact-tip census for all refs and full-history patch-ID were not refreshed. Eleven named tips resolved individually; comparisons against pinned main returned ahead=0, zero changed files and merge base equal to the exact tip in each case.
