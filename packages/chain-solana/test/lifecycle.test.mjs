@@ -442,18 +442,30 @@ test('disposal-during-marker-write-preserves-uncertainty-without-broadcast', asy
 
 
 test('conflict-on-the-marker-cas-never-broadcasts', async () => {
-  // Another writer wins the sendMarked compare-and-swap. D9 allows a send only after this client's own
-  // marker is durable, so nothing is broadcast and the record stays `signed`.
+  // The journal refuses this client's sendMarked CAS, as it would if another tab had moved the record first.
+  // D9 allows a send only after this client's own marker is durable. The fake commits nothing, so the record
+  // stays `signed`.
   const env = setupClient('native', {
     journal: { hooks: { before: record => (record.state === 'sendMarked' ? 'conflict' : undefined) } },
   });
   const seller = await connected(env, 'seller');
   error(await env.client.release(env.trade, seller), 'CONFLICT');
-  assert.equal(sendCount(env), 0);
+  // Let anything scheduled after the refusal run before counting sends.
+  await new Promise(resolve => setTimeout(resolve, 200));
+  assert.equal(sendCount(env), 0, 'no send, even one scheduled after the CONFLICT');
   assert.equal(onlyRecord(env).state, 'signed');
   assert.equal(onlyRecord(env).sendMarkedAt, null);
   const markerWrites = env.journalFake.writes.filter(state => state === 'sendMarked');
   assert.equal(markerWrites.length, 1, 'one marker attempt, no retry');
+  // Recovery cancels the never-marked intent without sending it; only a fresh intent is ever broadcast.
+  env.journalFake.hooks.before = undefined;
+  const [record] = ok(await env.client.recover(env.trade));
+  assert.equal(record.state, 'cancelled');
+  assert.equal(record.sendMarkedAt, null);
+  assert.equal(sendCount(env), 0, 'recovery never sends the conflicted intent');
+  const again = ok(await env.client.release(env.trade, await connected(env, 'seller')));
+  assert.equal(again.state, 'sent');
+  assert.equal(sendCount(env), 1, 'only the fresh intent was broadcast');
 });
 
 

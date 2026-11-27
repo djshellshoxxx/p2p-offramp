@@ -267,8 +267,9 @@ export async function signIntent(
 }
 
 /**
- * Writes the durable marker, then sends exactly once. If the marker write fails or its outcome is unknown,
- * nothing is sent (UNAVAILABLE; the stored record is `signed` or `sendMarked` and reconciles like any other).
+ * Writes the durable marker, then sends exactly once. If the marker write's outcome is unknown, nothing is sent
+ * (UNAVAILABLE; the stored record is `signed` or `sendMarked` and reconciles like any other). If the CAS is
+ * refused (CONFLICT: another writer moved the record), nothing is sent and the refusal is returned.
  * After the marker every send outcome is recorded as `sent` or `unknown`.
  */
 export async function markAndSend(
