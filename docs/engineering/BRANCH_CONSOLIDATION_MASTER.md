@@ -1,3 +1,31 @@
+## 2026-11-27 — autonomous native-retention source disposition and new repair candidates
+
+Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701` (tree `65c413d28fadc3a1ee44446281f6e3c59e2dea3f`), historical `autonomous/completion-20261102` = live open #26 `94554ecf9854e4604f9f56afe5bebedeee931994`; 68 ahead / 653 behind; merge base `e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa`. Four remaining native-retention paths examined against the live split #43 `bc549f477f86e27516f554c7f1923a7147b82ea4`, current main and #237; recursive trees returned untruncated.
+
+| Historical path | Historical blob | #43 disposition |
+| --- | --- | --- |
+| apps/web/src/retention/native-retention.ts | 65f526df1d680041391c329ff9e3ad47772b151f | e17a1d20c80fd2d5f65e0a1aab90d96d0ad1dfd0; one line changed: reverse a copy of cleanup resources rather than mutating original array |
+| apps/web/src/ui/RetentionPanel.tsx | 0d1b5a6e84457d76756081a8c9a30eb230e4ba77 | Exact |
+| apps/web/test/retention-native.test.mjs | f08181cf68da9852a4cd2509d80d1bdca6476acc | Exact |
+| apps/web/test/retention-worker.test.mjs | 9fa58bbeb170791c53467970b86ec11c89996ed2 | Exact |
+
+All four absent at original paths in main and #237. Do not equate absence with lost history: retained on #26/#43. Seven native and ten Worker historical test declarations cover mixed-record closure, unpaid credit, explicit consent/CAS, expiry and durable receipts. Main storage retention tests (5e5939b2c93da6e416e458354f1c5ca59b0c7b8d) include 26 named cases covering stronger conversation-sequence and payout-lease closure; those do not establish integrated native mixed-record deletion. #237 adds a different scalar-only read-only preview (panel e6afd0dcff0b2389908ceca4ffdb5959197a4e0f; runtime test 4205a19de58dd77a6ce6f9f12e700fec69d73494 has 14 named cases; UI test e4f5564fea2c5866b9a13aaf1ed0e706b6989cb9). DATA01 spec 71f1dbf4a8116f849b7ed0816680b4bf5ebb54a8 requires explicit local preview, consent, atomic revision-bound deletion and backup/remote limits. Thus destructive app composition is **not demonstrated complete** by #237; keep S07 Tier C native/deletion scope separately blocked on current-source validation and owner authorization, not a duplicate preview rewrite. The old #43 evidence is historical and cannot qualify current main. No wholesale transplant, deletion enablement or owner-branch modifications. The autonomous branch remains partially reconciled; the 300-path compare cap is not exhaustive.
+
+Fresh full REST pagination: **299 distinct branches / 284 PRs: 98 open, 128 merged, 58 closed unmerged**, main unchanged. Six new owned candidates since the previous 293/278 census:
+
+| PR | Head | Returned workflow state at inspection | Disposition |
+| --- | --- | --- | --- |
+| #282 | 86268e65167f81168f7aca7a0e018ea6b93cc11a | 4 success | B4 claims freshness implementation; preserve owner; named review absent |
+| #283 | e368f6de79de738c80dddbc3103d7fcae0942fe0 | 4 success, 1 failure | Exact-main evidence generator; hold for Solana browser failure |
+| #284 | 822631209223d47a202c917f8ba79925a1f5b00d | 4 success | Privacy-policy isolation successor to #227/#273; verify ancestry and individual #280 prerequisite, no activation |
+| #285 | 4d789523d3bc3efec08e23c3d42486b36b086014 | 4 success, Vault queued | Native rent payout safety; Tier C owner/current-target gate |
+| #286 | c1f2e3ac95ccabb29a548ffb60755e2975da96d4 | 4 success, Vault queued | Hostile RPC test oracle repair; not a new production fix |
+| #287 | ba81f6b47d819387553a3836466dfffff165dfe6 | 2 success, Vault queued | Stacked #155 digest regression; does not resolve evaluator decision |
+
+All six submitted-review lists empty. Workflow enumeration is not complete check-run qualification. #237/#280/#281/#228 reviews also empty; #251 remains merged. #283 [program job 140789362731](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/46084043880/job/140789362731) actually failed step 16 on checkout 3131aa5 (merge of e368f6de into fdf346ab). At Nov 28 00:24:04 UTC, browser timed out on disabled Review separate payout in scripts/test-solana-localnet-browser.mjs:38/119. Earlier frozen-ATA failure assertions passed as expected. Root cause not established; #285 addresses related rent readiness but cannot transfer its results. [Owner coordination](https://github.com/djshellshoxxx/p2p-offramp/pull/283#issuecomment-7231792945) published; no duplicate implementation, assertion relaxation or unchanged long financial rerun. No new runtime tests, independent executing worker, main merge, deployment or funds. Direct git DNS exit 128, historical workspace absent, Node 22.16.0. ReleaseEnabled=0 required. Full remaining branch-equivalence count unknown.
+
+---
+
 ## 2026-11-27 — autonomous completion branch: compatibility, local policy, analytics and backup form cohort
 
 Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; coordinator parent `eb5dc41f9c94f9b805a03e48dc7f91931eac371e`. Historical `autonomous/completion-20261102` tip `94554ecf9854e4604f9f56afe5bebedeee931994`, merge base `e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa`, 68 ahead/653 behind, 300 returned changed paths (compare cap; not exhaustive). This run individually read 17 of those paths on both pinned refs: 13 exact blobs, four revised. Scope dispositions, not a complete branch disposition.
