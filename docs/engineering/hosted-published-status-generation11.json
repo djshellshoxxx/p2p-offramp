@@ -1,0 +1,168 @@
+{
+  "observed_at_utc": "2026-11-20T03:05:14.328Z",
+  "scope": "Pull-request-triggered workflow metadata only; no new completed execution receipt inferred",
+  "candidates": [
+    {
+      "pr": 206,
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "runs": [
+        {
+          "id": 44664659264,
+          "name": "Vault foundation",
+          "status": "completed",
+          "conclusion": "cancelled"
+        },
+        {
+          "id": 44664659214,
+          "name": "Specification inventory",
+          "status": "completed",
+          "conclusion": "cancelled"
+        },
+        {
+          "id": 44664659342,
+          "name": "Vault foundation",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44664659248,
+          "name": "EVM escrow",
+          "status": "completed",
+          "conclusion": "cancelled"
+        },
+        {
+          "id": 44664659217,
+          "name": "Nostr relay interoperability",
+          "status": "completed",
+          "conclusion": "cancelled"
+        },
+        {
+          "id": 44664659368,
+          "name": "Specification inventory",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44664659392,
+          "name": "EVM escrow",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44664659348,
+          "name": "Nostr relay interoperability",
+          "status": "queued",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "pr": 207,
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "runs": [
+        {
+          "id": 44662758038,
+          "name": "Nostr relay interoperability",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44662758194,
+          "name": "EVM escrow",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44662758173,
+          "name": "Vault foundation",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44662758124,
+          "name": "Solana escrow",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44662758164,
+          "name": "Specification inventory",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "pr": 208,
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "runs": [
+        {
+          "id": 44663854118,
+          "name": "Solana escrow",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44663854033,
+          "name": "Specification inventory",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44663854059,
+          "name": "EVM escrow",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44663854039,
+          "name": "Nostr relay interoperability",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44663854050,
+          "name": "Vault foundation",
+          "status": "queued",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "pr": 209,
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "runs": [
+        {
+          "id": 44664052797,
+          "name": "Specification inventory",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44664052754,
+          "name": "Vault foundation",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44664052928,
+          "name": "Solana escrow",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44664052847,
+          "name": "Nostr relay interoperability",
+          "status": "queued",
+          "conclusion": null
+        },
+        {
+          "id": 44664052872,
+          "name": "EVM escrow",
+          "status": "queued",
+          "conclusion": null
+        }
+      ]
+    }
+  ]
+}

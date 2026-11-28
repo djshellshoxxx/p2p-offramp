@@ -1,0 +1,1864 @@
+{
+  "schemaVersion": 1,
+  "capturedDate": "2026-11-24",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "mainCommit": "8cff44909752f5e8b99eecec44ebaa44360c7b5d",
+  "coordinatorParent": "d82d6edfb5def251872390f67d0c1525138e05cd",
+  "scope": "Stage-local changed filenames from PR47 and PR48, matched against non-truncated recursive Git trees, plus PR26 preservation. These are historical source references, not current acceptance evidence or instructions to execute.",
+  "stage11": {
+    "pr": 47,
+    "head": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+    "files": [
+      {
+        "path": ".github/workflows/vault-foundation.yml",
+        "historicalBlob": "1c96cfcbbb2b89d46dc057500363589e4e26380d",
+        "mainBlob": "c539e5e80c6f534429c942894031336d6db9938f",
+        "pr26Blob": "5eb4f2e9f5ea29fce3fb2faff850662eef947ae9",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/execution/assurance/README.md",
+        "historicalBlob": "b2426159072b8bedc782ec3299ca69bd5e82b855",
+        "mainBlob": "40ff36b22c1c59ea50795a65b1ae357a44cb7eb8",
+        "pr26Blob": "b2426159072b8bedc782ec3299ca69bd5e82b855",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/execution/assurance/attack-cases.json",
+        "historicalBlob": "e3c21d8d49dfa5bc110389aa4d1463dd5d827f71",
+        "mainBlob": "e3c21d8d49dfa5bc110389aa4d1463dd5d827f71",
+        "pr26Blob": "e3c21d8d49dfa5bc110389aa4d1463dd5d827f71",
+        "matchingMainPaths": [
+          "docs/execution/assurance/attack-cases.json"
+        ],
+        "disposition": "same-path-identical"
+      },
+      {
+        "path": "docs/execution/assurance/evidence-manifest.json",
+        "historicalBlob": "610e7539b17466a8ea42ae05d53ced039ce2eeef",
+        "mainBlob": "8277c2df3041b1599ccc6c3d946c8ae6a0a2ff84",
+        "pr26Blob": "42231d66a667b514fc062203445976ec57518885",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/execution/assurance/incident-recovery-checklist.md",
+        "historicalBlob": "426a1437f9b780da8b967ec99c720ffb1b0774fd",
+        "mainBlob": "426a1437f9b780da8b967ec99c720ffb1b0774fd",
+        "pr26Blob": "426a1437f9b780da8b967ec99c720ffb1b0774fd",
+        "matchingMainPaths": [
+          "docs/execution/assurance/incident-recovery-checklist.md"
+        ],
+        "disposition": "same-path-identical"
+      },
+      {
+        "path": "docs/execution/assurance/jurisdiction-matrix.json",
+        "historicalBlob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+        "mainBlob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+        "pr26Blob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+        "matchingMainPaths": [
+          "docs/execution/assurance/jurisdiction-matrix.json",
+          "docs/execution/assurance/role-facts.json"
+        ],
+        "disposition": "same-path-identical"
+      },
+      {
+        "path": "docs/execution/assurance/role-facts.json",
+        "historicalBlob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+        "mainBlob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+        "pr26Blob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+        "matchingMainPaths": [
+          "docs/execution/assurance/jurisdiction-matrix.json",
+          "docs/execution/assurance/role-facts.json"
+        ],
+        "disposition": "same-path-identical"
+      },
+      {
+        "path": "docs/execution/drills/README.md",
+        "historicalBlob": "3159fd48fa741aeda13c763e76d00f5bfe44c35b",
+        "mainBlob": "6d8f4565b9088836b7397cc5601a287ec6bced90",
+        "pr26Blob": "3159fd48fa741aeda13c763e76d00f5bfe44c35b",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/execution/drills/local-checks.tap",
+        "historicalBlob": "198ba5466345c3a4e6bf1df95304ef311ac1dae1",
+        "mainBlob": "198ba5466345c3a4e6bf1df95304ef311ac1dae1",
+        "pr26Blob": "198ba5466345c3a4e6bf1df95304ef311ac1dae1",
+        "matchingMainPaths": [
+          "docs/execution/drills/local-checks.tap"
+        ],
+        "disposition": "same-path-identical"
+      },
+      {
+        "path": "docs/execution/drills/local-drills.json",
+        "historicalBlob": "61b503f60b4cbc04a579a92b861cf19194412c7c",
+        "mainBlob": "61b503f60b4cbc04a579a92b861cf19194412c7c",
+        "pr26Blob": "61b503f60b4cbc04a579a92b861cf19194412c7c",
+        "matchingMainPaths": [
+          "docs/execution/drills/local-drills.json"
+        ],
+        "disposition": "same-path-identical"
+      },
+      {
+        "path": "docs/execution/reviews/T49.json",
+        "historicalBlob": "094050e424a184689687919de6b922d72d088715",
+        "mainBlob": "094050e424a184689687919de6b922d72d088715",
+        "pr26Blob": "094050e424a184689687919de6b922d72d088715",
+        "matchingMainPaths": [
+          "docs/execution/reviews/T49.json"
+        ],
+        "disposition": "same-path-identical"
+      },
+      {
+        "path": "docs/governance/PENDING-DECISIONS.md",
+        "historicalBlob": "1b8a1b8c93b770e474ece81134892365657ccc43",
+        "mainBlob": "46312bf598984513c85ab0faa8838265c9f0d49d",
+        "pr26Blob": "1b8a1b8c93b770e474ece81134892365657ccc43",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/README.md",
+        "historicalBlob": "7d78c40887738216db72e75736fe937ed11ef61c",
+        "mainBlob": "29714226f2b55ed5d5c8e459834486c9f3b712a9",
+        "pr26Blob": "7d78c40887738216db72e75736fe937ed11ef61c",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/g14-terms-binding.decision.json",
+        "historicalBlob": "57f5c0171202932ad849ba58f749a007181ff252",
+        "mainBlob": "33f206e5e5ef005f1e5304233b5aee21e2d298e0",
+        "pr26Blob": "57f5c0171202932ad849ba58f749a007181ff252",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/g14-terms-binding.proposal.json",
+        "historicalBlob": "bd979ee99981339869b3bdd2c7b89f7b72d0f262",
+        "mainBlob": "2bce55e9852a1882a7e5d91944b7b3d019a622fe",
+        "pr26Blob": "bd979ee99981339869b3bdd2c7b89f7b72d0f262",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/g15-release-policy.decision.json",
+        "historicalBlob": "17e4b41820c2d159f0f8b1c68e76af4066491583",
+        "mainBlob": "0ef1e56e99fe98bf31bcf0cd4b767e37ca071223",
+        "pr26Blob": "17e4b41820c2d159f0f8b1c68e76af4066491583",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/g15-release-policy.proposal.json",
+        "historicalBlob": "119a6ab2616e9537bc0069f2058d882b5e06df76",
+        "mainBlob": "fee24fa5c58b50c6bef9c28099c264c8e8731989",
+        "pr26Blob": "119a6ab2616e9537bc0069f2058d882b5e06df76",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/g16-acceptance.decision.json",
+        "historicalBlob": "103c1a1eb86e203a80ddde96a7c432dd39f6c1b8",
+        "mainBlob": "e423bb58557a6a7a64bffa96ede4f9524e79e4a2",
+        "pr26Blob": "103c1a1eb86e203a80ddde96a7c432dd39f6c1b8",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/g16-acceptance.proposal.json",
+        "historicalBlob": "eb42d115a035de0c517b2dfc57f561a5e04e258f",
+        "mainBlob": "0c1ae60dfae6cb4856733681ee7495f257ebfac7",
+        "pr26Blob": "eb42d115a035de0c517b2dfc57f561a5e04e258f",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/peer-acceptance-carrier.decision.json",
+        "historicalBlob": "dab08300b916217a035a548d713284ff8c952513",
+        "mainBlob": "7668142d2084507e9ba88c5433fbf06b88aeef88",
+        "pr26Blob": "dab08300b916217a035a548d713284ff8c952513",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/peer-acceptance-carrier.proposal.json",
+        "historicalBlob": "622298b1d428c0670428eae38044f6747d64147c",
+        "mainBlob": "8f547009b852bf90339593dd6840fd77aed9dc98",
+        "pr26Blob": "622298b1d428c0670428eae38044f6747d64147c",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/qr-profile.decision.json",
+        "historicalBlob": "7112cdc3483c80ba39c0d6a70cc170b2e7538841",
+        "mainBlob": "12bf396991511b87deacfe80b94af009be2293e9",
+        "pr26Blob": "7112cdc3483c80ba39c0d6a70cc170b2e7538841",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/qr-profile.proposal.json",
+        "historicalBlob": "f6b21cef22f497202579c5cb2873d428c55a2ebf",
+        "mainBlob": "b74f1494e962dc0c85e0017583c587020e7352f0",
+        "pr26Blob": "f6b21cef22f497202579c5cb2873d428c55a2ebf",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/solana-profile.decision.json",
+        "historicalBlob": "c0ecec3c3cace5764910ff3b03485501244e85bd",
+        "mainBlob": "8f5ee4c89f0f28c7bc78f35fdda64d4bc0d447bf",
+        "pr26Blob": "c0ecec3c3cace5764910ff3b03485501244e85bd",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/governance/solana-profile.proposal.json",
+        "historicalBlob": "e0ce912bc77907f0e4ada4ec384a3b16d6ac75f6",
+        "mainBlob": "746d7d047b11b6f09977c392c228c74928a96728",
+        "pr26Blob": "e0ce912bc77907f0e4ada4ec384a3b16d6ac75f6",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "package.json",
+        "historicalBlob": "97e10665c213c9105815ec6cfd132827b9a9849a",
+        "mainBlob": "9bb6a80bcea23db82555085914b96eb02dbd3487",
+        "pr26Blob": "1458254149a0d9a0073ad42620542f1f3758a3f8",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "packages/governance/index.ts",
+        "historicalBlob": "64427a1a911dcf20868c4009a02f2ca2f536c433",
+        "mainBlob": "64427a1a911dcf20868c4009a02f2ca2f536c433",
+        "pr26Blob": "64427a1a911dcf20868c4009a02f2ca2f536c433",
+        "matchingMainPaths": [
+          "packages/governance/index.ts"
+        ],
+        "disposition": "same-path-identical"
+      },
+      {
+        "path": "packages/governance/src/assurance.ts",
+        "historicalBlob": "1e0d6ec367cc79420a314e86cb023546de734a3a",
+        "mainBlob": "1e0d6ec367cc79420a314e86cb023546de734a3a",
+        "pr26Blob": "1e0d6ec367cc79420a314e86cb023546de734a3a",
+        "matchingMainPaths": [
+          "packages/governance/src/assurance.ts"
+        ],
+        "disposition": "same-path-identical"
+      },
+      {
+        "path": "packages/governance/src/records.ts",
+        "historicalBlob": "6da3e9c761e718d049cb952c9aab61da2340cd3f",
+        "mainBlob": "5ee3e042b04c4a890210c9293b4ab318100c6ffe",
+        "pr26Blob": "6da3e9c761e718d049cb952c9aab61da2340cd3f",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "packages/governance/test/assurance.test.mjs",
+        "historicalBlob": "a93ef4f55db07684e6712562ee809843b13ee318",
+        "mainBlob": "a01437f83bc34a04ac1d24b28674bb9c245fdc08",
+        "pr26Blob": "a93ef4f55db07684e6712562ee809843b13ee318",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "packages/governance/test/records.test.mjs",
+        "historicalBlob": "125fba4ac483016a00f64228b0d0fca097507dd2",
+        "mainBlob": "80fd7ab091d5f33ce30b55748d173fd6b6e9f863",
+        "pr26Blob": "125fba4ac483016a00f64228b0d0fca097507dd2",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "scripts/governance/check-all.mjs",
+        "historicalBlob": "695aa058db79f460b179f104433e6eb2173b469b",
+        "mainBlob": "5c287dcd24b28ee4c82bd5c14c6c9daef93b648c",
+        "pr26Blob": "d757f1a97510ada684067285341e064a134e1b31",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "scripts/governance/check.mjs",
+        "historicalBlob": "73ce8af1168aace40422e81eb4e2fd96e7e24560",
+        "mainBlob": "1a3ea366e6a3363edc7b869ac2d7bcdc7f01a077",
+        "pr26Blob": "73ce8af1168aace40422e81eb4e2fd96e7e24560",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "scripts/governance/refresh-evidence-manifest.mjs",
+        "historicalBlob": "d65dcb0bccbd2fc401247d5333df8ba8bde7ae5a",
+        "mainBlob": "8f1ffbd3fd81df320b1ed51d86c697186ce24cca",
+        "pr26Blob": null,
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "scripts/tests/refresh-evidence-manifest.test.mjs",
+        "historicalBlob": "f96cde85d3506edb4a8026876d452478b433bea2",
+        "mainBlob": "343a82000e6de75bea31042853ed95c835f4c98a",
+        "pr26Blob": null,
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "scripts/tests/tool-path.test.mjs",
+        "historicalBlob": "1e2863da21b023b53db3a1fd1a73c5ae04da7971",
+        "mainBlob": "1e2863da21b023b53db3a1fd1a73c5ae04da7971",
+        "pr26Blob": null,
+        "matchingMainPaths": [
+          "scripts/tests/tool-path.test.mjs"
+        ],
+        "disposition": "same-path-identical"
+      }
+    ]
+  },
+  "stage12": {
+    "pr": 48,
+    "head": "494703e837897d04bce1cb04134fa8be6b747377",
+    "files": [
+      {
+        "path": "README.md",
+        "historicalBlob": "56d44bc6511552177bb27052e88f06a278cc79df",
+        "mainBlob": "69c805afac28dfaba4396c5191744ffc7d23719e",
+        "pr26Blob": "56d44bc6511552177bb27052e88f06a278cc79df",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/LOCAL_DEVELOPMENT_AND_RELEASE_GATES.md",
+        "historicalBlob": "c83f3bacbf023e44cb10d30af445210353597bb4",
+        "mainBlob": "21d967e830d5be161bc473a1b69b93f0b604988e",
+        "pr26Blob": "c83f3bacbf023e44cb10d30af445210353597bb4",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/execution/ALL-REMAINING-WORK-PROMPT.md",
+        "historicalBlob": "d04416fc77a8b2c1993c7b128b1b007580511cdf",
+        "mainBlob": null,
+        "pr26Blob": "d04416fc77a8b2c1993c7b128b1b007580511cdf",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+        "historicalBlob": "9038154eae4cab579df39f79eca22ded5ba2a83b",
+        "mainBlob": null,
+        "pr26Blob": "9038154eae4cab579df39f79eca22ded5ba2a83b",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.md",
+        "historicalBlob": "f09393ce11c75a4da779d9daa4eb6f08ef03b4e9",
+        "mainBlob": null,
+        "pr26Blob": "f09393ce11c75a4da779d9daa4eb6f08ef03b4e9",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/GUIDANCE-REMAINING-2026-11-01.md",
+        "historicalBlob": "222fc7f6dfa1075d4e5696c0de55827af57c485a",
+        "mainBlob": "5f9b02cd5c0f4044007dd4ce83c41c2f89dc9fe9",
+        "pr26Blob": "222fc7f6dfa1075d4e5696c0de55827af57c485a",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "docs/execution/acceptance/README.md",
+        "historicalBlob": "5a35f45ff7577c9533b5515ae19cf93f196e8edc",
+        "mainBlob": null,
+        "pr26Blob": "5a35f45ff7577c9533b5515ae19cf93f196e8edc",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/acceptance/g24-coverage.json",
+        "historicalBlob": "7574d9be50587f49620485e29ffbd1df9ea21a2a",
+        "mainBlob": null,
+        "pr26Blob": "7574d9be50587f49620485e29ffbd1df9ea21a2a",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/acceptance/g24-current-local.json",
+        "historicalBlob": "339f901b20b6a0929acee988a74da95d39b68d77",
+        "mainBlob": null,
+        "pr26Blob": "339f901b20b6a0929acee988a74da95d39b68d77",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/acceptance/g24-current-local.md",
+        "historicalBlob": "a60444f92f31550dca3d152815cc40ec436347f4",
+        "mainBlob": null,
+        "pr26Blob": "a60444f92f31550dca3d152815cc40ec436347f4",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/architecture/completion-decisions.md",
+        "historicalBlob": "42250693eab63a2f65b8a24d7dbef198088884ac",
+        "mainBlob": null,
+        "pr26Blob": "42250693eab63a2f65b8a24d7dbef198088884ac",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/CURRENT-SOURCE.json",
+        "historicalBlob": "6eb6c61ffee4e5b82315ecfc87ecf55689e4d25a",
+        "mainBlob": null,
+        "pr26Blob": "6eb6c61ffee4e5b82315ecfc87ecf55689e4d25a",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/README.md",
+        "historicalBlob": "ce8ffdb6ec7b617737644c200fdb69b8be3027f1",
+        "mainBlob": null,
+        "pr26Blob": "ce8ffdb6ec7b617737644c200fdb69b8be3027f1",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/app-runtime-ui.json",
+        "historicalBlob": "3c66d10cbc376d52fd71aa23eddaad977c76ca4d",
+        "mainBlob": null,
+        "pr26Blob": "3c66d10cbc376d52fd71aa23eddaad977c76ca4d",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/app-runtime-ui.md",
+        "historicalBlob": "87b30c59df0383490380c02a993ceeb8394957e7",
+        "mainBlob": null,
+        "pr26Blob": "87b30c59df0383490380c02a993ceeb8394957e7",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/build-ops.json",
+        "historicalBlob": "85db8cf99a648961186e41ee4135ee401868ff02",
+        "mainBlob": null,
+        "pr26Blob": "85db8cf99a648961186e41ee4135ee401868ff02",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/build-ops.md",
+        "historicalBlob": "afd84b6eb8fbcab0b14b97e6dac902d7143570c8",
+        "mainBlob": null,
+        "pr26Blob": "afd84b6eb8fbcab0b14b97e6dac902d7143570c8",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/crypto-storage.json",
+        "historicalBlob": "0a1f4245f326f344cee9b89dea8acc675979f1f2",
+        "mainBlob": null,
+        "pr26Blob": "0a1f4245f326f344cee9b89dea8acc675979f1f2",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/crypto-storage.md",
+        "historicalBlob": "c72aac22bbbf01f669f29aae3cfa9ad88092938c",
+        "mainBlob": null,
+        "pr26Blob": "c72aac22bbbf01f669f29aae3cfa9ad88092938c",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/domain-evm.json",
+        "historicalBlob": "236f4cc29bc3a4461139504f7293506eab4e24b8",
+        "mainBlob": null,
+        "pr26Blob": "236f4cc29bc3a4461139504f7293506eab4e24b8",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/domain-evm.md",
+        "historicalBlob": "a0681bc147ed155b2c01283e1d7151ae5d834aab",
+        "mainBlob": null,
+        "pr26Blob": "a0681bc147ed155b2c01283e1d7151ae5d834aab",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/maintained-tools.json",
+        "historicalBlob": "9ef23a5a36c84b0f129384570ca3fac12e28191e",
+        "mainBlob": null,
+        "pr26Blob": "9ef23a5a36c84b0f129384570ca3fac12e28191e",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/maintained-tools.md",
+        "historicalBlob": "dbc0afd1bd9f9e6c7211b259a1a5c44f464d1d5d",
+        "mainBlob": null,
+        "pr26Blob": "dbc0afd1bd9f9e6c7211b259a1a5c44f464d1d5d",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/optional.json",
+        "historicalBlob": "9492902b5c7b1b8349eca355104ee7167468f882",
+        "mainBlob": null,
+        "pr26Blob": "9492902b5c7b1b8349eca355104ee7167468f882",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/optional.md",
+        "historicalBlob": "e83021317cc38723df65d47361df67f6f51305f4",
+        "mainBlob": null,
+        "pr26Blob": "e83021317cc38723df65d47361df67f6f51305f4",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/root-recovery-tools.json",
+        "historicalBlob": "64c883d941f9fc0f86ec8986f88baf2dc5630001",
+        "mainBlob": null,
+        "pr26Blob": "64c883d941f9fc0f86ec8986f88baf2dc5630001",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/schemas-proof.json",
+        "historicalBlob": "a65f63e2f2da62db6ab9b0da6c4462d0f9a771c5",
+        "mainBlob": null,
+        "pr26Blob": "a65f63e2f2da62db6ab9b0da6c4462d0f9a771c5",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/schemas-proof.md",
+        "historicalBlob": "e521c6ce18a0c7b9346be3c8c7b5a0f14ccedcfc",
+        "mainBlob": null,
+        "pr26Blob": "e521c6ce18a0c7b9346be3c8c7b5a0f14ccedcfc",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/transport-messaging.json",
+        "historicalBlob": "e14f405c59a02ae555702868978b5b5a3af08410",
+        "mainBlob": null,
+        "pr26Blob": "e14f405c59a02ae555702868978b5b5a3af08410",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/audit-2026-11-02/transport-messaging.md",
+        "historicalBlob": "45738c34e0d473d1324bb47ea94e5f52a232df2a",
+        "mainBlob": null,
+        "pr26Blob": "45738c34e0d473d1324bb47ea94e5f52a232df2a",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/coverage/COVERAGE.md",
+        "historicalBlob": "412310cfc19bcd6c144210e2ee6d192ab7728b82",
+        "mainBlob": null,
+        "pr26Blob": "412310cfc19bcd6c144210e2ee6d192ab7728b82",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/coverage/CURRENT-REMAINDER.json",
+        "historicalBlob": "430c39d4b8d568593b7ed774d3b837b9f80ce92b",
+        "mainBlob": null,
+        "pr26Blob": "430c39d4b8d568593b7ed774d3b837b9f80ce92b",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/coverage/CURRENT-REMAINDER.md",
+        "historicalBlob": "1535509dea803a1c12fea3d1277848701f013817",
+        "mainBlob": null,
+        "pr26Blob": "1535509dea803a1c12fea3d1277848701f013817",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/coverage/REQUIREMENTS.json",
+        "historicalBlob": "4b9fb924de4b4d72dd8aebe73d34dbaa147e2b65",
+        "mainBlob": null,
+        "pr26Blob": "4b9fb924de4b4d72dd8aebe73d34dbaa147e2b65",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/01-proof.md",
+        "historicalBlob": "c01c86091b6f521c06c05a6f3cccbd0b846b6f85",
+        "mainBlob": null,
+        "pr26Blob": "c01c86091b6f521c06c05a6f3cccbd0b846b6f85",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/02-reputation.md",
+        "historicalBlob": "2dfe77496ace7960e6fa476e7484d2272770e4c7",
+        "mainBlob": null,
+        "pr26Blob": "2dfe77496ace7960e6fa476e7484d2272770e4c7",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/03-relay-allocation.md",
+        "historicalBlob": "f78bc8246bc3aa799a9f4f8153d819c29623cadb",
+        "mainBlob": null,
+        "pr26Blob": "f78bc8246bc3aa799a9f4f8153d819c29623cadb",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/04-optional-messaging.md",
+        "historicalBlob": "e379287e572038a506be00e8e7c3c80d327f0e1f",
+        "mainBlob": null,
+        "pr26Blob": "e379287e572038a506be00e8e7c3c80d327f0e1f",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/05-mobile.md",
+        "historicalBlob": "a3a20eed2fe45271dac3ac3ff7d3c77a48f2a985",
+        "mainBlob": null,
+        "pr26Blob": "a3a20eed2fe45271dac3ac3ff7d3c77a48f2a985",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/06-tor.md",
+        "historicalBlob": "a780ce6a560cf1bb6b6ce2f81e20b4834e7bfadb",
+        "mainBlob": null,
+        "pr26Blob": "a780ce6a560cf1bb6b6ce2f81e20b4834e7bfadb",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/07-asset-privacy.md",
+        "historicalBlob": "68cf7caedd271d83f2f10e1c069a202902c65802",
+        "mainBlob": null,
+        "pr26Blob": "68cf7caedd271d83f2f10e1c069a202902c65802",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/08-stealth.md",
+        "historicalBlob": "e46d3642075e6f00468b61a44fb1736ccfabed45",
+        "mainBlob": null,
+        "pr26Blob": "e46d3642075e6f00468b61a44fb1736ccfabed45",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/README.md",
+        "historicalBlob": "87d01a251fe07f78d1febe90eefa362e4d883f0e",
+        "mainBlob": null,
+        "pr26Blob": "87d01a251fe07f78d1febe90eefa362e4d883f0e",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/decision-index.json",
+        "historicalBlob": "8b696a82373f14c567350052e44f8055a892f262",
+        "mainBlob": null,
+        "pr26Blob": "8b696a82373f14c567350052e44f8055a892f262",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/source-index.json",
+        "historicalBlob": "44d510a7434db405b84df008c7bb299dadfcdc73",
+        "mainBlob": null,
+        "pr26Blob": "44d510a7434db405b84df008c7bb299dadfcdc73",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/stealth-comparison-vectors.json",
+        "historicalBlob": "8f3ecd76b1548ce1253a5e56c456f98de960a4a9",
+        "mainBlob": null,
+        "pr26Blob": "8f3ecd76b1548ce1253a5e56c456f98de960a4a9",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/stealth-local-contract.json",
+        "historicalBlob": "00476e7a838066f75e1e7eac4a711098462ca466",
+        "mainBlob": null,
+        "pr26Blob": "00476e7a838066f75e1e7eac4a711098462ca466",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/profiles/validation-report.json",
+        "historicalBlob": "6bef13694e71f10a5ea6cc14983db0c9dc3dead3",
+        "mainBlob": null,
+        "pr26Blob": "6bef13694e71f10a5ea6cc14983db0c9dc3dead3",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/qualification/browser-engines.json",
+        "historicalBlob": "1a441072fd0c17f3b2800d87b7dac3debecedf09",
+        "mainBlob": null,
+        "pr26Blob": "1a441072fd0c17f3b2800d87b7dac3debecedf09",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/qualification/browser-tooling-policy.json",
+        "historicalBlob": "5428f3116b275ee3c9fd5eb2612c7e7c78caf579",
+        "mainBlob": null,
+        "pr26Blob": "5428f3116b275ee3c9fd5eb2612c7e7c78caf579",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/qualification/browser-zoom.json",
+        "historicalBlob": "3af79bf3af279de531a36dbf71fc6587dfcb1310",
+        "mainBlob": null,
+        "pr26Blob": "3af79bf3af279de531a36dbf71fc6587dfcb1310",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/qualification/evm-formal-partitions.json",
+        "historicalBlob": "4fc5b0d2e6cf97751d3ab96fd8255b0c5c0d3b6d",
+        "mainBlob": null,
+        "pr26Blob": "4fc5b0d2e6cf97751d3ab96fd8255b0c5c0d3b6d",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/qualification/fresh-lab-693c66c-failed.json",
+        "historicalBlob": "42e4f123fb4ce3dca9226df430e82c80a20a6359",
+        "mainBlob": null,
+        "pr26Blob": "42e4f123fb4ce3dca9226df430e82c80a20a6359",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/qualification/fresh-lab-a2b414f.json",
+        "historicalBlob": "72de9e4b48c1f7192b1bf1888d146e01f36b639a",
+        "mainBlob": null,
+        "pr26Blob": "72de9e4b48c1f7192b1bf1888d146e01f36b639a",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/qualification/local-origin-outage.json",
+        "historicalBlob": "b4e747d3933a430a9be816800d74403133e7cdda",
+        "mainBlob": null,
+        "pr26Blob": "b4e747d3933a430a9be816800d74403133e7cdda",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/COMPLETION-META-CI-FINAL.md",
+        "historicalBlob": "87d3d163c4927fc7c96ae7b8cb2d37bb803ff29f",
+        "mainBlob": null,
+        "pr26Blob": "87d3d163c4927fc7c96ae7b8cb2d37bb803ff29f",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/COMPLETION-META-CI.md",
+        "historicalBlob": "54b6174f8ef72a13ba63056906582016b29b215e",
+        "mainBlob": null,
+        "pr26Blob": "54b6174f8ef72a13ba63056906582016b29b215e",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/COVERAGE.json",
+        "historicalBlob": "359399e63fdbf53b18071fa5c6762cc341f05ed1",
+        "mainBlob": null,
+        "pr26Blob": "359399e63fdbf53b18071fa5c6762cc341f05ed1",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/OPTIONAL-GUARD-FINAL.md",
+        "historicalBlob": "22344eacdf840bd5e2c5c31e60b03fc54e5fe608",
+        "mainBlob": null,
+        "pr26Blob": "22344eacdf840bd5e2c5c31e60b03fc54e5fe608",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/PACKAGE-CI-ENROLLMENT.json",
+        "historicalBlob": "8e16fd52013e586a637434d45ffd0f2bc4816ce4",
+        "mainBlob": null,
+        "pr26Blob": "8e16fd52013e586a637434d45ffd0f2bc4816ce4",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/RUNTIME-BUILD-COVERAGE.json",
+        "historicalBlob": "b534ade51ec3eff19c718d818ba3643fc8fa6352",
+        "mainBlob": null,
+        "pr26Blob": "b534ade51ec3eff19c718d818ba3643fc8fa6352",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T100-author.json",
+        "historicalBlob": "6337cc20ed853e41573cb8ce88721afa6ad5ea23",
+        "mainBlob": null,
+        "pr26Blob": "6337cc20ed853e41573cb8ce88721afa6ad5ea23",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T100-author.md",
+        "historicalBlob": "2549cc229c82b9b8ac1c6b28577ba3d682f95ba2",
+        "mainBlob": null,
+        "pr26Blob": "2549cc229c82b9b8ac1c6b28577ba3d682f95ba2",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T100-root.json",
+        "historicalBlob": "0b8daf51be2d3f58c75cfa35d4684cd7654b98c1",
+        "mainBlob": null,
+        "pr26Blob": "0b8daf51be2d3f58c75cfa35d4684cd7654b98c1",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T100-root.md",
+        "historicalBlob": "073fbb6c8db470dc5fa8dcd22680cd27e832d778",
+        "mainBlob": null,
+        "pr26Blob": "073fbb6c8db470dc5fa8dcd22680cd27e832d778",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T101-final.json",
+        "historicalBlob": "14763c8677fc00556a9c8142f0a006dc970ea31e",
+        "mainBlob": null,
+        "pr26Blob": "14763c8677fc00556a9c8142f0a006dc970ea31e",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T101-final.md",
+        "historicalBlob": "c405de3aab776d18a01d4b7a1d6639ee112f1f20",
+        "mainBlob": null,
+        "pr26Blob": "c405de3aab776d18a01d4b7a1d6639ee112f1f20",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T101-root.json",
+        "historicalBlob": "3e18eccffcebcbcd97ddf66c934173a9af2d43de",
+        "mainBlob": null,
+        "pr26Blob": "3e18eccffcebcbcd97ddf66c934173a9af2d43de",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T101-root.md",
+        "historicalBlob": "5579fd306c6c3a9fba93ea78a1da558e3a04902b",
+        "mainBlob": null,
+        "pr26Blob": "5579fd306c6c3a9fba93ea78a1da558e3a04902b",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T33.md",
+        "historicalBlob": "1f2a06cabec72a7b62ce0e26e38bb61678b3c0d0",
+        "mainBlob": null,
+        "pr26Blob": "1f2a06cabec72a7b62ce0e26e38bb61678b3c0d0",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T34.md",
+        "historicalBlob": "33ae07cd43b48e45ea7ba9113ff101c02efe0d21",
+        "mainBlob": null,
+        "pr26Blob": "33ae07cd43b48e45ea7ba9113ff101c02efe0d21",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T35.md",
+        "historicalBlob": "7153e95259f34f882fe4660edb6aee6a3b85f02f",
+        "mainBlob": null,
+        "pr26Blob": "7153e95259f34f882fe4660edb6aee6a3b85f02f",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T36-hashes.json",
+        "historicalBlob": "dbf54a0387506a2e28733d58a80d70c9166cfca6",
+        "mainBlob": null,
+        "pr26Blob": "dbf54a0387506a2e28733d58a80d70c9166cfca6",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T36.md",
+        "historicalBlob": "a0eabf3fb884b83bc822d29c0fd05f8b4a5eb888",
+        "mainBlob": null,
+        "pr26Blob": "a0eabf3fb884b83bc822d29c0fd05f8b4a5eb888",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T38-final-bindings.json",
+        "historicalBlob": "e6e03cd4e16ea16e78ff260957ff7d54dc2594a1",
+        "mainBlob": null,
+        "pr26Blob": "e6e03cd4e16ea16e78ff260957ff7d54dc2594a1",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T38-final-bindings.md",
+        "historicalBlob": "3b5ee5580868d70e491ff98327aabd626b3b6e67",
+        "mainBlob": null,
+        "pr26Blob": "3b5ee5580868d70e491ff98327aabd626b3b6e67",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T38-final-docs.json",
+        "historicalBlob": "e59462248b2b31f02c8102bde3bcc6f664d57880",
+        "mainBlob": null,
+        "pr26Blob": "e59462248b2b31f02c8102bde3bcc6f664d57880",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T38-final-docs.md",
+        "historicalBlob": "e64a2553700d3275f6d8d7d184a85b998f013819",
+        "mainBlob": null,
+        "pr26Blob": "e64a2553700d3275f6d8d7d184a85b998f013819",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T38-final-native.json",
+        "historicalBlob": "1f5e164da237717eedb58e55931f82330bfa7d31",
+        "mainBlob": null,
+        "pr26Blob": "1f5e164da237717eedb58e55931f82330bfa7d31",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T38-final-native.md",
+        "historicalBlob": "82ebb67883d1e2c3bb32a49af177b831f7d7329a",
+        "mainBlob": null,
+        "pr26Blob": "82ebb67883d1e2c3bb32a49af177b831f7d7329a",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T38-live-policy.json",
+        "historicalBlob": "e157476ec695c408ee75c1966eaf91d9f6f8541f",
+        "mainBlob": null,
+        "pr26Blob": "e157476ec695c408ee75c1966eaf91d9f6f8541f",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T38-live-policy.md",
+        "historicalBlob": "a4a1e6ab9bbdd317a21a1e45427cfc048c9adc3b",
+        "mainBlob": null,
+        "pr26Blob": "a4a1e6ab9bbdd317a21a1e45427cfc048c9adc3b",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T38-sonar-old-head.json",
+        "historicalBlob": "05124398ac41b542dd2a85c342fb3e52f43909c0",
+        "mainBlob": null,
+        "pr26Blob": "05124398ac41b542dd2a85c342fb3e52f43909c0",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T38-sonar-old-head.md",
+        "historicalBlob": "ed4eec5bd08724a4ca10890120e0c09b1eb32f2d",
+        "mainBlob": null,
+        "pr26Blob": "ed4eec5bd08724a4ca10890120e0c09b1eb32f2d",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T39-hashes.txt",
+        "historicalBlob": "19f965ff84c860353426ef755dc69c3f4505ed14",
+        "mainBlob": null,
+        "pr26Blob": "19f965ff84c860353426ef755dc69c3f4505ed14",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T39.md",
+        "historicalBlob": "b6c747b36d1c72d6d079981ef847c325263159a3",
+        "mainBlob": null,
+        "pr26Blob": "b6c747b36d1c72d6d079981ef847c325263159a3",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T40-MODEL.json",
+        "historicalBlob": "e13480c2722da75da6bfdd46f3cfa1a973ed523b",
+        "mainBlob": null,
+        "pr26Blob": "e13480c2722da75da6bfdd46f3cfa1a973ed523b",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T40-UI.md",
+        "historicalBlob": "d72ebc33b6a21e83e842f07177bc555b407b53af",
+        "mainBlob": null,
+        "pr26Blob": "d72ebc33b6a21e83e842f07177bc555b407b53af",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T41.json",
+        "historicalBlob": "0878824760a7ca7902e09793635d8475534b561e",
+        "mainBlob": null,
+        "pr26Blob": "0878824760a7ca7902e09793635d8475534b561e",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T42.json",
+        "historicalBlob": "5a68533d81d63c150fb207de75b766c800acee9e",
+        "mainBlob": null,
+        "pr26Blob": "5a68533d81d63c150fb207de75b766c800acee9e",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T43-final-integration.json",
+        "historicalBlob": "4e3c3def4140f2ff482c4027d577e3b14e7498fe",
+        "mainBlob": null,
+        "pr26Blob": "4e3c3def4140f2ff482c4027d577e3b14e7498fe",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T43.json",
+        "historicalBlob": "8a7e8d2d62d2d9eac69ed5eb00fa0a3b73c597f2",
+        "mainBlob": null,
+        "pr26Blob": "8a7e8d2d62d2d9eac69ed5eb00fa0a3b73c597f2",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T44.md",
+        "historicalBlob": "eddb09e2f4ff447ec0ab2de0c10450ca7874061c",
+        "mainBlob": null,
+        "pr26Blob": "eddb09e2f4ff447ec0ab2de0c10450ca7874061c",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T45.md",
+        "historicalBlob": "19d34751989f4089672c771c1ad58e39d177410b",
+        "mainBlob": null,
+        "pr26Blob": "19d34751989f4089672c771c1ad58e39d177410b",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T46.md",
+        "historicalBlob": "d4306a698a672acfd83e81013c1bbec051c8cd61",
+        "mainBlob": null,
+        "pr26Blob": "d4306a698a672acfd83e81013c1bbec051c8cd61",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T47.md",
+        "historicalBlob": "6e6794cbde37daf550851fabffdfeac06be25819",
+        "mainBlob": null,
+        "pr26Blob": "6e6794cbde37daf550851fabffdfeac06be25819",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T48.md",
+        "historicalBlob": "61f0dbd807b014ed150a509b1b324146679be850",
+        "mainBlob": null,
+        "pr26Blob": "61f0dbd807b014ed150a509b1b324146679be850",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T50.json",
+        "historicalBlob": "2ff957b2ec5776667ca9aa352d9ccb58e45505b8",
+        "mainBlob": null,
+        "pr26Blob": "2ff957b2ec5776667ca9aa352d9ccb58e45505b8",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T51.json",
+        "historicalBlob": "98803fb5269baa36b58641a3421aaf9b2a822fe7",
+        "mainBlob": null,
+        "pr26Blob": "98803fb5269baa36b58641a3421aaf9b2a822fe7",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T52.json",
+        "historicalBlob": "90d6df97437b21901bd7703e1936f2328e170637",
+        "mainBlob": null,
+        "pr26Blob": "90d6df97437b21901bd7703e1936f2328e170637",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T53.md",
+        "historicalBlob": "b7e89b09c88717e6a528219d5859e4cefa344819",
+        "mainBlob": null,
+        "pr26Blob": "b7e89b09c88717e6a528219d5859e4cefa344819",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T54.json",
+        "historicalBlob": "2d4bd60865305ae6c2ecd0c200130e12c4d1d306",
+        "mainBlob": null,
+        "pr26Blob": "2d4bd60865305ae6c2ecd0c200130e12c4d1d306",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T55-broker.md",
+        "historicalBlob": "f5db6c1e33511efabfc2549bfe6c2169effc6ffe",
+        "mainBlob": null,
+        "pr26Blob": "f5db6c1e33511efabfc2549bfe6c2169effc6ffe",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T55.json",
+        "historicalBlob": "4bdf60d7633a9ce7d4034ca3c78aca965cbe3003",
+        "mainBlob": null,
+        "pr26Blob": "4bdf60d7633a9ce7d4034ca3c78aca965cbe3003",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T56.json",
+        "historicalBlob": "3e4ae9fbf001b48dd1ce1ee9745e7ad8c9c64c06",
+        "mainBlob": null,
+        "pr26Blob": "3e4ae9fbf001b48dd1ce1ee9745e7ad8c9c64c06",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T57.json",
+        "historicalBlob": "4b05461f7d599104e3f4fbb77986107288c83d4f",
+        "mainBlob": null,
+        "pr26Blob": "4b05461f7d599104e3f4fbb77986107288c83d4f",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T58.md",
+        "historicalBlob": "9707ffc89db81c8b1e26ce9e0eb99839722b5425",
+        "mainBlob": null,
+        "pr26Blob": "9707ffc89db81c8b1e26ce9e0eb99839722b5425",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T59.md",
+        "historicalBlob": "82a2b33953e621babd08be0980f9e57648420cd2",
+        "mainBlob": null,
+        "pr26Blob": "82a2b33953e621babd08be0980f9e57648420cd2",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T60.md",
+        "historicalBlob": "38b48abec63344bc6055535c91034ed2c21f0106",
+        "mainBlob": null,
+        "pr26Blob": "38b48abec63344bc6055535c91034ed2c21f0106",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T61.json",
+        "historicalBlob": "2ee0cd472e2b9a2765a8c1b2ccfc2b86375d44d1",
+        "mainBlob": null,
+        "pr26Blob": "2ee0cd472e2b9a2765a8c1b2ccfc2b86375d44d1",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T62.json",
+        "historicalBlob": "360ec7b696ec46db65c84fc9f4b80df9533a2e36",
+        "mainBlob": null,
+        "pr26Blob": "360ec7b696ec46db65c84fc9f4b80df9533a2e36",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T63.json",
+        "historicalBlob": "d26fbcb2cf8df6e23adb5f96404dbf71396f026e",
+        "mainBlob": null,
+        "pr26Blob": "d26fbcb2cf8df6e23adb5f96404dbf71396f026e",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T64.json",
+        "historicalBlob": "8d6f5d5b2abd80704c830b16c9b041b09712f1dd",
+        "mainBlob": null,
+        "pr26Blob": "8d6f5d5b2abd80704c830b16c9b041b09712f1dd",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T65.json",
+        "historicalBlob": "421106189be7f07c4f7cbd1308125ee14052dc5f",
+        "mainBlob": null,
+        "pr26Blob": "421106189be7f07c4f7cbd1308125ee14052dc5f",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T66-integration.json",
+        "historicalBlob": "7fba8f280244ce165a8c7baef99e9a25780cabb4",
+        "mainBlob": null,
+        "pr26Blob": "7fba8f280244ce165a8c7baef99e9a25780cabb4",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T66.json",
+        "historicalBlob": "63e61f4641296295242dea3e4852a3d86761e202",
+        "mainBlob": null,
+        "pr26Blob": "63e61f4641296295242dea3e4852a3d86761e202",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T67-browser.json",
+        "historicalBlob": "d1dc17d9cddd24ee8548a88d6efe30f26aa75af4",
+        "mainBlob": null,
+        "pr26Blob": "d1dc17d9cddd24ee8548a88d6efe30f26aa75af4",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T67.json",
+        "historicalBlob": "97d6d18de1b9ffe3b42380a732b91c50cf7fcd24",
+        "mainBlob": null,
+        "pr26Blob": "97d6d18de1b9ffe3b42380a732b91c50cf7fcd24",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T68.md",
+        "historicalBlob": "5441a4a00b1f03a1b97618ccb996fee31dc19737",
+        "mainBlob": null,
+        "pr26Blob": "5441a4a00b1f03a1b97618ccb996fee31dc19737",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T69.json",
+        "historicalBlob": "ac3bcf057f6dc62910cdae6b6cd2455506c3c2f9",
+        "mainBlob": null,
+        "pr26Blob": "ac3bcf057f6dc62910cdae6b6cd2455506c3c2f9",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T70.json",
+        "historicalBlob": "5a91854e26f22436169eeb45cc50b08950c7f3fc",
+        "mainBlob": null,
+        "pr26Blob": "5a91854e26f22436169eeb45cc50b08950c7f3fc",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T71-failed-checkpoint.json",
+        "historicalBlob": "5d4f2e3e242b6339b0d8a2e0de86ec592ca7bb91",
+        "mainBlob": null,
+        "pr26Blob": "5d4f2e3e242b6339b0d8a2e0de86ec592ca7bb91",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T71-final-lab.json",
+        "historicalBlob": "c630d0f7056d99fea183f476176b72e21f636533",
+        "mainBlob": null,
+        "pr26Blob": "c630d0f7056d99fea183f476176b72e21f636533",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T71-final-lab.md",
+        "historicalBlob": "520d517830e263c99c1f5ef1a3428c066ed22942",
+        "mainBlob": null,
+        "pr26Blob": "520d517830e263c99c1f5ef1a3428c066ed22942",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T72.json",
+        "historicalBlob": "513457bd4e72b87d8192d89f215011e868bbc7d9",
+        "mainBlob": null,
+        "pr26Blob": "513457bd4e72b87d8192d89f215011e868bbc7d9",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T73.json",
+        "historicalBlob": "3ff0ae478028e9b264c23387636038710ae8668a",
+        "mainBlob": null,
+        "pr26Blob": "3ff0ae478028e9b264c23387636038710ae8668a",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T74-origin.json",
+        "historicalBlob": "b76ba5721dd1dc676ece9cf3f0847ae950479126",
+        "mainBlob": null,
+        "pr26Blob": "b76ba5721dd1dc676ece9cf3f0847ae950479126",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T74.md",
+        "historicalBlob": "48fc0702aa432a5c747a4da30003cdd76e790746",
+        "mainBlob": null,
+        "pr26Blob": "48fc0702aa432a5c747a4da30003cdd76e790746",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T75-readme-addendum.json",
+        "historicalBlob": "f849a47cadeda80ac291e77111bde35fdf39ed31",
+        "mainBlob": null,
+        "pr26Blob": "f849a47cadeda80ac291e77111bde35fdf39ed31",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T75.json",
+        "historicalBlob": "78347a62da96b3098908fa7002ff4237f644e171",
+        "mainBlob": null,
+        "pr26Blob": "78347a62da96b3098908fa7002ff4237f644e171",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T76.json",
+        "historicalBlob": "9693d1a492c0b3a9d64fdfcffedf7f0950907a00",
+        "mainBlob": null,
+        "pr26Blob": "9693d1a492c0b3a9d64fdfcffedf7f0950907a00",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T78.json",
+        "historicalBlob": "71956e6d07d3a8a7d31db033fe3e0277d940eef5",
+        "mainBlob": null,
+        "pr26Blob": "71956e6d07d3a8a7d31db033fe3e0277d940eef5",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T79.json",
+        "historicalBlob": "0ad08c07218880966b9f7b5b0f0ec62f3e1897ce",
+        "mainBlob": null,
+        "pr26Blob": "0ad08c07218880966b9f7b5b0f0ec62f3e1897ce",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T80-T81-final.json",
+        "historicalBlob": "b54a840b47ae2df47dd94e064ebe7aa293640fae",
+        "mainBlob": null,
+        "pr26Blob": "b54a840b47ae2df47dd94e064ebe7aa293640fae",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T80-T81-final.md",
+        "historicalBlob": "7345be2804884b4a43cb1dc5e606e99bcc47f97d",
+        "mainBlob": null,
+        "pr26Blob": "7345be2804884b4a43cb1dc5e606e99bcc47f97d",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T80-author.json",
+        "historicalBlob": "acfc9032f73e391739b3f295cefde735174e12d5",
+        "mainBlob": null,
+        "pr26Blob": "acfc9032f73e391739b3f295cefde735174e12d5",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T80-native-token-author.json",
+        "historicalBlob": "22cf551a0746179ba8f53ee11da9bd6ab15251b9",
+        "mainBlob": null,
+        "pr26Blob": "22cf551a0746179ba8f53ee11da9bd6ab15251b9",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T81-author.json",
+        "historicalBlob": "6771778a7543d3e934fa0fc5965b9cccac58360f",
+        "mainBlob": null,
+        "pr26Blob": "6771778a7543d3e934fa0fc5965b9cccac58360f",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T82-author.md",
+        "historicalBlob": "6e527dfb80825539557d7c7302d3c54331b8d480",
+        "mainBlob": null,
+        "pr26Blob": "6e527dfb80825539557d7c7302d3c54331b8d480",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T82-corrections-author.md",
+        "historicalBlob": "bae0d8143c2659e9e9fcfb2f3ebdb54a67a85362",
+        "mainBlob": null,
+        "pr26Blob": "bae0d8143c2659e9e9fcfb2f3ebdb54a67a85362",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T82-final.json",
+        "historicalBlob": "d52a0d2b033725c162fe153081a64e6b0c6194a7",
+        "mainBlob": null,
+        "pr26Blob": "d52a0d2b033725c162fe153081a64e6b0c6194a7",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T82-final.md",
+        "historicalBlob": "9c5a2fad93f929dbabde15ea9505cec2c4edc858",
+        "mainBlob": null,
+        "pr26Blob": "9c5a2fad93f929dbabde15ea9505cec2c4edc858",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T83-T89-final.json",
+        "historicalBlob": "d56cc8835ef1100d233b88ad425862702aa0a34b",
+        "mainBlob": null,
+        "pr26Blob": "d56cc8835ef1100d233b88ad425862702aa0a34b",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T83-T89-final.md",
+        "historicalBlob": "8786db9f3977149baaa7c4e400e0c5b697646646",
+        "mainBlob": null,
+        "pr26Blob": "8786db9f3977149baaa7c4e400e0c5b697646646",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T83-T89-initial.json",
+        "historicalBlob": "207dee5664c939181e056a49878a4cc1d3ea2081",
+        "mainBlob": null,
+        "pr26Blob": "207dee5664c939181e056a49878a4cc1d3ea2081",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T83-author.json",
+        "historicalBlob": "00c556f95f12cd820a9ac297f31b39205ed28d6b",
+        "mainBlob": null,
+        "pr26Blob": "00c556f95f12cd820a9ac297f31b39205ed28d6b",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T83-root-remount.json",
+        "historicalBlob": "14a9d6ca509fbebc8d5f1534154a38b4d6c9be5f",
+        "mainBlob": null,
+        "pr26Blob": "14a9d6ca509fbebc8d5f1534154a38b4d6c9be5f",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T85.json",
+        "historicalBlob": "541469fc07739edc3adba1e41d1f10f5e0719830",
+        "mainBlob": null,
+        "pr26Blob": "541469fc07739edc3adba1e41d1f10f5e0719830",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T86-formal.json",
+        "historicalBlob": "4a20bcfb3e48026488f86194495c3fedd01f8a90",
+        "mainBlob": null,
+        "pr26Blob": "4a20bcfb3e48026488f86194495c3fedd01f8a90",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T86.json",
+        "historicalBlob": "b941a7dc655a8be340737ecc9f516004ebf5633f",
+        "mainBlob": null,
+        "pr26Blob": "b941a7dc655a8be340737ecc9f516004ebf5633f",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T87-root.json",
+        "historicalBlob": "8231fd2eccb00706faf264b2a57f8ef430388e26",
+        "mainBlob": null,
+        "pr26Blob": "8231fd2eccb00706faf264b2a57f8ef430388e26",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T87.json",
+        "historicalBlob": "f3980e095aa4a180af56417b9840de0df4bc8260",
+        "mainBlob": null,
+        "pr26Blob": "f3980e095aa4a180af56417b9840de0df4bc8260",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T88-canonical-relay-author.json",
+        "historicalBlob": "dbca100b8bdae08ebf659d930cabe7e85441504d",
+        "mainBlob": null,
+        "pr26Blob": "dbca100b8bdae08ebf659d930cabe7e85441504d",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T88-canonical-relay-root.json",
+        "historicalBlob": "dcea8988d9b09dbf096ea17576f414f597d58673",
+        "mainBlob": null,
+        "pr26Blob": "dcea8988d9b09dbf096ea17576f414f597d58673",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T88-chat-relay-author.json",
+        "historicalBlob": "f9c5d7a9981bfe60749bcb856963895540cb8636",
+        "mainBlob": null,
+        "pr26Blob": "f9c5d7a9981bfe60749bcb856963895540cb8636",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T88-cli-author.json",
+        "historicalBlob": "0e595e4057ee6bb4246f6315b77434e449475bac",
+        "mainBlob": null,
+        "pr26Blob": "0e595e4057ee6bb4246f6315b77434e449475bac",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T88-courier-author.json",
+        "historicalBlob": "1a27e1183368237f746f271011746012ca29e8f7",
+        "mainBlob": null,
+        "pr26Blob": "1a27e1183368237f746f271011746012ca29e8f7",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T88-root.json",
+        "historicalBlob": "a85d7e937057bf24463c7bd04d746527b2b576dd",
+        "mainBlob": null,
+        "pr26Blob": "a85d7e937057bf24463c7bd04d746527b2b576dd",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T88-schemas-author.json",
+        "historicalBlob": "ecb9ceaa3387c0e4e0960109b163eff19b2e5c23",
+        "mainBlob": null,
+        "pr26Blob": "ecb9ceaa3387c0e4e0960109b163eff19b2e5c23",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T88-terms-author.json",
+        "historicalBlob": "7b6a5b2fc672b16e4f482abdb3fe1acdec9738f7",
+        "mainBlob": null,
+        "pr26Blob": "7b6a5b2fc672b16e4f482abdb3fe1acdec9738f7",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T88-wallet-author.json",
+        "historicalBlob": "85c4c41cf23c121869b5f34febeec3f4566a7d52",
+        "mainBlob": null,
+        "pr26Blob": "85c4c41cf23c121869b5f34febeec3f4566a7d52",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T88-wallet-owned-author.json",
+        "historicalBlob": "878608fda3e407d6a522a2ad898744655f0d52c6",
+        "mainBlob": null,
+        "pr26Blob": "878608fda3e407d6a522a2ad898744655f0d52c6",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T89-author.json",
+        "historicalBlob": "a1c07ec7154629aaf1d8f5696e93898eec963865",
+        "mainBlob": null,
+        "pr26Blob": "a1c07ec7154629aaf1d8f5696e93898eec963865",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T89-author.md",
+        "historicalBlob": "c9e3d05260e1b44ca7e02933bd0ef7b532ce4c47",
+        "mainBlob": null,
+        "pr26Blob": "c9e3d05260e1b44ca7e02933bd0ef7b532ce4c47",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T90-author.json",
+        "historicalBlob": "55c5f6d000f098061167a1a1ff4aa85ae4796304",
+        "mainBlob": null,
+        "pr26Blob": "55c5f6d000f098061167a1a1ff4aa85ae4796304",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T90-root.json",
+        "historicalBlob": "0415ca71439e484580424fc125bf3867b3e0064c",
+        "mainBlob": null,
+        "pr26Blob": "0415ca71439e484580424fc125bf3867b3e0064c",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T91-author.json",
+        "historicalBlob": "844723186407cc9f4c17edce9f486ebfe6ee98e2",
+        "mainBlob": null,
+        "pr26Blob": "844723186407cc9f4c17edce9f486ebfe6ee98e2",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T91-root.json",
+        "historicalBlob": "af0f38a84769eb772b55e319577dbc7956a1ff20",
+        "mainBlob": null,
+        "pr26Blob": "af0f38a84769eb772b55e319577dbc7956a1ff20",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T92-author.json",
+        "historicalBlob": "63a7fa2134ec8761d389494ad39f3adaf4d03edf",
+        "mainBlob": null,
+        "pr26Blob": "63a7fa2134ec8761d389494ad39f3adaf4d03edf",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T92-root.json",
+        "historicalBlob": "97727db74e89d9127d00c2a909f74e10bdd3a994",
+        "mainBlob": null,
+        "pr26Blob": "97727db74e89d9127d00c2a909f74e10bdd3a994",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T93-author.json",
+        "historicalBlob": "f61016f46930214f1ddd8fe8277fe14e91d14e9a",
+        "mainBlob": null,
+        "pr26Blob": "f61016f46930214f1ddd8fe8277fe14e91d14e9a",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T93-root.json",
+        "historicalBlob": "602859fc3b505cd9f833e02a5801ccbf94232d7e",
+        "mainBlob": null,
+        "pr26Blob": "602859fc3b505cd9f833e02a5801ccbf94232d7e",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T94-author.json",
+        "historicalBlob": "69f9a4d22337f22097733f5901ac84a05cb5270c",
+        "mainBlob": null,
+        "pr26Blob": "69f9a4d22337f22097733f5901ac84a05cb5270c",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T94-root.json",
+        "historicalBlob": "2db27477b34767767f9b0d215cb67adc76a4fbdc",
+        "mainBlob": null,
+        "pr26Blob": "2db27477b34767767f9b0d215cb67adc76a4fbdc",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T95-author.json",
+        "historicalBlob": "ff84293ce1a8872b2e08cb27e7f5f89e68f5d152",
+        "mainBlob": null,
+        "pr26Blob": "ff84293ce1a8872b2e08cb27e7f5f89e68f5d152",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T95-root.json",
+        "historicalBlob": "c12b90990ff56b5926f7f5d05238d1934650cc97",
+        "mainBlob": null,
+        "pr26Blob": "c12b90990ff56b5926f7f5d05238d1934650cc97",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T96-author.json",
+        "historicalBlob": "2845da1dbb7aafae2aa5f7d7f312938c45dd797d",
+        "mainBlob": null,
+        "pr26Blob": "2845da1dbb7aafae2aa5f7d7f312938c45dd797d",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T96-root.json",
+        "historicalBlob": "e2d0a86f393ab8b22aa41f9c381a84484a9b404c",
+        "mainBlob": null,
+        "pr26Blob": "e2d0a86f393ab8b22aa41f9c381a84484a9b404c",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T97-author.json",
+        "historicalBlob": "9fe633e5af0123c028ef971217746bb65a7565c3",
+        "mainBlob": null,
+        "pr26Blob": "9fe633e5af0123c028ef971217746bb65a7565c3",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T97-root.json",
+        "historicalBlob": "b76d62ddb2475fad669e66f029dae49de9d643d4",
+        "mainBlob": null,
+        "pr26Blob": "b76d62ddb2475fad669e66f029dae49de9d643d4",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T98-author.json",
+        "historicalBlob": "50d9760cc5e421a8571c11152513005d728d98fb",
+        "mainBlob": null,
+        "pr26Blob": "50d9760cc5e421a8571c11152513005d728d98fb",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T98-author.md",
+        "historicalBlob": "53c25a8491f5d3f9361fe59176db5e2492a5f7f4",
+        "mainBlob": null,
+        "pr26Blob": "53c25a8491f5d3f9361fe59176db5e2492a5f7f4",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T98-final.json",
+        "historicalBlob": "e5691208d005b845528185f65676475edd10bc04",
+        "mainBlob": null,
+        "pr26Blob": "e5691208d005b845528185f65676475edd10bc04",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T98-final.md",
+        "historicalBlob": "81a6f93aaa6162ec9791d0774e44caef243a9826",
+        "mainBlob": null,
+        "pr26Blob": "81a6f93aaa6162ec9791d0774e44caef243a9826",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T98-root.json",
+        "historicalBlob": "7702d791cd95ea6c79fc10367d58ea054f18c656",
+        "mainBlob": null,
+        "pr26Blob": "7702d791cd95ea6c79fc10367d58ea054f18c656",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T98-root.md",
+        "historicalBlob": "7cf81473a7329f345a76016d699efd3954262838",
+        "mainBlob": null,
+        "pr26Blob": "7cf81473a7329f345a76016d699efd3954262838",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T99-root.json",
+        "historicalBlob": "1bfc15fa11de605a070cf199dc774a8079a8d422",
+        "mainBlob": null,
+        "pr26Blob": "1bfc15fa11de605a070cf199dc774a8079a8d422",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "docs/execution/reviews/T99.md",
+        "historicalBlob": "2be0bfa916ce5831770de6f753a9fda533bc0adf",
+        "mainBlob": null,
+        "pr26Blob": "2be0bfa916ce5831770de6f753a9fda533bc0adf",
+        "matchingMainPaths": [],
+        "disposition": "archive-only-at-pinned-historical-ref"
+      },
+      {
+        "path": "tasks/plan.md",
+        "historicalBlob": "39801a2d096d94aaf6894bab945a58ee92077a42",
+        "mainBlob": "6cc699663ed17b627c8fda2976e2fafdebb996f5",
+        "pr26Blob": "39801a2d096d94aaf6894bab945a58ee92077a42",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      },
+      {
+        "path": "tasks/todo.md",
+        "historicalBlob": "806afa439a8dcdae8acfef1a4ec94c7a72171c8e",
+        "mainBlob": "064aa0383f264644aa2a5d73f0bd90f8e2f60b5f",
+        "pr26Blob": "806afa439a8dcdae8acfef1a4ec94c7a72171c8e",
+        "matchingMainPaths": [],
+        "disposition": "different-current-blob-review-required"
+      }
+    ]
+  },
+  "archive": {
+    "pr": 26,
+    "head": "94554ecf9854e4604f9f56afe5bebedeee931994",
+    "missingStage12Paths": 185,
+    "missingPathsPreservedAtPR26": 185,
+    "missingPathsIdenticalElsewhereInMain": 0
+  },
+  "limitations": [
+    "No local patch-id or runtime execution.",
+    "No current qualification inferred from immutable archival blobs.",
+    "Historical prompts and policy must not override the accepted decisions or current source. No archive file is copied into active governance or release paths.",
+    "Five changed S12 root/plan/guidance documents require semantic reconciliation; do not overwrite current documents.",
+    "Source refs and open PR ownership preserved."
+  ]
+}
