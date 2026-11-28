@@ -47,12 +47,17 @@ configured local validator; this export adds no new network or funding mode.
 3. `recoveryExits(document, trade, snapshot, margins)` lists the exits that finalized snapshot allows:
    - **release** (seller), while `Funded` and `chainTime + releaseMargin < deadline`;
    - **refund** (seller), while `Funded` and the finalized Clock has reached the deadline;
-   - **payout** (seller or buyer pays the fee), after `Released`/`Refunded` with the principal unpaid and the vault
-     not frozen. The program pays the buyer after release and the seller after refund, whoever submits.
+   - **payout** (seller or buyer pays the fee), after `Released`/`Refunded` with the principal unpaid and no custody
+     payout blocker. A frozen SPL vault reports `vault-frozen`; native rent blockers report `rent-shortfall` or
+     `rent-unknown`. The program pays the buyer after release and the seller after refund, whoever submits.
+     Rent blockers do not close funded release or refund, and an already completed payout reports `paid-out`.
 4. `buildRecoveryMessage(document, trade, snapshot, exit, role, margins, recentBlockhash, options)` plans that exit
    with the client's own C-L2 rules and returns the unsigned legacy message and wire transaction. Use a blockhash
    from `getLatestBlockhash` at `finalized` commitment. The message has exactly one escrow instruction; a payout
    message may add `CreateIdempotent` for the recipient's canonical ATA (SPL) or a bounded rent top-up (native).
+   A known `rent-shortfall` can therefore be resolved in an explicit payout message: set `maxRentTopUpLamports`
+   to at least the required amount. The default zero limit or an insufficient limit gives `LIMIT_EXCEEDED`.
+   Unknown rent gives `CONFLICT` before preparing a message, regardless of balance or top-up limit.
    A `[release, payout]` or `[refund, payout]` bundle cannot be built: a failed payout leg would roll the release
    or refund back.
 5. Sign with any wallet that signs a legacy message for the role key, broadcast once, then read the signature
