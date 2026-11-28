@@ -52,6 +52,8 @@ jobs:
           node --import ./scripts/test-support/register-tsx.mjs --test packages/wallet/test/evm-escrow.test.mjs
       - run: npm run test:evm:local
       - run: npm run test:exchange:evm
+      - name: EIP-1271 contract-wallet native negative-mode acceptance (loopback Anvil)
+        run: npm run test:eip1271:local
       - run: npm run test:evm:viem
       - run: npm run test:payment:preflight
       - run: npm run test:evm:reconcile
