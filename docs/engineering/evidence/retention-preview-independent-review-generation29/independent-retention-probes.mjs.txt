@@ -1,0 +1,90 @@
+// Reviewer-owned local cleanup probes. They establish no native browser or financial qualification.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
+import { webcrypto } from 'node:crypto';
+
+const root = '/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-review-g29';
+const moduleAt = path => import(pathToFileURL(`${root}/${path}`).href);
+const { EncryptedVaultService, EncryptedBackupService, RetentionService } = await moduleAt('packages/storage/index.ts');
+const { createVaultWorkerEndpoint } = await moduleAt('apps/web/src/runtime/worker-endpoint.ts');
+const { VaultStorageError } = await moduleAt('packages/storage/src/idb-vault-store.ts');
+const fixture = JSON.parse(await readFile(`${root}/packages/storage/test/fixtures/vault-python-v1.json`, 'utf8'));
+const config = { version: 1, ReleaseEnabled: 0, connectOrigins: [] };
+const clone = value => structuredClone(value);
+const good = value => { assert.equal(value?.ok, true, JSON.stringify(value)); return value.value; };
+
+class Store {
+  rows = new Map([[fixture.envelope.profileId, clone(fixture.envelope)]]);
+  writes = 0;
+  async get(profileId) { return clone(this.rows.get(profileId)); }
+  async listProfileIds() { return { profileIds: [...this.rows.keys()], truncated: false }; }
+  async add(row, options) {
+    options?.assertCurrent?.();
+    if (this.rows.has(row.profileId)) throw new VaultStorageError('ALREADY_EXISTS');
+    this.rows.set(row.profileId, clone(row)); this.writes++;
+  }
+  async compareAndSwap(expected, row, options) {
+    options?.assertCurrent?.();
+    if (options?.signal?.aborted) throw new VaultStorageError('CANCELLED');
+    if (JSON.stringify(this.rows.get(expected.profileId)) !== JSON.stringify(expected)) throw new VaultStorageError('CONFLICT');
+    this.rows.set(row.profileId, clone(row)); this.writes++;
+  }
+  subscribeInvalidation() { return () => {}; }
+}
+
+async function setup(t) {
+  const store = new Store(), vault = new EncryptedVaultService(store, webcrypto, { lifecycle: false });
+  const backup = new EncryptedBackupService(store, webcrypto), messages = [];
+  const capture = vault.captureSession.bind(vault);
+  let selected;
+  vault.captureSession = (session, revoked) => { selected = session; return capture(session, revoked); };
+  const endpoint = createVaultWorkerEndpoint(message => messages.push(clone(message)), {
+    createServices: () => ({ vault, backup }), random: bytes => webcrypto.getRandomValues(bytes),
+  });
+  t.after(() => endpoint.dispose());
+  let requestId = 0;
+  const send = (operation, fields = {}, generation = 0) => endpoint.dispatch({ version: 1, requestId: ++requestId, generation, operation, ...fields });
+  await send('init', { config });
+  await send('unlock', { profileId: fixture.envelope.profileId, passphrase: fixture.passphrase });
+  assert.equal(good(messages.at(-1).result).state, 'unlocked');
+  return { store, vault, selected: () => selected,
+    plan: () => send('planRetention', { profileId: fixture.envelope.profileId, nowMs: 0 }),
+    plans: () => messages.filter(message => message.operation === 'planRetention'),
+  };
+}
+
+function replace(t, object, name, replacement) {
+  const original = object[name]; object[name] = replacement;
+  t.after(() => { object[name] = original; });
+}
+
+test('independent: queued revision change during cleanup cannot publish older counts after final freshness', async t => {
+  const s = await setup(t), writes = s.store.writes, captured = s.selected();
+  const dispose = RetentionService.prototype.dispose;
+  let commit;
+  replace(t, RetentionService.prototype, 'dispose', function () {
+    dispose.call(this);
+    commit ??= s.vault.commit(captured.sessionId, captured.revision, [{ op: 'put', record: {
+      id: 'f'.repeat(32), kind: 'preference', schemaVersion: 99, payload: 'e30',
+    } }]);
+  });
+  await s.plan();
+  assert.equal(good(await commit), captured.revision + 1);
+  assert.equal(s.plans().some(message => message.result.ok), false);
+  assert.equal(s.plans().at(-1).result.error.code, 'CONFLICT');
+  assert.equal(s.store.writes, writes + 1, 'the only mutation is the explicit test fixture commit');
+});
+
+test('independent: throwing cleanup stays a fixed error and never publishes success or sensitive detail', async t => {
+  const s = await setup(t), writes = s.store.writes, before = JSON.stringify([...s.store.rows]);
+  const dispose = RetentionService.prototype.dispose;
+  replace(t, RetentionService.prototype, 'dispose', function () { dispose.call(this); throw Error('PRIVATE cleanup payload'); });
+  await s.plan();
+  const messages = s.plans(); assert.ok(messages.length > 0);
+  assert.equal(messages.some(message => message.result.ok), false);
+  assert.equal(messages.at(-1).result.error.code, 'STORAGE_UNAVAILABLE');
+  assert.doesNotMatch(JSON.stringify(messages), /PRIVATE|cleanup|payload/);
+  assert.equal(s.store.writes, writes); assert.equal(JSON.stringify([...s.store.rows]), before);
+});

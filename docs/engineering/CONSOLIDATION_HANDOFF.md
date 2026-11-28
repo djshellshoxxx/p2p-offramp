@@ -1,3 +1,68 @@
+# Current consolidation checkpoint — generation 29 (2026-11-20 UTC)
+
+**The staged DATA01 offline retention preview now reaches Settings through the
+real Worker/runtime and AppServices boundary.** It returns validated scalar
+counts and a snapshot revision, disposes the real retention service before a
+final persisted freshness check, and adds explicit action/cancel controls with
+selection and request-ownership guards. The existing 30-day suggestion rule,
+storage implementation and saved-review deletion behavior remain unchanged.
+
+Frozen combined source `fa7c1a11ff990be4646053731f1030d09eb8f9b6`, tree
+`dc34c0065a6bc4d66b4195b16d573ef1ec7463a5`, is on
+`codex/retention-preview-continuation-g29-20261120`.
+It passed **2,555/2,555 tests**, with zero failures, skips, cancellations or
+todos, and all six additional qualification commands. Independent review accepted the bounded integration with no actionable
+Standards or Specification findings; its 21-case backend and 33-case combined
+selections share the same two cleanup probes.
+The 19 new backend cases are included in the author's 148-case selection; the
+UI has 31 focused cases and 22 adjacent cases. These overlap the complete suite
+and must not be added to it. The retained UI host/VM formatting failure is
+harness evidence, not a reproduced product failure.
+
+**Generation 29 is a separate follow-up above published
+[PR236](https://github.com/djshellshoxxx/p2p-offramp/pull/236); PR236 remains the
+one main-target aggregate for frozen PR233–235.** Preserve PR236 head
+`d9ddcf53d82100f05de7346143a0ad00d43c2c1a`, tree
+`437323a382952b9623a875c818f8af005a5d4563`, targeting last-observed main
+`8e836baa877b676a863c877003e277b638fc5061`. Its proposed merge
+`af2750c21f47f59898e3a7d8670509095e2dcf94` has that complete tree and ordered
+parents main then PR236 head. At 18:36:42 UTC on 2026-11-20, PR236 remained open and unmerged, with all
+14 current checks queued and Snyk successful. It was not merge-qualified.
+Do not amend or supersede PR236 with this follow-up. Require its current-target
+hosted gates and expected-head guarded merge, then main/tree/ordered-parent
+readback and proof of each frozen PR233–235 head's ancestry before reconciling
+those contained PRs. Keep all their branches. The single-aggregate plan still
+supersedes the historical sequential merge/retarget instructions below.
+
+Compared with PR236, seven non-documentation paths change and four are added;
+1,015 of its 1,022 entries remain exact. All 1,026 combined tested entries must
+remain exact through evidence packaging and publication. Generation 29's actual
+publication and current-target hosted acceptance remain pending. Parent checks
+do not qualify this changed source or a later retarget.
+
+Treat this standalone non-custody UI/runtime-count follow-up as D8 Tier B.
+The accepted detailed packet requires a CodeRabbit or Qodo review pass with
+findings answered, alongside applicable green checks and independent review.
+The named review remains unclaimed; parent PR236's combined-source treatment
+does not waive it. See the generation 29 handoff for the policy references.
+
+Read the [generation 29 handoff](CONTINUATION_GENERATION29_20261120.md),
+[combined receipt](qualification-generation29.json) and
+[retained-log index](retained-logs-generation29.json).
+Archive suggestions are included in the protected count; this snapshot approves
+zero records for deletion and performs no writes, network requests or native
+review. Native retention/deletion authority remains separate unfinished scope.
+Selected-catalog state and errors rerender without repeating the operation;
+production stays English-only/draft. Build-only native fixture preparation
+retains `nativeExecuted: false`, with no local native execution claim.
+
+The default updater is unconfigured, production trust is unset and
+`ReleaseEnabled=0`. Optional PR224–232 and audits 184–186 remain separately
+owned. Earlier sections below retain their exact historical bytes and source
+scope; they do not override this checkpoint or later exact-source receipts.
+
+---
+
 # Current consolidation checkpoint — generations 26–28 (2026-11-20 UTC)
 
 **The combined source passed 2,505/2,505 tests and all five additional

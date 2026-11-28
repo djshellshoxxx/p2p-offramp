@@ -1,0 +1,308 @@
+{
+  "format": "p2p-retention-preview-backend-evidence-v1",
+  "created_at_utc": "2026-11-20T18:29:21.460602+00:00",
+  "base_commit": "76d107e4e0ca1a2533636a6057d9d603861668e1",
+  "base_tree": "437323a382952b9623a875c818f8af005a5d4563",
+  "source_commit": "5ad059fa8b77cfb8beffcf2f1889e5f19d727ea4",
+  "source_tree": "05ff7a561aea207d6d54dad08d08fadd5cd8cf45",
+  "branch": "codex/retention-preview-backend-g29-20261120",
+  "toolchain": {
+    "node": "v24.22.3",
+    "dependency_source": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g26/node_modules",
+    "physical_dependency_directory": true,
+    "package_lock_sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72"
+  },
+  "baseline_interpretation": "Both positive ordinary command/reply cases failed because planRetention was absent from the existing operation allowlist. Three rejection cases passed. The harness executed normally; this is a missing interface baseline, not a reproduced exploit or a broken test harness.",
+  "source_paths": [
+    {
+      "path": "apps/web/src/app-services.ts",
+      "sha256": "10555cefa73285202dadd070cc7d38025122b1367e5e5a0e505c16ad7f0f36fe",
+      "bytes": 11810
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "sha256": "8125a876abeb33449c38e404c825e020dc02cee13bb31dba7d8edb503540db2d",
+      "bytes": 30002
+    },
+    {
+      "path": "apps/web/src/runtime/pending-metadata.ts",
+      "sha256": "3305eeed758591c4c85110c1287bba6c8525d3b179ac40648602566bbb400271",
+      "bytes": 2170
+    },
+    {
+      "path": "apps/web/src/runtime/worker-endpoint.ts",
+      "sha256": "e57d0f94a4ad0311017d6e3e4d61d8776fcaedb2dc1a63b2925e4657104f2db7",
+      "bytes": 27672
+    },
+    {
+      "path": "apps/web/test/retention-preview-runtime.test.mjs",
+      "sha256": "11c3cf34c82bde6c817498a8d05a74d0df09a71bcf512528ff6eb06ced63bc1e",
+      "bytes": 21053
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha256": "7555752bd735d2a23335d102bb1ea4a44e29fc49255f3d3b0c41750d3e90b93c",
+      "bytes": 33615
+    },
+    {
+      "path": "packages/schemas/test/runtime-retention-preview.test.mjs",
+      "sha256": "f472b0605ac9a218d24c7c19f1bfacf87b56f6527b86ebac5d7504c96dee08cb",
+      "bytes": 3911
+    }
+  ],
+  "checks": [
+    {
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "packages/schemas/test/runtime-retention-preview.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-backend-g29",
+      "exit_code": 1,
+      "execution_source_state": "base production source plus the new unchanged protocol test",
+      "log": "docs/execution/retention-preview-backend-generation29-20261120/01-red-protocol.log.gz",
+      "raw_bytes": 3017,
+      "gzip_bytes": 815,
+      "raw_sha256": "400d1da0ca79bfafb4f4084721968a2d58855d5b77cb0840f42a8b5e2fa47bd4",
+      "gzip_sha256": "6ca4f1abe810ecaf26ecac55bcbf0e7811cccd959fcc681a81edba5a0769522a",
+      "gzip_mtime": 0,
+      "lossless_round_trip_verified": true,
+      "log_last_modified_utc": "2026-11-20T18:21:56.138726+00:00",
+      "summary": [
+        "ℹ tests 5",
+        "ℹ suites 0",
+        "ℹ pass 3",
+        "ℹ fail 2",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 422.712244"
+      ],
+      "test_counts": {
+        "tests": 5,
+        "pass": 3,
+        "fail": 2
+      }
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "packages/schemas/test/runtime-retention-preview.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-backend-g29",
+      "exit_code": 0,
+      "execution_source_state": "implemented candidate before final comments and composition test additions",
+      "log": "docs/execution/retention-preview-backend-generation29-20261120/02-green-protocol.log.gz",
+      "raw_bytes": 636,
+      "gzip_bytes": 363,
+      "raw_sha256": "a147f3912d7adcd040429623f7c16b1620183939b26bf7152fb40609e951e4f9",
+      "gzip_sha256": "4469eb3e86430be41a5e659ebd28dc3e37754f47d922b8ce6348c9586c5191ba",
+      "gzip_mtime": 0,
+      "lossless_round_trip_verified": true,
+      "log_last_modified_utc": "2026-11-20T18:23:33.025551+00:00",
+      "summary": [
+        "ℹ tests 5",
+        "ℹ suites 0",
+        "ℹ pass 5",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 649.937445"
+      ],
+      "test_counts": {
+        "tests": 5,
+        "pass": 5,
+        "fail": 0
+      }
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-backend-g29",
+      "exit_code": 0,
+      "execution_source_state": "implemented candidate before final comments and composition test additions",
+      "log": "docs/execution/retention-preview-backend-generation29-20261120/03-typecheck-initial.log.gz",
+      "raw_bytes": 341,
+      "gzip_bytes": 211,
+      "raw_sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "gzip_sha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "gzip_mtime": 0,
+      "lossless_round_trip_verified": true,
+      "log_last_modified_utc": "2026-11-20T18:23:32.441534+00:00",
+      "summary": []
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "packages/schemas/test/runtime-retention-preview.test.mjs",
+        "apps/web/test/retention-preview-runtime.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-backend-g29",
+      "exit_code": 0,
+      "execution_source_state": "implemented candidate before final comments and explicit early successful test teardown",
+      "log": "docs/execution/retention-preview-backend-generation29-20261120/04-composition-initial.log.gz",
+      "raw_bytes": 2237,
+      "gzip_bytes": 1066,
+      "raw_sha256": "a5eff16ef7493e8cff2dc64e7305c3cb4c6c94dbe3a4ca7595b2dedd981fe435",
+      "gzip_sha256": "79ea77fce6aabc3437544a34147ebbdf165b256d42d2feed8b569f1269607be6",
+      "gzip_mtime": 0,
+      "lossless_round_trip_verified": true,
+      "log_last_modified_utc": "2026-11-20T18:27:04.323725+00:00",
+      "summary": [
+        "ℹ tests 19",
+        "ℹ suites 0",
+        "ℹ pass 19",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 5518.946209"
+      ],
+      "test_counts": {
+        "tests": 19,
+        "pass": 19,
+        "fail": 0
+      }
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=4",
+        "packages/schemas/test/runtime.test.mjs",
+        "packages/schemas/test/runtime-templates.test.mjs",
+        "packages/schemas/test/runtime-retention-preview.test.mjs",
+        "packages/storage/test/retention-service.test.mjs",
+        "apps/web/test/app-runtime.test.mjs",
+        "apps/web/test/app-services.test.mjs",
+        "apps/web/test/worker-endpoint.test.mjs",
+        "apps/web/test/pending-metadata.test.mjs",
+        "apps/web/test/recovery-references-worker.test.mjs",
+        "apps/web/test/saved-reviews-worker.test.mjs",
+        "apps/web/test/backup-verification-runtime.test.mjs",
+        "apps/web/test/trade-templates-runtime.test.mjs",
+        "apps/web/test/trade-templates-worker.test.mjs",
+        "apps/web/test/retention-preview-runtime.test.mjs"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-backend-g29",
+      "exit_code": 0,
+      "execution_source_state": "source and tests exactly as frozen in source_commit",
+      "log": "docs/execution/retention-preview-backend-generation29-20261120/05-adjacent-focused.log.gz",
+      "raw_bytes": 17103,
+      "gzip_bytes": 6434,
+      "raw_sha256": "3d801bd0386157690dc21873afff6b308cf9ed278896219b827881d1b43c1358",
+      "gzip_sha256": "5a86b558b6e045ead4e89198a40251043fcd3a247427f9cc57bd520a626e8f62",
+      "gzip_mtime": 0,
+      "lossless_round_trip_verified": true,
+      "log_last_modified_utc": "2026-11-20T18:27:42.664845+00:00",
+      "summary": [
+        "ℹ tests 148",
+        "ℹ suites 0",
+        "ℹ pass 148",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 12288.165535"
+      ],
+      "test_counts": {
+        "tests": 148,
+        "pass": 148,
+        "fail": 0
+      }
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-backend-g29",
+      "exit_code": 0,
+      "execution_source_state": "source and tests exactly as frozen in source_commit",
+      "log": "docs/execution/retention-preview-backend-generation29-20261120/06-typecheck-final.log.gz",
+      "raw_bytes": 341,
+      "gzip_bytes": 211,
+      "raw_sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "gzip_sha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "gzip_mtime": 0,
+      "lossless_round_trip_verified": true,
+      "log_last_modified_utc": "2026-11-20T18:27:30.488489+00:00",
+      "summary": []
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-backend-g29",
+      "exit_code": 0,
+      "execution_source_state": "source and tests exactly as frozen in source_commit",
+      "log": "docs/execution/retention-preview-backend-generation29-20261120/07-boundaries.log.gz",
+      "raw_bytes": 392,
+      "gzip_bytes": 288,
+      "raw_sha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "gzip_sha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446",
+      "gzip_mtime": 0,
+      "lossless_round_trip_verified": true,
+      "log_last_modified_utc": "2026-11-20T18:27:31.896531+00:00",
+      "summary": [
+        "PASS: 241 production source files; core entry graph visited 148 module(s). Static boundary checks do not prove runtime isolation or complete the bundler graph."
+      ]
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-retention-preview-backend-g29",
+      "exit_code": 0,
+      "execution_source_state": "all seven staged source/test paths exactly as frozen in source_commit; no exclusions",
+      "log": "docs/execution/retention-preview-backend-generation29-20261120/08-source-whitespace.log.gz",
+      "raw_bytes": 0,
+      "gzip_bytes": 20,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "gzip_mtime": 0,
+      "lossless_round_trip_verified": true,
+      "log_last_modified_utc": "2026-11-20T18:27:50.049061+00:00",
+      "summary": []
+    }
+  ],
+  "scope": {
+    "ReleaseEnabled": 0,
+    "offline_preview_only": true,
+    "native_review_or_deletion_added": false,
+    "storage_implementation_changed": false,
+    "saved_review_deletion_policy_changed": false,
+    "ui_or_catalog_changed": false,
+    "full_suite_rerun": false,
+    "browser_executed": false,
+    "native_financial_runs_executed": false,
+    "remote_operations_executed": false
+  },
+  "execution_notes": [
+    "Tests were paused when the coordinator reported workspace capacity exhaustion and resumed after the coordinator restored capacity. This worker encountered no capacity error in a completed check.",
+    "All captured stdout/stderr is retained losslessly. No failed run was overwritten or substituted.",
+    "The final 148-test selected run contains the 19 new cases; these counts are overlapping and must not be summed.",
+    "Initial candidate runs are labeled separately from the final frozen source checks.",
+    "The previous aggregate 2505/2505 full-suite receipt belongs to its earlier source and was not rerun or transferred as a current-source full-suite claim."
+  ]
+}
