@@ -5,6 +5,19 @@ This is the one living ledger for branch and PR consolidation. It supersedes the
 Regenerate the table with `python3 scripts/consolidation/branch-ledger.py <candidate> out.json out.md` on a full,
 unshallowed fetch. The script is read-only.
 
+## Settings endpoint details · November 28, 2026
+
+[PR #291](https://github.com/djshellshoxxx/p2p-offramp/pull/291) recovers the Settings portion of [#42](https://github.com/djshellshoxxx/p2p-offramp/pull/42) at `58b3c876ae6036114a195af6b2dcc4c9cc2a09ad` and `autonomous/completion-20261102` at `94554ecf9854e4604f9f56afe5bebedeee931994`. The historical panel and three render tests have identical Git blobs at those two refs. Base `f4dc63569b906de9a7832f78f46b2368533e6241`.
+
+| Milestone | Commit |
+| --- | --- |
+| App → Settings → normalized endpoint display, selection-scoped reveal and restored render tests | `febeba408973de0dbafaff814e24941f9d107cb4` |
+| Empty URL authority rejected before URL canonicalization, translated channel headings | `1f96c80323aa9458246ad10142156e9422144b73` |
+| Historical browser lifecycle cases through the current Settings route, including lock, remasking and side-effect checks | `0b7ef75a97c9b21d551b596393abe81557cbdec3` |
+| Deterministic pre-navigation test clock on slow runners | `2614328ce0e939c27e1ab33c2d5835a700534021` |
+
+[Engineering handoff and test evidence](../engineering/CONSOLIDATION_HANDOFF.md#settings-endpoint-details). The remaining historical stack has separate ownership.
+
 ## Current recorded disposition — November 18, 2026
 
 Pinned main: `6c38e641e24abcfdcf645f864bd64c9645836d75`, after merged #137. The

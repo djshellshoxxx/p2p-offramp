@@ -1,3 +1,19 @@
+# Settings endpoint details
+
+[PR #291](https://github.com/djshellshoxxx/p2p-offramp/pull/291) implements the Settings gap recorded by [the #245 coordinator](https://github.com/djshellshoxxx/p2p-offramp/pull/245). The [consolidation ledger](../consolidation/LEDGER.md) identifies both recovery refs and each milestone. The shipping offline composition supplies no endpoint observations. A trusted composition can bind a read-only port to one service instance and selection generation. The user must reveal origins while that selection is unlocked. Hiding, locking, changing the selection or leaving Settings removes the disclosure. The UI makes no endpoint probe.
+
+| Verification | Observed result |
+| --- | --- |
+| Node 24.22.3, four TypeScript projects | Passed on implementation `febeba408973de0dbafaff814e24941f9d107cb4`. |
+| Domain, details, panel and locale regressions | 33 passed, zero skipped on `0b7ef75a97c9b21d551b596393abe81557cbdec3`. The empty-authority case first failed against the pre-fix reader, which reported the malformed input as observed. |
+| Chromium 158.0.8127.0, real App and Settings with a synthetic endpoint source | The endpoint acceptance section from `2614328ce0e939c27e1ab33c2d5835a700534021` passed in isolation. It checked mask/reveal, normalized values, expiry, revocation, observer exhaustion, replacement, lock/rebind and unmount. It observed zero requests, WebSockets and monitored storage operations, and no endpoint markers in console messages. |
+| Python 3.12.14 with hash-pinned oracle | All 32 spec tests passed during this integration. Spec inventory, import boundaries and build-policy checks also passed locally. |
+| Independent code and privacy review | `1f96c80323aa9458246ad10142156e9422144b73` resolved both findings: reject an empty literal URL authority before normalization and use the selected catalog for channel headings. Independent re-review found no open issues in `0b7ef75a97c9b21d551b596393abe81557cbdec3` or the test clock follow-up. |
+
+The first full local locale-browser run stopped at an existing touch-help interaction before reaching the endpoint cases. Full Chrome for Testing could not create its singleton socket in the local executor. The isolated endpoint result above qualifies only that section. Exact-target full CI, browser results and the standalone D8 CodeRabbit or Qodo review are tracked on [the PR](https://github.com/djshellshoxxx/p2p-offramp/pull/291/checks). ReleaseEnabled=0. The feature adds no provider, release configuration, telemetry or storage.
+
+---
+
 # Current consolidation checkpoint — generations 26–28 (2026-11-20 UTC)
 
 **The combined source passed 2,505/2,505 tests and all five additional
