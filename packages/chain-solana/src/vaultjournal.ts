@@ -28,7 +28,9 @@ export const SOLANA_VAULT_JOURNAL_FORMAT = 'p2p-offramp/solana/vault-journal/v1'
 export const SOLANA_VAULT_JOURNAL_FORMAT_V2 = 'p2p-offramp/solana/vault-journal/v2';
 type VaultPort = Pick<VaultService, 'read' | 'commit'> & VaultSessionAuthority;
 interface StateV1 { readonly version: 1; readonly revision: number; readonly records: readonly SolanaIntentRecord[] }
-interface StateV2 { readonly version: 2; readonly revision: number; readonly entries: readonly SolanaReservationEntry[] }
+interface StateV2 {
+  readonly version: 2; readonly revision: number; readonly entries: readonly SolanaReservationEntry[]
+}
 type State = StateV1 | StateV2;
 interface Change<T> { readonly value: T; readonly changed: State | null }
 const ordered = intentOrder;
@@ -208,7 +210,9 @@ export class SolanaVaultJournal implements SolanaJournalPort {
   }
 
   /** Explicit, all-record migration; even an empty trade receives a persistent high-water mark. */
-  migrate(binding: TradeBinding, expectedRevision: number, signal?: AbortSignal): Promise<CoreResult<SolanaJournalSnapshotV2>> {
+  migrate(
+    binding: TradeBinding, expectedRevision: number, signal?: AbortSignal
+  ): Promise<CoreResult<SolanaJournalSnapshotV2>> {
     let bound: TradeBinding, expected: number;
     try { bound = parseSolanaBinding(binding); expected = revision(expectedRevision); }
     catch (error) { return Promise.resolve(refused(failureCode(error, 'INVALID_INPUT'))); }
@@ -222,7 +226,8 @@ export class SolanaVaultJournal implements SolanaJournalPort {
         intent, replaces: intent.replacementOf === null ? null
           : references.get(intent.replacementOf) ?? fail('INTEGRITY_FAILURE') }));
       const current = state.revision + state.records.length + 1;
-      const changed: StateV2 = { version: 2, revision: current, entries: parseReservationEntries(entries, bound, current) };
+      const changed: StateV2 = { version: 2, revision: current,
+        entries: parseReservationEntries(entries, bound, current) };
       return { changed, value: snapshotV2(changed) };
     });
   }
@@ -267,7 +272,8 @@ export class SolanaVaultJournal implements SolanaJournalPort {
       const changed: StateV2 = { version: 2, revision: generation,
         entries: parseReservationEntries(entries, bound, generation) };
       const created = changed.entries.find(entry => entry.generation === generation)!;
-      return { changed, value: Object.freeze({ identity: identityFromEntry(created), record: created.intent, revision: generation }) };
+      return { changed, value: Object.freeze({ identity: identityFromEntry(created), record: created.intent,
+        revision: generation }) };
     });
   }
 
@@ -290,11 +296,13 @@ export class SolanaVaultJournal implements SolanaJournalPort {
       if (state.revision === Number.MAX_SAFE_INTEGER) return fail('LIMIT_EXCEEDED');
       const previous = state.entries.find(entry => sameReservationRef(identityFromEntry(entry), captured));
       if (!previous) return fail('CONFLICT');
-      if ((copy.state === 'signed' || copy.state === 'sendMarked') && copy.originProfileId !== profileId) return fail('CONFLICT');
+      if ((copy.state === 'signed' || copy.state === 'sendMarked') && copy.originProfileId !== profileId)
+        return fail('CONFLICT');
       checkTransition(previous.intent, copy, profileId);
       const current = state.revision + 1;
       const entries = state.entries.map(entry => entry === previous ? { ...entry, intent: copy } : entry);
-      const changed: StateV2 = { version: 2, revision: current, entries: parseReservationEntries(entries, bound, current) };
+      const changed: StateV2 = { version: 2, revision: current,
+        entries: parseReservationEntries(entries, bound, current) };
       return { changed, value: current };
     });
   }

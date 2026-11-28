@@ -161,7 +161,8 @@ test('migration is an explicit one-shot local capability and preserves every exi
   assert.deepEqual((await state(env)).entries.map(entry => entry.identity), after.entries.map(entry => entry.identity));
 });
 
-test('a full v1 history stays bounded until explicit migration, then only one eligible cancellation retires', async t => {
+test('a full v1 history stays bounded until explicit migration, then only one eligible cancellation retires',
+  async t => {
   const s = await setup(t), env = client(t, s), session = await connected(env, 'seller');
   for (let index = 0; index < 32; index++) await cancelled(env, session);
   const original = await state(env);
@@ -181,7 +182,8 @@ test('a full v1 history stays bounded until explicit migration, then only one el
   for (const entry of migrated.entries.filter(entry => entry !== oldest)) {
     assert.deepEqual(after.entries.find(item => item.record.intentId === entry.record.intentId), entry);
   }
-  assert.equal(after.entries.find(entry => entry.record.intentId === review.intentId).identity.generation, after.revision);
+  assert.equal(after.entries.find(entry => entry.record.intentId === review.intentId).identity.generation,
+    after.revision);
   ok(await env.client.cancel(review));
   assert.equal(sends(env), 0); assert.equal(env.walletFake.calls.sign.length, 0);
 });
@@ -241,7 +243,8 @@ test('a late wallet result cannot cross an independently confirmed v1-to-v2 migr
   assert.equal(migrated.entries[0].record.sendMarkedAt, null);
 });
 
-test('migration observed after marker commit preserves uncertainty and prevents the old continuation from sending', async t => {
+test('migration observed after marker commit preserves uncertainty and prevents the old continuation from sending',
+  async t => {
   const s = await setup(t); let afterMarker;
   const journal = { profileId: () => s.journal.profileId(), read: (...args) => s.journal.read(...args),
     write: async (...args) => {
@@ -277,7 +280,8 @@ test('an uncertain v2 marker commit keeps the original identity and cannot broad
   assert.deepEqual(await state(resumed), before); assert.equal(sends(env), 0);
 });
 
-test('fresh-key recovery retains v2 identities and an explicit rebuild uses the complete original reference', async t => {
+test('fresh-key recovery retains v2 identities and an explicit rebuild uses the complete original reference',
+  async t => {
   const s = await setup(t), env = client(t, s, {
     clusterOptions: { sendBehavior: () => { throw Error('synthetic transport uncertainty'); } },
   });
@@ -334,7 +338,8 @@ test('v2 funded release/refund and payout keep identities and recover after encr
   });
 });
 
-test('an uncertain migration commit consumes its review and reopening discovers committed v2 without retry', async t => {
+test('an uncertain migration commit consumes its review and reopening discovers committed v2 without retry',
+  async t => {
   const s = await setup(t), env = client(t, s), seller = await connected(env, 'seller');
   const prepared = ok(await env.client.prepare(env.trade, seller, 'release'));
   const before = await state(env), review = ok(await env.client.prepareJournalMigration(env.trade));

@@ -218,7 +218,8 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
   const tradeKey = (trade: BoundSolanaTrade) =>
     `${trade.binding.networkId}:${trade.binding.deploymentId}:${trade.binding.tradeId}`;
   const authorityEpoch = (trade: BoundSolanaTrade) => authorityEpochs.get(tradeKey(trade)) ?? 0;
-  const revokeTradeReviews = (trade: BoundSolanaTrade) => authorityEpochs.set(tradeKey(trade), authorityEpoch(trade) + 1);
+  const revokeTradeReviews = (trade: BoundSolanaTrade) =>
+    authorityEpochs.set(tradeKey(trade), authorityEpoch(trade) + 1);
 
   /** One operation per trade at a time in this instance; other tabs are fenced by the journal CAS. */
   function serialized<T>(trade: BoundSolanaTrade, work: () => Promise<T>): Promise<CoreResult<T>> {
@@ -467,7 +468,8 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
       let loaded: LoadedIntents;
       try { loaded = await migrateIntents(journal, migration.trade, migration.revision); }
       catch (error) {
-        if (error instanceof UncertainWrite || ['UNAVAILABLE', 'TIMEOUT', 'CANCELLED', 'BROADCAST_UNKNOWN'].includes(codeOf(error))) {
+        if (error instanceof UncertainWrite ||
+            ['UNAVAILABLE', 'TIMEOUT', 'CANCELLED', 'BROADCAST_UNKNOWN'].includes(codeOf(error))) {
           revokeTradeReviews(migration.trade);
         }
         throw error;

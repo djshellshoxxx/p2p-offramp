@@ -197,9 +197,11 @@ export async function reserveIntentV2(
   const candidate = retire === null ? null : parseReservationRef(retire);
   verifyIntentForTrade(record, trade);
   if (expected === Number.MAX_SAFE_INTEGER) return fail('LIMIT_EXCEEDED');
-  const raw = exactData(await v2Write(() => journal.reserve!(trade.binding, expected, record, predecessor, candidate, signal)),
+  const raw = exactData(await v2Write(() =>
+    journal.reserve!(trade.binding, expected, record, predecessor, candidate, signal)),
     ['identity', 'record', 'revision']);
-  const identity = parseReservationIdentity(raw.identity), stored = parseSolanaIntent(raw.record), revision = revisionOf(raw.revision);
+  const identity = parseReservationIdentity(raw.identity), stored = parseSolanaIntent(raw.record),
+    revision = revisionOf(raw.revision);
   verifyIntentForTrade(stored, trade);
   if (revision !== expected + 1 || identity.generation !== revision || !sameBinding(identity.binding, trade.binding) ||
       identity.intentId !== stored.intentId || identity.originProfileId !== stored.originProfileId ||
@@ -213,7 +215,8 @@ export async function storeIntentV2(
   identity: SolanaReservationIdentity, next: SolanaIntentRecord, signal?: AbortSignal,
 ): Promise<number> {
   if (typeof journal.update !== 'function') return fail('UNSUPPORTED_VERSION');
-  const expected = revisionOf(expectedRevision), captured = parseReservationIdentity(identity), record = parseSolanaIntent(next);
+  const expected = revisionOf(expectedRevision), captured = parseReservationIdentity(identity),
+    record = parseSolanaIntent(next);
   verifyIntentForTrade(record, trade);
   if (!sameBinding(captured.binding, trade.binding) || captured.intentId !== record.intentId ||
       captured.originProfileId !== record.originProfileId || captured.generation > expected) return fail('CONFLICT');

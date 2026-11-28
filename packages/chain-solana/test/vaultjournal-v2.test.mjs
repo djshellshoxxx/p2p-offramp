@@ -30,14 +30,17 @@ class Store {
   }
   async compareAndSwap(expected, next, options) {
     await this.beforeWrite?.(expected, next); options?.assertCurrent?.();
-    if (JSON.stringify(this.rows.get(expected.profileId)) !== JSON.stringify(expected)) throw new VaultStorageError('CONFLICT');
+    if (JSON.stringify(this.rows.get(expected.profileId)) !== JSON.stringify(expected))
+      throw new VaultStorageError('CONFLICT');
     this.rows.set(next.profileId, structuredClone(next)); this.writes++; this.afterCommit?.(expected, next);
   }
 }
 async function setup(t) {
   const store = new Store(), vault = new EncryptedVaultService(store, crypto, { lifecycle: false });
   const session = ok(await vault.create(PASS));
-  const open = current => { const journal = new SolanaVaultJournal(vault, current); t.after(() => journal.dispose()); return journal; };
+  const open = current => {
+    const journal = new SolanaVaultJournal(vault, current); t.after(() => journal.dispose()); return journal;
+  };
   t.after(() => vault.dispose());
   return { store, vault, session, open, journal: open(session) };
 }
@@ -54,7 +57,8 @@ async function fixture() {
 const local = (s, record, n, time = 100) => ({ ...structuredClone(record), intentId: id(n),
   originProfileId: s.session.profileId, createdAt: time, updatedAt: time });
 const cancelled = (s, record, n, time = 100) => ({ ...local(s, record, n, time), state: 'cancelled' });
-const wrapped = (binding, payload, schemaVersion) => ({ id: solanaJournalRecordId(binding), kind: 'journal', schemaVersion,
+const wrapped = (binding, payload, schemaVersion) => ({ id: solanaJournalRecordId(binding),
+  kind: 'journal', schemaVersion,
   payload: encodeBase64url(new TextEncoder().encode(JSON.stringify(payload))) });
 async function seedV1(s, binding, records, revision = records.length) {
   const payload = { format: SOLANA_VAULT_JOURNAL_FORMAT, binding, revision, records: [...records].sort(byId) };
@@ -70,7 +74,8 @@ async function restore(t, s) {
   return { ...s, session, journal };
 }
 
-test('explicit empty migration creates one stable v2 aggregate and reservation updates require full identity', async t => {
+test('explicit empty migration creates one stable v2 aggregate and reservation updates require full identity',
+  async t => {
   const s = await setup(t), { binding, trade, rows } = await fixture();
   assert.deepEqual(ok(await s.journal.read(binding)), { revision: 0, records: [] });
   const migrated = await migrateIntents(s.journal, trade, 0);
@@ -86,7 +91,8 @@ test('explicit empty migration creates one stable v2 aggregate and reservation u
   assert.equal(stored.identity.generation, 2); assert.equal(stored.revision, 2);
   const loaded = await loadIntents(s.journal, trade);
   assert.deepEqual(identityForRecord(loaded, loaded.records[0]), stored.identity);
-  assert.throws(() => identityForRecord(loaded, structuredClone(loaded.records[0])), e => e.code === 'INTEGRITY_FAILURE');
+  assert.throws(() => identityForRecord(loaded, structuredClone(loaded.records[0])),
+    e => e.code === 'INTEGRITY_FAILURE');
   const next = { ...stored.record, state: 'cancelled' };
   error(await s.journal.update(binding, 2, { ...stored.identity, generation: 1 }, next), 'CONFLICT');
   error(await s.journal.update(binding, 2, { ...stored.identity, originProfileId: 'b'.repeat(32) }, next), 'CONFLICT');
@@ -94,7 +100,8 @@ test('explicit empty migration creates one stable v2 aggregate and reservation u
   error(await s.journal.update(binding, 3, stored.identity, stored.record), 'CONFLICT');
 });
 
-test('v1 migration preserves every field and resolves a predecessor whose registration generation is greater', async t => {
+test('v1 migration preserves every field and resolves a predecessor whose registration generation is greater',
+  async t => {
   const s = await setup(t), { binding, rows } = await fixture();
   const ids = [id(3), id(10)].sort(), predecessor = { ...local(s, rows[0], 10), intentId: ids[1], state: 'dropped' };
   const successor = { ...local(s, rows[0], 3), intentId: ids[0], state: 'cancelled', replacementOf: ids[1] };
@@ -109,14 +116,17 @@ test('v1 migration preserves every field and resolves a predecessor whose regist
   assert.equal(chooseRetirementCandidate({ version: 2, reservations: after.entries }, s.session.profileId), null);
 });
 
-test('pressure retirement preserves heads and rejects stale identities after deterministic repeated-ID allocation', async t => {
+test('pressure retirement preserves heads and rejects stale identities after deterministic repeated-ID allocation',
+  async t => {
   const s = await setup(t), { binding, trade, rows } = await fixture();
   const records = Array.from({ length: 32 }, (_, n) => cancelled(s, rows[0], n));
   await seedV1(s, binding, records);
   let loaded = await migrateIntents(s.journal, trade, 32);
-  const old = loaded.reservations.find(e => e.intent.intentId === chooseRetirementCandidate(loaded, s.session.profileId).intentId);
+  const old = loaded.reservations.find(e => e.intent.intentId ===
+    chooseRetirementCandidate(loaded, s.session.profileId).intentId);
   const head = loaded.reservations.at(-1), before = await raw(s, binding), prepared = local(s, rows[0], 200);
-  error(await s.journal.reserve(binding, loaded.revision, prepared, null, reservationRef(identityFromEntry(head))), 'CONFLICT');
+  error(await s.journal.reserve(binding, loaded.revision, prepared, null,
+    reservationRef(identityFromEntry(head))), 'CONFLICT');
   error(await s.journal.reserve(binding, loaded.revision, { ...prepared, intentId: old.intent.intentId }, null,
     reservationRef(identityFromEntry(old))), 'CONFLICT');
   assert.deepEqual(await raw(s, binding), before);
@@ -163,7 +173,8 @@ test('native v2 backup restore preserves the embedded high-water mark and forbid
   assert.equal(destination.session.revision, 0); assert.deepEqual(await raw(destination, binding), bytes);
   assert.deepEqual(after, before); assert.equal(chooseRetirementCandidate(after, destination.session.profileId), null);
   const target = reservationRef(identityFromEntry(after.reservations[0]));
-  error(await destination.journal.reserve(binding, after.revision, local(destination, rows[0], 200), null, target), 'CONFLICT');
+  error(await destination.journal.reserve(binding, after.revision, local(destination, rows[0], 200), null, target),
+    'CONFLICT');
   assert.deepEqual(await raw(destination, binding), bytes);
 });
 
@@ -174,21 +185,24 @@ test('a complete v2 payload accepts the public byte boundary and refuses one ext
   const json = JSON.stringify(decode(original));
   // Canonical 32-entry payloads cannot reach this limit: even independently maximal permitted fields
   // total at most 117,443 bytes. JSON whitespace exercises the public byte bound without inventing fields.
-  const atBoundary = { ...original, payload: encodeBase64url(new TextEncoder().encode(json.padEnd(MAX_PAYLOAD_BYTES))) };
+  const atBoundary = { ...original,
+    payload: encodeBase64url(new TextEncoder().encode(json.padEnd(MAX_PAYLOAD_BYTES))) };
   const outerRevision = s.store.rows.get(s.session.profileId).revision;
   assert.equal(decodeBase64url(atBoundary.payload, 1, MAX_PAYLOAD_BYTES).length, MAX_PAYLOAD_BYTES);
   const committed = ok(await s.vault.commit(s.session.sessionId, outerRevision, [{ op: 'put', record: atBoundary }]));
   assert.deepEqual(await loadIntents(s.journal, trade), before);
   assert.deepEqual(await raw(s, binding), atBoundary);
   const writes = s.store.writes;
-  const oversized = { ...original, payload: encodeBase64url(new TextEncoder().encode(json.padEnd(MAX_PAYLOAD_BYTES + 1))) };
+  const oversized = { ...original,
+    payload: encodeBase64url(new TextEncoder().encode(json.padEnd(MAX_PAYLOAD_BYTES + 1))) };
   error(await s.vault.commit(s.session.sessionId, committed, [{ op: 'put', record: oversized }]), 'LIMIT_EXCEEDED');
   assert.equal(s.store.writes, writes);
   assert.deepEqual(await raw(s, binding), atBoundary);
   assert.deepEqual(await loadIntents(s.journal, trade), before);
 });
 
-test('repeated fresh-key restore of an older v2 backup preserves history without transferring source update authority', async t => {
+test('repeated fresh-key restore of an older v2 backup preserves history without transferring source update authority',
+  async t => {
   const s = await setup(t), { binding, trade, rows } = await fixture();
   await seedV1(s, binding, Array.from({ length: 31 }, (_, n) => cancelled(s, rows[0], n)), 100);
   const migrated = await migrateIntents(s.journal, trade, 100);
@@ -196,7 +210,8 @@ test('repeated fresh-key restore of an older v2 backup preserves history without
   const oldSnapshot = await loadIntents(s.journal, trade), oldPayload = await raw(s, binding);
   const backup = new EncryptedBackupService(s.store, crypto), oldBackup = await backup.export(s.session.profileId);
   // This identity still belongs to its source profile. Advancing that profile does not alter the old export.
-  await storeIntentV2(s.journal, trade, captured.revision, captured.identity, { ...captured.record, state: 'cancelled' });
+  await storeIntentV2(s.journal, trade, captured.revision, captured.identity,
+    { ...captured.record, state: 'cancelled' });
   const current = await loadIntents(s.journal, trade);
   const later = await reserveIntentV2(s.journal, trade, current.revision, local(s, rows[0], 201), null,
     chooseRetirementCandidate(current, s.session.profileId));
@@ -246,14 +261,17 @@ test('v2 replacements require the complete predecessor identity and preserve one
   await seedV1(s, binding, [dropped], 4);
   const loaded = await migrateIntents(s.journal, trade, 4), original = identityForRecord(loaded, loaded.records[0]);
   const next = { ...local(s, rows[0], 2), replacementOf: dropped.intentId }, before = await raw(s, binding);
-  error(await s.journal.reserve(binding, loaded.revision, next, { ...reservationRef(original), generation: 1 }, null), 'CONFLICT');
+  error(await s.journal.reserve(binding, loaded.revision, next,
+    { ...reservationRef(original), generation: 1 }, null), 'CONFLICT');
   error(await s.journal.reserve(binding, loaded.revision, next, null, null), 'CONFLICT');
   assert.deepEqual(await raw(s, binding), before);
   const stored = await reserveIntentV2(s.journal, trade, loaded.revision, next, reservationRef(original), null);
   await storeIntentV2(s.journal, trade, stored.revision, stored.identity, { ...stored.record, state: 'cancelled' });
   const current = await loadIntents(s.journal, trade), snapshot = await raw(s, binding);
-  assert.deepEqual(current.reservations.find(e => e.intent.intentId === next.intentId).replaces, reservationRef(original));
-  error(await s.journal.reserve(binding, current.revision, { ...next, intentId: id(3) }, reservationRef(original), null), 'CONFLICT');
+  assert.deepEqual(current.reservations.find(e => e.intent.intentId === next.intentId).replaces,
+    reservationRef(original));
+  error(await s.journal.reserve(binding, current.revision, { ...next, intentId: id(3) },
+    reservationRef(original), null), 'CONFLICT');
   assert.deepEqual(await raw(s, binding), snapshot);
 });
 
@@ -299,7 +317,8 @@ test('an uncertain migration response preserves committed v2 and permits no auto
   assert.equal(s.store.writes, writes);
 });
 
-test('v2 entries reject malformed generations, duplicate identity, extra keys and inconsistent reference graphs', async t => {
+test('v2 entries reject malformed generations, duplicate identity, extra keys and inconsistent reference graphs',
+  async t => {
   const s = await setup(t), { binding, rows } = await fixture();
   const entries = [1, 2].map(n => ({ generation: n, intent: cancelled(s, rows[0], n), replaces: null }));
   entries.sort((a, b) => byId(a.intent, b.intent));
@@ -318,13 +337,15 @@ test('v2 entries reject malformed generations, duplicate identity, extra keys an
   assert.throws(() => parseReservationEntries([], binding, 3));
 });
 
-test('all four action heads retain the original timestamp and intent-ID tie order across later reservations', async t => {
+test('all four action heads retain the original timestamp and intent-ID tie order across later reservations',
+  async t => {
   const s = await setup(t), { binding, trade, rows } = await fixture();
   const instructions = { fund: ok(buildFundNative(trade)), release: ok(buildRelease(trade)),
     refund: ok(buildRefund(trade)), payout: ok(buildPayout(trade, 'released')) };
   const bases = Object.fromEntries(Object.entries(instructions).map(([action, instruction]) => {
     const expectedEscrowState = action === 'fund' ? 'absent' : action === 'payout' ? 'released' : 'funded';
-    const record = parseSolanaIntent({ ...rows[0], action, expectedEscrowState, role: 'seller', feePayer: trade.terms.seller,
+    const record = parseSolanaIntent({ ...rows[0], action, expectedEscrowState,
+      role: 'seller', feePayer: trade.terms.seller,
       message: encodeBase64(compileLegacyMessage(trade.terms.seller, [instruction], rows[0].blockhash)) });
     verifyIntentForTrade(record, trade); return [action, record];
   }));

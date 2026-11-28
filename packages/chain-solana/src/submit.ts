@@ -262,7 +262,8 @@ export async function prepareIntent(
       chooseRetirementCandidate(loaded, profile), signal);
   }
   admitIntent(loaded.records, record);
-  return { record, revision: await storeIntent(context.journal, trade, loaded.revision, record, signal), identity: null };
+  return { record, revision: await storeIntent(context.journal, trade, loaded.revision, record, signal),
+    identity: null };
 }
 
 /**

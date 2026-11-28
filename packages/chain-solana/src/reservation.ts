@@ -21,7 +21,8 @@ export function reservationGeneration(input: unknown): number {
   return input;
 }
 function reference(raw: Record<string, unknown>): SolanaReservationRef {
-  if (typeof raw.originProfileId !== 'string' || !/^[0-9a-f]{32}$/.test(raw.originProfileId)) return fail('INVALID_INPUT');
+  if (typeof raw.originProfileId !== 'string' || !/^[0-9a-f]{32}$/.test(raw.originProfileId))
+    return fail('INVALID_INPUT');
   let intentId: string;
   try { intentId = parseIntentId(raw.intentId); } catch { return fail('INVALID_INPUT'); }
   return Object.freeze({ originProfileId: raw.originProfileId, intentId,
@@ -46,7 +47,8 @@ export const sameReservationRef = (a: SolanaReservationRef, b: SolanaReservation
   a.generation === b.generation && a.intentId === b.intentId && a.originProfileId === b.originProfileId;
 export const sameReservationIdentity = (
   a: SolanaReservationIdentity | null | undefined, b: SolanaReservationIdentity | null | undefined,
-): boolean => a == null || b == null ? a == null && b == null : sameBinding(a.binding, b.binding) && sameReservationRef(a, b);
+): boolean => a == null || b == null ? a == null && b == null
+  : sameBinding(a.binding, b.binding) && sameReservationRef(a, b);
 
 export const intentOrder = (a: SolanaIntentRecord, b: SolanaIntentRecord): number =>
   a.intentId < b.intentId ? -1 : a.intentId > b.intentId ? 1 : 0;
@@ -54,9 +56,11 @@ const actionOrder = (a: SolanaIntentRecord, b: SolanaIntentRecord): number =>
   a.createdAt - b.createdAt || intentOrder(a, b);
 
 /** Parse wrappers and the complete predecessor graph; migration generations need not be chronological. */
-export function parseReservationEntries(input: unknown, binding: TradeBinding, revision: number): readonly SolanaReservationEntry[] {
-  if (!Array.isArray(input) || input.length > MAX_INTENTS_PER_TRADE || revision < 1 || !Number.isSafeInteger(revision) ||
-      (input.length === 0 && revision !== 1)) {
+export function parseReservationEntries(
+  input: unknown, binding: TradeBinding, revision: number
+): readonly SolanaReservationEntry[] {
+  if (!Array.isArray(input) || input.length > MAX_INTENTS_PER_TRADE || revision < 1 ||
+      !Number.isSafeInteger(revision) || (input.length === 0 && revision !== 1)) {
     return fail('INTEGRITY_FAILURE');
   }
   const entries: SolanaReservationEntry[] = [], generations = new Set<number>();
@@ -98,8 +102,9 @@ export function eligibleForRetirement(
   const record = entry.intent;
   if (!entries.includes(entry) || !/^[0-9a-f]{32}$/.test(profileId) || profileId === UNKNOWN_ORIGIN ||
       record.originProfileId !== profileId || record.state !== 'cancelled' || record.signature !== null ||
-      record.sendMarkedAt !== null || record.outcome !== null || record.replacementOf !== null || entry.replaces !== null ||
-      entries.some(candidate => candidate.intent.replacementOf === record.intentId)) return false;
+      record.sendMarkedAt !== null || record.outcome !== null || record.replacementOf !== null ||
+      entry.replaces !== null || entries.some(candidate => candidate.intent.replacementOf === record.intentId))
+    return false;
   const latest = entries.filter(candidate => candidate.intent.action === record.action)
     .map(candidate => candidate.intent).sort(actionOrder).at(-1);
   return latest !== record;
