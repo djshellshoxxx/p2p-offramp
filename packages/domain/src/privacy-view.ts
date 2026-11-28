@@ -98,8 +98,10 @@ const unknownEndpoints = (reason: PrivacyReason = 'not-observed'): PrivacyEndpoi
 function origin(input: unknown): string {
   if (typeof input !== 'string' || input.length > 2048 || !/^(?:https|wss|http|ws):\/\//i.test(input) || /[\u0000-\u0020\u007f\\#]/.test(input)) throw new Error();
   const authority = input.slice(input.indexOf('://') + 3).split(/[/?]/, 1)[0];
+  // URL repairs extra slashes by treating a path segment as the host. Require a literal authority.
+  if (!authority || authority.includes('@')) throw new Error();
   const url = new URL(input);
-  if (url.username || url.password || authority?.includes('@')) throw new Error();
+  if (url.username || url.password) throw new Error();
   const loopback = ['127.0.0.1', '[::1]', 'localhost'].includes(url.hostname);
   if (url.protocol !== 'https:' && url.protocol !== 'wss:' && !((url.protocol === 'http:' || url.protocol === 'ws:') && loopback)) throw new Error();
   return url.origin;

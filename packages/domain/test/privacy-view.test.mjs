@@ -190,6 +190,7 @@ test('endpoint metadata cannot publish credentials, ambiguous URLs, unknown fiel
   let getterCalls = 0;
   const valid = endpointSnapshot().endpoints[0];
   const hostile = [
+    { ...valid, configuredUrl: 'https:///SECRET/' }, { ...valid, connectionUrl: 'wss:////SECRET/' },
     { ...valid, configuredUrl: 'https://user:SECRET@node.example/' }, { ...valid, configuredUrl: 'https://@node.example/' },
     { ...valid, configuredUrl: 'https://node.example\\@SECRET.example/' }, { ...valid, configuredUrl: 'http://public.example/' },
     { ...valid, configuredUrl: 'ws://public.example/' }, { ...valid, configuredUrl: 'https://node.example/#SECRET' },

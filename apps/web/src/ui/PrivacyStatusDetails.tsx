@@ -1,16 +1,7 @@
-import type { PrivacyReason, PrivacyRouteIndicator } from '../../../../packages/domain/index.ts';
-import { message as english, messageGroup } from './locale/runtime.ts';
+import type { PrivacyEndpointDetails } from '../../../../packages/domain/index.ts';
+import { message, messageGroup } from './locale/runtime.ts';
 
-/** Same shape as the domain reader's endpoint details. The domain facade does not export that type yet (the
- * privacy-view half is a separate change), so this unwired leaf declares it locally. Type-only: no runtime effect. */
-interface PrivacyEndpointOrigin {
-  readonly channel: Exclude<PrivacyRouteIndicator['channel'], 'wallet'>; readonly id: string;
-  readonly configuredOrigin: string; readonly connectionOrigin: string | null;
-}
-interface PrivacyEndpointDetails {
-  readonly generation: number | null; readonly observedAt: number | null; readonly expiresAt: number | null;
-  readonly reason: PrivacyReason; readonly endpoints: readonly PrivacyEndpointOrigin[];
-}
+const channelLabels = { rpc: 'rpc', relay: 'relay', map: 'map', proof: 'proofChannel', update: 'update' } as const;
 
 /** Only normalized, display-only output of the trusted privacy reader reaches this component. */
 export function PrivacyStatusDetails({ details }: { readonly details: PrivacyEndpointDetails }) {
@@ -23,12 +14,12 @@ export function PrivacyStatusDetails({ details }: { readonly details: PrivacyEnd
       <p>{p.endpointSource}</p>
       <dl><dt>{p.endpointGeneration}</dt><dd>{details.generation}</dd><dt>{p.endpointExpiry}</dt><dd>{details.expiresAt}</dd></dl>
       <ul>{details.endpoints.map(item => <li key={item.channel + ':' + item.id}>
-        <h4>{item.channel}</h4><dl><dt>{p.endpointId}</dt><dd>{item.id}</dd>
+        <h4>{p[channelLabels[item.channel]]}</h4><dl><dt>{p.endpointId}</dt><dd>{item.id}</dd>
           <dt>{p.configuredOrigin}</dt><dd><code dir="ltr">{item.configuredOrigin}</code></dd>
           <dt>{p.connectionOrigin}</dt><dd><code dir="ltr">{item.connectionOrigin ?? p.unknown}</code></dd></dl>
       </li>)}</ul>
     </>}
-    <p>{details.observedAt === null ? p.noTime : english('privacy', 'time', {milliseconds:String(details.observedAt)})}</p>
+    <p>{details.observedAt === null ? p.noTime : message('privacy', 'time', {milliseconds:String(details.observedAt)})}</p>
     <p>{p.walletUnknown}</p>
   </section>;
 }
