@@ -6,9 +6,16 @@ release. Keep `ReleaseEnabled=0` and the default empty network allowlist.
 
 ## Reproduce local evidence
 
-Use Node 24+, Python 3.12+ and an installed Chromium. From the repository root:
+Use Node 24+ and an installed Chromium. The independent OpenSSL oracle run by
+`npm run test:specs` requires `cryptography`; the hash-pinned development
+closure targets CPython 3.12 on Linux x86_64 (Ubuntu amd64). Other tool
+platforms are not qualified by that lock. From the repository root, create and
+activate an owned virtual environment before running the checks:
 
 ```sh
+python3.12 -m venv .venv-oracle
+. .venv-oracle/bin/activate
+python -m pip --isolated install --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt
 npm ci --ignore-scripts
 npm ci --ignore-scripts --prefix packages/escrow-evm
 npm test
@@ -36,10 +43,13 @@ server and no external-chain connection. Never transfer assets to those accounts
    Preserve emitted third-party attribution and policy files.
 2. Confirm default build exclusion checks pass. Never publish `dist-demo` as a
    trading product. Local evidence files are not signed manifests or approval.
-3. An enabled release requires the missing common G15 manifest schema, selected
-   signing policy, independently reviewed cryptography/contracts, approved registry,
-   native deployments/endpoints, host-header smoke tests and supported-device
-   evidence. The local test registry is not a substitute.
+3. The common G15 manifest and D3 Option A testnet registry/ABI binding are
+   implemented; see [accepted owner decisions](adr/ACCEPTED-DECISIONS-2026-11-04.md).
+   D2 owner-authorized public trust material, the first signed testnet release,
+   independently reviewed cryptography/contracts, approved registry and native
+   deployments/endpoints, host-header smoke tests and supported-device evidence
+   remain separate gates. Testnet release verification is not production release
+   approval. The local test registry is not a substitute; keep `ReleaseEnabled=0`.
 4. When deployment is explicitly authorized, first retain the prior immutable
    artifact and its policy/asset digests. Deploy the exact reviewed artifact and
    check the final host, cache behavior, CSP, MIME types and framing headers.
