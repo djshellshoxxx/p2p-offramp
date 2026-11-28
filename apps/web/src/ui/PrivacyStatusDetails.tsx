@@ -1,16 +1,5 @@
-import type { PrivacyReason, PrivacyRouteIndicator } from '../../../../packages/domain/index.ts';
-import { message as english, messageGroup } from './locale/runtime.ts';
-
-/** Same shape as the domain reader's endpoint details. The domain facade does not export that type yet (the
- * privacy-view half is a separate change), so this unwired leaf declares it locally. Type-only: no runtime effect. */
-interface PrivacyEndpointOrigin {
-  readonly channel: Exclude<PrivacyRouteIndicator['channel'], 'wallet'>; readonly id: string;
-  readonly configuredOrigin: string; readonly connectionOrigin: string | null;
-}
-interface PrivacyEndpointDetails {
-  readonly generation: number | null; readonly observedAt: number | null; readonly expiresAt: number | null;
-  readonly reason: PrivacyReason; readonly endpoints: readonly PrivacyEndpointOrigin[];
-}
+import type { PrivacyEndpointDetails } from '../../../../packages/domain/index.ts';
+import { message, messageGroup } from './locale/runtime.ts';
 
 /** Only normalized, display-only output of the trusted privacy reader reaches this component. */
 export function PrivacyStatusDetails({ details }: { readonly details: PrivacyEndpointDetails }) {
@@ -28,7 +17,7 @@ export function PrivacyStatusDetails({ details }: { readonly details: PrivacyEnd
           <dt>{p.connectionOrigin}</dt><dd><code dir="ltr">{item.connectionOrigin ?? p.unknown}</code></dd></dl>
       </li>)}</ul>
     </>}
-    <p>{details.observedAt === null ? p.noTime : english('privacy', 'time', {milliseconds:String(details.observedAt)})}</p>
+    <p>{details.observedAt === null ? p.noTime : message('privacy', 'time', {milliseconds:String(details.observedAt)})}</p>
     <p>{p.walletUnknown}</p>
   </section>;
 }

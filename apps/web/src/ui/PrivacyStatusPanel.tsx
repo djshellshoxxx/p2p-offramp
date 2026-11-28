@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createPrivacyViewReader, type PrivacyIndicator, type PrivacyReason, type PrivacyTransportPort } from '../../../../packages/domain/index.ts';
+import { createPrivacyViewReader, type PrivacyEndpointDetails, type PrivacyEndpointPort, type PrivacyObservationPort, type PrivacyIndicator, type PrivacyReason, type PrivacyTransportPort } from '../../../../packages/domain/index.ts';
 import type { AppServices } from '../app-services.ts';
+import { PrivacyStatusDetails } from './PrivacyStatusDetails.tsx';
 import { message, messageGroup } from './locale/runtime.ts';
 
 const p = messageGroup('privacy');
@@ -14,35 +15,91 @@ const channels = { rpc: 'rpc', relay: 'relay', map: 'map', proof: 'proofChannel'
 
 /** Bundled composition supplies the same real broker it uses for transport.
  * A subscription is an invalidation hint; only a fresh coherent inspection is evidence. */
-export type PrivacyStatusTransport = PrivacyTransportPort & {
+interface InvalidationPort {
   subscribeInvalidation(listener: () => void): () => void;
-};
-export function PrivacyStatusPanel({ services = null, scope, transport = null }: {
-  readonly services?: AppServices | null; readonly scope?: number; readonly transport?: PrivacyStatusTransport | null;
-}) {
+}
+export type PrivacyStatusTransport = PrivacyTransportPort & InvalidationPort;
+export type PrivacyStatusEndpoints = PrivacyEndpointPort & InvalidationPort;
+export interface SettingsEndpointSource {
+  readonly services: AppServices;
+  readonly scope: number;
+  readonly port: PrivacyStatusEndpoints;
+}
+
+function useObservedPort<T extends InvalidationPort>(port: T | null) {
   const [, refresh] = useState(0);
-  const activeSubscription = useRef<PrivacyStatusTransport | null>(null);
-  const [subscription, setSubscription] = useState<{ readonly transport: PrivacyStatusTransport; readonly ready: boolean } | null>(null);
+  const activePort = useRef<T | null>(null);
+  const [registration, setRegistration] = useState<{ port: T; ready: boolean } | null>(null);
   useEffect(() => {
-    if (!transport) return;
+    if (!port) return;
     let active = true;
     let unsubscribe: (() => void) | undefined;
     try {
-      const off = transport.subscribeInvalidation(() => { if (active) refresh(value => value + 1); });
+      const off = port.subscribeInvalidation(() => { if (active) refresh(value => value + 1); });
       if (typeof off !== 'function') throw new Error();
       unsubscribe = off;
-      activeSubscription.current = transport;
-      setSubscription({ transport, ready: true });
-    } catch { setSubscription({ transport, ready: false }); }
+      activePort.current = port;
+      setRegistration({ port, ready: true });
+    } catch { setRegistration({ port, ready: false }); }
     return () => {
       active = false;
-      activeSubscription.current = null;
-      try { unsubscribe?.(); } catch { /* Old observers can no longer publish UI state. */ }
+      activePort.current = null;
+      try { unsubscribe?.(); } catch { /* A retired listener cannot trigger inspection. */ }
     };
-  }, [transport]);
-  // State can retain a formerly-ready broker across A → null → A. The active
-  // lease must also match: a new registration may fail or exhaust its limit.
-  const liveTransport = subscription?.transport === transport && subscription.ready && activeSubscription.current === transport ? transport : null;
+  }, [port]);
+  const current = registration !== null && registration.port === port;
+  return {
+    live: current && registration.ready && activePort.current === port ? port : null,
+    failed: current && !registration.ready,
+  };
+}
+
+function selectionOpen(source: SettingsEndpointSource) {
+  try { return source.services.getSnapshot().state === 'unlocked' && source.services.selectionScope() === source.scope; }
+  catch { return false; }
+}
+
+function ObservedEndpointDetails({ source, observations, fallback }: {
+  readonly source: SettingsEndpointSource; readonly observations: PrivacyObservationPort; readonly fallback: PrivacyEndpointDetails;
+}) {
+  const { live, failed } = useObservedPort(selectionOpen(source) ? source.port : null);
+  const reader = useMemo(() => createPrivacyViewReader({
+    monotonicNow: clock, observations, ...(live ? { endpoints: live } : {}),
+  }), [observations, live]);
+  const result = live && selectionOpen(source) ? reader.buildPrivacyView(null, source.scope) : null;
+  const details = result?.ok && result.value.vault.state === 'unlocked' && selectionOpen(source)
+    ? result.value.endpointDetails : fallback;
+  const [, refresh] = useState(0);
+  const deadline = details.expiresAt;
+  useEffect(() => {
+    if (deadline === null) return;
+    const timer = window.setTimeout(() => refresh(value => value + 1), Math.max(0, deadline - clock()));
+    return () => window.clearTimeout(timer);
+  }, [deadline]);
+  return <>{failed ? <p role="status">{p.unavailable}</p> : null}<PrivacyStatusDetails details={details} /></>;
+}
+
+function EndpointDisclosure({ source, observations, fallback }: {
+  readonly source: SettingsEndpointSource; readonly observations: PrivacyObservationPort; readonly fallback: PrivacyEndpointDetails;
+}) {
+  const [revealed, setRevealed] = useState<SettingsEndpointSource | null>(null);
+  if (revealed !== null && revealed !== source) setRevealed(null);
+  const open = revealed === source;
+  return <>
+    <button type="button" aria-expanded={open} aria-controls="privacy-endpoint-details"
+      onClick={() => setRevealed(open ? null : source)}>{open ? p.hideEndpoints : p.showEndpoints}</button>
+    <div id="privacy-endpoint-details">{open
+      ? <ObservedEndpointDetails source={source} observations={observations} fallback={fallback} />
+      : <p>{p.endpointsHidden}</p>}</div>
+  </>;
+}
+
+export function PrivacyStatusPanel({ services = null, scope, transport = null, endpoints = null }: {
+  readonly services?: AppServices | null; readonly scope?: number; readonly transport?: PrivacyStatusTransport | null;
+  readonly endpoints?: SettingsEndpointSource | null;
+}) {
+  const [, refresh] = useState(0);
+  const { live: liveTransport, failed } = useObservedPort(transport);
   const observations = useMemo(() => services ? {
     get generation() { return services.selectionScope(); },
     read() {
@@ -57,7 +114,7 @@ export function PrivacyStatusPanel({ services = null, scope, transport = null }:
   const reader = useMemo(() => createPrivacyViewReader({ monotonicNow: clock, ...(observations ? { observations } : {}),
     ...(liveTransport ? { transport: liveTransport } : {}) }), [observations, liveTransport]);
   const expectedScope = services ? scope : undefined;
-  let transportError = subscription?.transport === transport && !subscription.ready;
+  let transportError = failed;
   const inspect = () => {
     if (!liveTransport) return localReader.buildPrivacyView(null, expectedScope);
     try {
@@ -102,6 +159,10 @@ export function PrivacyStatusPanel({ services = null, scope, transport = null }:
     {transportError ? <p role="status">{p.error}</p> : null}
     {result.ok ? <ul>{result.value.routes.map(item => indicator(p[channels[item.channel]], item, item.selectedPolicy === 'ordinary' ? p.ordinary : item.selectedPolicy === 'strict' ? p.strict : p.noPolicy))}
       {indicator(p.vault, result.value.vault)}{indicator(p.messaging, result.value.messaging)}{indicator(p.proof, result.value.proof)}</ul> : <p role="status">{p.error}</p>}
+    {result.ok && (observations && endpoints && endpoints.services === services && endpoints.scope === scope &&
+      result.value.scopeGeneration === scope && result.value.vault.state === 'unlocked'
+      ? <EndpointDisclosure source={endpoints} observations={observations} fallback={result.value.endpointDetails} />
+      : <PrivacyStatusDetails details={result.value.endpointDetails} />)}
     <h3>{p.chainTitle}</h3><p>{p.chainWarning}</p><h3>{p.fiatTitle}</h3><p>{p.fiatWarning}</p><p className="warning">{p.authorityWarning}</p>
   </section>;
 }
