@@ -1,3 +1,25 @@
+## 2026-11-28 — historical UI and personalization cohort
+
+Main `fdf346ab8e6aacc60b501007ec10ec7ee840a701` unchanged. Historical autonomous tip 94554ecf9854e4604f9f56afe5bebedeee931994, 68 ahead/653 behind, merge base e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa. Thirteen exact-ref path comparisons: seven exact main, two revised, four absent at original main paths but exact on open #42 (58b3c876ae6036114a195af6b2dcc4c9cc2a09ad). No branch-wide equivalence inferred. Main domain reader 76f5ad03ba861ecd2df8eb1ee29e467c6137f2b6 exposes normalized endpointDetails; domain test 02b217efb7716e8087965b0ec73ca0b540d42b22 covers normalized origins without route authority. Display leaf exists but main Settings panel 5ecc366a0bd39a63f52a0e3dafb6c98bc4724246 does not reference it or endpointDetails. Historic reader-to-render/unmounted-port tests remain on #42; reconcile through the current app port and lifecycle contracts, without inventing providers or claiming positive coverage. #201 head f5241c09f268a7a6841a5760ed0faa90b5b7f005 is main ancestor (0 ahead/138 behind), despite individual merged=false. Do not reimplement favorites; preserve #267/#268/#270/#271 and #261 acceptance scopes. Current saved-review deletion tests protect foreign/malformed records, unlike historical native-retention refusal; do not blindly transplant or equate with #43 mixed-record deletion. #237 preview separate. #259 draft 1 ahead/24 behind, main ignore blob unchanged; prior qualification historical. Fresh 299 branch names/284 PRs (98 open, 128 merged, 58 closed unmerged; merged creation buckets 78/48/2). #251 merged; #237/#280/#285 review lists empty. Direct Git DNS exit 128, old workspace absent, Node 22.16.0 below >=24. No new runtime execution, production code, main merge, deployment, release, funds or activation. ReleaseEnabled=0 required. Remaining full semantic count unknown. Next: unassessed paths or owner-coordinated endpoint-details integration, not repeated cohort.
+
+| Path relative to apps/web/ | Historical blob | Main disposition |
+| --- | --- | --- |
+| src/ui/ControlHelp.tsx | c60ed0267dccff683b7b6be52b20fbc194033655 | Exact |
+| src/ui/help-registry.ts | 6bf9ff55290b83b5cb7b41e80645b255f0691860 | Exact |
+| test/help-registry.test.mjs | aea37a45e6acd5780ab88962a341d7e592d079a9 | Exact |
+| src/ui/LocalScreenAnalytics.tsx | cf4adc46dd93f4f9fde747c1779e3064bbf1a964 | Exact |
+| src/ui/use-screen-counts.ts | 6fa178f5c89d59896facd9387c04283a676dc9c2 | Exact |
+| test/local-screen-analytics.render.test.mjs | 70569cdf761c54c31aae405ee077720aa9a65550 | Exact |
+| src/ui/StartupCompatibilityNotice.tsx | 7df098913cff3f1b64688243655718a7a50ad7c7 | Exact leaf |
+| src/ui/PrivacyStatusDetails.tsx | 6a86497afb377be302bd9cc0e4c92241b166f44d | 1c39d693486010440fbce4dbb5261bfff00e60ba; local type replaces domain import |
+| test/privacy-status-details.test.mjs | 9ab72e428a1abae36420054ef92c0a923c8ddbaa | Absent at main path; exact #42 |
+| src/ui/FavoriteSavedReviews.tsx | 0f6b1ad43a0c03e91e4bf19dbc97a0ef1adb768e | Absent at main path; exact #42 |
+| test/review-favorites-ui.test.mjs | 5e5e0336b223cf8523bcf9809df9d5df2dad6cb6 | Absent at main path; exact #42 |
+| test/review-favorites-worker.test.mjs | 95124bfaa24c31320c0a750333fb14c26fa5571f | Absent at main path; exact #42 |
+| test/saved-reviews-worker.test.mjs | e0e7888b8f3bc69c5c102e61b8ec4dbafe7773e8 | 9a4504e2de244b0177d7731567cba68fd7d81009; recognized local review deletion, malformed-wrapper preservation and expiry CAS coverage |
+
+---
+
 ## 2026-11-28 — #284 optional scope-isolation review
 
 Main `fdf346ab8e6aacc60b501007ec10ec7ee840a701` confirmed unchanged; branch-name census 100/100/99/0 = 299 distinct; PR census 98 open, 58 closed unmerged, 128 merged (35/89/4 disjoint creation buckets), total 284. #251 merged. Full exact-tip and remaining semantic reconciliation count unknown.
