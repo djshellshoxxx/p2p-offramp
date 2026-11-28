@@ -164,9 +164,16 @@ only after a finalized `Released`/`Refunded` read), `wallet.ts` (Wallet Standard
 `skipPreflight: true`, `maxRetries: 0`, no resend; reconciliation by signature status and finalized blockhash
 expiry), `adapter.ts` (mapping to Lane A's `IntentV2`), `recovery.ts` and the entry point
 `createSolanaEscrowClient({ rpc, wallet, journal, registry, clock, margins, walletChain })` in `compose.ts`. Margins
-are required inputs. Status: adapter plus local-validator integration, not wired into apps/web. Details, the state
-machine and the open shared-schema items: [docs/lifecycle.md](docs/lifecycle.md); recovery:
+are required inputs. The opt-in apps/web Solana localnet recovery controller uses this client with
+`ReleaseEnabled: 0`. Details, the state machine, local-validator evidence and the open shared-schema items:
+[docs/lifecycle.md](docs/lifecycle.md); recovery:
 [contracts/solana/RECOVERY.md](../../contracts/solana/RECOVERY.md).
+
+Native payout planning refuses `rent-unknown` before preparing an intent, signing or sending. Recovery exit
+guidance also closes payouts for `rent-unknown` and `rent-shortfall`. A known shortfall can still be reviewed and
+paid with an exact top-up bounded by the caller's explicit limit; the limit defaults to zero. Rent blockers never
+close funded release or refund. See the [C-L2 rules](docs/lifecycle.md#3-c-l2-releaserefund-never-bundled-with-payout)
+for the distinction between a blocked exit and an explicitly bounded recovery review.
 
 `SolanaVaultJournal` in `src/vaultjournal.ts` implements the port with the real encrypted vault's session lease
 and persistent CAS. It keeps full native intents per trade, preserving pre-marker signatures, uncertain markers,

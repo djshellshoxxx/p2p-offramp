@@ -3,6 +3,15 @@
 Owner of this file: the Lane B session. Lane A folds it into `LEDGER.md`. Brief: `docs/consolidation/LANE-B-PROMPT.md`
 (the original note placed it on Lane A's branch until #135; #135 is now merged).
 
+## Semaphore archival decision — November 28, 2026
+
+The owner accepted archival-only retention. Exact #287 `ba81f6b47d819387553a3836466dfffff165dfe6`
+is preserved in `archive/semaphore-v4-research-20261128`, including the corrected test.
+[PR #288](https://github.com/djshellshoxxx/p2p-offramp/pull/288) separates the executable research
+from #155's remaining intake. The historical isolation issue remains unresolved in the archive;
+the optional reputation roadmap remains intact. See the
+[decision and preserved blob inventory](../reputation/SEMAPHORE-V4-ARCHIVAL-DECISION-20261128.md).
+
 ## Reconciled track status — November 18, 2026
 
 Pinned main: `6c38e641e24abcfdcf645f864bd64c9645836d75`. This table supplements the original progress record;
@@ -81,8 +90,8 @@ These are AI-assisted reviews, not a professional audit. "Verified" means at lea
 | B1c | F1 | Medium | reproduced 2026-11-27; fix in draft #279 (Tier C, owner approval) | `acceptance.ts:268-270`, `acceptance.py:411-414`: no vector isolates the verifier's role check or its counterparty-key check; every wrong-role and swapped-key negative is caught earlier, so mutants of those checks survive in both implementations. The review of the fix found the same gap for the terms-hash check and the small-order R rule. | Fix proposed in draft #279 (not merged): four single-field negatives (role, counterparty key, terms hash, identity R). Their mutants fail in TS and Python; the fixture change is insertion-only. |
 | B4 tooling (#154, merged) | F2 | Medium→Low | verified | `packages/claims/src/claims.ts` (blob `4889befe` on main) lines 87-89, 97 and 111 (lines 80-82, 90 and 103 at #154 head): the claims API ignores staleness when only `en.ts` changed, and the stale list defaults to `[]`. | Take the validator's `staleClaims` (required argument) and refuse listed ids. |
 | B4 tooling | F1 (extraction) | Medium | unverified | `dist-lab/` is not ignored (the s08 `.gitignore` line was not extracted), so every lab run after the first records `sourceDirty: true`. | Appears to be addressed by #259. |
-| B4 intake (#155, draft) | F1 | Medium | unverified | `semaphore-v4-evaluation.test.mjs:94-100`: the "changed lock" refusal test never changes the lock; an earlier check fails first. | Make each refusal case reach its own check. |
-| B4 intake | Qodo (#45 thread) | Medium | open | The evaluator verifies inputs, then mounts the caller-controlled `node_modules`/artifacts read-only and rechecks only after execution. | **Owner decision:** isolate verified input snapshots before execution, or archive the tool. |
+| B4 intake (#155, draft) | F1 | Medium | repaired by #287; preserved in archive | The original changed-lock test failed at an earlier check. #287 verifies valid inputs, changes only the lock, requires the exact digest error, restores the lock and verifies acceptance. | Preserve exact #287 `ba81f6b4` in `archive/semaphore-v4-research-20261128`; no execution or application qualification follows. |
+| B4 intake | Qodo (#45 thread) | Medium | archival-only accepted 2026-11-28; historical defect unresolved | The archived evaluator verifies inputs, mounts the caller-controlled dependencies/artifacts and checks again after execution. | Exclude the seven research files and npm hook through #288. [Accepted disposition](../reputation/SEMAPHORE-V4-ARCHIVAL-DECISION-20261128.md). Reactivation requires verified input isolation and fresh review. |
 | B4 governance (#156, draft; same blob on main) | GOV-1 | Medium | **reproduced 2026-11-26** (coordinator, real isolated Git fixtures; [#156 comment](https://github.com/djshellshoxxx/p2p-offramp/pull/156#issuecomment-7201664492)). **Fixed by #276**, merged 2026-11-27 as `a5a432bd` | `scripts/governance/evidence.mjs` (blob `ae171065`, identical on main `8cff449`) `checkEvidenceBinding`: an unmerged commit with identical bound file hashes is accepted, and a missing `origin/main` is accepted (baseline 2 pass / 2 fail). `check-all.mjs` calls it with no reachability guard, and `refresh-evidence-manifest.mjs --check` without `--commit` uses `manifest.sourceCommit` directly. Main's real manifest points to `8649b7a`, which is an ancestor of main, so there is no evidence the current packet is invalid. | Make both production entry points (`check-all.mjs` and `refresh-evidence-manifest.mjs --check`) run `git merge-base --is-ancestor <sourceCommit> refs/remotes/origin/main` before row checks. They must refuse a nonzero result or a missing or shallow ref, never silently accept it. Keep injected fixtures behind an explicit test-only scope, and keep every existing stale/hash/path/size/refusal check. Add CLI-level regressions (the four reproduction cases) and test the exact target. A local proof of concept (helper blob `e185ae9e`) passed 4/4. #276 does this against exact `refs/remotes/origin/main`, with CLI-level regressions that all fail on the original scripts (0/7 pass) and pass 7/7 with the fix, and an independent review with no High (findings fixed). |
 | B4 governance | F2 | Medium | reproduced 2026-11-27; **fixed by #277**, merged as `bdbccfc8` | `scripts/tests/tool-path.test.mjs:23-24`: the relative-PATH rejection is never exercised. | Fixed by #277: relative entries outside and inside the working directory now reach real fixtures. Five guard mutants fail the test. |
 | B2 (#144–#148, #160–#163; integration via #191–#199/#224–#232) | several | Medium | unverified | Boundary tests miss Worker URLs, Vite references and regex evasions; the only resolved-graph guard is `assertModuleAdmitted` (`NON_CORE_MODULE`) in `apps/web/scripts/static-build-plugin.mjs:34` (Lane A). Authority tests check names, not behaviour. The liquidity trap test never runs its traps. The courier locker accepts any non-null profile. The arbitration regex misses `crypto.subtle`. In privacy-policy, `retire()` invalidates every G05 broker permit, including core (PP-A2; still present at #227 head `7740f4d6` `mode.ts:52`; #273 changes only drain and disposal ordering and does not address it). | Reviewers of #191–#199/#224–#232 should check each against the integrated source. |
@@ -159,7 +168,7 @@ test('B1b F1: wallet rejections fill the per-trade journal and lock the funded t
 - D1 open item: whether a separate Solana terms consent is wanted in addition to the peer acceptance.
 - Solana acceptance ledger bounds (64 entries per space, 7-day horizon).
 - B1b journal retention and the shared-schema terminal states (F1/F2 above).
-- #155 Semaphore evaluator: isolate-and-verify, or archival-only.
+- #155 Semaphore evaluator: **settled 2026-11-28 — archival-only**. Preserve #287 at `ba81f6b4`; #288 separates the evaluator from active intake. See the [accepted disposition](../reputation/SEMAPHORE-V4-ARCHIVAL-DECISION-20261128.md).
 - External materials, none of which an agent can supply:
   - physical and browser Solana wallets for signing and interoperability tests;
   - a public Solana cluster profile (genesis, program id, mint list);
@@ -184,8 +193,12 @@ check each before starting so you do not duplicate it. Do not reimplement anythi
 3. Optional: an extra review of the B3 fix commits 05b9d22..59d091f (scripts/formal/evm.mjs). #137's description already
    records an independent review of head 39096586 with no new High/Medium. The first-review finding is in
    scripts/formal/README.md ("Deviation from the extracted source"); check for no new fail-open path.
-4. For #155: merge main, refresh the bound manifests at an origin/main commit, fix the intake F1, and record the
-   owner's decision on the Semaphore evaluator before any execution. Governance F2 is merged (#277).
+4. For #155: the owner accepted archival-only Semaphore retention on 2026-11-28. Preserve exact #287
+   `ba81f6b47d819387553a3836466dfffff165dfe6` in `archive/semaphore-v4-research-20261128`; #288 refreshes
+   current main and excludes the seven research files and npm hook. Complete #288's D8 gates before merging it
+   into #155. Review the four remaining intake packets separately; keep their existing execution restrictions.
+   Preserve the accepted archival disposition during historical consolidation. No assurance-manifest refresh
+   is needed solely for this disposition. Governance F2 is merged (#277).
 5. Post one review comment per B2 finding on the matching codex integration PR (#224-#232) if it is still open there.
    Needs Lane A #6 (the resolved-module guard in apps/web/scripts/static-build-plugin.mjs) is Lane A's file and should
    land before those intake merges; do not edit it, only point to it.
