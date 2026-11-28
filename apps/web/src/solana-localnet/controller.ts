@@ -79,11 +79,13 @@ export class SolanaRecoveryController {
     const trades: SolanaTradeView[] = open ? [...this.#trades.values()].map(trade => {
       const d = trade.document, s = trade.snapshot, fresh = s !== null && this.#now() >= trade.observedAt && this.#now() - trade.observedAt < 60000;
       const exits = fresh ? recoveryExits(d, trade.bound, s!, this.#config.margins) : null;
-      const eligible = (name: 'release' | 'refund' | 'payout') => !!wallet && wallet.tradeId === d.termsHash &&
-        !trade.intents.some(pending) && exits?.ok === true && exits.value.exits.some(e => e.exit === name && e.open && e.roles.includes(trade.role));
       const custody = s?.custody, blockers: readonly string[] = custody?.payoutBlockedBy ?? [];
       const topUp = custody?.kind === 'native' && blockers.includes('rent-shortfall') && custody.rentExemptMinimum !== null
         ? (BigInt(custody.rentExemptMinimum) - (BigInt(custody.lamports) - BigInt(custody.principalHeld))).toString() : null;
+      // A known shortfall may enter review; prepare still enforces the caller's explicit top-up cap.
+      const eligible = (name: 'release' | 'refund' | 'payout') => !!wallet && wallet.tradeId === d.termsHash &&
+        !trade.intents.some(pending) && exits?.ok === true && exits.value.exits.some(e => e.exit === name && e.roles.includes(trade.role) &&
+          (e.open || name === 'payout' && e.reason === 'rent-shortfall' && topUp !== null));
       return { id: d.termsHash, role: trade.role, seller: d.roles.seller, buyer: d.roles.buyer, amountBaseUnits: d.terms.amountBaseUnits,
         deadlineSeconds: d.terms.escrowExpirySeconds, escrow: d.escrow.address, state: fresh && s?.escrow ? s.escrow.state : 'unverified',
         paidOut: fresh && s?.escrow?.paidOut === true, chainTimeSeconds: fresh ? s!.live.timestampSeconds : null, restored: trade.restored,
