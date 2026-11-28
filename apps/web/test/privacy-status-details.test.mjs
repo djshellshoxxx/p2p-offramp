@@ -11,7 +11,7 @@ test('details consume actual normalized reader projection without exposing URL s
  const reader=createPrivacyViewReader({monotonicNow:()=>100,endpoints:{generation:2,read:()=>({version:1,generation:2,observedAt:100,expiresAt:200,endpoints:[{channel:'rpc',id:'node-a',configuredUrl:'https://RPC.example:443/SECRET?key=SECRET',connectionUrl:'https://app.example/rpc?SECRET'}]})}});
  const result=reader.buildPrivacyView(null);assert.equal(result.ok,true);
  const html=renderToStaticMarkup(createElement(PrivacyStatusDetails,{details:result.value.endpointDetails}));
- for(const text of[p.detailsTitle,p.detailsIntro,p.configuredOrigin,p.connectionOrigin,p.walletUnknown,'https://rpc.example','https://app.example'])assert.ok(html.includes(text));
+ for(const text of[p.detailsTitle,p.detailsIntro,p.rpc,p.configuredOrigin,p.connectionOrigin,p.walletUnknown,'https://rpc.example','https://app.example'])assert.ok(html.includes(text));
  assert.doesNotMatch(html,/SECRET|href=|<button|<input|<form/);assert.equal(result.value.economicPreparationAllowed,false);
 });
 test('unmounted endpoint services never get inspected or subscribed, including retained positive data',()=>{

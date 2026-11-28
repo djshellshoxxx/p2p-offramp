@@ -1,6 +1,8 @@
 import type { PrivacyEndpointDetails } from '../../../../packages/domain/index.ts';
 import { message, messageGroup } from './locale/runtime.ts';
 
+const channelLabels = { rpc: 'rpc', relay: 'relay', map: 'map', proof: 'proofChannel', update: 'update' } as const;
+
 /** Only normalized, display-only output of the trusted privacy reader reaches this component. */
 export function PrivacyStatusDetails({ details }: { readonly details: PrivacyEndpointDetails }) {
   const p = messageGroup('privacy');
@@ -12,7 +14,7 @@ export function PrivacyStatusDetails({ details }: { readonly details: PrivacyEnd
       <p>{p.endpointSource}</p>
       <dl><dt>{p.endpointGeneration}</dt><dd>{details.generation}</dd><dt>{p.endpointExpiry}</dt><dd>{details.expiresAt}</dd></dl>
       <ul>{details.endpoints.map(item => <li key={item.channel + ':' + item.id}>
-        <h4>{item.channel}</h4><dl><dt>{p.endpointId}</dt><dd>{item.id}</dd>
+        <h4>{p[channelLabels[item.channel]]}</h4><dl><dt>{p.endpointId}</dt><dd>{item.id}</dd>
           <dt>{p.configuredOrigin}</dt><dd><code dir="ltr">{item.configuredOrigin}</code></dd>
           <dt>{p.connectionOrigin}</dt><dd><code dir="ltr">{item.connectionOrigin ?? p.unknown}</code></dd></dl>
       </li>)}</ul>
