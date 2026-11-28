@@ -222,7 +222,8 @@ try {
   await privacyPage.close();
   pass('Settings expiry/resume reinspects the real local vault and unmount clears its sole deadline without network access');
   const brokerPage = await context.newPage();
-  await brokerPage.clock.install({ time: new Date('2026-01-01T00:00:00Z') });
+  // Freeze time before navigation, with enough headroom for a slow Chromium launch.
+  await brokerPage.clock.install({ time: new Date('2025-12-31T00:00:00Z') });
   await brokerPage.clock.pauseAt(new Date('2026-01-01T00:00:01Z'));
   brokerPage.on('pageerror', () => unexpected.push('FIXTURE_PAGE_ERROR'));
   await brokerPage.goto(origin + '/privacy-fixture/index.html');
@@ -284,7 +285,8 @@ try {
   await invoke('cleanup'); await brokerPage.close();
   pass('separate test-only emitted panel uses real direct-only broker invalidation, inspect-only expiry, disposal, replacement and bounded-subscription failure');
   const endpointPage = await context.newPage();
-  await endpointPage.clock.install({ time: new Date('2026-01-01T00:00:00Z') });
+  // Freeze time before navigation, with enough headroom for a slow Chromium launch.
+  await endpointPage.clock.install({ time: new Date('2025-12-31T00:00:00Z') });
   await endpointPage.clock.pauseAt(new Date('2026-01-01T00:00:01Z'));
   endpointPage.on('pageerror', () => unexpected.push('ENDPOINT_FIXTURE_PAGE_ERROR'));
   await endpointPage.goto(origin + '/privacy-fixture/index.html#/settings');
