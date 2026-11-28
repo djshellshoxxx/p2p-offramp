@@ -45,7 +45,7 @@ export interface SolanaRecoveryDocument {
 export interface RecoveryExitState {
   readonly exit: RecoveryExit; readonly roles: readonly SolanaRole[]; readonly open: boolean;
   readonly reason: 'open' | 'not-funded' | 'deadline-margin' | 'before-deadline' | 'not-terminal' | 'paid-out' |
-    'vault-frozen';
+    'vault-frozen' | 'rent-shortfall' | 'rent-unknown';
 }
 export interface RecoveryExits {
   readonly state: SolanaEscrowSnapshot['observation']['state']; readonly paidOut: boolean;
@@ -196,14 +196,14 @@ export function recoveryExits(
     const limits = parseMargins(margins), escrow = snapshot.escrow, now = snapshot.live.timestampSeconds;
     const window = value(settlementWindow(doc.terms.escrowExpirySeconds, now, limits.releaseMarginSeconds));
     const funded = escrow?.state === 'funded', terminal = escrow !== null && !funded;
-    const frozen = snapshot.custody?.kind === 'spl' && snapshot.custody.vaultFrozen;
+    const payoutBlocker = snapshot.custody?.payoutBlockedBy[0];
     const exit = (name: RecoveryExit, roles: SolanaRole[], reason: RecoveryExitState['reason']): RecoveryExitState =>
       Object.freeze({ exit: name, roles: Object.freeze(roles), open: reason === 'open', reason });
     const exits = [
       exit('release', ['seller'], !funded ? 'not-funded' : window.releaseOpen ? 'open' : 'deadline-margin'),
       exit('refund', ['seller'], !funded ? 'not-funded' : window.refundOpen ? 'open' : 'before-deadline'),
       exit('payout', ['seller', 'buyer'], !terminal ? 'not-terminal' : escrow.paidOut ? 'paid-out'
-        : frozen ? 'vault-frozen' : 'open'),
+        : payoutBlocker ?? 'open'),
     ];
     return Object.freeze({ state: snapshot.observation.state, paidOut: escrow?.paidOut ?? false,
       chainTimeSeconds: now, deadlineSeconds: doc.terms.escrowExpirySeconds, exits: Object.freeze(exits) });

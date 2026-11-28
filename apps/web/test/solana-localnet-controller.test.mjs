@@ -4,6 +4,7 @@ import { SolanaRecoveryController } from '../src/solana-localnet/controller.ts';
 import { parseSolanaLocalnetConfig, solanaLocalnetConfigDocument } from '../src/solana-localnet/config.ts';
 import { configOption } from './solana-localnet-support.mjs';
 import { setupClient } from '../../../packages/chain-solana/test/lifecycle-support.mjs';
+import { account, RENT, RENT_MIN, rentBytes, SYSVAR } from '../../../packages/chain-solana/test/support.mjs';
 import { createRecoveryDocument } from '../../../packages/chain-solana/src/recovery.ts';
 import { openEnvelope, disposeMaterial } from '../../../packages/storage/src/vault-crypto.ts';
 import { VaultStorageError } from '../../../packages/storage/src/idb-vault-store.ts';
@@ -24,14 +25,14 @@ function store() {
     async listProfileIds() { return { profileIds: [...rows.keys()].sort(), truncated: false }; },
     subscribeInvalidation() { return () => {}; }, rows, conflict: false };
 }
-async function composed(t) {
+async function composed(t, options = {}) {
   const env = setupClient(), data = store(), option = configOption(network => {
     network.genesisHash = network.chainIdentity = env.terms.genesisHash;
     network.deployments[0].artifactSha256 = env.trade.deployment.artifactSha256;
     network.deployments[0].runtime.programDataSha256 = env.trade.deployment.runtime.programDataSha256;
   });
   const config = await parseSolanaLocalnetConfig(solanaLocalnetConfigDocument(option));
-  const controller = new SolanaRecoveryController(config, env.walletFake.wallet, env.cluster.rpc, { store: data });
+  const controller = new SolanaRecoveryController(config, env.walletFake.wallet, env.cluster.rpc, { store: data, ...options.controller });
   t.after(() => { controller.dispose(); env.client.dispose(); });
   const id = success(await controller.dispatch({ type: 'profile.create', passphrase: PASS })).snapshot.profileId;
   const receipt = createRecoveryDocument(env.trade); assert.equal(receipt.ok, true);
@@ -40,7 +41,7 @@ async function composed(t) {
     const opened = await openEnvelope(data.rows.get(profile), passphrase, crypto);
     try { return { snapshot: opened.snapshot, ...readSolanaVaultRecords(opened.snapshot) }; } finally { disposeMaterial(opened.material); }
   };
-  const importTrade = async () => success(await controller.dispatch({ type: 'recovery.import', text: JSON.stringify(document), role: 'seller' }));
+  const importTrade = async () => success(await controller.dispatch({ type: 'recovery.import', text: JSON.stringify(document), role: options.role ?? 'seller' }));
   const connect = async () => success(await controller.dispatch({ type: 'wallet.connect', tradeId: document.termsHash }));
   const prepare = async (extra = {}) => success(await controller.dispatch({ type: 'review.prepare', tradeId: document.termsHash, action: 'release', fiatReceiptConfirmed: true, ...extra }));
   return { env, data, config, controller, id, document, read, importTrade, connect, prepare };
@@ -184,5 +185,55 @@ test('a persistent CAS conflict locks the profile before any wallet signature or
   const f = await composed(t); await f.importTrade(); await f.connect(); f.data.conflict = true;
   const result = await f.controller.dispatch({ type: 'review.prepare', tradeId: f.document.termsHash, action: 'release', fiatReceiptConfirmed: true });
   assert.equal(result.ok, false); assert.equal(result.snapshot.profileId, null);
+  assert.equal(f.env.walletFake.calls.sign.length, 0); assert.equal(f.env.cluster.sent.length, 0);
+});
+
+test('known rent shortfall keeps bounded payout review reachable with fresh wallet and no pending intent', async t => {
+  for (const role of ['seller', 'buyer']) {
+    let now = Date.now();
+    const f = await composed(t, { role, controller: { now: () => now } });
+    f.env.cluster.setEscrow({ state: 1 }, Number(f.env.terms.amountBaseUnits) + RENT_MIN - 1000);
+    await f.importTrade();
+    assert.equal(f.controller.snapshot().trades[0].canPayout, false, 'a connected trade wallet is required');
+    await f.connect();
+    assert.deepEqual(f.controller.snapshot().trades[0].payoutBlockedBy, ['rent-shortfall']);
+    assert.equal(f.controller.snapshot().trades[0].rentTopUpLamports, '1000');
+    assert.equal(f.controller.snapshot().trades[0].canPayout, true, 'the bounded top-up may be reviewed');
+    now += 60000;
+    assert.equal(f.controller.snapshot().trades[0].canPayout, false, 'a stale read cannot grant review eligibility');
+    success(await f.controller.dispatch({ type: 'refresh' }));
+    assert.equal(f.controller.snapshot().trades[0].canPayout, true);
+    const command = { type: 'review.prepare', tradeId: f.document.termsHash, action: 'payout' };
+    for (const options of [{}, { maxRentTopUpLamports: '999' }]) {
+      const refused = await f.controller.dispatch({ ...command, ...options });
+      assert.equal(refused.code, 'LIMIT_EXCEEDED');
+      assert.equal(refused.snapshot.review, null);
+    }
+    assert.deepEqual((await f.read()).intents, []);
+    const prepared = success(await f.controller.dispatch({ ...command, maxRentTopUpLamports: '1000' }));
+    assert.equal(prepared.snapshot.review.fields.find(field => field.label === 'Rent top-up (lamports)').value, '1000');
+    assert.equal(f.env.walletFake.calls.sign.length, 0); assert.equal(f.env.cluster.sent.length, 0);
+    success(await f.controller.dispatch({ type: 'refresh' }));
+    assert.equal(f.controller.snapshot().trades[0].canPayout, false, 'a pending prepared intent blocks another review');
+    success(await f.controller.dispatch({ type: 'review.confirm', reviewId: prepared.snapshot.review.id }));
+    assert.equal(f.env.walletFake.calls.sign.length, 1); assert.equal(f.env.cluster.sent.length, 1);
+    assert.equal(f.controller.snapshot().trades[0].canPayout, false, 'a sent intent still needs reconciliation');
+    f.controller.walletChanged();
+    assert.equal(f.controller.snapshot().trades[0].canPayout, false);
+  }
+});
+
+test('unknown rent is refused by payout review even with a connected wallet and the largest UI caller cap', async t => {
+  const f = await composed(t);
+  f.env.cluster.setEscrow({ state: 2 });
+  f.env.cluster.world.accounts.set(RENT, account(rentBytes(6960, '000000000000f83f'), SYSVAR));
+  await f.importTrade(); await f.connect();
+  const trade = f.controller.snapshot().trades[0];
+  assert.deepEqual(trade.payoutBlockedBy, ['rent-unknown']);
+  assert.equal(trade.rentTopUpLamports, null); assert.equal(trade.canPayout, false);
+  const refused = await f.controller.dispatch({ type: 'review.prepare', tradeId: f.document.termsHash,
+    action: 'payout', maxRentTopUpLamports: '9999999999999999' });
+  assert.equal(refused.code, 'CONFLICT'); assert.equal(refused.snapshot.review, null);
+  assert.deepEqual((await f.read()).intents, []);
   assert.equal(f.env.walletFake.calls.sign.length, 0); assert.equal(f.env.cluster.sent.length, 0);
 });
