@@ -16,6 +16,8 @@ unshallowed fetch. The script is read-only.
 | Historical browser lifecycle cases through the current Settings route, including lock, remasking and side-effect checks | `0b7ef75a97c9b21d551b596393abe81557cbdec3` |
 | Deterministic pre-navigation test clock on slow runners | `2614328ce0e939c27e1ab33c2d5835a700534021` |
 
+Qualification at `632d9295f2a2b3f424338a46c086d96d256d17c7`: 2,518 unit tests passed with one existing Foundry-dependent skip, all four type checks and the emitted web acceptance suite passed. The seven-check locale/Settings browser suite passed on the same product and test sources. The local persistent-context limitation and pending hosted/named-review gates are recorded in the handoff.
+
 [Engineering handoff and test evidence](../engineering/CONSOLIDATION_HANDOFF.md#settings-endpoint-details). The remaining historical stack has separate ownership.
 
 ## Current recorded disposition — November 18, 2026

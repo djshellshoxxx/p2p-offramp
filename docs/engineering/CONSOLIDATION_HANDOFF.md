@@ -4,13 +4,16 @@
 
 | Verification | Observed result |
 | --- | --- |
-| Node 24.22.3, four TypeScript projects | Passed on implementation `febeba408973de0dbafaff814e24941f9d107cb4`. |
-| Domain, details, panel and locale regressions | 33 passed, zero skipped on `0b7ef75a97c9b21d551b596393abe81557cbdec3`. The empty-authority case first failed against the pre-fix reader, which reported the malformed input as observed. |
+| Node 24.22.3, four TypeScript projects | All four passed again on `632d9295f2a2b3f424338a46c086d96d256d17c7`. |
+| Domain, details, panel and locale regressions | 33 passed, zero skipped on `632d9295f2a2b3f424338a46c086d96d256d17c7`. The empty-authority case first failed against the pre-fix reader, which reported the malformed input as observed. |
 | Chromium 158.0.8127.0, real App and Settings with a synthetic endpoint source | The endpoint acceptance section from `2614328ce0e939c27e1ab33c2d5835a700534021` passed in isolation. It checked mask/reveal, normalized values, expiry, revocation, observer exhaustion, replacement, lock/rebind and unmount. It observed zero requests, WebSockets and monitored storage operations, and no endpoint markers in console messages. |
+| Full Node suite, `632d9295f2a2b3f424338a46c086d96d256d17c7` | `npm test`: 2,518 passed, zero failed and one existing Foundry-dependent skip. The two earlier failures in Solana replay and relay exchange passed their 25-test rerun and the full suite. |
+| Full locale/Settings and emitted web browser suites | Chrome Headless Shell 156.0.8078.4 passed all seven `test:locale:browser` checks on `2614328ce0e939c27e1ab33c2d5835a700534021`, including the open, hidden, locked and replaced states with zero unexpected requests. `test:web:browser` passed on `632d9295f2a2b3f424338a46c086d96d256d17c7`. Touch was emulated; the locale runner reported CSS reflow coverage for 400% zoom. |
+| Build and repository checks | Production build, 58 build-policy tests, 57 tooling tests, governance, documentation, static boundaries, spec inventory, formal-unit, CLI acceptance, diagnostics and fuzz suites passed. |
 | Python 3.12.14 with hash-pinned oracle | All 32 spec tests passed during this integration. Spec inventory, import boundaries and build-policy checks also passed locally. |
 | Independent code and privacy review | `1f96c80323aa9458246ad10142156e9422144b73` resolved both findings: reject an empty literal URL authority before normalization and use the selected catalog for channel headings. Independent re-review found no open issues in `0b7ef75a97c9b21d551b596393abe81557cbdec3` or the test clock follow-up. |
 
-The first full local locale-browser run stopped at an existing touch-help interaction before reaching the endpoint cases. Full Chrome for Testing could not create its singleton socket in the local executor. The isolated endpoint result above qualifies only that section. Exact-target full CI, browser results and the standalone D8 CodeRabbit or Qodo review are tracked on [the PR](https://github.com/djshellshoxxx/p2p-offramp/pull/291/checks). ReleaseEnabled=0. The feature adds no provider, release configuration, telemetry or storage.
+The general vault browser suite passed its IndexedDB, runtime and content-policy sections locally. Its separate abrupt-kill/reopen case timed out launching a persistent browser context. The subsequent two-tab lifecycle test passed independently. A full Chrome binary also encountered a local singleton-socket restriction. Hosted browser and native jobs remain the acceptance evidence for their respective lanes. Exact-target checks and the standalone D8 CodeRabbit or Qodo review are tracked on [the PR](https://github.com/djshellshoxxx/p2p-offramp/pull/291/checks). ReleaseEnabled=0. The feature adds no provider, release configuration, telemetry or storage.
 
 ---
 
