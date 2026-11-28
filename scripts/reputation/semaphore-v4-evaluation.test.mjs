@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, symlink, rm } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { resolve, join } from 'node:path';
+import { resolve, join, dirname } from 'node:path';
 import { createHash, createPublicKey, verify } from 'node:crypto';
 import { parseEvaluationPins, digestInstalledTree, verifyEvaluationInputs, runSemaphoreV4Evaluation } from './semaphore-v4-evaluation.mjs';
 
@@ -93,10 +93,40 @@ test('external links, directory aliases, FIFOs and excessive nesting refuse befo
 });
 test('input verification refuses changed lock, absent assets and extra artifacts without starting a Docker proof', async t => {
   const root = await mkdtemp(join(tmpdir(), 'p2p-semaphore-inputs-')); t.after(() => rm(root, { recursive: true, force: true }));
-  const pins = parseEvaluationPins(new Uint8Array(pinsBytes)); await writeFile(join(root, 'package.json'), '{}'); await writeFile(join(root, 'package-lock.json'), '{}');
-  await assert.rejects(verifyEvaluationInputs(root, pins), /DIGEST/);
-  const tiny = { ...pins, packageSha256: sha('{}'), lockSha256: sha('{}') }; await mkdir(join(root, 'artifacts'));
-  await writeFile(join(root, 'artifacts', 'unexpected'), 'public'); await assert.rejects(verifyEvaluationInputs(root, tiny), /ARTIFACT_SET/);
+  // Public byte fixtures exercise input verification only; no dependency or proof artifact is executable.
+  const candidate = fixture(), packageBytes = '{"name":"public-input-digest-fixture"}', lockBytes = '{"lockfileVersion":3}';
+  await writeFile(join(root, 'package.json'), packageBytes); await writeFile(join(root, 'package-lock.json'), lockBytes);
+  candidate.packageSha256 = sha(packageBytes); candidate.lockSha256 = sha(lockBytes);
+  await mkdir(join(root, 'artifacts')); await mkdir(join(root, 'node_modules'));
+  const artifacts = new Map();
+  for (const name of Object.keys(candidate.artifact.selected)) {
+    const content = `public synthetic ${name}`; artifacts.set(name, content);
+    await writeFile(join(root, 'artifacts', name), content);
+    candidate.artifact.selected[name] = { bytes: Buffer.byteLength(content), sha256: sha(content) };
+  }
+  for (const source of candidate.sources) {
+    if (source.installedSourcePath === null) continue;
+    const path = join(root, 'node_modules', source.installedSourcePath), content = `public synthetic ${source.installedSourcePath}`;
+    await mkdir(dirname(path), { recursive: true }); await writeFile(path, content); source.sha256 = sha(content);
+    source.bytes = Buffer.byteLength(content);
+  }
+  candidate.installedTree = await digestInstalledTree(join(root, 'node_modules'));
+  const pins = parseEvaluationPins(bytes(candidate));
+  assert.deepEqual(await verifyEvaluationInputs(root, pins), { ...pins.installedTree }, 'all pinned inputs initially pass');
+
+  // Change one lock byte after successful verification, keeping the package and every other input intact.
+  await writeFile(join(root, 'package-lock.json'), '{"lockfileVersion":2}');
+  assert.equal(await readFile(join(root, 'package.json'), 'utf8'), packageBytes);
+  assert.notEqual(sha(await readFile(join(root, 'package-lock.json'))), pins.lockSha256);
+  await assert.rejects(verifyEvaluationInputs(root, pins), { message: 'SEMAPHORE_INPUT_DIGEST' });
+  await writeFile(join(root, 'package-lock.json'), lockBytes);
+  assert.deepEqual(await verifyEvaluationInputs(root, pins), { ...pins.installedTree }, 'restoring only the lock passes again');
+
+  await rm(join(root, 'artifacts', 'semaphore-2.wasm'));
+  await assert.rejects(verifyEvaluationInputs(root, pins), { message: 'SEMAPHORE_ARTIFACT_SET' });
+  await writeFile(join(root, 'artifacts', 'semaphore-2.wasm'), artifacts.get('semaphore-2.wasm'));
+  await writeFile(join(root, 'artifacts', 'unexpected'), 'public');
+  await assert.rejects(verifyEvaluationInputs(root, pins), { message: 'SEMAPHORE_ARTIFACT_SET' });
 });
 test('native cancellation, malformed signals, invalid mount paths and overlap retain/release the owned admission correctly', async () => {
   const aborted = new AbortController(); aborted.abort(); let getters = 0;
