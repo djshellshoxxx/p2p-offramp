@@ -99,11 +99,22 @@ CAS against the trade's journal revision.
 | fund | seller | escrow absent; funding window open at `t` and `t + submitMargin` | `fund_native` or `fund_spl` |
 | release | seller | `Funded`; `t + releaseMargin < deadline` | `release` |
 | refund | seller | `Funded`; `t >= deadline` | `refund` |
-| payout | seller or buyer | `Released`/`Refunded`, unpaid, vault not frozen | `[CreateIdempotent]? [Transfer top-up]? payout_*` |
+| payout | seller or buyer | `Released`/`Refunded`, unpaid, native rent known, vault not frozen | `[CreateIdempotent]? [Transfer top-up]? payout_*` |
 
 The SPL payout prepends `CreateIdempotent` for the recipient's canonical ATA (payer funds it). A native payout
 prepends a System transfer of exactly the reader-reported rent shortfall when one exists, only up to the caller's
-`maxRentTopUpLamports` (default 0: refused with `LIMIT_EXCEEDED`). `verifyPlanMessage` rebuilds the expected bytes
+`maxRentTopUpLamports` (default 0: refused with `LIMIT_EXCEEDED`). Unknown native rent is refused with `CONFLICT`,
+even if the escrow has surplus lamports or the caller supplies a large top-up limit. No intent is prepared and no
+wallet signature or send is requested. Prepared reviews recheck the same condition before signing and before
+physical send. Release and refund remain state-only actions and do not depend on payout rent readiness.
+
+`recoveryExits` reports `rent-shortfall` and `rent-unknown` as closed payout exits; a completed payout still reports
+`paid-out`. A known shortfall can be addressed by an explicit `buildRecoveryMessage` top-up within the caller's
+limit. The localnet controller therefore keeps the known-shortfall **review** reachable for a fresh snapshot,
+the connected trade wallet and an allowed role, with no pending intent. Its prepare operation still enforces the
+actual top-up limit; `canPayout` grants no signature or send authority. Unknown rent cannot enter payout review.
+
+`verifyPlanMessage` rebuilds the expected bytes
 from (trade, action, expected state, fee payer, blockhash) and refuses anything else with `INVALID_INPUT`, so
 `[release, payout]`, `[refund, payout]`, two escrow instructions, foreign programs, a nonce advance, another ATA owner
 or a substituted program/escrow/vault/mint/destination never pass, on creation or on restore.
