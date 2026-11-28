@@ -1,3 +1,11 @@
+## 2026-11-27 — #283 documentation generator gate follow-up
+
+Main `fdf346ab8e6aacc60b501007ec10ec7ee840a701` confirmed unchanged by identical comparison; exhaustive branch-name enumeration 299 distinct; PR counts 98 open / 58 closed unmerged / 128 merged (disjoint creation date buckets 35/80/13), total 284. #251 merged. Exact-tip/semantic reconciliation count still unknown.
+
+#283 exact head `e368f6de79de738c80dddbc3103d7fcae0942fe0`, generator blob `a12929a51be80369ec844f8da41e38ea4f2e3e60`. Coordinator reviewed four changed-file patches and ran an isolated synthetic Git repository using the manually extracted Python gate-only prefix (Python 3.13.5, Git 2.47.3): 8/8 passed (HEAD, annotated tag normalization, same-tree unmerged commit refusal, tree refusal, extra argument, unknown flag, missing exact main ref, shallow history). Harness SHA-256 `247126c076c8d0aece839923ffb3e49e22481259d6f6d1a60210dee1174e056b`. This is limited prefix execution, not full generator, output-record or exact-tree runtime qualification; existing author and independent full CLI evidence separately attributed. No actionable High/Medium in reviewed delta. [Coordinator COMMENT review 6095824366](https://github.com/djshellshoxxx/p2p-offramp/pull/283#pullrequestreview-6095824366) is not named review or independent worker approval. Four returned workflows success; Solana 46084043880 still failed; no merge or unchanged long rerun. #237/#280/#282/#284/#285 submitted reviews empty at read; D2/D5/D8 and device blockers remain. #228 acceptance gap remains owner-coordinated. Direct Git DNS exit 128, prior workspace absent, Node 22.16.0 below required 24. No production edits, new full suite/native execution, main merges, releases, deployment, funds or optional activation. ReleaseEnabled=0 required. Next: genuinely new accepted scope or newly actionable gate; do not repeat this review.
+
+---
+
 ## 2026-11-27 — #287 exact stacked regression review
 
 Main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`; fresh exhaustive branch-name pagination 100/100/99/0 = 299 distinct names, disjoint PR searches 98 open / 58 closed unmerged / 128 merged = 284. This is not an exact-tip or patch-history refresh. #251 confirmed merged. Full remaining semantic reconciliation count unknown.
