@@ -201,6 +201,7 @@ test('hostile-rpc-status-and-heights', async () => {
   error(await lie.client.reconcile(lie.trade), 'INTEGRITY_FAILURE');
   assert.equal(stateOf(lie, sent.intentId), 'sent');
 
+  let accessorCalls = 0;
   const cases = {
     'expired height but blockhash still valid': (env, record) => {
       expire(env, record);
@@ -242,7 +243,7 @@ test('hostile-rpc-status-and-heights', async () => {
           ? undefined
           : input.method === 'getSignatureStatuses'
             ? Object.defineProperty({ value: [null] }, 'context', {
-                get: () => assert.fail('getter ran'),
+                get: () => { accessorCalls++; throw new Error('getter ran'); },
                 enumerable: true,
               })
             : undefined;
@@ -256,6 +257,8 @@ test('hostile-rpc-status-and-heights', async () => {
     ok(await env.client.reconcile(env.trade));
     setup(env, onlyRecord(env));
     error(await env.client.reconcile(env.trade), 'INTEGRITY_FAILURE');
+    // A getter's exception can be normalized to the expected error; its invocation must still fail the test.
+    assert.equal(accessorCalls, 0, `${name}: provider getters must not execute`);
     assert.equal(stateOf(env, submission.intentId), 'sent', name);
     assert.equal(sendCount(env), 1, name);
   }

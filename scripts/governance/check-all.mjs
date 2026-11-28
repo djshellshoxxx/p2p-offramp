@@ -3,7 +3,7 @@ import { opendir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { checkGovernanceRecord } from './check.mjs';
-import { checkEvidenceBinding } from './evidence.mjs';
+import { EvidenceRefusal, checkEvidenceBinding } from './evidence.mjs';
 import { isMain } from '../lib/is-main.mjs';
 
 export async function checkMaintainedGovernance(root = fileURLToPath(new URL('../../', import.meta.url))) {
@@ -26,11 +26,17 @@ export async function checkMaintainedGovernance(root = fileURLToPath(new URL('..
     if (result.historical) historical++;
     if (result.pending) pending++;
   }
-  // Needs git history (CI job with fetch-depth 0). Drift of non-owned files is reported, never a failure.
+  // Needs full git history and refs/remotes/origin/main (CI job with fetch-depth 0): a sourceCommit that is not on
+  // main is refused. Drift of non-owned files is reported, never a failure.
   const evidence = await checkEvidenceBinding({ root });
-  return { checked: names.length, historical, pending, evidence: { sourceCommit: evidence.sourceCommit, rows: evidence.rows, owned: evidence.owned, bound: evidence.bound, stale: evidence.stale }, economicPreparationAllowed: false, authority: 'inert-record-only' };
+  return { checked: names.length, historical, pending, evidence: { sourceCommit: evidence.sourceCommit, mainAncestry: evidence.mainAncestry, rows: evidence.rows, owned: evidence.owned, bound: evidence.bound, stale: evidence.stale }, economicPreparationAllowed: false, authority: 'inert-record-only' };
 }
 if (isMain(import.meta.url)) {
   try { console.log(JSON.stringify(await checkMaintainedGovernance())); }
-  catch { console.log(JSON.stringify({ ok: false, code: 'GOVERNANCE_PACKET_CHECK_FAILED' })); process.exitCode = 1; }
+  catch (error) {
+    // Only the fixed refusal code is printed, never the detail (paths, commits).
+    const reason = error instanceof EvidenceRefusal ? { reason: error.code } : {};
+    console.log(JSON.stringify({ ok: false, code: 'GOVERNANCE_PACKET_CHECK_FAILED', ...reason }));
+    process.exitCode = 1;
+  }
 }

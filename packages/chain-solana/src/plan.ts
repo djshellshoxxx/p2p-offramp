@@ -199,9 +199,10 @@ export function planRefund(
   });
 }
 
-/** Native rent shortfall the payout needs topped up, or null; refused above the payer's limit. */
+/** Native rent shortfall, or null; unknown rent and amounts above the payer's limit are refused. */
 function rentTopUp(snapshot: SolanaEscrowSnapshot, maxTopUp: bigint): string | null {
   const custody = snapshot.custody;
+  if (custody?.kind === 'native' && custody.payoutBlockedBy.includes('rent-unknown')) return fail('CONFLICT');
   if (custody?.kind !== 'native' || !custody.payoutBlockedBy.includes('rent-shortfall')) return null;
   const minimum = BigInt(custody.rentExemptMinimum!), spare = BigInt(custody.lamports) - BigInt(custody.principalHeld);
   const shortfall = minimum - spare;
