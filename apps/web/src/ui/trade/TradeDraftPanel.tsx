@@ -77,7 +77,7 @@ function FreshDraftForm({ drafts, snapshot }: { readonly drafts: TradeDraftContr
   const acceptance = describeDeadline(fields.acceptBeforeSeconds, now);
   const expiry = describeDeadline(fields.escrowExpirySeconds, now);
   const bytes = instructionByteCount(fields.paymentInstructions);
-  const previews: Partial<Record<(typeof DRAFT_FIELD_NAMES)[number], string>> = {
+  const previews: Partial<Record<(typeof DRAFT_FIELD_NAMES)[number], string | undefined>> = {
     amountBaseUnits: crypto?.ok && identity ? `${crypto.value} ${identity.defaults.assetId}` : undefined,
     fiatMinorUnits: fiat?.ok ? fiat.value : undefined,
     acceptBeforeSeconds: fields.acceptBeforeSeconds ? (acceptance.ok ? acceptance.value.text : text.invalid) : undefined,
