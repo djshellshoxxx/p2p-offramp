@@ -56,3 +56,23 @@ escrow transaction is built by the client's serializer and signed through its Wa
 keypair; one signed transaction is cross-checked with `solana decode-transaction`. Localnet-only shim: its RPC
 adapter answers `getGenesisHash` with the program's compiled synthetic genesis constant, which no real validator
 can have. Writes `client-summary.json` in the work dir; `SOLANA_CLIENT_SKIP_REFUND=1` skips the wait (and fails).
+
+The native SOL and refund flows now use the production encrypted vault service
+and `SolanaVaultJournal` over an atomic in-memory store. Each funds through v1,
+explicitly migrates that nonempty journal, and preserves every intent field and
+the original record locator. Migration must commit once, allocate fresh
+generations, survive independent decryption, and make no wallet or RPC calls.
+Native release fills the 32-entry journal with its finalized fund and 31
+explicitly cancelled release reviews. Its next explicit release preparation
+must retire exactly one eligible cancellation while preserving all other
+records and identities; release and separate payout then finalize through v2.
+Refund and its separate payout retain their captured v2 identities. Refund
+still waits for the existing 1,815-second deadline in real time.
+
+A complete successful run is expected to report 98 checks: the original 62 plus
+36 migration, retirement and identity checks. SPL and crash flows retain the
+existing v1 Map/CAS fixture; their restored marker snapshot is not an encrypted
+fresh-key backup restore. Package tests separately cover that restore boundary.
+This harness does not exercise browser Worker messages, IndexedDB or migration
+controls. Offline helper tests use a simulated cluster and cannot substitute
+for real-validator execution.

@@ -28,6 +28,26 @@ repairing migration capability detection for partial journal ports. Final
 exact-commit review and repository/hosted qualification remain pending; this
 entry does not promote focused tests into application or validator evidence.
 
+The reviewed native milestone was published at
+`932c6e7f11bf02ed98331c6f25cb645ecd388828` (tree
+`1258dffae3aba69a78ebaa1034a93969e344f75b`). Two independent source reviewers
+confirmed no open High, Medium or Low at that exact tree. The follow-up native
+validator harness uses the production encrypted service for v1 funding, explicit
+v2 migration and v2 release/refund/payout, including actual capacity admission.
+Its two offline helper checks pass and an independent delta review found no open
+findings. A successful real-validator run is expected to contain 98 checks;
+that count remains unobserved until hosted execution. Existing v1 SPL/crash
+coverage and the real refund deadline remain intact.
+
+Local Python specification tests pass 32/32, Solana vector tests 7/7, and the
+173-file specification audit has no broken links or unindexed files. Typechecks
+and documentation/import-boundary validation also pass. The first broad Node
+and build-policy runs encountered terminated subprocesses (`SIGKILL`/`EPIPE`)
+and are not passes. An unchanged isolated AST test subsequently passed 6/6 on
+both this source and main; the exact termination cause is unproven. Continue
+qualification on the current head and record final local and hosted outcomes in
+#281 before requesting Tier C integration approval.
+
 ### Needs Lane A — #281 application integration
 
 The exact file/function handoff is in

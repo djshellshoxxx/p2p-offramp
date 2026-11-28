@@ -3,14 +3,15 @@
 // solana-test-validator (Agave 4.1.2): every escrow transaction below is built by the client's own legacy-message
 // serializer, signed through its Wallet Standard port by a synthetic localnet keypair, journaled with the durable
 // send marker and reconciled from finalized chain state. Flows:
-//   native     fund -> release alone -> finalized Released -> payout_native
+//   native     real encrypted v1 fund -> explicit v2 migration -> 31 cancelled release reviews -> capacity
+//              retirement on explicit release preparation -> finalized Released -> payout_native
 //   spl-hazard (i) a manually bundled [release, payout_spl] to a frozen ATA fails and rolls the release back;
 //              (ii) the client's sequenced flow: release alone, finalized, payout fails (frozen), escrow stays
 //              Released, payout retried after thaw succeeds
 //   crash      crash after the marker before send -> restart -> no resend -> dropped after expiry -> explicit
 //              rebuild; and a vault restore with the marker -> reconciled, not resent
-//   refund     fund with deadline = clock + 1815 s, client refuses an early refund, waits real time, refunds,
-//              then pays out to the seller
+//   refund     real encrypted v1 fund with deadline = clock + 1815 s -> explicit v2 migration; client refuses
+//              an early refund, waits the same real-time deadline, refunds and pays out to the seller
 // Run from the repo root:  node --import ./scripts/test-support/register-tsx.mjs contracts/solana/localnet/client-run.mjs
 // Env: SOLANA_LOCALNET_DIR (work dir), SOLANA_LOCALNET_PORT_OFFSET (default 400), SOLANA_CLIENT_SKIP_REFUND=1
 // (debug only; the run then exits 1). Prints a JSON summary on stdout, progress on stderr.
@@ -27,6 +28,8 @@ import { fileURLToPath } from 'node:url';
 import { ed25519 } from '@noble/curves/ed25519.js';
 import * as d from './driver.mjs';
 import { confinedPath, resolveTool } from './tool-path.mjs';
+import { createEncryptedClientJournal, migrateClientJournal, prepareWithCancellationRetirement }
+  from './client-vault.mjs';
 import { createSolanaEscrowClient } from '../../../packages/chain-solana/src/compose.ts';
 import { encodeSolanaTerms } from '../../../packages/domain/index.ts';
 import { buildPayout, buildRelease } from '../../../packages/chain-solana/src/instructions.ts';
@@ -61,6 +64,7 @@ const summary = { ok: false, startedAt: new Date(t0).toISOString(), workdir: WOR
     'getGenesisHash answered with the compiled synthetic genesis constant (localnet-only shim; see header)'],
   error: null };
 const keys = {};
+const disposals = [];
 let validator = null;
 
 const log = (...a) => console.error(`[${new Date().toISOString()}]`, ...a);
@@ -141,8 +145,11 @@ async function finalizeProgram() {
 
 // ---- injected ports: RPC adapter, Wallet Standard keypair wallet, CAS journal ----
 const sendLog = [];
+const portCalls = { rpc: 0, connects: 0, signs: 0 };
+const measurePorts = () => ({ ...portCalls, sends: sendLog.length });
 const rpcPort = {
   async request({ method, params = [], signal }) {
+    portCalls.rpc++;
     if (method === 'getGenesisHash') return COMPILED_GENESIS;
     if (method === 'sendTransaction') sendLog.push(params[0]);
     const res = await fetch(RPC_URL, { method: 'POST', headers: { 'content-type': 'application/json' },
@@ -156,9 +163,10 @@ function keypairWallet(pairs) {
   const accounts = pairs.map(p => ({ address: p.address, publicKey: p.publicKey, chains: [CHAIN],
     features: ['standard:connect', 'solana:signTransaction'] }));
   return { features: {
-    'standard:connect': { version: '1.0.0', connect: async () => ({ accounts }) },
+    'standard:connect': { version: '1.0.0', connect: async () => { portCalls.connects++; return { accounts }; } },
     'solana:signTransaction': { version: '1.0.0', supportedTransactionVersions: ['legacy'],
       async signTransaction(input) {
+        portCalls.signs++;
         const wire = input.transaction, message = wire.slice(1 + 64 * wire[0]);
         const pair = pairs.find(p => p.address === input.account.address);
         return [{ signedTransaction: Uint8Array.from([1, ...ed25519.sign(message, pair.seed), ...message]) }];
@@ -204,12 +212,18 @@ function registry() {
   return { network: id => (id === network.id ? network : null),
     deployment: (n, id) => (n === network.id && id === deployment.id ? deployment : null) };
 }
-let intentCounter = 0;
 function makeClient(journal, margins = MARGINS) {
-  return createSolanaEscrowClient({ rpc: rpcPort, wallet: keypairWallet([keys.seller, keys.buyer, keys.refundSeller]),
+  const client = createSolanaEscrowClient({ rpc: rpcPort, wallet: keypairWallet([keys.seller, keys.buyer, keys.refundSeller]),
     journal, registry: registry(), clock: { now: () => Date.now() }, margins, walletChain: CHAIN,
     freezeAuthorityPermits: [{ mint: d.FREEZABLE_MINT, freezeAuthority: keys.mintAuthority.address }],
     random: n => Uint8Array.from(randomBytes(n)), timeoutMs: 15_000 });
+  disposals.push(() => client.dispose());
+  return client;
+}
+async function makeEncryptedClient(margins = MARGINS) {
+  const encrypted = await createEncryptedClientJournal();
+  disposals.push(() => encrypted.dispose());
+  return { encrypted, client: makeClient(encrypted.journal, margins) };
 }
 
 // ---- trades ----
@@ -250,29 +264,64 @@ const snapshot = async (client, trade, label) => unwrap(`${label} read`, await c
 const sendsFor = signature => sendLog.filter(w => d.base58Encode(Buffer.from(w, 'base64').subarray(1, 65)) === signature)
   .length;
 
+async function reviewedV2Action(client, trade, session, label, action, existing) {
+  let review = existing?.review, identity = existing?.identity;
+  if (!review) {
+    review = unwrap(`${label} prepare`, await client.prepare(trade, session, action));
+    const state = unwrap(`${label} prepared journal`, await client.journalState(trade));
+    identity = state.entries.find(entry => entry.record.intentId === review.intentId)?.identity;
+    must(`${label}: explicit v2 preparation has a fresh complete identity`, state.version === 2 &&
+      identity?.generation === state.revision && identity.intentId === review.intentId &&
+      JSON.stringify(identity.binding) === JSON.stringify(trade.binding));
+  }
+  const completed = await act(client, trade, label, () => client.confirm(review, session));
+  const state = unwrap(`${label} final journal`, await client.journalState(trade));
+  const final = state.entries.find(entry => entry.record.intentId === review.intentId);
+  must(`${label}: the same v2 identity reaches finalized state`, state.version === 2 &&
+    completed.record.state === 'finalized' && JSON.stringify(final?.identity) === JSON.stringify(identity) &&
+    JSON.stringify(final?.record) === JSON.stringify(completed.record));
+  return { ...completed, identity };
+}
+async function completedV2Journal(client, trade, label, steps, recordCount) {
+  const state = unwrap(`${label} completed journal`, await client.journalState(trade));
+  must(`${label}: all finalized action heads and identities remain retained`, state.version === 2 &&
+    state.entries.length === recordCount && steps.every(step => {
+      const entry = state.entries.find(item => item.record.intentId === step.record.intentId);
+      return entry?.record.state === 'finalized' && JSON.stringify(entry.identity) === JSON.stringify(step.identity) &&
+        JSON.stringify(entry.record) === JSON.stringify(step.record);
+    }));
+  return { version: state.version, revision: state.revision, records: state.entries.length };
+}
+
 async function nativeFlow() {
-  const client = makeClient(casJournal('1'.repeat(32)).journal);
+  const { client, encrypted } = await makeEncryptedClient();
   const terms = await newTerms(keys.seller.address, keys.buyer.address, { amount: AMOUNTS.native, expiryOffset: 3600 });
   const trade = unwrap('bind', client.bind(bindingOf(terms), terms));
   const seller = unwrap('connect seller', await client.connect(trade, 'seller'));
   const fund = await act(client, trade, 'native fund', () => client.fund(trade, seller));
   eq('native fund finalized', fund.record.state, 'finalized');
   eq('native: escrow Funded at finalized', (await snapshot(client, trade, 'native')).escrow.state, 'funded');
-  const release = await act(client, trade, 'native release', () => client.release(trade, seller));
+  const migrated = await migrateClientJournal({ client, trade, encrypted, label: 'native v2', measure: measurePorts, must });
+  fund.identity = migrated.after.entries.find(entry => entry.record.intentId === fund.record.intentId).identity;
+  const admission = await prepareWithCancellationRetirement({ client, trade, session: seller, encrypted,
+    label: 'native v2', measure: measurePorts, must });
+  const release = await reviewedV2Action(client, trade, seller, 'native release', 'release', admission);
   eq('native release finalized', release.record.state, 'finalized');
   const released = await snapshot(client, trade, 'native');
   check('native: Released, unpaid, after a release-only message', released.escrow.state === 'released' &&
     !released.escrow.paidOut, released.escrow);
   const buyerBefore = await d.getBalance(rpc, keys.buyer.address);
-  const payout = await act(client, trade, 'native payout', () => client.payout(trade, seller));
+  const payout = await reviewedV2Action(client, trade, seller, 'native payout', 'payout');
   eq('native payout finalized', payout.record.state, 'finalized');
   eq('native: buyer credited exactly the amount', (await d.getBalance(rpc, keys.buyer.address)) - buyerBefore,
     AMOUNTS.native);
   eq('native: paid out at finalized', (await snapshot(client, trade, 'native')).escrow.paidOut, true);
   for (const step of [fund, release, payout]) eq('native: one sendTransaction per intent', sendsFor(step.submission.signature), 1);
   cliDecode(fund.submission.signature);
+  const journal = await completedV2Journal(client, trade, 'native v2', [fund, release, payout], 32);
   summary.flows.native = { escrow: trade.escrow.address, fund: fund.record.outcome, release: release.record.outcome,
-    payout: payout.record.outcome };
+    payout: payout.record.outcome, journal, retirement: { intentId: admission.retiredIntentId,
+      protectedHeadIntentId: admission.protectedHeadIntentId, admissionRevision: admission.revision } };
 }
 
 /** `solana decode-transaction` of one of our signed wire transactions: same keys, header and a passing sigverify. */
@@ -401,20 +450,22 @@ async function crashFlow() {
 }
 
 async function refundStart() {
-  const client = makeClient(casJournal('5'.repeat(32)).journal, REFUND_MARGINS);
+  const { client, encrypted } = await makeEncryptedClient(REFUND_MARGINS);
   const terms = await newTerms(keys.refundSeller.address, keys.buyer.address, { amount: AMOUNTS.refund,
     expiryOffset: 1815 });
   const trade = unwrap('bind refund', client.bind(bindingOf(terms), terms));
   const session = unwrap('connect refund seller', await client.connect(trade, 'seller'));
   const fund = await act(client, trade, 'refund fund', () => client.fund(trade, session));
   eq('refund trade funded', fund.record.state, 'finalized');
+  const migrated = await migrateClientJournal({ client, trade, encrypted, label: 'refund v2', measure: measurePorts, must });
+  fund.identity = migrated.after.entries.find(entry => entry.record.intentId === fund.record.intentId).identity;
   const early = await client.refund(trade, session);
   eq('refund: client refuses before the finalized Clock reaches the deadline', early.ok ? 'ok' : early.error.code,
     'EXPIRED');
-  return { client, trade, session, terms, fundedAt: Date.now() };
+  return { client, trade, session, terms, fund, fundedAt: Date.now() };
 }
 
-async function refundFinish({ client, trade, session, terms, fundedAt }) {
+async function refundFinish({ client, trade, session, terms, fund, fundedAt }) {
   const deadline = Number(terms.escrowExpirySeconds), stop = Date.now() + 3_000_000;
   for (;;) {
     const snap = await snapshot(client, trade, 'refund wait');
@@ -423,16 +474,17 @@ async function refundFinish({ client, trade, session, terms, fundedAt }) {
     log(`refund: finalized clock ${snap.live.timestampSeconds}, deadline ${deadline}`);
     await d.sleep(20_000);
   }
-  const refund = await act(client, trade, 'refund', () => client.refund(trade, session));
+  const refund = await reviewedV2Action(client, trade, session, 'refund', 'refund');
   eq('refund finalized', refund.record.state, 'finalized');
   eq('refund: escrow Refunded', (await snapshot(client, trade, 'refund')).escrow.state, 'refunded');
   const lamportsBefore = (await d.getAccount(rpc, trade.escrow.address, 'finalized')).lamports;
-  const payout = await act(client, trade, 'refund payout', () => client.payout(trade, session));
+  const payout = await reviewedV2Action(client, trade, session, 'refund payout', 'payout');
   eq('refund payout finalized', payout.record.state, 'finalized');
   eq('refund: escrow released exactly the amount', lamportsBefore -
     (await d.getAccount(rpc, trade.escrow.address, 'finalized')).lamports, AMOUNTS.refund);
+  const journal = await completedV2Journal(client, trade, 'refund v2', [fund, refund, payout], 3);
   summary.flows.refund = { escrow: trade.escrow.address, deadline, waitedSeconds: Math.round((Date.now() - fundedAt) / 1000),
-    refund: refund.record.outcome, payout: payout.record.outcome };
+    refund: refund.record.outcome, payout: payout.record.outcome, journal };
 }
 
 async function main() {
@@ -463,6 +515,7 @@ async function main() {
 }
 
 try { await main(); } catch (e) { summary.error = e.stack ?? String(e); log(`ERROR ${summary.error}`); }
+finally { for (const dispose of disposals.reverse()) dispose(); }
 killValidatorSync();
 summary.durationSeconds = Math.round((Date.now() - t0) / 1000);
 summary.ok = summary.error === null && summary.checks.length > 0 && summary.checks.every(c => c.ok);
