@@ -1,0 +1,39 @@
+✔ permission is an explicit action; cancellation holds physical admission across new owners and stops late tracks (19.107002ms)
+✔ active cancellation stops every track, detaches preview and requires a new gesture (9.492762ms)
+✔ provider failures and attach failures are fixed errors and cannot leak a live stream (3.373477ms)
+✔ image preflight bounds dimensions and complete container before native decompression (36.931117ms)
+✔ decoder physical job is terminated on timeout/cancel and late replies cannot cross generations (25.641339ms)
+✔ decoder refuses inconsistent pixel dimensions before posting and validates reply identifiers (1.651266ms)
+✔ all five public QR types get complete unauthenticated review and explicit no-authority confirmation (1609.401496ms)
+✔ default context rejects chain-bound codes; unsupported inputs never produce a review (260.02633ms)
+✔ file admission precedes reads, exact text is never trimmed and all bytes are wiped after use (218.576119ms)
+✔ cancel retains the physical file slot across remounts and suppresses every late result (43.379425ms)
+✔ late hash, context change, expiry and local replay cannot revive a reviewed selection (469.514105ms)
+✖ backup fingerprint is exact opaque bytes, compares only after review, never decrypts or restores (1467.602588ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38827.388706
+
+✖ failing tests:
+
+test at apps/web/test/qr-review.test.mjs:105:1
+✖ backup fingerprint is exact opaque bytes, compares only after review, never decrypts or restores (1467.602588ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  false !== true
+
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-review.test.mjs:115:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

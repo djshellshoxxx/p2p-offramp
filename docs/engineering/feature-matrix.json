@@ -1,0 +1,993 @@
+{
+  "schema": 1,
+  "main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+  "classification_scope": "Implementation as present on pinned main. Tests below name verified source paths, not new test execution. Release qualification is separate.",
+  "features": [
+    {
+      "id": "F01",
+      "feature": "Encrypted profiles, backup, fresh-key restore",
+      "status": "Implemented",
+      "implemented_scope": "Encrypted vault, IndexedDB CAS persistence, profiles, migration, backup verification and restore are present in main.",
+      "source": [
+        "packages/storage/src/vault-service.ts",
+        "packages/storage/src/backup-service.ts"
+      ],
+      "test_source": [
+        "packages/storage/test/vault-service.test.mjs",
+        "packages/storage/test/backup-service.test.mjs",
+        "packages/storage/test/backup-verification.test.mjs"
+      ],
+      "remaining": "Continue supported-browser/device acceptance; library completeness does not establish independent cryptographic certification.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F02",
+      "feature": "Private messaging identity and lock lifecycle",
+      "status": "Implemented",
+      "implemented_scope": "Messaging secret is owned by identity/vault services; session disposal and retention are implemented.",
+      "source": [
+        "packages/identity/src/identity-service.ts"
+      ],
+      "test_source": [
+        "packages/identity/test/identity.test.mjs",
+        "packages/identity/test/history-retention.test.mjs"
+      ],
+      "remaining": "Verify physical-device sleep/reload behavior and complete long-term key-rotation decisions separately.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F03",
+      "feature": "Canonical EVM terms and offline review",
+      "status": "Implemented",
+      "implemented_scope": "Immutable trade terms, registry bindings, role/account checks and signing-domain validation are implemented.",
+      "source": [
+        "packages/wallet/src/evm-terms.ts",
+        "packages/wallet/src/evm-agreement.ts"
+      ],
+      "test_source": [
+        "packages/wallet/test/evm-terms.test.mjs",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/wallet/test/g16-bilateral-replay.test.mjs"
+      ],
+      "remaining": "Integrate #187 to bound actual file reads before retained input; retain explicit review and validation.",
+      "candidate_prs": "#187",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F04",
+      "feature": "Basic EVM escrow and financial invariants",
+      "status": "Implemented",
+      "implemented_scope": "Native/ERC-20 fund, seller-authorized release to fixed buyer, timeout refund to fixed seller, terminal-state replay refusal and reentrancy guard exist.",
+      "source": [
+        "contracts/evm/src/BasicEscrow.sol"
+      ],
+      "test_source": [
+        "contracts/evm/test/BasicEscrow.t.sol",
+        "contracts/evm/test/BasicEscrowFuzz.t.sol",
+        "contracts/evm/test/BasicEscrowInvariant.t.sol"
+      ],
+      "remaining": "Independent contract review and authorized deployed-runtime/public-testnet qualification remain separate. BasicEscrow has no dispute/arbitration function.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F05",
+      "feature": "Failed payout and deferred withdrawal recovery",
+      "status": "Implemented",
+      "implemented_scope": "Failed push payouts retain a recipient/asset-bound pending withdrawal; retries pay the original recipient.",
+      "source": [
+        "contracts/evm/src/BasicEscrow.sol",
+        "scripts/recovery/evm-recovery.mjs"
+      ],
+      "test_source": [
+        "packages/wallet/test/recovery-erc20-withdraw-boundary.test.mjs",
+        "packages/wallet/test/recovery-withdrawal-boundary.test.mjs"
+      ],
+      "remaining": "Retain canonical state validation and exact recipient/asset binding during future UI expansion.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F06",
+      "feature": "Offer creation, discovery, expiration and stale-event defense",
+      "status": "Implemented",
+      "implemented_scope": "Signed Nostr advertisements and bounded orderbook ingest are composed into localnet trading; expiry/deletion filters and immutable ad identities exist.",
+      "source": [
+        "packages/relay/src/ad.ts",
+        "packages/relay/src/advertisement.ts",
+        "apps/web/src/localnet/controller.ts"
+      ],
+      "test_source": [
+        "packages/relay/test/ad.test.mjs",
+        "packages/relay/test/advertisement.test.mjs",
+        "packages/exchange/test/async-boundaries.test.mjs"
+      ],
+      "remaining": "Production relay/bootstrap configuration and physical-browser acceptance are separate; it is a bilateral trade workflow, not an automatic centralized matching engine.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F07",
+      "feature": "Bilateral negotiation, cancellation and replay resistance",
+      "status": "Implemented",
+      "implemented_scope": "v2 offer/accept requires TradeTerms plus PeerAcceptance signatures; terms-bound cancellation/rejection tombstones and durable replay ledger exist.",
+      "source": [
+        "packages/exchange/src/exchange.ts",
+        "packages/exchange/src/peer-acceptance.ts"
+      ],
+      "test_source": [
+        "packages/exchange/test/peer-acceptance.test.mjs",
+        "packages/exchange/test/redteam-exchange.test.mjs",
+        "packages/exchange/test/redteam-pass2-exchange.test.mjs"
+      ],
+      "remaining": "Do not import the older alternate exchange from #159 over current v2. Wallet and public-network acceptance remain separate.",
+      "candidate_prs": "#159 retains selected test/vector evidence only",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F08",
+      "feature": "Nostr event verification, relay transport and interop",
+      "status": "Implemented",
+      "implemented_scope": "Signature-checked events, malformed-event refusal, bounded subscriptions, duplicate handling, reconnect/failover and independent native relay harness are on main.",
+      "source": [
+        "packages/nostr-crypto/src/relay-event-crypto.ts",
+        "packages/relay/src/pool.ts",
+        "scripts/lib/nostr-relay-fixture.mjs"
+      ],
+      "test_source": [
+        "packages/relay/test/pool.test.mjs",
+        "packages/relay/test/pool-lifetime.test.mjs",
+        "scripts/tests/nostr-relay-native.test.mjs"
+      ],
+      "remaining": "Readiness publication during reconnect needs #181; independently tested relay fixture does not establish every public relay/provider.",
+      "candidate_prs": "#181",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F09",
+      "feature": "Encrypted trade messaging and durable history",
+      "status": "Implemented",
+      "implemented_scope": "NIP-17 envelopes and authenticated encrypted history are composed into localnet bilateral trades.",
+      "source": [
+        "packages/messaging/src/envelope.ts",
+        "apps/web/src/localnet/controller.ts"
+      ],
+      "test_source": [
+        "packages/messaging/test/envelope.test.mjs",
+        "packages/messaging/test/durable-chat.test.mjs"
+      ],
+      "remaining": "Public metadata and network/device privacy remain external qualification concerns; ciphertext does not hide public chain settlement.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F10",
+      "feature": "Wallet connection, network identity and prompt/session safety",
+      "status": "Partial",
+      "implemented_scope": "EVM provider/peer signer and Solana wallet boundaries exist, with explicit account/network checks and prompt invalidation.",
+      "source": [
+        "packages/wallet/src/evm-adapter.ts",
+        "packages/wallet/src/evm-peer-acceptance.ts",
+        "packages/chain-solana/src/wallet.ts"
+      ],
+      "test_source": [
+        "packages/wallet/test/evm-adapter.test.mjs",
+        "packages/wallet/test/evm-peer-session.test.mjs",
+        "packages/chain-solana/test/wallet.test.mjs"
+      ],
+      "remaining": "Physical injected wallets, hardware devices, mobile handoff and full account/chain switch matrix remain; local fixtures cannot qualify those devices.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F11",
+      "feature": "Durable send marker, concurrency and unknown-broadcast recovery",
+      "status": "Implemented",
+      "implemented_scope": "Version-2 sendMarkedAt/origin provenance, CAS journal writes, conservative unknown outcomes, nonce reservations and canonical reconciliation are on main.",
+      "source": [
+        "packages/domain/src/intent-journal.ts",
+        "packages/domain/src/tx-lifecycle.ts",
+        "packages/wallet/src/evm-execution.ts"
+      ],
+      "test_source": [
+        "packages/domain/test/intent-journal.test.mjs",
+        "packages/domain/test/tx-lifecycle.test.mjs",
+        "packages/wallet/test/evm-execution.test.mjs"
+      ],
+      "remaining": "Retain no-automatic-resend rule and source-bound device/browser verification. Do not reimport the duplicate D9 branch stack.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F12",
+      "feature": "Native EVM browser trade flow",
+      "status": "Implemented",
+      "implemented_scope": "Isolated localnet app supports two-party offer/accept, explicit review, funding, release/refund, messaging and encrypted recovery. It is merged into main.",
+      "source": [
+        "apps/web/src/localnet/LocalnetRoot.tsx",
+        "apps/web/src/localnet/controller.ts",
+        "apps/web/src/localnet/wallet-bridge.ts"
+      ],
+      "test_source": [
+        "apps/web/test/localnet-boundary.test.mjs",
+        "apps/web/test/localnet-ui-restore.test.mjs",
+        "scripts/test-localnet-browser.mjs"
+      ],
+      "remaining": "Localnet profile is restricted to synthetic endpoints/fixtures and ReleaseEnabled=0. Default static app is not a live production trading deployment.",
+      "candidate_prs": "#181 readiness correction",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F13",
+      "feature": "ERC-20 browser approval, settlement and recovery",
+      "status": "Implemented",
+      "implemented_scope": "Merged #170/#173 add exact-token allowance review, funding, release/refund and fresh-profile/cancelled-intent recovery.",
+      "source": [
+        "apps/web/src/localnet/erc20-funding.ts",
+        "apps/web/src/localnet/controller.ts"
+      ],
+      "test_source": [
+        "apps/web/test/localnet-erc20-funding.test.mjs",
+        "scripts/test-localnet-erc20-independent.mjs",
+        "scripts/test-localnet-erc20-browser.mjs"
+      ],
+      "remaining": "Qualify each authorized production token/profile separately; local MockERC20 evidence is not arbitrary token compatibility.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F14",
+      "feature": "Interrupted unfunded trade resumption",
+      "status": "Implemented",
+      "implemented_scope": "Merged #175 revalidates original bilateral proof and same immutable terms from encrypted checkpoints before funding admission.",
+      "source": [
+        "packages/exchange/src/checkpoint.ts",
+        "apps/web/src/localnet/controller.ts"
+      ],
+      "test_source": [
+        "apps/web/test/localnet-resumption.test.mjs",
+        "apps/web/test/localnet-resumption-ui.test.mjs"
+      ],
+      "remaining": "Missing/expired/withdrawn original evidence still requires a new negotiation. Resumption does not refresh peer authorization or send a transaction.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F15",
+      "feature": "Solana native/SPL escrow client and durable recovery",
+      "status": "Implemented",
+      "implemented_scope": "Merged #167 provides finalized native/SPL reads, settlement planning, wallet submission fences, durable native journal and encrypted recovery.",
+      "source": [
+        "packages/chain-solana/src/compose.ts",
+        "packages/chain-solana/src/vaultjournal.ts",
+        "contracts/solana/programs/basic-escrow/src/lib.rs"
+      ],
+      "test_source": [
+        "packages/chain-solana/test/settlement.test.mjs",
+        "packages/chain-solana/test/lifecycle.test.mjs",
+        "packages/chain-solana/test/vaultjournal.test.mjs"
+      ],
+      "remaining": "Public network/genesis/program and allowed-mint policies are not invented or activated; Token-2022/wrapped SOL are refused.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F16",
+      "feature": "Solana funded-exit browser composition",
+      "status": "Partial",
+      "implemented_scope": "Core native client exists. Open #179 adds explicit prepared/confirm review and browser recovery of already funded trades, rather than full offer/fund parity.",
+      "source": [
+        "packages/chain-solana/src/compose.ts"
+      ],
+      "test_source": [
+        "packages/chain-solana/test/recovery.test.mjs",
+        "packages/chain-solana/test/independent-vault-dispatch.test.mjs"
+      ],
+      "remaining": "Repair #179 qualification and validate actual browser plus native validator; full Solana discovery/negotiation/funding UI remains beyond that funded-exit slice.",
+      "candidate_prs": "#179",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F17",
+      "feature": "Public QR codec and renderer",
+      "status": "Implemented",
+      "implemented_scope": "Main contains versioned bounded QR envelope, canonical JSON, base45, text codec, symbol encoder and SVG rendering primitives.",
+      "source": [
+        "packages/qr/src/text-codec.ts",
+        "packages/qr/src/jcs.ts",
+        "packages/qr/src/qr-matrix.ts"
+      ],
+      "test_source": [
+        "packages/qr/test/codec.test.mjs",
+        "packages/qr/test/jcs.test.mjs",
+        "packages/qr/test/qr-matrix.test.mjs"
+      ],
+      "remaining": "Integrate #171 positive-safe-integer grouping guard and #172 typed failure for hostile array descriptors. Trade invite signing/verifier policy remains unresolved.",
+      "candidate_prs": "#171 #172",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F18",
+      "feature": "Public QR image/camera capture and review UI",
+      "status": "Missing",
+      "implemented_scope": "Absent from pinned main; #183 contains new bounded image/header admission, decoder Worker, camera capture and explicit public review UI.",
+      "source": [
+        "packages/qr/index.ts"
+      ],
+      "test_source": [
+        "packages/qr/test/envelope.test.mjs"
+      ],
+      "remaining": "Repair browser qualification, integrate candidate with explicit trust-context refusal, then complete real device matrix; no authenticated invite claim from unsigned data.",
+      "candidate_prs": "#183",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F19",
+      "feature": "Localization and accessibility",
+      "status": "Partial",
+      "implemented_scope": "Locale catalogs, language/direction selector, keyboard focus handling and basic responsive UI tests exist.",
+      "source": [
+        "apps/web/src/ui/locale/runtime.ts",
+        "apps/web/src/ui/locale/catalog.ts"
+      ],
+      "test_source": [
+        "apps/web/test/locale-runtime.test.mjs",
+        "apps/web/test/locale-catalog.test.mjs",
+        "scripts/test-locale-layout-browser.mjs"
+      ],
+      "remaining": "Complete supported translations, native browser zoom/RTL/screen-reader/mobile device acceptance. Locale source presence alone is not translation qualification.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F20",
+      "feature": "Privacy controls, origin policy and private-data isolation",
+      "status": "Partial",
+      "implemented_scope": "Encrypted storage, session lock, explicit transport grants, content policy, import boundaries and static artifact checks exist.",
+      "source": [
+        "packages/transport/src/http-driver.ts",
+        "packages/security/src/content-policy.ts",
+        "scripts/check-import-boundaries.mjs"
+      ],
+      "test_source": [
+        "packages/transport/test/http-driver.test.mjs",
+        "apps/web/test/content-policy.test.mjs",
+        "scripts/tests/import-boundaries.test.mjs"
+      ],
+      "remaining": "Deployment origin, RPC/relay metadata, physical device and extension assumptions require separate review; no comprehensive anonymity guarantee.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F21",
+      "feature": "Dispute/jury arbitration",
+      "status": "Experimental",
+      "implemented_scope": "Basic escrow has no adjudication path. Optional #147 preserves diagnostic arbitration calculations; this is not enabled dispute settlement.",
+      "source": [
+        "contracts/evm/src/BasicEscrow.sol"
+      ],
+      "test_source": [],
+      "remaining": "Review optional module independently and define authority/model before any user-facing financial integration.",
+      "candidate_prs": "#147; historical #46",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F22",
+      "feature": "Meetup/geofencing, courier and advanced privacy modules",
+      "status": "Experimental",
+      "implemented_scope": "Nine accepted independent optional-package branches preserve reference implementations outside main/default application.",
+      "source": [
+        "docs/adr/ACCEPTED-DECISIONS-2026-11-04.md"
+      ],
+      "test_source": [],
+      "remaining": "Qualify one package at a time and keep default-build import isolation. Do not count unwired reference modules as completed core features.",
+      "candidate_prs": "#144\u2013148 #160\u2013163",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F23",
+      "feature": "zkTLS/payment proof adapters and private reputation",
+      "status": "Missing",
+      "implemented_scope": "Main has research/specification material; optional proof-inputs/proof-jobs and intake evaluation branches are not production proof verification or a reputation service.",
+      "source": [
+        "docs/adr/ACCEPTED-DECISIONS-2026-11-04.md"
+      ],
+      "test_source": [],
+      "remaining": "Select explicit trust model, implement adapter and real fixtures, independently review. Preserve #155 evaluations as inert evidence.",
+      "candidate_prs": "#144 #155 #162",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F24",
+      "feature": "Signed asset-update controller and browser update UI",
+      "status": "Missing",
+      "implemented_scope": "Main has signed release/registry primitives. Historical #40/#56/#81 still contain a distinct asset-update HTTP/store/controller feature not yet present on main.",
+      "source": [
+        "packages/security/src/release-manifest.ts",
+        "packages/security/src/release-locator.ts"
+      ],
+      "test_source": [
+        "packages/security/test/release-manifest.test.mjs",
+        "packages/security/test/release-locator.test.mjs"
+      ],
+      "remaining": "Selective extraction needs later malformed-envelope fixes, failed-IDB-open retry repair, current transport types, tests and release-verification review. Do not restore older trust semantics.",
+      "candidate_prs": "#40 #56 #81",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F25",
+      "feature": "Lab/docs tooling, claims and historical evidence",
+      "status": "Partial",
+      "implemented_scope": "Core spec/build checks exist. Repaired #174 preserves original #154 tooling, bounded claims and evidence-manifest fixes; #176 contains prior inventory/evidence.",
+      "source": [
+        "scripts/spec_audit.py",
+        "docs/execution/CONSOLIDATION-RESULT-2026-11-18.md"
+      ],
+      "test_source": [
+        "scripts/tests/test_spec_audit.py"
+      ],
+      "remaining": "Qualify repaired tooling against current docs; preserve historical test dates/source hashes and update stale present-tense claims.",
+      "candidate_prs": "#174 #176; dependent #155 #156",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F26",
+      "feature": "Duplicate historical regression stack",
+      "status": "Duplicate",
+      "implemented_scope": "D9 #69\u201375/#91\u201393 tests, isolated #78\u201380 tests, and #168 effective browser delta are already represented on current main.",
+      "source": [
+        "packages/domain/test/intent-journal.test.mjs",
+        "packages/wallet/test/evm-execution.test.mjs"
+      ],
+      "test_source": [
+        "packages/domain/test/intent-journal.test.mjs",
+        "packages/wallet/test/evm-execution.test.mjs"
+      ],
+      "remaining": "No reimplementation. Exact normalized whole-file preservation and merge-tree proof are in branch-inventory.json.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F27",
+      "feature": "Production release and live-funds qualification",
+      "status": "Blocked",
+      "implemented_scope": "Release-disabled architecture, explicit build modes and signed trust primitives exist; no deployment/release is authorized in this task.",
+      "source": [
+        "apps/web/scripts/build.mjs",
+        "docs/recovery/OWNER-TESTNET-RELEASE-RUNBOOK.md"
+      ],
+      "test_source": [
+        "apps/web/scripts/artifact-policy.test.mjs",
+        "scripts/tests/verify-web-artifact.test.mjs"
+      ],
+      "remaining": "Owner-controlled trust roots/pins, physical wallets/public testnet, required independent reviews and explicit release authorization remain separate. Preserve ReleaseEnabled=0.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    }
+  ],
+  "staging_overlay": {
+    "source_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+    "source_tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+    "published_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "published_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "integration_pr": 210,
+    "scope": "Generation11 combined source includes prior reviewed components and212 transport cleanup. New2311 full and44 independent maintained tests passed. Current-source hosted qualification remains separate;27 pinned-main rows unchanged.",
+    "historical_core": {
+      "pr": 205,
+      "source": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+      "full_passed": 2217,
+      "state": "held because four later core corrections are absent"
+    },
+    "updates": [
+      {
+        "feature_id": "F01",
+        "status": "Implemented prerequisite on combined staging",
+        "change": "Currentd301 preserves208 selected-profile complete-backup verification and Worker/VaultService generation/revision ownership. Combined2311 and independent44 qualification passed; signed-update UI remains partial."
+      },
+      {
+        "feature_id": "F03",
+        "status": "Implemented on staging",
+        "change": "Actual-byte bounds from187 applied before retaining review input."
+      },
+      {
+        "feature_id": "F06",
+        "status": "Reviewed correction composed on combined staging",
+        "change": "Relay clock/capacity guards from206 are preserved in701f. Component browser/native relay receipts remain source-bound; current combined-hosted qualification is pending."
+      },
+      {
+        "feature_id": "F08",
+        "status": "Implemented on staging",
+        "change": "Readiness correction retained; historical source-bound native relay and EVM browser evidence remains separate from current-source qualification."
+      },
+      {
+        "feature_id": "F11",
+        "status": "Reviewed correction preserved on combined staging",
+        "change": "Finalized expiry and covering Solana status context handling from207 is preserved. Unknown outcomes retain markers; no automatic resend added."
+      },
+      {
+        "feature_id": "F16",
+        "status": "Partial",
+        "change": "Funded-exit and restore source is preserved in701f. Historical real-refund receipts remain bound to original sources. Full discovery/negotiation/funding parity is incomplete and current combined-native/browser gates are pending."
+      },
+      {
+        "feature_id": "F17",
+        "status": "Implemented on staging",
+        "change": "Grouping guard and typed JCS descriptor errors integrated."
+      },
+      {
+        "feature_id": "F18",
+        "status": "Implemented public-review source on combined staging",
+        "change": "Currentd301 preserves independently corrected211 post-await expiry/invalid-clock behavior and authority:none. Combined2311full/44independent and optional2711 qualification are source-bound. Current browser/device/authenticated-invite conditions remain."
+      },
+      {
+        "feature_id": "F24",
+        "status": "Partial",
+        "change": "Internal updater and208 backup prerequisite composed; trust/transport/update-UI composition remains incomplete. No trust roots or network activation invented; screened historical adaptation remains excluded."
+      },
+      {
+        "feature_id": "F25",
+        "status": "Implemented within source-tooling scope",
+        "change": "Immutable copy-text tooling and replacement-output cleanup corrections are reviewed. Current unsigned distribution still refuses stale locale evidence; historical positive fixtures do not approve new source."
+      },
+      {
+        "feature_id": "F22",
+        "status": "Nine preserved optional layers qualified on currentd301core",
+        "change": "Generation11 full2711 and independent16 passed;2492 protectedcoreentries,172 originalnonsharedblobs,56-to62commands,13default/14demo files equal fresh finalcore. Zerooptionalimports; original191-199refs unchanged; standalone namedreview and source-bound hosted gates remain."
+      },
+      {
+        "feature_id": "F20",
+        "status": "Partial; transport-library hygiene corrected",
+        "change": "Current212 cleanup erases owned temporary POST copies on cancellation/capacity refusal; oneLow cause,44 independent and2311 full tests. No demonstrated network leak or financial effect. Changed driver is absent from default/demo graphs; no default activation implied."
+      }
+    ],
+    "hosted_failure_report": "HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md",
+    "generation9_optional_evidence": {
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "tree": "6a9eb6f25ea0568daa80b928408c958356a3db59",
+      "tested_source_tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+      "full_passed": 2681,
+      "separate_candidates_excluded": [
+        206,
+        208,
+        209,
+        211
+      ]
+    },
+    "qr211_independent": {
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "affected_passed": 112,
+      "report_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+      "status": "locally-qualified-separate-source-hosted-pending"
+    },
+    "generation10_optional_evidence": {
+      "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
+      "published_final": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+      "final_tree": "08c42c12a1cdb1dc81fc0c8422ec58a923e05733",
+      "tested_source": "7dc8f486791f8f4a2fa0b9182181354e6b72f188",
+      "tested_tree": "e0826f1f8824f8f1f044e161311432ace6e06254",
+      "full_passed": 2709,
+      "independent_boundary_passed": 16
+    },
+    "current_hosted_snapshot": "hosted-snapshot-generation11.json",
+    "generation11_new_candidate": {
+      "pr": 212,
+      "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+      "test_first_parent": "56e1ae0fd50c40109aea3f40ce8505e85fc1a5c2",
+      "base": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+      "state": "independently-qualified-and-published-in210",
+      "independent_original": {
+        "passed": 0,
+        "failed": 2
+      },
+      "independent_fixed": {
+        "passed": 2,
+        "failed": 0
+      },
+      "independent_maintained_passed": 44,
+      "independent_maintained_includes_two_regressions": true,
+      "cause_count_increment": 1,
+      "scope": "One Low temporary POST-copy cleanup cause with two refusal variants; no demonstrated network leak/financial impact. Count after accepted-source qualification.",
+      "published_combined_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "full_passed": 2311,
+      "github_recorded_state": "closed-merged-into-stacked-target",
+      "original_source_ref_unchanged": true
+    },
+    "generation11_core_evidence": {
+      "report": "GENERATION11_TRANSPORT_CORE_QUALIFICATION_20261120.md",
+      "independent_report": "INDEPENDENT_TRANSPORT_PREFLIGHT_REVIEW_GENERATION11_20261120.md",
+      "plan": "generation11-core-plan.json",
+      "published_mapping": "generation11-published-checkpoints.json",
+      "full_passed": 2311,
+      "independent_affected_passed": 44,
+      "new_implementation_cause": 1
+    },
+    "generation11_optional_evidence": {
+      "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+      "published_final": "db531cb03ad303821a3625f6858941de1ac07606",
+      "final_tree": "e67004acf32a567dfd515e798c46992aca12163d",
+      "tested_source": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+      "tested_tree": "b43344279e6a6c7acd14e52eafab0aca1ff4bc3d",
+      "full_passed": 2711,
+      "independent_boundary_passed": 16
+    },
+    "status": "locally-qualified-independently-reviewed-current-hosted-gates-pending"
+  },
+  "additional_staging_capabilities": [
+    {
+      "id": "F28",
+      "capability": "Encrypted favorites and reusable trade templates",
+      "main_status": "Missing package consumers",
+      "staging_status": "Implemented in current reviewed combined source; exact-source hosted pending",
+      "source": [
+        "packages/personalization/src/favorites.ts",
+        "packages/personalization/src/trade-draft-store.ts"
+      ],
+      "evidence": [
+        "packages/personalization/test/favorites.test.mjs",
+        "packages/personalization/test/trade-draft-store.test.mjs"
+      ],
+      "remaining": "Favorites/templates and route-ownership corrections preserved in d301. Current2311/44 local qualification is distinct from older205/component browser receipts. Current hosted/device gates remain.",
+      "status": "Implemented in current reviewed combined source; exact-source hosted pending",
+      "source_prs": [
+        201,
+        204,
+        207,
+        210
+      ]
+    },
+    {
+      "id": "F29",
+      "capability": "Scriptless public source-reference portal",
+      "main_status": "Missing",
+      "staging_status": "Implemented source; actual hosted browser passed at PR190",
+      "source": [
+        "scripts/portal/build.mjs",
+        "apps/portal/index.html"
+      ],
+      "evidence": [
+        "scripts/portal/build.test.mjs",
+        "scripts/test-scriptless-portal-browser.mjs"
+      ],
+      "remaining": "Currentd301 preserves replacement-directory cleanup and scriptless portal. Historical190/component browser receipts remain source-bound; current hosted/deployed-host/physical-print qualification remains separate."
+    },
+    {
+      "id": "F30",
+      "capability": "Unsigned deterministic distribution staging",
+      "main_status": "Missing",
+      "staging_status": "Implemented local source; actual hosted browser passed at PR190",
+      "source": [
+        "scripts/distribution/stage.mjs",
+        "scripts/distribution/manifest.mjs"
+      ],
+      "evidence": [
+        "scripts/distribution/stage.test.mjs",
+        "scripts/distribution/browser.test.mjs"
+      ],
+      "remaining": "Current locale drift keeps unsigned staging refused. Historical-client/current-tooling fixture passes with currentSourceDistributionQualified:false; no signed-release or distribution approval."
+    },
+    {
+      "id": "F31",
+      "capability": "Inert governance and historical assurance checks",
+      "main_status": "Missing dedicated package",
+      "staging_status": "Implemented inert source",
+      "source": [
+        "packages/governance/src/records.ts",
+        "packages/governance/src/assurance.ts"
+      ],
+      "evidence": [
+        "packages/governance/test/records.test.mjs",
+        "packages/governance/test/assurance.test.mjs"
+      ],
+      "remaining": "Historical stale references remain explicit; this module grants no legal, release or economic authority."
+    }
+  ],
+  "staging_overlay_history_generation9": {
+    "source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+    "source_tree": "b330e1ca3a8a22598197bdd5de9532a0c56a917b",
+    "published_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+    "published_tree": "4b694124197ae8ce271f14307d12abc43c719406",
+    "integration_pr": 207,
+    "scope": "Corrected core207 has2259 full source tests and independent97 affected tests. Its actual hosted browser diagnostic failed the warmed-connection precondition on2026-11-20; full current-source qualification remains incomplete. Original27-capability main baseline is unchanged. Relay206, backup208 and dependency209 are separately reviewed descendants, not one qualified combined tree.",
+    "historical_core": {
+      "pr": 205,
+      "source": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+      "full_passed": 2217,
+      "state": "held because four later core corrections are absent"
+    },
+    "updates": [
+      {
+        "feature_id": "F01",
+        "status": "Implemented library; separate runtime prerequisite reviewed",
+        "change": "PR208 exposes selected-profile complete-backup verification through current Worker/VaultService ownership and fresh generation/revision checks. External author2277 full tests; this coordinator did not execute those tests. No signed-update UI activation."
+      },
+      {
+        "feature_id": "F03",
+        "status": "Implemented on staging",
+        "change": "Actual-byte bounds from187 applied before retaining review input."
+      },
+      {
+        "feature_id": "F06",
+        "status": "Reviewed source correction in separate PR206",
+        "change": "Clock/capacity guards composed on207; external2265 full tests and root original-source140 affected tests are separate counts. Native/current-source hosted qualification remains required."
+      },
+      {
+        "feature_id": "F08",
+        "status": "Implemented on staging",
+        "change": "Readiness correction retained; historical source-bound native relay and EVM browser evidence remains separate from current-source qualification."
+      },
+      {
+        "feature_id": "F11",
+        "status": "Reviewed reconciliation correction in207",
+        "change": "Unknown Solana outcomes retain their marker until finalized expiry and covering status contexts agree. No automatic resend; RPC context consistency is not cryptographic history completeness."
+      },
+      {
+        "feature_id": "F16",
+        "status": "Partial",
+        "change": "Funded-exit, acknowledged-send and restore lifecycle source is composed.202 completed62 validator and5 actual Worker/browser checks with real refund waits.207 has a distinct failed transport-fixture precondition and pending native qualification. No discovery/funding parity added."
+      },
+      {
+        "feature_id": "F17",
+        "status": "Implemented on staging",
+        "change": "Grouping guard and typed JCS descriptor errors integrated."
+      },
+      {
+        "feature_id": "F18",
+        "status": "Implemented public-review source; separate211 timing correction independently reviewed",
+        "change": "211 rechecks expiry and clock validity after awaited hash/verifier work. Original1pass/3fail became4pass; affected112pass includes those4. One Low cause; authority none. Actual new-source browser/physical-device and authenticated invite qualification remain separate."
+      },
+      {
+        "feature_id": "F24",
+        "status": "Partial",
+        "change": "Internal updater recovered with storage retry/cancellation corrections.208 adds the backup prerequisite. Real trust/transport/update-UI composition remains incomplete; the externally screened historical browser adaptation is excluded."
+      },
+      {
+        "feature_id": "F25",
+        "status": "Implemented within source-tooling scope",
+        "change": "Immutable copy-text tooling and replacement-output cleanup corrections are reviewed. Current unsigned distribution still refuses stale locale evidence; historical positive fixtures do not approve new source."
+      },
+      {
+        "feature_id": "F22",
+        "status": "Nine separately reviewed packages recomposed on corrected210; local2681-pass evidence published",
+        "change": "Generation9 preserves2463 core entries at every layer, exact original package subtrees,56-to62 command union and13 default/14 demo files; zero optional graph imports. Evidence8af4dbc2 preserves nine original-head-parent layers; original PR191-199 remain unchanged. Standalone named review and source-bound hosted/native/browser gates remain."
+      }
+    ],
+    "hosted_failure_report": "HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md",
+    "generation9_optional_evidence": {
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "tree": "6a9eb6f25ea0568daa80b928408c958356a3db59",
+      "tested_source_tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+      "full_passed": 2681,
+      "separate_candidates_excluded": [
+        206,
+        208,
+        209,
+        211
+      ]
+    },
+    "qr211_independent": {
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "affected_passed": 112,
+      "report_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+      "status": "locally-qualified-separate-source-hosted-pending"
+    }
+  },
+  "staging_overlay_history_generation10": {
+    "source_sha": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+    "source_tree": "81845317f8c1cfe7c76846aa54403fb49cc141b0",
+    "published_head": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+    "published_tree": "976a729bc359d331214924abab617969aa066950",
+    "integration_pr": 210,
+    "scope": "Generation10 combines reviewed206/208/209/210/211 on corrected207. Exact new source passed2309 full tests and independent54 focused tests; current-head hosted checks remain queued. The27-row pinned-main baseline is unchanged. New212 is owned by42/43 and has no transferred qualification.",
+    "historical_core": {
+      "pr": 205,
+      "source": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+      "full_passed": 2217,
+      "state": "held because four later core corrections are absent"
+    },
+    "updates": [
+      {
+        "feature_id": "F01",
+        "status": "Implemented prerequisite on combined staging",
+        "change": "Selected-profile complete-backup verification from208 is composed with current Worker/VaultService generation/revision ownership. Combined2309 and independent54 passed; signed-update UI remains partial."
+      },
+      {
+        "feature_id": "F03",
+        "status": "Implemented on staging",
+        "change": "Actual-byte bounds from187 applied before retaining review input."
+      },
+      {
+        "feature_id": "F06",
+        "status": "Reviewed correction composed on combined staging",
+        "change": "Relay clock/capacity guards from206 are preserved in701f. Component browser/native relay receipts remain source-bound; current combined-hosted qualification is pending."
+      },
+      {
+        "feature_id": "F08",
+        "status": "Implemented on staging",
+        "change": "Readiness correction retained; historical source-bound native relay and EVM browser evidence remains separate from current-source qualification."
+      },
+      {
+        "feature_id": "F11",
+        "status": "Reviewed correction preserved on combined staging",
+        "change": "Finalized expiry and covering Solana status context handling from207 is preserved. Unknown outcomes retain markers; no automatic resend added."
+      },
+      {
+        "feature_id": "F16",
+        "status": "Partial",
+        "change": "Funded-exit and restore source is preserved in701f. Historical real-refund receipts remain bound to original sources. Full discovery/negotiation/funding parity is incomplete and current combined-native/browser gates are pending."
+      },
+      {
+        "feature_id": "F17",
+        "status": "Implemented on staging",
+        "change": "Grouping guard and typed JCS descriptor errors integrated."
+      },
+      {
+        "feature_id": "F18",
+        "status": "Implemented public-review source on combined staging",
+        "change": "Independently reproduced211 post-await expiry/invalid-clock correction is composed in2309-test701f. One previously countedLow cause; authority:none. New-source browser, authenticated invite policy and physical devices remain separate."
+      },
+      {
+        "feature_id": "F24",
+        "status": "Partial",
+        "change": "Internal updater and208 backup prerequisite composed; trust/transport/update-UI composition remains incomplete. No trust roots or network activation invented; screened historical adaptation remains excluded."
+      },
+      {
+        "feature_id": "F25",
+        "status": "Implemented within source-tooling scope",
+        "change": "Immutable copy-text tooling and replacement-output cleanup corrections are reviewed. Current unsigned distribution still refuses stale locale evidence; historical positive fixtures do not approve new source."
+      },
+      {
+        "feature_id": "F22",
+        "status": "Nine preserved optional layers qualified on combined core",
+        "change": "Generation10 full2709 and independent16 passed. All2487 protected core entries,172 nonshared original blobs and56-to62 commands preserved. All13default/14demo files match fresh core, zerooptionalimports. Evidencecf827ee5 preserves original191-199refs; named review and applicable source-bound hosted gates remain."
+      }
+    ],
+    "hosted_failure_report": "HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md",
+    "generation9_optional_evidence": {
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "tree": "6a9eb6f25ea0568daa80b928408c958356a3db59",
+      "tested_source_tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+      "full_passed": 2681,
+      "separate_candidates_excluded": [
+        206,
+        208,
+        209,
+        211
+      ]
+    },
+    "qr211_independent": {
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "affected_passed": 112,
+      "report_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+      "status": "locally-qualified-separate-source-hosted-pending"
+    },
+    "generation10_optional_evidence": {
+      "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
+      "published_final": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+      "final_tree": "08c42c12a1cdb1dc81fc0c8422ec58a923e05733",
+      "tested_source": "7dc8f486791f8f4a2fa0b9182181354e6b72f188",
+      "tested_tree": "e0826f1f8824f8f1f044e161311432ace6e06254",
+      "full_passed": 2709,
+      "independent_boundary_passed": 16
+    },
+    "current_hosted_snapshot": "generation10-final-current-gates.json",
+    "generation11_new_candidate": {
+      "pr": 212,
+      "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+      "test_first_parent": "56e1ae0fd50c40109aea3f40ce8505e85fc1a5c2",
+      "base": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+      "state": "independent-scoped-review-cleared-full-qualification-active",
+      "independent_original": {
+        "passed": 0,
+        "failed": 2
+      },
+      "independent_fixed": {
+        "passed": 2,
+        "failed": 0
+      },
+      "independent_maintained_passed": 44,
+      "independent_maintained_includes_two_regressions": true,
+      "cause_count_increment": 0,
+      "scope": "One Low temporary POST-copy cleanup cause with two refusal variants; no demonstrated network leak/financial impact. Count after accepted-source qualification."
+    }
+  },
+  "staging_overlay_history_generation13": {
+    "handoff": "CONTINUATION_GENERATIONS12_13_20261120.md",
+    "main_unchanged": true,
+    "main_target_pr": 213,
+    "core_source": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "core_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "backup_verification": {
+      "pr": 215,
+      "source": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+      "final_ui_tests": 17,
+      "cross_browser_pr": 217,
+      "hosted_browser_execution_pending": true
+    },
+    "signed_update_view": {
+      "local_source": "723b8d105a185f3c84130d1ccd5c9a907ff13153",
+      "default_controller": null,
+      "independent_ui_tests": 23,
+      "executable_updater_in_default_graph": false,
+      "configured_runtime_qualified": false,
+      "remaining": [
+        "exact-own-lock backup lease adapter",
+        "trusted controller configuration",
+        "native origin transition",
+        "physical wallet/device qualification"
+      ]
+    },
+    "solana_funded_exits": {
+      "public_recovery_export": "implementation active",
+      "full_discovery_negotiation_funding": "outside implemented accepted carrier/review scope"
+    },
+    "dependency_remediation": {
+      "pr": 216,
+      "audit_vulnerabilities_before": 1,
+      "audit_vulnerabilities_after": 0,
+      "host_library_defined_tests": 0,
+      "native_gates_pending": true
+    },
+    "required_oracle_pr": 214,
+    "release_enabled": 0
+  },
+  "current_overlay_key": "merged_main_overlay_generation17",
+  "staging_overlay_generation15": {
+    "pr": 219,
+    "head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+    "tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
+    "main_unchanged": true,
+    "full_suite_passed": 2361,
+    "independent_actionable_findings": 0,
+    "handoff": "CONTINUATION_GENERATION15_20261120.md",
+    "backup_ui": "implemented; current-source browser pending",
+    "signed_update_ui": "optional view implemented; configured operation incomplete",
+    "solana_recovery_export": "implemented; current-source actual download pending",
+    "native_hosted_gates": "pending",
+    "optional_packages": "preserved separately; final-core qualification not claimed",
+    "release_enabled": 0
+  },
+  "merged_main_overlay_generation17": {
+    "source_scope": "Current merged main; 27 historical pinned-main feature rows and generation15 staging overlay remain immutable source-dated evidence",
+    "merged_pr": 221,
+    "merge_commit": "1084a410676bc0658da97f33eba6a059493d74df",
+    "previous_main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+    "candidate_head": "24b67bb2db7c74654b9a5b9496279b4d44380d28",
+    "complete_tree": "7ccc0514c8320314a04fab333d5ebf14294f69dc",
+    "qualified_on": "2026-11-20",
+    "hosted_checks": {
+      "successful": 15,
+      "total": 15,
+      "snyk": "success"
+    },
+    "node_suite": {
+      "passed": 2362,
+      "failed": 0,
+      "skipped": 1,
+      "skipped_case": "Cast parity requires Foundry; separately passed in provisioned EVM/forge job"
+    },
+    "chromium_locale_listener_oracle": "passed on PR221 exact merge checkout; historical PR219 failed",
+    "backup_ui": "integrated; physical device qualification separate",
+    "signed_update_ui": "present with null default controller; trust and own-lock adapter incomplete",
+    "solana_public_recovery_export": "integrated; full negotiation and funding incomplete",
+    "semantic_locale_distribution_approved": false,
+    "optional_prs_separately_gated": [
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "default_optional_activation": false,
+    "release_enabled": 0,
+    "release_qualified": false,
+    "handoff": "CONTINUATION_GENERATION17_20261120.md"
+  }
+}

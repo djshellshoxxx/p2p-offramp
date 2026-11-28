@@ -86,6 +86,11 @@ function locator(input: Uint8Array<ArrayBuffer>): ReleaseLocator {
   if (value.expiresAt <= value.createdAt || value.expiresAt - value.createdAt > 30 * 86400 || canonical(value as unknown as Data) !== source) return fail();
   return value;
 }
+/** Internal untrusted routing index. This value confers no signature, proof or installation authority. */
+export function readUntrustedReleaseLocator(input: unknown): Readonly<{ok:true;value:ReleaseLocator}>|Readonly<{ok:false;error:Readonly<{code:ReleaseErrorCode}>}> {
+  try { return Object.freeze({ok:true,value:locator(bytes(input,RELEASE_LOCATOR_LIMITS.locatorBytes))}); }
+  catch(error) { return Object.freeze({ok:false,error:Object.freeze({code:classified(error)})}); }
+}
 function keys(input: unknown): JsonWebKey[] {
   try {
     if (!Array.isArray(input) || Object.getPrototypeOf(input) !== Array.prototype) return fail('KEY_UNTRUSTED');

@@ -18,7 +18,11 @@ export interface EvmReaderOptions {
 export interface LiveAnchor { readonly height: string; readonly hash: string; readonly timestampSeconds: string; readonly codeKeccak256: string; }
 export interface EscrowExpectation { readonly seller: string; readonly buyer: string; readonly asset: string; readonly amountBaseUnits: string; readonly expirySeconds: string; }
 export interface DecodedEscrow extends EscrowExpectation { readonly state: ChainObservation['state']; }
-export interface EvmEscrowSnapshot { readonly observation: ChainObservation; readonly escrow: DecodedEscrow; }
+export interface EvmEscrowSnapshot {
+  readonly observation: ChainObservation; readonly escrow: DecodedEscrow;
+  /** The same rechecked canonical header used for every state read; its timestamp drives native deadline guidance. */
+  readonly anchor: LiveAnchor;
+}
 export interface EvmReadRequest { readonly generation: number; readonly requestSequence: number; readonly signal: AbortSignal; }
 export interface ExpectedEscrowTransaction { readonly hash: string; readonly from: string; readonly to: string; readonly data: string; readonly value: string; readonly nonce?: string; }
 export interface ReceiptObservation {
@@ -92,7 +96,13 @@ function decodeEscrow(input: unknown, layout: EscrowLayout): DecodedEscrow {
   return result;
 }
 interface Context { readonly signal: AbortSignal; guard(): void; call(method: string, params?: readonly unknown[]): Promise<unknown>; }
-interface Live { readonly network: NetworkV1; readonly deployment: DeploymentV1; readonly anchor: LiveAnchor; readonly blockTag: string; }
+/** EIP-1898 block parameter for state reads: the anchored block by hash, which the node must reject unless it is canonical. */
+interface AnchoredBlock { readonly blockHash: string; readonly requireCanonical: true; }
+/** `blockTag` is used only for the header recheck; every state read (`eth_getCode`, `eth_call`) carries `stateAt`.
+ * A node or proxy that rejects the object form, or no longer has the block canonical, fails the read; there is no
+ * fallback to block-number pinning, because a number can resolve to a different block on another backend. */
+interface Live { readonly network: NetworkV1; readonly deployment: DeploymentV1; readonly anchor: LiveAnchor; readonly blockTag: string; readonly stateAt: AnchoredBlock; }
+const anchoredBlock = (blockHash: string): AnchoredBlock => Object.freeze({ blockHash, requireCanonical: true as const });
 
 function snapshotLayouts(input: unknown): Readonly<Record<string, EscrowLayout>> | undefined {
   if (input === undefined) return undefined;
@@ -153,12 +163,12 @@ export class EvmChainReader {
     const genesis = header(await context.call('eth_getBlockByNumber', ['0x0',false]));
     if (genesis.height !== 0n || genesis.hash !== network.genesisHash) return fail('WRONG_CHAIN');
     const block = header(await context.call('eth_getBlockByNumber',['finalized',false]));
-    const blockTag = `0x${block.height.toString(16)}`;
-    const code = await context.call('eth_getCode',[deployment.address,blockTag]);
+    const blockTag = `0x${block.height.toString(16)}`, stateAt = anchoredBlock(block.hash);
+    const code = await context.call('eth_getCode',[deployment.address,stateAt]);
     if (typeof code !== 'string' || code.length > 2 + MAX_RUNTIME_CODE_BYTES * 2 || !/^0x(?:[0-9a-f]{2})+$/.test(code)) return fail();
     const codeKeccak256 = hex(keccak_256(fromHex(code.slice(2))));
     if (codeKeccak256 !== deployment.runtime.keccak256) return fail();
-    return { network, deployment, blockTag, anchor:Object.freeze({height:block.height.toString(),hash:block.hash,timestampSeconds:block.timestamp.toString(),codeKeccak256}) };
+    return { network, deployment, blockTag, stateAt, anchor:Object.freeze({height:block.height.toString(),hash:block.hash,timestampSeconds:block.timestamp.toString(),codeKeccak256}) };
   }
   async #recheck(live: Live, context: Context): Promise<void> {
     const block = header(await context.call('eth_getBlockByNumber',[live.blockTag,false]));
@@ -178,11 +188,11 @@ export class EvmChainReader {
       if (!asset || !live.deployment.supportedAssetIds.includes(asset.id)) return fail('UNSUPPORTED_PROVIDER');
       const layout = this.#layouts === undefined ? 'legacy-escrows-v1' : this.#layouts[live.anchor.codeKeccak256];
       if (layout === undefined) return fail('UNSUPPORTED_PROVIDER');
-      const escrow = decodeEscrow(await context.call('eth_call',[{to:live.deployment.address,data:`0x${SELECTORS[layout]}${binding.tradeId}`},live.blockTag]), layout);
+      const escrow = decodeEscrow(await context.call('eth_call',[{to:live.deployment.address,data:`0x${SELECTORS[layout]}${binding.tradeId}`},live.stateAt]), layout);
       if (escrow.state !== 'absent' && (escrow.seller !== wanted.seller || escrow.buyer !== wanted.buyer || escrow.asset !== wanted.asset || escrow.amountBaseUnits !== wanted.amountBaseUnits || escrow.expirySeconds !== wanted.expirySeconds)) return fail();
       await this.#recheck(live,context);
       const observedAt = counter((this.#options.now ?? Date.now)());
-      return Object.freeze({escrow,observation:Object.freeze({binding,generation,requestSequence,anchor:Object.freeze({height:live.anchor.height,hash:live.anchor.hash}),state:escrow.state,finality:'finalized' as const,observedAt})});
+      return Object.freeze({escrow,anchor:live.anchor,observation:Object.freeze({binding,generation,requestSequence,anchor:Object.freeze({height:live.anchor.height,hash:live.anchor.hash}),state:escrow.state,finality:'finalized' as const,observedAt})});
     });
   }
   async readValidated(binding: TradeBinding, request: EvmReadRequest, expected: EscrowExpectation): Promise<CoreResult<ChainObservation>> {
@@ -212,6 +222,9 @@ export class EvmChainReader {
       if (nonceExpected !== undefined && nonce !== nonceExpected) return fail();
       const canonical = header(await context.call('eth_getBlockByNumber',[`0x${height.toString(16)}`,false]));
       if (canonical.height !== height) return fail();
+      // At the anchored height the validated anchor is the reference: a header for N from another backend that
+      // disagrees with H is refused, as the recheck would. Below N the header is still matched by height only.
+      if (height === BigInt(live.anchor.height) && canonical.hash !== live.anchor.hash) return fail();
       await this.#recheck(live,context);
       return Object.freeze({kind:canonical.hash !== blockHash ? 'reorged' as const : height <= BigInt(live.anchor.height) ? 'finalized' as const : 'pending' as const,transactionHash,anchor:Object.freeze({height:height.toString(),hash:blockHash}),succeeded:canonical.hash === blockHash ? status === 1n : null,nonce});
     });

@@ -1,0 +1,454 @@
+{
+  "schema": "p2p-offramp.generation21-publication.v1",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "branch": "codex/continuation-g21-20261120",
+  "mainBase": "8e836baa877b676a863c877003e277b638fc5061",
+  "publicationMethod": "Authenticated GitHub connector. Commit metadata and commit IDs differ; every full source tree and ordered parent relationship is verified.",
+  "localEquivalentCheckpoint": {
+    "commit": "aa4a126f2b3d303e8bf7bd649135185339ad42d5",
+    "tree": "c851a1d53478594b356bfdd4f910740a756086ed"
+  },
+  "publishedEquivalentCheckpoint": {
+    "commit": "875826f103f69ae7f15dc35e96b5caf24371d43b",
+    "tree": "c851a1d53478594b356bfdd4f910740a756086ed"
+  },
+  "testedLocalSource": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+  "testedPublishedEquivalentSource": "e7a30dbc39a1bfe49b30fa5f4e29fce50c161e38",
+  "verification": {
+    "blobCount": 111,
+    "mappedCommits": 34,
+    "allTreesMatch": true,
+    "allOrderedParentsReadBack": true,
+    "nonDocumentationEntriesIdenticalToTestedSource": 1013
+  },
+  "commitMap": [
+    {
+      "localSha": "c5908d04c4216fcfbf24485070f81ce7f5bfc440",
+      "publishedSha": "0c9ad815f74ea03a08b08adf8a034230fbf391c5",
+      "tree": "9875959aa4eaf94ffeddf60816e7efafee774ca7",
+      "localParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "publishedParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "9d459c6ae1f470a53ba202cb8bd28d6aa15bc30a",
+      "publishedSha": "8f69ec1a9117fd82301d9b2069215132356775ec",
+      "tree": "edf57e2dd38c6d5b3a71ee1cc7448846017121aa",
+      "localParents": [
+        "c5908d04c4216fcfbf24485070f81ce7f5bfc440"
+      ],
+      "publishedParents": [
+        "0c9ad815f74ea03a08b08adf8a034230fbf391c5"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "cba3435360f11edd050e4a29ba734081cef1d207",
+      "publishedSha": "933d49654d06f352cf629dc76a2cada797ef4cff",
+      "tree": "edf57e2dd38c6d5b3a71ee1cc7448846017121aa",
+      "localParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "9d459c6ae1f470a53ba202cb8bd28d6aa15bc30a"
+      ],
+      "publishedParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+        "8f69ec1a9117fd82301d9b2069215132356775ec"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "ecf3b70d94ccfc3c8786f2b0a23985682ce11827",
+      "publishedSha": "d35c773b7a89f8b8928f1b81e40477116c629cdd",
+      "tree": "a91416e65f5c40d0c4153e2d930550ef0bd9ae5c",
+      "localParents": [
+        "cba3435360f11edd050e4a29ba734081cef1d207"
+      ],
+      "publishedParents": [
+        "933d49654d06f352cf629dc76a2cada797ef4cff"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "5407bb564208c663d257fca7671d109002891e1d",
+      "publishedSha": "7f1f5768ecbaa543783bb2cdfa62223166755340",
+      "tree": "811f340897ca7cf3825c0a55be8dd81aa23d92ca",
+      "localParents": [
+        "ecf3b70d94ccfc3c8786f2b0a23985682ce11827"
+      ],
+      "publishedParents": [
+        "d35c773b7a89f8b8928f1b81e40477116c629cdd"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "80fd10384816ea95410190dbd005b528e8a8ba3c",
+      "publishedSha": "320629286f7f44bb19f44eec29709019be92caf8",
+      "tree": "2bca1cedd0d2be26798ed081859041f9635f3100",
+      "localParents": [
+        "5407bb564208c663d257fca7671d109002891e1d"
+      ],
+      "publishedParents": [
+        "7f1f5768ecbaa543783bb2cdfa62223166755340"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "798d2f0b5ab24564e4da2f1811843d9f3a5778db",
+      "publishedSha": "c74d8cf425ef10857fd05a0f29ca6f985d0e25c5",
+      "tree": "d3038ae1ff1db3c18434c9b70eb9f2d31e957e37",
+      "localParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "publishedParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "6be8acc9f45f5b9036989b380ca537084094faa4",
+      "publishedSha": "a65b53b909b86705a34dc6d46d211d18f33bfd9a",
+      "tree": "3aabb59c3d4cd8b73f2ff253555c068997a4bb20",
+      "localParents": [
+        "798d2f0b5ab24564e4da2f1811843d9f3a5778db"
+      ],
+      "publishedParents": [
+        "c74d8cf425ef10857fd05a0f29ca6f985d0e25c5"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "765b3eb8540d52caeb4226d8c83ca10cfdd166f6",
+      "publishedSha": "eb0e8ad0c8b8e4ce9a0938e0e309752e4c906c9a",
+      "tree": "596a5ada2e19705313eead3d0f7f4cc8f2a68e84",
+      "localParents": [
+        "80fd10384816ea95410190dbd005b528e8a8ba3c",
+        "6be8acc9f45f5b9036989b380ca537084094faa4"
+      ],
+      "publishedParents": [
+        "320629286f7f44bb19f44eec29709019be92caf8",
+        "a65b53b909b86705a34dc6d46d211d18f33bfd9a"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "70372a0cd65a70e162a451cacc2b5f2d9547a578",
+      "publishedSha": "526f343b31b97078e027bd6f2d59a0c5fb04aa48",
+      "tree": "b038e6954e5740234e58a643aa9d85ea379e7221",
+      "localParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "publishedParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "a7059a910e4758062d10fb1d7f28a42842e5c90e",
+      "publishedSha": "61e8895321af6201257d6912fc048296e46e0788",
+      "tree": "1b7f1d2c31d0265e91d2f51d40ecff165a3462c0",
+      "localParents": [
+        "765b3eb8540d52caeb4226d8c83ca10cfdd166f6",
+        "70372a0cd65a70e162a451cacc2b5f2d9547a578"
+      ],
+      "publishedParents": [
+        "eb0e8ad0c8b8e4ce9a0938e0e309752e4c906c9a",
+        "526f343b31b97078e027bd6f2d59a0c5fb04aa48"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "9dbb0253d6de64d328ca69e1bb5d099abbbc1305",
+      "publishedSha": "2b9130e1727c1eddcb3b927996302418d7cedc51",
+      "tree": "b46707ea09d420425fe7888fec3d4ea02f7dc3bd",
+      "localParents": [
+        "a7059a910e4758062d10fb1d7f28a42842e5c90e"
+      ],
+      "publishedParents": [
+        "61e8895321af6201257d6912fc048296e46e0788"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "c209d9d7ecfdd117a84548d7a19c9af842e1b1d8",
+      "publishedSha": "b61e92c3ab25015be2825ae435f4d42074b56fd3",
+      "tree": "51bf6a8f4002c48659e852643fe90f21578af53c",
+      "localParents": [
+        "9dbb0253d6de64d328ca69e1bb5d099abbbc1305"
+      ],
+      "publishedParents": [
+        "2b9130e1727c1eddcb3b927996302418d7cedc51"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "a6536c5f8e001d311275c8153f41207b4b09203f",
+      "publishedSha": "0121aa0828e281ca3b40bfee1313c44b6ebbfdd3",
+      "tree": "f74022ad70d6faedec9fbdbb91e22dc85f7f1a3a",
+      "localParents": [
+        "c209d9d7ecfdd117a84548d7a19c9af842e1b1d8"
+      ],
+      "publishedParents": [
+        "b61e92c3ab25015be2825ae435f4d42074b56fd3"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "c73555deec80bc8b8afd8cf270d915ba3f959f92",
+      "publishedSha": "ca477693d69f93f81d4053e056fa6f9cbe9ac637",
+      "tree": "e83ce4690c828dbeec0765bd30fc9569a2480be2",
+      "localParents": [
+        "a6536c5f8e001d311275c8153f41207b4b09203f"
+      ],
+      "publishedParents": [
+        "0121aa0828e281ca3b40bfee1313c44b6ebbfdd3"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "3191d50658147286854ea14eae58755f8164d533",
+      "publishedSha": "da7459d80644c4c00ed6ac0276fa58a9ee78020c",
+      "tree": "c48ace1689c8679361eb48bb513b0375c92ce67b",
+      "localParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "publishedParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "0046c8288ea18c219c4cc7be79c94d86134d56cf",
+      "publishedSha": "0930fac2837199342a1b3b3b8d1a33ac09fa46c7",
+      "tree": "92b5d9e8a795621e3ab98a132e69232d65f62e1a",
+      "localParents": [
+        "3191d50658147286854ea14eae58755f8164d533"
+      ],
+      "publishedParents": [
+        "da7459d80644c4c00ed6ac0276fa58a9ee78020c"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "3c52b5561a63ddf5f8cb728386f8e1d1569542a9",
+      "publishedSha": "0d7c16835862960ac6c4b2256a17e135bce1732b",
+      "tree": "b738a87c35e11f76085fbd51b8e73732f9941bf3",
+      "localParents": [
+        "0046c8288ea18c219c4cc7be79c94d86134d56cf"
+      ],
+      "publishedParents": [
+        "0930fac2837199342a1b3b3b8d1a33ac09fa46c7"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "063eb9985ab2ec5d7cfe1bacae21ff4d9110593d",
+      "publishedSha": "59980eb4bbc69f1093ebf38774f2695eeffbc8f0",
+      "tree": "10323246db9d4bb3102f83cee55252f9859f700a",
+      "localParents": [
+        "c73555deec80bc8b8afd8cf270d915ba3f959f92",
+        "3c52b5561a63ddf5f8cb728386f8e1d1569542a9"
+      ],
+      "publishedParents": [
+        "ca477693d69f93f81d4053e056fa6f9cbe9ac637",
+        "0d7c16835862960ac6c4b2256a17e135bce1732b"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "293ffd4d47b58eb3e289d5fb36f2169239cd56f2",
+      "publishedSha": "8571938096116fd1f0893aecc5b2d5df8ce7c007",
+      "tree": "4bd209b80787eaecd4552bb0db1b0d583f418ee4",
+      "localParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "publishedParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "08acab8908fb9878e91aa2d87d652e8a245051e3",
+      "publishedSha": "bcd1849e8458a68609fd47fe86a02892bb913603",
+      "tree": "13f111937bf5f6fa01dc3db65afcd81a84fa91b0",
+      "localParents": [
+        "293ffd4d47b58eb3e289d5fb36f2169239cd56f2"
+      ],
+      "publishedParents": [
+        "8571938096116fd1f0893aecc5b2d5df8ce7c007"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "0457f0bac49276eb82ec0677b0c96ce226de1d45",
+      "publishedSha": "293e1a4a50f184bf5a4999f94c1ff7b3c593f2e1",
+      "tree": "4cc1e43b65d8349b242bca18b77d5db70ed91d66",
+      "localParents": [
+        "063eb9985ab2ec5d7cfe1bacae21ff4d9110593d",
+        "08acab8908fb9878e91aa2d87d652e8a245051e3"
+      ],
+      "publishedParents": [
+        "59980eb4bbc69f1093ebf38774f2695eeffbc8f0",
+        "bcd1849e8458a68609fd47fe86a02892bb913603"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "d72015a90705fed73f2c94ec316ef1fe5c662218",
+      "publishedSha": "bebe37c49c0eb74c59dc4f5775718dd14a9579a2",
+      "tree": "7cabddd6233c40d35ef00be48cfb7f789b3f3053",
+      "localParents": [
+        "0457f0bac49276eb82ec0677b0c96ce226de1d45"
+      ],
+      "publishedParents": [
+        "293e1a4a50f184bf5a4999f94c1ff7b3c593f2e1"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "24bb5df89b06a136f7be53a8e9db2e7f9343bfaf",
+      "publishedSha": "121aa83f235f7ddfa9be59be878db7e3533b3997",
+      "tree": "57539537bbda259db8746e0de088d409c4f034a0",
+      "localParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "publishedParents": [
+        "388526a474aea0e08f9c04178c2b7f9e1d4bee3f"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "946c26a28822c4950cf69072d1d445042797c850",
+      "publishedSha": "348ca17385676eba867a7d1c6dc1f98060d5bc00",
+      "tree": "45a085c7e1065b2bb53126f2e3cad9962c9f2621",
+      "localParents": [
+        "24bb5df89b06a136f7be53a8e9db2e7f9343bfaf"
+      ],
+      "publishedParents": [
+        "121aa83f235f7ddfa9be59be878db7e3533b3997"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "publishedSha": "e7a30dbc39a1bfe49b30fa5f4e29fce50c161e38",
+      "tree": "dfd6384a913552c6dc7bb3c2a8bce1b815fa903d",
+      "localParents": [
+        "d72015a90705fed73f2c94ec316ef1fe5c662218",
+        "946c26a28822c4950cf69072d1d445042797c850"
+      ],
+      "publishedParents": [
+        "bebe37c49c0eb74c59dc4f5775718dd14a9579a2",
+        "348ca17385676eba867a7d1c6dc1f98060d5bc00"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "cda4bbeae00c6e9fc96873f4aa196644e33687a9",
+      "publishedSha": "f3a05474be38447eb4c5b7781aa05378659347d4",
+      "tree": "604e92b429f2cd9d7d194e4e1a2bf33e1d230465",
+      "localParents": [
+        "758936c54d0b823b96bad99ccfa93520ee175ae6",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "publishedParents": [
+        "e7a30dbc39a1bfe49b30fa5f4e29fce50c161e38",
+        "8e836baa877b676a863c877003e277b638fc5061"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "efa9d79f588d83c6716dfab27d57b1384a37fd4f",
+      "publishedSha": "2a084a014944f7f05662a41ae4fd19887a66c435",
+      "tree": "fd27fa2ee58a57b6de53852114e65ebe364379b4",
+      "localParents": [
+        "cda4bbeae00c6e9fc96873f4aa196644e33687a9"
+      ],
+      "publishedParents": [
+        "f3a05474be38447eb4c5b7781aa05378659347d4"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "7e2b2adcc4c935067f2b96ed97e22c757e06bb10",
+      "publishedSha": "8244547133efe3bfe7f1c24965b1910d7f88127d",
+      "tree": "cf3304a2f0cc647fbd907c3aad3fb5e6d787dc10",
+      "localParents": [
+        "efa9d79f588d83c6716dfab27d57b1384a37fd4f"
+      ],
+      "publishedParents": [
+        "2a084a014944f7f05662a41ae4fd19887a66c435"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "publishedSha": "c4206d60cfd80606494d730b9b09845cca376287",
+      "tree": "b917b5abfb0c06c17a4add2ae19d7e87f5dbdc82",
+      "localParents": [
+        "7e2b2adcc4c935067f2b96ed97e22c757e06bb10"
+      ],
+      "publishedParents": [
+        "8244547133efe3bfe7f1c24965b1910d7f88127d"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "dd2aa39c43f4ca2ff2e7afad57415556a59842ca",
+      "publishedSha": "1bea04a53aeb9d38f2ded418b74cd5ac221dc7d6",
+      "tree": "762aaf83805abbb6ebf7d1e9b9acd015cf05dc6f",
+      "localParents": [
+        "059fe0b6bbfe90ad87d0c948443f129b8dae583e"
+      ],
+      "publishedParents": [
+        "c4206d60cfd80606494d730b9b09845cca376287"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "8419ef138e17a25b56527523d27276cafcdd9037",
+      "publishedSha": "71598b5611aafa544b9529d5f893abaf7b0c33f1",
+      "tree": "14a245528fc22cf0d666c4bdb4023db8ce36bc0b",
+      "localParents": [
+        "dd2aa39c43f4ca2ff2e7afad57415556a59842ca"
+      ],
+      "publishedParents": [
+        "1bea04a53aeb9d38f2ded418b74cd5ac221dc7d6"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "b98c1c3bd05c883ca161a204eb9a420f9a53c758",
+      "publishedSha": "01fb8fb1f1fab4f1c0a73a6a9ec108bb6c3f6702",
+      "tree": "b7fa58a665214a2b514c6aaa4ce8a20216903691",
+      "localParents": [
+        "8419ef138e17a25b56527523d27276cafcdd9037"
+      ],
+      "publishedParents": [
+        "71598b5611aafa544b9529d5f893abaf7b0c33f1"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "aa4a126f2b3d303e8bf7bd649135185339ad42d5",
+      "publishedSha": "875826f103f69ae7f15dc35e96b5caf24371d43b",
+      "tree": "c851a1d53478594b356bfdd4f910740a756086ed",
+      "localParents": [
+        "b98c1c3bd05c883ca161a204eb9a420f9a53c758"
+      ],
+      "publishedParents": [
+        "01fb8fb1f1fab4f1c0a73a6a9ec108bb6c3f6702"
+      ],
+      "readBackVerified": true
+    }
+  ],
+  "limits": [
+    "This mapping publishes source/evidence and supplies no hosted, browser, semantic, device or release acceptance.",
+    "The final branch adds this publication record after the equivalent whole-tree checkpoint; its actual head is recorded in the pull request.",
+    "Original local source/report commits remain locally preserved. The mapped remote commits retain exact trees and topology, not original metadata.",
+    "ReleaseEnabled remains 0; production remains English-only/draft and optional default imports remain absent."
+  ]
+}

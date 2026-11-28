@@ -1,10 +1,12 @@
 /** Partial G07 document composition root. Public commands never expose a provider, record payload or key. */
 import {
   MAX_RUNTIME_SEQUENCE, RUNTIME_DISPOSE_TIMEOUT_MS, RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
-  parseRuntimeCommand, parseRuntimeConfig, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
+  parseRuntimeCommand, parseRuntimeConfig, parseTradeDraftChange, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeExport, type RuntimeHandle, type RuntimeInventory, type RuntimeMessage,
   type RuntimeOperation, type RuntimeRestore, type RuntimeResult, type RuntimeStatus, type RuntimeValue,
-  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences,
+  type BackupVerificationReceipt, type RuntimeBackupVerification,
+  type RuntimeTradeTemplates, type RuntimeTradeTemplatePreview, type RuntimeTradeTemplateReceipt, type RuntimeTradeTemplateCancelled, type RuntimeTradeTemplateConsent, type TradeDraftChangeV1,
+  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeSavedReviewFavorites, type RuntimeSavedReviewFavorite,
 } from '../../../../packages/schemas/index.ts';
 import { capturePendingMetadata, type PendingMetadata } from './pending-metadata.ts';
 
@@ -13,6 +15,14 @@ export interface AppRuntimeOptions {
   readonly createWorker?: () => RuntimeWorkerPort;
   readonly lifecycle?: boolean;
   readonly now?: () => number;
+}
+/** Opaque local ownership, including one exact acknowledged lock. It supplies no
+ * trust, wallet, navigation or imported-backup authority. */
+export interface RuntimeBackupSelection {
+  current(): boolean;
+  requireVerifiedBackup(signal: AbortSignal): Promise<void>;
+  lock(signal: AbortSignal): Promise<void>;
+  dispose(): void;
 }
 interface Pending {
   readonly metadata: PendingMetadata;
@@ -31,6 +41,9 @@ export class AppRuntime {
   #pending = new Map<number, Pending>();
   #generation = 0;
   #sequence = 0;
+  // Unlike the UI selection scope, this changes on every admitted opening and
+  // every invalidation, including repeated locks with no visible state change.
+  #selectionEpoch: object = {};
   #current: RuntimeStatus = locked();
   #closed = false;
   #disposing = false;
@@ -118,7 +131,8 @@ export class AppRuntime {
     const pending = this.#pending.get(id); if (!pending) return;
     this.#pending.delete(id); clearTimeout(pending.timer); pending.removeAbort(); pending.resolve(result);
   }
-  #invalidate(code: RuntimeErrorCode): boolean {
+  #invalidate(code: RuntimeErrorCode, selectionEpoch: object = {}): boolean {
+    this.#selectionEpoch = selectionEpoch;
     this.#resetStatus();
     for (const id of [...this.#pending.keys()]) this.#settle(id, runtimeFailure(code));
     if (this.#generation >= MAX_RUNTIME_SEQUENCE) { this.#close('LIMIT_EXCEEDED'); return false; }
@@ -168,15 +182,25 @@ export class AppRuntime {
     if (pending.metadata.operation !== message.operation || pending.metadata.generation !== message.generation) { this.#close('PROTOCOL_ERROR'); return; }
     this.#checkIdle(); if (!this.#pending.has(message.requestId)) return;
     if (message.result.ok && message.operation !== 'exportEncrypted' && message.operation !== 'listProfiles' && message.operation !== 'restore' &&
-        message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview' && message.operation !== 'listRecoveryReferences') {
+        message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview' && message.operation !== 'listRecoveryReferences' &&
+        message.operation !== 'listFavoriteReviews' && message.operation !== 'setReviewFavorite' && message.operation !== 'loadTradeTemplates' && message.operation !== 'previewTradeTemplateChange' &&
+        message.operation !== 'commitTradeTemplateChange' && message.operation !== 'cancelTradeTemplateChange' &&
+        message.operation !== 'verifyBackup' && message.operation !== 'checkBackupVerification') {
       if (!this.#acceptStatus(message, message.result.value, pending)) { this.#close('PROTOCOL_ERROR'); return; }
       this.#settle(message.requestId, Object.freeze({ ok: true, value: this.#current }));
     } else {
       if (!message.result.ok && (pending.metadata.operation === 'unlock' || pending.metadata.operation === 'create')) this.#resetStatus();
       // Saved-review replies belong to the profile the command named; it must still be the open profile.
-      if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview' || message.operation === 'listRecoveryReferences') &&
+      if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview' || message.operation === 'listRecoveryReferences' ||
+          message.operation === 'listFavoriteReviews' || message.operation === 'setReviewFavorite' || message.operation === 'loadTradeTemplates' || message.operation === 'previewTradeTemplateChange' ||
+          message.operation === 'commitTradeTemplateChange' || message.operation === 'cancelTradeTemplateChange' ||
+          message.operation === 'verifyBackup' || message.operation === 'checkBackupVerification') &&
           (!('profileId' in pending.metadata) || this.#current.state !== 'unlocked' || this.#current.handle.profileId !== pending.metadata.profileId)) {
         this.#settle(message.requestId, runtimeFailure('LOCKED')); return;
+      }
+      if (message.result.ok && (message.operation === 'verifyBackup' || message.operation === 'checkBackupVerification')) {
+        const receipt = message.operation === 'verifyBackup' ? message.result.value : message.result.value.verification;
+        if (receipt && (!('profileId' in pending.metadata) || receipt.profileId !== pending.metadata.profileId)) { this.#close('PROTOCOL_ERROR'); return; }
       }
       if (message.result.ok && message.operation === 'exportEncrypted') {
         if (pending.metadata.operation !== 'exportEncrypted' || parseBackupBytes(message.result.value.bytes).envelope.profileId !== pending.metadata.profileId) { this.#close('PROTOCOL_ERROR'); return; }
@@ -200,18 +224,78 @@ export class AppRuntime {
     try { command = parseRuntimeCommand({ version: 1, requestId: this.#sequence + 1, generation: this.#generation, operation, ...fields }); }
     catch { return Promise.resolve(runtimeFailure('INVALID_INPUT')); }
     this.#sequence++;
-    if (operation === 'unlock' || operation === 'create') this.#resetStatus();
+    if (operation === 'unlock' || operation === 'create') { this.#selectionEpoch = {}; this.#resetStatus(); }
     return new Promise(resolve => {
       const abort = (): void => { if (!this.#closed && !this.#disposing && this.#invalidate('CANCELLED')) void this.#request('lock', {}, undefined, true); };
       const timer = setTimeout(() => this.#close('TIMEOUT'), operation === 'dispose' ? RUNTIME_DISPOSE_TIMEOUT_MS : RUNTIME_REQUEST_TIMEOUT_MS);
       const pending: Pending = { metadata: capturePendingMetadata(command), resolve, timer, removeAbort: () => signal?.removeEventListener('abort', abort) };
       this.#pending.set(command.requestId, pending); signal?.addEventListener('abort', abort, { once: true });
-      if (signal?.aborted) { abort(); return; }
-      try { this.#worker.postMessage(command); } catch { this.#close('STORAGE_UNAVAILABLE'); }
+      try {
+        if (signal?.aborted) { abort(); return; }
+        this.#worker.postMessage(command);
+      } catch { this.#close('STORAGE_UNAVAILABLE'); }
+      finally { if (command.operation === 'verifyBackup') command.bytes.fill(0); }
     });
   }
   get current(): RuntimeStatus { this.#checkIdle(); return this.#current; }
   isCurrent(handle: RuntimeHandle): boolean { this.#checkIdle(); return !this.#closed && !this.#disposing && this.#current.state === 'unlocked' && this.#current.handle === handle; }
+  /** Capture locally owned selection identity; no Worker handle or lifecycle
+   * counter leaves the runtime. A later opening is retirement even if it fails. */
+  captureBackupSelection(): RuntimeBackupSelection | null {
+    this.#checkIdle();
+    const selected = this.#current;
+    if (this.#closed || this.#disposing || selected.state !== 'unlocked') return null;
+    const runtime = this;
+    let epoch = this.#selectionEpoch, generation = this.#generation;
+    let phase: 'selected' | 'locking' | 'locked' | 'retired' = 'selected';
+    const retire = () => { phase = 'retired'; };
+    const owns = () => !this.#closed && !this.#disposing && epoch === this.#selectionEpoch && generation === this.#generation;
+    const current = (): boolean => {
+      this.#checkIdle();
+      if (!owns()) { retire(); return false; }
+      if (phase === 'selected') {
+        if (this.#current.state === 'unlocked' && this.#current.handle === selected.handle) return true;
+        retire(); return false;
+      }
+      return phase === 'locked' && this.#current.state === 'locked';
+    };
+    const refuse = (code: RuntimeErrorCode): never => { throw new RuntimeBoundaryError(code); };
+    return Object.freeze({
+      current,
+      async requireVerifiedBackup(signal: AbortSignal): Promise<void> {
+        if (signal.aborted) { retire(); return refuse('CANCELLED'); }
+        if (phase !== 'selected' || !current()) return refuse('LOCKED');
+        if (signal.aborted) { retire(); return refuse('CANCELLED'); }
+        signal.addEventListener('abort', retire, { once: true });
+        try {
+          const result = await runtime.checkBackupVerification(signal);
+          if (signal.aborted) return refuse('CANCELLED');
+          if (!result.ok) return refuse(result.error.code);
+          if (phase !== 'selected' || !current()) return refuse('LOCKED');
+          if (result.value.verification === null) return refuse('CONFLICT');
+        } finally { signal.removeEventListener('abort', retire); }
+      },
+      async lock(signal: AbortSignal): Promise<void> {
+        if (signal.aborted) { retire(); return refuse('CANCELLED'); }
+        if (phase !== 'selected' || !current()) return refuse('LOCKED');
+        if (signal.aborted) { retire(); return refuse('CANCELLED'); }
+        // Capture the owned transition before dispatch, never infer it from the
+        // public locked snapshot after an await or a reentrant Worker callback.
+        epoch = {}; generation = runtime.#generation + 1; phase = 'locking';
+        signal.addEventListener('abort', retire, { once: true });
+        try {
+          const result = await runtime.#lock(epoch);
+          if (signal.aborted) return refuse('CANCELLED');
+          if (!result.ok) return refuse(result.error.code);
+          if (phase !== 'locking' || !owns() || runtime.#current.state !== 'locked') return refuse('LOCKED');
+          phase = 'locked';
+          if (!current()) return refuse('LOCKED');
+        } catch (error) { retire(); throw error; }
+        finally { signal.removeEventListener('abort', retire); }
+      },
+      dispose: retire,
+    });
+  }
   async unlock(profileId: string, passphrase: string, signal?: AbortSignal): Promise<RuntimeResult<RuntimeHandle>> {
     const generation = this.#generation;
     const result = await this.#request('unlock', { profileId, passphrase }, signal);
@@ -263,7 +347,7 @@ export class AppRuntime {
     return !result.ok ? result : 'bytes' in result.value ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
   }
   /** Purpose-bound open-profile commands. Replies after lock or profile switch are refused. */
-  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences', fields: Record<string, unknown>,
+  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'listFavoriteReviews' | 'setReviewFavorite' | 'loadTradeTemplates' | 'previewTradeTemplateChange' | 'commitTradeTemplateChange' | 'cancelTradeTemplateChange' | 'verifyBackup' | 'checkBackupVerification', fields: Record<string, unknown>,
     accept: (value: RuntimeValue) => value is T, signal?: AbortSignal): Promise<RuntimeResult<T>> {
     this.#checkIdle();
     const current = this.#current;
@@ -274,6 +358,15 @@ export class AppRuntime {
     if (result.ok && (this.#closed || this.#disposing || this.#generation !== generation || !this.isCurrent(current.handle))) return runtimeFailure('LOCKED');
     return !result.ok ? result : accept(result.value) ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
   }
+  /** Authenticate the supplied complete file in the current Worker selection; this never restores or writes. */
+  verifyBackup(bytes: Uint8Array, passphrase: string, signal?: AbortSignal): Promise<RuntimeResult<BackupVerificationReceipt>> {
+    return this.#profileCommand('verifyBackup', { bytes, passphrase },
+      (value): value is BackupVerificationReceipt => 'scope' in value && value.scope === 'complete-profile-v1', signal);
+  }
+  /** Revalidate the Worker-owned fact against the persisted current revision on every call. */
+  checkBackupVerification(signal?: AbortSignal): Promise<RuntimeResult<RuntimeBackupVerification>> {
+    return this.#profileCommand('checkBackupVerification', {}, (value): value is RuntimeBackupVerification => 'verification' in value, signal);
+  }
   saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>> {
     return this.#profileCommand('saveTermsReview', { source, bytes }, (value): value is RuntimeSavedReviewRef => 'recordId' in value, signal);
   }
@@ -283,14 +376,37 @@ export class AppRuntime {
   deleteTermsReview(recordId: string, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>> {
     return this.#profileCommand('deleteTermsReview', { recordId }, (value): value is RuntimeSavedReviewRef => 'recordId' in value && value.recordId === recordId, signal);
   }
+  listFavoriteReviews(signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewFavorites>> {
+    return this.#profileCommand('listFavoriteReviews', {}, (value): value is RuntimeSavedReviewFavorites => 'recordIds' in value, signal);
+  }
+  setReviewFavorite(recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewFavorite>> {
+    return this.#profileCommand('setReviewFavorite', { recordId, favorite, expectedRevision }, (value): value is RuntimeSavedReviewFavorite =>
+      'favorite' in value && value.recordId === recordId && value.favorite === favorite && value.revision === expectedRevision + 1, signal);
+  }
+  loadTradeTemplates(signal?: AbortSignal): Promise<RuntimeResult<RuntimeTradeTemplates>> {
+    return this.#profileCommand('loadTradeTemplates', {}, (value): value is RuntimeTradeTemplates => 'library' in value, signal);
+  }
+  previewTradeTemplateChange(expectedRevision: number, change: TradeDraftChangeV1, signal?: AbortSignal): Promise<RuntimeResult<RuntimeTradeTemplatePreview>> {
+    try { change = parseTradeDraftChange(change); } catch { return Promise.resolve(runtimeFailure('INVALID_INPUT')); }
+    return this.#profileCommand('previewTradeTemplateChange', { expectedRevision, change }, (value): value is RuntimeTradeTemplatePreview =>
+      'previewId' in value && value.revision === expectedRevision && JSON.stringify(value.change) === JSON.stringify(change), signal);
+  }
+  commitTradeTemplateChange(previewId: string, expectedRevision: number, consent: RuntimeTradeTemplateConsent, signal?: AbortSignal): Promise<RuntimeResult<RuntimeTradeTemplateReceipt>> {
+    return this.#profileCommand('commitTradeTemplateChange', { previewId, expectedRevision, consent }, (value): value is RuntimeTradeTemplateReceipt =>
+      'persisted' in value && value.sessionCurrent && value.revision === expectedRevision + (value.changed ? 1 : 0), signal);
+  }
+  cancelTradeTemplateChange(signal?: AbortSignal): Promise<RuntimeResult<RuntimeTradeTemplateCancelled>> {
+    return this.#profileCommand('cancelTradeTemplateChange', {}, (value): value is RuntimeTradeTemplateCancelled => 'cancelled' in value, signal);
+  }
   listRecoveryReferences(offset = 0, expectedRevision: number | null = null, signal?: AbortSignal): Promise<RuntimeResult<RuntimeRecoveryReferences>> {
     return this.#profileCommand('listRecoveryReferences', { offset, expectedRevision }, (value): value is RuntimeRecoveryReferences => 'authority' in value && value.offset === offset &&
       (expectedRevision === null || value.revision === expectedRevision), signal);
   }
-  lock(): Promise<RuntimeResult<RuntimeStatus>> {
-    if (this.#closed || this.#disposing || !this.#invalidate('LOCKED')) return Promise.resolve(runtimeFailure('LOCKED'));
+  #lock(selectionEpoch: object = {}): Promise<RuntimeResult<RuntimeStatus>> {
+    if (this.#closed || this.#disposing || !this.#invalidate('LOCKED', selectionEpoch)) return Promise.resolve(runtimeFailure('LOCKED'));
     return this.#request('lock', {}, undefined, true) as Promise<RuntimeResult<RuntimeStatus>>;
   }
+  lock(): Promise<RuntimeResult<RuntimeStatus>> { return this.#lock(); }
   dispose(): Promise<void> {
     if (this.#disposal) return this.#disposal;
     if (this.#closed) return Promise.resolve();

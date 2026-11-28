@@ -1,0 +1,153 @@
+{
+  "schema": "p2p-offramp-unlock-form-admission-qualification/v1",
+  "recorded_utc": "2026-11-20T17:54:30.392Z",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "worker": "/root/ui_admission_recon_g26",
+  "branch": "codex/unlock-form-admission-g26-20261120",
+  "base_commit": "1a52c1c4f53a97cbbd0937f14a4379b88fd249b8",
+  "base_tree": "26938456c4924e4792a5671183a0879e86f8b7a2",
+  "regression_commit": "6df5a34a7c00f8a6fa489a53ca8f783616e285f5",
+  "regression_tree": "4526273027691552d891ebce9d0d66bec19fb828",
+  "source_commit": "a2a854a285563d4560610577a0df099b041643bf",
+  "source_tree": "d6eea6d8e46d9612b59768801daa28ee9544e3a3",
+  "node_version": "v24.22.3",
+  "changed_paths": [
+    "apps/web/src/ui/VaultForms.tsx",
+    "apps/web/test/unlock-form-admission.test.mjs"
+  ],
+  "regression_test_blob_unchanged": true,
+  "source_files": [
+    {
+      "path": "apps/web/src/ui/VaultForms.tsx",
+      "sha256": "c45331bf70e75ad617f389d4dda5e118c07d067c0778f404d914b0ac9459b606"
+    },
+    {
+      "path": "apps/web/test/unlock-form-admission.test.mjs",
+      "sha256": "55d038f4005bdd8f9c800477cec790a317e1f9342d931f51f7910bfd6d5924e7"
+    }
+  ],
+  "base_tree_entries": 2728,
+  "source_tree_entries": 2729,
+  "unchanged_base_entries": 2727,
+  "working_tree_execution_note": "RED ran with the original 1a52 production source and the test bytes subsequently frozen in the regression-only commit. GREEN, affected suites and UI typecheck ran on the exact working tree subsequently frozen in the source commit. The regression test blob is identical across both commits.",
+  "characterization": {
+    "qualified_source_commit": "1a52c1c4f53a97cbbd0937f14a4379b88fd249b8",
+    "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/unlock-admission-recon.g26.test.mjs",
+    "original_probe_path": "apps/web/test/unlock-admission-recon.g26.test.mjs",
+    "retained_probe": "docs/engineering/evidence/unlock-form-admission-generation26/characterization-probe.mjs.txt",
+    "retained_probe_sha256": "a506c2acc47d75f38b7d00d01bdb4e4b10c9eacb1af038eaedd20e2a9ea15671",
+    "exit_code": 0,
+    "tests": 5,
+    "pass": 5,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "interpretation": "The initial probe asserted observed behavior, including the ownership loss. Its green result is characterization evidence, not desired-behavior qualification.",
+    "log": "docs/engineering/evidence/unlock-form-admission-generation26/characterization.log",
+    "log_bytes": 893,
+    "log_sha256": "4977d5aa3a4583a66febc0769dac6275307153eb09eedd6691ed05e266b0dba6"
+  },
+  "executions": [
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/unlock-form-admission.test.mjs",
+      "exit_code": 1,
+      "qualified_source_commit": "6df5a34a7c00f8a6fa489a53ca8f783616e285f5",
+      "tests": 8,
+      "pass": 4,
+      "fail": 4,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "log": "docs/engineering/evidence/unlock-form-admission-generation26/regression-red.log.gz",
+      "log_bytes": 852,
+      "log_sha256": "ed70ab46cc0f4f07a57bce14864d8a4ae5a0180e032f32a225609b616e9b972c",
+      "compression": {
+        "format": "gzip",
+        "mtime": 0,
+        "compressed_bytes": 852,
+        "compressed_sha256": "ed70ab46cc0f4f07a57bce14864d8a4ae5a0180e032f32a225609b616e9b972c",
+        "decoded_bytes": 3646,
+        "decoded_sha256": "279bf2a761430e8be81889ddca940c3aebd93a4fbe86fab1017f91920b9fb4d5",
+        "decoded_byte_equality_verified": true
+      }
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/unlock-form-admission.test.mjs",
+      "exit_code": 0,
+      "qualified_source_commit": "a2a854a285563d4560610577a0df099b041643bf",
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "log": "docs/engineering/evidence/unlock-form-admission-generation26/regression-green.log",
+      "log_bytes": 841,
+      "log_sha256": "cf22e5ff108c6cc7a5efdbc3815115e167d8b9918ce4fb7251f0fa0f50dc4bb2"
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/vault-forms-locale.test.mjs apps/web/test/app-services.test.mjs apps/web/test/app-runtime.test.mjs apps/web/test/pending-metadata.test.mjs",
+      "exit_code": 0,
+      "qualified_source_commit": "a2a854a285563d4560610577a0df099b041643bf",
+      "tests": 52,
+      "pass": 52,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "log": "docs/engineering/evidence/unlock-form-admission-generation26/affected-tests.log",
+      "log_bytes": 6007,
+      "log_sha256": "bf9c1d95f50820cc1ef3cfbdf743e15b4c08c7a1bc1c9949f4327d62aae1bebf"
+    },
+    {
+      "command": "./node_modules/.bin/tsc -p apps/web/tsconfig.ui.json --noEmit",
+      "exit_code": 0,
+      "qualified_source_commit": "a2a854a285563d4560610577a0df099b041643bf",
+      "log": "docs/engineering/evidence/unlock-form-admission-generation26/ui-typecheck.log",
+      "log_bytes": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "qualified_source_commit": "a2a854a285563d4560610577a0df099b041643bf",
+      "log": "docs/engineering/evidence/unlock-form-admission-generation26/source-diff-check.log",
+      "log_bytes": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "evidence_whitespace_check": {
+    "command": "git diff --check 1a52c1c4f53a97cbbd0937f14a4379b88fd249b8",
+    "exit_code": 0,
+    "scope": "Complete report-bearing author working tree, including every source, test and evidence path; no path exclusions."
+  },
+  "scope": {
+    "production_change": "UnlockForm rejects submission synchronously when its existing request ref is non-null, preserving the admitted AbortController before React rerenders busy state.",
+    "regression_cases": [
+      "single pending cancellation with a delivered late valid unlock reply",
+      "same-render duplicate followed immediately by Cancel and unmount",
+      "settled duplicate followed by Cancel",
+      "settled duplicate followed by unmount",
+      "duplicate pending-state and original authentication notice preservation",
+      "rerender-separated duplicate control",
+      "ordinary successful unlock",
+      "explicit fresh retry after completed authentication failure"
+    ],
+    "execution_boundary": "Maintained transpiled TSX handler, actual AppServices facade and AppRuntime; controlled hook rendering and held Worker port. Native browser event reachability and native Worker behavior are not qualified.",
+    "rate_policy": "No cooldown, interval, attempt count, new clock or persistence policy is introduced. The line-158 rate-limit wording remains underdefined; the existing one-job runtime/Worker bound is unchanged."
+  },
+  "preserved": [
+    "passphrase clearing and fixed notice mapping",
+    "original cancellation and runtime generation handling",
+    "one posted Worker unlock command",
+    "ReleaseEnabled=0 and default activation",
+    "trust, keys, origins, protocol, dependency and workflow files",
+    "all other VaultForms components and the passphrase-attempt specification"
+  ],
+  "limits": [
+    "author evidence only; independent review and composed-source qualification remain with the coordinator",
+    "no local browser, full suite, financial run, remote read or mutation, deployment or publication",
+    "the assigned base is a coordinator source commit, not a claim about a remote main ref"
+  ]
+}

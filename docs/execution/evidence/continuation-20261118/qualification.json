@@ -1,0 +1,112 @@
+{
+  "schema": "p2p-offramp/continuation-execution-record/v1",
+  "recorded_at": "2026-11-18T06:26:36.498385-08:00",
+  "published_implementation_commit": "5caca61b065c8bd6d0a03385876519cbf5d9b065",
+  "implementation_tree": "fcb55944b3580c9727d2a9a194b2369c102f322a",
+  "full_package_suite_local_commit": "0db582b29f74f5f706e5750c1ee3238401ad74fe",
+  "post_suite_changes": "component reports and evidence only; product, tests, dependencies and workflow inputs unchanged",
+  "environment": {
+    "node": "24.22.1",
+    "npm": "11.9.0",
+    "foundry": "1.5.1",
+    "solc": "0.8.30",
+    "network": "owned loopback Anvil/Nostr fixtures; published development wallet keys"
+  },
+  "results": [
+    {
+      "command": "npm test",
+      "result": "1943 passed, zero failed/skipped/cancelled/todo",
+      "exit_code": 0,
+      "log": "erc20-final-full-tests.log",
+      "sha256": "6fd16b53e43bd8535812c34471ca883e919a25f2002ee97f345fe5219e14ee3e"
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "four TypeScript projects passed",
+      "exit_code": 0,
+      "log": "erc20-final-typecheck.log",
+      "sha256": "6a12cffb65325525a02ae9c63237b4a5c732aa42302fa957e127eba5c566bfab"
+    },
+    {
+      "command": "npm run test:specs",
+      "result": "32 passed",
+      "exit_code": 0,
+      "log": "erc20-final-specs.log",
+      "sha256": "80fbbbd8f9ce3c264dce7389a6973a68167f30fab626473b64d52dceb2b85de9"
+    },
+    {
+      "command": "npm run check:specs",
+      "result": "173 specs, zero broken/unindexed",
+      "exit_code": 0,
+      "log": "erc20-final-spec-links.log",
+      "sha256": "702f17b0b0d5d137efd0cb99c4b0c9592e628045d20a12638e2d50e8cd7dc66a"
+    },
+    {
+      "command": "npm run check:boundaries",
+      "result": "197 production sources,112 core modules",
+      "exit_code": 0,
+      "log": "erc20-final-boundaries.log",
+      "sha256": "f5d18d613c51d33533dfa56ed680f8bfa9e9e38c5b9b423ac398564b95beee3b"
+    },
+    {
+      "command": "npm run test:build-policy",
+      "result": "50 passed,zero failures/skips",
+      "exit_code": 0,
+      "log": "erc20-final-build-policy.log",
+      "sha256": "c6af6c4227c4e6fecb2bd5d28bab0d4317852ee6f5ce93b1f83671d7bdd668b4"
+    },
+    {
+      "command": "npm run build",
+      "result": "passed",
+      "exit_code": 0,
+      "log": "erc20-final-build.log",
+      "sha256": "b4e680af9e6c28c95cf429b07afd2186e09c917f8b6af78e6d13fa723cc084bb"
+    },
+    {
+      "command": "npm run build:demo",
+      "result": "passed",
+      "exit_code": 0,
+      "log": "erc20-final-build-demo.log",
+      "sha256": "7d6472e8cb9b972d13c58db0aec6494cd280daac2f9260e3831b26942372cd7a"
+    },
+    {
+      "command": "npm run test:localnet:controller",
+      "result": "12 checks,4 sends,4 exact markers",
+      "exit_code": 0,
+      "log": "erc20-final-native-compatibility.log",
+      "sha256": "46e2707f87383c786c0c5d4ec3afa208da838351907bfd5c8ad87aab8c73d0d5"
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-erc20.mjs",
+      "result": "7 checks,8 sends,8 exact markers",
+      "exit_code": 0,
+      "log": "erc20-final-native.log",
+      "sha256": "aeb85545f3ced3511410ec2dab829c7503e5152e5e94c0e615665526c8674839"
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-erc20-independent.mjs",
+      "result": "4 checks,3 sends,3 exact markers",
+      "exit_code": 0,
+      "log": "erc20-final-independent.log",
+      "sha256": "4db14f27dba74045dc461be1ab91f2165869c488168b8adc4f381b18f4d4be4e"
+    },
+    {
+      "command": "buildWeb(localnet) with startLocalnetFixture({erc20:true})",
+      "result": "11 assets,ReleaseEnabled0,no browser executed",
+      "exit_code": 0,
+      "log": "erc20-final-localnet-build.log",
+      "sha256": "a70020d67503a6953ece019ca612af83630a849c0c2d6b95c174e754a86e102b"
+    }
+  ],
+  "browser": {
+    "executed": false,
+    "reason": "Chromium required Unix socket denied before browser context",
+    "evidence": "../../LOCALNET-BROWSER-CONTINUATION-2026-11-18.md"
+  },
+  "solana_validator": {
+    "executed_in_this_continuation": false,
+    "hosted_qualification": "pending"
+  },
+  "ReleaseEnabled": 0,
+  "signed_release_attestation": false
+}

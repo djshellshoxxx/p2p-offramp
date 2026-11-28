@@ -1,0 +1,395 @@
+{
+  "repository": "djshellshoxxx/p2p-offramp",
+  "pr": 219,
+  "branch": "codex/reviewed-main-consolidation-g15-20261120",
+  "head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+  "tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
+  "local_equivalent": "430fbcaa6eff20dcd869d30a73e6a2ca6add0f0c",
+  "base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+  "merge_checkout": "0dad3d1bab9b868ab7ee7e8a8565075bf6990452",
+  "ordered_parents": [
+    "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+    "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "24378d91682f7ee2957e1237aefcdb2ed062962b",
+    "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+    "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+    "973d7b046df54856e0f71688db7a3efd879e7c2d",
+    "7d40620c8320945750bd51bf865226dadde998ca",
+    "09c3d94aedab3c78a4397e3cb80786fb5eb4fd4a"
+  ],
+  "changed_paths_vs_main": 379,
+  "commit_count_vs_main": 64,
+  "local_changed_paths_vs_core": 42,
+  "source_publication_map": [
+    {
+      "path": ".github/workflows/evm-escrow.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "26c317db158bec40a12b9ca2234b3b617780959d",
+      "known_remote_component": "oracle",
+      "length": 0
+    },
+    {
+      "path": ".github/workflows/vault-foundation.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6024ba60bf009f9ec68438254455836e56dc2878",
+      "known_remote_component": "browsers",
+      "length": 0
+    },
+    {
+      "path": "apps/web/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "45eec6cc2094304ebef79f9ad57d2748e2500a0c",
+      "known_remote_component": null,
+      "length": 7103
+    },
+    {
+      "path": "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e0bacc230f4b254a7fcf7c644d50b399a9f5e467",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "apps/web/src/solana-localnet/controller.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "069fa219b60549e95c33296780bf058b863b3b86",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "apps/web/src/solana-localnet/protocol.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3993703228c4a39c0c74e216a52c1d0b5b8e06d8",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "apps/web/src/solana-localnet/validation.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d554a2c0a39c737eac59816962379a4879151290",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "apps/web/src/ui/App.tsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb2f4d681afd9027db9aeca9feebcb9376112a2d",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "apps/web/src/ui/BackupVerificationForm.tsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b22ef6fc72c2b397e49fa912c23e8e4173134a88",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d1a4d6a4e4277aa88b07f8ade3863567e81b41c8",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "apps/web/src/ui/SignedUpdatePanel.tsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "156fa39b4fdf012ed105f163f772235747bec165",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b90d918ff20bcaa4caa5b7e45dc3f025d05285e",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "apps/web/test/backup-verification-ui.test.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d620f4e11cc435408e413398cf1bcec17eeda0b",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "apps/web/test/signed-update-ui.test.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b0400ad59ad359a4be3ad520f3e63a985834c06b",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "apps/web/test/solana-localnet-controller.test.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d6089239674362d6df46601a00fb0c3ef5914efb",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "apps/web/test/solana-public-recovery-ui.test.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b58dd8c2b9954e53828d77f3b73b89b9df418e51",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "contracts/solana/Cargo.lock",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7d9b985b90a095c0a8c248d086512a19ed21ff66",
+      "known_remote_component": "dependency",
+      "length": 0
+    },
+    {
+      "path": "contracts/solana/RECOVERY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a6081146c67980704a6a2a2ec77de1638957825c",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/BACKUP_CROSS_BROWSER_GENERATION13_20261120.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dd3548b1e9e849a2bb1463c65e17078531138032",
+      "known_remote_component": "browsers",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/BACKUP_VERIFICATION_UI_GENERATION12_20261120.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aad80173d72263ac32f6d821c447109899967a24",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/COMBINED_QUALIFICATION_GENERATION14_20261120.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c73d18a8bcbb78c9135a9899bfc52fc953d90e3a",
+      "known_remote_component": null,
+      "length": 6686
+    },
+    {
+      "path": "docs/engineering/GENERATION12_CI_ORACLE_COVERAGE_20261120.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f6658dcc76c4a8e66950175fe7c0d223c45f491",
+      "known_remote_component": "oracle",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/INDEPENDENT_BACKUP_VERIFICATION_UI_REVIEW_GENERATION12_20261120.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e0a52066f8cc11c96e052b9fb8048f90c9364328",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/INDEPENDENT_SIGNED_UPDATE_UI_REVIEW_GENERATION13_20261120.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "873dd0979148dcbae05cb2b97dcfb52c22427e71",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/INDEPENDENT_SOLANA_PUBLIC_EXPORT_REVIEW_GENERATION14_20261120.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d981fe11ca763bce2dd6ed4df0b0742b641d2e39",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/SIGNED_UPDATE_UI_GENERATION13_20261120.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fbc21693ba5c9c2a7e61c9a42fa9b6fd441932cf",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/SIGNED_UPDATE_UI_GENERATION13_20261120.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be61fbd5c5ce8d9aa9579a632ca5a58b63c26bc7",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/SOLANA_PUBLIC_RECOVERY_EXPORT_GENERATION14_20261120.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "abcdc4f6a748d883e68e944cee37241f2b008328",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/SOLANA_PUBLIC_RECOVERY_EXPORT_GENERATION14_20261120.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0dce99392c50c89d720f4bb88e4e74c76988a952",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/backup-cross-browser-generation13-evidence.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "96464d8457d425ce471ee5db3b219df50c67fa6c",
+      "known_remote_component": "browsers",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/backup-verification-ui-generation12-evidence.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c824ca48885d0a871e85bbe26e860f0c3c2ff5b3",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/backup-verification-ui-independent-review-generation12.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "075041221255b559fde1ab9451681292140da681",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/combined-qualification-generation14.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97e272129dff2ab7aba28363717c823b18caad50",
+      "known_remote_component": null,
+      "length": 32119
+    },
+    {
+      "path": "docs/engineering/signed-update-ui-independent-review-generation13.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "adf19240e3efbd27f7c345197d77e9b117297f0a",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "docs/engineering/solana-public-export-independent-review-generation14.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b0749bdf64cf974791964c41cce2dd6d01f1c8c5",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02a4f6d42e932567f213353db21dc99616f5eaa9",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "packages/security/README-UPDATES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30b611c3369d3ed08da4176cbfc7ce7f4c2ae05d",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "packages/security/update-view.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9ebc8b22273a679c8db659c6d6b02e9b05a7466",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "scripts/check-import-boundaries.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4455ec624a97724c4c04fd3801b5bcbfc642ad12",
+      "known_remote_component": "updater",
+      "length": 0
+    },
+    {
+      "path": "scripts/test-backup-verification-browser.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f6afc775c6bb97abc7e2950f73a98ed813303d15",
+      "known_remote_component": "browsers",
+      "length": 0
+    },
+    {
+      "path": "scripts/test-solana-localnet-browser.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5607620869fda8c54482336af926e53e17eb1f7f",
+      "known_remote_component": "export",
+      "length": 0
+    },
+    {
+      "path": "scripts/tests/import-boundaries.test.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b043ede5878608aa1595f90bf692f7fde3f559b0",
+      "known_remote_component": "updater",
+      "length": 0
+    }
+  ],
+  "full_suite": {
+    "passed": 2361,
+    "failed": 0,
+    "skipped": 0,
+    "log_sha256": "74f612915a534d96a0a850496b4ad761f2e81fe868c04abd8e8e0eb3339ca404"
+  },
+  "independent_review": "INDEPENDENT_FINAL_COMPOSITION_REVIEW_GENERATION15_20261120.md",
+  "main_merges_performed": 0,
+  "original_refs_preserved": true,
+  "release_enabled": 0,
+  "automation": {
+    "id": "Automation_ab68cc67e6ac8191bd31dc2d84a085e1",
+    "prompt_updated": true,
+    "schedule_unchanged": true
+  },
+  "solana_export_focused_publication": {
+    "local": "64f44a4a761d9ec39cfaf52db0afa1abdd4a72e8",
+    "remote": "09c3d94aedab3c78a4397e3cb80786fb5eb4fd4a",
+    "tree": "ddd3f4b29c5690c240c092ae8915d80342d503a1",
+    "base": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "tests_passed": 21,
+    "test_log_sha256": "478e61376ecb457301b1e3cbc7f687f240ae16b0dc2ad41feb0588af734f4b98",
+    "build_log_sha256": "4a18d0ee47f8f860515b09301142aab55e84725ff5091c41be848695fda9a59e",
+    "boundary_log_sha256": "a2afff1ba06119367082cb0aec36223a649eae2fcc0580855c50a042cf9f7684"
+  },
+  "component_prs_closed_as_superseded": [
+    213,
+    214,
+    215,
+    216,
+    217,
+    218
+  ],
+  "component_refs_verified_after_closure": true
+}

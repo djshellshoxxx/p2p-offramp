@@ -1,0 +1,3994 @@
+{
+  "schema": "p2p-consolidation-inventory-delta/v2",
+  "generation": 10,
+  "observed_from_utc": "2026-11-20T04:13:15.345Z",
+  "observed_to_utc": "2026-11-20T04:13:45.861Z",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "input_handoff": {
+    "pr": 200,
+    "head": "b01aa60a7eb893d0359449f335f1862864eec179",
+    "tree": "86c7f44cd323601ffa9817defdbcabb2ed241054",
+    "local_equivalent": "ac87d6f305e513237b3cefa6b25c1ee35bdecfee"
+  },
+  "main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+  "counts": {
+    "branches": 219,
+    "pull_requests": 208,
+    "open": 65,
+    "merged": 105,
+    "closed_unmerged": 38,
+    "tags": 0,
+    "releases": 0
+  },
+  "original_inventory_file": "branch-inventory.json",
+  "previous_inventory_file": "inventory-delta-generation7.json",
+  "original_classification_counts": {
+    "A": 108,
+    "B": 20,
+    "C": 41,
+    "D": 5,
+    "E": 2,
+    "F": 11,
+    "G": 5
+  },
+  "original_branches_compared": 192,
+  "original_heads_changed": [],
+  "original_prs_compared": 184,
+  "original_pr_metadata_changes": [],
+  "previous_212_branches_compared": 212,
+  "new_branches_since_generation7": [
+    {
+      "branch": "codex/ctutils-remediation-20261119",
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "protected": false,
+      "tree": "e7aba3833fa52c6eda7a23cd6d1301cadc610355",
+      "parents": [
+        "df10fe26a308407237f9ccbc636c8bb61f55b84f"
+      ],
+      "classification": "C",
+      "classification_reason": "Known cumulative derivative with scoped useful differences; the complete branch is not declared merge-qualified.",
+      "pr": 209,
+      "owner": "root-coordinator",
+      "scope": "Compatible ctutils lock update plus reports; bigint advisory remains separate.",
+      "next_action": "Include exact reviewed lock delta in owned combined core, then require applicable native qualification.",
+      "exact_delta_base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "delta_paths": [
+        "contracts/solana/Cargo.lock",
+        "docs/engineering/CARGO_DEPENDENCY_REMEDIATION_GENERATION7_20261119.md",
+        "docs/engineering/INDEPENDENT_CARGO_REMEDIATION_REVIEW_GENERATION7_20261119.md",
+        "docs/engineering/cargo-dependency-remediation-generation7.json"
+      ],
+      "additional_unowned_functionality_identified": false
+    },
+    {
+      "branch": "codex/generation8-core-20261120",
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "protected": false,
+      "tree": "4b694124197ae8ce271f14307d12abc43c719406",
+      "parents": [
+        "cd7d54ba075118a7ec043788c17718be842ee405"
+      ],
+      "classification": "C",
+      "classification_reason": "Known cumulative derivative with scoped useful differences; the complete branch is not declared merge-qualified.",
+      "pr": 207,
+      "owner": "external-successor-coordinator",
+      "scope": "Four reviewed source corrections on205; current main-targeting core remains held by its failed browser precondition and unfinished native job.",
+      "next_action": "Preserve external ref; use as ancestor of the owned followup composition.",
+      "exact_delta_base": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "delta_paths": [
+        "apps/web/src/ui/trade/TradeDraftPanel.tsx",
+        "apps/web/src/ui/trade/TradePages.tsx",
+        "apps/web/test/recovery-references-ui-lifecycle.test.mjs",
+        "apps/web/test/solana-expiry-rpc.test.mjs",
+        "apps/web/test/trade-draft-navigation-contract.test.mjs",
+        "apps/web/test/trade-ui-navigation-lifecycle.test.mjs",
+        "docs/engineering/CODE_AUDIT_GENERATION6_20261119.md",
+        "docs/engineering/CODE_AUDIT_GENERATION7_20261119.md",
+        "docs/engineering/CODE_AUDIT_GENERATION8_20261120.md",
+        "docs/engineering/CONSOLIDATION_HANDOFF.md",
+        "docs/engineering/FEATURE_MATRIX.md",
+        "docs/engineering/GENERATION6_BUG_HUNT_20261119.md",
+        "docs/engineering/HOSTED_REVIEW_GENERATION9_20261119.json",
+        "docs/engineering/HOSTED_REVIEW_GENERATION9_20261119.md",
+        "docs/engineering/INDEPENDENT_INTERACTION_REVIEW_GENERATION8_20261120.md",
+        "docs/engineering/INDEPENDENT_NAVIGATION_REVIEW_GENERATION7_20261119.md",
+        "docs/engineering/INDEPENDENT_SOLANA_EXPIRY_REVIEW_GENERATION8_20261119.md",
+        "docs/engineering/OPTIONAL_COMPOSITION_GENERATION8_20261120.md",
+        "docs/engineering/SECURITY_REVIEW_QR_WORKER_GENERATION7_20261119.md",
+        "docs/engineering/SOLANA_RECONCILIATION_CONTEXT_20261119.md",
+        "docs/engineering/SUCCESSOR_CONSOLIDATION_GENERATIONS6_8_20261120.md",
+        "docs/engineering/consolidation-state.json",
+        "docs/engineering/core-qualification-generation8.json",
+        "docs/engineering/inventory-delta-generation8.json",
+        "docs/engineering/optional-composition-generation8.json",
+        "packages/chain-solana/src/submit.ts",
+        "packages/chain-solana/test/independent-expiry-context.test.mjs",
+        "packages/chain-solana/test/reconciliation-context.test.mjs",
+        "packages/security/src/release-update-store.ts",
+        "packages/security/test/release-update-open-independent.test.mjs",
+        "packages/security/test/release-update-store.test.mjs",
+        "packages/security/test/release-update.test.mjs",
+        "scripts/portal/build.mjs",
+        "scripts/portal/build.test.mjs"
+      ],
+      "additional_unowned_functionality_identified": false
+    },
+    {
+      "branch": "codex/generation9-backup-verification-20261120",
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "protected": false,
+      "tree": "6a4417741c0b399dde894773f29854f7a2d36228",
+      "parents": [
+        "df10fe26a308407237f9ccbc636c8bb61f55b84f"
+      ],
+      "classification": "C",
+      "classification_reason": "Known cumulative derivative with scoped useful differences; the complete branch is not declared merge-qualified.",
+      "pr": 208,
+      "owner": "external-successor-coordinator",
+      "scope": "Reviewed selected-profile complete-backup verification through current runtime; no update-UI or trust activation.",
+      "next_action": "Preserve source; compose through current author and qualify combined behavior.",
+      "exact_delta_base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "delta_paths": [
+        "apps/web/src/app-services.ts",
+        "apps/web/src/runtime/app-runtime.ts",
+        "apps/web/src/runtime/pending-metadata.ts",
+        "apps/web/src/runtime/worker-endpoint.ts",
+        "apps/web/test/backup-verification-independent.test.mjs",
+        "apps/web/test/backup-verification-publication.test.mjs",
+        "apps/web/test/backup-verification-runtime.test.mjs",
+        "docs/engineering/BACKUP_VERIFICATION_COMPOSITION_GENERATION9_20261120.md",
+        "docs/engineering/BACKUP_VERIFICATION_PREREQUISITE_GENERATION9_20261120.md",
+        "docs/engineering/INDEPENDENT_BACKUP_PUBLICATION_REVIEW_GENERATION9_20261120.md",
+        "docs/engineering/SECURITY_REVIEW_BACKUP_GENERATION9_20261119.md",
+        "docs/engineering/SECURITY_REVIEW_UPDATER_COMPOSITION_GENERATION10_20261120.json",
+        "docs/engineering/SECURITY_REVIEW_UPDATER_COMPOSITION_GENERATION10_20261120.md",
+        "docs/engineering/backup-qualification-generation9.json",
+        "packages/schemas/src/runtime.ts",
+        "packages/schemas/test/backup-verification.test.mjs",
+        "packages/security/README-UPDATES.md"
+      ],
+      "additional_unowned_functionality_identified": false
+    },
+    {
+      "branch": "codex/optional-corrected-evidence-g9-20261120",
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "protected": false,
+      "tree": "6a9eb6f25ea0568daa80b928408c958356a3db59",
+      "parents": [
+        "c4c640aff58c1bcaf3b80875d121b8a95245ab36"
+      ],
+      "classification": "C",
+      "classification_reason": "Known cumulative derivative with scoped useful differences; the complete branch is not declared merge-qualified.",
+      "pr": null,
+      "owner": "root-coordinator",
+      "scope": "Known nine-package optional source on210 plus four evidence documents; exact tested source tree retained.",
+      "next_action": "Preserve nine separate original PRs and named-review/native/browser conditions; rebind only to a newly qualified core.",
+      "exact_delta_base": "c4c640aff58c1bcaf3b80875d121b8a95245ab36",
+      "delta_paths": [
+        "docs/engineering/GENERATION9_OPTIONAL_CORRECTED_STACK_20261120.md",
+        "docs/engineering/INDEPENDENT_OPTIONAL_CORRECTED_STACK_GENERATION9_20261120.md",
+        "docs/engineering/generation9-optional-published-layers.json",
+        "docs/engineering/generation9-optional-stack-plan.json"
+      ],
+      "additional_unowned_functionality_identified": false
+    },
+    {
+      "branch": "codex/successor-handoff-20261120",
+      "head": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+      "protected": false,
+      "tree": "c7323a825a19aa8cff7b4b24ae5ebe7a129fafcf",
+      "parents": [
+        "0e148564743b1ee353abdbdf8931fec464f09870",
+        "9d1129f189c2b7e5661384ade94da5270227af2e"
+      ],
+      "classification": "C",
+      "classification_reason": "Known cumulative derivative with scoped useful differences; the complete branch is not declared merge-qualified.",
+      "pr": null,
+      "owner": "external-successor-coordinator",
+      "scope": "External documentation checkpoint;15 engineering paths relative to208, no additional runtime delta.",
+      "next_action": "Preserve external owner and consume evidence without duplicating source integration.",
+      "exact_delta_base": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "delta_paths": [
+        "docs/engineering/CONSOLIDATION_HANDOFF.md",
+        "docs/engineering/FEATURE_MATRIX.md",
+        "docs/engineering/GENERATION5_REDISCOVERY_20261119.md",
+        "docs/engineering/HOSTED_REVIEW_GENERATION11_20261120.json",
+        "docs/engineering/HOSTED_REVIEW_GENERATION11_20261120.md",
+        "docs/engineering/INDEPENDENT_PUBLICATION_AUDIT_GENERATION11_20261120.md",
+        "docs/engineering/INDEPENDENT_RELAY_INPUT_REVIEW_GENERATION10_20261120.md",
+        "docs/engineering/RELAY_CORE_COMPOSITION_GENERATION11_20261120.md",
+        "docs/engineering/RELAY_FRESHNESS_CAPACITY_20261120.md",
+        "docs/engineering/SUCCESSOR_HANDOFF_GENERATION11_20261120.md",
+        "docs/engineering/consolidation-state.json",
+        "docs/engineering/feature-matrix.json",
+        "docs/engineering/hosted-published-status-generation11.json",
+        "docs/engineering/inventory-delta-generation5.json",
+        "docs/engineering/relay-composition-generation11.json"
+      ],
+      "additional_unowned_functionality_identified": false
+    },
+    {
+      "branch": "codex/transport-qualification-20261120",
+      "head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+      "protected": false,
+      "tree": "47f982cf20cd123df45805597b266f1f5ab98259",
+      "parents": [
+        "df10fe26a308407237f9ccbc636c8bb61f55b84f"
+      ],
+      "classification": "C",
+      "classification_reason": "Known cumulative derivative with scoped useful differences; the complete branch is not declared merge-qualified.",
+      "pr": 210,
+      "owner": "root-coordinator",
+      "scope": "Reviewed diagnostic correction retaining all assertions and measured socket warmth; actual revised-browser gate pending.",
+      "next_action": "Generation10 author/reviewer own combined followups; root may publish by expected-head lease only after local qualification.",
+      "exact_delta_base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "delta_paths": [
+        "apps/web/test/solana-withheld-transport-independent.test.mjs",
+        "apps/web/test/solana-withheld-transport-qualification.test.mjs",
+        "docs/engineering/INDEPENDENT_TRANSPORT_FIXTURE_REVIEW_GENERATION8_20261120.md",
+        "docs/engineering/TRANSPORT_WARM_CONNECTION_QUALIFICATION_GENERATION8_20261120.md",
+        "scripts/lib/solana-withheld-transport-qualification.mjs",
+        "scripts/test-solana-withheld-send-browser.mjs"
+      ],
+      "additional_unowned_functionality_identified": false
+    },
+    {
+      "branch": "fix/qr-async-expiry-20261120",
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "protected": false,
+      "tree": "224341968be39c6de7874b34a1f7fd6eefa19857",
+      "parents": [
+        "3afe1504556466d9a22ad4f2d69826b6d68a78bf"
+      ],
+      "classification": "C",
+      "classification_reason": "Known cumulative derivative with scoped useful differences; the complete branch is not declared merge-qualified.",
+      "pr": 211,
+      "owner": "existing-hourly-continuation-author",
+      "scope": "One Low public-review post-await timing correction, independently reviewed112 affected tests; no signing/payment authority.",
+      "next_action": "Use exact reviewed source in currently owned combined core; preserve standalone author ref.",
+      "exact_delta_base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "delta_paths": [
+        "docs/engineering/QR_ASYNC_EXPIRY_RECHECK_20261120.md",
+        "packages/qr/src/text-codec.ts",
+        "packages/qr/test/async-expiry.test.mjs"
+      ],
+      "additional_unowned_functionality_identified": false
+    }
+  ],
+  "changed_heads_since_generation7": [
+    {
+      "branch": "codex/consolidation-handoff-20261119",
+      "before": "9d1129f189c2b7e5661384ade94da5270227af2e",
+      "now": "b01aa60a7eb893d0359449f335f1862864eec179"
+    },
+    {
+      "branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "before": "e848ae19574e8b7f4cb040082df5255ee5a63f1e",
+      "now": "825a85a55a1e0a43d6f416696fabee94913a2f18"
+    }
+  ],
+  "previous_203_prs_compared": 203,
+  "previous_pr_metadata_changes": [
+    {
+      "pr": 206,
+      "changes": [
+        {
+          "field": "head",
+          "before": "e848ae19574e8b7f4cb040082df5255ee5a63f1e",
+          "current": "825a85a55a1e0a43d6f416696fabee94913a2f18"
+        },
+        {
+          "field": "base",
+          "before": "codex/generation5-core-20261119",
+          "current": "codex/generation8-core-20261120"
+        },
+        {
+          "field": "base_sha",
+          "before": "cd7d54ba075118a7ec043788c17718be842ee405",
+          "current": "df10fe26a308407237f9ccbc636c8bb61f55b84f"
+        }
+      ]
+    },
+    {
+      "pr": 200,
+      "changes": [
+        {
+          "field": "head",
+          "before": "9d1129f189c2b7e5661384ade94da5270227af2e",
+          "current": "b01aa60a7eb893d0359449f335f1862864eec179"
+        }
+      ]
+    }
+  ],
+  "new_prs_since_generation7": [
+    {
+      "number": 207,
+      "title": "Consolidate reviewed Solana expiry and lifecycle repairs",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "head_branch": "codex/generation8-core-20261120",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main",
+      "draft": true,
+      "created_at": "2026-11-20T02:42:56Z",
+      "updated_at": "2026-11-20T02:42:56Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/207"
+    },
+    {
+      "number": 208,
+      "title": "Complete current-runtime backup verification prerequisite",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "head_branch": "codex/generation9-backup-verification-20261120",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120",
+      "draft": true,
+      "created_at": "2026-11-20T02:52:34Z",
+      "updated_at": "2026-11-20T02:52:35Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/208"
+    },
+    {
+      "number": 209,
+      "title": "Update compatible ctutils lock and retain explicit dependency findings",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "head_branch": "codex/ctutils-remediation-20261119",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120",
+      "draft": false,
+      "created_at": "2026-11-20T02:54:24Z",
+      "updated_at": "2026-11-20T02:55:08Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/209"
+    },
+    {
+      "number": 210,
+      "title": "Preserve transport assertions while sampling warmed connections",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+      "head_branch": "codex/transport-qualification-20261120",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120",
+      "draft": true,
+      "created_at": "2026-11-20T03:25:31Z",
+      "updated_at": "2026-11-20T03:25:31Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/210"
+    },
+    {
+      "number": 211,
+      "title": "fix(qr): recheck expiry after async hash and signature verification",
+      "state": "open",
+      "merged": false,
+      "merged_at": null,
+      "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "head_branch": "fix/qr-async-expiry-20261120",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120",
+      "draft": true,
+      "created_at": "2026-11-20T03:39:26Z",
+      "updated_at": "2026-11-20T03:39:26Z",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/211"
+    }
+  ],
+  "prior_snapshot_digest_verification": {
+    "remote_branches_compact_json_sha256": [
+      {
+        "sort_keys": false,
+        "ensure_ascii": false,
+        "digest": "48940b07b46d0e6fd3d2e168d3f3627a32bff6d3f4b06e11523d593331d40f14"
+      },
+      {
+        "sort_keys": false,
+        "ensure_ascii": true,
+        "digest": "48940b07b46d0e6fd3d2e168d3f3627a32bff6d3f4b06e11523d593331d40f14"
+      },
+      {
+        "sort_keys": true,
+        "ensure_ascii": false,
+        "digest": "48940b07b46d0e6fd3d2e168d3f3627a32bff6d3f4b06e11523d593331d40f14"
+      },
+      {
+        "sort_keys": true,
+        "ensure_ascii": true,
+        "digest": "48940b07b46d0e6fd3d2e168d3f3627a32bff6d3f4b06e11523d593331d40f14"
+      }
+    ],
+    "pull_requests_compact_json_sha256": [
+      {
+        "sort_keys": true,
+        "ensure_ascii": false,
+        "digest": "66460badccc900e27de6f66a4c8df41f306eaad6626de99486d22f7cf585265e"
+      },
+      {
+        "sort_keys": true,
+        "ensure_ascii": true,
+        "digest": "66460badccc900e27de6f66a4c8df41f306eaad6626de99486d22f7cf585265e"
+      }
+    ]
+  },
+  "inventory_method": {
+    "branch_pages": [
+      100,
+      100,
+      19
+    ],
+    "pull_request_pages": [
+      100,
+      100,
+      8
+    ],
+    "page_size": 100,
+    "terminal_pages_under_page_size": true,
+    "pull_request_state": "all",
+    "pull_request_order": "created ascending",
+    "api_cli_heads_identical": true,
+    "cli": "git ls-remote --heads --tags origin",
+    "release_api": "GET /repos/djshellshoxxx/p2p-offramp/releases?per_page=100&page=1",
+    "non_atomic_snapshot": true
+  },
+  "all_branch_heads": [
+    {
+      "branch": "autonomous/completion-20261031",
+      "head": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/completion-20261102",
+      "head": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/continuation-20261031",
+      "head": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/guidance-20261101",
+      "head": "c8494b05e36cda43ac3f73e0feab831cfa00647d",
+      "protected": false
+    },
+    {
+      "branch": "autonomous/journey-20261101",
+      "head": "3947074c95fa1e0facd65a8947a2c7e70363c708",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex-continuation-spec-20261109",
+      "head": "62c6c14539ccc2ac2e56658a81602f6d1ba50d73",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/acceptance-cli-input-bounds-20261110",
+      "head": "2ba1a4e18f4673f006b195e822b5f984effb48e8",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/acceptance-review-boolean-20261110",
+      "head": "08a9cf1e9abc0fb703b14964062a3da2234fdbb6",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "head": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-compatibility-20261118",
+      "head": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
+      "head": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "head": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+      "head": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "head": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/audit-utf8-20261119-108",
+      "head": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-cross-deployment-nonce-20261111",
+      "head": "c153a99dd5c876c23bdb115f7037a4bf63cb57d4",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
+      "head": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
+      "head": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
+      "head": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
+      "head": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
+      "head": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
+      "head": "146d06d81474445434070aff557ad56379ad24a3",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
+      "head": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
+      "head": "92cc054ce9a2ee21936e20d103757e374f4af296",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-race-20261111",
+      "head": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
+      "head": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-collaboration-20261117",
+      "head": "e21a58e6a4d09c099d3249660ddec770f2164a74",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-python-baseline-20261116",
+      "head": "75a5e35b56310a9660aa7c6a3855db3c64e759f4",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-static-offers-status-20261116",
+      "head": "30efa0e158c6b50525c8e0dced494faa9f54eb08",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-status-20261118",
+      "head": "708d937df7e4799e4ad212b3293bec923f619940",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-wiki-20261110",
+      "head": "c14cfd07a440f03b5f57e35c8d39e63cdabfd5bf",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+      "head": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
+      "head": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
+      "head": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-native-withdraw-recipient-20261111",
+      "head": "84bb67f6e438b26bd1d321995c427d6a86a58930",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
+      "head": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g16-bilateral-replay-20261111",
+      "head": "969d02aecf86c6be18dde509b5cf0016345b0fe4",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-final-chain-recheck-20261111",
+      "head": "921f067769188f53c2d379f035695a40ae978083",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
+      "head": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g20-chat-scope-regression-20261111",
+      "head": "a5c74990f0f5e9162a23450db5e9af00f37d88e8",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g25-public-endpoint-regression-20261110",
+      "head": "e0a9033158d1ae874c78de7f25d0be0aa3a13157",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/g26-clear-reentrancy-20261111",
+      "head": "548495515c83fc1389837f00eb0468758cd232fd",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
+      "head": "5f2381ab42c27984dbb1cc872468dd3e09771690",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+      "head": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
+      "head": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/qualify-pr61-20261110",
+      "head": "a1930a3596f76eff4c29a1ee2991d6acd7f35895",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/recovery-reference-identity-20261115",
+      "head": "85849f7b267dddceffc35ef5253da4a23ef9be05",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/registry-concurrency-20261110",
+      "head": "a213166ea83a0c5ec0768f693ff583413e8e976b",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/review-read-bounds-20261119-119",
+      "head": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "protected": false
+    },
+    {
+      "branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
+      "head": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+      "protected": false
+    },
+    {
+      "branch": "claude/adoring-wozniak-850ue6",
+      "head": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+      "protected": false
+    },
+    {
+      "branch": "claude/compassionate-gauss-uyhfih",
+      "head": "970ac80f08c04e8d340ee57d901e48e26a667a18",
+      "protected": false
+    },
+    {
+      "branch": "claude/confident-fermi-g6wjp3",
+      "head": "64c7c1861779ea34632f2f800b80bdaecbaefa03",
+      "protected": false
+    },
+    {
+      "branch": "claude/docs-screenshots",
+      "head": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+      "protected": false
+    },
+    {
+      "branch": "claude/friendly-dijkstra-nsi310",
+      "head": "bd26833555e13408825942e9696157ed68e9980e",
+      "protected": false
+    },
+    {
+      "branch": "claude/gifted-faraday-73kydc",
+      "head": "8fb081b492ccf9ecef4dc47525c753cac670dacb",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy",
+      "head": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-decisions",
+      "head": "89d0a928e9e1127a4c8911f9437359260bd06ab6",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-journey",
+      "head": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+      "head": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
+      "head": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+      "head": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+      "head": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "head": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "head": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "head": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "head": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "head": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "head": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "head": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+      "head": "494703e837897d04bce1cb04134fa8be6b747377",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s00-ci-triggers",
+      "head": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s01-tooling",
+      "head": "4e319013ea61ead31ae00ea9a44fa9c431cc84ce",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s02-core-contracts-storage",
+      "head": "01344cbd6655f509f3e2e3903333cdb579228d37",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s03-core-messaging",
+      "head": "5a747ded358ee9fcca393bb4a0616fd4e8632296",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s04-wallet-release",
+      "head": "4ebe660f0514cc8e9ed580bf0cc23bc5a80dfad2",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s05-web-locale-leaf",
+      "head": "72bdf9f521db5ed99acc7e19ae13fe3f65ab5bce",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s06-web-runtime-ui",
+      "head": "14be5a1c1ec69d91b0affe8a87811c681269fb6c",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s07-native-journey",
+      "head": "8f0e5e245ee8c63c749e8af97fdb9d309e95b8d7",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s08-portal-lab-docs",
+      "head": "c950dad4b387cb4b33910789c454eb8f2ab0ae81",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s09-intake",
+      "head": "389c0ea69e24615d0f1d7595942514300cd855f9",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s10-optional-packages",
+      "head": "c696c02b94eb6b90da2ed76f93c383fcd8a7f703",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s11-governance-ci",
+      "head": "789b2b2c2644af741daa5328adf76ac2ec88599c",
+      "protected": false
+    },
+    {
+      "branch": "claude/loving-einstein-xgzvdy-s12-evidence",
+      "head": "001c31cc868b683080e79a025b6621d900acb96a",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-consolidation-k5h13u",
+      "head": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "head": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-integration-aan57u",
+      "head": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+      "protected": false
+    },
+    {
+      "branch": "claude/p2p-offramp-prompt-lqcgno",
+      "head": "25a01987385b49e9c28199fdfb4a874b29a6ad89",
+      "protected": false
+    },
+    {
+      "branch": "claude/post-merge-followups",
+      "head": "ec65012dbb94189180d3da52de2619cc22fe0482",
+      "protected": false
+    },
+    {
+      "branch": "claude/quirky-knuth-3s6ysy",
+      "head": "2f839b12768700ac6c3b674f75a144c6ec19fa93",
+      "protected": false
+    },
+    {
+      "branch": "claude/recovery-consolidation",
+      "head": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+      "protected": false
+    },
+    {
+      "branch": "claude/sleepy-fermat-4s6ocx",
+      "head": "f1d9dd63a2ac9d55912899f8c6233456ebf8a499",
+      "protected": false
+    },
+    {
+      "branch": "claude/sweet-noether-arf6ne",
+      "head": "391653eaba946f77057b01fd03d3c234958bcf1d",
+      "protected": false
+    },
+    {
+      "branch": "claude/sweet-shannon-grykla",
+      "head": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+      "protected": false
+    },
+    {
+      "branch": "claude/tender-goodall-db3cot",
+      "head": "8783636e7a1739b5e884cec62fbecf9c77a0ceaf",
+      "protected": false
+    },
+    {
+      "branch": "claude/trade-review-integration",
+      "head": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+      "protected": false
+    },
+    {
+      "branch": "claude/vibrant-cray-ny4gum",
+      "head": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "protected": false
+    },
+    {
+      "branch": "codex/completion-20261116",
+      "head": "88f9e40bbf8ea086705edd554a2555865429b54a",
+      "protected": false
+    },
+    {
+      "branch": "codex/consolidation-20261116",
+      "head": "274d4fe533f47ffa15aed936bd095f82ad10d9ce",
+      "protected": false
+    },
+    {
+      "branch": "codex/consolidation-handoff-20261119",
+      "head": "b01aa60a7eb893d0359449f335f1862864eec179",
+      "protected": false
+    },
+    {
+      "branch": "codex/consolidation-ledger-20261104",
+      "head": "d5b959b5ed732ab3e6f7adfd37e872a841470225",
+      "protected": false
+    },
+    {
+      "branch": "codex/continue-completion-20261116",
+      "head": "e7506c22e6b0bc405a9e51f1c809fa30c2fe5861",
+      "protected": false
+    },
+    {
+      "branch": "codex/core-continuation-20261104",
+      "head": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+      "protected": false
+    },
+    {
+      "branch": "codex/ctutils-remediation-20261119",
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "protected": false
+    },
+    {
+      "branch": "codex/d9-migration-20261116",
+      "head": "c1f8e750beb7e22d5b9a7f0e47cca9f8cd8bdb65",
+      "protected": false
+    },
+    {
+      "branch": "codex/foundation-gates-20261104",
+      "head": "77fb7c52dcdde58cad17ceee45a0f43e7e22ad43",
+      "protected": false
+    },
+    {
+      "branch": "codex/generation5-core-20261119",
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "protected": false
+    },
+    {
+      "branch": "codex/generation8-core-20261120",
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "protected": false
+    },
+    {
+      "branch": "codex/generation9-backup-verification-20261120",
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "protected": false
+    },
+    {
+      "branch": "codex/historical-recovery-20261119",
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "protected": false
+    },
+    {
+      "branch": "codex/max-consolidation-20261119",
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-arbitration-20261119",
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-composition-evidence-g8-20261120",
+      "head": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-corrected-evidence-g9-20261120",
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-courier-20261119",
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-liquidity-20261119",
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-meetup-20261119",
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-privacy-controls-20261119",
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-privacy-policy-20261119",
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-proof-inputs-20261119",
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-proof-jobs-20261119",
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "protected": false
+    },
+    {
+      "branch": "codex/optional-stealth-20261119",
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "protected": false
+    },
+    {
+      "branch": "codex/peer-acceptance-20261116",
+      "head": "b3f508420e63329ab30e1b646f61337020a1ebad",
+      "protected": false
+    },
+    {
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "protected": false
+    },
+    {
+      "branch": "codex/personalization-templates-ui-20261119",
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "protected": false
+    },
+    {
+      "branch": "codex/post-send-reconcile-20261109",
+      "head": "af0e1789889790c2050142ed508b5042ef5bcc85",
+      "protected": false
+    },
+    {
+      "branch": "codex/qr-camera-fixture-20261119",
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "protected": false
+    },
+    {
+      "branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "protected": false
+    },
+    {
+      "branch": "codex/review-consolidate-20261116",
+      "head": "5eadddd54f6db6e755e658c1982c95f95b37a823",
+      "protected": false
+    },
+    {
+      "branch": "codex/rq00-evidence-20261109",
+      "head": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+      "protected": false
+    },
+    {
+      "branch": "codex/setup-autonomous-agent-20261104",
+      "head": "54e632f8f472a4d26b2fdda4ebdd3f2e02a5dba0",
+      "protected": false
+    },
+    {
+      "branch": "codex/solana-browser-send-repair-20261119",
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "protected": false
+    },
+    {
+      "branch": "codex/solana-payout-docs-20261109",
+      "head": "7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
+      "protected": false
+    },
+    {
+      "branch": "codex/solana-restore-ack-20261119",
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "protected": false
+    },
+    {
+      "branch": "codex/successor-handoff-20261120",
+      "head": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+      "protected": false
+    },
+    {
+      "branch": "codex/transport-qualification-20261120",
+      "head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+      "protected": false
+    },
+    {
+      "branch": "consolidation/qualified-regressions-20261116",
+      "head": "f2375dba1b249912ac434ed9da3998e4cb0a40f0",
+      "protected": false
+    },
+    {
+      "branch": "consolidation/solana-browser-recovery-20261119",
+      "head": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "protected": false
+    },
+    {
+      "branch": "consolidation/tooling154-20261119",
+      "head": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "protected": false
+    },
+    {
+      "branch": "docs/consolidation-20261119",
+      "head": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+      "protected": false
+    },
+    {
+      "branch": "docs/lean-release-handoff-2026-10-24",
+      "head": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+      "protected": false
+    },
+    {
+      "branch": "docs/offramp-research-tools-execution-plan-20261106",
+      "head": "0f1792f589a20efab1f629f38d2a0068d4f44193",
+      "protected": false
+    },
+    {
+      "branch": "docs/security-spec-expansion-20261021",
+      "head": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+      "protected": false
+    },
+    {
+      "branch": "docs/spec-readiness-and-foundations",
+      "head": "6b6004bdf35b7aea14530f965756ca6d54336682",
+      "protected": false
+    },
+    {
+      "branch": "feat/custodial-ledger-foundation",
+      "head": "52e6987e77d9ef6bc403c0129b3f52531986ade8",
+      "protected": false
+    },
+    {
+      "branch": "feature/erc20-browser-continuation-20261118",
+      "head": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+      "protected": false
+    },
+    {
+      "branch": "feature/public-qr-capture-20261119",
+      "head": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "protected": false
+    },
+    {
+      "branch": "feature/same-terms-resumption-20261119",
+      "head": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+      "protected": false
+    },
+    {
+      "branch": "fix/localnet-readiness-20261119",
+      "head": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "protected": false
+    },
+    {
+      "branch": "fix/qr-async-expiry-20261120",
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "protected": false
+    },
+    {
+      "branch": "fix/remediation-09f20d73-9524c0",
+      "head": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+      "protected": false
+    },
+    {
+      "branch": "fix/remediation-f84468d6-0a97ed",
+      "head": "dba5072d7a67f67e223432c48aefabc07f31f005",
+      "protected": false
+    },
+    {
+      "branch": "gpt/p2p-beta-spec-20261109",
+      "head": "c4fb7b590639e2a1d0a3220cf6bf7936156cc8e4",
+      "protected": false
+    },
+    {
+      "branch": "integration/all-compatible-work",
+      "head": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+      "protected": false
+    },
+    {
+      "branch": "integration/browser-mvp-20261118",
+      "head": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
+      "protected": false
+    },
+    {
+      "branch": "integration/core-hardening-20261118",
+      "head": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+      "protected": false
+    },
+    {
+      "branch": "integration/docs-reconciliation-20261118",
+      "head": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+      "protected": false
+    },
+    {
+      "branch": "integration/m2a-safe-fixes-20261114",
+      "head": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+      "protected": false
+    },
+    {
+      "branch": "integration/p2p-consolidated-20261109",
+      "head": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+      "protected": false
+    },
+    {
+      "branch": "integration/pages-beta-qualification-20261112",
+      "head": "4dcddf2b4bcc9890e50647cea067f81b1b734cdd",
+      "protected": false
+    },
+    {
+      "branch": "integration/pages-offline-recovery-20261112",
+      "head": "9550d4b182806170ee28149e9d46ffbccef56c33",
+      "protected": false
+    },
+    {
+      "branch": "integration/privacy-endpoint-disclosures-20261109",
+      "head": "07b3b2abfc548a1b69621396b1d45a52dfe79063",
+      "protected": false
+    },
+    {
+      "branch": "integration/solana-core-qualification-20261118",
+      "head": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+      "protected": false
+    },
+    {
+      "branch": "main",
+      "head": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "protected": false
+    },
+    {
+      "branch": "nodata/affectionate-ritchie-xq4bon",
+      "head": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+      "protected": false
+    },
+    {
+      "branch": "nodata/doc-sweep-20261118",
+      "head": "436b591a3a750bcca2327117e487336f6dd77470",
+      "protected": false
+    },
+    {
+      "branch": "nodata/epic-goldberg-sg8n96",
+      "head": "1df700355e5199c69e84d5b41b12005677b5f5ee",
+      "protected": false
+    },
+    {
+      "branch": "nodata/epic-newton-7bowm4",
+      "head": "1fe5ae00ed2105633081d71a67db2b5436da9c8d",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx",
+      "head": "014a10a148f8b3b69c9d650fbcb083c8142e7d28",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1-reader-test-flake",
+      "head": "b7d06fed31fb7d2793da99c23f15bf6795a82b8a",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1a-reader",
+      "head": "37f074dd1d65d5f12b73182420998a152374b813",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
+      "head": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b1c-acceptance",
+      "head": "236f815e79a852643d8dfa61d6d4895c8a93f54a",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+      "head": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+      "head": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+      "head": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+      "head": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+      "head": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+      "head": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+      "head": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+      "head": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+      "head": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b3-formal",
+      "head": "39096586e1160c3c8434a2d081339bb70aeb4c1b",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+      "head": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+      "head": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
+      "head": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
+      "head": "579b02f3775323ba273dfe2bc624b5860897431e",
+      "protected": false
+    },
+    {
+      "branch": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
+      "head": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+      "protected": false
+    },
+    {
+      "branch": "parallel/accessibility-recovery-panels-20261113",
+      "head": "db38fba65be8b6e19c880c78e439e712ffe7e974",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-cold-nonce-20261113",
+      "head": "2cacd1d5219a82d984a75668838204e3160d5791",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-cold-recovery-20261113",
+      "head": "65efc3428ff01d4f091600baee85edfff094b347",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-peer-offer-20261113",
+      "head": "d6d65a47b99e68d00f82153d83fef366e532cf67",
+      "protected": false
+    },
+    {
+      "branch": "parallel/browser-runtime-engines-20261113",
+      "head": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+      "protected": false
+    },
+    {
+      "branch": "parallel/cli-argument-regression-20261113",
+      "head": "605bcd24ef3d239f6a080c129761132482029ef7",
+      "protected": false
+    },
+    {
+      "branch": "parallel/diagnostics-20261113",
+      "head": "330fa1ede8b70e532a02230e4895b0711579491e",
+      "protected": false
+    },
+    {
+      "branch": "parallel/docs-web-profile-recovery-20261113",
+      "head": "3524096c0ff1f4d743b01f06421bc56bbe07b9b3",
+      "protected": false
+    },
+    {
+      "branch": "parallel/locale-20261113",
+      "head": "c4b13ddccc5bd78406762c656df5af35958e83f9",
+      "protected": false
+    },
+    {
+      "branch": "parallel/localization-blank-warning-20261113",
+      "head": "718208880b650b03ac380d358a00878480827870",
+      "protected": false
+    },
+    {
+      "branch": "parallel/portable-recovery-guide-20261113",
+      "head": "05794e754c8bf588fc6781100e8af99675418629",
+      "protected": false
+    },
+    {
+      "branch": "parallel/recovery-builder-help-20261113",
+      "head": "4f75e00d0c8e7eb9f61efd633b684ca0a47b9d76",
+      "protected": false
+    },
+    {
+      "branch": "parallel/spec-tool-20261113",
+      "head": "6d48c9b0695cacd2a166a7386f24b61a6248bc10",
+      "protected": false
+    },
+    {
+      "branch": "parallel/tooling-source-correspondence-20261113",
+      "head": "32a4052163553f7826d55f784ab9a6e96425e576",
+      "protected": false
+    },
+    {
+      "branch": "research/code-reuse-2026-11-03",
+      "head": "5fec2c6db018868a49c8ce40c21e186cdf702417",
+      "protected": false
+    },
+    {
+      "branch": "research/remaining-gaps-20261103",
+      "head": "922a391e429d07b0840bbbe525b3a10c6d3c830c",
+      "protected": false
+    },
+    {
+      "branch": "research/security-addendum-20261103",
+      "head": "3a523a11a87d85443c484b6a4d4284b96c5f0b41",
+      "protected": false
+    },
+    {
+      "branch": "research/upstream-reuse-20261103",
+      "head": "977b36654bab2d00ca20c6139398b60c693bab73",
+      "protected": false
+    },
+    {
+      "branch": "review/codebase-security-20261104-94554ec",
+      "head": "6e9c0c5ea8881013d06892103cf87ef1c547476a",
+      "protected": false
+    },
+    {
+      "branch": "test/erc20-browser-recovery-20261119",
+      "head": "c7f462c6688c78c35514808177ff7cfed32b9961",
+      "protected": false
+    },
+    {
+      "branch": "test/nostr-relay-interop-20261119",
+      "head": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+      "protected": false
+    },
+    {
+      "branch": "work/noncustodial-reconstruction-2026-10-24",
+      "head": "bc996aac828ce63856193c9114edfef480153325",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-client-shell-2026-10-24",
+      "head": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-consolidated-20261030",
+      "head": "68fb46920431e3311c78f931432bc4a21d066c17",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-exchange-close-20261030",
+      "head": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-exchange-test-repair-20261030",
+      "head": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-gate-reconciliation-20261030",
+      "head": "e762e649600493221e3bd10f0c3525858722bc94",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-independent-branch-review-20261030",
+      "head": "9f80c9b27b943b30409710dea76a53d97a761832",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-pr14-finish-handoff-20261030",
+      "head": "8c8911e2dd3c7af4d515e645a6501eedc6178111",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-relay-lifetime-20261030",
+      "head": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+      "protected": false
+    },
+    {
+      "branch": "work/p2p-validation-20261030",
+      "head": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+      "protected": false
+    }
+  ],
+  "all_pull_requests": [
+    {
+      "number": 1,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+      "head_branch": "docs/security-spec-expansion-20261021",
+      "base_sha": "28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa",
+      "base_branch": "main"
+    },
+    {
+      "number": 2,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "6b6004bdf35b7aea14530f965756ca6d54336682",
+      "head_branch": "docs/spec-readiness-and-foundations",
+      "base_sha": "28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa",
+      "base_branch": "main"
+    },
+    {
+      "number": 3,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "3df560fcc2cae2f6031ec258b53ce37ad03c6510",
+      "head_branch": "claude/sweet-noether-arf6ne",
+      "base_sha": "28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa",
+      "base_branch": "main"
+    },
+    {
+      "number": 4,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+      "head_branch": "work/p2p-client-shell-2026-10-24",
+      "base_sha": "28bc32f1c8ea98d6216b2e1509b1fb5e3374bcfa",
+      "base_branch": "main"
+    },
+    {
+      "number": 5,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+      "head_branch": "claude/adoring-wozniak-850ue6",
+      "base_sha": "d96dcbb2114353c53b5b60cca0a8d0ba5a46150a",
+      "base_branch": "main"
+    },
+    {
+      "number": 6,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+      "head_branch": "docs/lean-release-handoff-2026-10-24",
+      "base_sha": "a606743d4f417ee37158e69292ea0395b55b5675",
+      "base_branch": "claude/adoring-wozniak-850ue6"
+    },
+    {
+      "number": 7,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+      "head_branch": "claude/p2p-offramp-integration-aan57u",
+      "base_sha": "6d76590d5ee8cd5a89af1624fff1546e31bf1e9d",
+      "base_branch": "main"
+    },
+    {
+      "number": 8,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+      "head_branch": "claude/trade-review-integration",
+      "base_sha": "55a9ea4ebb850f1746fa09864bb557ce0943a8d7",
+      "base_branch": "main"
+    },
+    {
+      "number": 9,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "ec65012dbb94189180d3da52de2619cc22fe0482",
+      "head_branch": "claude/post-merge-followups",
+      "base_sha": "48513fbea700b4211a3de9257338ba6171ba40f5",
+      "base_branch": "main"
+    },
+    {
+      "number": 10,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "391653eaba946f77057b01fd03d3c234958bcf1d",
+      "head_branch": "claude/sweet-noether-arf6ne",
+      "base_sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "base_branch": "main"
+    },
+    {
+      "number": 11,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+      "head_branch": "claude/recovery-consolidation",
+      "base_sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "base_branch": "main"
+    },
+    {
+      "number": 12,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+      "head_branch": "claude/sweet-shannon-grykla",
+      "base_sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "base_branch": "main"
+    },
+    {
+      "number": 13,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+      "head_branch": "claude/docs-screenshots",
+      "base_sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "base_branch": "main"
+    },
+    {
+      "number": 14,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "head_branch": "work/p2p-exchange-close-20261030",
+      "base_sha": "47f9bbee455e7affbc39539489227228eb346a0f",
+      "base_branch": "claude/sweet-noether-arf6ne"
+    },
+    {
+      "number": 15,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+      "head_branch": "work/p2p-relay-lifetime-20261030",
+      "base_sha": "47f9bbee455e7affbc39539489227228eb346a0f",
+      "base_branch": "claude/sweet-noether-arf6ne"
+    },
+    {
+      "number": 16,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "9f80c9b27b943b30409710dea76a53d97a761832",
+      "head_branch": "work/p2p-independent-branch-review-20261030",
+      "base_sha": "47f9bbee455e7affbc39539489227228eb346a0f",
+      "base_branch": "claude/sweet-noether-arf6ne"
+    },
+    {
+      "number": 17,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+      "head_branch": "work/p2p-exchange-test-repair-20261030",
+      "base_sha": "0054543f81f48e928a46bd58c1dab14f91d0edeb",
+      "base_branch": "work/p2p-exchange-close-20261030"
+    },
+    {
+      "number": 18,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "68fb46920431e3311c78f931432bc4a21d066c17",
+      "head_branch": "work/p2p-consolidated-20261030",
+      "base_sha": "47f9bbee455e7affbc39539489227228eb346a0f",
+      "base_branch": "claude/sweet-noether-arf6ne"
+    },
+    {
+      "number": 19,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+      "head_branch": "integration/all-compatible-work",
+      "base_sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "base_branch": "main"
+    },
+    {
+      "number": 20,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+      "head_branch": "autonomous/completion-20261031",
+      "base_sha": "eaa1fe5361ff5d0d93e7b7dd7711cb18bc37c38a",
+      "base_branch": "main"
+    },
+    {
+      "number": 21,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+      "head_branch": "autonomous/continuation-20261031",
+      "base_sha": "b7000850398712a855b79e669302445b0ada2556",
+      "base_branch": "main"
+    },
+    {
+      "number": 22,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+      "head_branch": "fix/remediation-09f20d73-9524c0",
+      "base_sha": "aa108b53046a28f7c0d07fdf0d82cae63f406d1b",
+      "base_branch": "autonomous/continuation-20261031"
+    },
+    {
+      "number": 23,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c8494b05e36cda43ac3f73e0feab831cfa00647d",
+      "head_branch": "autonomous/guidance-20261101",
+      "base_sha": "f264cabec4e21bc110a378bd63f8672285e28338",
+      "base_branch": "main"
+    },
+    {
+      "number": 24,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "3947074c95fa1e0facd65a8947a2c7e70363c708",
+      "head_branch": "autonomous/journey-20261101",
+      "base_sha": "f421fdcb1d127a087991270d0e5f60a3be323ba3",
+      "base_branch": "main"
+    },
+    {
+      "number": 25,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "dba5072d7a67f67e223432c48aefabc07f31f005",
+      "head_branch": "fix/remediation-f84468d6-0a97ed",
+      "base_sha": "10ea8728bffc0ccbfadd9605509195b479496dae",
+      "base_branch": "autonomous/journey-20261101"
+    },
+    {
+      "number": 26,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "head_branch": "autonomous/completion-20261102",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main"
+    },
+    {
+      "number": 27,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "2f839b12768700ac6c3b674f75a144c6ec19fa93",
+      "head_branch": "claude/quirky-knuth-3s6ysy",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main"
+    },
+    {
+      "number": 28,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "b89a87a3f7ddbd7d2e0fd155013dc6743cfaa501",
+      "head_branch": "claude/loving-einstein-xgzvdy",
+      "base_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "base_branch": "autonomous/completion-20261102"
+    },
+    {
+      "number": 29,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "89d0a928e9e1127a4c8911f9437359260bd06ab6",
+      "head_branch": "claude/loving-einstein-xgzvdy-decisions",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main"
+    },
+    {
+      "number": 30,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "3a523a11a87d85443c484b6a4d4284b96c5f0b41",
+      "head_branch": "research/security-addendum-20261103",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main"
+    },
+    {
+      "number": 31,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "6e9c0c5ea8881013d06892103cf87ef1c547476a",
+      "head_branch": "review/codebase-security-20261104-94554ec",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main"
+    },
+    {
+      "number": 32,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "5fec2c6db018868a49c8ce40c21e186cdf702417",
+      "head_branch": "research/code-reuse-2026-11-03",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main"
+    },
+    {
+      "number": 33,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "977b36654bab2d00ca20c6139398b60c693bab73",
+      "head_branch": "research/upstream-reuse-20261103",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main"
+    },
+    {
+      "number": 34,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "922a391e429d07b0840bbbe525b3a10c6d3c830c",
+      "head_branch": "research/remaining-gaps-20261103",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main"
+    },
+    {
+      "number": 35,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "4c5d01c639d05c0ec6ecba9bf162d5fa2a9abf05",
+      "head_branch": "claude/loving-einstein-xgzvdy-journey",
+      "base_sha": "3e32c981bd06088acaa7d80603b4283effb15955",
+      "base_branch": "claude/loving-einstein-xgzvdy"
+    },
+    {
+      "number": 36,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "a88560741e60146a424cc18fcb2cc1043756ae3e",
+      "head_branch": "claude/loving-einstein-xgzvdy-s00-ci-triggers",
+      "base_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "base_branch": "main"
+    },
+    {
+      "number": 37,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling",
+      "base_sha": "bebbbf582bae8bc65d57a943c974c1871acc83a4",
+      "base_branch": "main"
+    },
+    {
+      "number": 38,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage",
+      "base_sha": "81a295d5cd3936b88eded7e52b6f2a78989f6ea7",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s01-tooling"
+    },
+    {
+      "number": 39,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging",
+      "base_sha": "71a56d10405bacc7ab39f29d1b63b4bde8a82504",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s02-core-contracts-storage"
+    },
+    {
+      "number": 40,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release",
+      "base_sha": "404dc3daa8b19904c7da29d71d49d8df0f5e03ba",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s03-core-messaging"
+    },
+    {
+      "number": 41,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf",
+      "base_sha": "7706859d2385cae0f8e49615392de08dfee83f84",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s04-wallet-release"
+    },
+    {
+      "number": 42,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui",
+      "base_sha": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf"
+    },
+    {
+      "number": 43,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey",
+      "base_sha": "58b3c876ae6036114a195af6b2dcc4c9cc2a09ad",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s06-web-runtime-ui"
+    },
+    {
+      "number": 44,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs",
+      "base_sha": "bc549f477f86e27516f554c7f1923a7147b82ea4",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s07-native-journey"
+    },
+    {
+      "number": 45,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s09-intake",
+      "base_sha": "f8a9aa1430129fd57fd9217402577106bebeca7a",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s08-portal-lab-docs"
+    },
+    {
+      "number": 46,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages",
+      "base_sha": "5a9997485b9dbdc1c9bf8a23c3b372728515c295",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s09-intake"
+    },
+    {
+      "number": 47,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
+      "base_sha": "0baa3c1ae5a71e766df95217f6ff4d3db5b1cd03",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s10-optional-packages"
+    },
+    {
+      "number": 48,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "494703e837897d04bce1cb04134fa8be6b747377",
+      "head_branch": "claude/loving-einstein-xgzvdy-m0-s12-evidence",
+      "base_sha": "14d7c5e267962a68feb422e551b45ccbeba832bd",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci"
+    },
+    {
+      "number": 49,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "8fb081b492ccf9ecef4dc47525c753cac670dacb",
+      "head_branch": "claude/gifted-faraday-73kydc",
+      "base_sha": "e4146f98fe5c532799b0fb75857704541730ee0e",
+      "base_branch": "integration/p2p-consolidated-20261109"
+    },
+    {
+      "number": 50,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "e2e25cf0f5aa43c23d4f70ad8ef1c120b7df9746",
+      "head_branch": "claude/sleepy-fermat-4s6ocx",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 51,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "54e632f8f472a4d26b2fdda4ebdd3f2e02a5dba0",
+      "head_branch": "codex/setup-autonomous-agent-20261104",
+      "base_sha": "f87343287199b1c32c443daf2e4e901476729e6d",
+      "base_branch": "main"
+    },
+    {
+      "number": 52,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "d5b959b5ed732ab3e6f7adfd37e872a841470225",
+      "head_branch": "codex/consolidation-ledger-20261104",
+      "base_sha": "a7e3062cb0412be4ee5e3491198ee4089a32e23f",
+      "base_branch": "main"
+    },
+    {
+      "number": 53,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "77fb7c52dcdde58cad17ceee45a0f43e7e22ad43",
+      "head_branch": "codex/foundation-gates-20261104",
+      "base_sha": "a7e3062cb0412be4ee5e3491198ee4089a32e23f",
+      "base_branch": "main"
+    },
+    {
+      "number": 54,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+      "head_branch": "codex/core-continuation-20261104",
+      "base_sha": "a7e3062cb0412be4ee5e3491198ee4089a32e23f",
+      "base_branch": "main"
+    },
+    {
+      "number": 56,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "head_branch": "claude/vibrant-cray-ny4gum",
+      "base_sha": "edc66f6a503176302bd17dd1ca073947273f7d9a",
+      "base_branch": "codex/core-continuation-20261104"
+    },
+    {
+      "number": 57,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
+      "head_branch": "codex/solana-payout-docs-20261109",
+      "base_sha": "e2e25cf0f5aa43c23d4f70ad8ef1c120b7df9746",
+      "base_branch": "claude/sleepy-fermat-4s6ocx"
+    },
+    {
+      "number": 58,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "af0e1789889790c2050142ed508b5042ef5bcc85",
+      "head_branch": "codex/post-send-reconcile-20261109",
+      "base_sha": "07b1b9b043e2614d434fa6263db5ee423f20cfa6",
+      "base_branch": "claude/vibrant-cray-ny4gum"
+    },
+    {
+      "number": 59,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+      "head_branch": "codex/rq00-evidence-20261109",
+      "base_sha": "07b1b9b043e2614d434fa6263db5ee423f20cfa6",
+      "base_branch": "claude/vibrant-cray-ny4gum"
+    },
+    {
+      "number": 60,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "c4fb7b590639e2a1d0a3220cf6bf7936156cc8e4",
+      "head_branch": "gpt/p2p-beta-spec-20261109",
+      "base_sha": "a136909721046ec8a540ed98ecfdcbf4c4bcf8ad",
+      "base_branch": "codex/rq00-evidence-20261109"
+    },
+    {
+      "number": 61,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+      "head_branch": "integration/p2p-consolidated-20261109",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 62,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "07b3b2abfc548a1b69621396b1d45a52dfe79063",
+      "head_branch": "integration/privacy-endpoint-disclosures-20261109",
+      "base_sha": "23a93dd5a0da8e03cac57f2c572afa06efb44c94",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 63,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "62c6c14539ccc2ac2e56658a81602f6d1ba50d73",
+      "head_branch": "chatgpt/zero-codex-continuation-spec-20261109",
+      "base_sha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "base_branch": "main"
+    },
+    {
+      "number": 64,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "25a01987385b49e9c28199fdfb4a874b29a6ad89",
+      "head_branch": "claude/p2p-offramp-prompt-lqcgno",
+      "base_sha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "base_branch": "main"
+    },
+    {
+      "number": 65,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "bd26833555e13408825942e9696157ed68e9980e",
+      "head_branch": "claude/friendly-dijkstra-nsi310",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 66,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "a1930a3596f76eff4c29a1ee2991d6acd7f35895",
+      "head_branch": "chatgpt/zero-codex/qualify-pr61-20261110",
+      "base_sha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "base_branch": "main"
+    },
+    {
+      "number": 67,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "353b3d18eee66d0b7b9a101c9e2c575bb87cd7ab",
+      "head_branch": "chatgpt/zero-codex/audit-evm-schema-20261110",
+      "base_sha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "base_branch": "main"
+    },
+    {
+      "number": 68,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "c14cfd07a440f03b5f57e35c8d39e63cdabfd5bf",
+      "head_branch": "chatgpt/zero-codex/docs-wiki-20261110",
+      "base_sha": "300287dcde818a9d10ae301265d00bc7c0877bbb",
+      "base_branch": "main"
+    },
+    {
+      "number": 69,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+      "head_branch": "chatgpt/zero-codex/d9-marker-failure-20261110",
+      "base_sha": "5243449b56bca9470e1c0643ae85f0da4b4ed712",
+      "base_branch": "integration/p2p-consolidated-20261109"
+    },
+    {
+      "number": 70,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+      "head_branch": "chatgpt/zero-codex/d9-restore-regression-20261110",
+      "base_sha": "44ca5fcf5e5d94893b5d7a0e3e15735506a76f52",
+      "base_branch": "chatgpt/zero-codex/d9-marker-failure-20261110"
+    },
+    {
+      "number": 71,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+      "head_branch": "chatgpt/zero-codex/d9-restored-terminal-20261110",
+      "base_sha": "78af7214a1aab97eb3eb7722793bb536e7d6ff39",
+      "base_branch": "chatgpt/zero-codex/d9-restore-regression-20261110"
+    },
+    {
+      "number": 72,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "92cc054ce9a2ee21936e20d103757e374f4af296",
+      "head_branch": "chatgpt/zero-codex/d9-restored-prepared-20261110",
+      "base_sha": "06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f",
+      "base_branch": "chatgpt/zero-codex/d9-restored-terminal-20261110"
+    },
+    {
+      "number": 73,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+      "head_branch": "chatgpt/zero-codex/d9-restored-pending-20261110",
+      "base_sha": "92cc054ce9a2ee21936e20d103757e374f4af296",
+      "base_branch": "chatgpt/zero-codex/d9-restored-prepared-20261110"
+    },
+    {
+      "number": 74,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "146d06d81474445434070aff557ad56379ad24a3",
+      "head_branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110",
+      "base_sha": "94778c3282a99110922aa260b5f4ea98dd34caf9",
+      "base_branch": "chatgpt/zero-codex/d9-restored-pending-20261110"
+    },
+    {
+      "number": 75,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+      "head_branch": "chatgpt/zero-codex/d9-restored-casefold-20261110",
+      "base_sha": "146d06d81474445434070aff557ad56379ad24a3",
+      "base_branch": "chatgpt/zero-codex/d9-restored-hash-conflict-20261110"
+    },
+    {
+      "number": 76,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "2ba1a4e18f4673f006b195e822b5f984effb48e8",
+      "head_branch": "chatgpt/zero-codex/acceptance-cli-input-bounds-20261110",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 77,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "08a9cf1e9abc0fb703b14964062a3da2234fdbb6",
+      "head_branch": "chatgpt/zero-codex/acceptance-review-boolean-20261110",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 78,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "a213166ea83a0c5ec0768f693ff583413e8e976b",
+      "head_branch": "chatgpt/zero-codex/registry-concurrency-20261110",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 79,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "e0a9033158d1ae874c78de7f25d0be0aa3a13157",
+      "head_branch": "chatgpt/zero-codex/g25-public-endpoint-regression-20261110",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 80,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "5f2381ab42c27984dbb1cc872468dd3e09771690",
+      "head_branch": "chatgpt/zero-codex/http-buffer-lifecycle-20261110",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 81,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+      "head_branch": "claude/vibrant-cray-ny4gum",
+      "base_sha": "5243449b56bca9470e1c0643ae85f0da4b4ed712",
+      "base_branch": "integration/p2p-consolidated-20261109"
+    },
+    {
+      "number": 83,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "8783636e7a1739b5e884cec62fbecf9c77a0ceaf",
+      "head_branch": "claude/tender-goodall-db3cot",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 84,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "edc8a6971819a5e726f4c22813b4e51a6b9d8f9e",
+      "head_branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 85,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "921f067769188f53c2d379f035695a40ae978083",
+      "head_branch": "chatgpt/zero-codex/g18-final-chain-recheck-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 86,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "a5c74990f0f5e9162a23450db5e9af00f37d88e8",
+      "head_branch": "chatgpt/zero-codex/g20-chat-scope-regression-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 87,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "head_branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 88,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "c16e7617f0c5d165902ec15c67591a230d947fd2",
+      "head_branch": "chatgpt/zero-codex/g18-receipt-own-data-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 89,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "053056975ed0e6e7ff02345f0291ae7f71cb3eb9",
+      "head_branch": "chatgpt/zero-codex/g05-transport-path-binding-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 90,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "548495515c83fc1389837f00eb0468758cd232fd",
+      "head_branch": "chatgpt/zero-codex/g26-clear-reentrancy-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 91,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+      "head_branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111",
+      "base_sha": "f393c365937cbadee4bb1a0a35f78c4c105cbcee",
+      "base_branch": "chatgpt/zero-codex/d9-restored-casefold-20261110"
+    },
+    {
+      "number": 92,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+      "head_branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111",
+      "base_sha": "dd5cf16da0c7e0c2f1613153ac746bd6390ec587",
+      "base_branch": "chatgpt/zero-codex/d9-restored-cross-network-nonce-20261111"
+    },
+    {
+      "number": 93,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "e8afa6af3db9ac9575f57beaef61886e3b79683a",
+      "head_branch": "chatgpt/zero-codex/d9-restored-race-20261111",
+      "base_sha": "b19ae4637538d7c364b4e55a2624b0b908d5cb7f",
+      "base_branch": "chatgpt/zero-codex/d9-restored-account-isolation-20261111"
+    },
+    {
+      "number": 94,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "84bb67f6e438b26bd1d321995c427d6a86a58930",
+      "head_branch": "chatgpt/zero-codex/g12-native-withdraw-recipient-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 95,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "969d02aecf86c6be18dde509b5cf0016345b0fe4",
+      "head_branch": "chatgpt/zero-codex/g16-bilateral-replay-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 96,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "9786b221552fbbc12ea5d4fe644d1a3b45cd36a0",
+      "head_branch": "chatgpt/zero-codex/g12-erc20-withdraw-binding-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 97,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "c153a99dd5c876c23bdb115f7037a4bf63cb57d4",
+      "head_branch": "chatgpt/zero-codex/d9-cross-deployment-nonce-20261111",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 98,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "a0105f9abce8e389d7f0dbaff36d68d81da9f523",
+      "head_branch": "integration/pages-beta-qualification-20261112",
+      "base_sha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "base_branch": "integration/p2p-consolidated-20261109"
+    },
+    {
+      "number": 99,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "32a4052163553f7826d55f784ab9a6e96425e576",
+      "head_branch": "parallel/tooling-source-correspondence-20261113",
+      "base_sha": "d36413d8088d8a55de526e80561432aaccec0203",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 100,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "718208880b650b03ac380d358a00878480827870",
+      "head_branch": "parallel/localization-blank-warning-20261113",
+      "base_sha": "dd2a648140e79b0c0148ffb2a6be87fdf1b3c330",
+      "base_branch": "claude/loving-einstein-xgzvdy-m0-s05-web-locale-leaf"
+    },
+    {
+      "number": 101,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "9550d4b182806170ee28149e9d46ffbccef56c33",
+      "head_branch": "integration/pages-offline-recovery-20261112",
+      "base_sha": "cc3e442d1875201cf85c1dc8aff780651c8e4e63",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 102,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "605bcd24ef3d239f6a080c129761132482029ef7",
+      "head_branch": "parallel/cli-argument-regression-20261113",
+      "base_sha": "619fc7413fa65e63db39e5a63bf1bbfdb4ff1d2b",
+      "base_branch": "chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111"
+    },
+    {
+      "number": 103,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "378fdf92c0b9a340dff3587a0b53dd568292f3e6",
+      "head_branch": "parallel/browser-runtime-engines-20261113",
+      "base_sha": "d36413d8088d8a55de526e80561432aaccec0203",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 104,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "db38fba65be8b6e19c880c78e439e712ffe7e974",
+      "head_branch": "parallel/accessibility-recovery-panels-20261113",
+      "base_sha": "cc3e442d1875201cf85c1dc8aff780651c8e4e63",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 105,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "3524096c0ff1f4d743b01f06421bc56bbe07b9b3",
+      "head_branch": "parallel/docs-web-profile-recovery-20261113",
+      "base_sha": "93d181eb053684ac1675bfc19663273689631bbb",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 106,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "330fa1ede8b70e532a02230e4895b0711579491e",
+      "head_branch": "parallel/diagnostics-20261113",
+      "base_sha": "152173a205a40a9c8428f18ab0ee8c65ea3bfa02",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 107,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c4b13ddccc5bd78406762c656df5af35958e83f9",
+      "head_branch": "parallel/locale-20261113",
+      "base_sha": "c87c21b915c9e175113292bb1307754ed2424166",
+      "base_branch": "integration/p2p-consolidated-20261109"
+    },
+    {
+      "number": 108,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "4f75e00d0c8e7eb9f61efd633b684ca0a47b9d76",
+      "head_branch": "parallel/recovery-builder-help-20261113",
+      "base_sha": "fbec79f080f73ae4ee4a966370cd79ebb93ff573",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 109,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "05794e754c8bf588fc6781100e8af99675418629",
+      "head_branch": "parallel/portable-recovery-guide-20261113",
+      "base_sha": "aa85c5813ebdffbc11d2df3d32756697440bf6fe",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 110,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "6d48c9b0695cacd2a166a7386f24b61a6248bc10",
+      "head_branch": "parallel/spec-tool-20261113",
+      "base_sha": "fbec79f080f73ae4ee4a966370cd79ebb93ff573",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 111,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "65efc3428ff01d4f091600baee85edfff094b347",
+      "head_branch": "parallel/browser-cold-recovery-20261113",
+      "base_sha": "a0105f9abce8e389d7f0dbaff36d68d81da9f523",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 112,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "2cacd1d5219a82d984a75668838204e3160d5791",
+      "head_branch": "parallel/browser-cold-nonce-20261113",
+      "base_sha": "5947849cbd79427c1703fef6da639142b42f837f",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 113,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "d6d65a47b99e68d00f82153d83fef366e532cf67",
+      "head_branch": "parallel/browser-peer-offer-20261113",
+      "base_sha": "fc503edc021e9fde9b0e2374668fdbfc803d7620",
+      "base_branch": "integration/pages-beta-qualification-20261112"
+    },
+    {
+      "number": 114,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "4dcddf2b4bcc9890e50647cea067f81b1b734cdd",
+      "head_branch": "integration/pages-beta-qualification-20261112",
+      "base_sha": "5243449b56bca9470e1c0643ae85f0da4b4ed712",
+      "base_branch": "integration/p2p-consolidated-20261109"
+    },
+    {
+      "number": 115,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c0bbfe62951873a0960b4218b9db9b06b616da5a",
+      "head_branch": "integration/m2a-safe-fixes-20261114",
+      "base_sha": "78ca21ac42403e84b131184296469f75836fb431",
+      "base_branch": "integration/p2p-consolidated-20261109"
+    },
+    {
+      "number": 116,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "head_sha": "970ac80f08c04e8d340ee57d901e48e26a667a18",
+      "head_branch": "claude/compassionate-gauss-uyhfih",
+      "base_sha": "78ca21ac42403e84b131184296469f75836fb431",
+      "base_branch": "integration/p2p-consolidated-20261109"
+    },
+    {
+      "number": 117,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "85849f7b267dddceffc35ef5253da4a23ef9be05",
+      "head_branch": "chatgpt/zero-codex/recovery-reference-identity-20261115",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 118,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "25b4be639ba6776a5ea10911a6dea7a2106a1300",
+      "head_branch": "claude/confident-fermi-g6wjp3",
+      "base_sha": "f2950cf29a69bc56f28b04262f310c5c86a72d84",
+      "base_branch": "integration/p2p-consolidated-20261109"
+    },
+    {
+      "number": 119,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "274d4fe533f47ffa15aed936bd095f82ad10d9ce",
+      "head_branch": "codex/consolidation-20261116",
+      "base_sha": "d112d8235961e7b3fc009e1e7eb2e53e4c48bb04",
+      "base_branch": "claude/confident-fermi-g6wjp3"
+    },
+    {
+      "number": 120,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "88f9e40bbf8ea086705edd554a2555865429b54a",
+      "head_branch": "codex/completion-20261116",
+      "base_sha": "d43eb461352d2f43e53962876efd93c5db70d43c",
+      "base_branch": "codex/consolidation-20261116"
+    },
+    {
+      "number": 121,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "30efa0e158c6b50525c8e0dced494faa9f54eb08",
+      "head_branch": "chatgpt/zero-codex/docs-static-offers-status-20261116",
+      "base_sha": "cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e",
+      "base_branch": "main"
+    },
+    {
+      "number": 122,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c1f8e750beb7e22d5b9a7f0e47cca9f8cd8bdb65",
+      "head_branch": "codex/d9-migration-20261116",
+      "base_sha": "927530e28f0351881c7a8cd58719e7757a7c1646",
+      "base_branch": "codex/consolidation-20261116"
+    },
+    {
+      "number": 123,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "e7506c22e6b0bc405a9e51f1c809fa30c2fe5861",
+      "head_branch": "codex/continue-completion-20261116",
+      "base_sha": "7461c872a08a6af7045759bda8288c135171da63",
+      "base_branch": "claude/confident-fermi-g6wjp3"
+    },
+    {
+      "number": 124,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "b3f508420e63329ab30e1b646f61337020a1ebad",
+      "head_branch": "codex/peer-acceptance-20261116",
+      "base_sha": "46e2a7d43ae930501c6c9c2e14877e0b2f6ad162",
+      "base_branch": "claude/confident-fermi-g6wjp3"
+    },
+    {
+      "number": 125,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "bd7c36251d2a53e27cd9ea92d02e5f712fce2f74",
+      "head_branch": "codex/review-consolidate-20261116",
+      "base_sha": "174308d61e6a7771227f7b1d0825d94eda64cbd2",
+      "base_branch": "claude/confident-fermi-g6wjp3"
+    },
+    {
+      "number": 126,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "f2375dba1b249912ac434ed9da3998e4cb0a40f0",
+      "head_branch": "consolidation/qualified-regressions-20261116",
+      "base_sha": "28da0d9667c8dadf41f994462b60933395dadc21",
+      "base_branch": "main"
+    },
+    {
+      "number": 127,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "5eadddd54f6db6e755e658c1982c95f95b37a823",
+      "head_branch": "codex/review-consolidate-20261116",
+      "base_sha": "25b4be639ba6776a5ea10911a6dea7a2106a1300",
+      "base_branch": "claude/confident-fermi-g6wjp3"
+    },
+    {
+      "number": 128,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "64c7c1861779ea34632f2f800b80bdaecbaefa03",
+      "head_branch": "claude/confident-fermi-g6wjp3",
+      "base_sha": "fa28a3702517eb98293b3c5cca5070e74a2e2b57",
+      "base_branch": "integration/p2p-consolidated-20261109"
+    },
+    {
+      "number": 129,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "75a5e35b56310a9660aa7c6a3855db3c64e759f4",
+      "head_branch": "chatgpt/zero-codex/docs-python-baseline-20261116",
+      "base_sha": "2dfd09011611447306b7038483683d8bddcc46af",
+      "base_branch": "main"
+    },
+    {
+      "number": 131,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "e21a58e6a4d09c099d3249660ddec770f2164a74",
+      "head_branch": "chatgpt/zero-codex/docs-collaboration-20261117",
+      "base_sha": "2dfd09011611447306b7038483683d8bddcc46af",
+      "base_branch": "main"
+    },
+    {
+      "number": 132,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+      "head_branch": "nodata/affectionate-ritchie-xq4bon",
+      "base_sha": "6ef9a2614b237d855a91cf14fb5df112ffc6cd76",
+      "base_branch": "main"
+    },
+    {
+      "number": 133,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "1df700355e5199c69e84d5b41b12005677b5f5ee",
+      "head_branch": "nodata/epic-goldberg-sg8n96",
+      "base_sha": "86224cfb4abe19c266cf99d441bd64d52f5c57b4",
+      "base_branch": "nodata/affectionate-ritchie-xq4bon"
+    },
+    {
+      "number": 134,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "7be1dbef7fe38204db441ffb9c29e6f06acfaecd",
+      "head_branch": "nodata/epic-newton-7bowm4",
+      "base_sha": "6ef9a2614b237d855a91cf14fb5df112ffc6cd76",
+      "base_branch": "main"
+    },
+    {
+      "number": 135,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "b601f30b83b49f9fb2727e5d85507e260d77ef3c",
+      "head_branch": "nodata/epic-newton-7bowm4",
+      "base_sha": "eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9",
+      "base_branch": "main"
+    },
+    {
+      "number": 136,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "014a10a148f8b3b69c9d650fbcb083c8142e7d28",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx",
+      "base_sha": "eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9",
+      "base_branch": "main"
+    },
+    {
+      "number": 137,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "39096586e1160c3c8434a2d081339bb70aeb4c1b",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b3-formal",
+      "base_sha": "97ce6a41805ab4d8fc6fccbcfb9dd79463deebd7",
+      "base_branch": "main"
+    },
+    {
+      "number": 138,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+      "head_branch": "chatgpt/zero-codex/audit-compatibility-20261118",
+      "base_sha": "eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9",
+      "base_branch": "main"
+    },
+    {
+      "number": 139,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "708d937df7e4799e4ad212b3293bec923f619940",
+      "head_branch": "chatgpt/zero-codex/docs-status-20261118",
+      "base_sha": "eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9",
+      "base_branch": "main"
+    },
+    {
+      "number": 140,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "ddfc7eded0c8f37cb2eb19d4ed31d7514fb74e64",
+      "head_branch": "nodata/epic-newton-7bowm4",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main"
+    },
+    {
+      "number": 141,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "87af4088a2fde86ed7485fdc7d229b7c04a2be87",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b6-verifier-mode",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main"
+    },
+    {
+      "number": 142,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "d8c56d7ddc44661f4fd86c8db6dff411d9e10d10",
+      "head_branch": "claude/p2p-offramp-consolidation-k5h13u",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main"
+    },
+    {
+      "number": 143,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "579b02f3775323ba273dfe2bc624b5860897431e",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b5-evm-blockhash",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 144,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "0b681ed42330b9129502eb0097783cf5995e8382",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main"
+    },
+    {
+      "number": 145,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "f03ebbfb395128f839fbe069226e6d79bc143258",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main"
+    },
+    {
+      "number": 146,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "636a3372cfe1a2306578b5a70ab9eb42858a83ac",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
+      "base_sha": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+      "base_branch": "main"
+    },
+    {
+      "number": 147,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "f4840d46c3a58c182f7a0de1b7dda788b67cbace",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main"
+    },
+    {
+      "number": 148,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "7c1f3441fcaa45f076957633b2005bd5c1e25e9e",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main"
+    },
+    {
+      "number": 149,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "90b9b85715f1e04522b828ecdbc4858e92a1b88e",
+      "head_branch": "chatgpt/zero-codex/web-recovery-unknown-20261118-0130",
+      "base_sha": "af4835b58146fc970af90790b635ea7c75a724af",
+      "base_branch": "main"
+    },
+    {
+      "number": 150,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "1b4e9a45b1f19f2d20e5a8f295e6264ecb501f51",
+      "head_branch": "nodata/epic-newton-7bowm4",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 151,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "236f815e79a852643d8dfa61d6d4895c8a93f54a",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b1c-acceptance",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 152,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "37f074dd1d65d5f12b73182420998a152374b813",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b1a-reader",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 153,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "b7d06fed31fb7d2793da99c23f15bf6795a82b8a",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b1-reader-test-flake",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 154,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "3591dcbb84ff7280be3d93a27b5b160066074c06",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b4-tooling",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 155,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "9f03e0e014bd999c266eee944e46e9be002bdcfc",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b4-intake",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 156,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "7a60893c4c1ccdf4e66bb1cffc0f38d89ec5e19b",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b4-governance",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 157,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "f1d9dd63a2ac9d55912899f8c6233456ebf8a499",
+      "head_branch": "claude/sleepy-fermat-4s6ocx",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 158,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "0b0ca2907b372071471d7e060d0a80178d4294c9",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b1b-lifecycle",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 159,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "1d3f59a9474a058b4b09c1fc4cdbe00f46335302",
+      "head_branch": "claude/p2p-offramp-evm-escrow-vc7stk",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 160,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "30a38a607a48c630c0eec2aecc2f3a5e49ab7d22",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+      "base_sha": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+      "base_branch": "main"
+    },
+    {
+      "number": 161,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "1d78c89bb62895878b108e77c8711f2a2c88fe79",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 162,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "8decf7f95fd5deb17f814b80deb34f2903fe8e14",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+      "base_sha": "539ad540731be82c5499e9d3446482bfa1a1a51d",
+      "base_branch": "main"
+    },
+    {
+      "number": 163,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "6a7e8d709fc3f5344daa86ccb8d6234e22bd931c",
+      "head_branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+      "base_sha": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+      "base_branch": "main"
+    },
+    {
+      "number": 164,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "436b591a3a750bcca2327117e487336f6dd77470",
+      "head_branch": "nodata/doc-sweep-20261118",
+      "base_sha": "97ce6a41805ab4d8fc6fccbcfb9dd79463deebd7",
+      "base_branch": "main"
+    },
+    {
+      "number": 165,
+      "state": "closed",
+      "merged": true,
+      "draft": true,
+      "head_sha": "1fe5ae00ed2105633081d71a67db2b5436da9c8d",
+      "head_branch": "nodata/epic-newton-7bowm4",
+      "base_sha": "97ce6a41805ab4d8fc6fccbcfb9dd79463deebd7",
+      "base_branch": "main"
+    },
+    {
+      "number": 166,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+      "head_branch": "integration/core-hardening-20261118",
+      "base_sha": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "base_branch": "main"
+    },
+    {
+      "number": 167,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+      "head_branch": "integration/solana-core-qualification-20261118",
+      "base_sha": "22711c16847133be0d6de39fdf31dd7372be4e7a",
+      "base_branch": "main"
+    },
+    {
+      "number": 168,
+      "state": "closed",
+      "merged": false,
+      "draft": true,
+      "head_sha": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
+      "head_branch": "integration/browser-mvp-20261118",
+      "base_sha": "e17b4d34097ca97c21e621547a38766c0271fbde",
+      "base_branch": "main"
+    },
+    {
+      "number": 169,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+      "head_branch": "integration/docs-reconciliation-20261118",
+      "base_sha": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "base_branch": "main"
+    },
+    {
+      "number": 170,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+      "head_branch": "feature/erc20-browser-continuation-20261118",
+      "base_sha": "e17b4d34097ca97c21e621547a38766c0271fbde",
+      "base_branch": "main"
+    },
+    {
+      "number": 171,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "head_branch": "chatgpt/zero-codex/qr-display-chunk-regression-20261118",
+      "base_sha": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "base_branch": "main"
+    },
+    {
+      "number": 172,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "head_branch": "chatgpt/zero-codex/qr-jcs-array-trap-20261118",
+      "base_sha": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "base_branch": "main"
+    },
+    {
+      "number": 173,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "c7f462c6688c78c35514808177ff7cfed32b9961",
+      "head_branch": "test/erc20-browser-recovery-20261119",
+      "base_sha": "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+      "base_branch": "main"
+    },
+    {
+      "number": 174,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "head_branch": "consolidation/tooling154-20261119",
+      "base_sha": "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+      "base_branch": "main"
+    },
+    {
+      "number": 175,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+      "head_branch": "feature/same-terms-resumption-20261119",
+      "base_sha": "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+      "base_branch": "main"
+    },
+    {
+      "number": 176,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "25edde7b6f9c93c22157fbf97bd2f7e48f3dec59",
+      "head_branch": "docs/consolidation-20261119",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "base_branch": "main"
+    },
+    {
+      "number": 177,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "4d2d9bdd5a252e43855bbcf4d9ed878acc52e7ba",
+      "head_branch": "chatgpt/zero-codex/audit-utf8-20261119-108",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "base_branch": "main"
+    },
+    {
+      "number": 178,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "4eead2af05e3e301b9e05cc9023a63047ef6dcdf",
+      "head_branch": "chatgpt/zero-codex/docs-wiki-status-20261119-108",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "base_branch": "main"
+    },
+    {
+      "number": 179,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "head_branch": "consolidation/solana-browser-recovery-20261119",
+      "base_sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "base_branch": "main"
+    },
+    {
+      "number": 180,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "head_sha": "7fb274ba0380bdf6d750b95fd6aca68db8c7e4c0",
+      "head_branch": "test/nostr-relay-interop-20261119",
+      "base_sha": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+      "base_branch": "main"
+    },
+    {
+      "number": 181,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "head_branch": "fix/localnet-readiness-20261119",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main"
+    },
+    {
+      "number": 182,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "head_branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main"
+    },
+    {
+      "number": 183,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "head_branch": "feature/public-qr-capture-20261119",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main"
+    },
+    {
+      "number": 184,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "head_branch": "chatgpt/zero-codex/audit-local-policy-20261119-110",
+      "base_sha": "1e0f5729540fb4feda1579aba4da4a500ebd2d80",
+      "base_branch": "chatgpt/zero-codex/audit-solana-intent-20261119-109"
+    },
+    {
+      "number": 185,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "head_branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112",
+      "base_sha": "bfed3af3fa53425084f99efa18916433a5868fd1",
+      "base_branch": "chatgpt/zero-codex/audit-local-policy-20261119-110"
+    },
+    {
+      "number": 186,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "06c6b9ab3728fcf743b2c003dd69b0310078b0ad",
+      "head_branch": "chatgpt/zero-codex/audit-privacy-endpoint-20261119-114",
+      "base_sha": "512a7da0dc49041e25104ba3c341912bc17a38ee",
+      "base_branch": "chatgpt/zero-codex/audit-compat-startup-20261119-112"
+    },
+    {
+      "number": 187,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "head_branch": "chatgpt/zero-codex/review-read-bounds-20261119-119",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main"
+    },
+    {
+      "number": 188,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "head_branch": "codex/max-consolidation-20261119",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main"
+    },
+    {
+      "number": 189,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "head_branch": "codex/qr-camera-fixture-20261119",
+      "base_sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "base_branch": "codex/max-consolidation-20261119"
+    },
+    {
+      "number": 190,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "head_branch": "codex/historical-recovery-20261119",
+      "base_sha": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "base_branch": "codex/max-consolidation-20261119"
+    },
+    {
+      "number": 191,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "head_branch": "codex/optional-proof-inputs-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 192,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "head_branch": "codex/optional-liquidity-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 193,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "head_branch": "codex/optional-arbitration-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 194,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "head_branch": "codex/optional-privacy-policy-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 195,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "head_branch": "codex/optional-courier-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 196,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "head_branch": "codex/optional-meetup-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 197,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "head_branch": "codex/optional-privacy-controls-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 198,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "head_branch": "codex/optional-stealth-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 199,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "head_branch": "codex/optional-proof-jobs-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 200,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "b01aa60a7eb893d0359449f335f1862864eec179",
+      "head_branch": "codex/consolidation-handoff-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 201,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "head_branch": "codex/personalization-favorites-ui-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 202,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "head_branch": "codex/solana-browser-send-repair-20261119",
+      "base_sha": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "base_branch": "codex/historical-recovery-20261119"
+    },
+    {
+      "number": 203,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "head_branch": "codex/solana-restore-ack-20261119",
+      "base_sha": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "base_branch": "codex/solana-browser-send-repair-20261119"
+    },
+    {
+      "number": 204,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "head_branch": "codex/personalization-templates-ui-20261119",
+      "base_sha": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "base_branch": "codex/personalization-favorites-ui-20261119"
+    },
+    {
+      "number": 205,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "head_branch": "codex/generation5-core-20261119",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main"
+    },
+    {
+      "number": 206,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "head_branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120"
+    },
+    {
+      "number": 207,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "head_branch": "codex/generation8-core-20261120",
+      "base_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "base_branch": "main"
+    },
+    {
+      "number": 208,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "head_branch": "codex/generation9-backup-verification-20261120",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120"
+    },
+    {
+      "number": 209,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "head_branch": "codex/ctutils-remediation-20261119",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120"
+    },
+    {
+      "number": 210,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+      "head_branch": "codex/transport-qualification-20261120",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120"
+    },
+    {
+      "number": 211,
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "head_branch": "fix/qr-async-expiry-20261120",
+      "base_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "base_branch": "codex/generation8-core-20261120"
+    }
+  ],
+  "tags": [],
+  "releases": [],
+  "ownership": {
+    "observed_at_utc": "2026-11-20T04:17:53.755772+00:00",
+    "method": "Read-only git worktree list and git --no-optional-locks status; no activity inferred solely from a dirty tree or timestamp.",
+    "worktrees": [
+      {
+        "worktree": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation10-core",
+        "head": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+        "branch": "refs/heads/codex/generation10-combined-core-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "root-generation10-active-owned"
+      },
+      {
+        "worktree": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation10-core-independent",
+        "head": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+        "branch": "refs/heads/review/generation10-core-independent-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "root-generation10-active-owned"
+      },
+      {
+        "worktree": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation10-rediscovery",
+        "head": "ac87d6f305e513237b3cefa6b25c1ee35bdecfee",
+        "branch": "refs/heads/codex/generation10-rediscovery-and-gates-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "root-generation10-active-owned"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-backup-composition-g9",
+        "head": "0eee707a2b300b7075b217372781d584a2c72932",
+        "branch": "refs/heads/codex/generation9-backup-verification-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-bug-hunt-g6",
+        "head": "db9a4b53fe8cadfacca1c25eae8446a81a6a4e1b",
+        "branch": "refs/heads/codex/p2p-bug-hunt-g6-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-bug-hunt-g7",
+        "head": "351be0bf828e5c3ee85a7f026e4d044576d1b84e",
+        "branch": "refs/heads/codex/p2p-bug-hunt-g7-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-bug-hunt-g8",
+        "head": "fd3aba496cd8f75000c1d484f25b531524859f09",
+        "branch": "refs/heads/codex/p2p-bug-hunt-g8-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-bug-hunt-g9",
+        "head": "be6451f53f47012424795404c812065d620b8d16",
+        "branch": "refs/heads/codex/p2p-bug-hunt-g9-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-code-audit-g10",
+        "head": "14ab05b57ff84160b8ada310c17fa53402338ac9",
+        "branch": "refs/heads/codex/p2p-code-audit-g10-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-code-audit-g6",
+        "head": "b1e61dc78c462d8a4e1419249b19d814d4648148",
+        "branch": "refs/heads/codex/p2p-code-audit-g6-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-code-audit-g7",
+        "head": "b1e0499ad31a73f0a56c021b56711b04756d189c",
+        "branch": "refs/heads/codex/p2p-code-audit-g7-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-code-audit-g8",
+        "head": "bbf009a8b35e964524260b08a5896a7772e91c29",
+        "branch": "refs/heads/codex/p2p-code-audit-g8-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-feature-g9",
+        "head": "637bedf9218176f933dac29039631ca56bcb42fd",
+        "branch": "refs/heads/codex/p2p-feature-g9-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-final-coordination-g11",
+        "head": "3393067e0e3de8aecda63acb139c248dac7afe39",
+        "branch": "refs/heads/codex/p2p-final-coordination-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-hosted-review-g11",
+        "head": "2b52b6eef894f133e8aa7d191fdb6f9b2d662da6",
+        "branch": "refs/heads/codex/p2p-hosted-review-g11-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-hosted-review-g9",
+        "head": "d30ca5235dfc5c64774fbee836b309ae159eb462",
+        "branch": "refs/heads/codex/p2p-hosted-review-g9-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-offramp",
+        "head": "d82d5282bfc78e46ccb34d9c700cf1b59dc8b23a",
+        "branch": "refs/heads/codex/p2p-successor-consolidation-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-optional-successor",
+        "head": "813f9192a64f95028a755f167bb6ab888cfa392d",
+        "branch": "refs/heads/codex/p2p-optional-successor-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-publication-audit-g11",
+        "head": "6a9061c53f8ecef2509a2f293603d4e1fb068592",
+        "branch": "refs/heads/codex/p2p-publication-audit-g11-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-relay-composition-g11",
+        "head": "d4199d2c1ac4f3a6abaebd2571a031948fcfef8f",
+        "branch": "refs/heads/codex/p2p-relay-composition-g11-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-security-audit-g6",
+        "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+        "branch": "refs/heads/codex/p2p-security-audit-g6-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-security-g10",
+        "head": "3ce5a5d70edf63ac67bceb483cbdca5281e16ba7",
+        "branch": "refs/heads/codex/p2p-security-g10-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-security-g9",
+        "head": "1a9dfd3d9f3661932c6955b5c2f413ad9c56a9a8",
+        "branch": "refs/heads/codex/p2p-security-g9-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-security-review-g7",
+        "head": "68f3698abbe6f49e28498c47d8661f6da9bef76f",
+        "branch": "refs/heads/codex/p2p-security-review-g7-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-solana-review-g8",
+        "head": "bc3edc1379d9235e551aeac9f205524c1a433232",
+        "branch": "refs/heads/codex/p2p-solana-review-g8-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      },
+      {
+        "worktree": "/workspace/scratch/6eace968c0df/p2p-updater-browser-g10",
+        "head": "01f40b3e009d77b520ba0b6d7881fa24fc6301f9",
+        "branch": "refs/heads/codex/p2p-updater-browser-g10-20261120",
+        "status_exit": 0,
+        "status_lines": [],
+        "owner": "external-preserve"
+      }
+    ]
+  },
+  "remaining_actionable_work": {
+    "already_owned": [
+      "generation10 core followup composition and independent review",
+      "generation10 optional rebinding and independent review",
+      "root source/evidence publication and canonical handoff"
+    ],
+    "additional_unowned_source_task_identified": false,
+    "scope": "One complete metadata/ref delta plus exact known-source identity/delta inspection; not a fresh comprehensive vulnerability audit.",
+    "external_or_pending": [
+      "Exact-source hosted/native/browser gates",
+      "Applicable named standalone optional reviews",
+      "Owner-controlled trust/signing inputs and physical-device qualification",
+      "Incompatible upstream crypto-bigint repair remains unresolved"
+    ]
+  },
+  "source_tests_executed_by_this_task": 0,
+  "main_merges_performed_by_this_task": 0,
+  "remote_mutations_by_this_task": 0,
+  "snapshot_digests": {
+    "remote_snapshot_file_sha256": "aef91ad07bf26d1b213e8790ead07653625c6f10ebe78b61eafafe3b968f5e38",
+    "comparison_file_sha256": "1489544ef5140ad517e0240b63b70ca39065805c37bd805250f265cf52d16dc3",
+    "prior_raw_file_sha256": "6acc89a09e488671334698dc2516f441b01699334842221a8bc16182a35bfc71"
+  },
+  "limits": [
+    "Original192-branch classifications and184-PR baseline are unchanged.",
+    "C labels apply only to the seven known cumulative additions; no new aggregate classification of all219 branches is fabricated.",
+    "Dirty/clean status and timestamps do not prove worker liveness. External ownership remains protected.",
+    "Resolve live refs before publication; root may advance its own210 after this dated snapshot."
+  ],
+  "post_inventory_targeted_update": {
+    "observed_from_utc": "2026-11-20T04:29:45.427Z",
+    "observed_to_utc": "2026-11-20T04:29:45.920Z",
+    "purpose": "One bounded exact-new-head follow-up after root reported normal leased PR210 advance; not a new complete inventory or a repoll of unfinished native jobs.",
+    "pr": 210,
+    "old_source_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+    "head": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+    "head_branch": "codex/transport-qualification-20261120",
+    "source_tree": "976a729bc359d331214924abab617969aa066950",
+    "commit_parent_heads": [
+      "7819b88d32375905c12681e297773c712dabe94a"
+    ],
+    "base_branch": "codex/generation8-core-20261120",
+    "base_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+    "state": "open",
+    "merged": false,
+    "total_check_records": 10,
+    "counts": {
+      "queued": 10
+    },
+    "checks": [
+      {
+        "id": 136083640534,
+        "name": "program",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:29:04Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670457/job/136083640534"
+      },
+      {
+        "id": 136083554934,
+        "name": "schemas-and-crypto",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670439/job/136083554934"
+      },
+      {
+        "id": 136083554869,
+        "name": "local-evm",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670439/job/136083554869"
+      },
+      {
+        "id": 136083554859,
+        "name": "specs",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670439/job/136083554859"
+      },
+      {
+        "id": 136083554751,
+        "name": "docs-tooling",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670439/job/136083554751"
+      },
+      {
+        "id": 136083554377,
+        "name": "browser",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670439/job/136083554377"
+      },
+      {
+        "id": 136083554245,
+        "name": "native-nostr-relay",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670453/job/136083554245"
+      },
+      {
+        "id": 136083554065,
+        "name": "inventory",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670380/job/136083554065"
+      },
+      {
+        "id": 136083553817,
+        "name": "forge",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670362/job/136083553817"
+      },
+      {
+        "id": 136083553509,
+        "name": "local-trade",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670362/job/136083553509"
+      }
+    ],
+    "source_identity_verified": true,
+    "root_reported_qualification": {
+      "tested_local_source": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+      "tested_source_tree_prefix": "81845317",
+      "full_tests": 2309,
+      "independent_affected_tests": 54,
+      "three_evidence_documents_appended": true,
+      "evidence_basis": "Parent/root message; not rerun or independently re-audited by worker41."
+    },
+    "pending_evidence": "Current-head hosted/native/browser executions must bind actual checkout/tree and strict structured receipts; old210 and206/208/209 passes do not qualify this combined source.",
+    "original_component_and_optional_refs_preserved": "Root-reported; complete 04:13 inventory remains immutable and was not re-enumerated."
+  }
+}

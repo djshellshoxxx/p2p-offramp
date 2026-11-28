@@ -1,0 +1,49 @@
+✔ locked recovery Worker refuses every economic command and never touches RPC or wallet (12.184319ms)
+✔ profile lock revokes the controller immediately; unsupported commands cannot mint authority (142.406871ms)
+✔ only an original finalized funded native escrow with the embedded deployment pin can be imported (683.169842ms)
+✔ the complete canonical recovery document is encrypted and survives lock/reopen with its original provenance (551.965221ms)
+✔ manual receipt, exact review, cancellation and IndexedDB-compatible encrypted CAS precede signing and sending (1153.203068ms)
+✔ wallet scope revocation while the physical signer is pending cannot send or restore review authority (420.065671ms)
+✔ fresh-key restore preserves uncertain provenance and requires a definitive drop plus explicit rebuild (2015.188574ms)
+✔ a persistent CAS conflict locks the profile before any wallet signature or send (162.477115ms)
+✔ Solana profile pins one local native network and exact registry bytes; policies are explicit (15.792148ms)
+✔ Solana profile refuses nonlocal, SPL, multiple deployment and mutable program configurations (9.787183ms)
+✔ RPC configuration is a literal IPv4 loopback origin, canonical root URL and explicit port (1.039179ms)
+✔ Solana content policy adds exactly its local RPC; ordinary policies remain offline (1.862152ms)
+✔ native modules and RPC transport require their own explicit build profile (4.615596ms)
+vite v8.3.5 building client environment for solana-localnet...
+transforming...
+✓ 47 modules transformed.
+rendering chunks...
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/_headers                                     0.35 kB
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/content-policy.json                          1.18 kB
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/index.html                                   1.29 kB
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/third-party-licenses.json                    3.62 kB
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/core-graph-document.json                     6.99 kB
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/core-graph-worker.json                      11.26 kB
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/assets/solana-localnet.worker-urScG-cs.js  172.84 kB
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/assets/SolanaLocalnetRoot-C5L4xmIZ.css       0.97 kB
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/assets/index-lbyUyLrG.css                    6.77 kB
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/assets/SolanaLocalnetRoot-CCPSideg.js       30.37 kB
+../../../../tmp/p2p-solana-profile-test-0h5Rb5/app/assets/index-JZE8tYau.js                   220.96 kB
+
+✓ built in 1.10s
+✔ emitted native Worker artifact requires its own library profile, exact CSP and unchanged release refusal (1200.426938ms)
+✔ RPC transport preserves actual genesis and fences allowed methods, replies and disposal (64.111255ms)
+✔ Worker command parser refuses funding, generic signing, hidden fields and malformed recovery input (2.313017ms)
+✔ restore input is bounded before copying and cannot invoke a caller-owned iterator (0.584005ms)
+✔ independent physical-send evidence requires exact signed bytes, marker, current profile and pins (200.44186ms)
+✔ wallet connect and sign-only prompts require explicit one-shot document capabilities (5.188389ms)
+✔ exact transaction, chain and account substitutions never prompt a wallet (3.184431ms)
+✔ cancel and account changes retain the physical prompt slot until settlement and discard the result (0.93817ms)
+✔ changed account identity without an event is detected before prompt dispatch (0.665848ms)
+✔ expired reviews and wallets without change events fail closed (0.455845ms)
+✔ wallet byte views are bounded before copy and custom iterators never execute (0.886673ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12020.343027

@@ -28,6 +28,13 @@ review with no open High or Medium finding. Under that approval:
 - **D6 implementation** (`packages/qr`): prefix `P2POFFRAMP:1:`, chain ids `evm:<chainId>` / `solana:<genesis>`,
   signing domain `p2p-offramp-qr/v1/trade-invite/signing-digest`, 60 s expiry margin and 120 s skew are merged as
   implemented. The invite signing-key profile is still open: no verifier ships, so invites decode as unauthenticated.
+- **D1 implementation** (`docs/integration/D1-peer-acceptance.md`): the v2 carrier with both signatures, account
+  classification (EIP-7702 delegated and undeployed/ERC-6492 accounts refused), 2,048-byte contract-signature
+  budget, 7-day acceptance horizon, ledger quotas 8 per peer / 16 per advert / 64 live with 192 slots including
+  reserved tombstones, 300 s retirement grace, 120 s funding margin and EIP-1898 block pinning are merged as
+  implemented. Still open for the owner: withdrawing an acceptance (state-machine change), latest versus finalized
+  block for funding rechecks, the wallet prompt for the second statement, mixed v1/v2 sessions, inbox/relay-auth
+  policy. Nothing is wired into the app yet.
 
 Canonical index (reconciled 2026-11-18): D1, D4, D5, D6, D7, D8 and D9 are accepted as above; the individual packets
 under `docs/adr/proposed/` keep the analysis and are authoritative where this table is shorter. **D2** (testnet trust

@@ -1,0 +1,64 @@
+{
+  "repository": "djshellshoxxx/p2p-offramp",
+  "candidate": 219,
+  "head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+  "reason": "Verified component heads are retained as ordered parents of the single final candidate; closures are not main merges.",
+  "branches_deleted": 0,
+  "main_merges": 0,
+  "closures": [
+    {
+      "pr": 213,
+      "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "branch": "codex/main-consolidation-g12-20261120",
+      "state": "closed",
+      "merged": false,
+      "closed_at": "2026-11-20T07:07:23Z",
+      "superseded_by": 219
+    },
+    {
+      "pr": 214,
+      "head": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+      "branch": "codex/ci-oracle-g12-20261120",
+      "state": "closed",
+      "merged": false,
+      "closed_at": "2026-11-20T07:07:24Z",
+      "superseded_by": 219
+    },
+    {
+      "pr": 215,
+      "head": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+      "branch": "codex/backup-verification-ui-g12-20261120",
+      "state": "closed",
+      "merged": false,
+      "closed_at": "2026-11-20T07:07:26Z",
+      "superseded_by": 219
+    },
+    {
+      "pr": 216,
+      "head": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+      "branch": "codex/dependency-g12-20261120",
+      "state": "closed",
+      "merged": false,
+      "closed_at": "2026-11-20T07:07:27Z",
+      "superseded_by": 219
+    },
+    {
+      "pr": 217,
+      "head": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+      "branch": "codex/backup-cross-browser-g13-20261120",
+      "state": "closed",
+      "merged": false,
+      "closed_at": "2026-11-20T07:07:29Z",
+      "superseded_by": 219
+    },
+    {
+      "pr": 218,
+      "head": "7d40620c8320945750bd51bf865226dadde998ca",
+      "branch": "codex/signed-update-ui-g13-20261120",
+      "state": "closed",
+      "merged": false,
+      "closed_at": "2026-11-20T07:07:30Z",
+      "superseded_by": 219
+    }
+  ]
+}

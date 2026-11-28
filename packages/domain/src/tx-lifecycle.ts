@@ -34,8 +34,8 @@ export interface EvmChainReader {
   transactionCount(account: string, tag: 'latest' | 'pending', signal: AbortSignal): Promise<CoreResult<string>>;
   transaction(hash: string, signal: AbortSignal): Promise<CoreResult<EvmTransactionView | null>>;
   receipt(hash: string, signal: AbortSignal): Promise<CoreResult<EvmReceiptView | null>>;
-  /** Escrow trade state for `binding` at a decimal block number. */
-  escrowState(binding: TradeBinding, blockNumber: string, signal: AbortSignal): Promise<CoreResult<EscrowState>>;
+  /** Escrow trade state at a decimal block number. When supplied, bind to the already-observed canonical hash. */
+  escrowState(binding: TradeBinding, blockNumber: string, signal: AbortSignal, expectedBlockHash?: string): Promise<CoreResult<EscrowState>>;
   /** Native-decoded observation for the authority reducer (G08); `request` is the authority's reconcile request. */
   escrowObservation(binding: TradeBinding, request: ReconcileRequest): Promise<CoreResult<ChainObservation>>;
 }
@@ -391,18 +391,19 @@ class EvmLifecycle implements EvmTxLifecycle {
         const latestCount = BigInt(checked(await read(s => this.#reader.transactionCount(account, 'latest', s)), value => DECIMAL.test(value)));
         if (latestCount > nonce) {
           evidence = 'nonce';
+          // A different finalized journal transaction at this exact account/chain/nonce rules out every
+          // hashless action, including restored cancelled releases/refunds. Keeping those as separate
+          // successor-required replacements can otherwise make a funded exit permanently conflict.
+          nonceTakenElsewhere = hash === null && await this.#nonceFinalizedElsewhere(intent, account, nonce, request.chainId, finalizedNumber, read, signal);
           if (hash !== null) outcome = 'replaced';
-          else if (effects === null) {
-            // An approval without a recorded hash has no escrow effect to observe. It is settled as never included only
-            // when native data shows its nonce was consumed by a different, finalized transaction of this journal.
-            nonceTakenElsewhere = await this.#nonceFinalizedElsewhere(intent, account, nonce, request.chainId, finalizedNumber, read, signal);
-            outcome = nonceTakenElsewhere && !conflict ? 'replaced' : 'pending';
-          }
+          else if (nonceTakenElsewhere) outcome = conflict ? 'pending' : 'replaced';
+          // An approval without that proof or a recorded hash has no escrow effect to observe.
+          else if (effects === null) outcome = 'pending';
           else if (escrowState !== null && effects.includes(escrowState)) {
             // Unknown hash: the nonce was consumed and the escrow shows this intent's effect. Depth is measured on the escrow itself.
             evidence = 'escrow-effect';
             const depthBlock = latestNumber - BigInt(this.#policy.confirmations) + 1n;
-            const atFinalized = finalizedHead === null ? null : await read(s => this.#reader.escrowState(intent.binding, finalizedHead.number, s));
+            const atFinalized = finalizedHead === null ? null : await read(s => this.#reader.escrowState(intent.binding, finalizedHead.number, s, finalizedHead.hash));
             const atDepth = depthBlock < 0n ? null : await read(s => this.#reader.escrowState(intent.binding, depthBlock.toString(), s));
             outcome = atFinalized !== null && effects.includes(atFinalized) ? 'finalized' : atDepth !== null && effects.includes(atDepth) ? 'confirmed' : 'pending';
           } else outcome = latched ? 'reorged' : conflict ? 'pending' : 'replaced';

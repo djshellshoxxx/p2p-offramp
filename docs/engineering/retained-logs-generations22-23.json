@@ -1,0 +1,128 @@
+{
+  "schema": "p2p-offramp.generations22-23-retained-logs.v1",
+  "testedSource": "4cff269483e7372f607a8e994d35ca558d7cff00",
+  "testedTree": "c5f9d82f618a935f24603e2290ecd8c946954d66",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/full-node.log.gz",
+      "decodedBytes": 249082,
+      "compressedBytes": 84069,
+      "decodedSha256": "94e370b471f8afafc9f6bf92c3fcc8d22329ebe09e785a53c6442ae7c2a77686",
+      "compressedSha256": "92d4666051cbc9e10a79b1bc9ce25740cf18278e7efd6ced3d4617785782ecc6"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/build-policy.log.gz",
+      "decodedBytes": 7649,
+      "compressedBytes": 3143,
+      "decodedSha256": "ccae913bdde903bd7b0bf59577a0f592442410cf6feacf43f011b756cfca262a",
+      "compressedSha256": "24380e1bd86868e4aeafcbb993514896875107c6ca0b2a4d4fe505dabd782e7f"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 288,
+      "decodedSha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "compressedSha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/default-build.log.gz",
+      "decodedBytes": 1026,
+      "compressedBytes": 494,
+      "decodedSha256": "6eabd48d1f18bbf996d8ac1eb2c2a58d0bec9d7638234bf69f2be99679daa256",
+      "compressedSha256": "0cba300bfac6a64bf74f7984256ad28ccb98698a8ce83cb704fb7d5164d8c36f"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/demo-build.log.gz",
+      "decodedBytes": 1174,
+      "compressedBytes": 521,
+      "decodedSha256": "09d8cec824338520699f4d5be385cd8f00fd77af3d9b3b196651cab4c10851ed",
+      "compressedSha256": "7c4312796dc63a9b169042650771a5e86c1fbf06b91284166d5018cde0a5baca"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/tooling.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/tooling.log.gz",
+      "decodedBytes": 5740,
+      "compressedBytes": 2775,
+      "decodedSha256": "6181210068488f4595621025ec13a9ff2bffdae78d03c9315851952ada990259",
+      "compressedSha256": "c76e695cfdca9f98662c914ba1c702e11a409e63d8877bcd3573654b46521a28"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/docs.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/docs.log.gz",
+      "decodedBytes": 37760,
+      "compressedBytes": 4416,
+      "decodedSha256": "4b3a71a89cacadaace85274f4f03e5ef1b519f0e61d7325cc6d8aad8c6cda327",
+      "compressedSha256": "d57876debd46a197bd397463b479eaddf43f5de99faced3bb663e372a07ad28a"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/governance.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/governance.log.gz",
+      "decodedBytes": 1118,
+      "compressedBytes": 575,
+      "decodedSha256": "42f9556636da25ed29969162b2b491dc3b013911d5d1488a709864b931dd7194",
+      "compressedSha256": "074485628ce7fc73874f5421afcb1da614b569a17c77aefae57c313ef9314350"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/specifications.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/specifications.log.gz",
+      "decodedBytes": 349,
+      "compressedBytes": 264,
+      "decodedSha256": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9",
+      "compressedSha256": "e8014356cada8f67d21e6bb898a1d91fb08d05a58eb50a16b343eed9c409519b"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g22-qualification/python-specs.log",
+      "storedPath": "docs/execution/continuation-generations22-23-20261120/python-specs.log.gz",
+      "decodedBytes": 4721,
+      "compressedBytes": 1128,
+      "decodedSha256": "cf7d529669c4b2e63ffb814800df321ed221c526895855faf5b3829620c29200",
+      "compressedSha256": "5cd36eb27f7f73c04a40d3348d9cdb8f2a9d67506d161278cfa4248ebb8e69d3"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-runtime-lease-independent-g22-logs/focused.log",
+      "storedPath": "docs/execution/runtime-backup-lease-independent-generation22-20261120/focused.log.gz",
+      "decodedBytes": 9717,
+      "compressedBytes": 3757,
+      "decodedSha256": "b310740e8745f1902caa2b4700c0848df3d94b77750e6c5a55267056d1ed6b97",
+      "compressedSha256": "51fb4da8a2e5d67e2b2419409b0321e949ce932fb986aa206d8ed3eb57dc8275"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-runtime-lease-independent-g22-logs/typecheck.log",
+      "storedPath": "docs/execution/runtime-backup-lease-independent-generation22-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-update-runtime-composition-independent-g23-logs/focused.log",
+      "storedPath": "docs/execution/update-runtime-composition-independent-generation23-20261120/focused.log.gz",
+      "decodedBytes": 6410,
+      "compressedBytes": 2439,
+      "decodedSha256": "3b72dbb1d879227196f0325c2537d0cf1e9ed172939affe8887c5fc240b990cc",
+      "compressedSha256": "d33d35813025de8b1bd954128daea91e1bf82ffdeaf3c3b38e05c827c7d2fa50"
+    }
+  ],
+  "authorLogIndexes": [
+    "docs/engineering/runtime-backup-lease-generation22.json",
+    "docs/engineering/update-runtime-composition-generation23.json"
+  ],
+  "limits": [
+    "Original decoded execution bytes are preserved.",
+    "Focused and author selections overlap the full suite and are not added to its total.",
+    "This packaging supplies no current-head hosted/native/device qualification."
+  ]
+}

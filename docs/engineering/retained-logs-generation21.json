@@ -1,0 +1,433 @@
+{
+  "schema": "p2p-offramp-retained-execution-logs/v1",
+  "packagingBase": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+  "reason": "Preserve exact execution bytes while fixing committed-log whitespace findings",
+  "originalDiffCheckExitCode": 2,
+  "logs": [
+    {
+      "originalPath": "docs/execution/backup-notice-locale-generation20-20261120/backup-regression.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/backup-notice-locale-generation20-20261120/backup-regression.log.gz",
+      "decodedSha256": "7ff07b9182ff2ba3cff2b7160a76a8e764e6360abaaae747d5f84b8c461797dd",
+      "compressedSha256": "36b761cf9b73fc402d0829a8b16696e7c6c5a7f967ac423eb87e9ba7914009f4",
+      "decodedBytes": 5648,
+      "compressedBytes": 2162
+    },
+    {
+      "originalPath": "docs/execution/backup-notice-locale-generation20-20261120/backup-ui-after.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/backup-notice-locale-generation20-20261120/backup-ui-after.log.gz",
+      "decodedSha256": "64a396098accd6d1ec3b79d791b1c7c291e05597690835752e592b086b099c0c",
+      "compressedSha256": "d1bcf67348d6ba2d0b3a67eda8e5ed7b7fe28a83c95f62f688907d2230d0080d",
+      "decodedBytes": 2784,
+      "compressedBytes": 1038
+    },
+    {
+      "originalPath": "docs/execution/backup-notice-locale-generation20-20261120/backup-ui-before.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/backup-notice-locale-generation20-20261120/backup-ui-before.log.gz",
+      "decodedSha256": "82b7f85b7293944371ccbb063114755486abf25b4406695e30bd4c1c10ea256a",
+      "compressedSha256": "8a07d73a231620b9dbb4541eecc99b442fa57667cb41234eb04285244418386a",
+      "decodedBytes": 11469,
+      "compressedBytes": 1928
+    },
+    {
+      "originalPath": "docs/execution/backup-notice-locale-generation20-20261120/boundaries.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/backup-notice-locale-generation20-20261120/boundaries.log.gz",
+      "decodedSha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "compressedSha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446",
+      "decodedBytes": 392,
+      "compressedBytes": 288
+    },
+    {
+      "originalPath": "docs/execution/backup-notice-locale-generation20-20261120/build-policy.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/backup-notice-locale-generation20-20261120/build-policy.log.gz",
+      "decodedSha256": "700ad5b5b6ea8d6e40960adfda14a4e0d0355f1a35c1d443ad67aa99deeebdcb",
+      "compressedSha256": "518e66fc19b4e6d33cae41221710847eb983618ef2d0ce46765778d9f22377dc",
+      "decodedBytes": 7652,
+      "compressedBytes": 3161
+    },
+    {
+      "originalPath": "docs/execution/backup-notice-locale-generation20-20261120/default-build.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/backup-notice-locale-generation20-20261120/default-build.log.gz",
+      "decodedSha256": "30567a364cfa10a654cbc70cba011b6d7e9173edd0dcd2cf613ca8b040d45874",
+      "compressedSha256": "ec089b44199ee13bdda19800bb6fe1110c2126d8b156a98888de868ccc056d8e",
+      "decodedBytes": 1026,
+      "compressedBytes": 493
+    },
+    {
+      "originalPath": "docs/execution/backup-notice-locale-generation20-20261120/docs-check.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/backup-notice-locale-generation20-20261120/docs-check.log.gz",
+      "decodedSha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4",
+      "compressedSha256": "a2664c5af70e1bf7267838ada76afea685b3560594e50a95709b24b67a526cc6",
+      "decodedBytes": 33780,
+      "compressedBytes": 4069
+    },
+    {
+      "originalPath": "docs/execution/backup-notice-locale-generation20-20261120/locale-ui-regression.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/backup-notice-locale-generation20-20261120/locale-ui-regression.log.gz",
+      "decodedSha256": "ba9c39d7ae72cb42808252b99fe75e379c8fe165dbaa5bb8018168ae7540988b",
+      "compressedSha256": "ac65d47e7d9abfcebd510e2f718ef1dd6cd9d01f1554d41fb62bd0f62b9ccb4f",
+      "decodedBytes": 8594,
+      "compressedBytes": 3293
+    },
+    {
+      "originalPath": "docs/execution/backup-notice-locale-generation20-20261120/typecheck.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/backup-notice-locale-generation20-20261120/typecheck.log.gz",
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "decodedBytes": 341,
+      "compressedBytes": 211
+    },
+    {
+      "originalPath": "docs/execution/export-panel-locale-generation21-20261120/adjacent.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/export-panel-locale-generation21-20261120/adjacent.log.gz",
+      "decodedSha256": "181515a7e329aecee356d12a7d29124db60d65d0d3e23a074054e1456bec34ac",
+      "compressedSha256": "82f1731ec9e477b61594c7b3b46389b0cccb59a17143b01dbfca2e258fa77009",
+      "decodedBytes": 3326,
+      "compressedBytes": 1545
+    },
+    {
+      "originalPath": "docs/execution/export-panel-locale-generation21-20261120/green.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/export-panel-locale-generation21-20261120/green.log.gz",
+      "decodedSha256": "4210aaf9263fc3adc98a22d3109366db23419d7b698e33880dca7017f82a3a75",
+      "compressedSha256": "55c69c97d3f73c2b979a7cb8c0ca08502f6a04e621023f2d575e5bf22d1b8a49",
+      "decodedBytes": 5201,
+      "compressedBytes": 2207
+    },
+    {
+      "originalPath": "docs/execution/export-panel-locale-generation21-20261120/red.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/export-panel-locale-generation21-20261120/red.log.gz",
+      "decodedSha256": "e02282688020bf63cd81e9ce2144b794781201f60fa97d51837d14d5b0cc5943",
+      "compressedSha256": "28d417819c5f16d406fe282a07a586e7c8c88bc1187676d36eae13b1e1c323c4",
+      "decodedBytes": 7992,
+      "compressedBytes": 1452
+    },
+    {
+      "originalPath": "docs/execution/export-panel-locale-generation21-20261120/typecheck.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/export-panel-locale-generation21-20261120/typecheck.log.gz",
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "decodedBytes": 341,
+      "compressedBytes": 211
+    },
+    {
+      "originalPath": "docs/execution/vault-forms-locale-generation21-20261120/after.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/vault-forms-locale-generation21-20261120/after.log.gz",
+      "decodedSha256": "949261cc627f9c2941ec590aa13db701862ec495ed251505c2ea8668459c010c",
+      "compressedSha256": "f52b377052c7788d2af8cd8100213ca32f69a612a47bcb5ac86ec0a63bed33cb",
+      "decodedBytes": 2448,
+      "compressedBytes": 752
+    },
+    {
+      "originalPath": "docs/execution/vault-forms-locale-generation21-20261120/before.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/vault-forms-locale-generation21-20261120/before.log.gz",
+      "decodedSha256": "8ceb453f406f63968c3fe0bad98d866ff929e695015d71a92b20b87642ccb3b1",
+      "compressedSha256": "acc6f3818a87b904c6e200482c063e8d387aa535288f2491eba9d1f486a720c9",
+      "decodedBytes": 24430,
+      "compressedBytes": 2102
+    },
+    {
+      "originalPath": "docs/execution/vault-forms-locale-generation21-20261120/boundaries.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/vault-forms-locale-generation21-20261120/boundaries.log.gz",
+      "decodedSha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "compressedSha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446",
+      "decodedBytes": 392,
+      "compressedBytes": 288
+    },
+    {
+      "originalPath": "docs/execution/vault-forms-locale-generation21-20261120/build-policy.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/vault-forms-locale-generation21-20261120/build-policy.log.gz",
+      "decodedSha256": "f247b3ee964b6da8195b5eca226b306c40cea23c05ee3376a307da018a50021c",
+      "compressedSha256": "9346894c35cda2b88366824633aaa2923a4b49ca3a00ce91280e4526fb864e05",
+      "decodedBytes": 7642,
+      "compressedBytes": 3154
+    },
+    {
+      "originalPath": "docs/execution/vault-forms-locale-generation21-20261120/default-build.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/vault-forms-locale-generation21-20261120/default-build.log.gz",
+      "decodedSha256": "a510bd0101b50dc252b055aa67209c5dedea08897d422fa1eb0643a328adb4f9",
+      "compressedSha256": "8b6402807cedaa70c1c0aa7ea855e190986955813df1d4b2a543593002c34921",
+      "decodedBytes": 1026,
+      "compressedBytes": 495
+    },
+    {
+      "originalPath": "docs/execution/vault-forms-locale-generation21-20261120/docs-check.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/vault-forms-locale-generation21-20261120/docs-check.log.gz",
+      "decodedSha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4",
+      "compressedSha256": "a2664c5af70e1bf7267838ada76afea685b3560594e50a95709b24b67a526cc6",
+      "decodedBytes": 33780,
+      "compressedBytes": 4069
+    },
+    {
+      "originalPath": "docs/execution/vault-forms-locale-generation21-20261120/focused.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/vault-forms-locale-generation21-20261120/focused.log.gz",
+      "decodedSha256": "c9f08d749d101e9416bc88efd8af49a6692146829bf20e3e10b9ee67f8b97c65",
+      "compressedSha256": "53595c6146dd002f539222d7d430d0cdc89bb5e63ce5fd22d3476bd94e86f817",
+      "decodedBytes": 7722,
+      "compressedBytes": 2949
+    },
+    {
+      "originalPath": "docs/execution/vault-forms-locale-generation21-20261120/typecheck.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/vault-forms-locale-generation21-20261120/typecheck.log.gz",
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "decodedBytes": 341,
+      "compressedBytes": 211
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/before-packaging-whitespace.log",
+      "originalSourceCommit": "059fe0b6bbfe90ad87d0c948443f129b8dae583e",
+      "storedPath": "docs/execution/continuation-generation21-20261120/before-packaging-whitespace.log.gz",
+      "decodedSha256": "eb29fe173e0dbb0da97b958ef9b2ca74b9aa2ef0352370dbc99681bb77820858",
+      "compressedSha256": "ad146030042cf4f02568b1bd09129a007a383294980c5e363635f5a47e46804f",
+      "decodedBytes": 6742,
+      "compressedBytes": 473
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/boundaries.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/boundaries.log.gz",
+      "decodedSha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "compressedSha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446",
+      "decodedBytes": 392,
+      "compressedBytes": 288
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/build-policy.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/build-policy.log.gz",
+      "decodedSha256": "8139573ef99ad464f2a1046aa0178d50be6234746407d08016d284a6750720ba",
+      "compressedSha256": "fc096e0dfd1b8cccc43f4a544ce131a7ca2923546d7cf98c642b6de0d9298203",
+      "decodedBytes": 7654,
+      "compressedBytes": 3176
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/default-build.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/default-build.log.gz",
+      "decodedSha256": "e4b940b0bf6a5205b676e8be22adc27ec4670ef4965cf59702e7bfa574188973",
+      "compressedSha256": "d8475920a98f53910c8f33270ba008e378003bbb3bf613b44cd1327af10eb43b",
+      "decodedBytes": 1026,
+      "compressedBytes": 495
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/demo-build.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/demo-build.log.gz",
+      "decodedSha256": "b42e49084aede0442d12cbfcf304535ec25ce29c46c4696bb5984798e8d65ec0",
+      "compressedSha256": "de6b9992f80ac4cd8566797dabef2fd41c1e639043f045d45e6761492b9bfbce",
+      "decodedBytes": 1632,
+      "compressedBytes": 800
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/docs.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/docs.log.gz",
+      "decodedSha256": "4b3a71a89cacadaace85274f4f03e5ef1b519f0e61d7325cc6d8aad8c6cda327",
+      "compressedSha256": "d57876debd46a197bd397463b479eaddf43f5de99faced3bb663e372a07ad28a",
+      "decodedBytes": 37760,
+      "compressedBytes": 4416
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/full-node.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/full-node.log.gz",
+      "decodedSha256": "3f2d6f15309b381a03d41dd592d5065d9bb100a3d52abdb93345b162d6a92e48",
+      "compressedSha256": "6ed4e41711518d06fd0743c0ce6dce170b86857ed9a86d8e27dd6a49269ed0ac",
+      "decodedBytes": 245580,
+      "compressedBytes": 83659
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/governance.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/governance.log.gz",
+      "decodedSha256": "42f9556636da25ed29969162b2b491dc3b013911d5d1488a709864b931dd7194",
+      "compressedSha256": "074485628ce7fc73874f5421afcb1da614b569a17c77aefae57c313ef9314350",
+      "decodedBytes": 1118,
+      "compressedBytes": 575
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/python-specs.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/python-specs.log.gz",
+      "decodedSha256": "875b0c2169496850567d9fb5178042d44fe5da91e02c0865770d93e39dd7b357",
+      "compressedSha256": "efcdf531c680680b7086c6d25a1005f53204aa3b80657eedebff9e67f4dfe1a2",
+      "decodedBytes": 4721,
+      "compressedBytes": 1129
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/specifications.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/specifications.log.gz",
+      "decodedSha256": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9",
+      "compressedSha256": "e8014356cada8f67d21e6bb898a1d91fb08d05a58eb50a16b343eed9c409519b",
+      "decodedBytes": 349,
+      "compressedBytes": 264
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/tooling.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/tooling.log.gz",
+      "decodedSha256": "41fb7699d18df96b7d347d83e034292ee8eac1c6110bdde5e29bdb02e932d6b7",
+      "compressedSha256": "ade6d41062f21e79d8bee154d1fa21471a5f0e0f67e6bba41e376b3f23a288d0",
+      "decodedBytes": 5769,
+      "compressedBytes": 2798
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g21-qualification/typecheck.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/continuation-generation21-20261120/typecheck.log.gz",
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "decodedBytes": 341,
+      "compressedBytes": 211
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/app-shell-locale-g21-evidence/boundaries.log",
+      "originalSourceCommit": "6be8acc9f45f5b9036989b380ca537084094faa4",
+      "storedPath": "docs/execution/app-shell-locale-generation21-20261120/boundaries.log.gz",
+      "decodedSha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "compressedSha256": "8a691a9be8a0a23f6f4ec9638d65bbbda52e57515ffaabfdf3818863c4d86446",
+      "decodedBytes": 392,
+      "compressedBytes": 288
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/app-shell-locale-g21-evidence/build-policy.log",
+      "originalSourceCommit": "6be8acc9f45f5b9036989b380ca537084094faa4",
+      "storedPath": "docs/execution/app-shell-locale-generation21-20261120/build-policy.log.gz",
+      "decodedSha256": "b4c57737746b521570e7773614990f613fa7b7dbd33d9d50662f0355883d928b",
+      "compressedSha256": "48a3126dfb9d84e6b61072c91542f62ebf64f8742b59d0dc9872e68a5e8f82c9",
+      "decodedBytes": 7642,
+      "compressedBytes": 3153
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/app-shell-locale-g21-evidence/build.log",
+      "originalSourceCommit": "6be8acc9f45f5b9036989b380ca537084094faa4",
+      "storedPath": "docs/execution/app-shell-locale-generation21-20261120/build.log.gz",
+      "decodedSha256": "0b84ea66e258785ecbf5e11bc4981536d4e5e36ed005ece4ab2671825c3cf4e5",
+      "compressedSha256": "35a699d29f5112c1cfafb13d3e35f77f9e8156369241a957d2d7cbcdb7fb878d",
+      "decodedBytes": 1026,
+      "compressedBytes": 497
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/app-shell-locale-g21-evidence/green-focused.log",
+      "originalSourceCommit": "6be8acc9f45f5b9036989b380ca537084094faa4",
+      "storedPath": "docs/execution/app-shell-locale-generation21-20261120/green-focused.log.gz",
+      "decodedSha256": "4ea5485fbb6ff4ec67e909caf9b3180ae19b7e2f570989de5d19911f1e60a98d",
+      "compressedSha256": "1ef41910894e458a72d454ae4cf343c0ba217e197acee2ba7880e589145ba708",
+      "decodedBytes": 6382,
+      "compressedBytes": 2606
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/app-shell-locale-g21-evidence/red.log",
+      "originalSourceCommit": "798d2f0b5ab24564e4da2f1811843d9f3a5778db",
+      "storedPath": "docs/execution/app-shell-locale-generation21-20261120/red.log.gz",
+      "decodedSha256": "9d3cbb563b7d2883f92e24d53a17afa630c6771a0d049d350305bd19aedeb44c",
+      "compressedSha256": "84b199696b787b5dd69723a603b2bbea084776551f1ceac6f3360590b2713247",
+      "decodedBytes": 9360,
+      "compressedBytes": 1530
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/app-shell-locale-g21-evidence/typecheck.log",
+      "originalSourceCommit": "6be8acc9f45f5b9036989b380ca537084094faa4",
+      "storedPath": "docs/execution/app-shell-locale-generation21-20261120/typecheck.log.gz",
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "decodedBytes": 341,
+      "compressedBytes": 211
+    },
+    {
+      "originalPath": "/tmp/p2p-user-docs-g20-check-docs.log",
+      "originalSourceCommit": "70372a0cd65a70e162a451cacc2b5f2d9547a578",
+      "storedPath": "docs/execution/user-workflows-docs-generation20-20261120/p2p-user-docs-g20-check-docs.log.gz",
+      "decodedSha256": "54e9711358b58e04fb8c79a4fc32fbdcea71cacbd36bc03c8ee4ea059e580526",
+      "compressedSha256": "e58ab8ab6b953a2106e5ac7aa426b35137d95e17f6e1a1ef7c761a35fc02f07e",
+      "decodedBytes": 36079,
+      "compressedBytes": 4281
+    },
+    {
+      "originalPath": "/tmp/p2p-user-docs-g20-check-specs.log",
+      "originalSourceCommit": "70372a0cd65a70e162a451cacc2b5f2d9547a578",
+      "storedPath": "docs/execution/user-workflows-docs-generation20-20261120/p2p-user-docs-g20-check-specs.log.gz",
+      "decodedSha256": "b305f0a204383fe73916bbac32780e5535a13a68c69d054961c190672fed098f",
+      "compressedSha256": "74983fa9d3ec24e9adebad42076b4e9d334c9c10f5d50f21de305f875d2a1d5d",
+      "decodedBytes": 199,
+      "compressedBytes": 169
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/shell-export-docs-review-g21-evidence/focused.log",
+      "originalSourceCommit": "0457f0bac49276eb82ec0677b0c96ce226de1d45",
+      "storedPath": "docs/execution/shell-export-docs-review-generation21-20261120/focused.log.gz",
+      "decodedSha256": "6e6646b03d85f9e3f08b1cf3cda905aa5280d9503b98611cd3c6962c7b4a8f19",
+      "compressedSha256": "4f8ff47176a165798ec466b6657c8a13f5c68083aef8f25ff45937143847c537",
+      "decodedBytes": 8427,
+      "compressedBytes": 3203
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/shell-export-docs-review-g21-evidence/typecheck.log",
+      "originalSourceCommit": "0457f0bac49276eb82ec0677b0c96ce226de1d45",
+      "storedPath": "docs/execution/shell-export-docs-review-generation21-20261120/typecheck.log.gz",
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e",
+      "decodedBytes": 341,
+      "compressedBytes": 211
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/shell-export-docs-review-g21-evidence/docs-tests.log",
+      "originalSourceCommit": "0457f0bac49276eb82ec0677b0c96ce226de1d45",
+      "storedPath": "docs/execution/shell-export-docs-review-generation21-20261120/docs-tests.log.gz",
+      "decodedSha256": "638572f8c20880619d927e708f3c9a53e6f7f4408a36f0251ecf0b28a2ed289e",
+      "compressedSha256": "dd625e781c456584c564361eb0f4e83d402c2d1de610b9c1786082a50ab9e2e2",
+      "decodedBytes": 1758,
+      "compressedBytes": 927
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/shell-export-docs-review-g21-evidence/specs.log",
+      "originalSourceCommit": "0457f0bac49276eb82ec0677b0c96ce226de1d45",
+      "storedPath": "docs/execution/shell-export-docs-review-generation21-20261120/specs.log.gz",
+      "decodedSha256": "2cf32f195ca4fb478a4387e1998b6948d74ba38dfa9770e75658bb01c6410f10",
+      "compressedSha256": "344b0f790a9a7d75249994f7489f56652fa818855fcda5ed35ef187827dac88b",
+      "decodedBytes": 126,
+      "compressedBytes": 117
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/vault-qr-independent-g21-evidence/focused.log",
+      "originalSourceCommit": "758936c54d0b823b96bad99ccfa93520ee175ae6",
+      "storedPath": "docs/execution/vault-qr-independent-generation21-20261120/focused.log.gz",
+      "decodedSha256": "c5fe8c4d134e64f9c9fc29ba5ed77f1582197f73b3ba1ab7eaa4d003eae8cb39",
+      "compressedSha256": "bc444c5b18976109d7ada12642928fcc641c5656d29ea6ccd021656a353b9940",
+      "decodedBytes": 12254,
+      "compressedBytes": 4024
+    }
+  ],
+  "historicalReportFormatting": {
+    "path": "docs/engineering/LIVE_CONSOLIDATION_REVIEW_GENERATION19_20261120.md",
+    "beforeSha256": "462c6402608ed927ffeffe7aa9be68c9e51ee52c8d0b29087a2d22c560ca74d3",
+    "afterSha256": "b9d2ffe72357179140532ef8f8343765ff56338da728174480531270241b7180",
+    "change": "Remove extra final blank line only"
+  },
+  "limits": [
+    "Decoded hashes refer to unchanged original execution bytes.",
+    "This packaging changes documentation and evidence storage only.",
+    "Author source and original evidence commits remain preserved."
+  ]
+}

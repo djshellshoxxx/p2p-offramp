@@ -1,0 +1,26 @@
+✔ wallet connect and sign-only prompts require explicit one-shot document capabilities (8.339579ms)
+✔ exact transaction, chain and account substitutions never prompt a wallet (4.248107ms)
+✔ cancel and account changes retain the physical prompt slot until settlement and discard the result (1.034893ms)
+✔ changed account identity without an event is detected before prompt dispatch (0.628851ms)
+✔ expired reviews and wallets without change events fail closed (6.31126ms)
+✖ wallet byte views are bounded before copy and custom iterators never execute (0.807135ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1599.15775
+
+✖ failing tests:
+
+test at apps/web/test/solana-localnet-wallet.test.mjs:60:1
+✖ wallet byte views are bounded before copy and custom iterators never execute (0.807135ms)
+  Error: external iterator
+      at Uint8Array.value (file:///workspace/scratch/29ec534d969d/review-solana-browser/apps/web/test/solana-localnet-wallet.test.mjs:63:77)
+      at Uint8Array.from (<anonymous>)
+      at bytes (file:///workspace/scratch/29ec534d969d/review-solana-browser/apps/web/src/solana-localnet/wallet-bridge.ts:22:27)
+      at publicAccount (file:///workspace/scratch/29ec534d969d/review-solana-browser/apps/web/src/solana-localnet/wallet-bridge.ts:34:54)
+      at Array.map (<anonymous>)
+      at Object.request (file:///workspace/scratch/29ec534d969d/review-solana-browser/apps/web/src/solana-localnet/wallet-bridge.ts:92:84)

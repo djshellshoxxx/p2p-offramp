@@ -1,0 +1,137 @@
+{
+  "schema": "p2p-offramp/engineering-app-shell-locale/v1",
+  "scope": "App navigation and command presentation under explicit live locale selection",
+  "base": {
+    "commit": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+    "tree": "455c76e42918f570f91fb21918f4afba1801c3c8"
+  },
+  "regression_only_commit": "798d2f0b5ab24564e4da2f1811843d9f3a5778db",
+  "source": {
+    "commit": "6be8acc9f45f5b9036989b380ca537084094faa4",
+    "tree": "3aabb59c3d4cd8b73f2ff253555c068997a4bb20",
+    "changed_paths": [
+      "apps/web/src/ui/App.tsx",
+      "apps/web/test/app-shell-locale.test.mjs"
+    ],
+    "unchanged_base_tree_entries": 2575
+  },
+  "executed": {
+    "red": {
+      "source_commit": "798d2f0b5ab24564e4da2f1811843d9f3a5778db",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/app-shell-locale.test.mjs",
+      "exit_code": 1,
+      "tests": 10,
+      "passed": 3,
+      "failed": 7,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "green_focused": {
+      "source_commit": "6be8acc9f45f5b9036989b380ca537084094faa4",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/app-shell-locale.test.mjs apps/web/test/locale-runtime.test.mjs apps/web/test/locale-catalog.test.mjs apps/web/test/locale-selector.render.test.mjs apps/web/test/locale-source.test.mjs apps/web/test/locale-stress.test.mjs apps/web/test/ui-routes.test.mjs apps/web/test/trade-ui-navigation-lifecycle.test.mjs apps/web/test/trade-draft-navigation-contract.test.mjs",
+      "exit_code": 0,
+      "tests": 62,
+      "passed": 62,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "typescript_projects": 4
+    },
+    "build_policy": {
+      "command": "npm run test:build-policy",
+      "exit_code": 0,
+      "tests": 58,
+      "passed": 58,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "boundaries": {
+      "command": "npm run check:boundaries",
+      "exit_code": 0,
+      "production_sources": 241,
+      "core_entry_modules": 148
+    },
+    "default_build": {
+      "command": "node apps/web/scripts/build.mjs",
+      "exit_code": 0,
+      "files": 12,
+      "bytes": 794260,
+      "graphs": {
+        "core-graph-document.json": {
+          "modules": 95,
+          "security_modules": [
+            "packages/security/release-context.ts",
+            "packages/security/src/release-proof.ts"
+          ]
+        },
+        "core-graph-worker.json": {
+          "modules": 30,
+          "security_modules": []
+        },
+        "qr-graph-worker.json": {
+          "modules": 4,
+          "security_modules": []
+        }
+      }
+    },
+    "whitespace": {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  },
+  "log_digests": {
+    "boundaries.log": {
+      "sha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "bytes": 392
+    },
+    "build-policy.log": {
+      "sha256": "b4c57737746b521570e7773614990f613fa7b7dbd33d9d50662f0355883d928b",
+      "bytes": 7642
+    },
+    "build.log": {
+      "sha256": "0b84ea66e258785ecbf5e11bc4981536d4e5e36ed005ece4ab2671825c3cf4e5",
+      "bytes": 1026
+    },
+    "green-focused.log": {
+      "sha256": "4ea5485fbb6ff4ec67e909caf9b3180ae19b7e2f570989de5d19911f1e60a98d",
+      "bytes": 6382
+    },
+    "red.log": {
+      "sha256": "9d3cbb563b7d2883f92e24d53a17afa630c6771a0d049d350305bd19aedeb44c",
+      "bytes": 9360
+    },
+    "typecheck.log": {
+      "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "bytes": 341
+    }
+  },
+  "fixture": {
+    "explicit_development_bundle": true,
+    "marker_text_not_translation": true,
+    "locale": "ar",
+    "direction": "rtl",
+    "funds_locale_eligible": false,
+    "native_browser_run": false,
+    "child_screens_rendered": false
+  },
+  "preserved": {
+    "ReleaseEnabled": 0,
+    "releaseAcceptance": false,
+    "connectOrigins": [],
+    "csp_connect_src": "'none'",
+    "production_locale": "English source only, draft",
+    "workflows_dependencies_catalogs_unchanged": true,
+    "backup_verification_source_unchanged": true
+  },
+  "qualification_limits": [
+    "No hosted or physical browser acceptance",
+    "No full workspace or long native Solana rerun",
+    "No translation/semantic/release approval",
+    "Fresh independent review and final composition gates remain root-owned"
+  ]
+}

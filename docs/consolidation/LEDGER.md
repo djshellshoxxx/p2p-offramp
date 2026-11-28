@@ -5,7 +5,27 @@ This is the one living ledger for branch and PR consolidation. It supersedes the
 Regenerate the table with `python3 scripts/consolidation/branch-ledger.py <candidate> out.json out.md` on a full,
 unshallowed fetch. The script is read-only.
 
-## Snapshot (2026-11-18, refreshed before editing)
+## Current recorded disposition — November 18, 2026
+
+Pinned main: `6c38e641e24abcfdcf645f864bd64c9645836d75`, after merged #137. The
+[documentation reconciliation](2026-11-18-documentation-reconciliation.md) is the current
+checkpoint for merged #135/#140/#150/#141/#149/#151/#143/#137 and draft stack #166–#168.
+It also preserves the exact heads of documentation PRs #136/#139/#164/#165 as merge
+ancestors. The combination is a candidate until its own integration is qualified;
+source PR closure is not inferred from its local existence.
+
+The earlier #159/#157 overlap warning below now has a partial disposition: #166
+selectively extracts #159's external-wallet signer and localnet build support while
+retaining main's D1 exchange; #167 consolidates #152/#153/#157/#158 native work. These
+are still draft-source outcomes. Preserve unconsumed deltas, and do not classify the
+whole original PR as superseded merely because one capability was extracted.
+Audit PR #138 remains an independent active lane; its ledger is untouched here.
+
+All branch counts, ahead/behind values, “live” labels and pending-route instructions in
+the following inventory are historical to its original `6ef9a261` checkpoint. They are
+not a fresh full-ref scan. Original qualification counts retain their original sources.
+
+## Historical snapshot (2026-11-18, before Phase 2 consolidation)
 
 | Ref | SHA |
 | --- | --- |
@@ -18,7 +38,7 @@ unshallowed fetch. The script is read-only.
 145 remote branches including `main`; 51 open PRs. 89 branches are ancestors of the candidate (52 of them already
 ancestors of `main`). The other 56 are dispositioned below.
 
-## Route
+## Historical integration route
 
 This session can push only `nodata/epic-newton-7bowm4`, so it cannot update #133's or #132's branches. Per the
 fallback rule, `nodata/epic-newton-7bowm4` is the single replacement integration branch: it starts at #133's exact
@@ -54,7 +74,7 @@ extractions below, and goes to `main` through one PR that supersedes #132 and #1
 - #65: T33 (malformed legacy saved-review wrapper) and T34 (unquoted meta refresh) are present on the trunk; only a
   comment line differs. T35 is patch-equivalent. T36–T40 are open tasks, tracked in the handoff, not code.
 
-## Branch table
+## Historical branch table
 
 Disposition vocabulary: already integrated · integrate (via the integration PR) · contained by content ·
 selectively extracted · preserved/historical · excluded.
@@ -206,3 +226,15 @@ selectively extracted · preserved/historical · excluded.
 | `work/p2p-pr14-finish-handoff-20261030` | `8c8911e2dd` | - | 0/111 | yes | yes |  |  | already integrated (ancestor of main) |
 | `work/p2p-relay-lifetime-20261030` | `e0961edc8c` | - | 0/115 | yes | yes |  |  | already integrated (ancestor of main) |
 | `work/p2p-validation-20261030` | `11ce9e42be` | - | 0/113 | yes | yes |  |  | already integrated (ancestor of main) |
+
+## Recorded merges after Phase 2 (earlier November 18 checkpoint)
+
+| PR | Merge commit | Content | Gates |
+| --- | --- | --- | --- |
+| #135 | `af4835b` | Locale root lang/dir and selector; Phase 2 outcome; Phase 3 quarry plan; Lane B prompt | 10/10 CI + Snyk; locale review clean |
+| #140 | `8649b7a` | D3 Option A release-trust unification; D6 `packages/qr` codec | 10/10 CI + Snyk; local 1,648/1,648; reviews clean; owner Tier C approval |
+| #150 | `97ce6a4` | D1 peer acceptance (Option B) | 10/10 CI + Snyk; local 1,698/1,698, forge 92/92; review clean; owner Tier C approval |
+
+Overlap to resolve (not Lane A's PRs, left untouched): #159 (`claude/p2p-offramp-evm-escrow-vc7stk`, D1 in exchange v2)
+duplicates D1 already on `main` via #150; #157 (`claude/sleepy-fermat-4s6ocx`, chain-solana planner/reader) overlaps
+Lane B track B1 (#151, #152, #158). Lane B PRs #136–#163 are drafts owned by Lane B.

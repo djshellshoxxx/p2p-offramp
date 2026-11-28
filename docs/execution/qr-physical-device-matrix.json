@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "scope": "Physical-device qualification required by D6; not satisfied by Node or synthetic-camera browser fixtures",
+  "status": "NOT_RUN",
+  "ReleaseEnabled": 0,
+  "requiredCases": [
+    "screen-to-camera-default-M",
+    "printed-code-default-M",
+    "1024-byte-generation-target",
+    "2048-byte-import-limit",
+    "rotated",
+    "inverted",
+    "low-light",
+    "partial-readable-or-fixed-refusal",
+    "multiple-codes-refused-when-detected",
+    "permission-denied",
+    "cancel-during-permission",
+    "background-and-route-exit-stop-tracks",
+    "exact-text-and-file-fallback",
+    "no-network-wallet-or-domain-authority"
+  ],
+  "devices": [
+    { "platform": "iOS Safari", "device": null, "osVersion": null, "browserVersion": null, "observedAt": null, "results": [], "status": "NOT_RUN" },
+    { "platform": "Android Chrome", "device": null, "osVersion": null, "browserVersion": null, "observedAt": null, "results": [], "status": "NOT_RUN" },
+    { "platform": "Desktop Chromium", "device": null, "osVersion": null, "browserVersion": null, "observedAt": null, "results": [], "status": "NOT_RUN" },
+    { "platform": "Desktop Firefox", "device": null, "osVersion": null, "browserVersion": null, "observedAt": null, "results": [], "status": "NOT_RUN" }
+  ],
+  "resultRequirements": ["case", "inputSha256", "decodedTextSha256OrRefusalCode", "durationMilliseconds", "cameraTracksEnded", "observedNetworkAndWalletEffects", "reviewer", "evidencePath"]
+}

@@ -1,0 +1,146 @@
+✔ durable-send evidence accepts the complete native and token approval requests without changing them (1.233854ms)
+✖ durable-send evidence rejects a substituted from even when every other field matches (0.883217ms)
+✖ durable-send evidence rejects a substituted to even when every other field matches (0.127171ms)
+✔ durable-send evidence rejects a substituted data even when every other field matches (0.310016ms)
+✖ durable-send evidence rejects a substituted value even when every other field matches (0.083005ms)
+✖ durable-send evidence rejects a substituted nonce even when every other field matches (0.071037ms)
+✖ durable-send evidence rejects a substituted chainId even when every other field matches (0.05952ms)
+✖ durable-send evidence rejects an omitted field or an extra wallet field (0.177907ms)
+✔ durable-send evidence refuses ambiguous markers and markers belonging to an older profile (0.418279ms)
+✖ durable-send evidence requires persisted pre-send provenance and matching account and nonce metadata (2.276382ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 3
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 90.775661
+
+✖ failing tests:
+
+test at apps/web/test/localnet-send-evidence.test.mjs:29:3
+✖ durable-send evidence rejects a substituted from even when every other field matches (0.883217ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///workspace/scratch/ab9553887ecb/browser-qualification/apps/web/test/localnet-send-evidence.test.mjs:31:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at apps/web/test/localnet-send-evidence.test.mjs:29:3
+✖ durable-send evidence rejects a substituted to even when every other field matches (0.127171ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///workspace/scratch/ab9553887ecb/browser-qualification/apps/web/test/localnet-send-evidence.test.mjs:31:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at apps/web/test/localnet-send-evidence.test.mjs:29:3
+✖ durable-send evidence rejects a substituted value even when every other field matches (0.083005ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///workspace/scratch/ab9553887ecb/browser-qualification/apps/web/test/localnet-send-evidence.test.mjs:31:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at apps/web/test/localnet-send-evidence.test.mjs:29:3
+✖ durable-send evidence rejects a substituted nonce even when every other field matches (0.071037ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///workspace/scratch/ab9553887ecb/browser-qualification/apps/web/test/localnet-send-evidence.test.mjs:31:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at apps/web/test/localnet-send-evidence.test.mjs:29:3
+✖ durable-send evidence rejects a substituted chainId even when every other field matches (0.05952ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///workspace/scratch/ab9553887ecb/browser-qualification/apps/web/test/localnet-send-evidence.test.mjs:31:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at apps/web/test/localnet-send-evidence.test.mjs:35:1
+✖ durable-send evidence rejects an omitted field or an extra wallet field (0.177907ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception: missing from
+      at TestContext.<anonymous> (file:///workspace/scratch/ab9553887ecb/browser-qualification/apps/web/test/localnet-send-evidence.test.mjs:39:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at apps/web/test/localnet-send-evidence.test.mjs:50:1
+✖ durable-send evidence requires persisted pre-send provenance and matching account and nonce metadata (2.276382ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///workspace/scratch/ab9553887ecb/browser-qualification/apps/web/test/localnet-send-evidence.test.mjs:58:43)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }

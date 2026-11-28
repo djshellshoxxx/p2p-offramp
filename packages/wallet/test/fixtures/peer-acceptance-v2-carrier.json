@@ -1,0 +1,82 @@
+{
+  "notice": "SYNTHETIC D1 version 2 carrier vectors from public scenario keys. Cross-implementation encoding evidence, not independent protocol approval.",
+  "generator": {
+    "script": "packages/wallet/test/fixtures/peer-acceptance-v2-generate.mjs",
+    "viem": "2.57.10",
+    "nobleCurves": "2.4.0"
+  },
+  "domain": {
+    "chainId": "31337",
+    "verifyingContract": "0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e"
+  },
+  "terms": {
+    "orderId": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "revision": "1",
+    "networkId": "local-evm",
+    "deploymentId": "escrow-local-v1",
+    "seller": "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+    "buyer": "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+    "assetKind": "native",
+    "asset": "0x0000000000000000000000000000000000000000",
+    "amountBaseUnits": "1000000000000000000",
+    "privateAgreementHash": "972459f32afc027880b2e4910469dbce213ed14e19e7273412fb8bed0fa83605",
+    "capabilitiesHash": "6a53056d4685133d77cb26b16b7c5c281581a414b586337e0314a5296280e2e4",
+    "sellerNonce": "3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c",
+    "acceptBeforeSeconds": "1700000000",
+    "escrowExpirySeconds": "1700086400"
+  },
+  "messagingKeys": {
+    "seller": "1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f",
+    "buyer": "4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766"
+  },
+  "domainSeparator": "5816cd5220e8184a22e074460163eacbc38a0824f184795a269addfcde818b9f",
+  "tradeTermsStructHash": "032568b7142f9f49a2aecee9b4206163250b8439062be4b5d9e355cdb450b00e",
+  "termsHash": "005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a",
+  "peerAcceptanceTypeHash": "de2ca7c5099211136e010c7b4e0f5cfe58f436ae16f7fbcda417f45b73b56c3c",
+  "statements": [
+    {
+      "role": "seller",
+      "binding": {
+        "v": 1,
+        "termsHash": "005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a",
+        "role": "seller",
+        "account": "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+        "ownMessagingKey": "1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f",
+        "counterpartyMessagingKey": "4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766",
+        "notAfterSeconds": "1699995000"
+      },
+      "structHash": "fd1de83157ca02f95620203a9f448e58f6e343e4162ac2d5050881a03cc858fa",
+      "digest": "821f6410f427914f12635640ecb3d40879d2411376ea4c9acec05699f4060f5e",
+      "termsSignature": "0x89c29b49abfbd8c4d8f36ea60838acd922a270f8e79aaf8b4419cc40afdf382a41d7f32278d3accce34b8971d6f28c6777384a939b8d935fe65901159f14d9b41c",
+      "bindingSignature": "0x368e7b1aa7381ca65a9cae9af0f456372f2f3ef9a78221a84f84f6538cc8bbef12ca9feb5160943d048a65edd33be20dabd64892474d3a6cbbb1c1120575e2361c"
+    },
+    {
+      "role": "buyer",
+      "binding": {
+        "v": 1,
+        "termsHash": "005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a",
+        "role": "buyer",
+        "account": "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+        "ownMessagingKey": "4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766",
+        "counterpartyMessagingKey": "1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f",
+        "notAfterSeconds": "1699995000"
+      },
+      "structHash": "d65ea3853f046d21f6ba733c5d99b8448cbd9989215b3df60dd5ed06a4df1de2",
+      "digest": "b990cfa57903287068b1f612130a8a6c7868bc61806d426e73081e546b39c773",
+      "termsSignature": "0xc4dabfb7225b4eea344c6353c03dee43cc323feed894e9673ae635b662c777932326d790fa31b07237713275a0bb458ccbd9ae3e25139d3a6a81f86f2a89c8781c",
+      "bindingSignature": "0xf44f4d00f498b09fb58689fb428c6d53ac6802500b8ecfba43e19b79fb390deb2c52e7877ca51759c801d5231ba86f872cd13faba1c9d9106c103200280a9dc01c"
+    }
+  ],
+  "envelopes": [
+    {
+      "type": "terms-offer",
+      "text": "{\"v\":2,\"type\":\"terms-offer\",\"ad\":\"30078:1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f:p2p-offramp:v1:a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1\",\"orderId\":\"a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1\",\"sender\":\"1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f\",\"recipient\":\"4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766\",\"nonce\":\"a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5\",\"expiresAtSeconds\":\"1699990900\",\"termsHash\":\"005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a\",\"body\":{\"terms\":\"{\\\"format\\\":\\\"p2p-offramp/local-terms-review/v1\\\",\\\"terms\\\":{\\\"orderId\\\":\\\"a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1\\\",\\\"revision\\\":\\\"1\\\",\\\"networkId\\\":\\\"local-evm\\\",\\\"deploymentId\\\":\\\"escrow-local-v1\\\",\\\"seller\\\":\\\"0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e\\\",\\\"buyer\\\":\\\"0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5\\\",\\\"assetKind\\\":\\\"native\\\",\\\"asset\\\":\\\"0x0000000000000000000000000000000000000000\\\",\\\"amountBaseUnits\\\":\\\"1000000000000000000\\\",\\\"privateAgreementHash\\\":\\\"972459f32afc027880b2e4910469dbce213ed14e19e7273412fb8bed0fa83605\\\",\\\"capabilitiesHash\\\":\\\"6a53056d4685133d77cb26b16b7c5c281581a414b586337e0314a5296280e2e4\\\",\\\"sellerNonce\\\":\\\"3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c\\\",\\\"acceptBeforeSeconds\\\":\\\"1700000000\\\",\\\"escrowExpirySeconds\\\":\\\"1700086400\\\"},\\\"privateAgreement\\\":{\\\"v\\\":1,\\\"orderId\\\":\\\"a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1\\\",\\\"revision\\\":\\\"1\\\",\\\"fiatCurrency\\\":\\\"USD\\\",\\\"fiatMinorUnits\\\":\\\"5000\\\",\\\"fiatScale\\\":2,\\\"paymentInstructions\\\":\\\"SYNTHETIC test payment note A\\\",\\\"capabilities\\\":[{\\\"id\\\":\\\"local-test-cap\\\",\\\"version\\\":\\\"1\\\",\\\"policyHash\\\":\\\"9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c\\\"}],\\\"agreementSalt\\\":\\\"1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a\\\"}}\",\"acceptance\":{\"binding\":{\"v\":1,\"termsHash\":\"005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a\",\"role\":\"seller\",\"account\":\"0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e\",\"ownMessagingKey\":\"1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f\",\"counterpartyMessagingKey\":\"4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766\",\"notAfterSeconds\":\"1699995000\"},\"termsSignature\":\"0x89c29b49abfbd8c4d8f36ea60838acd922a270f8e79aaf8b4419cc40afdf382a41d7f32278d3accce34b8971d6f28c6777384a939b8d935fe65901159f14d9b41c\",\"bindingSignature\":\"0x368e7b1aa7381ca65a9cae9af0f456372f2f3ef9a78221a84f84f6538cc8bbef12ca9feb5160943d048a65edd33be20dabd64892474d3a6cbbb1c1120575e2361c\"}}}",
+      "sha256": "7a93bd2fe11b82133241a95daf8c4f7702aa5de301556f2cf78df2a35c87c627"
+    },
+    {
+      "type": "terms-accept",
+      "text": "{\"v\":2,\"type\":\"terms-accept\",\"ad\":\"30078:1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f:p2p-offramp:v1:a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1\",\"orderId\":\"a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1\",\"sender\":\"4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766\",\"recipient\":\"1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f\",\"nonce\":\"5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a\",\"expiresAtSeconds\":\"1699990900\",\"termsHash\":\"005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a\",\"body\":{\"revision\":\"1\",\"acceptance\":{\"binding\":{\"v\":1,\"termsHash\":\"005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a\",\"role\":\"buyer\",\"account\":\"0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5\",\"ownMessagingKey\":\"4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766\",\"counterpartyMessagingKey\":\"1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f\",\"notAfterSeconds\":\"1699995000\"},\"termsSignature\":\"0xc4dabfb7225b4eea344c6353c03dee43cc323feed894e9673ae635b662c777932326d790fa31b07237713275a0bb458ccbd9ae3e25139d3a6a81f86f2a89c8781c\",\"bindingSignature\":\"0xf44f4d00f498b09fb58689fb428c6d53ac6802500b8ecfba43e19b79fb390deb2c52e7877ca51759c801d5231ba86f872cd13faba1c9d9106c103200280a9dc01c\"}}}",
+      "sha256": "332abbd8ef34126c04edb96a6273706d482ddd3d23960d2c2dc3ba7e529e13c3"
+    }
+  ]
+}

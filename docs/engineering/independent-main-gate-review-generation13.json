@@ -1,0 +1,1361 @@
+{
+  "repository": "djshellshoxxx/p2p-offramp",
+  "reviewer": "main_gate_review_g13",
+  "observed_at_utc": "2026-11-20T06:35:30Z",
+  "scope": "Read-only hosted source/check readiness review; no application/runtime/source changes or fresh functional test.",
+  "decision": {
+    "main_merge_ready": false,
+    "reason": "Current-target PR213 native/browser and queued workflow jobs incomplete.",
+    "new_actionable_failure": false,
+    "source_security_review_claim": false
+  },
+  "main": {
+    "sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+    "protected": false,
+    "rulesets": []
+  },
+  "prs": [
+    {
+      "number": 213,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/213",
+      "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "draft": true,
+      "mergeable": true,
+      "mergeable_state": "unstable",
+      "merged": false,
+      "merge_checkout": "007651d899220b7aa0ec50794db51e8c4605c6d2",
+      "merge_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+      "source_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+      "ordered_parents": [
+        "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+        "d30152336bb687b31ae547ab3fcecb8835a02ef4"
+      ],
+      "workflows": [
+        {
+          "run_id": 44685352684,
+          "name": "EVM escrow",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+          "attempt": 1,
+          "pr_numbers": [
+            213
+          ],
+          "jobs": [
+            {
+              "id": 136118251232,
+              "name": "local-trade",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:05:33Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136118251512,
+              "name": "forge",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:05:33Z",
+              "completed_at": null,
+              "steps": []
+            }
+          ]
+        },
+        {
+          "run_id": 44685352661,
+          "name": "Vault foundation",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+          "attempt": 1,
+          "pr_numbers": [
+            213
+          ],
+          "jobs": [
+            {
+              "id": 136118251247,
+              "name": "schemas-and-crypto",
+              "status": "completed",
+              "conclusion": "success",
+              "started_at": "2026-11-20T06:26:12Z",
+              "completed_at": "2026-11-20T06:29:47Z",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-11-20T06:26:12Z",
+                  "completed_at": "2026-11-20T06:26:13Z"
+                },
+                {
+                  "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-11-20T06:26:13Z",
+                  "completed_at": "2026-11-20T06:26:14Z"
+                },
+                {
+                  "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-11-20T06:26:14Z",
+                  "completed_at": "2026-11-20T06:26:18Z"
+                },
+                {
+                  "name": "Run npm ci --ignore-scripts",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-11-20T06:26:18Z",
+                  "completed_at": "2026-11-20T06:26:25Z"
+                },
+                {
+                  "name": "Run npm run typecheck",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-11-20T06:26:25Z",
+                  "completed_at": "2026-11-20T06:26:28Z"
+                },
+                {
+                  "name": "Run npm test",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-11-20T06:26:28Z",
+                  "completed_at": "2026-11-20T06:28:57Z"
+                },
+                {
+                  "name": "Run npm run test:formal:unit",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-11-20T06:28:57Z",
+                  "completed_at": "2026-11-20T06:29:14Z"
+                },
+                {
+                  "name": "Run npm run test:acceptance:cli",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-11-20T06:29:14Z",
+                  "completed_at": "2026-11-20T06:29:24Z"
+                },
+                {
+                  "name": "Run node --test scripts/agent/*.test.mjs",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 9,
+                  "started_at": "2026-11-20T06:29:24Z",
+                  "completed_at": "2026-11-20T06:29:25Z"
+                },
+                {
+                  "name": "Run npm run check:boundaries",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 10,
+                  "started_at": "2026-11-20T06:29:25Z",
+                  "completed_at": "2026-11-20T06:29:26Z"
+                },
+                {
+                  "name": "Run npm run test:build-policy",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-11-20T06:29:26Z",
+                  "completed_at": "2026-11-20T06:29:32Z"
+                },
+                {
+                  "name": "Run npm run test:diagnostics",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 12,
+                  "started_at": "2026-11-20T06:29:32Z",
+                  "completed_at": "2026-11-20T06:29:38Z"
+                },
+                {
+                  "name": "Run npm run test:fuzz",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 13,
+                  "started_at": "2026-11-20T06:29:38Z",
+                  "completed_at": "2026-11-20T06:29:42Z"
+                },
+                {
+                  "name": "Run npm run build",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 14,
+                  "started_at": "2026-11-20T06:29:42Z",
+                  "completed_at": "2026-11-20T06:29:46Z"
+                },
+                {
+                  "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 27,
+                  "started_at": "2026-11-20T06:29:46Z",
+                  "completed_at": "2026-11-20T06:29:46Z"
+                },
+                {
+                  "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 28,
+                  "started_at": "2026-11-20T06:29:46Z",
+                  "completed_at": "2026-11-20T06:29:46Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 29,
+                  "started_at": "2026-11-20T06:29:46Z",
+                  "completed_at": "2026-11-20T06:29:46Z"
+                }
+              ]
+            },
+            {
+              "id": 136118251527,
+              "name": "specs",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:05:33Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136118251580,
+              "name": "local-evm",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:05:33Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136118251665,
+              "name": "docs-tooling",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:05:33Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136118251733,
+              "name": "browser",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:05:33Z",
+              "completed_at": null,
+              "steps": []
+            }
+          ]
+        },
+        {
+          "run_id": 44685352623,
+          "name": "Specification inventory",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+          "attempt": 1,
+          "pr_numbers": [
+            213
+          ],
+          "jobs": [
+            {
+              "id": 136118250851,
+              "name": "inventory",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:05:33Z",
+              "completed_at": null,
+              "steps": []
+            }
+          ]
+        },
+        {
+          "run_id": 44685352627,
+          "name": "Nostr relay interoperability",
+          "event": "pull_request",
+          "status": "completed",
+          "conclusion": "success",
+          "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+          "attempt": 1,
+          "pr_numbers": [
+            213
+          ],
+          "jobs": [
+            {
+              "id": 136118250875,
+              "name": "native-nostr-relay",
+              "status": "completed",
+              "conclusion": "success",
+              "started_at": "2026-11-20T06:22:17Z",
+              "completed_at": "2026-11-20T06:22:37Z",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-11-20T06:22:18Z",
+                  "completed_at": "2026-11-20T06:22:19Z"
+                },
+                {
+                  "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-11-20T06:22:19Z",
+                  "completed_at": "2026-11-20T06:22:21Z"
+                },
+                {
+                  "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-11-20T06:22:21Z",
+                  "completed_at": "2026-11-20T06:22:22Z"
+                },
+                {
+                  "name": "Run npm ci --ignore-scripts",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-11-20T06:22:22Z",
+                  "completed_at": "2026-11-20T06:22:28Z"
+                },
+                {
+                  "name": "Install exact upstream relay binary",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-11-20T06:22:28Z",
+                  "completed_at": "2026-11-20T06:22:29Z"
+                },
+                {
+                  "name": "Qualify native relay transport and AUTH refusal",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-11-20T06:22:29Z",
+                  "completed_at": "2026-11-20T06:22:33Z"
+                },
+                {
+                  "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-11-20T06:22:33Z",
+                  "completed_at": "2026-11-20T06:22:35Z"
+                },
+                {
+                  "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 12,
+                  "started_at": "2026-11-20T06:22:35Z",
+                  "completed_at": "2026-11-20T06:22:35Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 13,
+                  "started_at": "2026-11-20T06:22:35Z",
+                  "completed_at": "2026-11-20T06:22:35Z"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "run_id": 44685352632,
+          "name": "Solana escrow",
+          "event": "pull_request",
+          "status": "in_progress",
+          "conclusion": null,
+          "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+          "attempt": 1,
+          "pr_numbers": [
+            213
+          ],
+          "jobs": [
+            {
+              "id": 136118251162,
+              "name": "program",
+              "status": "in_progress",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:25:03Z",
+              "completed_at": null,
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-11-20T06:25:03Z",
+                  "completed_at": "2026-11-20T06:25:04Z"
+                },
+                {
+                  "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-11-20T06:25:04Z",
+                  "completed_at": "2026-11-20T06:25:06Z"
+                },
+                {
+                  "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-11-20T06:25:06Z",
+                  "completed_at": "2026-11-20T06:25:07Z"
+                },
+                {
+                  "name": "Run npm ci --ignore-scripts",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-11-20T06:25:07Z",
+                  "completed_at": "2026-11-20T06:25:13Z"
+                },
+                {
+                  "name": "Independent JavaScript vectors",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-11-20T06:25:13Z",
+                  "completed_at": "2026-11-20T06:25:13Z"
+                },
+                {
+                  "name": "Run actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-11-20T06:25:13Z",
+                  "completed_at": "2026-11-20T06:25:13Z"
+                },
+                {
+                  "name": "Install pinned Agave and Anchor CLI",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-11-20T06:25:13Z",
+                  "completed_at": "2026-11-20T06:25:33Z"
+                },
+                {
+                  "name": "Rust toolchain from rust-toolchain.toml",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-11-20T06:25:33Z",
+                  "completed_at": "2026-11-20T06:25:42Z"
+                },
+                {
+                  "name": "Format",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 9,
+                  "started_at": "2026-11-20T06:25:42Z",
+                  "completed_at": "2026-11-20T06:25:42Z"
+                },
+                {
+                  "name": "Build program (SBPF v3, platform-tools v1.54)",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 10,
+                  "started_at": "2026-11-20T06:25:42Z",
+                  "completed_at": "2026-11-20T06:28:26Z"
+                },
+                {
+                  "name": "Lint",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-11-20T06:28:26Z",
+                  "completed_at": "2026-11-20T06:29:14Z"
+                },
+                {
+                  "name": "LiteSVM tests (original SPL Token 3.5.0 and p-token)",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 12,
+                  "started_at": "2026-11-20T06:29:14Z",
+                  "completed_at": "2026-11-20T06:30:04Z"
+                },
+                {
+                  "name": "Verify committed IDL is current",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 13,
+                  "started_at": "2026-11-20T06:30:04Z",
+                  "completed_at": "2026-11-20T06:31:14Z"
+                },
+                {
+                  "name": "Real validator client acceptance including refund and recovery",
+                  "status": "in_progress",
+                  "conclusion": null,
+                  "number": 14,
+                  "started_at": "2026-11-20T06:31:14Z",
+                  "completed_at": null
+                },
+                {
+                  "name": "Chromium for actual native browser composition",
+                  "status": "pending",
+                  "conclusion": null,
+                  "number": 15,
+                  "started_at": null,
+                  "completed_at": null
+                },
+                {
+                  "name": "Actual Worker encrypted Solana recovery and real-time refund",
+                  "status": "pending",
+                  "conclusion": null,
+                  "number": 16,
+                  "started_at": null,
+                  "completed_at": null
+                },
+                {
+                  "name": "Save dependency cache (push to main only)",
+                  "status": "pending",
+                  "conclusion": null,
+                  "number": 17,
+                  "started_at": null,
+                  "completed_at": null
+                },
+                {
+                  "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+                  "status": "pending",
+                  "conclusion": null,
+                  "number": 33,
+                  "started_at": null,
+                  "completed_at": null
+                },
+                {
+                  "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                  "status": "pending",
+                  "conclusion": null,
+                  "number": 34,
+                  "started_at": null,
+                  "completed_at": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "run_id": 44685341266,
+          "name": "PR #213",
+          "event": "dynamic",
+          "status": "completed",
+          "conclusion": "success",
+          "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+          "attempt": 1,
+          "pr_numbers": [],
+          "jobs": [
+            {
+              "id": 136118219795,
+              "name": "Analyze (python)",
+              "status": "completed",
+              "conclusion": "success",
+              "started_at": "2026-11-20T06:22:34Z",
+              "completed_at": "2026-11-20T06:23:21Z",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-11-20T06:22:35Z",
+                  "completed_at": "2026-11-20T06:22:36Z"
+                },
+                {
+                  "name": "Checkout repository",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-11-20T06:22:36Z",
+                  "completed_at": "2026-11-20T06:22:37Z"
+                },
+                {
+                  "name": "Setup proxy for registries",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-11-20T06:22:37Z",
+                  "completed_at": "2026-11-20T06:22:37Z"
+                },
+                {
+                  "name": "Initialize CodeQL",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-11-20T06:22:37Z",
+                  "completed_at": "2026-11-20T06:22:47Z"
+                },
+                {
+                  "name": "Perform CodeQL Analysis",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-11-20T06:22:47Z",
+                  "completed_at": "2026-11-20T06:23:18Z"
+                },
+                {
+                  "name": "Post Perform CodeQL Analysis",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-11-20T06:23:18Z",
+                  "completed_at": "2026-11-20T06:23:19Z"
+                },
+                {
+                  "name": "Post Initialize CodeQL",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-11-20T06:23:19Z",
+                  "completed_at": "2026-11-20T06:23:19Z"
+                },
+                {
+                  "name": "Post Setup proxy for registries",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 9,
+                  "started_at": "2026-11-20T06:23:19Z",
+                  "completed_at": "2026-11-20T06:23:20Z"
+                },
+                {
+                  "name": "Post Checkout repository",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 10,
+                  "started_at": "2026-11-20T06:23:20Z",
+                  "completed_at": "2026-11-20T06:23:20Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-11-20T06:23:20Z",
+                  "completed_at": "2026-11-20T06:23:20Z"
+                }
+              ]
+            },
+            {
+              "id": 136118220045,
+              "name": "Analyze (javascript-typescript)",
+              "status": "completed",
+              "conclusion": "success",
+              "started_at": "2026-11-20T06:24:37Z",
+              "completed_at": "2026-11-20T06:26:29Z",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-11-20T06:24:38Z",
+                  "completed_at": "2026-11-20T06:24:41Z"
+                },
+                {
+                  "name": "Checkout repository",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-11-20T06:24:41Z",
+                  "completed_at": "2026-11-20T06:24:45Z"
+                },
+                {
+                  "name": "Setup proxy for registries",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-11-20T06:24:45Z",
+                  "completed_at": "2026-11-20T06:24:46Z"
+                },
+                {
+                  "name": "Initialize CodeQL",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-11-20T06:24:46Z",
+                  "completed_at": "2026-11-20T06:24:59Z"
+                },
+                {
+                  "name": "Perform CodeQL Analysis",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-11-20T06:24:59Z",
+                  "completed_at": "2026-11-20T06:26:24Z"
+                },
+                {
+                  "name": "Post Perform CodeQL Analysis",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-11-20T06:26:24Z",
+                  "completed_at": "2026-11-20T06:26:24Z"
+                },
+                {
+                  "name": "Post Initialize CodeQL",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-11-20T06:26:24Z",
+                  "completed_at": "2026-11-20T06:26:25Z"
+                },
+                {
+                  "name": "Post Setup proxy for registries",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 9,
+                  "started_at": "2026-11-20T06:26:25Z",
+                  "completed_at": "2026-11-20T06:26:25Z"
+                },
+                {
+                  "name": "Post Checkout repository",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 10,
+                  "started_at": "2026-11-20T06:26:25Z",
+                  "completed_at": "2026-11-20T06:26:25Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-11-20T06:26:25Z",
+                  "completed_at": "2026-11-20T06:26:26Z"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 214,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/214",
+      "head": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+      "base": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "draft": false,
+      "mergeable": true,
+      "mergeable_state": "unstable",
+      "merged": false,
+      "merge_checkout": "54da0586b24b38021d92eff8ba2aca4f13e93c83",
+      "merge_tree": "ff58a8823649c43ba74356cc78084703ffaeedb6",
+      "source_tree": "ff58a8823649c43ba74356cc78084703ffaeedb6",
+      "ordered_parents": [
+        "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "24378d91682f7ee2957e1237aefcdb2ed062962b"
+      ],
+      "workflows": [
+        {
+          "run_id": 44685876577,
+          "name": "Vault foundation",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+          "attempt": 1,
+          "pr_numbers": [
+            214
+          ]
+        },
+        {
+          "run_id": 44685876342,
+          "name": "EVM escrow",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+          "attempt": 1,
+          "pr_numbers": [
+            214
+          ],
+          "jobs": [
+            {
+              "id": 136119961534,
+              "name": "forge",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:10:04Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136119961750,
+              "name": "local-trade",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:10:04Z",
+              "completed_at": null,
+              "steps": []
+            }
+          ]
+        },
+        {
+          "run_id": 44685876340,
+          "name": "Nostr relay interoperability",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+          "attempt": 1,
+          "pr_numbers": [
+            214
+          ]
+        },
+        {
+          "run_id": 44685876426,
+          "name": "Specification inventory",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "24378d91682f7ee2957e1237aefcdb2ed062962b",
+          "attempt": 1,
+          "pr_numbers": [
+            214
+          ]
+        }
+      ]
+    },
+    {
+      "number": 215,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/215",
+      "head": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+      "base": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "draft": true,
+      "mergeable": true,
+      "mergeable_state": "unstable",
+      "merged": false,
+      "merge_checkout": "c89188e50e3f05709852149fe055dafa5e005430",
+      "merge_tree": "af568d385edf9792f6e602d864e4c6d3d9a2d64a",
+      "source_tree": "af568d385edf9792f6e602d864e4c6d3d9a2d64a",
+      "ordered_parents": [
+        "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce"
+      ],
+      "workflows": [
+        {
+          "run_id": 44686692832,
+          "name": "EVM escrow",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+          "attempt": 1,
+          "pr_numbers": [
+            215
+          ]
+        },
+        {
+          "run_id": 44686692777,
+          "name": "Specification inventory",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+          "attempt": 1,
+          "pr_numbers": [
+            215
+          ]
+        },
+        {
+          "run_id": 44686692828,
+          "name": "Nostr relay interoperability",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+          "attempt": 1,
+          "pr_numbers": [
+            215
+          ]
+        },
+        {
+          "run_id": 44686692816,
+          "name": "Solana escrow",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+          "attempt": 1,
+          "pr_numbers": [
+            215
+          ]
+        },
+        {
+          "run_id": 44686692737,
+          "name": "Vault foundation",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+          "attempt": 1,
+          "pr_numbers": [
+            215
+          ],
+          "jobs": [
+            {
+              "id": 136122600670,
+              "name": "schemas-and-crypto",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:16:58Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136122601006,
+              "name": "specs",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:16:58Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136122601025,
+              "name": "local-evm",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:16:58Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136122601039,
+              "name": "browser",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:16:58Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136122601071,
+              "name": "docs-tooling",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:16:58Z",
+              "completed_at": null,
+              "steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 216,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/216",
+      "head": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+      "base": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "draft": true,
+      "mergeable": true,
+      "mergeable_state": "unstable",
+      "merged": false,
+      "merge_checkout": "1e5742ebb0dee499d6ee36dab101c40bffc190a5",
+      "merge_tree": "5ab1f4ddc56742645c60ac43ac2184e194867e0a",
+      "source_tree": "5ab1f4ddc56742645c60ac43ac2184e194867e0a",
+      "ordered_parents": [
+        "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "9dd01b199a3448a7654c4719d226ec01eb93eecc"
+      ],
+      "workflows": [
+        {
+          "run_id": 44687350905,
+          "name": "Vault foundation",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+          "attempt": 1,
+          "pr_numbers": [
+            216
+          ]
+        },
+        {
+          "run_id": 44687350995,
+          "name": "Nostr relay interoperability",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+          "attempt": 1,
+          "pr_numbers": [
+            216
+          ]
+        },
+        {
+          "run_id": 44687350997,
+          "name": "Specification inventory",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+          "attempt": 1,
+          "pr_numbers": [
+            216
+          ]
+        },
+        {
+          "run_id": 44687351087,
+          "name": "Solana escrow",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+          "attempt": 1,
+          "pr_numbers": [
+            216
+          ],
+          "jobs": [
+            {
+              "id": 136124723167,
+              "name": "program",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:22:36Z",
+              "completed_at": null,
+              "steps": []
+            }
+          ]
+        },
+        {
+          "run_id": 44687350901,
+          "name": "EVM escrow",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+          "attempt": 1,
+          "pr_numbers": [
+            216
+          ]
+        }
+      ]
+    },
+    {
+      "number": 217,
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/217",
+      "head": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+      "base": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+      "draft": true,
+      "mergeable": true,
+      "mergeable_state": "unstable",
+      "merged": false,
+      "merge_checkout": "1020dd891cd60abda81a21f17dd7fdcafa1390c8",
+      "merge_tree": "9c5e9d8cc8d3c6996a646b43d39b581fe325484f",
+      "source_tree": "9c5e9d8cc8d3c6996a646b43d39b581fe325484f",
+      "ordered_parents": [
+        "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+        "973d7b046df54856e0f71688db7a3efd879e7c2d"
+      ],
+      "workflows": [
+        {
+          "run_id": 44687510433,
+          "name": "EVM escrow",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+          "attempt": 1,
+          "pr_numbers": [
+            217
+          ]
+        },
+        {
+          "run_id": 44687510367,
+          "name": "Nostr relay interoperability",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+          "attempt": 1,
+          "pr_numbers": [
+            217
+          ]
+        },
+        {
+          "run_id": 44687510481,
+          "name": "Vault foundation",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+          "attempt": 1,
+          "pr_numbers": [
+            217
+          ],
+          "jobs": [
+            {
+              "id": 136125239174,
+              "name": "browser",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:23:57Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136125239446,
+              "name": "local-evm",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:23:57Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136125239461,
+              "name": "backup-verification-webkit",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:23:57Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136125239502,
+              "name": "docs-tooling",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:23:57Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136125239514,
+              "name": "specs",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:23:57Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136125239554,
+              "name": "schemas-and-crypto",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:23:57Z",
+              "completed_at": null,
+              "steps": []
+            },
+            {
+              "id": 136125239664,
+              "name": "backup-verification-firefox",
+              "status": "queued",
+              "conclusion": null,
+              "started_at": "2026-11-20T06:23:57Z",
+              "completed_at": null,
+              "steps": []
+            }
+          ]
+        },
+        {
+          "run_id": 44687510387,
+          "name": "Solana escrow",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+          "attempt": 1,
+          "pr_numbers": [
+            217
+          ]
+        },
+        {
+          "run_id": 44687510365,
+          "name": "Specification inventory",
+          "event": "pull_request",
+          "status": "queued",
+          "conclusion": null,
+          "head": "973d7b046df54856e0f71688db7a3efd879e7c2d",
+          "attempt": 1,
+          "pr_numbers": [
+            217
+          ]
+        }
+      ]
+    }
+  ],
+  "inspected_completed_logs": [
+    {
+      "file": "schemas-136118251247.log",
+      "run_id": 44685352661,
+      "job_id": 136118251247,
+      "checkout": "007651d899220b7aa0ec50794db51e8c4605c6d2",
+      "checkout_ref": "refs/remotes/pull/213/merge",
+      "test_result": {
+        "tests": 2311,
+        "pass": 2310,
+        "skip": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "skip_reason": "Foundry Cast is not installed in schemas job"
+      },
+      "other_suites": {
+        "formal_unit": 22,
+        "acceptance_cli": 12,
+        "agent_workflow": 8,
+        "build_policy": 57,
+        "diagnostics": 16,
+        "parser_fuzz": 26
+      }
+    },
+    {
+      "file": "nostr-136118250875.log",
+      "run_id": 44685352627,
+      "job_id": 136118250875,
+      "checkout": "007651d899220b7aa0ec50794db51e8c4605c6d2",
+      "checkout_ref": "refs/remotes/pull/213/merge",
+      "test_result": {
+        "tests": 3,
+        "pass": 3,
+        "skip": 0,
+        "fail": 0,
+        "cancelled": 0,
+        "todo": 0
+      }
+    },
+    {
+      "file": "codeql_js-136118220045.log",
+      "run_id": 44685341266,
+      "job_id": 136118220045,
+      "checkout": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "checkout_ref": "refs/remotes/pull/213/head",
+      "result": "completed successfully"
+    },
+    {
+      "file": "codeql_py-136118219795.log",
+      "run_id": 44685341266,
+      "job_id": 136118219795,
+      "checkout": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "checkout_ref": "refs/remotes/pull/213/head",
+      "result": "completed successfully"
+    }
+  ],
+  "decoded_utf8_logs": {
+    "nostr-136118250875.log": {
+      "characters": 17987,
+      "bytes": 18017,
+      "sha256": "4d0666ada60b6e04d8d361c8c1f61f0f300219d808d278640e29ad08d8d7f895"
+    },
+    "schemas-136118251247.log": {
+      "characters": 340854,
+      "bytes": 345966,
+      "sha256": "513d2b4e7886742c5e4be6f3fdb0deae4bc916d0cfc3f1b88051d86e172c2d6b"
+    },
+    "codeql_js-136118220045.log": {
+      "characters": 460438,
+      "bytes": 460440,
+      "sha256": "350b918964f23e65ecc3775d0fb787c3258227605a9f20a8ae3fd8e05bb323f9"
+    },
+    "codeql_py-136118219795.log": {
+      "characters": 158827,
+      "bytes": 158829,
+      "sha256": "f8c11823d4b2cba9d71557ab06b73f2881ad9e36ca6cf442a00d1e6057743a81"
+    }
+  },
+  "old_pr210": {
+    "same_head": true,
+    "run_id": 44677307772,
+    "job_id": 136092098296,
+    "status": "in_progress",
+    "complete_log_inspected": false,
+    "executing": "Actual Worker encrypted Solana recovery and real-time refund",
+    "merge_checkout": "65f9739dfd1ea44cb2dc9aa93a884c35548aa888",
+    "ordered_parents": [
+      "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "d30152336bb687b31ae547ab3fcecb8835a02ef4"
+    ],
+    "tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "transfer_to_pr213": false
+  },
+  "warnings": [
+    "Commit checks combine PR210 and PR213 contexts for identical d301 head.",
+    "Current PR213 Solana progress is API step status only; complete job log pending.",
+    "Queued workflows are not diagnosed as failures.",
+    "Local host compilation and advisory audit do not qualify updated PR216 native/BPF chain.",
+    "Empty PR213 reviews/comments do not substitute for committed independent source review."
+  ],
+  "release_enabled": 0,
+  "remote_mutations": [],
+  "root_resume": "Read live refs/checks and inspect completed current-target native/browser logs; require actual source/tree/parents plus applicable gates before expected-head merge.",
+  "followup_observations": [
+    {
+      "observed_at_utc": "2026-11-20T06:37:28Z",
+      "new_completed_job": {
+        "run_id": 44685352661,
+        "job_id": 136118251527,
+        "name": "specs",
+        "status": "completed",
+        "conclusion": "success",
+        "checkout": "007651d899220b7aa0ec50794db51e8c4605c6d2",
+        "python_tests": 32,
+        "python_result": "OK",
+        "inventory_documents": 173,
+        "inventory_broken_links": 0,
+        "inventory_unindexed": [],
+        "decoded_log": {
+          "file": "specs-136118251527.log",
+          "bytes": 22214,
+          "characters": 22132,
+          "sha256": "f6f8827e63e50375cc7d268afbcfcb20fddc506e34ecbcfcae0abef4ba822ddc"
+        }
+      },
+      "remaining_current_target_source_jobs": {
+        "queued": [
+          "browser",
+          "docs-tooling",
+          "local-evm",
+          "forge",
+          "local-trade",
+          "inventory"
+        ],
+        "in_progress": [
+          "program"
+        ]
+      },
+      "pr213_current_step": {
+        "name": "Real validator client acceptance including refund and recovery",
+        "started_at": "2026-11-20T06:31:14Z"
+      },
+      "pr210_current_step": {
+        "name": "Actual Worker encrypted Solana recovery and real-time refund",
+        "started_at": "2026-11-20T06:11:06Z"
+      },
+      "main_merge_ready": false
+    }
+  ],
+  "local_report_validation": {
+    "docs": {
+      "exit": 0,
+      "engineeringConsistency": true,
+      "semanticApproval": false,
+      "published": false,
+      "approvedRelease": null
+    },
+    "json_parse": true,
+    "whitespace": true
+  }
+}

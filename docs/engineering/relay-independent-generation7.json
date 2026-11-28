@@ -1,0 +1,138 @@
+{
+  "reviewed_source": "e848ae19574e8b7f4cb040082df5255ee5a63f1e",
+  "reviewed_tree": "8420b5614b717e4d705cd676b4cf999b049dc51a",
+  "regressions": {
+    "source": "e848ae19574e8b7f4cb040082df5255ee5a63f1e",
+    "tree": "8420b5614b717e4d705cd676b4cf999b049dc51a",
+    "base": "cd7d54ba075118a7ec043788c17718be842ee405",
+    "runs": [
+      {
+        "name": "original-module-red",
+        "command": [
+          "node",
+          "--import",
+          "./scripts/test-support/register-tsx.mjs",
+          "--test",
+          "--test-concurrency=1",
+          "--test-name-pattern=standalone ad validation|book refuses invalid capacity",
+          "packages/relay/test/ad.test.mjs"
+        ],
+        "exit": 1,
+        "seconds": 0.615,
+        "sha256": "f2897fc654de2b115e4763d77a7a3702d1291367dfad40f42f99ab9d825c9d74",
+        "summary": [
+          "\u2139 tests 2",
+          "\u2139 suites 0",
+          "\u2139 pass 0",
+          "\u2139 fail 2",
+          "\u2139 cancelled 0",
+          "\u2139 skipped 0",
+          "\u2139 todo 0",
+          "\u2139 duration_ms 524.122061"
+        ]
+      },
+      {
+        "name": "repaired-module-green",
+        "command": [
+          "node",
+          "--import",
+          "./scripts/test-support/register-tsx.mjs",
+          "--test",
+          "--test-concurrency=1",
+          "--test-name-pattern=standalone ad validation|book refuses invalid capacity",
+          "packages/relay/test/ad.test.mjs"
+        ],
+        "exit": 0,
+        "seconds": 0.747,
+        "sha256": "bfea887618830902a32d2f186f2db92c36a32601ee2d092e53ce205bb8292c1c",
+        "summary": [
+          "\u2139 tests 2",
+          "\u2139 suites 0",
+          "\u2139 pass 2",
+          "\u2139 fail 0",
+          "\u2139 cancelled 0",
+          "\u2139 skipped 0",
+          "\u2139 todo 0",
+          "\u2139 duration_ms 668.993637"
+        ]
+      }
+    ]
+  },
+  "affected": {
+    "source": "e848ae19574e8b7f4cb040082df5255ee5a63f1e",
+    "command": [
+      "node",
+      "--import",
+      "./scripts/test-support/register-tsx.mjs",
+      "--test",
+      "--test-concurrency=1",
+      "packages/relay/test/ad.test.mjs",
+      "packages/relay/test/advertisement.test.mjs",
+      "packages/relay/test/bip340-vectors.test.mjs",
+      "packages/relay/test/local-pool.test.mjs",
+      "packages/relay/test/nostr-crypto-wiring.test.mjs",
+      "packages/relay/test/nostr-tools-differential.test.mjs",
+      "packages/relay/test/pool-lifetime.test.mjs",
+      "packages/relay/test/pool-subscriptions.test.mjs",
+      "packages/relay/test/pool-url-binding.test.mjs",
+      "packages/relay/test/pool.test.mjs",
+      "apps/web/test/context-adapters.test.mjs",
+      "apps/web/test/localnet-readiness.test.mjs",
+      "packages/wallet/test/evm-peer-session.test.mjs",
+      "packages/exchange/test/peer-acceptance.test.mjs"
+    ],
+    "exit": 0,
+    "seconds": 61.213,
+    "sha256": "09ba1c5e3204b8b160dc069140303612749ad9ca55dd64338f7136aede095e2e",
+    "summary": [
+      "\u2139 {\"fixture\":\"owned-loopback-ws-missing-publish-ack\",\"receivedEvents\":1,\"suppressedDefaultAcks\":1,\"outcome\":\"unknown\",\"connectionsBeforePublish\":1,\"connectionsAfterEvent\":2,\"finalConnections\":2,\"publishTimeoutMs\":800,\"postTimeoutObservationMs\":800}",
+      "\u2139 tests 140",
+      "\u2139 suites 0",
+      "\u2139 pass 140",
+      "\u2139 fail 0",
+      "\u2139 cancelled 0",
+      "\u2139 skipped 0",
+      "\u2139 todo 0",
+      "\u2139 duration_ms 61084.728286"
+    ]
+  },
+  "preservation": {
+    "base": "cd7d54ba075118a7ec043788c17718be842ee405",
+    "source": "e848ae19574e8b7f4cb040082df5255ee5a63f1e",
+    "tree": "8420b5614b717e4d705cd676b4cf999b049dc51a",
+    "changed_paths": [
+      "docs/engineering/RELAY_FRESHNESS_CAPACITY_20261120.md",
+      "packages/relay/src/ad.ts",
+      "packages/relay/test/ad.test.mjs"
+    ],
+    "only_two_guard_insertions_in_production": true,
+    "protected_paths": [
+      "package.json",
+      "package-lock.json",
+      ".github/workflows",
+      "contracts",
+      "packages/nostr-crypto",
+      "packages/wallet",
+      "packages/exchange",
+      "apps/web/src/context-adapters/observations.ts",
+      "apps/web/src/localnet/controller.ts"
+    ],
+    "protected_paths_identical": true,
+    "application_capacity_callers": {
+      "apps/web/src/localnet/controller.ts": 32,
+      "apps/web/src/context-adapters/observations.ts": 32
+    }
+  },
+  "standards_findings": 0,
+  "spec_findings": 0,
+  "source_subreviewer": "generation7_relay_review/relay_source_semantics",
+  "worker_count_for_this_task": 2,
+  "not_executed": [
+    "full repository suite",
+    "TypeScript projects",
+    "build",
+    "pinned nak/Khatru native harness",
+    "hosted workflow",
+    "browser"
+  ]
+}

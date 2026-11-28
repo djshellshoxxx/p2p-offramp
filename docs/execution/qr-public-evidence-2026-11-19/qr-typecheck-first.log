@@ -1,0 +1,5 @@
+apps/web/src/qr/decode.worker.ts(4,37): error TS2304: Cannot find name 'DedicatedWorkerGlobalScope'.
+apps/web/src/qr/decoder.ts(9,19): error TS2349: This expression is not callable.
+  Type 'typeof import("/workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/jsqr/dist/index")' has no call signatures.
+apps/web/src/qr/decoder.ts(21,9): error TS2349: This expression is not callable.
+  Type 'typeof import("/workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/jsqr/dist/index")' has no call signatures.

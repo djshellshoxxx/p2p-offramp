@@ -1,54 +1,91 @@
 # User Guide
 
-[Home](Home.md) · [Developer Guide](Developer-Guide.md)
+[Home](Home.md) · [Developer Guide](Developer-Guide.md) · [Privacy and Recovery](Privacy-and-Recovery.md)
 
-**Status: development/test-only.** The app is experimental and does not accept or authorize real-funds trading. `ReleaseEnabled=0`. Treat anything in an open draft PR as unmerged work; do not interpret demos as live exchange services.
+**Status: development/test-only.** Real-funds trading is disabled: `ReleaseEnabled=0`. A source merge, demonstration or successful test does not approve a live exchange service.
 
-## Overview and capabilities
+This guide describes merged `main@388526a474aea0e08f9c04178c2b7f9e1d4bee3f` on November 20, 2026 UTC. The [source-consolidation record](../engineering/CONTINUATION_GENERATION17_20261120.md) identifies the merged implementation and its scoped hosted checks. The [November 18 reconciliation](../consolidation/2026-11-18-documentation-reconciliation.md) and dated [development status](../DEVELOPMENT_STATUS.md) retain their historical source scope; their descriptions of then-unmerged localnet work are not the current capability list.
 
-On **main**, the static client provides a local encrypted profile/vault with lock, unlock, encrypted export and recovery into a fresh-key profile. A synthetic demo build contains offline sample offers and read-only EVM trade-terms review. An unlocked profile can save a bounded set of original review documents locally and revalidate them on load. Existing tests cover aspects of backup recovery, browser storage and review; those tests are **not production or security certification**.
+## Choose the appropriate build
 
-**Not ready:** real-money trading, trusted live registry/bootstrap, fiat settlement guarantees, supported live custody, production deployment and a fully accepted buyer/seller beta journey. Optional relay, escrow, proof and recovery work appears across unmerged PRs and planning documents; a draft PR is not an enabled feature.
+The same repository contains several isolated clients. A feature in a localnet fixture does not become available in the normal static client.
 
-## Installation and access (developers/testers only)
+| Build | Available workflow | Scope |
+| --- | --- | --- |
+| Default static client | Local encrypted profiles, encrypted export, explicit backup authentication, fresh-key restore and local inspection tools | No approved live registry, wallet connection or funds movement |
+| Synthetic demo | The local profile workflows plus offline example offers and read-only EVM terms review | Synthetic examples; an unlocked profile can save up to eight original terms files and revalidate them on load |
+| EVM localnet fixture | Isolated buyer/seller, wallet, journal and recovery exercises | Explicit loopback test configuration; not a public exchange endpoint |
+| Solana localnet fixture | Recovery of an already funded escrow, private encrypted backup and selected public recovery-document export | Explicit local-validator configuration; full Solana negotiation and new funding remain unfinished |
 
-Use Node **24+** and the pinned lockfile. From the repository root:
+The [Developer Guide](Developer-Guide.md) describes build and source boundaries. The existing [qualification record](../engineering/CONTINUATION_GENERATION17_20261120.md) covers its named browser and native fixtures. Physical-wallet/device acceptance, production trust configuration, independent security approval and real-funds release remain separate work.
 
-```sh
-npm ci --ignore-scripts
-npm run build:demo
-```
+## Installation and access
 
-The synthetic demonstration output is `apps/web/dist-demo`. The default production-style static build is `npm run build` (output `apps/web/dist`), but it has no approved trust root and **does not enable real trading**. Hosting the generated files does not change those safety gates. No official production endpoint or real-funds onboarding is asserted here. Details: [Getting Started](Getting-Started.md) and [operator guide](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/OPERATOR.md).
+Developers and testers need Node 24 or newer and the pinned lockfile. From the repository root, run `npm ci --ignore-scripts`, then `npm run build:demo` for the synthetic demonstration. Its output is `apps/web/dist-demo`. The default static build is `npm run build`, with output in `apps/web/dist`.
 
-## Common safe workflows
+These commands do not create an approved production endpoint. Localnet clients need their own explicit fixtures; a normal or demo build does not select a network or wallet for them. See [Getting Started](Getting-Started.md) and the [operator guide](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/docs/OPERATOR.md).
 
-1. **Local vault:** create a profile with the app's explicit no-reset consent, unlock it, and lock it when finished. Preserve your own recovery materials.
-2. **Offline review:** use the **synthetic demo only** to inspect full addresses, chain, token/native asset, amounts, expiry and settlement warnings. A displayed review is not cryptographic approval or proof of fiat payment.
-3. **Saved terms:** while unlocked, save up to eight original terms documents in the encrypted local profile, then revalidate them on load. A restored profile uses fresh-key recovery; treat backups as sensitive.
-4. **Recovery:** explicitly export encrypted backup bytes and verify a separate restored profile using test data first. A QR display, screenshot or partial receipt is not a replacement for a complete independently preserved encrypted backup.
-5. **Wallet and QR:** inspect the actual destination and chain in the wallet interface. Never enter a seed phrase into a webpage or QR form. No real wallet transfer is approved in the current app.
+## Local profiles and saved terms
+
+On **Home**, create a profile after reading the no-reset consent, or unlock an existing profile using its exact profile ID and passphrase. The profile belongs to the current browser origin. Use **Lock vault** when finished; browser storage is not a durable backup.
+
+In the synthetic demo, review full addresses, chain, asset, amount, expiry and settlement warnings before saving a terms document. Saved terms remain encrypted within that profile and are checked again against the loaded registry when opened. A review does not authenticate fiat payment or authorize a wallet transfer. The [current shell and review composition](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/apps/web/src/ui/App.tsx) keeps these profile and build scopes separate.
+
+## Export, authenticate and recheck a backup
+
+The default client and synthetic demo expose these controls on **Recovery**:
+
+1. Under **Export an encrypted file**, select the intended profile, accept the export notice and choose **Download unchecked encrypted backup**. Preserve the complete downloaded file and its passphrase separately. The browser controls whether it is saved; exporting does not test the passphrase or verify recovery.
+2. Unlock the matching local profile. Under **Authenticate a backup file against this profile**, choose the saved file in **Backup file to authenticate**, enter **Passphrase for this backup file**, then choose **Verify this backup file**.
+3. A successful result identifies the profile and committed revision, plus the authenticated encrypted-envelope and selected-file SHA-256 values. It authenticates that file against the complete current encrypted profile, including opaque records, without restoring or changing the profile.
+4. Use **Recheck verified revision** before relying on the result. This checks the held verification against the current stored profile revision. A displayed result is a point-in-time observation, not a continuous freshness guarantee. If the file no longer matches, export the latest profile and verify its new file. Locking or changing the selected profile retires that selection's verification.
+
+A checksum, QR fingerprint, successful unlock or completed download does not substitute for step 2. The check does not establish external-wallet spending-key recovery, complete relay history, current chain state or retention of the file on another device. The [Recovery page](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/apps/web/src/ui/Pages.tsx), [verification form](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/apps/web/src/ui/BackupVerificationForm.tsx) and [current English labels](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/apps/web/src/ui/locale/en.ts) define this workflow.
+
+## Restore into a separate profile
+
+On **Recovery**, use **Restore an encrypted file** with the complete backup, its **Backup passphrase** and the destination **New passphrase**, repeated in **Confirm new passphrase**. Read the restore notice and choose **Restore as new profile**. A successful restore creates a separate, locked profile with fresh keys and a new profile ID. It leaves existing profiles intact.
+
+Choose **Open restored profile** to select it for unlock on Home; enter the new passphrase there. If another profile is unlocked, use **Lock vault** before unlocking the restored one. With test data, check that the expected records are present, then export and authenticate a backup of this new profile. The old file belongs to the original profile and cannot serve as current-profile verification for the fresh-key copy.
+
+Keep the original file and old passphrase until independent recovery verification is complete. An older backup cannot contain later local changes or prove what a counterparty did afterward. Restored transaction references need fresh chain reconciliation before any economic action in a qualified test flow; an uncertain broadcast must not be retried as though it was unsent. See [Privacy and Recovery](Privacy-and-Recovery.md) and the [fresh-key backup service](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/packages/storage/src/backup-service.ts).
+
+In the isolated EVM localnet client, **Recheck and resume saved trade** is an explicit
+step for an eligible restored, unfunded agreement. It revalidates the original
+acceptances and does not itself send a transaction. Any subsequent transaction
+still requires its own fresh wallet review. An older backup cannot reveal a peer
+withdrawal that happened afterward. Source: [localnet resumption UI](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/apps/web/src/localnet/LocalnetRoot.tsx).
+
+## Solana public recovery documents
+
+This workflow belongs only to the isolated **Solana localnet** client. For an already retained escrow, **Export public recovery JSON** downloads that escrow's canonical public recovery document. The file contains original trade terms, public wallet addresses and deployment identities, including the agreement hash. It can link public activity to the selected trade.
+
+The action exports the retained document; it does not refresh finalized state, connect or prompt a wallet, sign, send, or create a new trade. It excludes the private profile wrapper, transaction journal, passphrases and signatures. Keep a separate **Export encrypted backup** file for private profile and journal recovery. A public recovery JSON file cannot be used in **Restore an encrypted backup**. See the [Solana localnet UI](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx) and [export controller](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/apps/web/src/solana-localnet/controller.ts).
+
+## Signed asset updates in Settings
+
+**Settings → Signed asset updates** is present, but update checking is unconfigured in the default build. **Check for a signed update** is disabled; **Open backup and recovery tools** remains available. Opening Settings does not select a distribution key, discovery service or destination.
+
+The optional view can show a release candidate only when a build supplies a separately trusted controller. Its explicit check, review and confirmation are distinct steps. This guide supplies no production configuration, and a review does not approve a release. A move to another origin has separate local storage and requires an explicit restore there; no profile, passphrase, session or backup is transferred automatically. Source: [optional update view](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/apps/web/src/ui/SignedUpdatePanel.tsx) and [composition limits](../engineering/SIGNED_UPDATE_UI_GENERATION13_20261120.md).
 
 ## Troubleshooting
 
-- **Trade-terms review unavailable in default build:** expected; no approved registry is embedded. Only the explicitly labeled synthetic demo provides demonstration samples.
-- **Testnet build refuses `KEY_UNPINNED` or `TESTNET_TRUST_MISSING`:** expected without an owner-approved release key and corresponding trust files; do not bypass the trust gate.
-- **Backup does not unlock an existing profile:** recovery creates a separate fresh-key profile. Follow the on-screen restore workflow and preserve the original backup until independently verified.
-- **Browser data disappeared:** local browser storage is not guaranteed persistent; maintain encrypted backups, and do not assume deletion is secure erasure.
-- **Network/relay feature absent:** several remote workflows are pending qualification and do not become available merely because test modules or design specs exist.
+- **Trade-terms review unavailable in the default build:** no approved registry is embedded. Use the explicitly labeled synthetic demo for offline sample review.
+- **Testnet build reports `KEY_UNPINNED` or `TESTNET_TRUST_MISSING`:** the required approved release key or trust files are absent. This is not a request to choose an arbitrary key.
+- **Backup verification reports a different revision:** unlock the intended profile, export its latest committed state and authenticate that new file. Recheck before relying on the receipt.
+- **The old backup will not verify against a restored profile:** the restored profile has a new ID and fresh keys. Export and verify its own file.
+- **A restore was interrupted:** inspect the local profile list before trying again; a destination profile may already have been created.
+- **Browser data disappeared or a new origin is empty:** local storage can be removed or evicted, and different origins have separate storage. Preserve a complete encrypted backup independently.
+- **Signed update checking is disabled:** this is the default unconfigured state, not evidence of a network outage.
 
 ## Frequently asked questions
 
-**Can I send real funds?** No. Trading authority is disabled; testing uses synthetic fixtures/local EVM as described in repository evidence.
+**Can I send real funds?** No. The documented exchange and recovery exercises use synthetic or explicitly configured local test environments. `ReleaseEnabled=0`.
 
-**Does the app guarantee payment finality?** No. Manual fiat settlement and counterparty behavior cannot be proven by an app screenshot; fiat reversals may occur.
+**Does the app guarantee fiat settlement?** No. Check actual payment records independently; screenshots and local trade state cannot establish finality or rule out reversals.
 
-**Does encryption make me anonymous?** No. Browser compromise, extensions, device access, payment providers, relays, chain analytics and network metadata can reveal information.
+**Does encryption make me anonymous?** No. Public transactions, payment providers, relays, network metadata, extensions and device access can reveal information.
 
-**Are draft PR capabilities released?** No. Review, CI, explicit approvals and release gates remain separate.
+**Is the live Wiki published by this update?** No. These are repository documentation sources. Their integrity checks do not approve their meaning or publish them.
 
-## Privacy, security and safe use
-
-Keys and sensitive vault content are intended to remain local; clients and optional relays are not equivalent to a trusted anonymous network. Keep encrypted backups and recovery passphrases separately. A compromised endpoint or copied browser profile defeats many protections. On-chain transactions expose public metadata, and deletion may not securely erase data. See [Privacy and Recovery](Privacy-and-Recovery.md), [Wallet and QR Safety](Wallet-and-QR-Safety.md) and [Security and Release](Security-and-Release.md).
-
-For precise implementation/qualification status, use [README](https://github.com/djshellshoxxx/p2p-offramp/blob/main/README.md), [development status](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/DEVELOPMENT_STATUS.md) and the [latest task ledger](https://github.com/djshellshoxxx/p2p-offramp/blob/main/tasks/todo.md).
+See [Privacy and Recovery](Privacy-and-Recovery.md), [Wallet and QR Safety](Wallet-and-QR-Safety.md), [Security and Release](Security-and-Release.md) and the [source-consolidation record](../engineering/CONTINUATION_GENERATION17_20261120.md) for the corresponding limits.

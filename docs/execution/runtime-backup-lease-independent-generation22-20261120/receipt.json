@@ -1,0 +1,52 @@
+[
+  {
+    "source": "44b0caef274e52632b509a23c7f1b7c9410c0568",
+    "tree": "c9512efee5d06da0e3741fbe638388d5ce04a2f5",
+    "command": [
+      "node",
+      "--import",
+      "./scripts/test-support/register-tsx.mjs",
+      "--test",
+      "--test-concurrency=4",
+      "apps/web/test/runtime-backup-selection.test.mjs",
+      "apps/web/test/app-runtime.test.mjs",
+      "apps/web/test/app-services.test.mjs",
+      "apps/web/test/backup-verification-runtime.test.mjs",
+      "apps/web/test/backup-verification-independent.test.mjs",
+      "apps/web/test/backup-verification-publication.test.mjs",
+      "packages/security/test/release-update.test.mjs"
+    ],
+    "started_at": "2026-11-20T16:50:32.092913+00:00",
+    "completed_at": "2026-11-20T16:50:36.186195+00:00",
+    "exit_code": 0,
+    "log": "/workspace/scratch/dcf03ef9bee8/p2p-runtime-lease-independent-g22-logs/focused.log",
+    "sha256": "b310740e8745f1902caa2b4700c0848df3d94b77750e6c5a55267056d1ed6b97",
+    "bytes": 9717,
+    "summary": [
+      "\u2139 tests 88",
+      "\u2139 suites 0",
+      "\u2139 pass 88",
+      "\u2139 fail 0",
+      "\u2139 cancelled 0",
+      "\u2139 skipped 0",
+      "\u2139 todo 0",
+      "\u2139 duration_ms 3985.570005"
+    ]
+  },
+  {
+    "source": "44b0caef274e52632b509a23c7f1b7c9410c0568",
+    "tree": "c9512efee5d06da0e3741fbe638388d5ce04a2f5",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "started_at": "2026-11-20T16:50:36.186544+00:00",
+    "completed_at": "2026-11-20T16:50:39.211603+00:00",
+    "exit_code": 0,
+    "log": "/workspace/scratch/dcf03ef9bee8/p2p-runtime-lease-independent-g22-logs/typecheck.log",
+    "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+    "bytes": 341,
+    "summary": []
+  }
+]

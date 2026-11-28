@@ -3,11 +3,14 @@ import { parseTradeBinding, type TradeBinding } from './core.ts';
 import { decodeIntentPayload, parseIntentAccount, parseIntentId, intentData, type IntentState } from './intent.ts';
 import { MAX_RECORDS, MAX_REVISION, type PrivateRecordV1 } from './vault.ts';
 import { parseStrictJsonBytes } from './registry.ts';
+import { decodeSolanaJournalRecoveryHint, SOLANA_RECOVERY_STATES,
+  type SolanaRecoveryStoredState } from './solana-recovery-reference.ts';
 export const RECOVERY_REFERENCE_PAGE_SIZE = 64;
 export const MAX_RECOVERY_REFERENCE_EXPORT_BYTES = 128 * 1024;
 export interface RuntimeRecoveryReference {
   readonly recordId: string; readonly intentId: string; readonly binding: TradeBinding; readonly account: string;
-  readonly action: 'approve' | 'fund' | 'release' | 'refund'; readonly storedState: IntentState;
+  readonly action: 'approve' | 'fund' | 'release' | 'refund' | 'payout';
+  readonly storedState: IntentState | SolanaRecoveryStoredState;
   /** Public chain transaction hash / Solana transaction-signature ID, never an acceptance signature or signed transaction. */
   readonly chainReference: string | null; readonly nonce: string | null;
 }
@@ -28,10 +31,19 @@ function parseReference(value: unknown): RuntimeRecoveryReference {
   const raw = intentData(value, ['recordId', 'intentId', 'binding', 'account', 'action', 'storedState', 'chainReference', 'nonce']);
   if (typeof raw.recordId !== 'string' || !/^[0-9a-f]{32}$/.test(raw.recordId)) return invalid();
   const binding = parseTradeBinding(raw.binding), account = parseIntentAccount(raw.account, binding.chain), intentId = parseIntentId(raw.intentId);
-  if (raw.action !== 'approve' && raw.action !== 'fund' && raw.action !== 'release' && raw.action !== 'refund' || !states.includes(raw.storedState as IntentState)) return invalid();
+  const native = binding.chain === 'solana';
+  if (raw.action !== 'approve' && raw.action !== 'fund' && raw.action !== 'release' && raw.action !== 'refund' &&
+      !(native && raw.action === 'payout')) return invalid();
+  if (!states.includes(raw.storedState as IntentState) &&
+      !(native && SOLANA_RECOVERY_STATES.includes(raw.storedState as SolanaRecoveryStoredState))) return invalid();
+  if (raw.action === 'payout' && !SOLANA_RECOVERY_STATES.includes(raw.storedState as SolanaRecoveryStoredState)) return invalid();
   if (raw.chainReference !== null && (typeof raw.chainReference !== 'string' || !(binding.chain === 'evm' ? /^0x[0-9a-f]{64}$/ : /^[1-9A-HJ-NP-Za-km-z]{64,88}$/).test(raw.chainReference))) return invalid();
   if (raw.nonce !== null && (binding.chain !== 'evm' || typeof raw.nonce !== 'string' || !/^(0|[1-9][0-9]{0,77})$/.test(raw.nonce))) return invalid();
-  return Object.freeze({ recordId: raw.recordId, intentId, binding, account, action: raw.action, storedState: raw.storedState as IntentState, chainReference: raw.chainReference as string | null, nonce: raw.nonce as string | null });
+  if (native && ['signed', 'sendMarked', 'sent', 'unknown'].includes(raw.storedState as string) &&
+      raw.chainReference === null) return invalid();
+  return Object.freeze({ recordId: raw.recordId, intentId, binding, account, action: raw.action,
+    storedState: raw.storedState as IntentState | SolanaRecoveryStoredState,
+    chainReference: raw.chainReference as string | null, nonce: raw.nonce as string | null });
 }
 /** Reads the existing private UI export. Every value remains a discovery hint, never native authority. */
 export function parseRecoveryReferenceExportBytes(bytes: Uint8Array): RecoveryReferenceExport {
@@ -87,9 +99,17 @@ export function projectRecoveryReferences(records: readonly PrivateRecordV1[], o
   for (const record of selected) {
     try {
       if (record.schemaVersion !== 1) throw Error();
-      const intent = decodeIntentPayload(record.payload);
-      items.push(parseReference({ recordId: record.id, intentId: intent.intentId, binding: intent.binding, account: intent.account, action: intent.action, storedState: intent.state,
-        chainReference: intent.submission.chain === 'evm' ? intent.submission.hash : intent.submission.signature, nonce: intent.submission.chain === 'evm' ? intent.submission.nonce : null }));
+      let reference: unknown;
+      try {
+        const intent = decodeIntentPayload(record.payload);
+        reference = { recordId: record.id, intentId: intent.intentId, binding: intent.binding, account: intent.account,
+          action: intent.action, storedState: intent.state,
+          chainReference: intent.submission.chain === 'evm' ? intent.submission.hash : intent.submission.signature,
+          nonce: intent.submission.chain === 'evm' ? intent.submission.nonce : null };
+      } catch {
+        reference = { recordId: record.id, ...decodeSolanaJournalRecoveryHint(record.payload) };
+      }
+      items.push(parseReference(reference));
     } catch { unsupported++; }
   }
   return parseRecoveryReferences({ authority: 'unverified-offline-reference', revision: current, offset: start, nextOffset: start + selected.length < journal.length ? start + selected.length : null,

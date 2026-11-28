@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { MAX_RECOVERY_REFERENCE_EXPORT_BYTES, type RuntimeRecoveryReferences } from '../../../../packages/schemas/index.ts';
-import type { AppServices } from '../app-services.ts';
+import type { AppServices, RuntimeErrorCode } from '../app-services.ts';
 import { errorMessage } from './routes.ts';
 import { recoveryReferenceMessages as m } from './recovery-reference-messages.ts';
 const noSubscribe = () => () => {}, noScope = () => 0, locked = Object.freeze({ state: 'locked' as const }), lockedSnapshot = () => locked;
@@ -15,7 +15,7 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
   const scope = useSyncExternalStore(services?.subscribe ?? noSubscribe, services?.selectionScope ?? noScope, noScope);
   const [loaded, setLoaded] = useState<{ readonly scope: number; readonly value: RuntimeRecoveryReferences } | null>(null);
   const [selected, setSelected] = useState<readonly number[]>([]), [consent, setConsent] = useState(false), [preview, setPreview] = useState<Preview | null>(null);
-  const [busy, setBusy] = useState(false), [error, setError] = useState(''), [notice, setNotice] = useState('');
+  const [busy, setBusy] = useState(false), [error, setError] = useState<RuntimeErrorCode | null>(null), [notice, setNotice] = useState<'downloaded' | null>(null);
   const request = useRef<AbortController | null>(null), sequence = useRef(0), retainedPreview = useRef<Preview | null>(null);
   const previewHeading = useRef<HTMLHeadingElement>(null);
   useLayoutEffect(() => {
@@ -33,7 +33,7 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
   }, [page]);
   function discardPreview() { retainedPreview.current?.bytes.fill(0); retainedPreview.current = null; setPreview(null); }
   useLayoutEffect(() => {
-    request.current?.abort(); sequence.current++; setLoaded(null); setSelected([]); setConsent(false); discardPreview(); setError(''); setNotice(''); setBusy(false);
+    request.current?.abort(); sequence.current++; setLoaded(null); setSelected([]); setConsent(false); discardPreview(); setError(null); setNotice(null); setBusy(false);
   }, [scope, services]);
   useEffect(() => () => { request.current?.abort(); sequence.current++; retainedPreview.current?.bytes.fill(0); retainedPreview.current = null; }, [services]);
   const isCurrent = (token: number, captured: number, controller: AbortController) => !controller.signal.aborted && sequence.current === token &&
@@ -42,35 +42,35 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
     if (!services || services.current.state !== 'unlocked' || busy) return;
     const captured = services.selectionScope(), token = ++sequence.current, controller = new AbortController();
     pageTrigger.current = document.activeElement === trigger ? trigger : null;
-    request.current?.abort(); request.current = controller; discardPreview(); setSelected([]); setConsent(false); setNotice(''); setError(''); setBusy(true);
+    request.current?.abort(); request.current = controller; discardPreview(); setSelected([]); setConsent(false); setNotice(null); setError(null); setBusy(true);
     try {
       const result = await services.listRecoveryReferences(offset, expectedRevision, controller.signal);
       if (!isCurrent(token, captured, controller)) return;
-      if (result.ok) setLoaded({ scope: captured, value: result.value }); else { setLoaded(null); setError(errorMessage(result.error.code)); }
-    } catch { if (isCurrent(token, captured, controller)) { setLoaded(null); setError(errorMessage('PROTOCOL_ERROR')); } }
+      if (result.ok) setLoaded({ scope: captured, value: result.value }); else { setLoaded(null); setError(result.error.code); }
+    } catch { if (isCurrent(token, captured, controller)) { setLoaded(null); setError('PROTOCOL_ERROR'); } }
     finally { if (isCurrent(token, captured, controller)) setBusy(false); if (request.current === controller) request.current = null; }
   }
   function showPreview() {
-    discardPreview(); setError(''); setNotice('');
+    discardPreview(); setError(null); setNotice(null);
     if (!page || !consent || selected.length === 0 || services?.selectionScope() !== scope) return;
     const text = JSON.stringify({ format: 'p2p-offramp/offline-recovery-references/v1', authority: page.authority, localSnapshotRevision: page.revision,
       items: selected.map(index => page.items[index]) }, null, 2), bytes = new TextEncoder().encode(text);
-    if (bytes.length > MAX_RECOVERY_REFERENCE_EXPORT_BYTES) { bytes.fill(0); setError(errorMessage('LIMIT_EXCEEDED')); return; }
+    if (bytes.length > MAX_RECOVERY_REFERENCE_EXPORT_BYTES) { bytes.fill(0); setError('LIMIT_EXCEEDED'); return; }
     const value = Object.freeze({ bytes, text, revision: page.revision, offset: page.offset }); retainedPreview.current = value; setPreview(value);
   }
   async function savePreview() {
     if (!services || !page || !preview || busy || !consent) return;
     const captured = services.selectionScope(), token = ++sequence.current, controller = new AbortController(), saved = preview;
-    request.current = controller; setBusy(true); setNotice(''); setError('');
+    request.current = controller; setBusy(true); setNotice(null); setError(null);
     try {
       // The same revision must still be durable just before download; never export a mixed-page/profile result.
       const fresh = await services.listRecoveryReferences(saved.offset, saved.revision, controller.signal);
       if (!isCurrent(token, captured, controller) || retainedPreview.current !== saved) return;
       if (!fresh.ok || JSON.stringify(fresh.value) !== JSON.stringify(page)) {
-        setLoaded(null); discardPreview(); setError(errorMessage(fresh.ok ? 'PROTOCOL_ERROR' : fresh.error.code)); return;
+        setLoaded(null); discardPreview(); setError(fresh.ok ? 'PROTOCOL_ERROR' : fresh.error.code); return;
       }
-      download(saved.bytes); setNotice(m.downloaded);
-    } catch { if (isCurrent(token, captured, controller)) { discardPreview(); setError(errorMessage('PROTOCOL_ERROR')); } }
+      download(saved.bytes); setNotice('downloaded');
+    } catch { if (isCurrent(token, captured, controller)) { discardPreview(); setError('PROTOCOL_ERROR'); } }
     finally { if (isCurrent(token, captured, controller)) setBusy(false); if (request.current === controller) request.current = null; }
   }
   return <section className="panel" aria-labelledby="recovery-references-title">
@@ -80,14 +80,14 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
       {page && page.offset > 0 ? <button type="button" disabled={busy} onClick={event => { void load(event.currentTarget, page.offset - 64, page.revision); }}>{m.previous}</button> : null}
       {page?.nextOffset !== null && page?.nextOffset !== undefined ? <button type="button" disabled={busy} onClick={event => { void load(event.currentTarget, page.nextOffset!, page.revision); }}>{m.next}</button> : null}
     </div>}
-    {busy ? <p role="status">{m.loading}</p> : null}{error ? <p className="notice error" role="alert">{error}</p> : null}{notice ? <p className="notice" role="status">{notice}</p> : null}
+    {busy ? <p role="status">{m.loading}</p> : null}{error ? <p className="notice error" role="alert">{errorMessage(error)}</p> : null}{notice ? <p className="notice" role="status">{m[notice]}</p> : null}
     {page ? <>
       <p className="helper" ref={pageSummary} tabIndex={-1}>{m.page(page.offset, page.totalJournalRecords, page.revision)}</p>
       {page.unsupported ? <p className="notice">{m.unsupported(page.unsupported)}</p> : null}
       {page.items.length === 0 ? <p>{m.empty}</p> : <fieldset className="profile-choices"><legend>{m.select}</legend>
         {page.items.map((item, index) => <div key={item.recordId}>
           <label className="checkbox-label"><input type="checkbox" disabled={busy} checked={selected.includes(index)} onChange={event => {
-            const checked = event.currentTarget.checked; discardPreview(); setNotice(''); setSelected(old => checked ? [...old, index] : old.filter(value => value !== index));
+            const checked = event.currentTarget.checked; discardPreview(); setNotice(null); setSelected(old => checked ? [...old, index] : old.filter(value => value !== index));
           }} /><span>{m.reference(index + 1)} · <code><bdi dir="ltr">{item.recordId}</bdi></code> · {item.action}</span></label>
           <dl className="terms"><dt>{m.storedLabel}</dt><dd>{item.storedState}</dd>
             <dt>{m.networkDeployment}</dt><dd><code><bdi dir="ltr">{item.binding.networkId} / {item.binding.deploymentId}</bdi></code></dd>

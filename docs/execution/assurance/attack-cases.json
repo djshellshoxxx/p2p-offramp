@@ -1,0 +1,580 @@
+[
+  {
+    "id": "C-01",
+    "capability": "canonical-basic-escrow",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Terminal state and shared reentrancy guard precede fixed-beneficiary payout callbacks.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Canonical native/ERC20 escrow; isolated escrow ABI is different. Code: contracts/evm/src/BasicEscrow.sol#function _payout. Assertions: contracts/evm/test/BasicEscrow.t.sol#test_reentrancy_buyerReentersRefundDuringReleasePush; contracts/evm/test/BasicEscrow.t.sol#test_reentrancy_callbackTokenDuringPayoutBlocked. Residual: Named callback fixtures do not cover every token or prove global invariants. Owner: escrow maintainer. Next: Retain exact native/fuzz invariants and independent supported-token review before deployment."
+  },
+  {
+    "id": "C-02",
+    "capability": "canonical-basic-escrow",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Cross-function release/refund/withdraw cannot create a second terminal disposition.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Shared canonical accounting and lock. Code: contracts/evm/src/BasicEscrow.sol#nonReentrant. Assertions: contracts/evm/test/BasicEscrow.t.sol#test_reentrancy_sellerReentersReleaseDuringRefundPush; contracts/evm/test/BasicEscrow.t.sol#test_reentrancy_withdrawReentryBlocked. Residual: No full formal or every external callback proof. Owner: escrow maintainer. Next: Run affected shared-entry invariant cases at final source; preserve failures."
+  },
+  {
+    "id": "C-03",
+    "capability": "canonical-read-authority",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Read-side guidance requires anchored finalized funding and current immutable-state veto.",
+    "fixturePaths": [
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/wallet/src/evm-payment-preflight.ts",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Basic escrow has no transient price oracle or callback-driven rate consumer. Code: packages/wallet/src/evm-payment-preflight.ts#createEvmPaymentPreflight. Assertions: packages/wallet/test/evm-payment-preflight.test.mjs#latest settled or absent state vetoes guidance; packages/wallet/test/evm-payment-preflight.test.mjs#malformed latest trade or a reorg during its read cannot produce guidance. Residual: No general read-only reentrancy proof for unimplemented downstream price/proof modules. Owner: native-reader maintainer. Next: Test any newly introduced downstream consumer against explicit consistent observation boundaries."
+  },
+  {
+    "id": "C-04",
+    "capability": "evm-acceptance",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Canonical client consent checks exact signer/digest and low-s signatures; funding consumes seller nonce once.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "evidencePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/src/evm-terms.ts",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: EOA off-chain G16 acceptance and canonical funding; contract ABI does not verify both consent signatures. Code: packages/wallet/src/evm-terms.ts#verifyEoaAcceptance. Assertions: packages/wallet/test/evm-terms.test.mjs#strict about malleability and format; contracts/evm/test/BasicEscrow.t.sol#test_fund_rejectsSellerNonceReuseAcrossOrders. Residual: No universal action-signature/permit/remote carrier or EIP1271 qualification. Owner: wallet/protocol maintainer. Next: Resolve existing acceptance-carrier/ABI decision and test exact new profile independently."
+  },
+  {
+    "id": "C-05",
+    "capability": "evm-domain-binding",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Trade digest and terms bind chain, verifying contract and economic fields.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "evidencePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/src/evm-terms.ts",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Fixed canonical EIP712 domain. Code: packages/wallet/src/evm-terms.ts#evmTermsHash. Assertions: packages/wallet/test/evm-terms.test.mjs#G16 EVM terms hash binds every field, domain chain and verifying contract; contracts/evm/test/BasicEscrow.t.sol#test_tradeId_isDeploymentAndChainBound. Residual: Fork/provider honesty and original deployment mapping remain assumptions. Owner: wallet/registry maintainer. Next: Keep wrong-domain/deployment negatives and authenticate each original runtime/profile."
+  },
+  {
+    "id": "C-06",
+    "capability": "canonical-token-admission",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Funding credits only exact balance delta for fixed allowlisted tokens and rejects guarded callback reentry.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Plain exact-transfer ERC20 admission only. Code: contracts/evm/src/BasicEscrow.sol#function fundToken. Assertions: contracts/evm/test/BasicEscrow.t.sol#test_fundToken_rejectsFeeOnTransfer; contracts/evm/test/BasicEscrow.t.sol#test_reentrancy_callbackTokenDuringFundingBlocked. Residual: Rebase/freeze/proxy/issuer semantics and future callbacks require independent asset policy. Owner: asset/escrow maintainer. Next: Qualify each actual token and repeat native conservation/recipient cases."
+  },
+  {
+    "id": "C-07",
+    "capability": "fixed-quote-core",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Basic settlement principal comes from bound exact terms, never a DEX price read.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Oracle/flash-loan conversion/collateral subsystem absent from canonical basic escrow. Code: contracts/evm/src/BasicEscrow.sol#amountBaseUnits. Assertions: packages/wallet/test/evm-terms.test.mjs#G16 EVM terms hash binds every field; contracts/evm/test/BasicEscrow.t.sol#test_fundNative_rejectsWrongValue. Residual: Any future oracle capability needs separate feed/freshness/decimals/deviation/economic review; no test of such absent oracle is claimed. Owner: future oracle-profile owner. Next: Keep oracle unavailable; specify and test actual selected oracle protocol before enabling it."
+  },
+  {
+    "id": "C-08",
+    "capability": "canonical-terminal-ordering",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Parameter binding and terminal state prevent ordering from redirecting principal or settling twice.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Release/refund ordering applies; swap sandwich/slippage subsystem absent. Code: contracts/evm/src/BasicEscrow.sol#function release. Assertions: contracts/evm/test/BasicEscrow.t.sol#test_race_beforeDeadline_releaseWinsRefundCannotRun; contracts/evm/test/BasicEscrow.t.sol#test_race_atDeadline_releaseFirstRejectedThenRefundSucceeds. Residual: Mempool censorship/inclusion/deadline changes remain; no absolute MEV guarantee. Owner: escrow/journal maintainer. Next: Retain native boundary/race regressions and exact-request revalidation; separately specify future swaps."
+  },
+  {
+    "id": "C-09",
+    "capability": "exact-call-boundary",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Prepared economic requests bind fixed target, selector, arguments, value and admitted deployment.",
+    "fixturePaths": [
+      "packages/wallet/test/evm-escrow.test.mjs",
+      "packages/wallet/test/evm-execution.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/wallet/src/evm-execution.ts",
+      "packages/wallet/test/evm-escrow.test.mjs",
+      "packages/wallet/test/evm-execution.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: No generic privileged external-call/delegatecall executor; immutable payout recipient/token call is distinct. Code: packages/wallet/src/evm-execution.ts#createEvmExecution. Assertions: packages/wallet/test/evm-execution.test.mjs#strict prepared transactions reject unknown fields; packages/wallet/test/evm-escrow.test.mjs#fund and trade-id builders use one detached descriptor snapshot. Residual: Trusted constructor validators must be composed correctly; hostile wallet can still deceive. Owner: wallet execution maintainer. Next: Audit actual canonical validator composition and reject changed request bytes before marker/send."
+  },
+  {
+    "id": "C-10",
+    "capability": "immutable-custody",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Canonical contract has no owner/admin/proxy/pause/sweep/upgrade or recipient override.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/domain/test/registry.test.mjs"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/domain/test/registry.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Upgrade-admin attack path absent in this immutable canonical version. Code: contracts/evm/src/BasicEscrow.sol#contract BasicEscrow. Assertions: packages/domain/test/registry.test.mjs#G11 rejects mutable deployments; contracts/evm/test/BasicEscrow.t.sol#test_constructor_recordsFixedAllowlist. Residual: Signing-root/host compromise still affects clients; future alternate deployments cannot inherit this exclusion. Owner: deployment maintainer. Next: Authenticate exact runtime and immutable deployment; separately review any proposed new authority."
+  },
+  {
+    "id": "C-11",
+    "capability": "bounded-payout",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Failed pushes terminate trade and preserve exact credit only for immutable beneficiary.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Per-trade state plus recipient/asset aggregate deferred credit. Code: contracts/evm/src/BasicEscrow.sol#function withdraw. Assertions: contracts/evm/test/BasicEscrow.t.sol#test_gasBurningBuyer_isBoundedAndDeferred; contracts/evm/test/BasicEscrow.t.sol#test_revertingBuyer_releaseDefersThenWithdrawAfterFix; contracts/evm/test/BasicEscrow.t.sol#test_insufficientGas_cannotForceDeferral. Residual: Permanently rejecting beneficiary or frozen token can prevent delivery; no alternate destination. Owner: escrow maintainer. Next: Retain native payout/credit/withdraw conservation cases; disclose permanent non-delivery residual."
+  },
+  {
+    "id": "C-12",
+    "capability": "integer-principal",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Canonical principal uses checked integer units and exact supported asset metadata.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrowFuzz.t.sol",
+      "packages/domain/test/registry.test.mjs"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrowFuzz.t.sol",
+      "packages/domain/test/registry.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: No floating-point settlement or conversion rate. Code: contracts/evm/src/BasicEscrow.sol#uint256 amount. Assertions: contracts/evm/test/BasicEscrowFuzz.t.sol#testFuzz_tokenMaxAmount; contracts/evm/test/BasicEscrowFuzz.t.sol#testFuzz_nativeReleasePaysExactPrincipal; packages/domain/test/registry.test.mjs#decimals and missing references. Residual: Fiat/provider fee rounding and future multi-asset models are separately unqualified. Owner: amount/asset maintainer. Next: Repeat exact limits/deltas for each supported token; specify any new fee rounding explicitly."
+  },
+  {
+    "id": "C-13",
+    "capability": "canonical-deadlines",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Release strictly before deadline and refund at/after deadline preserve one terminal state and fixed recipient.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "contracts/evm/test/BasicEscrowFuzz.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "contracts/evm/test/BasicEscrowFuzz.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Basic seller-release/timeout model. Code: contracts/evm/src/BasicEscrow.sol#block.timestamp. Assertions: contracts/evm/test/BasicEscrow.t.sol#test_release_rejectsAtDeadline; contracts/evm/test/BasicEscrow.t.sol#test_refund_atDeadlineByStrangerPaysSellerOnly; contracts/evm/test/BasicEscrowFuzz.t.sol#testFuzz_settlementTimeGuards. Residual: No wall-clock liveness during halted/censored chain or fiat/physical recovery guarantee. Owner: escrow/journey maintainer. Next: Retain expiry-1/equality/+1 native/token checks and visible seller-withholding disclosure."
+  },
+  {
+    "id": "C-14",
+    "capability": "send-time-revalidation",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Current identity/state and exact prepared bytes are rechecked before a single marked send.",
+    "fixturePaths": [
+      "packages/wallet/test/evm-execution.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/wallet/src/evm-execution.ts",
+      "packages/wallet/test/evm-execution.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Existing EVM local execution composition. Code: packages/wallet/src/evm-execution.ts#createEvmExecution. Assertions: packages/wallet/test/evm-execution.test.mjs#silent account or chain changes during durable preparation are rechecked before sending; packages/wallet/test/evm-payment-preflight.test.mjs#different finalized recipients, principal, asset or expiry block guidance. Residual: Simulation cannot guarantee future inclusion/state; actual external-wallet combinations remain pending. Owner: wallet execution maintainer. Next: Run final actual wallet return and changed-state cases without automatic resubmission."
+  },
+  {
+    "id": "C-15",
+    "capability": "canonical-recipient-display",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Canonical recipient/call bytes derive from reviewed bound terms; display localization cannot change raw copy bytes.",
+    "fixturePaths": [
+      "apps/web/test/locale-runtime.test.mjs",
+      "packages/wallet/test/evm-escrow.test.mjs"
+    ],
+    "evidencePaths": [
+      "apps/web/test/locale-runtime.test.mjs",
+      "packages/wallet/src/evm-escrow.ts",
+      "packages/wallet/test/evm-escrow.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Full-address and exact bytes apply; generic QR wallet/session profile remains separately unqualified. Code: packages/wallet/src/evm-escrow.ts#buildRelease. Assertions: packages/wallet/test/evm-escrow.test.mjs#a substituted buyer changes the tradeId; apps/web/test/locale-runtime.test.mjs#isolates exact machine variables without mutating them. Residual: Malware/clipboard/wallet can still replace user input; correct checksum alone is not authentication. Owner: UI/wallet maintainer. Next: Retain actual full-address/copy/confirmation checks on each supported device and wallet."
+  },
+  {
+    "id": "C-16",
+    "capability": "explicit-wallet-lifecycle",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Explicit wallet consent and account/network invalidation suppress stale signing results.",
+    "fixturePaths": [
+      "packages/wallet/test/evm-adapter.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/wallet/src/evm-adapter.ts",
+      "packages/wallet/test/evm-adapter.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Injected EVM adapter with test-owned providers. Code: packages/wallet/src/evm-adapter.ts#EvmWalletAdapter. Assertions: packages/wallet/test/evm-adapter.test.mjs#nothing is requested before an explicit connect; packages/wallet/test/evm-adapter.test.mjs#account/chain changes invalidate the session. Residual: Compromised extension/signing UI and unselected mobile/session protocols cannot be made safe by page checks. Owner: wallet compatibility maintainer. Next: Qualify exact wallet/browser/device versions and connector identity; retain cancellation tests."
+  },
+  {
+    "id": "C-17",
+    "capability": "anchored-native-reads",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Chain/genesis/runtime and canonical anchored fields are validated before authoritative guidance.",
+    "fixturePaths": [
+      "packages/chain-evm/test/reader.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/chain-evm/src/reader.ts",
+      "packages/chain-evm/test/reader.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Bounded local reader refusals; selected cases observed in local-drill TAP. Code: packages/chain-evm/src/reader.ts#EvmChainReader. Assertions: packages/chain-evm/test/reader.test.mjs#wrong chain/genesis/runtime/asset and changed anchors fail closed; packages/wallet/test/evm-payment-preflight.test.mjs#wrong chain, genesis, runtime, on-chain digest and canonical anchor refuse native evidence. Residual: No light-client consensus or actual independently controlled two/three-provider split-view evidence. Owner: chain-reader maintainer. Next: Execute exact selected independent-provider disagreement profile before claiming it covered."
+  },
+  {
+    "id": "C-18",
+    "capability": "release-transport-boundary",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Signed byte inventory and independently supplied public trust reject changed content and adjacent replacement keys.",
+    "fixturePaths": [
+      "packages/security/test/release-manifest.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/security/src/release-manifest.ts",
+      "packages/security/test/release-manifest.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Local verifier; default connection policy remains empty. Code: packages/security/src/release-manifest.ts#verifyRelease. Assertions: packages/security/test/release-manifest.test.mjs#G15 compares complete asset paths, lengths and raw hashes; packages/security/test/release-manifest.test.mjs#G15 never trusts adjacent keys. Residual: Initial hostile executable/bootstrap, actual HTTPS/TLS and host headers are not authenticated by same-host hashes. Owner: release/transport maintainer. Next: Qualify original trust/bootstrap and served transport using independently obtained evidence."
+  },
+  {
+    "id": "C-19",
+    "capability": "no-proof-release-authority",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Basic release remains stored-seller authorization; proof/chat metadata grants no on-chain release authority.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Proof-authorized settlement absent from canonical escrow; optional proof adapters are not approved providers. Code: contracts/evm/src/BasicEscrow.sol#function release. Assertions: contracts/evm/test/BasicEscrow.t.sol#test_release_rejectsNonSeller; packages/wallet/test/evm-terms.test.mjs#both parties sign the identical digest. Residual: No real payment-proof circuit/notary/rail replay validation is certified by this exclusion. Owner: fiat-proof policy owner. Next: Freeze actual proof/source/audience/finality policy and independent native evidence before new opt-in authority."
+  },
+  {
+    "id": "C-20",
+    "capability": "manual-fiat-risk",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Crypto funding guidance never establishes irreversible fiat receipt or buyer protection.",
+    "fixturePaths": [
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/wallet/src/evm-payment-preflight.ts",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Manual seller attestation with withholding/refund-to-seller risk; automated rail finality absent. Code: packages/wallet/src/evm-payment-preflight.ts#createEvmPaymentPreflight. Assertions: packages/wallet/test/evm-payment-preflight.test.mjs#900 seconds blocks; packages/wallet/test/evm-payment-preflight.test.mjs#latest settled or absent state vetoes guidance. Residual: Chargeback/fraud and dishonest seller remain; no bank/rail/legal approval. Owner: fiat-risk and safety-copy owner. Next: Obtain actual rail finality assessment and reviewed warnings; keep basic seller discretion explicit."
+  },
+  {
+    "id": "C-21",
+    "capability": "authenticated-private-chat",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Native sender/recipient/trade authentication and durable dedup precede history writes.",
+    "fixturePaths": [
+      "packages/messaging/test/durable-chat.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/messaging/src/durable-chat.ts",
+      "packages/messaging/test/durable-chat.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: New NIP17/44/59 private text; production acceptance carrier remains undefined. Code: packages/messaging/src/durable-chat.ts#createDurableTradeChat. Assertions: packages/messaging/test/durable-chat.test.mjs#native author, envelope author/recipient/trade and supported kind are checked; packages/messaging/test/durable-chat.test.mjs#same authenticated sender/messageId is idempotent. Residual: Local limits/dedup are not global Sybil resistance or reliable delivery; chat is not settlement. Owner: messaging maintainer. Next: Retain real-crypto replay/conflict/reopen cases and resolve exact production peer identity/carrier."
+  },
+  {
+    "id": "C-22",
+    "capability": "bounded-metadata-privacy",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Gift wraps use fresh outer keys and bounded NIP44 padding without claiming anonymity.",
+    "fixturePaths": [
+      "packages/nostr-crypto/test/nip44.test.mjs",
+      "packages/nostr-crypto/test/nip59.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/nostr-crypto/src/nip59.ts",
+      "packages/nostr-crypto/test/nip44.test.mjs",
+      "packages/nostr-crypto/test/nip59.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Message content protection and specific metadata reductions only. Code: packages/nostr-crypto/src/nip59.ts#createGiftWrap. Assertions: packages/nostr-crypto/test/nip59.test.mjs#each wrap uses a fresh one-time key and timestamps spread; packages/nostr-crypto/test/nip44.test.mjs#valid.calc_padded_len: every vector. Residual: Public chain/relay/fiat traffic and stable peer/trade correlation remain; no blanket per-trade identity unlinkability or quantified anonymity. Owner: privacy claims owner. Next: Quantify actual selected-profile leakage before any stronger published privacy claim."
+  },
+  {
+    "id": "C-23",
+    "capability": "private-local-lifecycle",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Allowlisted exports refuse injected secrets; encrypted vault access is lease-bound and revoked on lock.",
+    "fixturePaths": [
+      "packages/diagnostics/test/diagnostics.test.mjs",
+      "packages/storage/test/vault-service.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/diagnostics/src/diagnostics.ts",
+      "packages/diagnostics/test/diagnostics.test.mjs",
+      "packages/storage/test/vault-service.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Observed synthetic diagnostics checks and existing G02 assertions. Code: packages/diagnostics/src/diagnostics.ts#createDiagnostics. Assertions: packages/diagnostics/test/diagnostics.test.mjs#known secret strings in every candidate field are refused; packages/storage/test/vault-service.test.mjs#G02 lock revokes leases synchronously. Residual: XSS/extensions/screenshots/strings/user backups can disclose data; wiping owned arrays is not hardware erasure. Owner: storage/diagnostics maintainer. Next: Retain final actual Worker/export/lifecycle checks and independent hostile-rendering review."
+  },
+  {
+    "id": "C-24",
+    "capability": "canonical-finality",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Only canonical chain-specific finalized evidence permits scoped ready guidance.",
+    "fixturePaths": [
+      "packages/chain-evm/test/reader.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/chain-evm/src/reader.ts",
+      "packages/chain-evm/test/reader.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: EVM finalized policy; no bridge subsystem/asset qualification. Code: packages/chain-evm/src/reader.ts#EvmChainReader. Assertions: packages/chain-evm/test/reader.test.mjs#unknown, pending and reorged receipts do not become false finality; packages/wallet/test/evm-payment-preflight.test.mjs#malformed latest trade or a reorg during its read cannot produce guidance. Residual: Dishonest RPC/chain instability and bridged-asset economic risk are not removed by confirmation count. Owner: chain/asset maintainer. Next: Test finality/reorg policy natively per chain and explicitly exclude unsupported bridged assets."
+  },
+  {
+    "id": "C-25",
+    "capability": "single-trade-settlement",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Per-trade terminal disposition and exact deferred credit avoid ambiguous partial payout authority.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/src/BasicEscrow.sol",
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Batch settlement subsystem absent; aggregate beneficiary credit is not a batch executor. Code: contracts/evm/src/BasicEscrow.sol#function _payout. Assertions: contracts/evm/test/BasicEscrow.t.sol#test_terminal_releasedRejectsEverything; contracts/evm/test/BasicEscrow.t.sol#test_falseReturningTransfer_releaseDeferred. Residual: Future batching/partial-fill/liquidity custody models require their own exact native profile and conservation tests. Owner: escrow/custody maintainer. Next: Preserve single-trade accounting; separately specify atomic/partial recovery before any batch activation."
+  },
+  {
+    "id": "C-26",
+    "capability": "exact-token-allowance",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Token approval/funding targets exact asset/spender and integer principal.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-escrow.test.mjs"
+    ],
+    "evidencePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/src/evm-escrow.ts",
+      "packages/wallet/test/evm-escrow.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Existing explicit ERC20 approve; permit submission/domain/nonce subsystem absent. Code: packages/wallet/src/evm-escrow.ts#approveAmountFor. Assertions: contracts/evm/test/BasicEscrow.t.sol#test_fundToken_rejectsMissingAllowance; packages/wallet/test/evm-escrow.test.mjs#simple calls round-trip and reject malformed arguments. Residual: Already granted wallet allowances and malicious token behavior remain external risks; no permit qualification inferred. Owner: token/wallet maintainer. Next: Qualify allowance confirmation/revoke guidance for exact assets; independently specify permits before supporting them."
+  },
+  {
+    "id": "C-27",
+    "capability": "exact-asset-registry",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Exact chain/token/deployment metadata and base units are checked; names/symbols never authenticate an asset.",
+    "fixturePaths": [
+      "packages/domain/test/registry.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/domain/src/registry.ts",
+      "packages/domain/test/registry.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Bounded registry/native read profile only. Code: packages/domain/src/registry.ts#RegistryService. Assertions: packages/domain/test/registry.test.mjs#bad IDs, duplicates, wrong family pairs, decimals and missing references; packages/wallet/test/evm-payment-preflight.test.mjs#snapshot validation refuses wrong bindings, unsupported assets and mutable deployment profiles before RPC. Residual: Issuer/proxy/code identity and real allowlist review remain required; unknown SPL profile cannot inherit ERC20 support. Owner: asset registry maintainer. Next: Authenticate actual code/issuer/deployment profiles and repeat each supported asset target independently."
+  },
+  {
+    "id": "C-28",
+    "capability": "censorship-residual",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Only approved bounded relay attempts occur; strict unsupported routing never falls back to direct.",
+    "fixturePaths": [
+      "packages/relay/test/pool.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/relay/src/pool.ts",
+      "packages/relay/test/pool.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Existing relay APIs plus original on-chain exits; no new outbox/cursor protocol. Code: packages/relay/src/pool.ts#createRelayPool. Assertions: packages/relay/test/pool.test.mjs#failover: a relay that never connects exhausts six reconnects; packages/relay/test/pool.test.mjs#strict mode without verified-private coverage. Residual: Relay/chain censorship and permanent outage can still stop progress; direct emergency action is explicit and route-sensitive. Owner: relay/recovery maintainer. Next: Retain bounded offline/failover checks and qualify independent original recovery distribution without promising delivery."
+  },
+  {
+    "id": "C-29",
+    "capability": "frontend-provenance",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "Closed default source/asset graphs and exact signed byte inventories prevent named forbidden dependencies/content.",
+    "fixturePaths": [
+      "apps/web/scripts/artifact-policy.test.mjs",
+      "packages/security/test/release-manifest.test.mjs",
+      "scripts/tests/import-boundaries.test.mjs"
+    ],
+    "evidencePaths": [
+      "apps/web/scripts/artifact-policy.test.mjs",
+      "packages/security/src/release-manifest.ts",
+      "packages/security/test/release-manifest.test.mjs",
+      "scripts/tests/import-boundaries.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: Source/build checks plus local verification only; no runtime CDN requirement. Code: packages/security/src/release-manifest.ts#verifyRelease. Assertions: apps/web/scripts/artifact-policy.test.mjs#emitted asset scan denies active remote resources, inlining, secrets and source maps; scripts/tests/import-boundaries.test.mjs#G07 import boundaries use the TypeScript AST and report fixture violations; packages/security/test/release-manifest.test.mjs#G15 compares complete asset paths. Residual: Lockfile/SBOM/signature do not prove dependency honesty or authenticate compromised root/first executable. Owner: build/release maintainer. Next: Keep pinned provenance/SBOM/tool inputs and independent clean-build/security review before release."
+  },
+  {
+    "id": "C-30",
+    "capability": "message-length-timing",
+    "preconditions": [
+      "Owned synthetic test/source review only; no external target, live funds or executed attack is claimed.",
+      "Production trading is disabled; applicability describes implemented libraries/canonical escrow or bounded local fixtures."
+    ],
+    "invariant": "NIP44 padding and randomized wrap timestamps provide only their defined bounded metadata treatment.",
+    "fixturePaths": [
+      "packages/nostr-crypto/test/nip44.test.mjs",
+      "packages/nostr-crypto/test/nip59.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/nostr-crypto/src/nip44.ts",
+      "packages/nostr-crypto/test/nip44.test.mjs",
+      "packages/nostr-crypto/test/nip59.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Scope: No optional delayed batching, measured trade-id rotation or quantified traffic-correlation guarantee. Code: packages/nostr-crypto/src/nip44.ts#calcPaddedLength. Assertions: packages/nostr-crypto/test/nip44.test.mjs#valid.calc_padded_len: every vector; packages/nostr-crypto/test/nip59.test.mjs#timestamps spread across the 2-day window. Residual: Ciphertext class/length, timing, recipient and public chain linkage remain observable. Owner: messaging/privacy claims owner. Next: Measure leakage for the actual deployment/traffic profile and keep unsupported mitigations explicit."
+  }
+]
