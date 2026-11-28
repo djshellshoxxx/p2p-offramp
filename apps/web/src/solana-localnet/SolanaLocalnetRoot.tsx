@@ -12,21 +12,21 @@ function download(bytes: Uint8Array, name = 'solana-recovery-encrypted.backup', 
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 export function SolanaLocalnetRoot() {
-  const client = useRef<SolanaBrowserClient | null>(null);
+  const client = useRef<SolanaBrowserClient | null>(null), observedProfile = useRef<string | null>(null);
   const active = useRef(true), commandEpoch = useRef(0), pendingRequest = useRef(false), inputEpoch = useRef(0);
   const backupInput = useRef<HTMLInputElement | null>(null), backupBytes = useRef<Uint8Array | null>(null);
   const [wallets, setWallets] = useState<readonly DiscoveredSolanaWallet[]>([]), [choice, setChoice] = useState('');
   const [snapshot, setSnapshot] = useState<SolanaSnapshot | null>(null), [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [passphrase, setPassphrase] = useState(''), [profile, setProfile] = useState('');
-  const [recovery, setRecovery] = useState(''), [role, setRole] = useState<'seller' | 'buyer'>('seller');
+  const [proposal, setProposal] = useState(''), [recovery, setRecovery] = useState(''), [role, setRole] = useState<'seller' | 'buyer'>('seller');
   const [backup, setBackup] = useState<Uint8Array | null>(null), [sourcePass, setSourcePass] = useState(''), [newPass, setNewPass] = useState('');
   const [received, setReceived] = useState<Record<string, boolean>>({}), [topUp, setTopUp] = useState<Record<string, string>>({});
   const busy = pending || snapshot?.phase === 'working', open = !!snapshot?.profileId;
   const clearPrivate = () => {
     inputEpoch.current++; backupBytes.current?.fill(0); backupBytes.current = null;
     if (backupInput.current) backupInput.current.value = '';
-    setPassphrase(''); setSourcePass(''); setNewPass(''); setReceived({}); setRecovery(''); setBackup(null); setTopUp({});
+    setPassphrase(''); setSourcePass(''); setNewPass(''); setReceived({}); setProposal(''); setRecovery(''); setBackup(null); setTopUp({});
   };
   async function request(command: SolanaCommand) {
     const owned = client.current, interrupts = command.type === 'profile.lock' || command.type === 'review.cancel';
@@ -42,6 +42,7 @@ export function SolanaLocalnetRoot() {
       if (command.type === 'backup.restore') command.bytes.fill(0);
       const result = await response;
       if (!active.current || generation !== commandEpoch.current || client.current !== owned) return null;
+      if (command.type === 'funding.proposal.import' && (!profileId || result.snapshot.profileId !== profileId || owned.snapshot()?.profileId !== profileId)) return null;
       if (!result.ok) setError(result.code);
       else if (result.backupBytes) download(result.backupBytes);
       else if (command.type === 'recovery.export' && result.recoveryJson && profileId &&
@@ -86,7 +87,10 @@ export function SolanaLocalnetRoot() {
       const config = await parseSolanaLocalnetConfig(__P2P_SOLANA_LOCALNET_CONFIG__);
       if (!active.current || client.current) return;
       const created = createSolanaRecoveryClient(config, selected.wallet); client.current = created;
-      created.subscribe(next => { if (active.current) { setSnapshot(next); if (next.profileId === null) clearPrivate(); } });
+      created.subscribe(next => { if (active.current) {
+        if (next.profileId === null || next.profileId !== observedProfile.current) clearPrivate();
+        observedProfile.current = next.profileId; setSnapshot(next);
+      } });
       await request({ type: 'status' });
     } catch { setError('This wallet does not support localnet sign-only transactions and change notifications.'); }
   }
@@ -99,8 +103,8 @@ export function SolanaLocalnetRoot() {
   }
   return <main className="solana-recovery" aria-busy={busy} data-release-enabled="0" data-profile-id={snapshot?.profileId ?? ''}
     data-phase={snapshot?.phase ?? 'locked'} data-wallet-account={snapshot?.wallet?.address ?? ''} data-wallet-trade={snapshot?.wallet?.tradeId ?? ''}>
-    <header><p className="solana-banner">{SOLANA_LOCALNET_BANNER}</p><h1>Recover a funded Solana escrow</h1>
-      <p>Import the original recovery document, check finalized chain state, and review each settlement transaction with your wallet.</p></header>
+    <header><p className="solana-banner">{SOLANA_LOCALNET_BANNER}</p><h1>Local Solana proposals and recovery</h1>
+      <p>Save fixed seller proposals, explicitly review native SOL funding, or import the original recovery document for finalized escrow settlement.</p></header>
     {!client.current && <section><h2>Choose your wallet</h2><div className="solana-field"><label htmlFor="solana-wallet-choice">Wallet Standard wallet</label><select id="solana-wallet-choice" value={choice} onChange={e => setChoice(e.target.value)}>
       <option value="">Select wallet</option>{wallets.map(w => <option key={w.id} value={String(w.id)}>{w.name}</option>)}</select></div>
       <button type="button" onClick={() => void selectWallet()}>Use selected wallet</button>
@@ -122,6 +126,45 @@ export function SolanaLocalnetRoot() {
       <button disabled={busy || !backup || !sourcePass || !newPass} onClick={() => { if (!backup || pendingRequest.current) return; const bytes = backup, s = sourcePass, d = newPass; backupBytes.current = null; clearPrivate(); void request({ type: 'backup.restore', bytes, sourcePassphrase: s, destinationPassphrase: d }); }}>Restore with a fresh key</button>
       <p>Restored transactions are reconciled with finalized chain state. They are never resent automatically.</p>
     </section>}
+    {open && <section><h2>Save a seller funding proposal</h2>
+      <p>Paste the complete proposal JSON for this local validator. Saving retains the fixed terms in your encrypted profile. Peer acceptance has not been established, and saving does not prepare or send a transaction.</p>
+      <div className="solana-field"><label htmlFor="solana-funding-proposal-json">Funding proposal JSON</label><textarea id="solana-funding-proposal-json" rows={5} value={proposal} maxLength={4096} disabled={busy} onChange={e => setProposal(e.target.value)} /></div>
+      <button disabled={busy || !proposal} onClick={() => { if (pendingRequest.current) return; const text = proposal; setProposal(''); void request({ type: 'funding.proposal.import', text }); }}>Save seller funding proposal</button>
+      <p>Retained trade bindings: {snapshot?.tradeCapacity.used} of {snapshot?.tradeCapacity.limit}. Existing recovery remains available when a restored profile exceeds this admission limit.</p>
+    </section>}
+    {snapshot?.proposals.map(proposal => <section key={proposal.id} data-proposal-id={proposal.id} data-binding-status={proposal.bindingStatus}
+      data-proposal-state={proposal.state} data-wallet-connected={String(proposal.walletConnected)}>
+      <h2>Saved proposal</h2><p>Peer acceptance has not been established. Saving these terms does not prepare or send a transaction.</p>
+      <p>Finalized escrow observation: {proposal.state}. Chain time: {proposal.chainTimeSeconds ?? 'Unavailable'}.</p>
+      {proposal.restored && <p>Original provenance preserved after restore</p>}
+      {proposal.bindingStatus === 'configuration-mismatch' && <p>Saved with a different local configuration</p>}
+      {proposal.bindingStatus === 'unsupported' && <p>These terms are unsupported by this build</p>}
+      {proposal.escrowConflict && <p>Another retained binding uses this escrow</p>}
+      {proposal.recoveryRetained && <p>A recovery document is retained; use its settlement section</p>}
+      <dl><dt>Terms SHA-256</dt><dd>{proposal.binding.tradeId}</dd><dt>Local network</dt><dd>{proposal.binding.networkId}</dd>
+        <dt>Deployment</dt><dd>{proposal.binding.deploymentId}</dd><dt>Escrow</dt><dd>{proposal.escrow ?? 'Unavailable under this configuration'}</dd>
+        {[
+          ['Network genesis', proposal.terms.genesisHash], ['Immutable program', proposal.terms.programId], ['Order ID', proposal.terms.orderId],
+          ['Seller', proposal.terms.seller], ['Buyer', proposal.terms.buyer], ['Asset', 'Native SOL'], ['Mint', 'None'], ['Token program', 'None'],
+          ['Private agreement SHA-256', proposal.terms.privateAgreementHash], ['Capabilities SHA-256', proposal.terms.capabilitiesHash],
+          ['Seller nonce', proposal.terms.sellerNonce], ['Revision', proposal.terms.revision], ['Principal (lamports)', proposal.terms.amountBaseUnits],
+          ['Acceptance deadline (chain seconds)', proposal.terms.acceptBeforeSeconds], ['Escrow expiry (chain seconds)', proposal.terms.escrowExpirySeconds],
+        ].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+      {proposal.bindingStatus === 'available' && !proposal.recoveryRetained && !proposal.escrowConflict && <div className="solana-actions">
+        <button disabled={busy} onClick={() => void request({ type: 'funding.wallet.connect', proposalId: proposal.id })}>Connect seller wallet</button>
+        <button disabled={busy || !proposal.walletConnected || proposal.state !== 'absent' ||
+          proposal.intents.some(intent => !['finalized', 'failed', 'dropped', 'cancelled'].includes(intent.state)) ||
+          proposal.intents.some(intent => intent.action === 'fund' && intent.state === 'dropped' && !proposal.intents.some(next => next.replacementOf === intent.id))}
+          onClick={() => void request({ type: 'funding.prepare', proposalId: proposal.id })}>Review funding</button>
+      </div>}
+      <ul>{proposal.intents.map(intent => <li key={intent.id}>{intent.action}: {intent.state} {intent.signature && <code>{intent.signature}</code>}
+        {intent.action === 'fund' && intent.state === 'dropped' && !proposal.intents.some(next => next.replacementOf === intent.id) &&
+          proposal.bindingStatus === 'available' && !proposal.recoveryRetained && !proposal.escrowConflict &&
+          <button disabled={busy || !proposal.walletConnected || proposal.state !== 'absent' ||
+            proposal.intents.some(record => !['finalized', 'failed', 'dropped', 'cancelled'].includes(record.state))}
+            onClick={() => void request({ type: 'funding.prepare', proposalId: proposal.id, rebuildOf: intent.id })}>Review new funding after this definitive drop</button>}
+      </li>)}</ul>
+    </section>)}
     {open && <section><h2>Import the original recovery document</h2>
       <div className="solana-field"><label htmlFor="solana-recovery-json">Recovery JSON</label><textarea id="solana-recovery-json" rows={5} value={recovery} maxLength={16384} onChange={e => setRecovery(e.target.value)} /></div>
       <div className="solana-field"><label htmlFor="solana-recovery-role">Your role</label><select id="solana-recovery-role" value={role} onChange={e => setRole(e.target.value as 'seller' | 'buyer')}><option value="seller">Seller</option><option value="buyer">Buyer</option></select></div>

@@ -17,9 +17,9 @@
  * A pending physical wallet prompt keeps its serial slot until it settles, even after cancellation/disposal.
  */
 import { createCoreError, createOperationId, type SolanaTermsInput } from '../../domain/index.ts';
-import type { CoreErrorCode, CoreResult, TradeBinding } from '../../schemas/index.ts';
+import { parseIntentId, type CoreErrorCode, type CoreResult, type TradeBinding } from '../../schemas/index.ts';
 import { bindSolanaTrade, isBoundSolanaTrade, type BoundSolanaTrade, type SolanaRegistryView } from './bind.ts';
-import { decimalU64, fail, SolanaFailure } from './codec.ts';
+import { canonicalKey, decimalU64, fail, SolanaFailure } from './codec.ts';
 import { exactData, isTerminal, type SolanaIntentRecord } from './intent.ts';
 import { checkedProfileId, loadIntents, UncertainWrite, type SolanaJournalPort } from './journal.ts';
 import { encodeBase64 } from './message.ts';
@@ -68,6 +68,12 @@ export interface PreparedSolanaAction {
   readonly message: string; readonly blockhash: string; readonly lastValidBlockHeight: string;
   readonly shape: Readonly<PlanShape>;
 }
+/** Native funding review; the existing exit-only action type and prepare entry remain unchanged. */
+export interface PreparedSolanaFunding extends Omit<PreparedSolanaAction,
+  'action' | 'role' | 'expectedEscrowState' | 'shape'> {
+  readonly action: 'fund'; readonly role: 'seller'; readonly expectedEscrowState: 'absent';
+  readonly shape: Readonly<Extract<PlanShape, { readonly action: 'fund' }>>;
+}
 export interface SolanaEscrowClient {
   bind(binding: TradeBinding, terms: SolanaTermsInput): CoreResult<BoundSolanaTrade>;
   connect(trade: BoundSolanaTrade, role: SolanaWalletSession['role']): Promise<CoreResult<SolanaWalletSession>>;
@@ -75,10 +81,14 @@ export interface SolanaEscrowClient {
   /** Exit actions only. Persists an exact-message review; never signs or sends. */
   prepare(trade: BoundSolanaTrade, session: SolanaWalletSession, action: PreparedSolanaActionKind,
     options?: PayoutOptions & RebuildOption): Promise<CoreResult<PreparedSolanaAction>>;
+  /** Explicit native funding review. Persists exact bytes with no wallet prompt or broadcast. */
+  prepareFunding(trade: BoundSolanaTrade, session: SolanaWalletSession,
+    options?: FundOptions & RebuildOption): Promise<CoreResult<PreparedSolanaFunding>>;
   /** Consumes a review before awaiting anything. Rechecks finalized eligibility and original blockhash. */
-  confirm(prepared: PreparedSolanaAction, session: SolanaWalletSession): Promise<CoreResult<SolanaSubmission>>;
+  confirm(prepared: PreparedSolanaAction | PreparedSolanaFunding,
+    session: SolanaWalletSession): Promise<CoreResult<SolanaSubmission>>;
   /** Revokes this client's review immediately; cancels only its own never-marked journal record. */
-  cancel(prepared: PreparedSolanaAction): Promise<CoreResult<void>>;
+  cancel(prepared: PreparedSolanaAction | PreparedSolanaFunding): Promise<CoreResult<void>>;
   fund(trade: BoundSolanaTrade, session: SolanaWalletSession, options?: FundOptions & RebuildOption):
     Promise<CoreResult<SolanaSubmission>>;
   release(trade: BoundSolanaTrade, session: SolanaWalletSession, options?: RebuildOption):
@@ -134,6 +144,22 @@ function reviewOptions(input: PayoutOptions & RebuildOption): Readonly<PayoutOpt
     copy.rebuildOf = raw.rebuildOf;
   }
   return Object.freeze(copy);
+}
+
+/** Capture the funding source and replacement identity before enqueueing any asynchronous work. */
+function fundingReviewOptions(input: FundOptions & RebuildOption): Readonly<FundOptions & RebuildOption> {
+  try {
+    const keys = Reflect.ownKeys(input);
+    if (keys.length > 2 || keys.some(key => typeof key !== 'string' ||
+        !['sellerTokenAccount', 'rebuildOf'].includes(key))) return fail('INVALID_INPUT');
+    const raw = exactData(input, keys as string[]);
+    const copy: { sellerTokenAccount?: string; rebuildOf?: string } = {};
+    if (raw.sellerTokenAccount !== undefined) {
+      copy.sellerTokenAccount = canonicalKey(raw.sellerTokenAccount, 'INVALID_INPUT');
+    }
+    if (raw.rebuildOf !== undefined) copy.rebuildOf = parseIntentId(raw.rebuildOf);
+    return Object.freeze(copy);
+  } catch { return fail('INVALID_INPUT'); }
 }
 
 /** Ignore only fields a legitimate intent transition can change; all reviewed identity/bytes stay exact. */
@@ -247,10 +273,18 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
     return submitPrepared(trade, session, stored, active);
   }
 
-  async function prepareReview(
+  function prepareReview(
     trade: BoundSolanaTrade, session: SolanaWalletSession, action: PreparedSolanaActionKind,
     extra: Readonly<PayoutOptions & RebuildOption>,
-  ): Promise<PreparedSolanaAction> {
+  ): Promise<PreparedSolanaAction>;
+  function prepareReview(
+    trade: BoundSolanaTrade, session: SolanaWalletSession, action: 'fund',
+    extra: Readonly<FundOptions & RebuildOption>,
+  ): Promise<PreparedSolanaFunding>;
+  async function prepareReview(
+    trade: BoundSolanaTrade, session: SolanaWalletSession, action: PreparedSolanaActionKind | 'fund',
+    extra: Readonly<FundOptions & PayoutOptions & RebuildOption>,
+  ): Promise<PreparedSolanaAction | PreparedSolanaFunding> {
     assertActive(); checkSession(trade, session, true);
     const profile = checkedProfileId(journal);
     let preparation: Preparation | undefined;
@@ -260,7 +294,8 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
       if (preparation?.revoked) fail('CANCELLED');
       checkSession(trade, session, true);
     } };
-    const plan: Planner = snapshot => action === 'release' ? planRelease(trade, snapshot, session.role, margins)
+    const plan: Planner = snapshot => action === 'fund' ? planFund(trade, snapshot, session.role, margins, extra)
+      : action === 'release' ? planRelease(trade, snapshot, session.role, margins)
       : action === 'refund' ? planRefund(trade, snapshot, session.role, margins)
         : planPayout(trade, snapshot, session.role, extra);
     const planned = value(plan(await read(trade)));
@@ -274,7 +309,7 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
       binding: Object.freeze({ ...record.binding }), programId: record.programId, escrow: record.escrow,
       expectedEscrowState: record.expectedEscrowState, message: record.message, blockhash: record.blockhash,
       lastValidBlockHeight: record.lastValidBlockHeight, shape: Object.freeze({ ...planned.shape }),
-    }) as PreparedSolanaAction;
+    }) as PreparedSolanaAction | PreparedSolanaFunding;
     preparations.set(view, preparation);
     return view;
   }
@@ -299,7 +334,7 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
   }
 
   function confirm(
-    prepared: PreparedSolanaAction, session: SolanaWalletSession,
+    prepared: PreparedSolanaAction | PreparedSolanaFunding, session: SolanaWalletSession,
   ): Promise<CoreResult<SolanaSubmission>> {
     const preparation = preparations.get(prepared);
     if (!preparation) return Promise.resolve(failure('UNAUTHORIZED'));
@@ -317,7 +352,7 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
     });
   }
 
-  function cancel(prepared: PreparedSolanaAction): Promise<CoreResult<void>> {
+  function cancel(prepared: PreparedSolanaAction | PreparedSolanaFunding): Promise<CoreResult<void>> {
     const preparation = preparations.get(prepared);
     if (!preparation) return Promise.resolve(failure('UNAUTHORIZED'));
     if (preparation.status === 'consumed' || preparation.revoked) return Promise.resolve(failure('CONFLICT'));
@@ -379,6 +414,13 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
         }
         const captured = reviewOptions(extra);
         return serialized(trade, () => prepareReview(trade, session, action, captured));
+      } catch (error) { return Promise.resolve(failure(codeOf(error))); }
+    },
+    prepareFunding: (trade: BoundSolanaTrade, session: SolanaWalletSession,
+      extra: FundOptions & RebuildOption = {}) => {
+      try {
+        const captured = fundingReviewOptions(extra);
+        return serialized(trade, () => prepareReview(trade, session, 'fund', captured));
       } catch (error) { return Promise.resolve(failure(codeOf(error))); }
     },
     confirm, cancel,

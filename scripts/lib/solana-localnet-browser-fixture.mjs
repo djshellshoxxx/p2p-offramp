@@ -9,9 +9,11 @@ import { chromium } from 'playwright-core';
 import { buildWeb } from '../../apps/web/scripts/build.mjs';
 import { buildSolanaLocalnetContentPolicy } from '../../packages/security/src/content-policy.ts';
 import { openEnvelope, disposeMaterial } from '../../packages/storage/src/vault-crypto.ts';
+import { parseSolanaLocalnetConfig, solanaLocalnetConfigDocument } from '../../apps/web/src/solana-localnet/config.ts';
+import { base58Encode } from '../../contracts/solana/vectors/derive.mjs';
 import { resolveChromiumPath } from './chromium-path.mjs';
 import { startSolanaLocalnetFixture } from './solana-localnet-fixture.mjs';
-import { assertSolanaSendMarked, readSolanaVaultRecords } from './solana-localnet-send-evidence.mjs';
+import { assertSolanaSendMarked, assertSolanaFundingSendMarked, readSolanaBrowserVaultRecords } from './solana-localnet-send-evidence.mjs';
 
 export async function waitSolanaBrowser(check, label, timeoutMs = 45000, intervalMs = 100) {
   const start = Date.now();
@@ -42,11 +44,12 @@ export async function startSolanaBrowserFixture() {
   async function vault() {
     const id = await profileId(page); assert.match(id, /^[0-9a-f]{32}$/); assert.equal(typeof passphrase, 'string');
     const row = await encryptedRow(page, id), opened = await openEnvelope(row, passphrase, crypto);
-    try { return { id, row, snapshot: opened.snapshot, ...readSolanaVaultRecords(opened.snapshot) }; }
+    try { return { id, row, snapshot: opened.snapshot, ...await readSolanaBrowserVaultRecords(opened.snapshot) }; }
     finally { disposeMaterial(opened.material); }
   }
   try {
     chain = await startSolanaLocalnetFixture(); temporary = await mkdtemp(join(tmpdir(), 'p2p-solana-browser-artifact-'));
+    const config = await parseSolanaLocalnetConfig(solanaLocalnetConfigDocument(chain.buildOption));
     const outDir = join(temporary, 'app'), evidence = await buildWeb({ delivery: 'solana-localnet', outDir, solanaLocalnet: chain.buildOption });
     assert.equal(evidence.ReleaseEnabled, 0);
     const files = new Map(await Promise.all(evidence.assets.map(async asset => [asset.path, await readFile(join(outDir, asset.path))])));
@@ -102,7 +105,13 @@ export async function startSolanaBrowserFixture() {
     }, { address: account.address, publicKey: [...account.publicKey] });
     chain.observeSends(async wire => {
       const stored = await vault();
-      const proof = assertSolanaSendMarked(stored.intents, wire, stored.id, chain.summary, seen);
+      const bytes = Buffer.from(wire, 'base64'), signature = base58Encode(bytes.subarray(1, 65));
+      const matching = stored.intents.filter(record => record.state === 'sendMarked' && record.signature === signature &&
+        record.message === bytes.subarray(65).toString('base64'));
+      assert.equal(matching.length, 1, 'one exact marker selects its fixed physical-send verifier');
+      const proof = matching[0].action === 'fund'
+        ? await assertSolanaFundingSendMarked(stored.intents, stored.proposals, wire, stored.id, chain.summary, config, seen)
+        : assertSolanaSendMarked(stored.intents, wire, stored.id, chain.summary, seen);
       assert.equal(JSON.stringify(stored.row).includes(stored.intents.find(r => r.intentId === proof.intentId).message), false, 'signed message is encrypted at rest');
       return proof;
     });
