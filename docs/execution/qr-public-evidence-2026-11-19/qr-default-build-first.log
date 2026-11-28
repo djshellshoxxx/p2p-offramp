@@ -1,0 +1,20 @@
+failed to load config from /workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/vite.config.ts
+file:///workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/.vite-temp/vite.config.ts.timestamp-1795076371653-9aeae4b2a75508.mjs:448
+	throw new LocaleError(code);
+	      ^
+
+LocaleError: The message or locale is unavailable.
+    at refuse (file:///workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/.vite-temp/vite.config.ts.timestamp-1795076371653-9aeae4b2a75508.mjs:448:8)
+    at createMessage (file:///workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/.vite-temp/vite.config.ts.timestamp-1795076371653-9aeae4b2a75508.mjs:569:10)
+    at file:///workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/.vite-temp/vite.config.ts.timestamp-1795076371653-9aeae4b2a75508.mjs:1585:17
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async loadConfigFromBundledFile (file:///workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/vite/dist/node/chunks/node.js:38260:12)
+    at async bundleAndLoadConfigFile (file:///workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/vite/dist/node/chunks/node.js:38106:21)
+    at async loadConfigFromFile (file:///workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/vite/dist/node/chunks/node.js:38066:42)
+    at async resolveConfig (file:///workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/vite/dist/node/chunks/node.js:37668:22)
+    at async createBuilder (file:///workspace/scratch/29ec534d969d/review-qr-mobile/node_modules/vite/dist/node/chunks/node.js:35245:17) {
+  code: 'MESSAGE_VARIABLE_MISMATCH'
+}
+
+Node.js v24.22.3

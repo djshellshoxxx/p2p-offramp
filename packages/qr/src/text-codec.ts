@@ -102,7 +102,7 @@ export function qrTextToBytes(text: unknown): QrBytesResult {
 }
 
 interface Context {
-  readonly sha256: Sha256; readonly now: number; readonly chains: ReadonlySet<string>;
+  readonly sha256: Sha256; readonly now: number; readonly nowSeconds: () => number; readonly chains: ReadonlySet<string>;
   readonly expectedChain: string | null; readonly verifier: InviteVerifier | null; readonly requireSignature: boolean;
 }
 const isByteCount = (value: unknown, max: number): boolean => typeof value === 'number' && Number.isSafeInteger(value) && value >= 1 && value <= max;
@@ -122,9 +122,17 @@ function readContext(context: QrDecodeContext): Context {
   try { now = nowSeconds(); } catch { return refuse('UNAVAILABLE'); }
   if (!Number.isSafeInteger(now) || now < 0) return refuse('UNAVAILABLE');
   return {
-    sha256, now, chains: allowed, expectedChain: expectedChain ?? null, verifier: inviteVerifier ?? null,
+    sha256, now, nowSeconds, chains: allowed, expectedChain: expectedChain ?? null, verifier: inviteVerifier ?? null,
     requireSignature: inviteVerifier !== undefined && requireInviteSignature !== false,
   };
+}
+
+/** Refresh after asynchronous work; never let a backwards clock increase an already sampled deadline. */
+function currentClock(context: Context, earliest: number): number {
+  let sampled: number;
+  try { sampled = context.nowSeconds(); } catch { return refuse('UNAVAILABLE'); }
+  if (!Number.isSafeInteger(sampled) || sampled < 0) return refuse('UNAVAILABLE');
+  return Math.max(earliest, sampled);
 }
 
 function checkClock(envelope: QrEnvelope, now: number): void {
@@ -173,9 +181,13 @@ async function reviewBytes(bytes: Uint8Array, context: Context): Promise<QrImpor
     if (context.expectedChain !== null && envelope.chain !== context.expectedChain) refuse('CHAIN_MISMATCH');
   }
   await assertPayloadHash(context.sha256, envelope);
-  checkClock(envelope, context.now);
+  // Hash providers and signature verifiers may take long enough for a once-valid code to expire.
+  const beforeSignature = currentClock(context, context.now);
+  checkClock(envelope, beforeSignature);
   const signature = await signatureState(envelope, context);
-  return buildReview({ envelope, envelopeBytes: bytes.length, nowSeconds: context.now, signature: signature.state, signatureWarnings: signature.warnings });
+  const acceptedAt = currentClock(context, beforeSignature);
+  checkClock(envelope, acceptedAt);
+  return buildReview({ envelope, envelopeBytes: bytes.length, nowSeconds: acceptedAt, signature: signature.state, signatureWarnings: signature.warnings });
 }
 
 /**

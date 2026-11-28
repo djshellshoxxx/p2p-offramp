@@ -1,0 +1,487 @@
+{
+  "source_commit": "1e940862ba6e01309b81d5ce9d3d9f4ae4e32ce7",
+  "source_tree": "5ab1f4ddc56742645c60ac43ac2184e194867e0a",
+  "base_commit": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+  "changed_code_paths": [
+    "contracts/solana/Cargo.lock"
+  ],
+  "lock_sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039",
+  "lock_delta_counts": {
+    "removed": 10,
+    "added": 25,
+    "changed_preserved_versions": 22,
+    "before_count": 412,
+    "after_count": 427,
+    "unchanged": 380
+  },
+  "audit": {
+    "database_commit": "074ea9a7ed619f511b5b7374c7a97e98d1e98be4",
+    "before_vulnerabilities": 1,
+    "after_vulnerabilities": 0,
+    "maintenance_warnings": [
+      [
+        "unmaintained",
+        "ansi_term",
+        "0.12.1",
+        "RUSTSEC-2021-0139"
+      ],
+      [
+        "unmaintained",
+        "bincode",
+        "1.3.3",
+        "RUSTSEC-2025-0141"
+      ],
+      [
+        "unmaintained",
+        "derivative",
+        "2.2.0",
+        "RUSTSEC-2024-0388"
+      ],
+      [
+        "unmaintained",
+        "libsecp256k1",
+        "0.7.2",
+        "RUSTSEC-2025-0161"
+      ],
+      [
+        "unmaintained",
+        "paste",
+        "1.0.15",
+        "RUSTSEC-2024-0436"
+      ]
+    ],
+    "warning_set_preserved": true,
+    "suppressions": []
+  },
+  "commands": {
+    "cargo-format-receipt": {
+      "command": [
+        "cargo",
+        "fmt",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.107,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "host-normal-build-tree-receipt": {
+      "command": [
+        "cargo",
+        "tree",
+        "--manifest-path",
+        "contracts/solana/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--features",
+        "localnet",
+        "-e",
+        "normal,build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.521,
+      "log_sha256": "2d1fa502279ca7d63a0e3239b254f8d95244532d51ea8f3e4370a2589f701709"
+    },
+    "bigint-feature-tree-receipt": {
+      "command": [
+        "cargo",
+        "tree",
+        "--manifest-path",
+        "contracts/solana/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--features",
+        "localnet",
+        "-e",
+        "features",
+        "-i",
+        "crypto-bigint"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.049,
+      "log_sha256": "9b403675220b31f845c4e9aa6026c65906af79536d65449282ef68bdc4a44a06"
+    },
+    "audit-after-receipt": {
+      "command": [
+        "/workspace/scratch/dcf03ef9bee8/tools/cargo-audit-v0.23.0/cargo-audit-x86_64-unknown-linux-gnu-v0.23.0/cargo-audit",
+        "audit",
+        "--db",
+        "/workspace/scratch/dcf03ef9bee8/tools/rustsec-advisory-db-g12",
+        "--no-fetch",
+        "--json",
+        "--file",
+        "/workspace/scratch/dcf03ef9bee8/p2p-dependency-g12/contracts/solana/Cargo.lock"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.374,
+      "output_sha256": "2feeba37bfa504a2f6d511a04fcf1fe9dfd8689d580bdc30d1ed115ae37dc88a",
+      "vulnerability_count": 0,
+      "warnings": {
+        "unmaintained": [
+          {
+            "advisory": "RUSTSEC-2021-0139",
+            "package": "ansi_term",
+            "version": "0.12.1"
+          },
+          {
+            "advisory": "RUSTSEC-2025-0141",
+            "package": "bincode",
+            "version": "1.3.3"
+          },
+          {
+            "advisory": "RUSTSEC-2024-0388",
+            "package": "derivative",
+            "version": "2.2.0"
+          },
+          {
+            "advisory": "RUSTSEC-2025-0161",
+            "package": "libsecp256k1",
+            "version": "0.7.2"
+          },
+          {
+            "advisory": "RUSTSEC-2024-0436",
+            "package": "paste",
+            "version": "1.0.15"
+          }
+        ]
+      }
+    },
+    "cargo-metadata-receipt": {
+      "command": [
+        "cargo",
+        "metadata",
+        "--manifest-path",
+        "contracts/solana/Cargo.toml",
+        "--locked",
+        "--format-version",
+        "1",
+        "--features",
+        "localnet"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 12.91,
+      "stdout_sha256": "00ff766941abfb904dca0a7cf94c3c3e61204f77265af08bf23b178773309581",
+      "stderr_sha256": "0a62a269e9cdc0949cdac7be652b53a871c5af59c21a4bf161663ecd4ddfd4a0"
+    },
+    "recovery-targeted-update-receipt": {
+      "command": [
+        "cargo",
+        "update",
+        "--manifest-path",
+        "contracts/solana/Cargo.toml",
+        "--package",
+        "solana-secp256k1-recover",
+        "--precise",
+        "3.3.1"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 18.697,
+      "log_sha256": "244f490f26444e14abcea9d6fda1731f7f7ada567bd8207ceaa663329f8f6874",
+      "lock_sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039"
+    },
+    "build-sbf-receipt": {
+      "command": [
+        "cargo",
+        "build-sbf",
+        "--manifest-path",
+        "programs/basic-escrow/Cargo.toml",
+        "--features",
+        "localnet",
+        "--arch",
+        "v3",
+        "--no-rustup-override",
+        "--jobs",
+        "2",
+        "--",
+        "--locked"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 88.255,
+      "log_sha256": "2186c2607460e6b21a252983c10be180b50ea731b39f6e59a51e4a2f0d4b2f09",
+      "lock_sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039"
+    },
+    "ctutils-supporting-update-receipt": {
+      "command": [
+        "cargo",
+        "update",
+        "--manifest-path",
+        "contracts/solana/Cargo.toml",
+        "--package",
+        "ctutils",
+        "--precise",
+        "0.4.8"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 15.699,
+      "log_sha256": "30f959fc1f610e19f8f86e4d3700757e00b3ac0e86d30360e2dcb35b2f7b24f6",
+      "lock_sha256": "b6836c92c45c22442d5a47af53e0b5012e2cf0603075374bdfabb251a5231527"
+    },
+    "syscalls-native-check-receipt": {
+      "command": [
+        "cargo",
+        "check",
+        "--manifest-path",
+        "contracts/solana/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--package",
+        "solana-syscalls",
+        "--jobs",
+        "2"
+      ],
+      "exit_code": 101,
+      "elapsed_seconds": 0.671,
+      "log_sha256": "05d03ab4390eda1fc6214e5bcc15fee8e92627c0ca4bf2ed67cbd350c0a33cf8"
+    },
+    "audit-before-receipt": {
+      "command": [
+        "/workspace/scratch/dcf03ef9bee8/tools/cargo-audit-v0.23.0/cargo-audit-x86_64-unknown-linux-gnu-v0.23.0/cargo-audit",
+        "audit",
+        "--db",
+        "/workspace/scratch/dcf03ef9bee8/tools/rustsec-advisory-db-g12",
+        "--no-fetch",
+        "--json",
+        "--file",
+        "/workspace/scratch/dcf03ef9bee8/evidence/dependencies-g12/worker/Cargo.before.lock"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 2.928,
+      "output_sha256": "2c194eff3f175e423423944db89ca26f4ba2b434138417bd25706fd505513ed1"
+    },
+    "cargo-update-receipt": {
+      "command": [
+        "cargo",
+        "update",
+        "--manifest-path",
+        "contracts/solana/Cargo.toml",
+        "--package",
+        "solana-secp256k1-recover",
+        "--precise",
+        "3.3.1"
+      ],
+      "exit_code": 101,
+      "elapsed_seconds": 10.807,
+      "log_sha256": "9a7f7158dc7b60aa267e0ed3d2bef8eeec5e972057b3d24b1e00dec2868a716b",
+      "lock_before_sha256": "9700b283dad1a3fb008a53398f2e41e30f947aa9e76ddfb044ff9e922043ed90",
+      "lock_after_sha256": "9700b283dad1a3fb008a53398f2e41e30f947aa9e76ddfb044ff9e922043ed90"
+    },
+    "build-sbf-pinned-compiler-receipt": {
+      "command": [
+        "cargo",
+        "build-sbf",
+        "--manifest-path",
+        "programs/basic-escrow/Cargo.toml",
+        "--features",
+        "localnet",
+        "--arch",
+        "v3",
+        "--no-rustup-override",
+        "--jobs",
+        "2",
+        "--",
+        "--locked"
+      ],
+      "rustc": "/home/agent/.cache/solana/v1.54/platform-tools/rust/bin/rustc",
+      "exit_code": 1,
+      "elapsed_seconds": 208.084,
+      "log_sha256": "7a425d8d0afcb69df9098d7e4822d65119375b51c3f6fb6b31a318864dfa5447",
+      "lock_sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039"
+    },
+    "build-sbf-serial-receipt": {
+      "command": [
+        "cargo",
+        "build-sbf",
+        "--manifest-path",
+        "programs/basic-escrow/Cargo.toml",
+        "--features",
+        "localnet",
+        "--arch",
+        "v3",
+        "--no-rustup-override",
+        "--jobs",
+        "1",
+        "--",
+        "--locked"
+      ],
+      "rustc": "/home/agent/.cache/solana/v1.54/platform-tools/rust/bin/rustc",
+      "exit_code": 1,
+      "elapsed_seconds": 33.037,
+      "log_sha256": "679a8d8fbf668faa2343d08a19fa4698d089185284d1ce12aa8735aef8238233",
+      "lock_sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039"
+    },
+    "native-library-test-receipt": {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "localnet",
+        "--lib",
+        "--jobs",
+        "1"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 258.453,
+      "log_sha256": "5fb948ea6a15a192a97f3e965b0bd527e9cbe20e7e3f5d5a2468f143f29a441e",
+      "lock_sha256": "b9596088f7a28dccf465f5165eade7a9c02ea73a5734e38005be5e3b1b830039"
+    }
+  },
+  "native_status": "Host dependency closure compiled successfully; library defines zero tests. SBPF failed twice with SIGKILL; full native qualification remains required.",
+  "published_source_commit": "9dd01b199a3448a7654c4719d226ec01eb93eecc",
+  "pull_request": 216,
+  "qualifications": {
+    "source_resolution": "pass",
+    "independent_replay": "reviewer reports identical complete lock",
+    "dependency_audit": "0 vulnerability matches;5 unchanged maintenance warnings",
+    "format": "pass",
+    "host_library_compile": "pass",
+    "host_library_tests_defined": 0,
+    "sbpf": "incomplete;SIGKILL twice in unchanged anchor-lang-idl",
+    "clippy_all_targets": "not run",
+    "litesvm": "not run",
+    "idl": "not run",
+    "real_validator": "not run",
+    "browser_refund": "not run",
+    "release_authorized": false
+  },
+  "lock_delta": {
+    "complete_delta_sha256": "baed86b16e7cd1ce57a607f0b13c8946f1f47d39ba0ea349f76a6d70cc346bb3",
+    "removed": [
+      "base16ct@0.2.0",
+      "crypto-bigint@0.5.5",
+      "ctutils@0.4.4",
+      "ecdsa@0.16.9",
+      "elliptic-curve@0.13.8",
+      "k256@0.13.4",
+      "rfc6979@0.4.0",
+      "sec1@0.7.3",
+      "solana-define-syscall@5.2.0",
+      "solana-secp256k1-recover@3.3.0"
+    ],
+    "added": [
+      "base16ct@1.0.0",
+      "cpubits@0.1.1",
+      "crypto-bigint@0.7.11",
+      "ctutils@0.4.8",
+      "der@0.8.3",
+      "ecdsa@0.17.0",
+      "elliptic-curve@0.14.3",
+      "ff@0.14.0",
+      "getrandom@0.4.3",
+      "group@0.14.0",
+      "hmac@0.13.0",
+      "k256@0.14.0",
+      "pkcs8@0.11.0",
+      "primefield@0.14.0",
+      "primeorder@0.14.0",
+      "r-efi@6.0.0",
+      "rand_core@0.10.1",
+      "rfc6979@0.6.0",
+      "sec1@0.8.1",
+      "serdect@0.4.3",
+      "signature@3.0.0",
+      "solana-define-syscall@5.4.0",
+      "solana-secp256k1-recover@3.3.1",
+      "spki@0.8.1",
+      "wnaf@0.14.1"
+    ],
+    "retained_dependency_lists_changed": [
+      "blstrs@0.7.1",
+      "crypto-common@0.2.2",
+      "digest@0.10.7",
+      "ed25519@2.2.3",
+      "generic-array@0.14.7",
+      "getrandom@0.3.4",
+      "group@0.13.0",
+      "hybrid-array@0.4.15",
+      "pairing@0.23.0",
+      "pkcs8@0.10.2",
+      "signature@2.2.0",
+      "solana-address@2.6.1",
+      "solana-bls-signatures@3.4.0",
+      "solana-bn254@3.2.1",
+      "solana-curve25519@4.0.1",
+      "solana-get-sysvar@1.0.0",
+      "solana-instruction@3.4.0",
+      "solana-msg@3.1.0",
+      "solana-seed-phrase@3.0.0",
+      "solana-sha512-hasher@1.0.1",
+      "solana-sysvar@4.1.0",
+      "spki@0.7.3"
+    ],
+    "retained_name_version_source_checksum_unchanged": true
+  },
+  "toolchain_provenance": {
+    "rust_manifest_sha256": "a7c8774a5fd8441c997d94c029776cbc5eb111e9d72ab5d256fa69866644347e",
+    "rust_components": [
+      {
+        "package": "cargo",
+        "url": "https://static.rust-lang.org/dist/2026-09-03/cargo-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+        "sha256": "ea1de9f9e23107d97ee2b41a72c552f34064a593da503789218387aee59f3ba4"
+      },
+      {
+        "package": "rustc",
+        "url": "https://static.rust-lang.org/dist/2026-09-03/rustc-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+        "sha256": "e974f036b28565f37c0f3bd92ddefa809bee16c04f9dcf07b9ed96e05aaaf7c4"
+      },
+      {
+        "package": "rust-std",
+        "url": "https://static.rust-lang.org/dist/2026-09-03/rust-std-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+        "sha256": "fa3ff450172a16c026944030230c5069947af93c728d9179971d44e5e0cfb561"
+      },
+      {
+        "package": "rustfmt-preview",
+        "url": "https://static.rust-lang.org/dist/2026-09-03/rustfmt-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+        "sha256": "b29a1addcbf2aa8f5785075605700e63cbe131b08c8334b50c09cfca8bbc51dc"
+      },
+      {
+        "package": "clippy-preview",
+        "url": "https://static.rust-lang.org/dist/2026-09-03/clippy-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+        "sha256": "e167f333be24e1d5eea56ea563c7def0aa0bd613f5ce3445976c93b0288799d1"
+      }
+    ],
+    "agave": {
+      "version": "4.1.2",
+      "archive_sha256": "5991d027a686eb419a709a479178b33eb83501e8a2bfbf599a81a286bfcbf770"
+    },
+    "anchor": {
+      "version": "1.2.2",
+      "binary_sha256": "e2c35a973bcfe476f3a89b120e99820f917229faf33d3e71f6625bd94199e741"
+    },
+    "platform_tools": {
+      "version": "1.54",
+      "version_md": "daa3af4a1110ec3f10ce08083bb0b7855a88416f  https://github.com/anza-xyz/rust.git\nd96b806368b1a00ea55a3e2f08876edc4e86bc3e  https://github.com/anza-xyz/cargo.git\nf0f8003daa3f71a1a3e2f067f8d5bb46e2756514  https://github.com/anza-xyz/newlib.git\n",
+      "rustc_version": "rustc 1.89.0-dev"
+    },
+    "cargo_audit": {
+      "version": "0.23.0",
+      "archive_sha256": "b77993532b253fcbf550996d7716465ec3d734d4e74e7f87bfb65a19add0fb59"
+    }
+  },
+  "sources": [
+    "https://crates.io/api/v1/crates/solana-secp256k1-recover/3.3.1/dependencies",
+    "https://static.crates.io/crates/solana-secp256k1-recover/solana-secp256k1-recover-3.3.1.crate",
+    "https://static.crates.io/crates/solana-syscalls/solana-syscalls-4.1.2.crate",
+    "https://rustsec.org/advisories/RUSTSEC-2026-0387.html",
+    "https://github.com/djshellshoxxx/p2p-offramp/pull/216"
+  ],
+  "logs": {
+    "audit-after.json": "2feeba37bfa504a2f6d511a04fcf1fe9dfd8689d580bdc30d1ed115ae37dc88a",
+    "audit-after.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "audit-before.json": "2c194eff3f175e423423944db89ca26f4ba2b434138417bd25706fd505513ed1",
+    "audit-before.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bigint-feature-tree.log": "9b403675220b31f845c4e9aa6026c65906af79536d65449282ef68bdc4a44a06",
+    "build-sbf-pinned-compiler.log": "7a425d8d0afcb69df9098d7e4822d65119375b51c3f6fb6b31a318864dfa5447",
+    "build-sbf-serial.log": "679a8d8fbf668faa2343d08a19fa4698d089185284d1ce12aa8735aef8238233",
+    "build-sbf.log": "2186c2607460e6b21a252983c10be180b50ea731b39f6e59a51e4a2f0d4b2f09",
+    "cargo-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cargo-metadata.stderr": "0a62a269e9cdc0949cdac7be652b53a871c5af59c21a4bf161663ecd4ddfd4a0",
+    "cargo-update.log": "9a7f7158dc7b60aa267e0ed3d2bef8eeec5e972057b3d24b1e00dec2868a716b",
+    "ctutils-supporting-update.log": "30f959fc1f610e19f8f86e4d3700757e00b3ac0e86d30360e2dcb35b2f7b24f6",
+    "host-normal-build-tree.log": "2d1fa502279ca7d63a0e3239b254f8d95244532d51ea8f3e4370a2589f701709",
+    "native-library-test.log": "5fb948ea6a15a192a97f3e965b0bd527e9cbe20e7e3f5d5a2468f143f29a441e",
+    "recover-source.diff": "cb03b02ea19901fe155e46a18d009d6b82746b15e4b81a0a2b2b917b20f9aa69",
+    "recovery-targeted-update.log": "244f490f26444e14abcea9d6fda1731f7f7ada567bd8207ceaa663329f8f6874",
+    "syscalls-native-check.log": "05d03ab4390eda1fc6214e5bcc15fee8e92627c0ca4bf2ed67cbd350c0a33cf8"
+  }
+}

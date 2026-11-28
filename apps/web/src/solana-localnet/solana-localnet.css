@@ -1,0 +1,15 @@
+.solana-recovery { max-width: 880px; margin: 0 auto; padding: 24px; color: #182327; }
+.solana-recovery section { margin: 24px 0; border: 1px solid #bac8ce; border-radius: 8px; padding: 20px; background: #fff; }
+.solana-banner { padding: 12px; background: #f5e7bc; border: 1px solid #b98c26; font-weight: 700; }
+.solana-recovery label { display: flex; flex-direction: column; gap: 6px; margin: 14px 0; }
+.solana-recovery .solana-field { display: flex; flex-direction: column; gap: 6px; margin: 14px 0; }
+.solana-recovery .solana-field label { margin: 0; }
+.solana-recovery textarea, .solana-recovery input, .solana-recovery select { max-width: 100%; padding: 10px; border: 1px solid #8b9ba5; border-radius: 4px; }
+.solana-recovery textarea { width: 100%; box-sizing: border-box; }
+.solana-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.solana-recovery button { padding: 10px 14px; margin: 4px; }
+.solana-recovery dd, .solana-recovery code { overflow-wrap: anywhere; }
+.solana-recovery dt { font-weight: 700; margin-top: 10px; }
+.solana-recovery dd { margin-left: 0; }
+.solana-recovery .solana-check { flex-direction: row; align-items: flex-start; }
+.solana-recovery [role="alert"] { border-left: 4px solid #9a3230; padding: 12px; }

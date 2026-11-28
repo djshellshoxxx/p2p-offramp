@@ -1,0 +1,253 @@
+{
+  "schema": 1,
+  "observed_at_utc": "2026-11-20T06:44:47.310734+00:00",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "scope": "Explicit public export of a previously imported funded native-SOL recovery document; localnet only",
+  "source": "b993d17fdbd7cdfce8f0d1e5d239c7785c9d787e",
+  "tree": "e35d9cdb942fec95aa6d1133149d113a559afbdc",
+  "base": "bf12a45604497860b8ded9d0e65f06a1c0cc9860",
+  "branch": "codex/solana-recovery-export-g14-20261120",
+  "source_changed_paths": [
+    "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+    "apps/web/src/solana-localnet/controller.ts",
+    "apps/web/src/solana-localnet/protocol.ts",
+    "apps/web/src/solana-localnet/validation.ts",
+    "apps/web/test/solana-localnet-controller.test.mjs",
+    "apps/web/test/solana-public-recovery-ui.test.mjs",
+    "scripts/test-solana-localnet-browser.mjs"
+  ],
+  "checks": [
+    {
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=2",
+        "apps/web/test/solana-localnet-controller.test.mjs",
+        "apps/web/test/solana-public-recovery-ui.test.mjs"
+      ],
+      "exit_code": 0,
+      "log": "focused.log",
+      "sha256": "9355f2ca8f197a5329abbbb6e83e2e475a5a3f8fc059fe0ab31cb8fe7dc9702f",
+      "tests": 17,
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    {
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=2",
+        "apps/web/test/solana-localnet-restore-lifecycle.test.mjs",
+        "apps/web/test/solana-localnet-wallet.test.mjs",
+        "apps/web/test/solana-localnet-policy.test.mjs"
+      ],
+      "exit_code": 0,
+      "log": "affected.log",
+      "sha256": "35903ab2e1ea0fd00da9a5a6bda3119c6f2690a1e5671905bb1b1c3ca8ba86b5",
+      "tests": 17,
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "exit_code": 0,
+      "log": "policy.log",
+      "sha256": "622e3f297a998e53b45f85b138297fed8b9645d0a0481fc3a657a2c9e453cc90",
+      "tests": 57,
+      "passed": 57,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit_code": 0,
+      "log": "typecheck.log",
+      "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "exit_code": 0,
+      "log": "boundaries.log",
+      "sha256": "2dfba649e4e8a9f10695ab238460bb8e402fd3e651a49ec39d47e4acbe85ad8a"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "log": "build.log",
+      "sha256": "eeee5538280c04ab12447ae467b30cf4c0abaae753c29911581a689020b988bc"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "build:demo"
+      ],
+      "exit_code": 0,
+      "log": "demo.log",
+      "sha256": "66fc8d5bbf024a9f2dd2cd228aa74aae4c3fc414c42eddcfe43a30624cf2b4d9"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exit_code": 0,
+      "log": "docs.log",
+      "sha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4",
+      "summary": {
+        "engineeringConsistency": true,
+        "semanticApproval": false,
+        "stale": [
+          "apps/web/src/ui/locale/en.ts"
+        ],
+        "staleClaims": [
+          "location-scope",
+          "logical-removal",
+          "message-content",
+          "selected-route",
+          "stealth-local",
+          "vault-at-rest"
+        ]
+      }
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "check:specs"
+      ],
+      "exit_code": 0,
+      "log": "specs.log",
+      "sha256": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9",
+      "summary": {
+        "broken_links": 0,
+        "total": 173,
+        "unindexed": []
+      }
+    }
+  ],
+  "new_cases": {
+    "controller": 3,
+    "ui": 6,
+    "counting": "Included in focused17, not added again to that execution or a full-suite count."
+  },
+  "source_boundaries": {
+    "production_files": 239,
+    "core_graph_modules": 143
+  },
+  "artifacts": {
+    "dist": {
+      "file_count": 13,
+      "reference_source": "bf12a45604497860b8ded9d0e65f06a1c0cc9860",
+      "equal_to_reference": true,
+      "files": {
+        "_headers": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+        "assets/OfflineRoot-CtqbvMoA.js": "7ec100f4462024ad7863d72f48af5a1c5edc867f413c324bd9a519da73a2c9dd",
+        "assets/decode.worker-DGcSBxfL.js": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+        "assets/index-CejmKC9k.js": "227e0e177230d46302cfce3df3dbf50002a9e24ce718ae020362226089b95a51",
+        "assets/index-rPDFZ4F5.css": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+        "assets/vault.worker-BFynfgnx.js": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044",
+        "content-policy.json": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+        "core-graph-document.json": "6bf85539dfcb89440254db99f22560be1dcef248a954c97ab17241bc067c1803",
+        "core-graph-worker.json": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+        "index.html": "68eb71f3d33fdcb61782b02ef0dafbd154e25adc407cb900fa854a03c85e0306",
+        "local-build-evidence.json": "2d6b6fead57bf8d1a8e414d00866e0784625860e692608e84051dcff6f59cca5",
+        "qr-graph-worker.json": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+        "third-party-licenses.json": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+      },
+      "differences": []
+    },
+    "dist-demo": {
+      "file_count": 14,
+      "reference_source": "bf12a45604497860b8ded9d0e65f06a1c0cc9860",
+      "equal_to_reference": true,
+      "files": {
+        "_headers": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+        "assets/OfflineRoot-CQJdtb7J.js": "1d32c0b610584a1a88d5accf499916d4b1e54b4fda05efc644d7367cd932990a",
+        "assets/decode.worker-DGcSBxfL.js": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+        "assets/index-B2wJMrtf.js": "d74b6010294a0ad1650eced0f8ffb20eebfe22d9f55e767aca5aa4493cfe6eef",
+        "assets/index-rPDFZ4F5.css": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+        "assets/synthetic-local-MdjGh0DS.js": "5b9d5f9129d9214288560329f7b9881fd645c9b75adbfd38cbfc2965a6d1f058",
+        "assets/vault.worker-BFynfgnx.js": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044",
+        "content-policy.json": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+        "core-graph-document.json": "7333bab4512e862cb53be9ba25765f67da5beb15d7414d249058ea08ccdaca96",
+        "core-graph-worker.json": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+        "index.html": "89ffbb2239aead4a541f1a9f11c49825aa9d86b019ac0d37b6172bf3bcc94126",
+        "local-build-evidence.json": "88b76073e2df834266733122d970d490a623f707b1088d9d06952cb116a4b3c9",
+        "qr-graph-worker.json": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+        "third-party-licenses.json": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+      },
+      "differences": []
+    }
+  },
+  "graph_counts": {
+    "default": {
+      "document": 94,
+      "vault_worker": 30,
+      "qr_worker": 4
+    },
+    "demo": {
+      "document": 96,
+      "vault_worker": 30,
+      "qr_worker": 4
+    }
+  },
+  "solana_runtime_modules_in_default_or_demo": 0,
+  "release_enabled": 0,
+  "signed_release": false,
+  "release_acceptance": false,
+  "browser_fixture": {
+    "path": "scripts/test-solana-localnet-browser.mjs",
+    "new_check": "Original document download with exact filename, bounded bytes, schema contents, zero wallet connections/prompts/sends.",
+    "syntax_exit": 0,
+    "executed": false,
+    "original_assertions_preserved": true,
+    "refund_minima_seconds_unchanged": 1800
+  },
+  "local_limits": [
+    "UI tests use maintained TSX with controlled client results, not a native DOM or download manager.",
+    "Controller tests use real vault/controller, in-memory CAS store and synthetic chain.",
+    "Existing artifact-policy tests build actual localnet Worker; no runtime qualification inferred.",
+    "No configured public-network, physical-wallet, negotiation, new-funding or release claim."
+  ],
+  "f16_remaining": "The accepted D1 carrier specifies EVM EIP-712; Solana prepared-review supports funded exits. Full negotiation/funding composition requires its own accepted scope.",
+  "raw_log_directory": "dist/solana-export-evidence",
+  "remote_mutations_by_worker": 0,
+  "documentation_limits": {
+    "engineering_consistency": true,
+    "semantic_approval": false,
+    "stale_locale_source": "apps/web/src/ui/locale/en.ts",
+    "stale_claims_count": 6,
+    "locale_and_approval_sources_changed": false,
+    "evidence_repinned": false
+  }
+}

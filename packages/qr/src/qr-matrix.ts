@@ -11,7 +11,8 @@
  * Verification: published known answers (ISO/IEC 18004 Annex I and the widely used "HELLO WORLD" 1-Q Reed-Solomon
  * codewords, the 32 format-information words, version information, D6's capacity figures) and an independent
  * stdlib Python reader in scripts/vectors/check_qr_codec.py that decodes every frozen matrix, checks every
- * Reed-Solomon block and recovers the text. No third-party scanner has read these symbols yet.
+ * Reed-Solomon block and recovers the text. The app's separate pinned jsQR oracle reads all 25 frozen symbols;
+ * physical-device, printed-code and low-light qualification remain pending.
  */
 import { BASE45_ALPHABET } from './base45.ts';
 import { encodeUtf8, isWellFormedString } from './utf8.ts';

@@ -14,6 +14,8 @@ name = "basic_escrow"
 default = []
 # Exactly one network profile must be selected; it fixes the genesis constant and mint allowlist.
 localnet = []
+# Local browser acceptance fixture only: explicit build-time identity from its already running ledger.
+browser-localnet = []
 cpi = ["no-entrypoint"]
 no-entrypoint = []
 no-log-ix-name = []

@@ -1,0 +1,222 @@
+{
+  "schema": "p2p-hosted-failure-triage/v1",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "recorded_at_utc": "2026-11-20T03:17:34.588568+00:00",
+  "task_date_pacific": "2026-11-19",
+  "coordinator_parent": {
+    "head": "0b6533cd553e453a0a12aa0e089cf45db9e078c2",
+    "tree": "28de8d5b65659d79a0b3bc48d4a427b161053aca"
+  },
+  "owner": "generation7_rediscovery, resumed for bounded generation8 triage",
+  "scope": {
+    "report_only": true,
+    "source_edits": false,
+    "tests_or_builds_executed": false,
+    "new_agents_launched": 0,
+    "remote_mutations": false,
+    "external_worktree_mutations": false,
+    "canonical_handoff_or_state_edited": false,
+    "new_repair_count": 0
+  },
+  "failures": [
+    {
+      "id": "HOSTED-PR207-WARM-CONNECTION",
+      "pr": 207,
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "run_id": 44662758173,
+      "job_id": 136044687707,
+      "job_name": "browser",
+      "job_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044687707",
+      "conclusion": "failure",
+      "failed_step": {
+        "number": 6,
+        "name": "Verify one actual browser POST for a withheld Solana acknowledgment"
+      },
+      "failure_at_utc": "2026-11-20T03:03:18.1918663Z",
+      "actual_checkout": "0aba9abd40c39920b8c1cfe9a94fd5870d01f1f9",
+      "checkout_tree": "4b694124197ae8ce271f14307d12abc43c719406",
+      "checkout_parents": [
+        "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+        "df10fe26a308407237f9ccbc636c8bb61f55b84f"
+      ],
+      "node": "24.22.3",
+      "browser": "158.0.8127.36",
+      "diagnostic_path": "scripts/test-solana-withheld-send-browser.mjs",
+      "diagnostic_blob": "302a60d61c17055a33a6353a6f281629934592a5",
+      "identical_diagnostic_at_heads": {
+        "202": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+        "205": "cd7d54ba075118a7ec043788c17718be842ee405",
+        "207": "df10fe26a308407237f9ccbc636c8bb61f55b84f"
+      },
+      "assertions_before_failure": {
+        "evidence_kind": "inferred from reaching line101 after synchronous successful assertions99-100 in the verified immutable script",
+        "application_calls": 1,
+        "fetch_calls": 1,
+        "fetch_failures": 0,
+        "statuses": [
+          503
+        ],
+        "refusal": "RPC_UNAVAILABLE",
+        "warm_read_records_including_followup": 9,
+        "physical_send_posts": 1
+      },
+      "failed_assertion": {
+        "line": 101,
+        "message": "send uses a connection warmed by an actual RPC read",
+        "actual": false,
+        "expected": true
+      },
+      "assertions_not_executed": [
+        {
+          "line": 102,
+          "counter": "completed",
+          "expected": [
+            503
+          ]
+        },
+        {
+          "line": 102,
+          "counter": "errors",
+          "expected": []
+        },
+        {
+          "line": 102,
+          "counter": "pageErrors",
+          "expected": []
+        },
+        {
+          "line": 102,
+          "counter": "unexpected",
+          "expected": []
+        }
+      ],
+      "success_receipt_emitted": false,
+      "connection_pool_cause": "unproven",
+      "product_transport_regression_established": false,
+      "repair": {
+        "owner": "/root/generation8_transport_fixture",
+        "worker_count_at_assignment_reported_by_coordinator": 35,
+        "owner_status_observed": "running",
+        "design_review": "coordinator reports independent design review completed by existing relay reviewer",
+        "implementation_and_execution_complete": false,
+        "next_action": "Qualify actual warmed-connection diagnostic deterministically while preserving one-call/one-fetch/one-POST and all completion/error checks; obtain independent review and exact-source hosted execution."
+      },
+      "evidence": {
+        "local_file": "/workspace/scratch/6bd6e00af1c0/verification/generation8-hosted-triage/job-136044687707.log",
+        "bytes": 47786,
+        "sha256": "71accc6cfeecce06b070dadff5ea016adc314e9c3bd370e42370a12f48281337",
+        "log_complete": true
+      }
+    },
+    {
+      "id": "HOSTED-PR204-INHERITED-NATIVE",
+      "pr": 204,
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "run_id": 44656491793,
+      "job_id": 136023880105,
+      "job_name": "program",
+      "job_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491793/job/136023880105",
+      "conclusion": "failure",
+      "failed_step": {
+        "number": 16,
+        "name": "Actual Worker encrypted Solana recovery and real-time refund"
+      },
+      "actual_checkout": "c579e9a646855b5d821caf97249df9872b3e98e1",
+      "checkout_tree": "f5c5bb060732a892ba4eb91532e82ed79f64f2c4",
+      "checkout_parents": [
+        "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+        "98d33db64622eab3f5f4ece6141d445d255245e7"
+      ],
+      "failure_sequence": [
+        {
+          "at_utc": "2026-11-20T02:55:17.3205368Z",
+          "message": "one physical attempt per signed transaction; no retries or resends",
+          "source": "scripts/lib/solana-localnet-send-evidence.mjs:53",
+          "actual": true,
+          "expected": false
+        },
+        {
+          "at_utc": "2026-11-20T02:56:02.8828702Z",
+          "message": "locator.click: Timeout 45000ms exceeded.",
+          "disabled_button": "Restore with a fresh key",
+          "source": "scripts/test-solana-localnet-browser.mjs:126"
+        },
+        {
+          "at_utc": "2026-11-20T02:56:02.9162314Z",
+          "exit_code": 1
+        }
+      ],
+      "earlier_browser_journeys_logged_ok": 3,
+      "successful_final_browser_receipt": false,
+      "withholding_fixture": {
+        "path": "scripts/lib/solana-localnet-fixture.mjs",
+        "old_blob": "59fb525d0e9b49baf117dc7792d585904d51e281",
+        "old_behavior": "response.destroy() before completed HTTP response",
+        "corrected_202_and_207_blob": "44dcbfa3c204f782448cf113169d2c1f3652a13b",
+        "corrected_behavior": "rejectWithheldSolanaSend(response, cors), using completed503 helper"
+      },
+      "classification": "inherited legacy withholding and restore failure evidence; not a new repair",
+      "causal_limit": "The duplicate-send assertion precedes the disabled-restore timeout; this log alone does not prove one caused the other.",
+      "next_action": "Keep this old-source failure historical. Qualify corrected current source; preserve physical-send/marker and full native refund assertions.",
+      "evidence": {
+        "local_file": "/workspace/scratch/6bd6e00af1c0/verification/generation8-hosted-triage/job-136023880105.log",
+        "bytes": 178156,
+        "sha256": "d9001af7306c83a44d86201f1cf6bbad44a6353ca66843bc05b233f879c4f566",
+        "log_complete": true
+      }
+    }
+  ],
+  "external_relay_composition": {
+    "pr": 206,
+    "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+    "tree": "243d178ac6a3822f71ddf3ad3073cc1d8020b864",
+    "base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+    "ordered_parents": [
+      "e848ae19574e8b7f4cb040082df5255ee5a63f1e",
+      "df10fe26a308407237f9ccbc636c8bb61f55b84f"
+    ],
+    "draft": true,
+    "latest_metadata_observed_at_utc": "2026-11-20T03:15:51Z",
+    "local_report_head": "d4199d2c1ac4f3a6abaebd2571a031948fcfef8f",
+    "frozen_tested_source": "46727d2a8ee1fd58cde15dcc252e1692408830f4",
+    "frozen_tested_tree": "6745c3b148aed3e13c092cc1d917541c24a9a482",
+    "reported_full_suite": {
+      "passed": 2265,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "duration_ms": 121539.850093
+    },
+    "evidence_attribution": "Read committed external report and verified published/local tree equality; not rerun by this triage worker.",
+    "reported_checks": [
+      "four TypeScript projects",
+      "57 build-policy tests",
+      "238 production/142 core boundaries",
+      "default build",
+      "independent exact source-union comparison"
+    ],
+    "native_browser_hosted_pass_claimed_by_author_report": false,
+    "next_action": "Preserve completed external recomposition and its exact-source remaining gates; do not duplicate it."
+  },
+  "external_handoff": {
+    "branch": "codex/successor-handoff-20261120",
+    "head": "3b538fd4586b6fc00846262d67956a2125b6c9f1",
+    "tree": "c7323a825a19aa8cff7b4b24ae5ebe7a129fafcf",
+    "parents": [
+      "0e148564743b1ee353abdbdf8931fec464f09870",
+      "9d1129f189c2b7e5661384ade94da5270227af2e"
+    ],
+    "verification": "Exact branch head from git ls-remote; tree and parents from fetched GitHub commit object.",
+    "local_equal_tree_checkpoint": "3393067e0e3de8aecda63acb139c248dac7afe39",
+    "canonical_pr200_ownership_preserved": true
+  },
+  "qualification_limits": [
+    "Only completed captured logs and immutable source/commit objects were inspected.",
+    "The pre-warm counters in207 follow from passed earlier assertions; no success JSON receipt was emitted.",
+    "Post-warm completion/error/page-error/unexpected-request assertions did not run and are not passes.",
+    "The warmed socket mismatch is established; its precise connection-pool cause is not.",
+    "The failed204 job uses the old destructive withholding response and is not evidence that the completed503 helper regressed.",
+    "All runtime/financial/browser tests and implementation are owned elsewhere; this worker added evidence only.",
+    "No security/review gate, refund minimum, send count, durable marker or assertion was weakened."
+  ]
+}

@@ -1,0 +1,19 @@
+vite v8.3.5 building client environment for meta...
+transforming...
+✓ 97 modules transformed.
+rendering chunks...
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/_headers                            0.34 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/qr-graph-worker.json                0.90 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/content-policy.json                 1.00 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/index.html                          1.28 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/third-party-licenses.json           3.62 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/core-graph-worker.json              4.75 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/core-graph-document.json           14.26 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/assets/vault.worker-BFynfgnx.js    93.53 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/assets/decode.worker-DGcSBxfL.js  133.92 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/assets/index-rPDFZ4F5.css           8.41 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/assets/index-3H7Prb45.js          220.80 kB
+../../../../tmp/p2p-update-runtime-browser-oOnxJU/app/assets/OfflineRoot-qGn6R2FB.js    301.25 kB
+
+✓ built in 516ms
+{"fixture":"native-update-runtime-controlled-composition","nativeExecuted":false,"strictFixtureCompilation":true,"fixtureModules":37,"fixtureModuleSha256":"b26c6c3fbac298902bb2c3c345d25ce7a1bc4b5298864d3179a7eec1ea157c28","emittedWorker":{"path":"assets/vault.worker-BFynfgnx.js","sha256":"a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"},"defaultGraphs":[{"path":"core-graph-document.json","sha256":"45f1f07f356ba6316a6e6474f77610dceffa94e5a0ad31bd5b53b5ad6e0671c4","modules":95},{"path":"core-graph-worker.json","sha256":"d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834","modules":30},{"path":"qr-graph-worker.json","sha256":"2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce","modules":4}],"publicCorpusSha256":"f02709fd881c89fd00ddb5e2edf5ee002545367a3f4075648ba98595307336e2","defaultUpdaterIncluded":false,"ReleaseEnabled":0}

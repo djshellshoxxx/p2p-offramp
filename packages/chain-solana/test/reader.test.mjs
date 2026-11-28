@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { getEventListeners } from 'node:events';
 import { createTradeAuthority } from '../../domain/src/authority.ts';
-import { SolanaFailure } from '../src/codec.ts';
+import { decodeBase64, SolanaFailure } from '../src/codec.ts';
 import { MAX_RPC_READS, payoutRegressed, SolanaChainReader } from '../src/reader.ts';
 import {
   account,
@@ -136,7 +137,9 @@ test('spl-surplus', async () => {
     vaultFrozen: false,
     mintDecimals: 6,
     mintFreezeAuthority: null,
+    payoutBlockedBy: [],
   });
+  assert.deepEqual(ok(s.result).mint, { address: MINT, decimals: 6, freezeAuthority: null });
   assert.deepEqual(s.calls[1].params[0], [PROGRAM, PROGRAM_DATA, CLOCK, escrowOf(s.world), vaultOf(s.world), MINT]);
 });
 
@@ -160,7 +163,36 @@ test('paid-complete', async () => {
   const spl = ok((await readWith('spl', { world: { escrow: { state: 2, paid: 1 } } })).result);
   assert.equal(spl.observation.state, 'refunded');
   assert.equal(spl.payout, 'complete');
-  assert.equal(spl.custody.principalHeld, '0');
+  const splCustody = (vaultAmount, surplus) => ({
+    kind: 'spl',
+    vault: vaultPda(spl.escrowAddress).address,
+    vaultAmount,
+    principalHeld: '0',
+    surplus,
+    vaultFrozen: false,
+    mintDecimals: 6,
+    mintFreezeAuthority: null,
+    payoutBlockedBy: [],
+  });
+  assert.deepEqual(spl.custody, splCustody('0', '0'));
+  // A donated surplus left after the payout is surplus, never a negative principal difference.
+  const donated = ok((await readWith('spl', { world: { escrow: { state: 1, paid: 1 }, vaultAmount: 7 } })).result);
+  assert.deepEqual(donated.custody, splCustody('7', '7'));
+});
+
+// u64 fields above 2^32 need their upper four bytes (5 SOL, and an SPL amount past 2^40).
+test('wide-amounts-≥2^32-round-trip', async () => {
+  for (const [kind, amountBaseUnits] of [
+    ['native', '5000000000'],
+    ['spl', String(2 ** 40 + 3)],
+  ]) {
+    const snapshot = ok((await readWith(kind, { termsChanges: { amountBaseUnits } })).result);
+    assert.equal(snapshot.escrow.amountBaseUnits, amountBaseUnits, kind);
+    assert.equal(snapshot.custody.principalHeld, amountBaseUnits, kind);
+    assert.equal(snapshot.observation.state, 'funded', kind);
+  }
+  const native = ok((await readWith('native', { termsChanges: { amountBaseUnits: '5000000000' } })).result);
+  assert.equal(native.custody.lamports, String(5_000_000_000 + RENT_MIN));
 });
 
 test('absent-{null,prefunded,spl-prefunded-vault}', async () => {
@@ -516,8 +548,49 @@ test('INTEGRITY_FAILURE: data-{base58,3-tuple,bad-b64}', async () => {
 
 // Spec §8: base64 caps are checked before decoding. Every account also has an exact-length check after decoding,
 // so only cost tells the two apart: an uncapped reader would regex-scan, allocate and decode ~48 MB first.
+/**
+ * Records the length of every string that the work hands to a whole-string reader: a regular-expression scan
+ * (`test`, `match`, `replace`, `split`, `search` all go through `exec`), string iteration (`for...of`, `Array.from`,
+ * spread; decodeBase64's own decode loop), `atob`, `Buffer.from(string)` and `TextEncoder`. The test then proves
+ * that the 64 MiB input never reaches any of them, so it is refused by its length alone, without a wall-clock bound.
+ * The earlier version asserted < 250 ms per case (setup included) and failed under CPU contention
+ * (--test-concurrency=4, reproduced 4/4 with busy loops beside it) although the reader behaved correctly.
+ * Not observed: index loops over `s[i]`/`charCodeAt` and other native readers; the reader has none on this path.
+ */
+async function withStringReads(work) {
+  const seen = [];
+  const exec = RegExp.prototype.exec, iterate = String.prototype[Symbol.iterator];
+  const atob0 = globalThis.atob, from = Buffer.from, encode = TextEncoder.prototype.encode;
+  RegExp.prototype.exec = function spy(input) { seen.push(String(input).length); return exec.call(this, input); };
+  String.prototype[Symbol.iterator] = function spy() { seen.push(String(this).length); return iterate.call(this); };
+  globalThis.atob = function spy(input) { seen.push(String(input).length); return atob0(input); };
+  Buffer.from = function spy(value, ...rest) {
+    if (typeof value === 'string') seen.push(value.length);
+    return from.call(this, value, ...rest);
+  };
+  TextEncoder.prototype.encode = function spy(input = '') {
+    seen.push(String(input).length); return encode.call(this, input);
+  };
+  try {
+    await work();
+  } finally {
+    RegExp.prototype.exec = exec;
+    String.prototype[Symbol.iterator] = iterate;
+    globalThis.atob = atob0;
+    Buffer.from = from;
+    TextEncoder.prototype.encode = encode;
+  }
+  return seen;
+}
+
 test('INTEGRITY_FAILURE: base64-capped-before-decoding', async () => {
   const huge = 'A'.repeat(64 * 1024 * 1024);
+  // The largest per-account cap (ProgramData) in base64 characters; every observed read must stay within it.
+  const LARGEST_CAP = 1_398_164;
+  // Control: the spies see both the decoder's regex scan and its decode loop for an in-cap string of the same shape.
+  const probe = 'A'.repeat(LARGEST_CAP);
+  const controlReads = await withStringReads(async () => decodeBase64(probe, probe.length));
+  assert.ok(controlReads.filter(length => length === probe.length).length >= 2);
   // Every account index the reader visits, per kind; `absent` drops the escrow so index 4 is the bare vault check.
   const cases = [
     ...[0, 1, 2, 3, 4].map(index => ['native', index, false]),
@@ -526,21 +599,62 @@ test('INTEGRITY_FAILURE: base64-capped-before-decoding', async () => {
   ];
   for (const [kind, index, absent] of cases) {
     let world;
-    const started = performance.now();
-    await failsWith('INTEGRITY_FAILURE', kind, {
-      mutate: captured => {
-        world = captured;
-        if (absent) setAccount(world, escrowOf(world), null);
-      },
-      handle: input => {
-        if (input.method !== 'getMultipleAccounts') return undefined;
+    const seen = await withStringReads(() =>
+      failsWith('INTEGRITY_FAILURE', kind, {
+        mutate: captured => {
+          world = captured;
+          if (absent) setAccount(world, escrowOf(world), null);
+        },
+        handle: input => {
+          if (input.method !== 'getMultipleAccounts') return undefined;
+          const value = input.params[0].map(address => structuredClone(world.accounts.get(address) ?? null));
+          value[index] = { ...value[index], data: [huge, 'base64'] };
+          return { context: { slot: SLOT }, value };
+        },
+      }),
+    );
+    const label = `${kind}${absent ? ' (absent escrow)' : ''} account ${index}`;
+    assert.ok(seen.length > 0, `${label}: the spies observed the read`);
+    assert.ok(seen.every(length => length <= LARGEST_CAP),
+      `${label}: over-cap data must be refused before any whole-string read or decode`);
+  }
+});
+
+// ownArray's length cap precedes enumeration and index reads. A proxy makes this deterministic under CPU load.
+test('INTEGRITY_FAILURE: arrays-capped-before-walking-{value,data}', async () => {
+  let walked = 0;
+  const huge = new Proxy(new Array(5_000_000), {
+    ownKeys() { walked++; return ['length']; },
+    getOwnPropertyDescriptor(target, property) {
+      if (property !== 'length') walked++;
+      return Reflect.getOwnPropertyDescriptor(target, property);
+    },
+    get(target, property, receiver) {
+      if (property !== 'length') walked++;
+      return Reflect.get(target, property, receiver);
+    },
+  });
+  const cases = [
+    ['value', () => ({ context: { slot: SLOT }, value: huge })],
+    [
+      'data',
+      (input, world) => {
         const value = input.params[0].map(address => structuredClone(world.accounts.get(address) ?? null));
-        value[index] = { ...value[index], data: [huge, 'base64'] };
+        value[0] = { ...value[0], data: huge };
         return { context: { slot: SLOT }, value };
       },
+    ],
+  ];
+  for (const [label, respond] of cases) {
+    let world;
+    walked = 0;
+    await failsWith('INTEGRITY_FAILURE', 'native', {
+      mutate: captured => {
+        world = captured;
+      },
+      handle: input => (input.method === 'getMultipleAccounts' ? respond(input, world) : undefined),
     });
-    const label = `${kind}${absent ? ' (absent escrow)' : ''} account ${index}`;
-    assert.ok(performance.now() - started < 250, `${label} over-cap data must be refused before decoding`);
+    assert.equal(walked, 0, `${label}: an over-long array must be refused before enumeration or index access`);
   }
 });
 
@@ -603,6 +717,39 @@ test('INTEGRITY_FAILURE: genesis-flip', async () => {
   assert.equal(s.calls.length, 5);
 });
 
+// Spec §5 RPC step 1: only the canonical string itself matches; a look-alike is never coerced (no provider code).
+test('genesis-must-be-a-string-{object,String-wrapper}', async () => {
+  let coerced = 0;
+  const lookalikes = () => {
+    const wrapper = new String(COMPILED_GENESIS);
+    wrapper.valueOf = wrapper.toString = () => {
+      coerced++;
+      return COMPILED_GENESIS;
+    };
+    const object = {
+      toString() {
+        coerced++;
+        return COMPILED_GENESIS;
+      },
+    };
+    return [object, wrapper];
+  };
+  for (const [index, lookalike] of lookalikes().entries()) {
+    const first = await failsWith('WRONG_CHAIN', 'native', {
+      handle: input => (input.method === 'getGenesisHash' ? lookalike : undefined),
+    });
+    assert.equal(first.calls.length, 1, `first genesis ${index}`);
+  }
+  for (const [index, lookalike] of lookalikes().entries()) {
+    let count = 0;
+    const second = await failsWith('INTEGRITY_FAILURE', 'native', {
+      handle: input => (input.method === 'getGenesisHash' && ++count === 2 ? lookalike : undefined),
+    });
+    assert.equal(second.calls.length, 5, `second genesis ${index}`);
+  }
+  assert.equal(coerced, 0, 'toString/valueOf of a provider result are never invoked');
+});
+
 test('WRONG_CHAIN: genesis-mismatch (1 call)', async () => {
   const s = await failsWith('WRONG_CHAIN', 'native', {
     mutate: world => {
@@ -651,6 +798,21 @@ test('INTEGRITY_FAILURE: escrow-{other-owner,system-data,exec,bump,seller,nonce}
   await integrity('native', world =>
     setAccount(world, escrowOf(world), account(new Uint8Array(0), SYSTEM, { executable: true })),
   );
+  // `executable` must be a boolean: a falsy stand-in is malformed, not a non-executable escrow or empty vault.
+  for (const executable of [null, 0, '', 'false']) {
+    for (const kind of ['native', 'spl']) {
+      await integrity(kind, world =>
+        setAccount(world, escrowOf(world), { ...world.accounts.get(escrowOf(world)), executable }),
+      );
+    }
+    await integrity('native', world =>
+      setAccount(world, escrowOf(world), { ...account(new Uint8Array(0), SYSTEM), executable }),
+    );
+    await integrity('spl', world => {
+      setAccount(world, escrowOf(world), null);
+      setAccount(world, vaultOf(world), { ...account(new Uint8Array(0), SYSTEM), executable });
+    });
+  }
   await integrity('native', replaceEscrow({ escrowBump: 254 }));
   await integrity('native', replaceEscrow({ seller: key('other-seller') }));
   await integrity('native', replaceEscrow({ sellerNonce: 'ab'.repeat(32) }));
@@ -752,32 +914,76 @@ test('INTEGRITY_FAILURE: vault-while-absent, mint-decimals', async () => {
   await integrity('spl', absent(null));
 });
 
-test('vault-frozen', async () => {
-  // Control: an unfrozen funded SPL vault is healthy, so only the frozen flag yields CONFLICT.
-  const healthy = setup('spl');
+// Review C-L3: a frozen vault blocks only the payout. release/refund are state-only and still succeed, so the G08
+// port reports the same funded observation; the flag and the payout blocker are in the snapshot. Pre-fix code
+// returned CONFLICT from readValidated here.
+const FREEZER = key('freezer');
+const PERMIT = { freezeAuthorityPermits: [{ mint: MINT, freezeAuthority: FREEZER }] };
+test('vault-frozen-reported-funded (C-L3)', async () => {
+  const healthy = setup('spl', { world: { mint: { freeze: FREEZER } }, options: PERMIT });
+  const frozen = setup('spl', { world: { vault: { state: 2 }, mint: { freeze: FREEZER } }, options: PERMIT });
   try {
-    assert.equal(ok(await healthy.reader.readValidated(healthy.binding, request(), healthy.terms)).state, 'funded');
-  } finally {
-    healthy.reader.dispose();
-  }
-  const frozen = { world: { vault: { state: 2 }, mint: { freeze: key('freezer') } } };
-  const s = setup('spl', frozen);
-  try {
-    const snapshot = ok(await s.reader.read(s.binding, request(), s.terms));
+    const expected = ok(await healthy.reader.readValidated(healthy.binding, request(), healthy.terms));
+    const observation = ok(await frozen.reader.readValidated(frozen.binding, request(), frozen.terms));
+    assert.equal(observation.state, 'funded');
+    assert.deepEqual(observation, expected, 'the same ChainObservation a healthy funded trade gets');
+    const snapshot = ok(await frozen.reader.read(frozen.binding, request(), frozen.terms));
     assert.equal(snapshot.custody.vaultFrozen, true);
-    assert.equal(snapshot.custody.mintFreezeAuthority, key('freezer'));
-    error(await s.reader.readValidated(s.binding, request(), s.terms), 'CONFLICT');
-  } finally {
-    s.reader.dispose();
-  }
-  const released = setup('spl', { world: { ...frozen.world, escrow: { state: 1 } } });
-  try {
-    assert.equal(
-      ok(await released.reader.readValidated(released.binding, request(), released.terms)).state,
-      'released',
+    assert.deepEqual(snapshot.custody.payoutBlockedBy, ['vault-frozen']);
+    assert.equal(snapshot.custody.mintFreezeAuthority, FREEZER);
+    assert.deepEqual(snapshot.mint, { address: MINT, decimals: 6, freezeAuthority: FREEZER });
+    assert.deepEqual(
+      ok(await healthy.reader.read(healthy.binding, request(), healthy.terms)).custody.payoutBlockedBy,
+      [],
     );
   } finally {
-    released.reader.dispose();
+    healthy.reader.dispose();
+    frozen.reader.dispose();
+  }
+  for (const [state, paid, blockedBy] of [
+    [1, 0, ['vault-frozen']],
+    [2, 0, ['vault-frozen']],
+    [1, 1, []],
+  ]) {
+    const s = setup('spl', {
+      world: { vault: { state: 2 }, mint: { freeze: FREEZER }, escrow: { state, paid } },
+      options: PERMIT,
+    });
+    try {
+      const observation = ok(await s.reader.readValidated(s.binding, request(), s.terms));
+      assert.equal(observation.state, state === 1 ? 'released' : 'refunded');
+      const snapshot = ok(await s.reader.read(s.binding, request(), s.terms));
+      assert.deepEqual(snapshot.custody.payoutBlockedBy, blockedBy, `state ${state} paid ${paid}`);
+    } finally {
+      s.reader.dispose();
+    }
+  }
+});
+
+test('vault-frozen-blocks-payout-only', async () => {
+  const frozen = { vault: { state: 2 }, mint: { freeze: key('freezer') } };
+  const cases = [
+    [{}, {}, 'funded', 'not-applicable', true, ['vault-frozen']],
+    [{ state: 1 }, {}, 'released', 'pending', true, ['vault-frozen']],
+    [{ state: 2 }, {}, 'refunded', 'pending', true, ['vault-frozen']],
+    // Paid out: nothing is left to block, even though the vault (holding a donated surplus) stays frozen.
+    [{ state: 1, paid: 1 }, { vaultAmount: 7 }, 'released', 'complete', true, []],
+    [{}, { vault: {} }, 'funded', 'not-applicable', false, []],
+  ];
+  for (const [escrow, world, state, payout, vaultFrozen, blockedBy] of cases) {
+    const s = setup('spl', { world: { ...frozen, escrow, ...world }, options: PERMIT });
+    try {
+      const snapshot = ok(await s.reader.read(s.binding, request(), s.terms));
+      assert.equal(snapshot.observation.state, state);
+      assert.equal(snapshot.payout, payout);
+      assert.equal(snapshot.custody.vaultFrozen, vaultFrozen, state);
+      assert.equal(snapshot.custody.mintFreezeAuthority, key('freezer'));
+      assert.deepEqual(snapshot.custody.payoutBlockedBy, blockedBy, `${state}/${payout}`);
+      assert.ok(Object.isFrozen(snapshot.custody.payoutBlockedBy));
+      assert.deepEqual(ok(await s.reader.readValidated(s.binding, request(), s.terms)), snapshot.observation);
+    } finally {
+      s.reader.dispose();
+    }
   }
 });
 
@@ -832,10 +1038,210 @@ test('pre-RPC negatives make no calls', async () => {
     error(await s.reader.read(s.binding, request(aborted.signal), s.terms), 'CANCELLED');
     error(await s.reader.validateLive('solana:localnet', DEPLOYMENT_ID), 'INVALID_INPUT');
     error(await s.reader.validateLive(NETWORK_ID, 'missing'), 'UNSUPPORTED_PROVIDER');
+    // Two faults at once: the earlier pre-RPC step decides the code (run guard, counters, terms, registry).
+    const missing = { ...s.binding, deploymentId: 'missing' };
+    error(await s.reader.read(s.binding, { ...request(aborted.signal), generation: -1 }, s.terms), 'CANCELLED');
+    error(await s.reader.read(missing, { ...request(), generation: -1 }, s.terms), 'INVALID_INPUT');
+    error(await s.reader.read(missing, request(), { ...s.terms, extra: '1' }), 'INVALID_INPUT');
+    error(await s.reader.read({ ...missing, tradeId: 'ab'.repeat(32) }, request(), s.terms), 'INVALID_INPUT');
     assert.equal(s.calls.length, 0);
   } finally {
     s.reader.dispose();
   }
+});
+
+// A caller signal that is not an AbortSignal is refused before a job slot is reserved, so it cannot leak one.
+test('non-signal-refused-without-leaking-a-slot', async () => {
+  const held = [];
+  let holding = false;
+  const s = setup('native', {
+    handle: input =>
+      holding && input.method === 'getGenesisHash' ? new Promise(resolve => held.push(resolve)) : undefined,
+  });
+  try {
+    const hostile = new Proxy(
+      {},
+      {
+        getPrototypeOf() {
+          throw Error('SECRET');
+        },
+      },
+    );
+    const throwingAdd = new AbortController().signal;
+    throwingAdd.addEventListener = () => {
+      throw Error('SECRET');
+    };
+    const throwingAborted = Object.defineProperty(new AbortController().signal, 'aborted', {
+      get() {
+        throw Error('SECRET');
+      },
+    });
+    const bad = [{}, { aborted: false }, null, new EventTarget(), hostile, throwingAdd, throwingAborted];
+    for (const signal of bad) {
+      error(await s.reader.read(s.binding, { generation: 1, requestSequence: 1, signal }, s.terms), 'INVALID_INPUT');
+      error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, signal), 'INVALID_INPUT');
+    }
+    // A throwing addEventListener reaches the slot logic, so it runs MAX_RPC_READS times per method.
+    for (let index = 0; index < MAX_RPC_READS; index++) {
+      error(await s.reader.read(s.binding, request(throwingAdd), s.terms), 'INVALID_INPUT');
+      error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, throwingAdd), 'INVALID_INPUT');
+    }
+    assert.equal(s.calls.length, 0);
+    ok(await s.reader.read(s.binding, request(), s.terms));
+    ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
+    // A signal whose removeEventListener throws is still usable: the read resolves to a result, never rejects.
+    const throwingRemove = new AbortController().signal;
+    throwingRemove.removeEventListener = () => {
+      throw Error('SECRET');
+    };
+    ok(await s.reader.read(s.binding, request(throwingRemove), s.terms));
+    ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, throwingRemove));
+    // Every slot is still free: MAX_RPC_READS reads can be held at once, and one more is LIMIT_EXCEEDED.
+    holding = true;
+    const jobs = Array.from({ length: MAX_RPC_READS }, () => s.reader.read(s.binding, request(), s.terms));
+    while (held.length < MAX_RPC_READS) await new Promise(resolve => setImmediate(resolve));
+    error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID), 'LIMIT_EXCEEDED');
+    holding = false;
+    held.forEach(resolve => resolve(COMPILED_GENESIS));
+    for (const job of jobs) ok(await job);
+  } finally {
+    s.reader.dispose();
+  }
+});
+
+// The request object itself is caller input: read() always returns a promise of a result, and a request that
+// cannot be read (null, a throwing signal or counter getter) is INVALID_INPUT, never a provider failure.
+test('unreadable-request-{null,undefined,signal-getter,counter-getters}-INVALID_INPUT', async () => {
+  const s = setup('native');
+  const throwing = name =>
+    Object.defineProperty({ ...request() }, name, {
+      get() {
+        throw Error('SECRET');
+      },
+    });
+  try {
+    for (const req of [null, undefined, throwing('signal'), throwing('generation'), throwing('requestSequence')]) {
+      let pending;
+      assert.doesNotThrow(() => {
+        pending = s.reader.read(s.binding, req, s.terms);
+      });
+      assert.ok(pending instanceof Promise);
+      error(await pending, 'INVALID_INPUT');
+      error(await s.reader.readValidated(s.binding, req, s.terms), 'INVALID_INPUT');
+    }
+    assert.equal(s.calls.length, 0);
+    ok(await s.reader.read(s.binding, request(), s.terms));
+  } finally {
+    s.reader.dispose();
+  }
+});
+
+// A caller signal's addEventListener is caller code. If it re-enters the reader, the nested calls must still see
+// the slot the outer call took, so no more than MAX_RPC_READS jobs ever run at once.
+test('reentrant-signal-cannot-exceed-the-job-limit', async () => {
+  for (const method of ['read', 'validateLive']) {
+    let inFlight = 0;
+    let peak = 0;
+    const s = setup('native', {
+      handle: () => {
+        peak = Math.max(peak, ++inFlight);
+        return new Promise(() => {});
+      },
+    });
+    const jobs = [];
+    let depth = 0;
+    const call = signal =>
+      method === 'read'
+        ? s.reader.read(s.binding, request(signal), s.terms)
+        : s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, signal);
+    const reentrant = () => {
+      const signal = new AbortController().signal;
+      signal.addEventListener = function (...args) {
+        if (depth++ < 9) jobs.push(call(reentrant()));
+        return EventTarget.prototype.addEventListener.apply(this, args);
+      };
+      return signal;
+    };
+    try {
+      jobs.push(call(reentrant()));
+      await new Promise(resolve => setTimeout(resolve, 20));
+      assert.ok(peak <= MAX_RPC_READS, `${method}: ${peak} provider calls in flight`);
+      error(await call(undefined), 'LIMIT_EXCEEDED');
+    } finally {
+      s.reader.dispose();
+    }
+    const codes = (await Promise.all(jobs)).map(result => result.error.code);
+    assert.equal(codes.filter(code => code === 'CANCELLED').length, MAX_RPC_READS, method);
+    assert.equal(codes.filter(code => code === 'LIMIT_EXCEEDED').length, jobs.length - MAX_RPC_READS, method);
+  }
+});
+
+// The listener #run attaches to a caller signal is removed on every settle path, so a reused signal keeps none.
+test('caller-signal-listener-removed-{ok,timeout,dispose}', async () => {
+  const listeners = signal => getEventListeners(signal, 'abort').length;
+  const s = setup('native');
+  try {
+    const caller = new AbortController();
+    for (let index = 0; index < 3; index++) {
+      ok(await s.reader.read(s.binding, request(caller.signal), s.terms));
+      ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, caller.signal));
+    }
+    assert.equal(listeners(caller.signal), 0);
+  } finally {
+    s.reader.dispose();
+  }
+  const hang = input => (input.method === 'getBlock' ? new Promise(() => {}) : undefined);
+  const slow = setup('native', { options: { timeoutMs: 10 }, handle: hang });
+  try {
+    const caller = new AbortController();
+    error(await slow.reader.read(slow.binding, request(caller.signal), slow.terms), 'TIMEOUT');
+    error(await slow.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, caller.signal), 'TIMEOUT');
+    assert.equal(listeners(caller.signal), 0);
+  } finally {
+    slow.reader.dispose();
+  }
+  const held = setup('native', { handle: hang });
+  const caller = new AbortController();
+  const job = held.reader.read(held.binding, request(caller.signal), held.terms);
+  await new Promise(resolve => setTimeout(resolve, 5));
+  held.reader.dispose();
+  error(await job, 'CANCELLED');
+  assert.equal(listeners(caller.signal), 0);
+  // An addEventListener that registers the listener and then throws: the refusal still removes it.
+  const late = setup('native');
+  try {
+    const signal = new AbortController().signal;
+    signal.addEventListener = function (...args) {
+      EventTarget.prototype.addEventListener.apply(this, args);
+      throw Error('SECRET');
+    };
+    for (let index = 0; index < 3; index++) {
+      error(await late.reader.read(late.binding, request(signal), late.terms), 'INVALID_INPUT');
+      error(await late.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, signal), 'INVALID_INPUT');
+    }
+    assert.equal(late.calls.length, 0);
+    assert.equal(listeners(signal), 0);
+  } finally {
+    late.reader.dispose();
+  }
+  // LIMIT_EXCEEDED and disposed refusals never attach a listener to a reused caller signal.
+  const full = setup('native', { handle: () => new Promise(() => {}) });
+  const holds = Array.from({ length: MAX_RPC_READS }, () => full.reader.read(full.binding, request(), full.terms));
+  const reused = new AbortController();
+  for (let index = 0; index < 3; index++) {
+    error(await full.reader.read(full.binding, request(reused.signal), full.terms), 'LIMIT_EXCEEDED');
+    error(await full.reader.readValidated(full.binding, request(reused.signal), full.terms), 'LIMIT_EXCEEDED');
+    error(await full.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, reused.signal), 'LIMIT_EXCEEDED');
+  }
+  assert.equal(listeners(reused.signal), 0);
+  full.reader.dispose();
+  for (let index = 0; index < 3; index++) {
+    error(await full.reader.read(full.binding, request(reused.signal), full.terms), 'CANCELLED');
+    error(await full.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, reused.signal), 'CANCELLED');
+  }
+  assert.equal(listeners(reused.signal), 0);
+  for (const hold of holds) error(await hold, 'CANCELLED');
+  assert.equal(full.calls.length, MAX_RPC_READS);
 });
 
 // ---- concurrency ----
@@ -863,6 +1269,48 @@ test('four-held-cancel-limit-no-followups', async () => {
   holding = false;
   ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
   s.reader.dispose();
+});
+
+// Spec §5 pre-RPC step 1: with every slot held, CANCELLED (disposed or aborted) and a non-signal INVALID_INPUT
+// still win over LIMIT_EXCEEDED.
+test('guard-order-with-four-held-{aborted,non-signal,disposed}', async () => {
+  const held = [];
+  const s = setup('native', {
+    handle: input => (input.method === 'getGenesisHash' ? new Promise(resolve => held.push(resolve)) : undefined),
+  });
+  const jobs = Array.from({ length: MAX_RPC_READS }, () => s.reader.read(s.binding, request(), s.terms));
+  while (held.length < MAX_RPC_READS) await new Promise(resolve => setImmediate(resolve));
+  const aborted = new AbortController();
+  aborted.abort();
+  error(await s.reader.read(s.binding, request(aborted.signal), s.terms), 'CANCELLED');
+  error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, aborted.signal), 'CANCELLED');
+  error(await s.reader.read(s.binding, { generation: 1, requestSequence: 1, signal: {} }, s.terms), 'INVALID_INPUT');
+  error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, {}), 'INVALID_INPUT');
+  error(await s.reader.read(s.binding, request(), s.terms), 'LIMIT_EXCEEDED');
+  s.reader.dispose();
+  // The fake RPC ignores the abort, so all four slots stay taken after dispose.
+  error(await s.reader.read(s.binding, request(), s.terms), 'CANCELLED');
+  error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID), 'CANCELLED');
+  error(await s.reader.read(s.binding, { generation: 1, requestSequence: 1, signal: {} }, s.terms), 'CANCELLED');
+  error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, {}), 'CANCELLED');
+  // Disposed is checked first: an unreadable request is CANCELLED too, and no caller getter runs after dispose.
+  let getterCalls = 0;
+  const unreadable = () => ({
+    generation: 1,
+    requestSequence: 1,
+    get signal() {
+      getterCalls++;
+      throw Error('SECRET');
+    },
+  });
+  for (const read of [s.reader.read, s.reader.readValidated]) {
+    error(await read.call(s.reader, s.binding, null, s.terms), 'CANCELLED');
+    error(await read.call(s.reader, s.binding, unreadable(), s.terms), 'CANCELLED');
+  }
+  assert.equal(getterCalls, 0);
+  for (const job of jobs) error(await job, 'CANCELLED');
+  held.forEach(resolve => resolve(COMPILED_GENESIS));
+  assert.equal(s.calls.length, MAX_RPC_READS);
 });
 
 // Spec §5 pre-RPC step 1 and §8: validateLive honours its signal exactly like read().
@@ -1133,8 +1581,20 @@ test('authority: funded-to-absent-reorged', async () => {
   }
 });
 
-test('authority: conflict-unavailable', async () => {
-  const s = setup('spl', { world: { vault: { state: 2 } } });
+test('authority: frozen-vault-funded-fresh (C-L3)', async () => {
+  const s = setup('spl', { world: { vault: { state: 2 }, mint: { freeze: FREEZER } }, options: PERMIT });
+  const authority = authorityFor(s);
+  try {
+    assert.equal(ok(await authority.refresh(s.binding)).state, 'funded');
+    assert.equal(authority.readView(123).chainHealth, 'fresh');
+  } finally {
+    authority.dispose();
+    s.reader.dispose();
+  }
+});
+
+test('authority: nonce-reused-conflict-unavailable', async () => {
+  const s = setup('native', { mutate: replaceEscrow({ termsHash: 'cd'.repeat(32) }) });
   const authority = authorityFor(s);
   try {
     error(await authority.refresh(s.binding), 'CONFLICT');
@@ -1164,4 +1624,14 @@ test('payoutRegressed', async () => {
   const absent = ok((await readWith('native', { mutate: world => setAccount(world, escrowOf(world), null) })).result);
   assert.equal(payoutRegressed(paid, absent), true, 'paid to absent');
   assert.equal(payoutRegressed(absent, paid), false);
+  // Heights are decimal slot strings: the comparison must be numeric across a power of ten.
+  const at = async slot => ok((await readWith('native', { world: { slot, escrow: { state: 1, paid: 1 } } })).result);
+  for (const [low, high] of [
+    [99, 100],
+    [999, 1000],
+  ]) {
+    const [before, after] = [await at(low), await at(high)];
+    assert.equal(payoutRegressed(after, before), true, `${high} -> ${low} is a decrease`);
+    assert.equal(payoutRegressed(before, after), false, `${low} -> ${high} is an increase`);
+  }
 });

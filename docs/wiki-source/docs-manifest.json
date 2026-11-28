@@ -1,7 +1,7 @@
 {
   "version": 1,
   "releaseId": "local-unapproved-draft",
-  "sourceCommit": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+  "sourceCommit": "84814328f5534d6fceb2bbe74509fe37c5b48689",
   "dirtyDraft": true,
   "reviewers": [],
   "approvedRelease": null,
@@ -10,7 +10,7 @@
       "locale": "en",
       "topic": "Home",
       "sourcePath": "docs/wiki-source/Home.md",
-      "sha256": "dd788e9a026dee8c5f8d77ef625c5b994731f3cd7876b3fd1ee95940285d4def",
+      "sha256": "6202aab97db8516d2bbcb3d7ff69690be36f246cfeed734a72943917b8646e60",
       "implementedCapabilities": [],
       "lastVerifiedRelease": null
     },
@@ -18,7 +18,7 @@
       "locale": "en",
       "topic": "Getting-Started",
       "sourcePath": "docs/wiki-source/Getting-Started.md",
-      "sha256": "c797e59909415adcc331be9726f3c262ffc7e9128400a930d2517ffd1831c6cb",
+      "sha256": "00747c9e0dac076b157d93ea150e6609369f6cc6208d6642ff511fde7c9df566",
       "implementedCapabilities": [
         "vault"
       ],
@@ -28,7 +28,7 @@
       "locale": "en",
       "topic": "Privacy-and-Recovery",
       "sourcePath": "docs/wiki-source/Privacy-and-Recovery.md",
-      "sha256": "6d6f20ecaaac502f3e58ab89a4f49ebb6701289185ac1c56b744aa175d63a1d6",
+      "sha256": "bc257f0882404e5527878223db91253fcb34a84c0d8d401c8ce2c4d7de9ab097",
       "implementedCapabilities": [
         "vault",
         "messaging",
@@ -40,7 +40,7 @@
       "locale": "en",
       "topic": "Wallet-and-QR-Safety",
       "sourcePath": "docs/wiki-source/Wallet-and-QR-Safety.md",
-      "sha256": "c8fa2b14362467ee53b97896b53a44843150cd00965199ff7df02d6064fefd94",
+      "sha256": "e42cf36fc1f6532e0100185e8125340173553070a100b8585f1f77af3894234c",
       "implementedCapabilities": [],
       "lastVerifiedRelease": null
     },
@@ -68,10 +68,10 @@
       "locale": "en",
       "topic": "Security-and-Release",
       "sourcePath": "docs/wiki-source/Security-and-Release.md",
-      "sha256": "7bdb1d64b2c9d16a49ab57d4d37837697f94185e18ae01aa900b3343b95fd861",
+      "sha256": "ed4447d993f5d7182039b3da139c7b68c715113316ed38ccf58dfa93ddf7fc0e",
       "implementedCapabilities": [],
       "lastVerifiedRelease": null
     }
   ],
-  "linkReportDigest": "02acf4500a2e89322199d19defb8057857a32fbadacf0167b215ee34ed5f067c"
+  "linkReportDigest": "da68f5830aa8bc959686466500035316641ac64c34669d43d134448cb1ac8dcd"
 }

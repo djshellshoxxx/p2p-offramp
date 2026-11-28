@@ -1,0 +1,15 @@
+✔ control: a single submission is aborted on cancel and a late reply remains locked (27.169096ms)
+✔ characterization: same-render duplicate replaces the cancel target despite one runtime unlock (9.262163ms)
+ℹ One Worker unlock was posted; cancel aborted only the rejected duplicate; the original later published unlocked and called onCancel after unmount.
+✔ characterization: settled duplicate clears busy and ownership while original remains pending (10.373322ms)
+ℹ The duplicate BUSY completion reenabled the UI and cleared request.current; unmount then missed the live first request.
+✔ control: a rerender between submissions keeps the first cancel target (5.538247ms)
+✔ characterization: a completed authentication refusal imposes no UI retry delay (5.3549ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 855.722915

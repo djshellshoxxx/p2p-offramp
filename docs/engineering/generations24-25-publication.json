@@ -1,0 +1,146 @@
+{
+  "schema": "p2p-offramp.generations24-25-publication.v1",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "branch": "codex/native-update-locale-continuation-g24-20261120",
+  "publishedParent": {
+    "pr": 234,
+    "head": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+    "branch": "codex/runtime-update-continuation-g22-20261120"
+  },
+  "publicationMethod": "Authenticated GitHub connector. Every complete tree and ordered parent relationship was read back. Commit metadata and IDs differ.",
+  "localEquivalentCheckpoint": {
+    "commit": "d47bcfa2dadaa7fdf2217972aaa9e88515e1a486",
+    "tree": "c28d98b9ff319d8cabcd6bd35c9ec5519f6b4397"
+  },
+  "publishedEquivalentCheckpoint": {
+    "commit": "a892c8109ce13674b9e02f2788f0b9184e37295d",
+    "tree": "c28d98b9ff319d8cabcd6bd35c9ec5519f6b4397"
+  },
+  "testedLocalSource": "1a52c1c4f53a97cbbd0937f14a4379b88fd249b8",
+  "testedPublishedEquivalentSource": "4868a4337ff8b9280100158f0a133b73b1dba7eb",
+  "testedTree": "26938456c4924e4792a5671183a0879e86f8b7a2",
+  "verification": {
+    "payloadBlobCount": 52,
+    "mappedCommits": 9,
+    "allTreesMatch": true,
+    "allOrderedParentsReadBack": true,
+    "nonEvidenceEntriesIdenticalToTestedSource": 1020
+  },
+  "commitMap": [
+    {
+      "localSha": "cc0324e45ea0afe2cf6c18ce941514cef977c3d8",
+      "publishedSha": "e8e034ec529b921d4fdcf4ae3b44a5a7e0e7df2b",
+      "tree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "localParents": [
+        "477777dc152cd3148ba7f25a75ce8f00dc1b03b5"
+      ],
+      "publishedParents": [
+        "477777dc152cd3148ba7f25a75ce8f00dc1b03b5"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "d9c073d5649bc83839b7ac65354659bfa772020d",
+      "publishedSha": "e9a5ed16d0b7180e21a0582474508af2a2bcb7d7",
+      "tree": "ee8dcbfea9fa6920bd60c90ddc5f47ccb294aa0f",
+      "localParents": [
+        "cc0324e45ea0afe2cf6c18ce941514cef977c3d8"
+      ],
+      "publishedParents": [
+        "e8e034ec529b921d4fdcf4ae3b44a5a7e0e7df2b"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "bca6cccc735bb1afa524f2a9446430ee50e37dfb",
+      "publishedSha": "194ec35cb30a0dd9458b921ce4824f5152f625cb",
+      "tree": "2864ba81502a095ef35f1574b219ae0df7d9a116",
+      "localParents": [
+        "d9c073d5649bc83839b7ac65354659bfa772020d"
+      ],
+      "publishedParents": [
+        "e9a5ed16d0b7180e21a0582474508af2a2bcb7d7"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "f3da597fdfa3b8efff59b78da58bcae27ff716a8",
+      "publishedSha": "9b3de876cdfe1a391e8a0ea05290a0134845fca9",
+      "tree": "588a0790ce9d17be4f708358216f88a00415ac5d",
+      "localParents": [
+        "bca6cccc735bb1afa524f2a9446430ee50e37dfb"
+      ],
+      "publishedParents": [
+        "194ec35cb30a0dd9458b921ce4824f5152f625cb"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "1a52c1c4f53a97cbbd0937f14a4379b88fd249b8",
+      "publishedSha": "4868a4337ff8b9280100158f0a133b73b1dba7eb",
+      "tree": "26938456c4924e4792a5671183a0879e86f8b7a2",
+      "localParents": [
+        "f3da597fdfa3b8efff59b78da58bcae27ff716a8"
+      ],
+      "publishedParents": [
+        "9b3de876cdfe1a391e8a0ea05290a0134845fca9"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "eb351e038db2efa85087e69fdb784ca60d165479",
+      "publishedSha": "bbcb76d6b6febeaad663151ae5b4df5693460a22",
+      "tree": "304221d5d91efc951cd2f38399b46bf98577ccf7",
+      "localParents": [
+        "1a52c1c4f53a97cbbd0937f14a4379b88fd249b8"
+      ],
+      "publishedParents": [
+        "4868a4337ff8b9280100158f0a133b73b1dba7eb"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "64456269461aa07f8b03675dcf996e8e60c6090b",
+      "publishedSha": "7b9fee7f1ef48a64fec190f8e76414c32fb50509",
+      "tree": "4c46f2911e5c85b53673089830177142388c97ac",
+      "localParents": [
+        "eb351e038db2efa85087e69fdb784ca60d165479"
+      ],
+      "publishedParents": [
+        "bbcb76d6b6febeaad663151ae5b4df5693460a22"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "c54886dd90374c063fbbe39ea559e511f0e237e2",
+      "publishedSha": "00fac4b7d8ef7ba84f7628c6116713198db7d366",
+      "tree": "d59315f82f2a37549ba9f16405eaf7a72620999d",
+      "localParents": [
+        "64456269461aa07f8b03675dcf996e8e60c6090b"
+      ],
+      "publishedParents": [
+        "7b9fee7f1ef48a64fec190f8e76414c32fb50509"
+      ],
+      "readBackVerified": true
+    },
+    {
+      "localSha": "d47bcfa2dadaa7fdf2217972aaa9e88515e1a486",
+      "publishedSha": "a892c8109ce13674b9e02f2788f0b9184e37295d",
+      "tree": "c28d98b9ff319d8cabcd6bd35c9ec5519f6b4397",
+      "localParents": [
+        "c54886dd90374c063fbbe39ea559e511f0e237e2"
+      ],
+      "publishedParents": [
+        "00fac4b7d8ef7ba84f7628c6116713198db7d366"
+      ],
+      "readBackVerified": true
+    }
+  ],
+  "limits": [
+    "The final branch appends this publication record. The actual final head and proposed merge are recorded in the pull request.",
+    "Local 2478/2478 plus eleven commands and independent source reviews qualify the named source; current-target hosted gates remain required.",
+    "Six native-browser scenarios are implemented but were not executed locally. Build-only preparation is not a native result.",
+    "Original author source checkpoints are retained locally; the combined qualification verifies their exact corresponding source blobs.",
+    "Production remains English-only/draft, the default updater remains unconfigured and ReleaseEnabled remains 0."
+  ]
+}

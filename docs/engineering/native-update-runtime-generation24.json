@@ -1,0 +1,397 @@
+{
+  "version": 1,
+  "qualification": "G24 current-source native update-runtime fixture preparation",
+  "baseCommit": "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+  "sourceCommit": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+  "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+  "branch": "codex/native-update-runtime-g24-20261120",
+  "sourceScope": {
+    "baseEntries": 2704,
+    "unchangedBaseEntries": 2702,
+    "modifiedBasePaths": [
+      ".github/workflows/vault-foundation.yml",
+      "package.json"
+    ],
+    "addedPaths": [
+      "scripts/fixtures/update-attempts.ts",
+      "scripts/fixtures/update-runtime-browser.ts",
+      "scripts/test-update-runtime-browser.mjs",
+      "scripts/tests/update-attempts.test.mjs"
+    ],
+    "deletedPaths": [],
+    "productionSourceChanged": false,
+    "lockfileChanged": false
+  },
+  "nativeExecution": {
+    "status": "pending-hosted-chromium",
+    "attemptedLocally": false,
+    "reason": "Managed Unix-socket policy prohibits local Chromium launch; no bypass attempted.",
+    "command": "npm run test:update:runtime:browser",
+    "workflow": ".github/workflows/vault-foundation.yml",
+    "job": "browser"
+  },
+  "implementedScenarios": [
+    "missing-proof",
+    "verified",
+    "persisted-mutation",
+    "held-own-lock",
+    "cancel-held-lock",
+    "competing-opening"
+  ],
+  "controlledPorts": [
+    "HTTP bytes and route registry",
+    "accepted floor",
+    "wallet lease",
+    "gesture",
+    "destination observer",
+    "release clock",
+    "response delivery scheduling"
+  ],
+  "excludedClaims": [
+    "Actual origin transition",
+    "Physical wallet qualification",
+    "Native accepted-floor durability",
+    "Browser activation",
+    "Production trust integration",
+    "Default updater activation",
+    "Release acceptance"
+  ],
+  "preparation": {
+    "fixture": "native-update-runtime-controlled-composition",
+    "nativeExecuted": false,
+    "strictFixtureCompilation": true,
+    "fixtureModules": 37,
+    "fixtureModuleSha256": "b26c6c3fbac298902bb2c3c345d25ce7a1bc4b5298864d3179a7eec1ea157c28",
+    "emittedWorker": {
+      "path": "assets/vault.worker-BFynfgnx.js",
+      "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+    },
+    "defaultGraphs": [
+      {
+        "path": "core-graph-document.json",
+        "sha256": "45f1f07f356ba6316a6e6474f77610dceffa94e5a0ad31bd5b53b5ad6e0671c4",
+        "modules": 95
+      },
+      {
+        "path": "core-graph-worker.json",
+        "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+        "modules": 30
+      },
+      {
+        "path": "qr-graph-worker.json",
+        "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+        "modules": 4
+      }
+    ],
+    "publicCorpusSha256": "9d91a40904aec7a88ef77fc221bf7a46a13f68ff179d0aa4c6d141fda73941f9",
+    "defaultUpdaterIncluded": false,
+    "ReleaseEnabled": 0
+  },
+  "demoIsolation": {
+    "qualification": "unchanged-demo-build-isolation",
+    "productionSourceDiff": [],
+    "ReleaseEnabled": 0,
+    "syntheticDemo": true,
+    "testnet": false,
+    "defaultUpdaterIncluded": false,
+    "nativeExecuted": false,
+    "graphs": [
+      {
+        "path": "core-graph-document.json",
+        "sha256": "80f56c4d303f6f7f3b33864ed10731074d642bfe0c2e4071d446fc2c67ab1baa",
+        "modules": 97
+      },
+      {
+        "path": "core-graph-worker.json",
+        "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+        "modules": 30
+      },
+      {
+        "path": "qr-graph-worker.json",
+        "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+        "modules": 4
+      }
+    ],
+    "assets": [
+      {
+        "path": "_headers",
+        "bytes": 342,
+        "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+      },
+      {
+        "path": "assets/OfflineRoot-DbnUbVwq.js",
+        "bytes": 307111,
+        "sha256": "a61a1c92725905ed97f25c2375d8a49b4cfe5fd9c00137bf7c500e031e49afa0"
+      },
+      {
+        "path": "assets/decode.worker-DGcSBxfL.js",
+        "bytes": 133927,
+        "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+      },
+      {
+        "path": "assets/index-BE8wspsM.js",
+        "bytes": 220820,
+        "sha256": "bab7a26a777fc00b7dc6095a7579e91cb5766dbca91accd264db615030bd1d88"
+      },
+      {
+        "path": "assets/index-rPDFZ4F5.css",
+        "bytes": 8414,
+        "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+      },
+      {
+        "path": "assets/synthetic-local-Cs5lbPeJ.js",
+        "bytes": 5743,
+        "sha256": "d84e1b12c4559732ab594a47d179ea556a4210036cd8768ce21e8a5e67c94db5"
+      },
+      {
+        "path": "assets/vault.worker-BFynfgnx.js",
+        "bytes": 93535,
+        "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+      },
+      {
+        "path": "content-policy.json",
+        "bytes": 1009,
+        "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+      },
+      {
+        "path": "core-graph-document.json",
+        "bytes": 14565,
+        "sha256": "80f56c4d303f6f7f3b33864ed10731074d642bfe0c2e4071d446fc2c67ab1baa"
+      },
+      {
+        "path": "core-graph-worker.json",
+        "bytes": 4758,
+        "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+      },
+      {
+        "path": "index.html",
+        "bytes": 1283,
+        "sha256": "726a56680f60ebc11a781508be363b1eccb6167a26f8a03972d6a93275660b1f"
+      },
+      {
+        "path": "qr-graph-worker.json",
+        "bytes": 905,
+        "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+      },
+      {
+        "path": "third-party-licenses.json",
+        "bytes": 15329,
+        "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+      }
+    ]
+  },
+  "executions": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "elapsedSeconds": 1.8863273900060449,
+      "exitCode": 0,
+      "sourceCommit": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "startedAtUTC": "2026-11-20T17:39:19.943430+00:00",
+      "label": "boundaries",
+      "counts": {},
+      "path": "docs/execution/native-update-runtime-generation24-20261120/boundaries.log.gz",
+      "rawBytes": 696,
+      "rawSha256": "f506720277a434fc1301b911c3868eb46359bcec0f092fa6f2202b91155592b1",
+      "gzipBytes": 483,
+      "gzipSha256": "d235c40e5a22dda9d48d93054a8ae1fbd5f0f949f10ddcbb8139ffff7252f3fb",
+      "roundTripVerified": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:update:runtime:browser",
+        "--",
+        "--build-only"
+      ],
+      "elapsedSeconds": 3.520684569994046,
+      "exitCode": 0,
+      "sourceCommit": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "startedAtUTC": "2026-11-20T17:39:19.954036+00:00",
+      "label": "build-only",
+      "counts": {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "path": "docs/execution/native-update-runtime-generation24-20261120/build-only.log.gz",
+      "rawBytes": 3514,
+      "rawSha256": "efcfeceaa1bc22f5390a56ca31d9cc815484a3980897d7a578b1e852e1df2e46",
+      "gzipBytes": 1585,
+      "gzipSha256": "0b85cb007ec5a10e759cb4e13c5084fbe70b674f5949a3231c079dc5c674b443",
+      "roundTripVerified": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "elapsedSeconds": 6.919319211003312,
+      "exitCode": 0,
+      "sourceCommit": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "startedAtUTC": "2026-11-20T17:39:54.789041+00:00",
+      "label": "build-policy",
+      "counts": {
+        "tests": 58,
+        "pass": 58,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "path": "docs/execution/native-update-runtime-generation24-20261120/build-policy.log.gz",
+      "rawBytes": 7948,
+      "rawSha256": "4c97c743215518d61f2afaf2a07ffc367f5d1e4eb0e7596d4f652fbbf7bf042d",
+      "gzipBytes": 3357,
+      "gzipSha256": "13b820fb5f71f7e1237765db14922799b5c46f22db1e58b0b396084c4be17907",
+      "roundTripVerified": true
+    },
+    {
+      "command": [
+        "node",
+        "/workspace/scratch/dcf03ef9bee8/g24-demo-isolation.mjs"
+      ],
+      "elapsedSeconds": 2.196811493005953,
+      "exitCode": 0,
+      "sourceCommit": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "startedAtUTC": "2026-11-20T17:39:54.784303+00:00",
+      "label": "demo-isolation",
+      "counts": {},
+      "path": "docs/execution/native-update-runtime-generation24-20261120/demo-isolation.log.gz",
+      "rawBytes": 3773,
+      "rawSha256": "d2a1e11791adbf0534503017bcf545ec08bab6ca697501269cdfbade2ff7f43e",
+      "gzipBytes": 1503,
+      "gzipSha256": "146c5a12c17024977540bfd56a6db9c2188f08b028348b5399e14a118ca1948a",
+      "roundTripVerified": true
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/runtime-backup-selection.test.mjs",
+        "apps/web/test/update-runtime-composition.test.mjs",
+        "packages/security/test/release-update.test.mjs"
+      ],
+      "elapsedSeconds": 4.5134014610011945,
+      "exitCode": 0,
+      "sourceCommit": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "startedAtUTC": "2026-11-20T17:39:19.945338+00:00",
+      "label": "selection-composition",
+      "counts": {
+        "tests": 59,
+        "pass": 59,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "path": "docs/execution/native-update-runtime-generation24-20261120/selection-composition.log.gz",
+      "rawBytes": 7095,
+      "rawSha256": "f6aee7a2bc003bcae0634ed5995ce600cabaec2ba9c942603f03ae2307f613f0",
+      "gzipBytes": 2766,
+      "gzipSha256": "419cdb7da606d4d275d7fdc2c01c8baf6d42bce4575319dcbb1490eb5ad69c2e",
+      "roundTripVerified": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:tooling"
+      ],
+      "elapsedSeconds": 26.22920977299509,
+      "exitCode": 0,
+      "sourceCommit": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "startedAtUTC": "2026-11-20T17:39:54.789045+00:00",
+      "label": "tooling",
+      "counts": {
+        "tests": 50,
+        "pass": 50,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "path": "docs/execution/native-update-runtime-generation24-20261120/tooling.log.gz",
+      "rawBytes": 6605,
+      "rawSha256": "55c4c76b547d0f31e390af898f328efc062fa7175819aa9d6be790341b54769d",
+      "gzipBytes": 3189,
+      "gzipSha256": "27e58926ebd680b50ab5939f6ad4172abb512c3ed31de8d8eba0f8849b9c248d",
+      "roundTripVerified": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "elapsedSeconds": 4.217649994003295,
+      "exitCode": 0,
+      "sourceCommit": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "startedAtUTC": "2026-11-20T17:39:19.942137+00:00",
+      "label": "typecheck",
+      "counts": {},
+      "path": "docs/execution/native-update-runtime-generation24-20261120/typecheck.log.gz",
+      "rawBytes": 630,
+      "rawSha256": "f32d7d8626ef18b81efb8cb28c60bf98c034b503b0a58711d8438b325ca910c7",
+      "gzipBytes": 411,
+      "gzipSha256": "a9beac853ac11cc2f8884f33cb68cc4f0abaae5c97e5e749af0c16b0b3429aca",
+      "roundTripVerified": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "477777dc152cd3148ba7f25a75ce8f00dc1b03b5",
+        "bc330e07b1cad13490bb5b1880f89c55e952f97e"
+      ],
+      "elapsedSeconds": 0.009817612000915688,
+      "exitCode": 0,
+      "sourceCommit": "bc330e07b1cad13490bb5b1880f89c55e952f97e",
+      "sourceTree": "bbd84440104f8ae08617a4980bf5970e89cd6aa2",
+      "startedAtUTC": "2026-11-20T17:41:08.222678+00:00",
+      "label": "whitespace",
+      "counts": {},
+      "path": "docs/execution/native-update-runtime-generation24-20261120/whitespace.log.gz",
+      "rawBytes": 460,
+      "rawSha256": "951936fb10ef89283f27d282c23e4e40fb4685ef8809d20673e5e72b92e855e5",
+      "gzipBytes": 275,
+      "gzipSha256": "bb8f2d3223a55fac9983cdf63b9cb9bc351b44f2b2d2334014f6df164dfadcf0",
+      "roundTripVerified": true
+    }
+  ],
+  "preFreezeFailure": {
+    "kind": "harness-preparation-regex-false-positive",
+    "nativeExecution": false,
+    "fullOriginalLogsRetained": false,
+    "retainedContent": "Exact tool-returned error excerpts with labeled provenance; not complete raw stdout/stderr.",
+    "path": "docs/execution/native-update-runtime-generation24-20261120/preparation-failure-excerpts.txt.gz",
+    "rawBytes": 2179,
+    "rawSha256": "c568245449713d32e379d0d1d43e218b9643a55a6436321763ace73de9406e59",
+    "gzipBytes": 915,
+    "gzipSha256": "0b52c7eabefe531929b6d975507c2ae2d2d41fd329fb59264b945f583830a5b6",
+    "roundTripVerified": true
+  },
+  "demoReplayScript": {
+    "path": "docs/execution/native-update-runtime-generation24-20261120/demo-isolation-check.mjs",
+    "sha256": "699f93af1290509718789a5f59d6f218b8ccc830c08a9a0d7a37b92e06560b10",
+    "instruction": "Run with node from the repository root at the frozen source."
+  }
+}

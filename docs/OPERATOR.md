@@ -34,9 +34,14 @@ Each successful build writes `local-build-evidence.json` with the asset lengths,
 Keep a copy from the trusted build outside the directory you intend to host. To check a copied Pages demo before upload, run
 
 ```sh
-node scripts/verify-web-artifact.mjs ./pages-candidate ./retained/demo/local-build-evidence.json
+node scripts/verify-web-artifact.mjs --demo ./pages-candidate ./retained/demo/local-build-evidence.json
 ```
 
+The scan mode comes from the command line, never from the reference file: `--default` (also used when no flag is
+given), `--demo` or `--testnet`. A reference whose build profile disagrees with the requested mode is refused with
+`BUILD_MODE_MISMATCH` before any scan, so a demo or testnet artifact cannot pass as a default one, even with a matching
+reference. Usage errors exit 2 and failed verification exits 1. `--testnet` checks the testnet build profile only: it does
+not establish owner approval, a pinned release key or local-proof status.
 The command checks the copied inventory and every payload file, including the native Worker, against that reference.
 A missing, changed or unexpected file fails verification. This comparison establishes local build integrity. Release
 signing and authorization require their own evidence.

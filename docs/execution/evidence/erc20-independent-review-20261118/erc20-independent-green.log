@@ -1,0 +1,28 @@
+{
+  "observation": "funded exit after unrelated allowance read failure",
+  "connectionOk": true,
+  "walletConnected": true,
+  "first": {
+    "state": "absent",
+    "canFund": false
+  },
+  "second": {
+    "state": "funded",
+    "canRelease": true,
+    "canRefund": false
+  },
+  "sends": 2
+}
+ok - an unavailable unfunded token observation preserves the later independently verified funded exit
+ok - the visible funded exit actually transfers its exact principal despite the unrelated allowance-read outage
+ok - a chain identity change during token observation remains fatal rather than being downgraded to unavailable guidance
+ok - profile lock during the token query revokes the whole operation and emits no private trade projection
+{
+  "ok": true,
+  "kind": "INDEPENDENT_ERC20_RECOVERY_PROOF",
+  "checks": 4,
+  "signatures": 8,
+  "sends": 3,
+  "durableExactMarkers": 3,
+  "ReleaseEnabled": 0
+}

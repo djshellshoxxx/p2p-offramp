@@ -44,11 +44,18 @@ function text(v:unknown,max=512):string{
   if (typeof v!=='string'||!v.length||v.length>max||new TextEncoder().encode(v).length>max||/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/.test(v)||/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(v))return invalid();
   return v;
 }
+function boundedArrayLength(value:unknown,maximum:number):number{
+  if(!Array.isArray(value)||Object.getPrototypeOf(value)!==Array.prototype)return invalid();
+  const descriptor=Object.getOwnPropertyDescriptor(value,'length');
+  const length:unknown=descriptor&&'value'in descriptor?descriptor.value:undefined;
+  if(typeof length!=='number'||!Number.isSafeInteger(length)||length<0||length>maximum||Reflect.ownKeys(value).length!==length+1)return invalid();
+  return length;
+}
 function list(v:unknown,paths=false):readonly string[]{
-  if (!Array.isArray(v)||Object.getPrototypeOf(v)!==Array.prototype||v.length>32||Reflect.ownKeys(v).length!==v.length+1)return invalid();
+  const length=boundedArrayLength(v,32);
   const out:string[]=[];
   for (let i=0;
-  i<v.length;
+  i<length;
   i++ ) {
     const d=Object.getOwnPropertyDescriptor(v,String(i));
     if (!d||!('value'in d))return invalid();
@@ -88,10 +95,11 @@ export function canDisplayTestedClaim(input:unknown,scope:ClaimScope,trust?:Main
     return false;
   }}
 export function claimFor(claims:readonly PrivacyClaimV1[],capability:string,scope:ClaimScope,trust?:MaintainedClaimTrust,staleEvidencePaths:readonly string[]=[]):PrivacyClaimV1|null{try {
-    if(typeof capability!=='string'||!id.test(capability)||!Array.isArray(claims)||Object.getPrototypeOf(claims)!==Array.prototype||claims.length>64||Reflect.ownKeys(claims).length!==claims.length+1)return null;
+    if(typeof capability!=='string'||!id.test(capability))return null;
+    const length=boundedArrayLength(claims,64);
     const parsed:PrivacyClaimV1[]=[];
     for (let i=0;
-    i<claims.length;
+    i<length;
     i++ ) {
       const d=Object.getOwnPropertyDescriptor(claims,String(i));
       if (!d||!('value'in d))return null;

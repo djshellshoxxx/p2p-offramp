@@ -103,7 +103,8 @@ async function readRecovery({ profile, binding: input, endpointId, request, sign
     if (BigInt(anchor.number) < BigInt(identityAnchor.height) || BigInt(anchor.timestamp) < BigInt(identityAnchor.timestampSeconds)) return refuseRecovery('INTEGRITY_FAILURE');
     if (anchor.number === identityAnchor.height && (anchor.hash !== identityAnchor.hash || anchor.timestamp !== identityAnchor.timestampSeconds)) return refuseRecovery('INTEGRITY_FAILURE');
     const getTrade = buildGetTrade(deployment.address,binding.tradeId);
-    const raw = await call('eth_call',[{to:getTrade.to,data:getTrade.data},tag(anchor.number)]);
+    const stateAt = Object.freeze({blockHash:anchor.hash,requireCanonical:true});
+    const raw = await call('eth_call',[{to:getTrade.to,data:getTrade.data},stateAt]);
     if (typeof raw !== 'string' || raw.length !== 386) return refuseRecovery('INTEGRITY_FAILURE');
     const trade = decodeTrade(raw);
     const asset = network.assets.find(item => trade.token === ZERO ? item.kind === 'native' : item.kind === 'erc20' && item.address === trade.token);
@@ -111,7 +112,7 @@ async function readRecovery({ profile, binding: input, endpointId, request, sign
     let pendingWithdrawal = null;
     if (trade.state === 'released' || trade.state === 'refunded') {
       const recipient = trade.state === 'released' ? trade.buyer : trade.seller, pending = buildPendingWithdrawals(deployment.address,recipient,trade.token);
-      const returned = await call('eth_call',[{to:pending.to,data:pending.data},tag(anchor.number)]);
+      const returned = await call('eth_call',[{to:pending.to,data:pending.data},stateAt]);
       if (typeof returned !== 'string' || !/^0x[0-9a-f]{64}$/.test(returned)) return refuseRecovery('INTEGRITY_FAILURE');
       pendingWithdrawal = Object.freeze({recipient,token:trade.token,amount:BigInt(returned).toString()});
     }

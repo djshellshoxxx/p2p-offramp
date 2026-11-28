@@ -1,0 +1,21 @@
+ok - independent encrypted profiles own distinct messaging identities and explicitly connect different external wallets
+ok - real encrypted take/offer/accept uses current D1 with four exact reviewed wallet signatures and no funding
+ok - durable encrypted chat reaches the independent peer without creating chain or fiat authority
+ok - cancelled preparation sends nothing; funding writes a durable marker and release requires explicit bank-receipt confirmation
+ok - seller release reaches canonical native escrow state after a new exact transaction review
+ok - unknown broadcast retains its null hash and marker; fresh-key restore reconciles native effect without resending or requiring fresh D1 acceptance for exits
+ok - abandoned funding review reconciles after lock/reopen without demanding the lost ephemeral D1 session or authorizing resubmission
+ok - abandoned release review expires through native reconciliation after lock/reopen and does not prevent a fresh funded exit
+ok - refund eligibility uses the rechecked canonical block time despite a deliberately skewed browser clock
+ok - restored original seller refunds after native expiry through one new reviewed transaction and canonical journal
+ok - relay contains only public ads/ciphertext and lock removes all decrypted trade/chat projections
+{
+  "ok": true,
+  "kind": "LOCAL_CONTROLLER_PROOF",
+  "checks": 11,
+  "walletPrompts": 12,
+  "sends": 4,
+  "durableMarkers": 4,
+  "ReleaseEnabled": 0,
+  "browserQualification": false
+}

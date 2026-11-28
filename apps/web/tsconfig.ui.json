@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": { "lib": ["ES2023", "DOM", "DOM.Iterable"], "jsx": "react-jsx" },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["src/workers/**", "src/runtime/worker-endpoint.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "../../packages/wallet/localnet.ts", "../../packages/domain/localnet.ts", "../../packages/chain-evm/localnet.ts"],
+  "exclude": ["src/workers/**", "src/runtime/worker-endpoint.ts", "src/qr/decode.worker.ts"]
 }

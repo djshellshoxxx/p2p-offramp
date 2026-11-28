@@ -1,0 +1,24 @@
+{
+  "version": "v0.22.3",
+  "source": "https://github.com/fiatjaf/nak",
+  "commit": "a3b1237bb5325a21a01c132fb53bb615789c4242",
+  "release": "https://github.com/fiatjaf/nak/releases/tag/v0.22.3",
+  "sourceFilesSha256": {
+    "serve.go": "d4c1e27c3171fa31a9ed147b2c2f01012e1452d7aad352ae3dbc9d7d5483d1ad",
+    "go.mod": "14bda33f1b94c8f7d41edc9cdf2b04e3b0ab253b81a5fe147976cca5a1ee8d31",
+    "go.sum": "79200f7c8bd4327b5081b232d19974c5d174fab29c8eddeac78f78fda15919cd",
+    "LICENSE": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e"
+  },
+  "binary": {
+    "platform": "linux",
+    "arch": "x64",
+    "url": "https://github.com/fiatjaf/nak/releases/download/v0.22.3/nak-v0.22.3-linux-amd64",
+    "sha256": "2eb9a16f86c865275983459b2c705d22d5dfbcf527026a279449cbf204d164fe"
+  },
+  "relayModule": {
+    "name": "fiatjaf.com/nostr",
+    "version": "v0.0.0-20261101164043-96f89895a4b2",
+    "commit": "96f89895a4b2285e2e09364ee2225cb61196a325",
+    "sum": "h1:8RKyuRnEaX5C/QFTrDkdsKPsdy2OdZm4L4kzHZY3K7o="
+  }
+}

@@ -36,6 +36,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run typecheck
       - run: npm test
+      - run: npm run test:formal:unit
       - run: npm run test:acceptance:cli
       - run: node --test scripts/agent/*.test.mjs
       - run: npm run check:boundaries
@@ -47,6 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+        with:
+          fetch-depth: 0 # Unsigned distribution binds documentation to immutable source commits.
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4, official ref checked 2026-10-24
         with:
           node-version: '24'
@@ -57,10 +60,30 @@ jobs:
         uses: browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce # v1.7.3, official annotated tag dereferenced
         with:
           chrome-version: stable
+      - name: Verify one actual browser POST for a withheld Solana acknowledgment
+        run: npm run test:solana:ack:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - name: Verify acknowledged Solana restore with the actual encrypted Worker
+        run: npm run test:solana:restore:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:portal:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:distribution:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:web:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:favorites:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:templates:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:private:browser
@@ -73,6 +96,14 @@ jobs:
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:diagnostics:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - name: Verify explicit backup authentication in the actual offline app
+        run: npm run test:backup:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - name: Verify native backup-selection lease and controlled updater composition
+        run: npm run test:update:runtime:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:recovery:browser
@@ -88,6 +119,27 @@ jobs:
         run: node scripts/test-peer-offer-browser.mjs
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+  backup-verification-engines:
+    name: backup-verification-${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Install the pinned Playwright engine and system dependencies
+        run: node node_modules/playwright-core/cli.js install --with-deps ${{ matrix.browser }}
+      - name: Qualify backup verification with the actual Worker and IndexedDB
+        run: npm run test:backup:browser
+        env:
+          P2P_BACKUP_BROWSER: ${{ matrix.browser }}
   docs-tooling:
     runs-on: ubuntu-latest
     steps:
@@ -101,6 +153,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run test:tooling
       - run: npm run check:docs
+      - run: npm run check:governance
   specs:
     runs-on: ubuntu-latest
     steps:

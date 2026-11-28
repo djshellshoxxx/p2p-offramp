@@ -90,19 +90,19 @@ The review never navigates, connects a wallet, signs, stores anything or makes a
 
 Deduplication of unauthenticated codes is best-effort under memory pressure. As the spec says, this stops accidental repeat imports on one device. It is not global anti-replay security.
 
-## What is not implemented
+## Application composition and remaining qualification
 
-- **No camera or scanner UI and no QR image decoding.** There is no `getUserMedia`, no image handling and no scan lifecycle here. The UI also has to pass the scanned or pasted text through unchanged, without trimming, because space is a base45 digit.
-- **No physical scan tests, and no third-party reader has decoded these symbols yet.** D6 and the spec require tests on iOS, Android and desktop, with printed, low-light, inverted and partial codes. The 1,024-byte generation target and the level M default stay provisional until those tests are done. At level M, envelope size sets the symbol size: 350 bytes need version 15 (77×77 modules), 1,024 bytes need version 27 (125×125) and 2,048 bytes need version 39 (173×173). D6 notes that dense codes are hard to scan from a screen.
+- **Public application composition lives outside this package.** `apps/web/src/qr/` and `ui/QrPanel.tsx` add bounded PNG/JPEG and single-frame camera capture, exact pasted text and public file input, explicit full review, local display/copy/download, and exact encrypted-backup/reference fingerprint comparison. The decoder is the locally pinned jsQR 1.4.0 in a separate disposable Worker. The app passes decoded or pasted text through unchanged because space is a base45 digit. See the [execution record](../../docs/execution/qr-public-flow-2026-11-19.md) for actual gate status and the [dependency intake](../../security/intake/qr-decoder/README.md). The codec package itself still has no browser or dependency capabilities.
+- **No physical scan qualification.** The independent pinned jsQR reader has decoded all 25 frozen matrices in the Node oracle, including the 2,048-byte envelope, plus synthetic rotated, inverted and bounded damaged images. That does not qualify an actual phone or camera. D6 and the spec still require tests on iOS, Android and desktop, with printed, low-light, inverted and partial codes. The 1,024-byte generation target and the level M default stay provisional until those tests are done. At level M, envelope size sets the symbol size: 350 bytes need version 15 (77×77 modules), 1,024 bytes need version 27 (125×125) and 2,048 bytes need version 39 (173×173). D6 notes that dense codes are hard to scan from a screen.
 - **How the symbol encoder was checked.** It matches published known answers:
   - the Reed-Solomon examples from ISO/IEC 18004 Annex I and the well-known "HELLO WORLD" 1-Q walkthrough;
   - all 32 format-information words and the version-information words;
   - the capacity figures quoted in D6 and the 2026-11-03 research note.
 
-  A separate Python reader in the oracle decodes all 21 frozen symbols, checks every Reed-Solomon block and recovers the original text. That reader was written in this change and is not an outside scanner. Penalty rule 3 uses the common "outside is light" reading, so another encoder may choose a different mask that is just as valid. A bit-for-bit comparison with an outside encoder was not done.
+  The separate Python reader checks the frozen symbols, every Reed-Solomon block and the recovered original text. That reader belongs to this repository. The jsQR oracle in `apps/web/test/qr-decoder-oracle.test.mjs` adds an outside scanner against the same frozen matrices. Penalty rule 3 uses the common "outside is light" reading, so another encoder may choose a different mask that is just as valid. A bit-for-bit comparison with an outside encoder was not done.
 - **The invite signing-key profile is open.** There is no verifier, no key binding to the advertisement and no signer.
 - **No `commitImport`.** Merging into domain state, `IMPORT_CONFLICT`, refusing to overwrite funded terms, and the G05 refetch and revalidation of signed current terms before funding all belong to the domain layer.
-- **No 64 KiB file-import path.** File import of public envelopes, and a downloadable file with a hash fingerprint for oversized content, are not built. Multi-frame codes are unsupported.
+- **Public text files stay exact and bounded.** The application admits files up to 64 KiB before reading, retains the codec's 2,048-byte envelope cap, and never splits a payload into frames. Public downloads contain the exact reviewed text only. A private encrypted backup/reference file can be represented by a format/length/SHA-256 fingerprint; its contents never enter the code. Multi-frame codes remain unsupported.
 - **No ERC-681 or `wc:` compatibility parser.** Both are refused. Wallet pairing belongs to its connector.
 - **The secret and URL scan is a heuristic backstop.** The exact-key schemas, which allow no free-text field, are the real control. A raw 32-byte hex secret placed in a hash field cannot be told apart from a hash.
 
@@ -116,6 +116,8 @@ Deduplication of unauthenticated codes is best-effort under memory pressure. As 
 
 ```sh
 node --import ./scripts/test-support/register-tsx.mjs --test packages/qr/test/*.test.mjs
+node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/qr-decoder-oracle.test.mjs           # pinned outside scanner
+node scripts/test-qr-browser.mjs                                                                         # actual emitted app/Workers; see execution status
 node --import ./scripts/test-support/register-tsx.mjs packages/qr/test/fixtures/generate-vectors.mjs --check   # fixture freshness
 python3 -I scripts/vectors/check_qr_codec.py                                                                 # independent oracle
 python3 -m unittest scripts/tests/test_qr_codec_oracle.py

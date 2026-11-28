@@ -1,0 +1,236 @@
+{
+  "schema": "p2p-offramp-vault-forms-locale-qualification/v1",
+  "recorded_utc": "2026-11-20T16:17:35+00:00",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "worker": "/root/vault_forms_locale_g21",
+  "base_commit": "388526a474aea0e08f9c04178c2b7f9e1d4bee3f",
+  "regression_commit": "293ffd4d47b58eb3e289d5fb36f2169239cd56f2",
+  "source_commit": "08acab8908fb9878e91aa2d87d652e8a245051e3",
+  "source_tree": "13f111937bf5f6fa01dc3db65afcd81a84fa91b0",
+  "working_tree_execution_note": "The regression and initial fixed/targeted/type checks executed on byte-identical working trees subsequently frozen in the named commits. Build and policy checks executed after the source freeze. The regression test blob is identical in both commits.",
+  "branch": "codex/vault-forms-locale-g21-20261120",
+  "node_version": "v24.22.3",
+  "changed_paths": [
+    "apps/web/src/ui/VaultForms.tsx",
+    "apps/web/test/vault-forms-locale.test.mjs"
+  ],
+  "source_files": [
+    {
+      "path": "apps/web/src/ui/VaultForms.tsx",
+      "sha256": "3937c2730ad0d4b931fbd1f7c5f64f22b8a09c1689fd8c6298aa00b27ea27466"
+    },
+    {
+      "path": "apps/web/test/vault-forms-locale.test.mjs",
+      "sha256": "50ab9db37eacf60f05502a230c456c3c6bf76d21404e598a031f1543e272b8f6"
+    }
+  ],
+  "base_tree_entries": 2576,
+  "source_tree_entries": 2577,
+  "unchanged_base_entries": 2575,
+  "executions": [
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/vault-forms-locale.test.mjs",
+      "exit_code": 1,
+      "qualified_source_commit": "293ffd4d47b58eb3e289d5fb36f2169239cd56f2",
+      "log": "docs/execution/vault-forms-locale-generation21-20261120/before.log",
+      "log_sha256": "8ceb453f406f63968c3fe0bad98d866ff929e695015d71a92b20b87642ccb3b1",
+      "log_bytes": 24430,
+      "tests": 21,
+      "suites": 0,
+      "pass": 3,
+      "fail": 18,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/vault-forms-locale.test.mjs",
+      "exit_code": 0,
+      "qualified_source_commit": "08acab8908fb9878e91aa2d87d652e8a245051e3",
+      "log": "docs/execution/vault-forms-locale-generation21-20261120/after.log",
+      "log_sha256": "949261cc627f9c2941ec590aa13db701862ec495ed251505c2ea8668459c010c",
+      "log_bytes": 2448,
+      "tests": 21,
+      "suites": 0,
+      "pass": 21,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/vault-forms-locale.test.mjs apps/web/test/panels-misc.render.test.mjs apps/web/test/app-services.test.mjs apps/web/test/locale-runtime.test.mjs apps/web/test/locale-catalog.test.mjs apps/web/test/locale-source.test.mjs apps/web/test/locale-selector.render.test.mjs apps/web/test/ui-routes.test.mjs",
+      "exit_code": 0,
+      "qualified_source_commit": "08acab8908fb9878e91aa2d87d652e8a245051e3",
+      "log": "docs/execution/vault-forms-locale-generation21-20261120/focused.log",
+      "log_sha256": "c9f08d749d101e9416bc88efd8af49a6692146829bf20e3e10b9ee67f8b97c65",
+      "log_bytes": 7722,
+      "tests": 68,
+      "suites": 0,
+      "pass": 68,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "qualified_source_commit": "08acab8908fb9878e91aa2d87d652e8a245051e3",
+      "log": "docs/execution/vault-forms-locale-generation21-20261120/typecheck.log",
+      "log_sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "log_bytes": 341
+    },
+    {
+      "command": "npm run check:boundaries",
+      "exit_code": 0,
+      "qualified_source_commit": "08acab8908fb9878e91aa2d87d652e8a245051e3",
+      "log": "docs/execution/vault-forms-locale-generation21-20261120/boundaries.log",
+      "log_sha256": "a452672f68ca4f407f03006e6aa73d13110adf2e2f69e944789dc73d68afb90a",
+      "log_bytes": 392
+    },
+    {
+      "command": "node apps/web/scripts/build.mjs",
+      "exit_code": 0,
+      "qualified_source_commit": "08acab8908fb9878e91aa2d87d652e8a245051e3",
+      "log": "docs/execution/vault-forms-locale-generation21-20261120/default-build.log",
+      "log_sha256": "a510bd0101b50dc252b055aa67209c5dedea08897d422fa1eb0643a328adb4f9",
+      "log_bytes": 1026
+    },
+    {
+      "command": "npm run test:build-policy",
+      "exit_code": 0,
+      "qualified_source_commit": "08acab8908fb9878e91aa2d87d652e8a245051e3",
+      "log": "docs/execution/vault-forms-locale-generation21-20261120/build-policy.log",
+      "log_sha256": "f247b3ee964b6da8195b5eca226b306c40cea23c05ee3376a307da018a50021c",
+      "log_bytes": 7642,
+      "tests": 58,
+      "suites": 0,
+      "pass": 58,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  ],
+  "count_scope": "Executed suites overlap; counts are not summed. The original 18 failures remain retained evidence.",
+  "default_build": {
+    "files": 12,
+    "bytes": 794416,
+    "artifacts": [
+      {
+        "path": "_headers",
+        "bytes": 342,
+        "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+      },
+      {
+        "path": "assets/OfflineRoot-DvtLSApf.js",
+        "bytes": 299840,
+        "sha256": "f3de08d09831462ed2d8ad20a8bd58eb3488eb93905a831617e696e2be06c3f3"
+      },
+      {
+        "path": "assets/decode.worker-DGcSBxfL.js",
+        "bytes": 133927,
+        "sha256": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef"
+      },
+      {
+        "path": "assets/index-BsNB24Lm.js",
+        "bytes": 220808,
+        "sha256": "db5bb71ec8a7fe6d719d4f0ca868f268d5342e1763bb45dc143dc6052ca66ec8"
+      },
+      {
+        "path": "assets/index-rPDFZ4F5.css",
+        "bytes": 8414,
+        "sha256": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932"
+      },
+      {
+        "path": "assets/vault.worker-BFynfgnx.js",
+        "bytes": 93535,
+        "sha256": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044"
+      },
+      {
+        "path": "content-policy.json",
+        "bytes": 1009,
+        "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+      },
+      {
+        "path": "core-graph-document.json",
+        "bytes": 14266,
+        "sha256": "519f50d6b32b19865600c6d8e58de958e05d94f4ab901691d0950409a9013759"
+      },
+      {
+        "path": "core-graph-worker.json",
+        "bytes": 4758,
+        "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834"
+      },
+      {
+        "path": "index.html",
+        "bytes": 1283,
+        "sha256": "2da7ea4075885b31493475ace0d24dc65347fb58acffe91c636037d153842a1c"
+      },
+      {
+        "path": "qr-graph-worker.json",
+        "bytes": 905,
+        "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce"
+      },
+      {
+        "path": "third-party-licenses.json",
+        "bytes": 15329,
+        "sha256": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+      }
+    ],
+    "graphs": {
+      "core-graph-document.json": {
+        "module_count": 95,
+        "sha256": "519f50d6b32b19865600c6d8e58de958e05d94f4ab901691d0950409a9013759",
+        "asset_update_implementation_modules": []
+      },
+      "core-graph-worker.json": {
+        "module_count": 30,
+        "sha256": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+        "asset_update_implementation_modules": []
+      },
+      "qr-graph-worker.json": {
+        "module_count": 4,
+        "sha256": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+        "asset_update_implementation_modules": []
+      }
+    },
+    "ReleaseEnabled": 0,
+    "releaseAcceptance": false,
+    "connectOrigins": [],
+    "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'",
+    "generated_build_receipt": {
+      "path": "local-build-evidence.json",
+      "bytes": 2525,
+      "sha256": "6780f703247e0d7dd05aafcc258137fe2048c9da37358d2f14fddd0c84014873"
+    },
+    "artifact_count_note": "The builder qualifies 12 payload files, then writes its separate local-build-evidence.json receipt. The generated receipt is preserved separately and is not counted as a payload file."
+  },
+  "preserved": [
+    "English-only draft default locale configuration and all catalog/evidence pins",
+    "Existing notice roles, fixed copy and error-code mappings",
+    "Profile/record values and explicit restored-profile handoff",
+    "Input/byte clearing, explicit export consent, abort and uncertain-reconciliation behavior",
+    "Service, crypto, storage, Worker and private-key operations",
+    "App and BackupVerificationForm source owned by other workers",
+    "Dependencies, workflows, optional activation and trust configuration"
+  ],
+  "limits": [
+    "Node fixture renders the maintained TSX with controlled hooks/facade/DOM effects and the actual compiled locale runtime; it is not a native-browser result.",
+    "Alternate copy is explicitly compiled synthetic draft data, not a translation or semantic approval.",
+    "Fresh independent review and final composed-source hosted gates remain required.",
+    "No local browser, long native suite, deployment, release, real funds or remote mutation was performed."
+  ],
+  "documentation_validation": {
+    "command": "npm run check:docs",
+    "exit_code": 0,
+    "scope": "Report-bearing working tree after the executable source freeze; no semantic/source pin was changed.",
+    "engineeringConsistency": true,
+    "semanticApproval": false,
+    "published": false,
+    "log": "docs/execution/vault-forms-locale-generation21-20261120/docs-check.log",
+    "log_sha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4",
+    "log_bytes": 33780
+  }
+}

@@ -45,6 +45,10 @@ test('escrow-decodes-native-and-spl', () => {
   assert.equal(token.assetKind, 'spl');
   assert.equal(token.paidOut, true);
   assert.equal(token.tokenProgram, spl.tokenProgram);
+  // Amounts at or above 2^32 need the upper four bytes of the u64 at [142..150).
+  for (const amount of ['5000000000', '4294967296', String((1n << 64n) - 1n)]) {
+    assert.equal(decodeEscrow(escrowBytes(spl, { amount })).amountBaseUnits, amount);
+  }
 });
 
 const ESCROW_REJECTS = 'escrow-rejects-{disc,221,223,layout,state3,paid2,paid-funded,kind1,kind3,' +

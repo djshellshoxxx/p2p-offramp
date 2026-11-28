@@ -1,0 +1,68 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p2p-offramp@0.1.0 test:qr:browser
+> node scripts/test-qr-browser.mjs
+
+vite v8.3.5 building client environment for meta...
+transforming...
+✓ 93 modules transformed.
+rendering chunks...
+../../../../tmp/p2p-public-qr-Wp8bt5/web/_headers                            0.34 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/qr-graph-worker.json                0.90 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/content-policy.json                 1.00 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/index.html                          1.28 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/third-party-licenses.json           3.62 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/core-graph-worker.json              4.13 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/core-graph-document.json           13.65 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/assets/vault.worker-DeA1P_KX.js    69.45 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/assets/decode.worker-DGcSBxfL.js  133.92 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/assets/index-MQunfNpA.css           7.54 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/assets/index-Wy_2yRGI.js          220.80 kB
+../../../../tmp/p2p-public-qr-Wp8bt5/web/assets/OfflineRoot-D-1wzC30.js    246.38 kB
+
+✓ built in 965ms
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browserType.launch: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /usr/bin/chromium --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-DhqcHb --remote-debugging-pipe --no-startup-window
+<launched> pid=56
+[pid=56][err] /usr/bin/chromium: 9: [: 5225713664: unexpected operator
+[pid=56][err] [56:56:1119/003934.901015:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)
+[pid=56][err] [1119/003934.902167:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)
+Call log:
+  - <launching> /usr/bin/chromium --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-DhqcHb --remote-debugging-pipe --no-startup-window
+  - <launched> pid=56
+  - [pid=56][err] /usr/bin/chromium: 9: [: 5225713664: unexpected operator
+  - [pid=56][err] [56:56:1119/003934.901015:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)
+  - [pid=56][err] [1119/003934.902167:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)
+  - [pid=56] <gracefully close start>
+  - [pid=56] <kill>
+  - [pid=56] <will force kill>
+  - [pid=56] <process did exit: exitCode=null, signal=SIGABRT>
+  - [pid=56] starting temporary directories cleanup
+  - [pid=56] finished temporary directories cleanup
+  - [pid=56] <gracefully close end>
+
+    at startQrBrowserFixture (/workspace/scratch/29ec534d969d/review-qr-mobile/scripts/lib/qr-browser-fixture.mjs:122:30)
+    at async file:///workspace/scratch/29ec534d969d/review-qr-mobile/scripts/test-qr-browser.mjs:6:11 {
+  log: [
+    '  - <launching> /usr/bin/chromium --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-DhqcHb --remote-debugging-pipe --no-startup-window',
+    '  - <launched> pid=56',
+    '  - [pid=56][err] /usr/bin/chromium: 9: [: 5225713664: unexpected operator',
+    '  - [pid=56][err] [56:56:1119/003934.901015:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)',
+    '  - [pid=56][err] [1119/003934.902167:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)',
+    '  - [pid=56] <gracefully close start>',
+    '  - [pid=56] <kill>',
+    '  - [pid=56] <will force kill>',
+    '  - [pid=56] <process did exit: exitCode=null, signal=SIGABRT>',
+    '  - [pid=56] starting temporary directories cleanup',
+    '  - [pid=56] finished temporary directories cleanup',
+    '  - [pid=56] <gracefully close end>'
+  ]
+}
+
+Node.js v24.22.3

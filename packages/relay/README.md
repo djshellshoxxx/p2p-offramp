@@ -86,3 +86,17 @@ node packages/relay/test/advertisement.test.mjs
 node packages/relay/test/local-pool.test.mjs
 npm run typecheck
 ```
+
+## Independent native relay qualification
+
+`npm run test:relay:native` runs the canonical pool and real Nostr crypto against
+the pinned, independently maintained `nak serve` / Khatru relay on disposable
+loopback sockets. It requires the exact `P2P_NAK` binary; it never substitutes the
+in-process fake relay or silently skips a missing tool. The additive hosted job
+is `native-nostr-relay`.
+
+The [native relay evidence and runbook](../../docs/integration/NOSTR-RELAY-INTEROPERABILITY.md)
+records source/binary pins, actual local results and the tested boundaries.
+This qualifies a development transport profile, including refusal when AUTH is
+required. Product NIP-42 signing, inbox discovery, public relay access, TLS and
+privacy/release acceptance remain separate gates.

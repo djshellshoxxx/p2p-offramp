@@ -103,6 +103,68 @@ test('G07 permits only the explicit read-only release side entry and follows its
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
+test('update view types have a narrow facade while updater construction remains a private package path', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-update-view-'));
+  try {
+    await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true, allowImportingTsExtensions: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+    await put(root, 'packages/security/src/release-update.ts', 'export interface AssetUpdateController { cancel(): void; }\nexport function createAssetUpdateController() {}\n');
+    await put(root, 'packages/security/update-view.ts', "export type { AssetUpdateController } from './src/release-update.ts';\n");
+    await put(root, 'apps/web/src/main.ts', "import type { AssetUpdateController } from '../../../packages/security/update-view.ts';\n");
+    assert.equal((await inspectImportBoundaries(root)).findings.length, 0);
+    await put(root, 'apps/web/src/main.ts', "import type { AssetUpdateController } from '../../../packages/security/update-view.ts';\nimport { createAssetUpdateController } from '../../../packages/security/src/release-update.ts';\n");
+    const findings = (await inspectImportBoundaries(root)).findings.filter(finding => finding.code === 'APP_PACKAGE_PRIVATE_IMPORT');
+    assert.equal(findings.length, 1); assert.equal(findings[0].detail, '../../../packages/security/src/release-update.ts');
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('favorites facade belongs only to the native vault endpoint; document, QR, barrel and private imports fail closed', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-favorites-'));
+  try {
+    await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true, allowImportingTsExtensions: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+    await put(root, 'packages/personalization/favorites.ts', "export * from './src/favorites.ts';\n");
+    await put(root, 'packages/personalization/src/favorites.ts', 'export const favorites = true;\n');
+    await put(root, 'packages/personalization/index.ts', "export * from './src/favorites.ts';\n");
+    await put(root, 'apps/web/src/runtime/worker-endpoint.ts', "import '../../../../packages/personalization/favorites.ts';\n");
+    await put(root, 'apps/web/src/main.ts', 'export const document = true;\n');
+    let result = await inspectImportBoundaries(root); assert.deepEqual(result.findings, []);
+    await put(root, 'apps/web/src/main.ts', "import '../../../packages/personalization/favorites.ts'; import '../../../packages/personalization/index.ts'; import '../../../packages/personalization/src/favorites.ts';\n");
+    await put(root, 'apps/web/src/qr/decode.worker.ts', "import '../../../../packages/personalization/favorites.ts';\n");
+    await put(root, 'packages/other/src/consumer.ts', "import '../../personalization/favorites.ts';\n");
+    result = await inspectImportBoundaries(root);
+    assert.equal(result.findings.filter(finding => finding.code === 'PERSONALIZATION_OUTSIDE_VAULT_WORKER').length, 5);
+    assert.ok(result.findings.some(finding => finding.code === 'APP_PACKAGE_PRIVATE_IMPORT'));
+    assert.equal(result.findings.some(finding => finding.file.endsWith('/runtime/worker-endpoint.ts')), false);
+    await put(root, 'packages/proof-jobs/index.ts', 'export const optional = true;\n');
+    await put(root, 'packages/personalization/src/favorites.ts', "export * from '../../proof-jobs/index.ts';\n");
+    result = await inspectImportBoundaries(root);
+    assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === 'packages/proof-jobs/index.ts'), 'favorites never exempt transitive optional modules');
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('templates facade belongs only to the native vault endpoint; document, QR, barrel and private imports fail closed', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-templates-'));
+  try {
+    await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true, allowImportingTsExtensions: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+    await put(root, 'packages/personalization/templates.ts', "export * from './src/trade-draft-store.ts';\n");
+    await put(root, 'packages/personalization/src/trade-draft-store.ts', 'export const templates = true;\n');
+    await put(root, 'packages/personalization/index.ts', "export * from './src/trade-draft-store.ts';\n");
+    await put(root, 'apps/web/src/runtime/worker-endpoint.ts', "import '../../../../packages/personalization/templates.ts';\n");
+    await put(root, 'apps/web/src/main.ts', 'export const document = true;\n');
+    let result = await inspectImportBoundaries(root); assert.deepEqual(result.findings, []);
+    await put(root, 'apps/web/src/main.ts', "import '../../../packages/personalization/templates.ts'; import '../../../packages/personalization/index.ts'; import '../../../packages/personalization/src/trade-draft-store.ts';\n");
+    await put(root, 'apps/web/src/qr/decode.worker.ts', "import '../../../../packages/personalization/templates.ts';\n");
+    await put(root, 'packages/other/src/consumer.ts', "import '../../personalization/templates.ts';\n");
+    result = await inspectImportBoundaries(root);
+    assert.equal(result.findings.filter(finding => finding.code === 'PERSONALIZATION_OUTSIDE_VAULT_WORKER').length, 5);
+    assert.ok(result.findings.some(finding => finding.code === 'APP_PACKAGE_PRIVATE_IMPORT'));
+    assert.equal(result.findings.some(finding => finding.file.endsWith('/runtime/worker-endpoint.ts')), false);
+    await put(root, 'packages/proof-jobs/index.ts', 'export const optional = true;\n');
+    await put(root, 'packages/personalization/src/trade-draft-store.ts', "export * from '../../proof-jobs/index.ts';\n");
+    result = await inspectImportBoundaries(root);
+    assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === 'packages/proof-jobs/index.ts'), 'templates never exempt transitive optional modules');
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test('G07 permits only the existing release side entry and excludes parked optional dependencies', async () => {
   const root = await mkdtemp(join(tmpdir(), 'p2p-import-acceptance-context-'));
   try {
@@ -241,4 +303,73 @@ test('G07 follows JavaScript-extension specifiers into their TypeScript sources'
       await rm(root, { recursive: true, force: true });
     }
   }
+});
+
+// A3 localnet facades: public side entries reachable only from apps/web/src/localnet/**, and only lazily from outside it.
+test('G07 localnet facades are side entries reachable only from the localnet app subtree', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-localnet-'));
+  try {
+    await put(root, 'tsconfig.json', JSON.stringify({
+      compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true, allowImportingTsExtensions: true, jsx: 'preserve' },
+      include: ['packages/**/*', 'apps/web/src/**/*'],
+    }));
+    await put(root, 'packages/wallet/localnet.ts', "export { adapter } from './src/evm-adapter.ts';\n");
+    await put(root, 'packages/wallet/src/evm-adapter.ts', 'export const adapter = true;\n');
+    await put(root, 'packages/domain/localnet.ts', "export { lifecycle } from './src/tx-lifecycle.ts';\n");
+    await put(root, 'packages/domain/src/tx-lifecycle.ts', 'export const lifecycle = true;\n');
+    await put(root, 'packages/chain-evm/localnet.ts', "export { reader } from './src/reader.ts';\n");
+    await put(root, 'packages/chain-evm/src/reader.ts', 'export const reader = true;\n');
+    await put(root, 'packages/messaging/localnet.ts', 'export const notApproved = true;\n');
+    await put(root, 'apps/web/src/localnet/LocalnetRoot.tsx', [
+      "import { adapter } from '../../../../packages/wallet/localnet.ts';",
+      "import { lifecycle } from '../../../../packages/domain/localnet.ts';",
+      "import { reader } from '../../../../packages/chain-evm/localnet.ts';",
+      "import { local } from './config.ts';",
+      'export const LocalnetRoot = () => [adapter, lifecycle, reader, local];', ''].join('\n'));
+    await put(root, 'apps/web/src/localnet/config.ts', 'export const local = 1;\n');
+    await put(root, 'apps/web/src/main.tsx', "export const load = () => import('./localnet/LocalnetRoot.tsx');\n");
+    let result = await inspectImportBoundaries(root);
+    assert.deepEqual(result.findings, [], 'facades from the localnet subtree and a lazy localnet import from main are permitted');
+    assert.equal(result.graphChecked, true);
+
+    await put(root, 'apps/web/src/ui.ts', "import { adapter } from '../../../packages/wallet/localnet.ts'; export const ui = adapter;\n");
+    await put(root, 'apps/web/src/eager.ts', "import { LocalnetRoot } from './localnet/LocalnetRoot.tsx'; export const eager = LocalnetRoot;\n");
+    await put(root, 'apps/web/src/typed.ts', "import type { local } from './localnet/config.ts'; export type Local = typeof local;\n");
+    await put(root, 'apps/web/src/localnet/other.ts', "import '../../../../packages/messaging/localnet.ts';\n");
+    await put(root, 'packages/exchange/index.ts', "export * from './src/exchange.ts';\n");
+    await put(root, 'packages/exchange/src/exchange.ts', "import { reader } from '../../chain-evm/localnet.ts'; export const exchange = reader;\n");
+    await put(root, 'packages/domain/src/uses-facade.ts', "import { adapter } from '../../wallet/localnet.ts'; export const leaked = adapter;\n");
+    await put(root, 'packages/chain-evm/src/bad.ts', "import React from 'react'; export { React };\n");
+    await put(root, 'packages/domain/src/core-react.ts', "import React from 'react'; export { React };\n");
+    result = await inspectImportBoundaries(root);
+    const has = (code, file, detail) => result.findings.some(finding => finding.code === code && finding.file.endsWith(file) && (detail === undefined || finding.detail === detail));
+    assert.ok(has('APP_LOCALNET_FACADE_OUTSIDE_LOCALNET', '/apps/web/src/ui.ts'), JSON.stringify(result.findings));
+    assert.ok(has('APP_LOCALNET_STATIC_IMPORT', '/apps/web/src/eager.ts'));
+    assert.ok(has('APP_LOCALNET_STATIC_IMPORT', '/apps/web/src/typed.ts'));
+    assert.ok(has('APP_PACKAGE_PRIVATE_IMPORT', '/apps/web/src/localnet/other.ts', '../../../../packages/messaging/localnet.ts'), 'only the three approved localnet facades are public');
+    assert.ok(has('PACKAGE_IMPORT_LOCALNET_FACADE', '/packages/exchange/src/exchange.ts'));
+    assert.ok(has('PACKAGE_IMPORT_LOCALNET_FACADE', '/packages/domain/src/uses-facade.ts'));
+    assert.ok(has('CORE_EXTERNAL_IMPORT', '/packages/domain/src/core-react.ts'));
+    assert.equal(has('CORE_EXTERNAL_IMPORT', '/packages/chain-evm/src/bad.ts'), false, 'chain-evm is not a core package');
+    assert.equal(result.findings.some(finding => finding.file.endsWith('/apps/web/src/main.tsx')), false);
+    assert.equal(result.findings.some(finding => finding.file.endsWith('/apps/web/src/localnet/LocalnetRoot.tsx')), false);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('G07 a localnet facade is classified under its own package, so the domain facade keeps core-package rules', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-localnet-core-'));
+  try {
+    await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true, allowImportingTsExtensions: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+    await put(root, 'packages/domain/localnet.ts', "import fs from 'node:fs'; export { fs };\nexport const title = document.title;\n");
+    await put(root, 'apps/web/src/main.ts', 'export const app = true;\n');
+    const result = await inspectImportBoundaries(root);
+    assert.ok(result.findings.some(finding => finding.code === 'CORE_NODE_IMPORT' && finding.file.endsWith('/packages/domain/localnet.ts')), JSON.stringify(result.findings));
+    assert.ok(result.findings.some(finding => finding.code === 'CORE_BROWSER_GLOBAL' && finding.file.endsWith('/packages/domain/localnet.ts')));
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('G07 the repository passes with the localnet facades registered', async () => {
+  const result = await inspectImportBoundaries(resolve(import.meta.dirname, '../..'));
+  assert.deepEqual(result.findings, []);
+  assert.equal(result.graphChecked, true);
 });

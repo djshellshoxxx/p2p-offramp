@@ -1,0 +1,624 @@
+{
+  "observed_at_utc": "2026-11-20T03:30:50Z",
+  "log_retrieval": "Completed native archives read and structured validator/browser receipts parsed in this coordinator; not inferred solely from green status.",
+  "receipts": [
+    {
+      "pr": 203,
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "merge_checkout": "8e2cd7b6ed1c907127b2e35e8b8826f59c039d90",
+      "tree": "412efa7b9534cc182d05d2b97830d5f6ff09944e",
+      "job": 136022950914,
+      "job_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212245/job/136022950914",
+      "log_bytes": 190528,
+      "check_records": 10,
+      "all_check_records_successful": true,
+      "validator": {
+        "ok": true,
+        "checks": 62,
+        "all_checks_true": true,
+        "send_transaction_calls": 13,
+        "refund_wait_seconds": 1852,
+        "duration_seconds": 1907,
+        "finished_at": "2026-11-20T02:46:29.602Z",
+        "deviations": [
+          "getGenesisHash answered with the compiled synthetic genesis constant (localnet-only shim; see header)"
+        ]
+      },
+      "browser": {
+        "ok": true,
+        "checks": [
+          "actual module Worker refuses absent or wrong-pinned escrows and encrypts three complete original funded receipts",
+          "explicit cancellation and a wallet change during an actual sign-only prompt both send zero transactions",
+          "reviewed release finalizes alone, then a separate reviewed payout transfers exact principal to the original buyer",
+          "fresh-key restore preserves the unknown marker without resending; only finalized expiry and a new explicit review permit replacement",
+          "real chain time opens refund; separate reviewed refund and payout return original seller principal minus actual fees"
+        ],
+        "duration_seconds": 2051,
+        "actual_module_worker": true,
+        "encrypted_indexed_db": true,
+        "genesis_rpc_rewritten": false,
+        "clock_warped": false,
+        "actual_genesis_rpc": true,
+        "real_clock": true,
+        "wallet_connects": 5,
+        "wallet_prompt_count": 8,
+        "recorded_sends": 7,
+        "distinct_signatures": 7,
+        "fixture_errors": 0,
+        "artifact_sha256": "72263dbd3dacfddbbb2dbda7873d2f9b3dd1f64d0848e38661a5e59677819b56",
+        "ReleaseEnabled": 0,
+        "public_network_qualification": false,
+        "fresh_negotiation_qualification": false
+      },
+      "scope": "Exact ancestor checkout only; no qualification transferred to corrected207 or new fixture210.205 still lacks four known corrections.",
+      "decoded_log_sha256": "8d46d425ff79ec5fae7852b206e63d0a0e1000db86a2ebbb4486c5fbee04e039",
+      "merge_tree_verified": true
+    },
+    {
+      "pr": 205,
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "merge_checkout": "3dbe6ac3994c56bf2e6424676c6dc034ecc9a9b4",
+      "tree": "ce3c69ddc36245f756005c540e521a26a3ce59b8",
+      "job": 136027174510,
+      "job_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477232/job/136027174510",
+      "log_bytes": 190505,
+      "check_records": 13,
+      "all_check_records_successful": true,
+      "validator": {
+        "ok": true,
+        "checks": 62,
+        "all_checks_true": true,
+        "send_transaction_calls": 13,
+        "refund_wait_seconds": 1850,
+        "duration_seconds": 1909,
+        "finished_at": "2026-11-20T02:49:49.039Z",
+        "deviations": [
+          "getGenesisHash answered with the compiled synthetic genesis constant (localnet-only shim; see header)"
+        ]
+      },
+      "browser": {
+        "ok": true,
+        "checks": [
+          "actual module Worker refuses absent or wrong-pinned escrows and encrypts three complete original funded receipts",
+          "explicit cancellation and a wallet change during an actual sign-only prompt both send zero transactions",
+          "reviewed release finalizes alone, then a separate reviewed payout transfers exact principal to the original buyer",
+          "fresh-key restore preserves the unknown marker without resending; only finalized expiry and a new explicit review permit replacement",
+          "real chain time opens refund; separate reviewed refund and payout return original seller principal minus actual fees"
+        ],
+        "duration_seconds": 2059,
+        "actual_module_worker": true,
+        "encrypted_indexed_db": true,
+        "genesis_rpc_rewritten": false,
+        "clock_warped": false,
+        "actual_genesis_rpc": true,
+        "real_clock": true,
+        "wallet_connects": 5,
+        "wallet_prompt_count": 8,
+        "recorded_sends": 7,
+        "distinct_signatures": 7,
+        "fixture_errors": 0,
+        "artifact_sha256": "29efeb19d47c6927b20ddec89607a5dfacf55d5f543c352a0be6dd5e166b94af",
+        "ReleaseEnabled": 0,
+        "public_network_qualification": false,
+        "fresh_negotiation_qualification": false
+      },
+      "scope": "Exact ancestor checkout only; no qualification transferred to corrected207 or new fixture210.205 still lacks four known corrections.",
+      "decoded_log_sha256": "1415ec974b022ce3a6df52b7955638061cd758ae1f5913cc9aad63c3da9ea9bd",
+      "merge_tree_verified": true
+    }
+  ],
+  "current_status_snapshot": {
+    "observed_at_utc": "2026-11-20T03:30:50Z",
+    "prs": {
+      "203": {
+        "counts": {
+          "success": 10
+        },
+        "records": [
+          {
+            "name": "program",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136022950914,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212245/job/136022950914"
+          },
+          {
+            "name": "docs-tooling",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136022950249,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078/job/136022950249"
+          },
+          {
+            "name": "browser",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136022950072,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078/job/136022950072"
+          },
+          {
+            "name": "local-evm",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136022950050,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078/job/136022950050"
+          },
+          {
+            "name": "schemas-and-crypto",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136022950037,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078/job/136022950037"
+          },
+          {
+            "name": "local-trade",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136022949990,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212104/job/136022949990"
+          },
+          {
+            "name": "native-nostr-relay",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136022949793,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212072/job/136022949793"
+          },
+          {
+            "name": "specs",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136022949762,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078/job/136022949762"
+          },
+          {
+            "name": "forge",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136022949569,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212104/job/136022949569"
+          },
+          {
+            "name": "inventory",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136022949408,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212063/job/136022949408"
+          }
+        ]
+      },
+      "205": {
+        "counts": {
+          "success": 13
+        },
+        "records": [
+          {
+            "name": "CodeQL",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136033752731,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/runs/136033752731"
+          },
+          {
+            "name": "inventory",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027175725,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477515/job/136027175725"
+          },
+          {
+            "name": "docs-tooling",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027175464,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341/job/136027175464"
+          },
+          {
+            "name": "browser",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027175362,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341/job/136027175362"
+          },
+          {
+            "name": "local-evm",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027175323,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341/job/136027175323"
+          },
+          {
+            "name": "schemas-and-crypto",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027175317,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341/job/136027175317"
+          },
+          {
+            "name": "native-nostr-relay",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027175206,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477383/job/136027175206"
+          },
+          {
+            "name": "specs",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027175006,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341/job/136027175006"
+          },
+          {
+            "name": "local-trade",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027174955,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477306/job/136027174955"
+          },
+          {
+            "name": "forge",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027174640,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477306/job/136027174640"
+          },
+          {
+            "name": "program",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027174510,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477232/job/136027174510"
+          },
+          {
+            "name": "Analyze (javascript-typescript)",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027163474,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657472437/job/136027163474"
+          },
+          {
+            "name": "Analyze (python)",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136027163336,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657472437/job/136027163336"
+          }
+        ]
+      },
+      "207": {
+        "counts": {
+          "success": 11,
+          "failure": 1,
+          "in_progress": 1
+        },
+        "records": [
+          {
+            "name": "CodeQL",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136051760253,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/runs/136051760253"
+          },
+          {
+            "name": "docs-tooling",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136044688041,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044688041"
+          },
+          {
+            "name": "schemas-and-crypto",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136044688023,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044688023"
+          },
+          {
+            "name": "specs",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136044687974,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044687974"
+          },
+          {
+            "name": "local-evm",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136044687928,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044687928"
+          },
+          {
+            "name": "local-trade",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136044687919,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758194/job/136044687919"
+          },
+          {
+            "name": "forge",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136044687761,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758194/job/136044687761"
+          },
+          {
+            "name": "browser",
+            "status": "completed",
+            "conclusion": "failure",
+            "id": 136044687707,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044687707"
+          },
+          {
+            "name": "inventory",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136044687556,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758164/job/136044687556"
+          },
+          {
+            "name": "program",
+            "status": "in_progress",
+            "conclusion": null,
+            "id": 136044687282,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758124/job/136044687282"
+          },
+          {
+            "name": "native-nostr-relay",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136044686685,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758038/job/136044686685"
+          },
+          {
+            "name": "Analyze (javascript-typescript)",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136044678057,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662753845/job/136044678057"
+          },
+          {
+            "name": "Analyze (python)",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136044677642,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662753845/job/136044677642"
+          }
+        ]
+      },
+      "208": {
+        "counts": {
+          "queued": 8,
+          "in_progress": 1,
+          "success": 1
+        },
+        "records": [
+          {
+            "name": "local-evm",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048285000,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854050/job/136048285000"
+          },
+          {
+            "name": "docs-tooling",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048284948,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854050/job/136048284948"
+          },
+          {
+            "name": "schemas-and-crypto",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048284942,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854050/job/136048284942"
+          },
+          {
+            "name": "browser",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048284909,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854050/job/136048284909"
+          },
+          {
+            "name": "local-trade",
+            "status": "in_progress",
+            "conclusion": null,
+            "id": 136048284859,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854059/job/136048284859"
+          },
+          {
+            "name": "specs",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048284604,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854050/job/136048284604"
+          },
+          {
+            "name": "program",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048284590,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854118/job/136048284590"
+          },
+          {
+            "name": "forge",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136048284500,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854059/job/136048284500"
+          },
+          {
+            "name": "inventory",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048284305,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854033/job/136048284305"
+          },
+          {
+            "name": "native-nostr-relay",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048284109,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854039/job/136048284109"
+          }
+        ]
+      },
+      "209": {
+        "counts": {
+          "queued": 9,
+          "success": 1
+        },
+        "records": [
+          {
+            "name": "local-trade",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048938735,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052872/job/136048938735"
+          },
+          {
+            "name": "program",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048938614,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052928/job/136048938614"
+          },
+          {
+            "name": "browser",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048938353,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052754/job/136048938353"
+          },
+          {
+            "name": "forge",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048938289,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052872/job/136048938289"
+          },
+          {
+            "name": "specs",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048938288,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052754/job/136048938288"
+          },
+          {
+            "name": "docs-tooling",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048938268,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052754/job/136048938268"
+          },
+          {
+            "name": "local-evm",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048938260,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052754/job/136048938260"
+          },
+          {
+            "name": "native-nostr-relay",
+            "status": "completed",
+            "conclusion": "success",
+            "id": 136048938231,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052847/job/136048938231"
+          },
+          {
+            "name": "inventory",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048937950,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052797/job/136048937950"
+          },
+          {
+            "name": "schemas-and-crypto",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136048937903,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052754/job/136048937903"
+          }
+        ]
+      },
+      "210": {
+        "counts": {
+          "queued": 10
+        },
+        "records": [
+          {
+            "name": "docs-tooling",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136060707626,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667629796/job/136060707626"
+          },
+          {
+            "name": "schemas-and-crypto",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136060707609,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667629796/job/136060707609"
+          },
+          {
+            "name": "local-evm",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136060707554,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667629796/job/136060707554"
+          },
+          {
+            "name": "browser",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136060707469,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667629796/job/136060707469"
+          },
+          {
+            "name": "specs",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136060707286,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667629796/job/136060707286"
+          },
+          {
+            "name": "program",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136060703683,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667628668/job/136060703683"
+          },
+          {
+            "name": "inventory",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136060703382,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667628585/job/136060703382"
+          },
+          {
+            "name": "local-trade",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136060703254,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667628512/job/136060703254"
+          },
+          {
+            "name": "native-nostr-relay",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136060703235,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667628538/job/136060703235"
+          },
+          {
+            "name": "forge",
+            "status": "queued",
+            "conclusion": null,
+            "id": 136060702829,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667628512/job/136060702829"
+          }
+        ]
+      }
+    }
+  }
+}

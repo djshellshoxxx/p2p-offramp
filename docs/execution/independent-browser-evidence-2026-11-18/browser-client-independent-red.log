@@ -1,0 +1,145 @@
+✖ independent review: locking redacts the document projection before worker acknowledgement (2.144527ms)
+✖ independent review: a pre-lock worker snapshot cannot republish private data while locking (0.426081ms)
+✖ independent review: a review cannot grant a signing method outside the bridge protocol (0.505751ms)
+✖ independent review: invalidation from a provider request getter prevents the physical prompt (0.320663ms)
+✖ independent review: only the current explicit opening result can restore a private projection (0.400693ms)
+✖ independent review: lock supersedes a queued opening result (0.345429ms)
+✖ independent review: a full document command queue cannot prevent a lock command (0.507894ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 0
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 320.673025
+
+✖ failing tests:
+
+test at apps/web/test/independent-localnet-client.test.mjs:32:1
+✖ independent review: locking redacts the document projection before worker acknowledgement (2.144527ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '11111111111111111111111111111111'
+  - null
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/browser-independent-review/apps/web/test/independent-localnet-client.test.mjs:37:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '11111111111111111111111111111111',
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/independent-localnet-client.test.mjs:42:1
+✖ independent review: a pre-lock worker snapshot cannot republish private data while locking (0.426081ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '11111111111111111111111111111111'
+  - null
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/browser-independent-review/apps/web/test/independent-localnet-client.test.mjs:49:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '11111111111111111111111111111111',
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/independent-localnet-client.test.mjs:54:1
+✖ independent review: a review cannot grant a signing method outside the bridge protocol (0.505751ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/scratch/07167523f342/browser-independent-review/apps/web/test/independent-localnet-client.test.mjs:61:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps/web/test/independent-localnet-client.test.mjs:66:1
+✖ independent review: invalidation from a provider request getter prevents the physical prompt (0.320663ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/browser-independent-review/apps/web/test/independent-localnet-client.test.mjs:72:64)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/independent-localnet-client.test.mjs:76:1
+✖ independent review: only the current explicit opening result can restore a private projection (0.400693ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '11111111111111111111111111111111'
+  - null
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/browser-independent-review/apps/web/test/independent-localnet-client.test.mjs:82:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '11111111111111111111111111111111',
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/independent-localnet-client.test.mjs:100:1
+✖ independent review: lock supersedes a queued opening result (0.345429ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/browser-independent-review/apps/web/test/independent-localnet-client.test.mjs:107:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/independent-localnet-client.test.mjs:114:1
+✖ independent review: a full document command queue cannot prevent a lock command (0.507894ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'status'
+  - 'profile.lock'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/browser-independent-review/apps/web/test/independent-localnet-client.test.mjs:120:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'status',
+    expected: 'profile.lock',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -6,3 +6,10 @@ declare const __P2P_TESTNET__: boolean;
 declare const __P2P_TESTNET_TRUST__: unknown;
 /** Explicit test-owned build seam; independently supplied fixture pin, never read from the embedded bundle. */
 declare const __P2P_TESTNET_LOCAL_PROOF_KEY_ID__: string | null;
+/** True only in the library-only `localnet` build (apps/web/scripts/build.mjs with an explicit localnet option). */
+declare const __P2P_LOCALNET__: boolean;
+/** The validated localnet config document (apps/web/src/localnet/config.ts) in the localnet build; null in every other build. */
+declare const __P2P_LOCALNET_CONFIG__: unknown;
+/** Separate library-only Solana recovery fixture; never set by a CLI/environment switch. */
+declare const __P2P_SOLANA_LOCALNET__: boolean;
+declare const __P2P_SOLANA_LOCALNET_CONFIG__: unknown;

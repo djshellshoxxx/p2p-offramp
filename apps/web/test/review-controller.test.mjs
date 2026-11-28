@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createTradeReviewController, noApprovedRegistry, MAX_SESSION_REVIEWS } from '../src/trade/review-controller.ts';
+import { MAX_TERMS_REVIEW_BYTES } from '../../../packages/domain/index.ts';
 
 const registry = { network: () => null, deployment: () => null };
 const ready = async () => ({ kind: 'ready', label: 'synthetic-demo', registry, samples: [{ id: 's1', label: 'Sample', load: async now => new TextEncoder().encode(String(now)) }] });
@@ -49,6 +50,37 @@ test('oversize files are refused before any bytes are read', async () => {
   const outcome = await trade.importFile({ size: 64 * 1024 + 1, arrayBuffer: async () => { read = true; return new ArrayBuffer(0); } });
   assert.deepEqual(outcome, { kind: 'rejected', code: 'TOO_LARGE' });
   assert.equal(read, false);
+});
+
+test('actual bytes are bounded after a FileLike read and after a generated sample, despite claimed metadata', async () => {
+  let validations = 0;
+  const tooMany = MAX_TERMS_REVIEW_BYTES + 1;
+  const documentBytes = new Uint8Array(tooMany).fill(41);
+  const sampleBytes = new Uint8Array(tooMany).fill(42);
+  const source = async () => ({ kind: 'ready', label: 'synthetic-demo', registry,
+    samples: [{ id: 'oversized', label: 'Oversized local fixture', load: async () => sampleBytes }] });
+  const trade = createTradeReviewController({ source, randomBytes, review: async () => { validations++; return accepted('should-not-accept'); } });
+  await trade.loadRegistry();
+  assert.deepEqual(await trade.importFile({ size: 1, arrayBuffer: async () => documentBytes.buffer }),
+    { kind: 'rejected', code: 'TOO_LARGE' }, 'advertised FileLike size is not authoritative');
+  assert.deepEqual(await trade.importSample('oversized'), { kind: 'rejected', code: 'TOO_LARGE' });
+  assert.equal(validations, 0, 'neither oversized read may enter the validator');
+  assert.deepEqual(trade.getSnapshot().reviews, [], 'neither oversized read may be retained');
+  assert.equal(documentBytes.every(byte => byte === 0), true, 'rejected file bytes are cleared');
+  assert.equal(sampleBytes.every(byte => byte === 0), true, 'rejected sample bytes are cleared');
+  trade.dispose();
+});
+
+test('invalid claimed FileLike lengths fail closed without reading file contents', async () => {
+  const trade = createTradeReviewController({ source: ready, randomBytes, review: async () => accepted('unexpected') });
+  await trade.loadRegistry();
+  for (const size of [-1, NaN, 1.5, '4', null, undefined]) {
+    let read = false;
+    const result = await trade.importFile({ size, arrayBuffer: async () => { read = true; return new ArrayBuffer(0); } });
+    assert.deepEqual(result, { kind: 'rejected', code: 'FILE_UNREADABLE' }, String(size));
+    assert.equal(read, false);
+  }
+  trade.dispose();
 });
 
 test('rejections, unreadable files and a throwing validator map to fixed codes and store nothing', async () => {

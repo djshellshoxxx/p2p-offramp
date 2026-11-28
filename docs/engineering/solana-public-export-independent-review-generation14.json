@@ -1,0 +1,159 @@
+{
+  "reviewer": "solana_export_review_g14",
+  "observed_at_utc": "2026-11-20T06:46:06.753585+00:00",
+  "author_source": "b993d17fdbd7cdfce8f0d1e5d239c7785c9d787e",
+  "author_tree": "e35d9cdb942fec95aa6d1133149d113a559afbdc",
+  "base": "bf12a45604497860b8ded9d0e65f06a1c0cc9860",
+  "test_source": "fb4adca6ae355e5a9c21879cf9515ea3ac8fd6b5",
+  "test_tree": "fa2cf3afb3476bd5d025963459f64ec01ad261a5",
+  "review_scope": "ordinary source and functional review of explicit retained public recovery export; no configured native browser or validator execution",
+  "actionable_findings": [],
+  "production_source_changed_by_reviewer": false,
+  "new_test": "public document export imports into a separate fresh profile with new private provenance and an empty journal",
+  "focused_tests": {
+    "files": [
+      "apps/web/test/solana-localnet-controller.test.mjs",
+      "apps/web/test/solana-public-recovery-ui.test.mjs",
+      "apps/web/test/solana-localnet-rpc.test.mjs"
+    ],
+    "tests": 21,
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "full_repository_suite": false
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/solana-localnet-controller.test.mjs",
+        "apps/web/test/solana-public-recovery-ui.test.mjs",
+        "apps/web/test/solana-localnet-rpc.test.mjs"
+      ],
+      "exit": 0,
+      "duration_seconds": 6.687,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/solana-export-review-g14/check-1.log",
+      "sha256": "bbbd8a4a4f43c0fbaaa3c2462aabbcca3e78f16c7840bacbd4d3167041ab6e3d"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit": 0,
+      "duration_seconds": 6.701,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/solana-export-review-g14/check-2.log",
+      "sha256": "14544efd767e5a014f49b28aa5ff3be7063d350191e041153ebb55ffcfae780e"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "exit": 0,
+      "duration_seconds": 1.618,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/solana-export-review-g14/check-3.log",
+      "sha256": "ece539767175d0a358063cf6cdc452c9ac2f85f7ebe80c56a39ebe48d2abe49a"
+    },
+    {
+      "command": [
+        "node",
+        "--check",
+        "scripts/test-solana-localnet-browser.mjs"
+      ],
+      "exit": 0,
+      "duration_seconds": 0.087,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/solana-export-review-g14/check-4.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "duration_seconds": 0.706,
+      "log": "/workspace/scratch/dcf03ef9bee8/evidence/solana-export-review-g14/check-5.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "source_boundaries": {
+    "production_files": 239,
+    "core_graph_modules": 143
+  },
+  "default_build": {
+    "four_typescript_projects_passed": true,
+    "scanned_assets": 12,
+    "scanned_bytes": 784437,
+    "actual_file_count": 13,
+    "files_sha256": {
+      "_headers": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+      "assets/OfflineRoot-CtqbvMoA.js": "7ec100f4462024ad7863d72f48af5a1c5edc867f413c324bd9a519da73a2c9dd",
+      "assets/decode.worker-DGcSBxfL.js": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+      "assets/index-CejmKC9k.js": "227e0e177230d46302cfce3df3dbf50002a9e24ce718ae020362226089b95a51",
+      "assets/index-rPDFZ4F5.css": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+      "assets/vault.worker-BFynfgnx.js": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044",
+      "content-policy.json": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+      "core-graph-document.json": "6bf85539dfcb89440254db99f22560be1dcef248a954c97ab17241bc067c1803",
+      "core-graph-worker.json": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+      "index.html": "68eb71f3d33fdcb61782b02ef0dafbd154e25adc407cb900fa854a03c85e0306",
+      "local-build-evidence.json": "2d6b6fead57bf8d1a8e414d00866e0784625860e692608e84051dcff6f59cca5",
+      "qr-graph-worker.json": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+      "third-party-licenses.json": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+    },
+    "graphs": [
+      {
+        "path": "core-graph-document.json",
+        "modules": 94,
+        "solana_modules": []
+      },
+      {
+        "path": "core-graph-worker.json",
+        "modules": 30,
+        "solana_modules": []
+      },
+      {
+        "path": "qr-graph-worker.json",
+        "modules": 4,
+        "solana_modules": []
+      }
+    ],
+    "ReleaseEnabled": 0,
+    "signedRelease": false,
+    "releaseAcceptance": false,
+    "connectOrigins": [],
+    "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+  },
+  "default_reference_comparison": {
+    "reference_source": "bf12a45604497860b8ded9d0e65f06a1c0cc9860",
+    "reference_tree": "3ed920615ec2ffcea9621339ff88556a19f0f9d7",
+    "reference_report": "generation12-combined-qualification.json",
+    "reference_report_sha256": "8e59e9097ebcba1e0e42ad24d7d4e4eb6e7087da56fb8dab95d9c6321c7df46d",
+    "identical_files": 13,
+    "all_files_identical": true
+  },
+  "reviewed_source_paths": [
+    "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx",
+    "apps/web/src/solana-localnet/controller.ts",
+    "apps/web/src/solana-localnet/protocol.ts",
+    "apps/web/src/solana-localnet/validation.ts",
+    "apps/web/test/solana-localnet-controller.test.mjs",
+    "apps/web/test/solana-public-recovery-ui.test.mjs",
+    "scripts/test-solana-localnet-browser.mjs"
+  ],
+  "evidence_limits": [
+    "UI tests run maintained TSX handlers with a controlled client and synthetic Blob/download surface.",
+    "Controller round trip uses ordinary existing synthetic chain fixtures and the maintained parser/storage services.",
+    "No native browser/download manager, validator, physical device, live network or funds qualification was executed.",
+    "New actual Solana browser fixture assertion requires applicable current-source hosted qualification.",
+    "Existing 1800-second refund minima and source/workflow gates are unchanged."
+  ]
+}

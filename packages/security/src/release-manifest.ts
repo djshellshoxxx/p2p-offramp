@@ -200,6 +200,11 @@ function manifest(raw: Uint8Array<ArrayBuffer>): ReleaseManifest {
     buildRecipeDigest: hex(m.buildRecipeDigest), lockfileDigest: hex(m.lockfileDigest), sbomDigest: hex(m.sbomDigest), createdAt, expiresAt,
     minStorageSchema, maxStorageSchema, assets: Object.freeze(assets), deployments: Object.freeze([]), predecessorDigest: m.predecessorDigest === null ? null : hex(m.predecessorDigest) });
 }
+/** Internal discovery index only. No signature, asset verification or proof registration occurs. */
+export function readUntrustedReleaseManifest(input: unknown): Readonly<{ok:true;value:ReleaseManifest}>|Readonly<{ok:false;error:Readonly<{code:ReleaseErrorCode}>}> {
+  try { return Object.freeze({ok:true,value:manifest(bytes(input,RELEASE_LIMITS.manifestBytes,'MANIFEST_UNSUPPORTED'))}); }
+  catch(error) { return Object.freeze({ok:false,error:Object.freeze({code:refusalCode(error,'MANIFEST_UNSUPPORTED')})}); }
+}
 function publicKeys(input: unknown): JsonWebKey[] {
   try {
     return array(input, RELEASE_LIMITS.trustedKeys, 'KEY_UNTRUSTED').map(value => {

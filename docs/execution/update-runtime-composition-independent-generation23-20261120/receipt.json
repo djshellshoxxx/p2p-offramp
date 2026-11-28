@@ -1,0 +1,32 @@
+{
+  "source": "2732f5b136987c27639db23f1c7943a278e3fa56",
+  "tree": "5a1f2969c06db1dba47a1a55d1332a099466edef",
+  "command": [
+    "node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "apps/web/test/update-runtime-composition.test.mjs",
+    "apps/web/test/runtime-backup-selection.test.mjs",
+    "packages/security/test/release-update.test.mjs"
+  ],
+  "node": "v24.22.3",
+  "startedAt": "2026-11-20T17:03:40.662849+00:00",
+  "completedAt": "2026-11-20T17:03:45.777675+00:00",
+  "durationSeconds": 5.11922286299523,
+  "exitCode": 0,
+  "log": "/workspace/scratch/dcf03ef9bee8/p2p-update-runtime-composition-independent-g23-logs/focused.log",
+  "bytes": 6410,
+  "sha256": "3b72dbb1d879227196f0325c2537d0cf1e9ed172939affe8887c5fc240b990cc",
+  "summary": [
+    "\u2139 tests 59",
+    "\u2139 suites 0",
+    "\u2139 pass 59",
+    "\u2139 fail 0",
+    "\u2139 cancelled 0",
+    "\u2139 skipped 0",
+    "\u2139 todo 0",
+    "\u2139 duration_ms 5012.187749"
+  ]
+}

@@ -1,0 +1,3596 @@
+{
+  "schema": "p2p-consolidation-hosted-snapshot/v2",
+  "generation": 10,
+  "repository": "djshellshoxxx/p2p-offramp",
+  "observed_from_utc": "2026-11-20T04:14:20.997Z",
+  "observed_to_utc": "2026-11-20T04:14:21.875Z",
+  "native_step_observed_at_utc": "2026-11-20T04:15:11.222Z",
+  "selected_prs_only": [
+    206,
+    207,
+    208,
+    209,
+    210,
+    211
+  ],
+  "candidate_checks": [
+    {
+      "pr": 206,
+      "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "total_check_records": 10,
+      "counts": {
+        "success": 9,
+        "cancelled": 1
+      },
+      "checks": [
+        {
+          "id": 136050935033,
+          "name": "forge",
+          "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:53:41Z",
+          "completed_at": "2026-11-20T03:54:22Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664659392/job/136050935033"
+        },
+        {
+          "id": 136050934601,
+          "name": "local-trade",
+          "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:32:47Z",
+          "completed_at": "2026-11-20T03:36:03Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664659392/job/136050934601"
+        },
+        {
+          "id": 136050934451,
+          "name": "native-nostr-relay",
+          "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:45:56Z",
+          "completed_at": "2026-11-20T03:46:18Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664659348/job/136050934451"
+        },
+        {
+          "id": 136050933154,
+          "name": "docs-tooling",
+          "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:55:50Z",
+          "completed_at": "2026-11-20T03:56:29Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664659342/job/136050933154"
+        },
+        {
+          "id": 136050933124,
+          "name": "browser",
+          "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:46:33Z",
+          "completed_at": "2026-11-20T03:49:53Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664659342/job/136050933124"
+        },
+        {
+          "id": 136050933031,
+          "name": "schemas-and-crypto",
+          "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:47:06Z",
+          "completed_at": "2026-11-20T03:49:35Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664659342/job/136050933031"
+        },
+        {
+          "id": 136050933013,
+          "name": "specs",
+          "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:41:39Z",
+          "completed_at": "2026-11-20T03:41:52Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664659342/job/136050933013"
+        },
+        {
+          "id": 136050932896,
+          "name": "inventory",
+          "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:27:07Z",
+          "completed_at": "2026-11-20T03:27:21Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664659368/job/136050932896"
+        },
+        {
+          "id": 136050932820,
+          "name": "local-evm",
+          "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:36:52Z",
+          "completed_at": "2026-11-20T03:37:25Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664659342/job/136050932820"
+        },
+        {
+          "id": 136050929150,
+          "name": "native-nostr-relay",
+          "head_sha": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "started_at": "2026-11-20T02:59:59Z",
+          "completed_at": "2026-11-20T02:59:59Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664659217/job/136050929150"
+        }
+      ]
+    },
+    {
+      "pr": 207,
+      "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "total_check_records": 13,
+      "counts": {
+        "success": 11,
+        "failure": 1,
+        "in_progress": 1
+      },
+      "checks": [
+        {
+          "id": 136051760253,
+          "name": "CodeQL",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:02:08Z",
+          "completed_at": "2026-11-20T03:02:13Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/runs/136051760253"
+        },
+        {
+          "id": 136044688041,
+          "name": "docs-tooling",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:22:30Z",
+          "completed_at": "2026-11-20T03:23:08Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044688041"
+        },
+        {
+          "id": 136044688023,
+          "name": "schemas-and-crypto",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:13:06Z",
+          "completed_at": "2026-11-20T03:16:26Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044688023"
+        },
+        {
+          "id": 136044687974,
+          "name": "specs",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:11:51Z",
+          "completed_at": "2026-11-20T03:12:08Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044687974"
+        },
+        {
+          "id": 136044687928,
+          "name": "local-evm",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:08:38Z",
+          "completed_at": "2026-11-20T03:09:01Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044687928"
+        },
+        {
+          "id": 136044687919,
+          "name": "local-trade",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:19:30Z",
+          "completed_at": "2026-11-20T03:22:27Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758194/job/136044687919"
+        },
+        {
+          "id": 136044687761,
+          "name": "forge",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T02:54:39Z",
+          "completed_at": "2026-11-20T02:55:24Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758194/job/136044687761"
+        },
+        {
+          "id": 136044687707,
+          "name": "browser",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-20T03:02:58Z",
+          "completed_at": "2026-11-20T03:03:20Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758173/job/136044687707"
+        },
+        {
+          "id": 136044687556,
+          "name": "inventory",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:03:22Z",
+          "completed_at": "2026-11-20T03:03:34Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758164/job/136044687556"
+        },
+        {
+          "id": 136044687282,
+          "name": "program",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "in_progress",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:08:17Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758124/job/136044687282"
+        },
+        {
+          "id": 136044686685,
+          "name": "native-nostr-relay",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:09:03Z",
+          "completed_at": "2026-11-20T03:09:20Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662758038/job/136044686685"
+        },
+        {
+          "id": 136044678057,
+          "name": "Analyze (javascript-typescript)",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:06:10Z",
+          "completed_at": "2026-11-20T03:08:15Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662753845/job/136044678057"
+        },
+        {
+          "id": 136044677642,
+          "name": "Analyze (python)",
+          "head_sha": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:01:35Z",
+          "completed_at": "2026-11-20T03:02:18Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662753845/job/136044677642"
+        }
+      ]
+    },
+    {
+      "pr": 208,
+      "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "total_check_records": 10,
+      "counts": {
+        "success": 9,
+        "in_progress": 1
+      },
+      "checks": [
+        {
+          "id": 136048285000,
+          "name": "local-evm",
+          "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:54:21Z",
+          "completed_at": "2026-11-20T03:54:46Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854050/job/136048285000"
+        },
+        {
+          "id": 136048284948,
+          "name": "docs-tooling",
+          "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:51:31Z",
+          "completed_at": "2026-11-20T03:52:14Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854050/job/136048284948"
+        },
+        {
+          "id": 136048284942,
+          "name": "schemas-and-crypto",
+          "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:52:20Z",
+          "completed_at": "2026-11-20T03:55:18Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854050/job/136048284942"
+        },
+        {
+          "id": 136048284909,
+          "name": "browser",
+          "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:46:54Z",
+          "completed_at": "2026-11-20T03:50:16Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854050/job/136048284909"
+        },
+        {
+          "id": 136048284859,
+          "name": "local-trade",
+          "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:27:34Z",
+          "completed_at": "2026-11-20T03:31:15Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854059/job/136048284859"
+        },
+        {
+          "id": 136048284604,
+          "name": "specs",
+          "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:35:24Z",
+          "completed_at": "2026-11-20T03:35:37Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854050/job/136048284604"
+        },
+        {
+          "id": 136048284590,
+          "name": "program",
+          "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+          "status": "in_progress",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:30:51Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854118/job/136048284590"
+        },
+        {
+          "id": 136048284500,
+          "name": "forge",
+          "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:25:32Z",
+          "completed_at": "2026-11-20T03:26:06Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854059/job/136048284500"
+        },
+        {
+          "id": 136048284305,
+          "name": "inventory",
+          "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:32:27Z",
+          "completed_at": "2026-11-20T03:32:39Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854033/job/136048284305"
+        },
+        {
+          "id": 136048284109,
+          "name": "native-nostr-relay",
+          "head_sha": "0e148564743b1ee353abdbdf8931fec464f09870",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:38:40Z",
+          "completed_at": "2026-11-20T03:38:56Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44663854039/job/136048284109"
+        }
+      ]
+    },
+    {
+      "pr": 209,
+      "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "total_check_records": 10,
+      "counts": {
+        "success": 9,
+        "in_progress": 1
+      },
+      "checks": [
+        {
+          "id": 136048938735,
+          "name": "local-trade",
+          "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:42:28Z",
+          "completed_at": "2026-11-20T03:46:19Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052872/job/136048938735"
+        },
+        {
+          "id": 136048938614,
+          "name": "program",
+          "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+          "status": "in_progress",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:46:12Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052928/job/136048938614"
+        },
+        {
+          "id": 136048938353,
+          "name": "browser",
+          "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:49:37Z",
+          "completed_at": "2026-11-20T03:52:45Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052754/job/136048938353"
+        },
+        {
+          "id": 136048938289,
+          "name": "forge",
+          "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:31:17Z",
+          "completed_at": "2026-11-20T03:32:01Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052872/job/136048938289"
+        },
+        {
+          "id": 136048938288,
+          "name": "specs",
+          "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:37:18Z",
+          "completed_at": "2026-11-20T03:37:33Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052754/job/136048938288"
+        },
+        {
+          "id": 136048938268,
+          "name": "docs-tooling",
+          "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:48:54Z",
+          "completed_at": "2026-11-20T03:49:36Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052754/job/136048938268"
+        },
+        {
+          "id": 136048938260,
+          "name": "local-evm",
+          "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:55:20Z",
+          "completed_at": "2026-11-20T03:55:41Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052754/job/136048938260"
+        },
+        {
+          "id": 136048938231,
+          "name": "native-nostr-relay",
+          "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:16:53Z",
+          "completed_at": "2026-11-20T03:17:10Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052847/job/136048938231"
+        },
+        {
+          "id": 136048937950,
+          "name": "inventory",
+          "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:47:34Z",
+          "completed_at": "2026-11-20T03:47:44Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052797/job/136048937950"
+        },
+        {
+          "id": 136048937903,
+          "name": "schemas-and-crypto",
+          "head_sha": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T03:30:56Z",
+          "completed_at": "2026-11-20T03:33:45Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44664052754/job/136048937903"
+        }
+      ]
+    },
+    {
+      "pr": 210,
+      "head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+      "total_check_records": 10,
+      "counts": {
+        "queued": 8,
+        "success": 1,
+        "in_progress": 1
+      },
+      "checks": [
+        {
+          "id": 136060707626,
+          "name": "docs-tooling",
+          "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:25:35Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667629796/job/136060707626"
+        },
+        {
+          "id": 136060707609,
+          "name": "schemas-and-crypto",
+          "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:25:35Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667629796/job/136060707609"
+        },
+        {
+          "id": 136060707554,
+          "name": "local-evm",
+          "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:25:35Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667629796/job/136060707554"
+        },
+        {
+          "id": 136060707469,
+          "name": "browser",
+          "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:25:35Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667629796/job/136060707469"
+        },
+        {
+          "id": 136060707286,
+          "name": "specs",
+          "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-20T04:07:41Z",
+          "completed_at": "2026-11-20T04:07:55Z",
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667629796/job/136060707286"
+        },
+        {
+          "id": 136060703683,
+          "name": "program",
+          "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "status": "in_progress",
+          "conclusion": null,
+          "started_at": "2026-11-20T04:13:25Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667628668/job/136060703683"
+        },
+        {
+          "id": 136060703382,
+          "name": "inventory",
+          "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:25:34Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667628585/job/136060703382"
+        },
+        {
+          "id": 136060703254,
+          "name": "local-trade",
+          "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:25:34Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667628512/job/136060703254"
+        },
+        {
+          "id": 136060703235,
+          "name": "native-nostr-relay",
+          "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:25:34Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667628538/job/136060703235"
+        },
+        {
+          "id": 136060702829,
+          "name": "forge",
+          "head_sha": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:25:34Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44667628512/job/136060702829"
+        }
+      ]
+    },
+    {
+      "pr": 211,
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "total_check_records": 9,
+      "counts": {
+        "queued": 9
+      },
+      "checks": [
+        {
+          "id": 136065848343,
+          "name": "schemas-and-crypto",
+          "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:39:30Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44669207651/job/136065848343"
+        },
+        {
+          "id": 136065848304,
+          "name": "browser",
+          "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:39:30Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44669207651/job/136065848304"
+        },
+        {
+          "id": 136065848272,
+          "name": "local-evm",
+          "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:39:30Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44669207651/job/136065848272"
+        },
+        {
+          "id": 136065848234,
+          "name": "specs",
+          "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:39:30Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44669207651/job/136065848234"
+        },
+        {
+          "id": 136065848189,
+          "name": "inventory",
+          "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:39:30Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44669207683/job/136065848189"
+        },
+        {
+          "id": 136065848175,
+          "name": "forge",
+          "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:39:30Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44669207645/job/136065848175"
+        },
+        {
+          "id": 136065848002,
+          "name": "docs-tooling",
+          "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:39:30Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44669207651/job/136065848002"
+        },
+        {
+          "id": 136065847752,
+          "name": "local-trade",
+          "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:39:30Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44669207645/job/136065847752"
+        },
+        {
+          "id": 136065847699,
+          "name": "native-nostr-relay",
+          "head_sha": "e7397f45f68f18fae8857ea31b58a04e248df404",
+          "status": "queued",
+          "conclusion": null,
+          "started_at": "2026-11-20T03:39:30Z",
+          "completed_at": null,
+          "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44669207633/job/136065847699"
+        }
+      ]
+    }
+  ],
+  "actual_executed_browser_identities": [
+    {
+      "pr": 206,
+      "executed_checkout": "bfb908c9c765b60ecea6a66f979841919e6a1f3c",
+      "executed_tree": "243d178ac6a3822f71ddf3ad3073cc1d8020b864",
+      "ordered_parents": [
+        "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+        "825a85a55a1e0a43d6f416696fabee94913a2f18"
+      ],
+      "source_head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "base_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "source_and_merge_tree_equal": true
+    },
+    {
+      "pr": 208,
+      "executed_checkout": "300c33b9dcfae050e5a4c816513176c5eac65a5d",
+      "executed_tree": "6a4417741c0b399dde894773f29854f7a2d36228",
+      "ordered_parents": [
+        "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+        "0e148564743b1ee353abdbdf8931fec464f09870"
+      ],
+      "source_head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "base_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "source_and_merge_tree_equal": true
+    },
+    {
+      "pr": 209,
+      "executed_checkout": "16a98b0213ea7105a6ad27c210a17ccdbc020434",
+      "executed_tree": "e7aba3833fa52c6eda7a23cd6d1301cadc610355",
+      "ordered_parents": [
+        "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+        "c8695278c3b85ac75fc2ad3318830aa8a08f4d50"
+      ],
+      "source_head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "base_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+      "source_and_merge_tree_equal": true
+    }
+  ],
+  "completed_browser_step_results": [
+    {
+      "pr": 206,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run npm ci --ignore-scripts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Install Chromium",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Verify one actual browser POST for a withheld Solana acknowledgment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Verify acknowledged Solana restore with the actual encrypted Worker",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Run npm run test:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Run npm run test:portal:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Run npm run test:distribution:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Run npm run test:web:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Run npm run test:favorites:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Run npm run test:templates:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Run npm run test:private:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Run npm run test:locator:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Run npm run test:chat:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Run npm run test:diagnostics:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Run npm run test:recovery:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Run npm run test:peer:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19
+        },
+        {
+          "name": "Run npm run test:locale:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20
+        },
+        {
+          "name": "Verify isolated-peer live and stored signed-offer discovery",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 41
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 42
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 43
+        }
+      ]
+    },
+    {
+      "pr": 208,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run npm ci --ignore-scripts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Install Chromium",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Verify one actual browser POST for a withheld Solana acknowledgment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Verify acknowledged Solana restore with the actual encrypted Worker",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Run npm run test:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Run npm run test:portal:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Run npm run test:distribution:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Run npm run test:web:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Run npm run test:favorites:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Run npm run test:templates:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Run npm run test:private:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Run npm run test:locator:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Run npm run test:chat:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Run npm run test:diagnostics:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Run npm run test:recovery:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Run npm run test:peer:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19
+        },
+        {
+          "name": "Run npm run test:locale:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20
+        },
+        {
+          "name": "Verify isolated-peer live and stored signed-offer discovery",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 41
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 42
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 43
+        }
+      ]
+    },
+    {
+      "pr": 209,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run npm ci --ignore-scripts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Install Chromium",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Verify one actual browser POST for a withheld Solana acknowledgment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Verify acknowledged Solana restore with the actual encrypted Worker",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Run npm run test:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Run npm run test:portal:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Run npm run test:distribution:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Run npm run test:web:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Run npm run test:favorites:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Run npm run test:templates:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Run npm run test:private:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Run npm run test:locator:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Run npm run test:chat:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Run npm run test:diagnostics:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Run npm run test:recovery:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Run npm run test:peer:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19
+        },
+        {
+          "name": "Run npm run test:locale:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20
+        },
+        {
+          "name": "Verify isolated-peer live and stored signed-offer discovery",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 41
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 42
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 43
+        }
+      ]
+    }
+  ],
+  "native_step_results": [
+    {
+      "pr": 207,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run npm ci --ignore-scripts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Independent JavaScript vectors",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Run actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Install pinned Agave and Anchor CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Rust toolchain from rust-toolchain.toml",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Build program (SBPF v3, platform-tools v1.54)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Lint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "LiteSVM tests (original SPL Token 3.5.0 and p-token)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Verify committed IDL is current",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Real validator client acceptance including refund and recovery",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Chromium for actual native browser composition",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Actual Worker encrypted Solana recovery and real-time refund",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 16
+        },
+        {
+          "name": "Save dependency cache (push to main only)",
+          "status": "pending",
+          "conclusion": null,
+          "number": 17
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "pending",
+          "conclusion": null,
+          "number": 33
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "pending",
+          "conclusion": null,
+          "number": 34
+        }
+      ]
+    },
+    {
+      "pr": 208,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run npm ci --ignore-scripts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Independent JavaScript vectors",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Run actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Install pinned Agave and Anchor CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Rust toolchain from rust-toolchain.toml",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Build program (SBPF v3, platform-tools v1.54)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Lint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "LiteSVM tests (original SPL Token 3.5.0 and p-token)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Verify committed IDL is current",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Real validator client acceptance including refund and recovery",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Chromium for actual native browser composition",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Actual Worker encrypted Solana recovery and real-time refund",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 16
+        },
+        {
+          "name": "Save dependency cache (push to main only)",
+          "status": "pending",
+          "conclusion": null,
+          "number": 17
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "pending",
+          "conclusion": null,
+          "number": 33
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "pending",
+          "conclusion": null,
+          "number": 34
+        }
+      ]
+    },
+    {
+      "pr": 209,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run npm ci --ignore-scripts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Independent JavaScript vectors",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Run actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Install pinned Agave and Anchor CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Rust toolchain from rust-toolchain.toml",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Build program (SBPF v3, platform-tools v1.54)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Lint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "LiteSVM tests (original SPL Token 3.5.0 and p-token)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Verify committed IDL is current",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Real validator client acceptance including refund and recovery",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 14
+        },
+        {
+          "name": "Chromium for actual native browser composition",
+          "status": "pending",
+          "conclusion": null,
+          "number": 15
+        },
+        {
+          "name": "Actual Worker encrypted Solana recovery and real-time refund",
+          "status": "pending",
+          "conclusion": null,
+          "number": 16
+        },
+        {
+          "name": "Save dependency cache (push to main only)",
+          "status": "pending",
+          "conclusion": null,
+          "number": 17
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "pending",
+          "conclusion": null,
+          "number": 33
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "pending",
+          "conclusion": null,
+          "number": 34
+        }
+      ]
+    },
+    {
+      "pr": 210,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run npm ci --ignore-scripts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Independent JavaScript vectors",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Run actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Install pinned Agave and Anchor CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Rust toolchain from rust-toolchain.toml",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Build program (SBPF v3, platform-tools v1.54)",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 10
+        },
+        {
+          "name": "Lint",
+          "status": "pending",
+          "conclusion": null,
+          "number": 11
+        },
+        {
+          "name": "LiteSVM tests (original SPL Token 3.5.0 and p-token)",
+          "status": "pending",
+          "conclusion": null,
+          "number": 12
+        },
+        {
+          "name": "Verify committed IDL is current",
+          "status": "pending",
+          "conclusion": null,
+          "number": 13
+        },
+        {
+          "name": "Real validator client acceptance including refund and recovery",
+          "status": "pending",
+          "conclusion": null,
+          "number": 14
+        },
+        {
+          "name": "Chromium for actual native browser composition",
+          "status": "pending",
+          "conclusion": null,
+          "number": 15
+        },
+        {
+          "name": "Actual Worker encrypted Solana recovery and real-time refund",
+          "status": "pending",
+          "conclusion": null,
+          "number": 16
+        },
+        {
+          "name": "Save dependency cache (push to main only)",
+          "status": "pending",
+          "conclusion": null,
+          "number": 17
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "pending",
+          "conclusion": null,
+          "number": 33
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "pending",
+          "conclusion": null,
+          "number": 34
+        }
+      ]
+    }
+  ],
+  "completed_logs_read": [
+    {
+      "job_id": 136050933124,
+      "characters": 110207,
+      "bytes": 110301,
+      "carriage_returns": 0,
+      "sha256": "40e61b913043a100fd6eb3335d2178951ebb8ba1261c6ebf3107ce84e1206582",
+      "log_file": "job-136050933124.log"
+    },
+    {
+      "job_id": 136048284909,
+      "characters": 110206,
+      "bytes": 110300,
+      "carriage_returns": 0,
+      "sha256": "e3627b66b9e0f59144301dc21b239565a82cfb7ef815dbbf6e8e0c4096f6101d",
+      "log_file": "job-136048284909.log"
+    },
+    {
+      "job_id": 136048938353,
+      "characters": 110204,
+      "bytes": 110298,
+      "carriage_returns": 0,
+      "sha256": "f1589442a714a9a105fbdd2337ad0ea0b8bbd74a30d7181a9367a27a117570f0",
+      "log_file": "job-136048938353.log"
+    },
+    {
+      "job_id": 136050934451,
+      "characters": 18370,
+      "bytes": 18400,
+      "carriage_returns": 0,
+      "sha256": "5ffcac30aaa778b2dd111ecf8572fb704b8c6c181d11eb95ebf455c7cf5bc64a",
+      "log_file": "job-136050934451.log"
+    }
+  ],
+  "completed_execution_receipts": [
+    {
+      "job_id": 136050933124,
+      "checkout": "bfb908c9c765b60ecea6a66f979841919e6a1f3c",
+      "browser_command_groups": [
+        "npm run test:solana:ack:browser",
+        "npm run test:solana:restore:browser",
+        "npm run test:browser",
+        "npm run test:portal:browser",
+        "npm run test:distribution:browser",
+        "npm run test:web:browser",
+        "npm run test:favorites:browser",
+        "npm run test:templates:browser",
+        "npm run test:private:browser",
+        "npm run test:locator:browser",
+        "npm run test:chat:browser",
+        "npm run test:diagnostics:browser",
+        "npm run test:recovery:browser",
+        "npm run test:peer:browser",
+        "npm run test:locale:browser",
+        "node scripts/test-peer-offer-browser.mjs"
+      ],
+      "group_count": 16,
+      "error_annotations": [],
+      "log_sha256": "40e61b913043a100fd6eb3335d2178951ebb8ba1261c6ebf3107ce84e1206582",
+      "receipt_count": 23,
+      "receipts": [
+        {
+          "identity": "SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC",
+          "canonical_receipt_sha256": "a84356ffb2c5baf91a11bc7bf1582bfe8e2e21ec233a2b3fecfc38a133ccc952",
+          "summary": {
+            "ok": true,
+            "kind": "SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC",
+            "browser": "158.0.8127.36",
+            "actualRuntimeRpc": true,
+            "warmedConnection": true,
+            "applicationCalls": 1,
+            "fetchCalls": 1,
+            "fetchFailures": 0,
+            "statuses": [
+              503
+            ],
+            "refusal": "RPC_UNAVAILABLE",
+            "physicalSendPosts": 1,
+            "validatorForwards": 0,
+            "unexpectedRequests": 0,
+            "fixtureErrors": 0,
+            "artifactSha256": "8e1d06fb99e221589dfdd888a8b120ac45195dc63535a39de1f000f7b835cb0a",
+            "rawResetQualified": false,
+            "generalBrowserRetransmissionGuarantee": false,
+            "nativeChainQualified": false,
+            "ReleaseEnabled": 0
+          }
+        },
+        {
+          "identity": "SOLANA_RESTORE_ACK_BROWSER_DIAGNOSTIC",
+          "canonical_receipt_sha256": "5d74ef1489c03c424e94c2dc47b8afc1236cb87bf9f9fa777204f999019e13ca",
+          "summary": {
+            "ok": true,
+            "kind": "SOLANA_RESTORE_ACK_BROWSER_DIAGNOSTIC",
+            "browser": "158.0.8127.36",
+            "actualEmittedApp": true,
+            "actualModuleWorker": true,
+            "encryptedIndexedDB": true,
+            "heldActualLockResponses": 2,
+            "freshProfileAndKey": true,
+            "staleFileBufferDiscarded": true,
+            "submittedDocumentBufferDiscarded": true,
+            "walletPrompts": 0,
+            "rpcRequests": 0,
+            "financialTransactions": 0,
+            "nativeChainQualified": false,
+            "ReleaseEnabled": 0,
+            "artifactSha256": "16ac2fb80c86118e42a9094eaeb4a02d6d611d189f1b2644c0ce5c00c280b4e7"
+          }
+        },
+        {
+          "identity": "native-indexeddb-authority-composition",
+          "canonical_receipt_sha256": "92995cb11915f695de9dc1d3f575e1e85197600470fc80cf5199288180922a53",
+          "summary": {
+            "fixture": "native-indexeddb-authority-composition",
+            "browser": "158.0.8127.36",
+            "syntheticChainObservationsOnly": true,
+            "economicPreparationAllowed": false,
+            "pageErrors": 0,
+            "externalEgress": 0,
+            "reports_count": 6
+          }
+        },
+        {
+          "identity": "content-policy-local-chromium",
+          "canonical_receipt_sha256": "b29459c82c14fcbfe5cb14906334851d0ef313d626a1aab69a5905ede93134d2",
+          "summary": {
+            "fixture": "content-policy-local-chromium",
+            "browser": "158.0.8127.36",
+            "forbiddenHttpRequests": 0,
+            "forbiddenWebSocketRequests": 0,
+            "unexpectedOutgoingRequests": 0,
+            "framingAttestation": false,
+            "releaseAcceptance": false,
+            "profiles_count": 2
+          }
+        },
+        {
+          "identity": "G12-lifecycle-two-tab",
+          "canonical_receipt_sha256": "a49fb8dfdc921c4c1bca3720361918df93df753f63eeb740984c7b1f71136f29",
+          "summary": {
+            "suite": "G12-lifecycle-two-tab",
+            "coldPendingNonce": true,
+            "unexpectedRequests": 0
+          }
+        },
+        {
+          "identity": "scriptless-local-portal",
+          "canonical_receipt_sha256": "84b376dfd7d016ffaa064b936cbe2b76f97dc8d1b72055870ef49eb021c02433",
+          "summary": {
+            "fixture": "scriptless-local-portal",
+            "browser": "158.0.8127.36",
+            "checks": 5,
+            "javaScriptDisabledReadability": true,
+            "localHeaderEnforcement": true,
+            "deployedHostHeadersVerified": false,
+            "externalRequests": 0,
+            "signedRelease": false,
+            "approvedDeployment": false,
+            "releaseEnabled": false,
+            "bootstrapAuthenticated": false,
+            "accessibilityAcceptance": false
+          }
+        },
+        {
+          "identity": "historical-bound-distribution-nested-smoke",
+          "canonical_receipt_sha256": "783ad8ce31d75acac117d819f36688650122a5e14fdcac71742d70d45de25ae8",
+          "summary": {
+            "fixture": "historical-bound-distribution-nested-smoke",
+            "checks": 3,
+            "browser": "158.0.8127.36",
+            "assets": 42,
+            "fixtureSourceCommit": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+            "fixtureSourceTree": "a3701267756596e833247f50614c5ddc32f2cce0",
+            "toolingHashes": {
+              "scripts/distribution/stage.mjs": "3ad271a2aaa4cb07b4346aeda9db2b86e20182c0d606d28904da4cd1b301bedb",
+              "scripts/distribution/manifest.mjs": "b9a3dc7e73544312cf42789f03f74e3e944131ff78cb6d1fa0c7f039a0440328",
+              "scripts/docs/validate.mjs": "a50b96e58e2183f17859a76afaeea8e91067e90b385dd3ebd263babc926911c3",
+              "scripts/docs/copy-source.mjs": "f4d527849e9a49b1f328cf57fca53d5ea45f913463f4d4ba48aaa8ecf0c457b4",
+              "scripts/docs/generate.py": "10c998fa2d6cd133eaa476a0ef1c974381442d1260b3fb5dd683023a49634674"
+            },
+            "currentSourceRefused": true,
+            "currentSourceDistributionQualified": false,
+            "buildPasses": 2,
+            "localHeaderFixture": true,
+            "hostHeadersVerified": false,
+            "independentDistributionWitness": false,
+            "signedRelease": false,
+            "releaseEnabled": false,
+            "published": false,
+            "unexpectedRequests": 0
+          }
+        },
+        {
+          "identity": "emitted-react-vite-shell-local-chromium",
+          "canonical_receipt_sha256": "6e3973d290a682abce4a7fb2e27859af5ca1b5b78951f6f1b044f737a4503be9",
+          "summary": {
+            "fixture": "emitted-react-vite-shell-local-chromium",
+            "browser": "158.0.8127.36",
+            "localRebuildByteMatch": true,
+            "nativeEncryptedUnlockExport": true,
+            "uiCreateRestoreInventory": true,
+            "uiRestoreReconciliation": true,
+            "automaticWalletPrompts": 0,
+            "forbiddenLoopbackRequests": 0,
+            "unexpectedRequests": 0,
+            "deviceAcceptance": false,
+            "deployedFramingAttestation": false,
+            "signedRelease": false,
+            "releaseAcceptance": false,
+            "reports_count": 14
+          }
+        },
+        {
+          "identity": "synthetic-demo-trade-review-local-chromium",
+          "canonical_receipt_sha256": "30c55f72a484bff6b3dbff0316a726cdc92f85f52ebdbfe2cb238baea21ce32a",
+          "summary": {
+            "fixture": "synthetic-demo-trade-review-local-chromium",
+            "browser": "158.0.8127.36",
+            "syntheticDemo": true,
+            "walletPrompts": 0,
+            "networkCalls": 0,
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false,
+            "journey_count": 14
+          }
+        },
+        {
+          "identity": "synthetic-demo-saved-reviews-local-chromium",
+          "canonical_receipt_sha256": "27a9fa8cceae689f2b36f8abd4933d34552b252e4b4467715222e7906d983e68",
+          "summary": {
+            "fixture": "synthetic-demo-saved-reviews-local-chromium",
+            "browser": "158.0.8127.36",
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false,
+            "journey_count": 8
+          }
+        },
+        {
+          "identity": "sepolia-testnet-build-local-chromium",
+          "canonical_receipt_sha256": "b4f2b46ff5796340fa3a9597a116a00d34c78c2c4261ab6d3aceffb8796c1bc5",
+          "summary": {
+            "fixture": "sepolia-testnet-build-local-chromium",
+            "browser": "158.0.8127.36",
+            "keyId": "e27cc934426705f16a54f1bd95d909b764c8e538931ddea898a50a8f28d0c3fe",
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false,
+            "journey_count": 6
+          }
+        },
+        {
+          "identity": "emitted-public-qr-local-chromium",
+          "canonical_receipt_sha256": "2db7620f630c2480b72d8bbedb76a801da012c0deb4795036fb2ef1f089e087b",
+          "summary": {
+            "fixture": "emitted-public-qr-local-chromium",
+            "browser": "158.0.8127.36",
+            "journeys": [
+              "generated-display-download-exact-fingerprint-and-comparison",
+              "real-png-worker-and-local-replay",
+              "real-jpeg-worker",
+              "bounded-exact-file-text-and-hostile-image-refusals",
+              "synthetic-permission-real-stream-late-cancel-remount-capture-hidden-cleanup",
+              "reference-fingerprint-and-real-vault-lock-clears-memory"
+            ],
+            "emittedWorker": "assets/decode.worker-DGcSBxfL.js",
+            "decoderVersion": "1.4.0",
+            "dependencySha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859",
+            "actualModuleWorker": true,
+            "actualBitmapDecode": true,
+            "actualPrivateVaultLock": true,
+            "physicalCamera": false,
+            "physicalDeviceQualification": false,
+            "sourcePngSha256": "82e16d8b97f860240e83f2128a30902d409cfabaf3a283389fc12cd741c04ce3",
+            "sourcePngBytes": 5088,
+            "backupFingerprintSha256": "55ce9479aac56ee2b33b82b1581fa5ce7685c38d0eb80c182c95ba455cc389e9",
+            "observedPrivateOperationsDuringExplicitUnlockAndLock": [
+              "init",
+              "listProfiles",
+              "listProfiles",
+              "unlock",
+              "activity",
+              "listProfiles",
+              "activity",
+              "activity",
+              "activity",
+              "activity",
+              "lock"
+            ],
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "ReleaseEnabled": 0,
+            "releaseAcceptance": false
+          }
+        },
+        {
+          "identity": "synthetic-emitted-favorites-native-worker-idb",
+          "canonical_receipt_sha256": "66a719722c1239a17fe0635e4f9dbcfb8b0fbb03288a58627aca9d687d0d67fc",
+          "summary": {
+            "fixture": "synthetic-emitted-favorites-native-worker-idb",
+            "browser": "158.0.8127.36",
+            "journey": [
+              "locked",
+              "explicit-load-revision",
+              "star",
+              "encrypted-at-rest",
+              "reload",
+              "current-registry-open",
+              "lock-revokes-route",
+              "profile-isolation",
+              "unstar-persists",
+              "delete-retains-dangling-reference",
+              "explicit-dangling-removal",
+              "invalid-terms-favorite-refused"
+            ],
+            "workerOnlyFavorites": true,
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false
+          }
+        },
+        {
+          "identity": "synthetic-emitted-trade-templates-native-worker-idb",
+          "canonical_receipt_sha256": "c8b2c5223215a48e3470c3f751532718a3b2f91b6996cef2aebc187d4b2839aa",
+          "summary": {
+            "fixture": "synthetic-emitted-trade-templates-native-worker-idb",
+            "browser": "158.0.8127.36",
+            "journey": [
+              "locked",
+              "explicit-load-revision-zero",
+              "preview-consent",
+              "cancel-no-write",
+              "seven-defaults-only",
+              "same-slot-update",
+              "encrypted-at-rest",
+              "apply-clears-transient-fields",
+              "missing-fresh-inputs-refused",
+              "fresh-order-nonce-and-agreement",
+              "reload",
+              "profile-isolation",
+              "explicit-repeat-default",
+              "clear-repeat-default",
+              "delete-clears-default",
+              "lock-revokes-preview",
+              "native-two-worker-cas",
+              "native-eight-slot-bound",
+              "native-extra-field-refusal",
+              "current-registry-refusal",
+              "explicit-blank-draft"
+            ],
+            "nativeProbe": {
+              "initialRevision": 0,
+              "winnerRevision": 1,
+              "staleCode": "CONFLICT",
+              "cancelledCode": "NOT_FOUND",
+              "ninthCode": "PROTOCOL_ERROR",
+              "extraFieldCode": "PROTOCOL_ERROR",
+              "finalRevision": 8,
+              "slots": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "workerOnlyTemplates": true,
+            "unexpectedRequests": 0,
+            "walletPrompts": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false
+          }
+        },
+        {
+          "identity": "private-g16-public-data-chromium",
+          "canonical_receipt_sha256": "fb9ede2921bb2442e6176e6fe11da785b1be3ea122488c5a143672d20849e1fa",
+          "summary": {
+            "fixture": "private-g16-public-data-chromium",
+            "browser": "158.0.8127.36",
+            "node": "24.22.2",
+            "browserArtifactSha256": "f698c240b86e0b22534c3b3d797719358da5d0addee9722f64665fdf4257b484",
+            "fixtureModuleCount": 38,
+            "unexpectedRequests": 0,
+            "consoleMessages": 0,
+            "pageErrors": 0,
+            "integrationFixtureProvenance": "Node-only existing Noble-family deterministic synthetic signing; not independent qualification",
+            "appInclusion": false,
+            "providerApproval": false,
+            "auditAcceptance": false,
+            "deviceAcceptance": false,
+            "releaseEnabled": 0,
+            "economicPreparationAllowed": false,
+            "allowedFixturePaths_count": 3,
+            "document": {
+              "assertions": 238,
+              "independentKeccakKats": 2,
+              "independentG16Digests": 6,
+              "independentG16Signatures": 4,
+              "officialMailRecovery": true,
+              "retainedPrivateEncodingVectors": 2,
+              "sameProviderIntegrationBundles": 3,
+              "heldCancellationSchedules": 4,
+              "runtime": "document",
+              "testOnly": true,
+              "economicPreparationAllowed": false,
+              "privateDetailsReturned": false
+            },
+            "worker": {
+              "assertions": 238,
+              "independentKeccakKats": 2,
+              "independentG16Digests": 6,
+              "independentG16Signatures": 4,
+              "officialMailRecovery": true,
+              "retainedPrivateEncodingVectors": 2,
+              "sameProviderIntegrationBundles": 3,
+              "heldCancellationSchedules": 4,
+              "runtime": "dedicated-module-worker",
+              "testOnly": true,
+              "economicPreparationAllowed": false,
+              "privateDetailsReturned": false
+            }
+          }
+        },
+        {
+          "identity": "private-adapter-worker",
+          "canonical_receipt_sha256": "58fca442c2378451b3c95b6ae19226f5d2083c2f4f100a3bbe68a47a31c92ee7",
+          "summary": {
+            "fixture": "private-adapter-worker",
+            "browser": "158.0.8127.36",
+            "assertions": 51,
+            "actualAdapter": true,
+            "realDedicatedWorkerAndMessagePort": true,
+            "messageerror": "synthetic event, not native clone-failure qualification",
+            "appIncluded": false,
+            "spendingEnabled": false,
+            "unexpectedRequests": 0,
+            "consoleMessages": 0,
+            "pageErrors": 0,
+            "artifactSha256": "ac46be386600b892dd4ab183621ac5c4c782f8a26e62c5dd1c4b129cd2de2af2",
+            "auditAcceptance": false,
+            "providerApproval": false,
+            "records_count": 9
+          }
+        },
+        {
+          "identity": "G16-physical-message-qualification",
+          "canonical_receipt_sha256": "b73de624de31a556a11ee32a659bde321d7cf2ea240c84da5f360922ea6c8f04",
+          "summary": {
+            "fixture": "G16-physical-message-qualification",
+            "browser": "158.0.8127.36",
+            "assertions": 168,
+            "sourceHostSha256": "21233bf9feb82d6109c020f41e9d4a5896ad8297d8407148cf31023a57276e37",
+            "actualMessagePortAndDedicatedWorker": true,
+            "timeoutMode": "trusted monotonic/timer fixture at29999/30000; not native30second wall-clock acceptance",
+            "unhandledObservation": "event reporting through post-drain task checkpoint; not indefinite absence proof",
+            "heldSchedulesUseNonemptyCapabilities": true,
+            "fixtureControlsOnly": true,
+            "productionControlProtocolImplemented": false,
+            "appIncluded": false,
+            "spendingEnabled": false,
+            "browserArtifactSha256": "073c6e4c1fe99886c3c422f209959661d015c3b501fe63a5e23e8da4356f487f",
+            "unexpectedRequests": 0,
+            "consoleMessages": 0,
+            "pageErrors": 0,
+            "providerApproval": false,
+            "auditAcceptance": false,
+            "schedules_count": 13
+          }
+        },
+        {
+          "identity": "G15-public-data-local-qualification",
+          "canonical_receipt_sha256": "568f1dd4087458bf3c54854f59ae86ae51fb66ee036a32007289973ddf4131ff",
+          "summary": {
+            "fixture": "G15-public-data-local-qualification",
+            "browser": "158.0.8127.36",
+            "unexpectedRequests": 0,
+            "vectorSha256": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+            "appIncluded": false,
+            "providerApproved": false,
+            "releaseEnabled": false,
+            "renderedModules_count": 18,
+            "documentResult": {
+              "runtime": "document",
+              "assertions": 66,
+              "publishedPrimitiveVector": true,
+              "syntheticEnvelopeProviderIndependent": false,
+              "noSigningOrWallet": true,
+              "releaseEnabled": false
+            },
+            "workerResult": {
+              "runtime": "dedicated-module-worker",
+              "assertions": 66,
+              "publishedPrimitiveVector": true,
+              "syntheticEnvelopeProviderIndependent": false,
+              "noSigningOrWallet": true,
+              "releaseEnabled": false
+            }
+          }
+        },
+        {
+          "identity": "G15-locator-local-public-proof",
+          "canonical_receipt_sha256": "adf1dcaedb44b6045a8c15eb1a4ce4d50a18067cb13b6a241f2a09736880750d",
+          "summary": {
+            "fixture": "G15-locator-local-public-proof",
+            "browser": "158.0.8127.36",
+            "unexpectedRequests": 0,
+            "vectorSha256": "81900da0e81d600e246c821e6f425d4f8433aa73be8458be2cd91ffd7ebba929",
+            "appIncluded": false,
+            "providerApproved": false,
+            "releaseEnabled": false,
+            "renderedModules_count": 19,
+            "documentResult": {
+              "runtime": "document",
+              "checks": 25,
+              "locatorVerified": true,
+              "archiveVerified": true,
+              "profile": "cidv1-base32lower-raw-or-dagpb-sha2-256",
+              "releaseEnabled": false,
+              "installationAllowed": false
+            },
+            "workerResult": {
+              "runtime": "dedicated-module-worker",
+              "checks": 25,
+              "locatorVerified": true,
+              "archiveVerified": true,
+              "profile": "cidv1-base32lower-raw-or-dagpb-sha2-256",
+              "releaseEnabled": false,
+              "installationAllowed": false
+            }
+          }
+        },
+        {
+          "identity": "native-encrypted-chat-history",
+          "canonical_receipt_sha256": "a28c66fa803e4a6c1c8a879fa7cd1864d868d309ed8332d57e99441d21eb81b9",
+          "summary": {
+            "fixture": "native-encrypted-chat-history",
+            "browser": "158.0.8127.36",
+            "nativeTwoTabCas": true,
+            "reloadDurableDedup": true,
+            "nativeProofReauthentication": true,
+            "unexpectedRequests": 0,
+            "pageErrors": 0,
+            "appIncluded": false,
+            "releaseEnabled": false
+          }
+        },
+        {
+          "identity": "diagnostics-local-browser",
+          "canonical_receipt_sha256": "3a336347ddc38edc816a023177460459240cef756355f23a48a39715fd181cc7",
+          "summary": {
+            "fixture": "diagnostics-local-browser",
+            "engine": "chromium",
+            "browserVersion": "158.0.8127.36",
+            "signedFixture": true,
+            "approvedRelease": false,
+            "defaultCollectionBlocked": true,
+            "selectedPreviewExact": true,
+            "revocationRefused": true,
+            "lockedClear": true,
+            "externalNetwork": false
+          }
+        },
+        {
+          "identity": "native-worker-offline-recovery-references",
+          "canonical_receipt_sha256": "ccf97fb8f010ce6f973903984b657cfa3973bde54fcfe421ed7932236698b056",
+          "summary": {
+            "fixture": "native-worker-offline-recovery-references",
+            "browser": "chromium",
+            "version": "158.0.8127.36",
+            "readonly": true,
+            "revisionPinnedPages": true,
+            "exactPrivatePreview": true,
+            "staleRevisionExportRefused": true,
+            "coldStartReauthenticated": true,
+            "coldStartReferencePreserved": true,
+            "reloadLocked": true,
+            "lockAndProfileIsolation": true,
+            "preservedFutureRecord": true,
+            "noRawTransaction": true,
+            "tradingEnabled": false
+          }
+        },
+        {
+          "identity": "draft-locale-emitted-layout",
+          "canonical_receipt_sha256": "52a2a3b6ee5563c2e31b0305bf31c9b6a2c2cee6a41f7a04bf2cf96a97852a45",
+          "summary": {
+            "fixture": "draft-locale-emitted-layout",
+            "browser": "158.0.8127.36",
+            "checks": 6,
+            "stress": "test-only DOM static-catalog substitution; not a translated locale implementation",
+            "touch": "Chromium touchscreen emulation, not physical-device qualification",
+            "translatedLocaleApproved": false,
+            "accessibilityAcceptance": false,
+            "releaseEnabled": false,
+            "unexpectedRequests": 0
+          }
+        }
+      ],
+      "structured_summary_assertions": "PASS"
+    },
+    {
+      "job_id": 136048284909,
+      "checkout": "300c33b9dcfae050e5a4c816513176c5eac65a5d",
+      "browser_command_groups": [
+        "npm run test:solana:ack:browser",
+        "npm run test:solana:restore:browser",
+        "npm run test:browser",
+        "npm run test:portal:browser",
+        "npm run test:distribution:browser",
+        "npm run test:web:browser",
+        "npm run test:favorites:browser",
+        "npm run test:templates:browser",
+        "npm run test:private:browser",
+        "npm run test:locator:browser",
+        "npm run test:chat:browser",
+        "npm run test:diagnostics:browser",
+        "npm run test:recovery:browser",
+        "npm run test:peer:browser",
+        "npm run test:locale:browser",
+        "node scripts/test-peer-offer-browser.mjs"
+      ],
+      "group_count": 16,
+      "error_annotations": [],
+      "log_sha256": "e3627b66b9e0f59144301dc21b239565a82cfb7ef815dbbf6e8e0c4096f6101d",
+      "receipt_count": 23,
+      "receipts": [
+        {
+          "identity": "SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC",
+          "canonical_receipt_sha256": "a84356ffb2c5baf91a11bc7bf1582bfe8e2e21ec233a2b3fecfc38a133ccc952",
+          "summary": {
+            "ok": true,
+            "kind": "SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC",
+            "browser": "158.0.8127.36",
+            "actualRuntimeRpc": true,
+            "warmedConnection": true,
+            "applicationCalls": 1,
+            "fetchCalls": 1,
+            "fetchFailures": 0,
+            "statuses": [
+              503
+            ],
+            "refusal": "RPC_UNAVAILABLE",
+            "physicalSendPosts": 1,
+            "validatorForwards": 0,
+            "unexpectedRequests": 0,
+            "fixtureErrors": 0,
+            "artifactSha256": "8e1d06fb99e221589dfdd888a8b120ac45195dc63535a39de1f000f7b835cb0a",
+            "rawResetQualified": false,
+            "generalBrowserRetransmissionGuarantee": false,
+            "nativeChainQualified": false,
+            "ReleaseEnabled": 0
+          }
+        },
+        {
+          "identity": "SOLANA_RESTORE_ACK_BROWSER_DIAGNOSTIC",
+          "canonical_receipt_sha256": "cfdf87d0c59d84bb633d756c13621384d265cc1c530aff4545dd491f29923afa",
+          "summary": {
+            "ok": true,
+            "kind": "SOLANA_RESTORE_ACK_BROWSER_DIAGNOSTIC",
+            "browser": "158.0.8127.36",
+            "actualEmittedApp": true,
+            "actualModuleWorker": true,
+            "encryptedIndexedDB": true,
+            "heldActualLockResponses": 2,
+            "freshProfileAndKey": true,
+            "staleFileBufferDiscarded": true,
+            "submittedDocumentBufferDiscarded": true,
+            "walletPrompts": 0,
+            "rpcRequests": 0,
+            "financialTransactions": 0,
+            "nativeChainQualified": false,
+            "ReleaseEnabled": 0,
+            "artifactSha256": "9c8b99c74609b129c5efa9cb5f495beebe7a8fda55e2aff2e831f9ed328efcbe"
+          }
+        },
+        {
+          "identity": "native-indexeddb-authority-composition",
+          "canonical_receipt_sha256": "92995cb11915f695de9dc1d3f575e1e85197600470fc80cf5199288180922a53",
+          "summary": {
+            "fixture": "native-indexeddb-authority-composition",
+            "browser": "158.0.8127.36",
+            "syntheticChainObservationsOnly": true,
+            "economicPreparationAllowed": false,
+            "pageErrors": 0,
+            "externalEgress": 0,
+            "reports_count": 6
+          }
+        },
+        {
+          "identity": "content-policy-local-chromium",
+          "canonical_receipt_sha256": "b29459c82c14fcbfe5cb14906334851d0ef313d626a1aab69a5905ede93134d2",
+          "summary": {
+            "fixture": "content-policy-local-chromium",
+            "browser": "158.0.8127.36",
+            "forbiddenHttpRequests": 0,
+            "forbiddenWebSocketRequests": 0,
+            "unexpectedOutgoingRequests": 0,
+            "framingAttestation": false,
+            "releaseAcceptance": false,
+            "profiles_count": 2
+          }
+        },
+        {
+          "identity": "G12-lifecycle-two-tab",
+          "canonical_receipt_sha256": "5106c63929439e098f5c6c36a0084dbcaff01b0d1a27af3b106df97370090e83",
+          "summary": {
+            "suite": "G12-lifecycle-two-tab",
+            "coldPendingNonce": true,
+            "unexpectedRequests": 0
+          }
+        },
+        {
+          "identity": "scriptless-local-portal",
+          "canonical_receipt_sha256": "84b376dfd7d016ffaa064b936cbe2b76f97dc8d1b72055870ef49eb021c02433",
+          "summary": {
+            "fixture": "scriptless-local-portal",
+            "browser": "158.0.8127.36",
+            "checks": 5,
+            "javaScriptDisabledReadability": true,
+            "localHeaderEnforcement": true,
+            "deployedHostHeadersVerified": false,
+            "externalRequests": 0,
+            "signedRelease": false,
+            "approvedDeployment": false,
+            "releaseEnabled": false,
+            "bootstrapAuthenticated": false,
+            "accessibilityAcceptance": false
+          }
+        },
+        {
+          "identity": "historical-bound-distribution-nested-smoke",
+          "canonical_receipt_sha256": "783ad8ce31d75acac117d819f36688650122a5e14fdcac71742d70d45de25ae8",
+          "summary": {
+            "fixture": "historical-bound-distribution-nested-smoke",
+            "checks": 3,
+            "browser": "158.0.8127.36",
+            "assets": 42,
+            "fixtureSourceCommit": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+            "fixtureSourceTree": "a3701267756596e833247f50614c5ddc32f2cce0",
+            "toolingHashes": {
+              "scripts/distribution/stage.mjs": "3ad271a2aaa4cb07b4346aeda9db2b86e20182c0d606d28904da4cd1b301bedb",
+              "scripts/distribution/manifest.mjs": "b9a3dc7e73544312cf42789f03f74e3e944131ff78cb6d1fa0c7f039a0440328",
+              "scripts/docs/validate.mjs": "a50b96e58e2183f17859a76afaeea8e91067e90b385dd3ebd263babc926911c3",
+              "scripts/docs/copy-source.mjs": "f4d527849e9a49b1f328cf57fca53d5ea45f913463f4d4ba48aaa8ecf0c457b4",
+              "scripts/docs/generate.py": "10c998fa2d6cd133eaa476a0ef1c974381442d1260b3fb5dd683023a49634674"
+            },
+            "currentSourceRefused": true,
+            "currentSourceDistributionQualified": false,
+            "buildPasses": 2,
+            "localHeaderFixture": true,
+            "hostHeadersVerified": false,
+            "independentDistributionWitness": false,
+            "signedRelease": false,
+            "releaseEnabled": false,
+            "published": false,
+            "unexpectedRequests": 0
+          }
+        },
+        {
+          "identity": "emitted-react-vite-shell-local-chromium",
+          "canonical_receipt_sha256": "6e3973d290a682abce4a7fb2e27859af5ca1b5b78951f6f1b044f737a4503be9",
+          "summary": {
+            "fixture": "emitted-react-vite-shell-local-chromium",
+            "browser": "158.0.8127.36",
+            "localRebuildByteMatch": true,
+            "nativeEncryptedUnlockExport": true,
+            "uiCreateRestoreInventory": true,
+            "uiRestoreReconciliation": true,
+            "automaticWalletPrompts": 0,
+            "forbiddenLoopbackRequests": 0,
+            "unexpectedRequests": 0,
+            "deviceAcceptance": false,
+            "deployedFramingAttestation": false,
+            "signedRelease": false,
+            "releaseAcceptance": false,
+            "reports_count": 14
+          }
+        },
+        {
+          "identity": "synthetic-demo-trade-review-local-chromium",
+          "canonical_receipt_sha256": "30c55f72a484bff6b3dbff0316a726cdc92f85f52ebdbfe2cb238baea21ce32a",
+          "summary": {
+            "fixture": "synthetic-demo-trade-review-local-chromium",
+            "browser": "158.0.8127.36",
+            "syntheticDemo": true,
+            "walletPrompts": 0,
+            "networkCalls": 0,
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false,
+            "journey_count": 14
+          }
+        },
+        {
+          "identity": "synthetic-demo-saved-reviews-local-chromium",
+          "canonical_receipt_sha256": "27a9fa8cceae689f2b36f8abd4933d34552b252e4b4467715222e7906d983e68",
+          "summary": {
+            "fixture": "synthetic-demo-saved-reviews-local-chromium",
+            "browser": "158.0.8127.36",
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false,
+            "journey_count": 8
+          }
+        },
+        {
+          "identity": "sepolia-testnet-build-local-chromium",
+          "canonical_receipt_sha256": "708721bcc3beee99392d01c197537f5f3e27aefaf1107e2ed75ccda108684e4d",
+          "summary": {
+            "fixture": "sepolia-testnet-build-local-chromium",
+            "browser": "158.0.8127.36",
+            "keyId": "f295ff65e1f866b9ff3a0b51e2fe840788f03e4e41000aef02c6bb8af82bc49e",
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false,
+            "journey_count": 6
+          }
+        },
+        {
+          "identity": "emitted-public-qr-local-chromium",
+          "canonical_receipt_sha256": "235c64a80632b6b9069e989ad8ddfdd077d43db967e8b9a1267979d44c9aaf09",
+          "summary": {
+            "fixture": "emitted-public-qr-local-chromium",
+            "browser": "158.0.8127.36",
+            "journeys": [
+              "generated-display-download-exact-fingerprint-and-comparison",
+              "real-png-worker-and-local-replay",
+              "real-jpeg-worker",
+              "bounded-exact-file-text-and-hostile-image-refusals",
+              "synthetic-permission-real-stream-late-cancel-remount-capture-hidden-cleanup",
+              "reference-fingerprint-and-real-vault-lock-clears-memory"
+            ],
+            "emittedWorker": "assets/decode.worker-DGcSBxfL.js",
+            "decoderVersion": "1.4.0",
+            "dependencySha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859",
+            "actualModuleWorker": true,
+            "actualBitmapDecode": true,
+            "actualPrivateVaultLock": true,
+            "physicalCamera": false,
+            "physicalDeviceQualification": false,
+            "sourcePngSha256": "8fbfb4de23b432cd861f0561c089c24a5be765dab6a61edc727ff458f2bc391a",
+            "sourcePngBytes": 5096,
+            "backupFingerprintSha256": "55ce9479aac56ee2b33b82b1581fa5ce7685c38d0eb80c182c95ba455cc389e9",
+            "observedPrivateOperationsDuringExplicitUnlockAndLock": [
+              "init",
+              "listProfiles",
+              "listProfiles",
+              "unlock",
+              "activity",
+              "listProfiles",
+              "activity",
+              "activity",
+              "activity",
+              "activity",
+              "lock"
+            ],
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "ReleaseEnabled": 0,
+            "releaseAcceptance": false
+          }
+        },
+        {
+          "identity": "synthetic-emitted-favorites-native-worker-idb",
+          "canonical_receipt_sha256": "66a719722c1239a17fe0635e4f9dbcfb8b0fbb03288a58627aca9d687d0d67fc",
+          "summary": {
+            "fixture": "synthetic-emitted-favorites-native-worker-idb",
+            "browser": "158.0.8127.36",
+            "journey": [
+              "locked",
+              "explicit-load-revision",
+              "star",
+              "encrypted-at-rest",
+              "reload",
+              "current-registry-open",
+              "lock-revokes-route",
+              "profile-isolation",
+              "unstar-persists",
+              "delete-retains-dangling-reference",
+              "explicit-dangling-removal",
+              "invalid-terms-favorite-refused"
+            ],
+            "workerOnlyFavorites": true,
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false
+          }
+        },
+        {
+          "identity": "synthetic-emitted-trade-templates-native-worker-idb",
+          "canonical_receipt_sha256": "c8b2c5223215a48e3470c3f751532718a3b2f91b6996cef2aebc187d4b2839aa",
+          "summary": {
+            "fixture": "synthetic-emitted-trade-templates-native-worker-idb",
+            "browser": "158.0.8127.36",
+            "journey": [
+              "locked",
+              "explicit-load-revision-zero",
+              "preview-consent",
+              "cancel-no-write",
+              "seven-defaults-only",
+              "same-slot-update",
+              "encrypted-at-rest",
+              "apply-clears-transient-fields",
+              "missing-fresh-inputs-refused",
+              "fresh-order-nonce-and-agreement",
+              "reload",
+              "profile-isolation",
+              "explicit-repeat-default",
+              "clear-repeat-default",
+              "delete-clears-default",
+              "lock-revokes-preview",
+              "native-two-worker-cas",
+              "native-eight-slot-bound",
+              "native-extra-field-refusal",
+              "current-registry-refusal",
+              "explicit-blank-draft"
+            ],
+            "nativeProbe": {
+              "initialRevision": 0,
+              "winnerRevision": 1,
+              "staleCode": "CONFLICT",
+              "cancelledCode": "NOT_FOUND",
+              "ninthCode": "PROTOCOL_ERROR",
+              "extraFieldCode": "PROTOCOL_ERROR",
+              "finalRevision": 8,
+              "slots": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "workerOnlyTemplates": true,
+            "unexpectedRequests": 0,
+            "walletPrompts": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false
+          }
+        },
+        {
+          "identity": "private-g16-public-data-chromium",
+          "canonical_receipt_sha256": "fb9ede2921bb2442e6176e6fe11da785b1be3ea122488c5a143672d20849e1fa",
+          "summary": {
+            "fixture": "private-g16-public-data-chromium",
+            "browser": "158.0.8127.36",
+            "node": "24.22.2",
+            "browserArtifactSha256": "f698c240b86e0b22534c3b3d797719358da5d0addee9722f64665fdf4257b484",
+            "fixtureModuleCount": 38,
+            "unexpectedRequests": 0,
+            "consoleMessages": 0,
+            "pageErrors": 0,
+            "integrationFixtureProvenance": "Node-only existing Noble-family deterministic synthetic signing; not independent qualification",
+            "appInclusion": false,
+            "providerApproval": false,
+            "auditAcceptance": false,
+            "deviceAcceptance": false,
+            "releaseEnabled": 0,
+            "economicPreparationAllowed": false,
+            "allowedFixturePaths_count": 3,
+            "document": {
+              "assertions": 238,
+              "independentKeccakKats": 2,
+              "independentG16Digests": 6,
+              "independentG16Signatures": 4,
+              "officialMailRecovery": true,
+              "retainedPrivateEncodingVectors": 2,
+              "sameProviderIntegrationBundles": 3,
+              "heldCancellationSchedules": 4,
+              "runtime": "document",
+              "testOnly": true,
+              "economicPreparationAllowed": false,
+              "privateDetailsReturned": false
+            },
+            "worker": {
+              "assertions": 238,
+              "independentKeccakKats": 2,
+              "independentG16Digests": 6,
+              "independentG16Signatures": 4,
+              "officialMailRecovery": true,
+              "retainedPrivateEncodingVectors": 2,
+              "sameProviderIntegrationBundles": 3,
+              "heldCancellationSchedules": 4,
+              "runtime": "dedicated-module-worker",
+              "testOnly": true,
+              "economicPreparationAllowed": false,
+              "privateDetailsReturned": false
+            }
+          }
+        },
+        {
+          "identity": "private-adapter-worker",
+          "canonical_receipt_sha256": "58fca442c2378451b3c95b6ae19226f5d2083c2f4f100a3bbe68a47a31c92ee7",
+          "summary": {
+            "fixture": "private-adapter-worker",
+            "browser": "158.0.8127.36",
+            "assertions": 51,
+            "actualAdapter": true,
+            "realDedicatedWorkerAndMessagePort": true,
+            "messageerror": "synthetic event, not native clone-failure qualification",
+            "appIncluded": false,
+            "spendingEnabled": false,
+            "unexpectedRequests": 0,
+            "consoleMessages": 0,
+            "pageErrors": 0,
+            "artifactSha256": "ac46be386600b892dd4ab183621ac5c4c782f8a26e62c5dd1c4b129cd2de2af2",
+            "auditAcceptance": false,
+            "providerApproval": false,
+            "records_count": 9
+          }
+        },
+        {
+          "identity": "G16-physical-message-qualification",
+          "canonical_receipt_sha256": "b73de624de31a556a11ee32a659bde321d7cf2ea240c84da5f360922ea6c8f04",
+          "summary": {
+            "fixture": "G16-physical-message-qualification",
+            "browser": "158.0.8127.36",
+            "assertions": 168,
+            "sourceHostSha256": "21233bf9feb82d6109c020f41e9d4a5896ad8297d8407148cf31023a57276e37",
+            "actualMessagePortAndDedicatedWorker": true,
+            "timeoutMode": "trusted monotonic/timer fixture at29999/30000; not native30second wall-clock acceptance",
+            "unhandledObservation": "event reporting through post-drain task checkpoint; not indefinite absence proof",
+            "heldSchedulesUseNonemptyCapabilities": true,
+            "fixtureControlsOnly": true,
+            "productionControlProtocolImplemented": false,
+            "appIncluded": false,
+            "spendingEnabled": false,
+            "browserArtifactSha256": "073c6e4c1fe99886c3c422f209959661d015c3b501fe63a5e23e8da4356f487f",
+            "unexpectedRequests": 0,
+            "consoleMessages": 0,
+            "pageErrors": 0,
+            "providerApproval": false,
+            "auditAcceptance": false,
+            "schedules_count": 13
+          }
+        },
+        {
+          "identity": "G15-public-data-local-qualification",
+          "canonical_receipt_sha256": "568f1dd4087458bf3c54854f59ae86ae51fb66ee036a32007289973ddf4131ff",
+          "summary": {
+            "fixture": "G15-public-data-local-qualification",
+            "browser": "158.0.8127.36",
+            "unexpectedRequests": 0,
+            "vectorSha256": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+            "appIncluded": false,
+            "providerApproved": false,
+            "releaseEnabled": false,
+            "renderedModules_count": 18,
+            "documentResult": {
+              "runtime": "document",
+              "assertions": 66,
+              "publishedPrimitiveVector": true,
+              "syntheticEnvelopeProviderIndependent": false,
+              "noSigningOrWallet": true,
+              "releaseEnabled": false
+            },
+            "workerResult": {
+              "runtime": "dedicated-module-worker",
+              "assertions": 66,
+              "publishedPrimitiveVector": true,
+              "syntheticEnvelopeProviderIndependent": false,
+              "noSigningOrWallet": true,
+              "releaseEnabled": false
+            }
+          }
+        },
+        {
+          "identity": "G15-locator-local-public-proof",
+          "canonical_receipt_sha256": "adf1dcaedb44b6045a8c15eb1a4ce4d50a18067cb13b6a241f2a09736880750d",
+          "summary": {
+            "fixture": "G15-locator-local-public-proof",
+            "browser": "158.0.8127.36",
+            "unexpectedRequests": 0,
+            "vectorSha256": "81900da0e81d600e246c821e6f425d4f8433aa73be8458be2cd91ffd7ebba929",
+            "appIncluded": false,
+            "providerApproved": false,
+            "releaseEnabled": false,
+            "renderedModules_count": 19,
+            "documentResult": {
+              "runtime": "document",
+              "checks": 25,
+              "locatorVerified": true,
+              "archiveVerified": true,
+              "profile": "cidv1-base32lower-raw-or-dagpb-sha2-256",
+              "releaseEnabled": false,
+              "installationAllowed": false
+            },
+            "workerResult": {
+              "runtime": "dedicated-module-worker",
+              "checks": 25,
+              "locatorVerified": true,
+              "archiveVerified": true,
+              "profile": "cidv1-base32lower-raw-or-dagpb-sha2-256",
+              "releaseEnabled": false,
+              "installationAllowed": false
+            }
+          }
+        },
+        {
+          "identity": "native-encrypted-chat-history",
+          "canonical_receipt_sha256": "a28c66fa803e4a6c1c8a879fa7cd1864d868d309ed8332d57e99441d21eb81b9",
+          "summary": {
+            "fixture": "native-encrypted-chat-history",
+            "browser": "158.0.8127.36",
+            "nativeTwoTabCas": true,
+            "reloadDurableDedup": true,
+            "nativeProofReauthentication": true,
+            "unexpectedRequests": 0,
+            "pageErrors": 0,
+            "appIncluded": false,
+            "releaseEnabled": false
+          }
+        },
+        {
+          "identity": "diagnostics-local-browser",
+          "canonical_receipt_sha256": "3a336347ddc38edc816a023177460459240cef756355f23a48a39715fd181cc7",
+          "summary": {
+            "fixture": "diagnostics-local-browser",
+            "engine": "chromium",
+            "browserVersion": "158.0.8127.36",
+            "signedFixture": true,
+            "approvedRelease": false,
+            "defaultCollectionBlocked": true,
+            "selectedPreviewExact": true,
+            "revocationRefused": true,
+            "lockedClear": true,
+            "externalNetwork": false
+          }
+        },
+        {
+          "identity": "native-worker-offline-recovery-references",
+          "canonical_receipt_sha256": "ccf97fb8f010ce6f973903984b657cfa3973bde54fcfe421ed7932236698b056",
+          "summary": {
+            "fixture": "native-worker-offline-recovery-references",
+            "browser": "chromium",
+            "version": "158.0.8127.36",
+            "readonly": true,
+            "revisionPinnedPages": true,
+            "exactPrivatePreview": true,
+            "staleRevisionExportRefused": true,
+            "coldStartReauthenticated": true,
+            "coldStartReferencePreserved": true,
+            "reloadLocked": true,
+            "lockAndProfileIsolation": true,
+            "preservedFutureRecord": true,
+            "noRawTransaction": true,
+            "tradingEnabled": false
+          }
+        },
+        {
+          "identity": "draft-locale-emitted-layout",
+          "canonical_receipt_sha256": "52a2a3b6ee5563c2e31b0305bf31c9b6a2c2cee6a41f7a04bf2cf96a97852a45",
+          "summary": {
+            "fixture": "draft-locale-emitted-layout",
+            "browser": "158.0.8127.36",
+            "checks": 6,
+            "stress": "test-only DOM static-catalog substitution; not a translated locale implementation",
+            "touch": "Chromium touchscreen emulation, not physical-device qualification",
+            "translatedLocaleApproved": false,
+            "accessibilityAcceptance": false,
+            "releaseEnabled": false,
+            "unexpectedRequests": 0
+          }
+        }
+      ],
+      "structured_summary_assertions": "PASS"
+    },
+    {
+      "job_id": 136048938353,
+      "checkout": "16a98b0213ea7105a6ad27c210a17ccdbc020434",
+      "browser_command_groups": [
+        "npm run test:solana:ack:browser",
+        "npm run test:solana:restore:browser",
+        "npm run test:browser",
+        "npm run test:portal:browser",
+        "npm run test:distribution:browser",
+        "npm run test:web:browser",
+        "npm run test:favorites:browser",
+        "npm run test:templates:browser",
+        "npm run test:private:browser",
+        "npm run test:locator:browser",
+        "npm run test:chat:browser",
+        "npm run test:diagnostics:browser",
+        "npm run test:recovery:browser",
+        "npm run test:peer:browser",
+        "npm run test:locale:browser",
+        "node scripts/test-peer-offer-browser.mjs"
+      ],
+      "group_count": 16,
+      "error_annotations": [],
+      "log_sha256": "f1589442a714a9a105fbdd2337ad0ea0b8bbd74a30d7181a9367a27a117570f0",
+      "receipt_count": 23,
+      "receipts": [
+        {
+          "identity": "SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC",
+          "canonical_receipt_sha256": "a84356ffb2c5baf91a11bc7bf1582bfe8e2e21ec233a2b3fecfc38a133ccc952",
+          "summary": {
+            "ok": true,
+            "kind": "SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC",
+            "browser": "158.0.8127.36",
+            "actualRuntimeRpc": true,
+            "warmedConnection": true,
+            "applicationCalls": 1,
+            "fetchCalls": 1,
+            "fetchFailures": 0,
+            "statuses": [
+              503
+            ],
+            "refusal": "RPC_UNAVAILABLE",
+            "physicalSendPosts": 1,
+            "validatorForwards": 0,
+            "unexpectedRequests": 0,
+            "fixtureErrors": 0,
+            "artifactSha256": "8e1d06fb99e221589dfdd888a8b120ac45195dc63535a39de1f000f7b835cb0a",
+            "rawResetQualified": false,
+            "generalBrowserRetransmissionGuarantee": false,
+            "nativeChainQualified": false,
+            "ReleaseEnabled": 0
+          }
+        },
+        {
+          "identity": "SOLANA_RESTORE_ACK_BROWSER_DIAGNOSTIC",
+          "canonical_receipt_sha256": "5d74ef1489c03c424e94c2dc47b8afc1236cb87bf9f9fa777204f999019e13ca",
+          "summary": {
+            "ok": true,
+            "kind": "SOLANA_RESTORE_ACK_BROWSER_DIAGNOSTIC",
+            "browser": "158.0.8127.36",
+            "actualEmittedApp": true,
+            "actualModuleWorker": true,
+            "encryptedIndexedDB": true,
+            "heldActualLockResponses": 2,
+            "freshProfileAndKey": true,
+            "staleFileBufferDiscarded": true,
+            "submittedDocumentBufferDiscarded": true,
+            "walletPrompts": 0,
+            "rpcRequests": 0,
+            "financialTransactions": 0,
+            "nativeChainQualified": false,
+            "ReleaseEnabled": 0,
+            "artifactSha256": "16ac2fb80c86118e42a9094eaeb4a02d6d611d189f1b2644c0ce5c00c280b4e7"
+          }
+        },
+        {
+          "identity": "native-indexeddb-authority-composition",
+          "canonical_receipt_sha256": "92995cb11915f695de9dc1d3f575e1e85197600470fc80cf5199288180922a53",
+          "summary": {
+            "fixture": "native-indexeddb-authority-composition",
+            "browser": "158.0.8127.36",
+            "syntheticChainObservationsOnly": true,
+            "economicPreparationAllowed": false,
+            "pageErrors": 0,
+            "externalEgress": 0,
+            "reports_count": 6
+          }
+        },
+        {
+          "identity": "content-policy-local-chromium",
+          "canonical_receipt_sha256": "b29459c82c14fcbfe5cb14906334851d0ef313d626a1aab69a5905ede93134d2",
+          "summary": {
+            "fixture": "content-policy-local-chromium",
+            "browser": "158.0.8127.36",
+            "forbiddenHttpRequests": 0,
+            "forbiddenWebSocketRequests": 0,
+            "unexpectedOutgoingRequests": 0,
+            "framingAttestation": false,
+            "releaseAcceptance": false,
+            "profiles_count": 2
+          }
+        },
+        {
+          "identity": "G12-lifecycle-two-tab",
+          "canonical_receipt_sha256": "3802259cea30b73c3cf50a824de6e99e3768020ee1bb9cbea1352df6f39c9916",
+          "summary": {
+            "suite": "G12-lifecycle-two-tab",
+            "coldPendingNonce": true,
+            "unexpectedRequests": 0
+          }
+        },
+        {
+          "identity": "scriptless-local-portal",
+          "canonical_receipt_sha256": "84b376dfd7d016ffaa064b936cbe2b76f97dc8d1b72055870ef49eb021c02433",
+          "summary": {
+            "fixture": "scriptless-local-portal",
+            "browser": "158.0.8127.36",
+            "checks": 5,
+            "javaScriptDisabledReadability": true,
+            "localHeaderEnforcement": true,
+            "deployedHostHeadersVerified": false,
+            "externalRequests": 0,
+            "signedRelease": false,
+            "approvedDeployment": false,
+            "releaseEnabled": false,
+            "bootstrapAuthenticated": false,
+            "accessibilityAcceptance": false
+          }
+        },
+        {
+          "identity": "historical-bound-distribution-nested-smoke",
+          "canonical_receipt_sha256": "783ad8ce31d75acac117d819f36688650122a5e14fdcac71742d70d45de25ae8",
+          "summary": {
+            "fixture": "historical-bound-distribution-nested-smoke",
+            "checks": 3,
+            "browser": "158.0.8127.36",
+            "assets": 42,
+            "fixtureSourceCommit": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+            "fixtureSourceTree": "a3701267756596e833247f50614c5ddc32f2cce0",
+            "toolingHashes": {
+              "scripts/distribution/stage.mjs": "3ad271a2aaa4cb07b4346aeda9db2b86e20182c0d606d28904da4cd1b301bedb",
+              "scripts/distribution/manifest.mjs": "b9a3dc7e73544312cf42789f03f74e3e944131ff78cb6d1fa0c7f039a0440328",
+              "scripts/docs/validate.mjs": "a50b96e58e2183f17859a76afaeea8e91067e90b385dd3ebd263babc926911c3",
+              "scripts/docs/copy-source.mjs": "f4d527849e9a49b1f328cf57fca53d5ea45f913463f4d4ba48aaa8ecf0c457b4",
+              "scripts/docs/generate.py": "10c998fa2d6cd133eaa476a0ef1c974381442d1260b3fb5dd683023a49634674"
+            },
+            "currentSourceRefused": true,
+            "currentSourceDistributionQualified": false,
+            "buildPasses": 2,
+            "localHeaderFixture": true,
+            "hostHeadersVerified": false,
+            "independentDistributionWitness": false,
+            "signedRelease": false,
+            "releaseEnabled": false,
+            "published": false,
+            "unexpectedRequests": 0
+          }
+        },
+        {
+          "identity": "emitted-react-vite-shell-local-chromium",
+          "canonical_receipt_sha256": "6e3973d290a682abce4a7fb2e27859af5ca1b5b78951f6f1b044f737a4503be9",
+          "summary": {
+            "fixture": "emitted-react-vite-shell-local-chromium",
+            "browser": "158.0.8127.36",
+            "localRebuildByteMatch": true,
+            "nativeEncryptedUnlockExport": true,
+            "uiCreateRestoreInventory": true,
+            "uiRestoreReconciliation": true,
+            "automaticWalletPrompts": 0,
+            "forbiddenLoopbackRequests": 0,
+            "unexpectedRequests": 0,
+            "deviceAcceptance": false,
+            "deployedFramingAttestation": false,
+            "signedRelease": false,
+            "releaseAcceptance": false,
+            "reports_count": 14
+          }
+        },
+        {
+          "identity": "synthetic-demo-trade-review-local-chromium",
+          "canonical_receipt_sha256": "30c55f72a484bff6b3dbff0316a726cdc92f85f52ebdbfe2cb238baea21ce32a",
+          "summary": {
+            "fixture": "synthetic-demo-trade-review-local-chromium",
+            "browser": "158.0.8127.36",
+            "syntheticDemo": true,
+            "walletPrompts": 0,
+            "networkCalls": 0,
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false,
+            "journey_count": 14
+          }
+        },
+        {
+          "identity": "synthetic-demo-saved-reviews-local-chromium",
+          "canonical_receipt_sha256": "27a9fa8cceae689f2b36f8abd4933d34552b252e4b4467715222e7906d983e68",
+          "summary": {
+            "fixture": "synthetic-demo-saved-reviews-local-chromium",
+            "browser": "158.0.8127.36",
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false,
+            "journey_count": 8
+          }
+        },
+        {
+          "identity": "sepolia-testnet-build-local-chromium",
+          "canonical_receipt_sha256": "3bd584413db94ee1c4620141dfe6c11db96c5472d5f60092ab10bb811b2f96bc",
+          "summary": {
+            "fixture": "sepolia-testnet-build-local-chromium",
+            "browser": "158.0.8127.36",
+            "keyId": "0c9da6cce0caffa98d161752c78d8a6ab5b77e630286705057e90b31b0326e3d",
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false,
+            "journey_count": 6
+          }
+        },
+        {
+          "identity": "emitted-public-qr-local-chromium",
+          "canonical_receipt_sha256": "e9e1ba85b6e471338d54bfa9d7f6e6d4feb7462a8026d8d17303f29572bd33dc",
+          "summary": {
+            "fixture": "emitted-public-qr-local-chromium",
+            "browser": "158.0.8127.36",
+            "journeys": [
+              "generated-display-download-exact-fingerprint-and-comparison",
+              "real-png-worker-and-local-replay",
+              "real-jpeg-worker",
+              "bounded-exact-file-text-and-hostile-image-refusals",
+              "synthetic-permission-real-stream-late-cancel-remount-capture-hidden-cleanup",
+              "reference-fingerprint-and-real-vault-lock-clears-memory"
+            ],
+            "emittedWorker": "assets/decode.worker-DGcSBxfL.js",
+            "decoderVersion": "1.4.0",
+            "dependencySha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859",
+            "actualModuleWorker": true,
+            "actualBitmapDecode": true,
+            "actualPrivateVaultLock": true,
+            "physicalCamera": false,
+            "physicalDeviceQualification": false,
+            "sourcePngSha256": "25461ae1f3366bfad42b08f64c663653df8cb7391b10cb251b369d2c1ae68f27",
+            "sourcePngBytes": 5174,
+            "backupFingerprintSha256": "55ce9479aac56ee2b33b82b1581fa5ce7685c38d0eb80c182c95ba455cc389e9",
+            "observedPrivateOperationsDuringExplicitUnlockAndLock": [
+              "init",
+              "listProfiles",
+              "listProfiles",
+              "unlock",
+              "activity",
+              "listProfiles",
+              "activity",
+              "activity",
+              "activity",
+              "activity",
+              "lock"
+            ],
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "ReleaseEnabled": 0,
+            "releaseAcceptance": false
+          }
+        },
+        {
+          "identity": "synthetic-emitted-favorites-native-worker-idb",
+          "canonical_receipt_sha256": "66a719722c1239a17fe0635e4f9dbcfb8b0fbb03288a58627aca9d687d0d67fc",
+          "summary": {
+            "fixture": "synthetic-emitted-favorites-native-worker-idb",
+            "browser": "158.0.8127.36",
+            "journey": [
+              "locked",
+              "explicit-load-revision",
+              "star",
+              "encrypted-at-rest",
+              "reload",
+              "current-registry-open",
+              "lock-revokes-route",
+              "profile-isolation",
+              "unstar-persists",
+              "delete-retains-dangling-reference",
+              "explicit-dangling-removal",
+              "invalid-terms-favorite-refused"
+            ],
+            "workerOnlyFavorites": true,
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false
+          }
+        },
+        {
+          "identity": "synthetic-emitted-trade-templates-native-worker-idb",
+          "canonical_receipt_sha256": "c8b2c5223215a48e3470c3f751532718a3b2f91b6996cef2aebc187d4b2839aa",
+          "summary": {
+            "fixture": "synthetic-emitted-trade-templates-native-worker-idb",
+            "browser": "158.0.8127.36",
+            "journey": [
+              "locked",
+              "explicit-load-revision-zero",
+              "preview-consent",
+              "cancel-no-write",
+              "seven-defaults-only",
+              "same-slot-update",
+              "encrypted-at-rest",
+              "apply-clears-transient-fields",
+              "missing-fresh-inputs-refused",
+              "fresh-order-nonce-and-agreement",
+              "reload",
+              "profile-isolation",
+              "explicit-repeat-default",
+              "clear-repeat-default",
+              "delete-clears-default",
+              "lock-revokes-preview",
+              "native-two-worker-cas",
+              "native-eight-slot-bound",
+              "native-extra-field-refusal",
+              "current-registry-refusal",
+              "explicit-blank-draft"
+            ],
+            "nativeProbe": {
+              "initialRevision": 0,
+              "winnerRevision": 1,
+              "staleCode": "CONFLICT",
+              "cancelledCode": "NOT_FOUND",
+              "ninthCode": "PROTOCOL_ERROR",
+              "extraFieldCode": "PROTOCOL_ERROR",
+              "finalRevision": 8,
+              "slots": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "workerOnlyTemplates": true,
+            "unexpectedRequests": 0,
+            "walletPrompts": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false
+          }
+        },
+        {
+          "identity": "private-g16-public-data-chromium",
+          "canonical_receipt_sha256": "fb9ede2921bb2442e6176e6fe11da785b1be3ea122488c5a143672d20849e1fa",
+          "summary": {
+            "fixture": "private-g16-public-data-chromium",
+            "browser": "158.0.8127.36",
+            "node": "24.22.2",
+            "browserArtifactSha256": "f698c240b86e0b22534c3b3d797719358da5d0addee9722f64665fdf4257b484",
+            "fixtureModuleCount": 38,
+            "unexpectedRequests": 0,
+            "consoleMessages": 0,
+            "pageErrors": 0,
+            "integrationFixtureProvenance": "Node-only existing Noble-family deterministic synthetic signing; not independent qualification",
+            "appInclusion": false,
+            "providerApproval": false,
+            "auditAcceptance": false,
+            "deviceAcceptance": false,
+            "releaseEnabled": 0,
+            "economicPreparationAllowed": false,
+            "allowedFixturePaths_count": 3,
+            "document": {
+              "assertions": 238,
+              "independentKeccakKats": 2,
+              "independentG16Digests": 6,
+              "independentG16Signatures": 4,
+              "officialMailRecovery": true,
+              "retainedPrivateEncodingVectors": 2,
+              "sameProviderIntegrationBundles": 3,
+              "heldCancellationSchedules": 4,
+              "runtime": "document",
+              "testOnly": true,
+              "economicPreparationAllowed": false,
+              "privateDetailsReturned": false
+            },
+            "worker": {
+              "assertions": 238,
+              "independentKeccakKats": 2,
+              "independentG16Digests": 6,
+              "independentG16Signatures": 4,
+              "officialMailRecovery": true,
+              "retainedPrivateEncodingVectors": 2,
+              "sameProviderIntegrationBundles": 3,
+              "heldCancellationSchedules": 4,
+              "runtime": "dedicated-module-worker",
+              "testOnly": true,
+              "economicPreparationAllowed": false,
+              "privateDetailsReturned": false
+            }
+          }
+        },
+        {
+          "identity": "private-adapter-worker",
+          "canonical_receipt_sha256": "58fca442c2378451b3c95b6ae19226f5d2083c2f4f100a3bbe68a47a31c92ee7",
+          "summary": {
+            "fixture": "private-adapter-worker",
+            "browser": "158.0.8127.36",
+            "assertions": 51,
+            "actualAdapter": true,
+            "realDedicatedWorkerAndMessagePort": true,
+            "messageerror": "synthetic event, not native clone-failure qualification",
+            "appIncluded": false,
+            "spendingEnabled": false,
+            "unexpectedRequests": 0,
+            "consoleMessages": 0,
+            "pageErrors": 0,
+            "artifactSha256": "ac46be386600b892dd4ab183621ac5c4c782f8a26e62c5dd1c4b129cd2de2af2",
+            "auditAcceptance": false,
+            "providerApproval": false,
+            "records_count": 9
+          }
+        },
+        {
+          "identity": "G16-physical-message-qualification",
+          "canonical_receipt_sha256": "b73de624de31a556a11ee32a659bde321d7cf2ea240c84da5f360922ea6c8f04",
+          "summary": {
+            "fixture": "G16-physical-message-qualification",
+            "browser": "158.0.8127.36",
+            "assertions": 168,
+            "sourceHostSha256": "21233bf9feb82d6109c020f41e9d4a5896ad8297d8407148cf31023a57276e37",
+            "actualMessagePortAndDedicatedWorker": true,
+            "timeoutMode": "trusted monotonic/timer fixture at29999/30000; not native30second wall-clock acceptance",
+            "unhandledObservation": "event reporting through post-drain task checkpoint; not indefinite absence proof",
+            "heldSchedulesUseNonemptyCapabilities": true,
+            "fixtureControlsOnly": true,
+            "productionControlProtocolImplemented": false,
+            "appIncluded": false,
+            "spendingEnabled": false,
+            "browserArtifactSha256": "073c6e4c1fe99886c3c422f209959661d015c3b501fe63a5e23e8da4356f487f",
+            "unexpectedRequests": 0,
+            "consoleMessages": 0,
+            "pageErrors": 0,
+            "providerApproval": false,
+            "auditAcceptance": false,
+            "schedules_count": 13
+          }
+        },
+        {
+          "identity": "G15-public-data-local-qualification",
+          "canonical_receipt_sha256": "568f1dd4087458bf3c54854f59ae86ae51fb66ee036a32007289973ddf4131ff",
+          "summary": {
+            "fixture": "G15-public-data-local-qualification",
+            "browser": "158.0.8127.36",
+            "unexpectedRequests": 0,
+            "vectorSha256": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+            "appIncluded": false,
+            "providerApproved": false,
+            "releaseEnabled": false,
+            "renderedModules_count": 18,
+            "documentResult": {
+              "runtime": "document",
+              "assertions": 66,
+              "publishedPrimitiveVector": true,
+              "syntheticEnvelopeProviderIndependent": false,
+              "noSigningOrWallet": true,
+              "releaseEnabled": false
+            },
+            "workerResult": {
+              "runtime": "dedicated-module-worker",
+              "assertions": 66,
+              "publishedPrimitiveVector": true,
+              "syntheticEnvelopeProviderIndependent": false,
+              "noSigningOrWallet": true,
+              "releaseEnabled": false
+            }
+          }
+        },
+        {
+          "identity": "G15-locator-local-public-proof",
+          "canonical_receipt_sha256": "adf1dcaedb44b6045a8c15eb1a4ce4d50a18067cb13b6a241f2a09736880750d",
+          "summary": {
+            "fixture": "G15-locator-local-public-proof",
+            "browser": "158.0.8127.36",
+            "unexpectedRequests": 0,
+            "vectorSha256": "81900da0e81d600e246c821e6f425d4f8433aa73be8458be2cd91ffd7ebba929",
+            "appIncluded": false,
+            "providerApproved": false,
+            "releaseEnabled": false,
+            "renderedModules_count": 19,
+            "documentResult": {
+              "runtime": "document",
+              "checks": 25,
+              "locatorVerified": true,
+              "archiveVerified": true,
+              "profile": "cidv1-base32lower-raw-or-dagpb-sha2-256",
+              "releaseEnabled": false,
+              "installationAllowed": false
+            },
+            "workerResult": {
+              "runtime": "dedicated-module-worker",
+              "checks": 25,
+              "locatorVerified": true,
+              "archiveVerified": true,
+              "profile": "cidv1-base32lower-raw-or-dagpb-sha2-256",
+              "releaseEnabled": false,
+              "installationAllowed": false
+            }
+          }
+        },
+        {
+          "identity": "native-encrypted-chat-history",
+          "canonical_receipt_sha256": "a28c66fa803e4a6c1c8a879fa7cd1864d868d309ed8332d57e99441d21eb81b9",
+          "summary": {
+            "fixture": "native-encrypted-chat-history",
+            "browser": "158.0.8127.36",
+            "nativeTwoTabCas": true,
+            "reloadDurableDedup": true,
+            "nativeProofReauthentication": true,
+            "unexpectedRequests": 0,
+            "pageErrors": 0,
+            "appIncluded": false,
+            "releaseEnabled": false
+          }
+        },
+        {
+          "identity": "diagnostics-local-browser",
+          "canonical_receipt_sha256": "3a336347ddc38edc816a023177460459240cef756355f23a48a39715fd181cc7",
+          "summary": {
+            "fixture": "diagnostics-local-browser",
+            "engine": "chromium",
+            "browserVersion": "158.0.8127.36",
+            "signedFixture": true,
+            "approvedRelease": false,
+            "defaultCollectionBlocked": true,
+            "selectedPreviewExact": true,
+            "revocationRefused": true,
+            "lockedClear": true,
+            "externalNetwork": false
+          }
+        },
+        {
+          "identity": "native-worker-offline-recovery-references",
+          "canonical_receipt_sha256": "ccf97fb8f010ce6f973903984b657cfa3973bde54fcfe421ed7932236698b056",
+          "summary": {
+            "fixture": "native-worker-offline-recovery-references",
+            "browser": "chromium",
+            "version": "158.0.8127.36",
+            "readonly": true,
+            "revisionPinnedPages": true,
+            "exactPrivatePreview": true,
+            "staleRevisionExportRefused": true,
+            "coldStartReauthenticated": true,
+            "coldStartReferencePreserved": true,
+            "reloadLocked": true,
+            "lockAndProfileIsolation": true,
+            "preservedFutureRecord": true,
+            "noRawTransaction": true,
+            "tradingEnabled": false
+          }
+        },
+        {
+          "identity": "draft-locale-emitted-layout",
+          "canonical_receipt_sha256": "52a2a3b6ee5563c2e31b0305bf31c9b6a2c2cee6a41f7a04bf2cf96a97852a45",
+          "summary": {
+            "fixture": "draft-locale-emitted-layout",
+            "browser": "158.0.8127.36",
+            "checks": 6,
+            "stress": "test-only DOM static-catalog substitution; not a translated locale implementation",
+            "touch": "Chromium touchscreen emulation, not physical-device qualification",
+            "translatedLocaleApproved": false,
+            "accessibilityAcceptance": false,
+            "releaseEnabled": false,
+            "unexpectedRequests": 0
+          }
+        }
+      ],
+      "structured_summary_assertions": "PASS"
+    },
+    {
+      "job_id": 136050934451,
+      "checkout": "bfb908c9c765b60ecea6a66f979841919e6a1f3c",
+      "browser_command_groups": [
+        "npm run test:relay:native"
+      ],
+      "group_count": 1,
+      "error_annotations": [],
+      "receipts": [],
+      "log_sha256": "5ffcac30aaa778b2dd111ecf8572fb704b8c6c181d11eb95ebf455c7cf5bc64a",
+      "test_counts": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "native_relay_receipt": {
+        "relay": "v0.22.3",
+        "source": "a3b1237bb5325a21a01c132fb53bb615789c4242",
+        "nativeWrites": 4,
+        "implicitAuth": 0,
+        "recoveredUnknown": true,
+        "exactSignedFields": true,
+        "tlsQualified": false
+      },
+      "limitations": [
+        "No wallet, agreement authority or delivery receipt is created.",
+        "TLS remains unqualified; no Solana native financial execution."
+      ]
+    }
+  ],
+  "later_observation_not_polled": true,
+  "source_tests_executed_locally_by_this_task": 0,
+  "main_merges_performed": 0,
+  "interpretation": [
+    "206,208,209 each completed16 foundation browser command groups on the recorded exact merge tree; their23 structured receipt objects were parsed.",
+    "206 actual native Nostr run passed3 tests on the same recorded merge checkout; one other same-name check record is cancelled, with no cancellation cause inferred.",
+    "207 and208 native financial jobs were still in actual Worker/browser refund step16. Their validator-client acceptance step14 was successful metadata, not a newly retrieved complete validator receipt.",
+    "209 native financial job was still in validator acceptance step14.210 was still in program build step10. No completed native financial pass is claimed for these sources.",
+    "210 revised transport browser proof remains queued in this observation;211 all9 observed records remain queued.",
+    "The three successful foundation browser runs execute the pre210 diagnostic inherited from207; they do not execute or qualify210 changed helper.",
+    "Historical distribution receipts explicitly refuse current-source distribution; synthetic QR/camera and browser fixtures do not qualify physical devices or release.",
+    "Older203/205 complete native receipts and204 failure triage were not fetched or re-audited.",
+    "Check-record counts are metadata; per-source execution results are not summed into a new combined-source pass."
+  ],
+  "post_inventory_targeted_update": {
+    "observed_from_utc": "2026-11-20T04:29:45.427Z",
+    "observed_to_utc": "2026-11-20T04:29:45.920Z",
+    "purpose": "One bounded exact-new-head follow-up after root reported normal leased PR210 advance; not a new complete inventory or a repoll of unfinished native jobs.",
+    "pr": 210,
+    "old_source_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+    "head": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+    "head_branch": "codex/transport-qualification-20261120",
+    "source_tree": "976a729bc359d331214924abab617969aa066950",
+    "commit_parent_heads": [
+      "7819b88d32375905c12681e297773c712dabe94a"
+    ],
+    "base_branch": "codex/generation8-core-20261120",
+    "base_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+    "state": "open",
+    "merged": false,
+    "total_check_records": 10,
+    "counts": {
+      "queued": 10
+    },
+    "checks": [
+      {
+        "id": 136083640534,
+        "name": "program",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:29:04Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670457/job/136083640534"
+      },
+      {
+        "id": 136083554934,
+        "name": "schemas-and-crypto",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670439/job/136083554934"
+      },
+      {
+        "id": 136083554869,
+        "name": "local-evm",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670439/job/136083554869"
+      },
+      {
+        "id": 136083554859,
+        "name": "specs",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670439/job/136083554859"
+      },
+      {
+        "id": 136083554751,
+        "name": "docs-tooling",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670439/job/136083554751"
+      },
+      {
+        "id": 136083554377,
+        "name": "browser",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670439/job/136083554377"
+      },
+      {
+        "id": 136083554245,
+        "name": "native-nostr-relay",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670453/job/136083554245"
+      },
+      {
+        "id": 136083554065,
+        "name": "inventory",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670380/job/136083554065"
+      },
+      {
+        "id": 136083553817,
+        "name": "forge",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670362/job/136083553817"
+      },
+      {
+        "id": 136083553509,
+        "name": "local-trade",
+        "head_sha": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+        "status": "queued",
+        "conclusion": null,
+        "started_at": "2026-11-20T04:28:50Z",
+        "completed_at": null,
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44674670362/job/136083553509"
+      }
+    ],
+    "source_identity_verified": true,
+    "root_reported_qualification": {
+      "tested_local_source": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+      "tested_source_tree_prefix": "81845317",
+      "full_tests": 2309,
+      "independent_affected_tests": 54,
+      "three_evidence_documents_appended": true,
+      "evidence_basis": "Parent/root message; not rerun or independently re-audited by worker41."
+    },
+    "pending_evidence": "Current-head hosted/native/browser executions must bind actual checkout/tree and strict structured receipts; old210 and206/208/209 passes do not qualify this combined source.",
+    "original_component_and_optional_refs_preserved": "Root-reported; complete 04:13 inventory remains immutable and was not re-enumerated."
+  }
+}

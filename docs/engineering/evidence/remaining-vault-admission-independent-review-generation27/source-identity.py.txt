@@ -1,0 +1,83 @@
+from pathlib import Path
+from datetime import datetime, timezone
+import hashlib
+import json
+import subprocess
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-review-g27')
+DEPENDENCY_SOURCE = Path('/workspace/scratch/dcf03ef9bee8/p2p-remaining-vault-admission-g27')
+BASE = 'f36a0a07dff55aa83b9d01a69501d049461d9b33'
+RED = '515a7c945b6bef136c3ede436577635b17ccd4e2'
+GREEN = '0df0e191e5829e66141d4ba9c028599ce9c91de2'
+PRODUCTION = 'apps/web/src/ui/VaultForms.tsx'
+TEST = 'apps/web/test/vault-form-admission.test.mjs'
+EXPECTED_TEST_SHA256 = 'ff52ac643512849b2178977b8d07d4affe688a9b460bc91a0add033984a538b4'
+commands = []
+
+def command(*args):
+    commands.append(list(args))
+    return subprocess.check_output(args, cwd=ROOT)
+
+def git(*args):
+    return command('git', *args)
+
+def tree(commit):
+    entries = {}
+    for entry in git('ls-tree', '-rz', '--full-tree', commit).split(b'\0'):
+        if entry:
+            metadata, path = entry.split(b'\t', 1)
+            entries[path.decode()] = metadata.decode()
+    return entries
+
+def changed(before, after):
+    return sorted(path for path in before.keys() | after.keys() if before.get(path) != after.get(path))
+
+base, red, green = map(tree, (BASE, RED, GREEN))
+base_source = git('show', BASE + ':' + PRODUCTION)
+green_source = git('show', GREEN + ':' + PRODUCTION)
+dependency_packages = []
+for name in ('react', 'react-dom', 'vite', 'typescript'):
+    file = ROOT / 'node_modules' / name / 'package.json'
+    dependency_packages.append({'name': name, 'version': json.loads(file.read_text())['version'],
+                                'package_path': str(file), 'real_package_path': str(file.resolve()),
+                                'package_sha256': hashlib.sha256(file.read_bytes()).hexdigest(),
+                                'same_inode_as_source': file.stat().st_ino == (DEPENDENCY_SOURCE / 'node_modules' / name / 'package.json').stat().st_ino})
+invariants = {
+    'red_adds_only_regression_test': changed(base, red) == [TEST] and TEST not in base,
+    'red_preserves_every_base_entry': all(red[path] == entry for path, entry in base.items()),
+    'green_changes_only_vault_forms_from_red': changed(red, green) == [PRODUCTION],
+    'same_regression_blob_red_green': red[TEST] == green[TEST],
+    'same_regression_sha256_as_frozen_assignment': hashlib.sha256(git('show', GREEN + ':' + TEST)).hexdigest() == EXPECTED_TEST_SHA256,
+    'green_preserves_every_other_base_entry': all(green[path] == entry for path, entry in base.items() if path != PRODUCTION),
+    'green_adds_only_three_existing_ref_guards': base_source.count(b'if (busy) return;') == 3 and green_source == base_source.replace(b'if (busy) return;', b'if (busy || request.current !== null) return;'),
+    'UnlockForm_block_unchanged': base_source.split(b'export function UnlockForm', 1)[1].split(b'/** The only generated navigation target', 1)[0] == green_source.split(b'export function UnlockForm', 1)[1].split(b'/** The only generated navigation target', 1)[0],
+    'G26_unlock_regression_unchanged': base['apps/web/test/unlock-form-admission.test.mjs'] == green['apps/web/test/unlock-form-admission.test.mjs'],
+    'frozen_green_tree_matches_assignment': git('rev-parse', GREEN + '^{tree}').decode().strip() == '69395d2cc344ba360cddb0ca3e1b19884a568ed9',
+    'linear_base_red_green': git('rev-parse', RED + '^').decode().strip() == BASE and git('rev-parse', GREEN + '^').decode().strip() == RED,
+    'working_tree_is_exact_green': git('rev-parse', 'HEAD').decode().strip() == GREEN and git('status', '--porcelain=v1', '--untracked-files=all').decode().strip() == '',
+    'ReleaseEnabled_zero_in_actual_facade': b'AppRuntime.start({ version: 1, ReleaseEnabled: 0, connectOrigins: [] }' in git('show', GREEN + ':apps/web/src/app-services.ts'),
+    'physical_dependency_root': (ROOT / 'node_modules').is_dir() and not (ROOT / 'node_modules').is_symlink(),
+    'physical_package_files': all(Path(item['real_package_path']).is_relative_to(ROOT / 'node_modules') and not item['same_inode_as_source'] for item in dependency_packages),
+    'dependency_lock_matches_copy_source': (ROOT / 'package-lock.json').read_bytes() == (DEPENDENCY_SOURCE / 'package-lock.json').read_bytes(),
+}
+files = []
+for path in [PRODUCTION, TEST, 'apps/web/test/unlock-form-admission.test.mjs', 'apps/web/src/app-services.ts', 'apps/web/src/runtime/app-runtime.ts', 'scripts/test-support/register-tsx.mjs', 'scripts/test-support/tsx-hooks.mjs', 'packages/storage/test/fixtures/vault-python-v1.json', 'package.json', 'package-lock.json']:
+    blob = git('show', GREEN + ':' + path)
+    files.append({'path': path, 'git_entry': green[path], 'bytes': len(blob), 'sha256': hashlib.sha256(blob).hexdigest()})
+record = {
+    'recorded_utc': datetime.now(timezone.utc).isoformat(),
+    'commits': [{'label': label, 'commit': commit, 'tree': git('rev-parse', commit + '^{tree}').decode().strip(), 'entries': len(entries)} for label, commit, entries in [('base', BASE, base), ('red', RED, red), ('green', GREEN, green)]],
+    'base_to_red_changed_paths': changed(base, red),
+    'red_to_green_changed_paths': changed(red, green),
+    'base_to_green_changed_paths': changed(base, green),
+    'unchanged_base_entries_in_green': sum(green.get(path) == entry for path, entry in base.items()),
+    'invariants': invariants,
+    'source_files': files,
+    'dependencies': {'copied_from': str(DEPENDENCY_SOURCE / 'node_modules'), 'physical_root': str(ROOT / 'node_modules'),
+                     'node': command('node', '--version').decode().strip(), 'npm': command('npm', '--version').decode().strip(),
+                     'node_executable': command('node', '-p', 'process.execPath').decode().strip(), 'packages': dependency_packages},
+    'production_diff': git('diff', RED, GREEN, '--', PRODUCTION).decode(),
+    'executed_argv': commands,
+}
+print(json.dumps(record, indent=2))
+assert all(invariants.values()), invariants

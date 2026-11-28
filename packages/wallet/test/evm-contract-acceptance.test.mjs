@@ -29,7 +29,7 @@ async function fixture(patch={}){
 test('explicit1271 acceptance binds exact digest/account/domain and arbitrary bounded signature withoutEOAfallback',async()=>{
  const f=await fixture(),result=await f.verifier.verify(f.input);assert.equal(result.ok,true,JSON.stringify(result));
  assert.equal(result.value.termsHash,evmTermsHash(f.input.domain,f.input.terms));assert.equal(result.value.account,W);assert.equal(result.value.economicPreparationAllowed,false);
- const call=f.calls.find(c=>c.method==='eth_call');assert.equal(call.params[0].gas,'0x186a0');assert.equal(call.params[0].to,W);assert.equal(call.params[1],'0x10');assert.ok(call.params[0].data.startsWith('0x1626ba7e'+result.value.termsHash));
+ const call=f.calls.find(c=>c.method==='eth_call');assert.equal(call.params[0].gas,'0x186a0');assert.equal(call.params[0].to,W);assert.deepEqual(call.params[1],{blockHash:H,requireCanonical:true});assert.ok(call.params[0].data.startsWith('0x1626ba7e'+result.value.termsHash));
  assert.deepEqual(f.input.signature,new Uint8Array([7,8,9]));assert.ok(f.calls.every(c=>!/(send|signTyped|personal_sign)/.test(c.method)));f.verifier.dispose();
 });
 test('wrongmagic,short/oversized return,revert,nocode,currentchain/code and canonical reorg failures reject',async()=>{
@@ -91,7 +91,7 @@ test('calldata encodes the exact dynamic signature bytes and zero padding at the
   const call=f.calls.find(item=>item.method==='eth_call'),digest=evmTermsHash(f.input.domain,f.input.terms);
   const raw=Buffer.from(Array.from({length:33},(_,i)=>i+1)).toString('hex');
   assert.equal(call.params[0].data,'0x1626ba7e'+digest+'40'.padStart(64,'0')+'21'.padStart(64,'0')+raw+'0'.repeat(62));
-  assert.equal(call.params[1],'0x10');
+  assert.deepEqual(call.params[1],{blockHash:H,requireCanonical:true});
  }finally{f.verifier.dispose();}
 });
 
@@ -117,4 +117,22 @@ test('malformed header fields and wallet-code changes refuse with fixed errors',
   const f=await fixture({intercept});try{const result=await f.verifier.verify(f.input);assert.equal(result.ok,false);assert.equal(result.error.code,'INTEGRITY_FAILURE');assert.doesNotMatch(JSON.stringify(result),/PRIVATE/);}finally{f.verifier.dispose();}
  }
  assert.equal(accessorCalls,0);
+});
+
+test('a fork accepting a signature cannot supply acceptance for the majority block hash', async () => {
+ const forkHash='0x'+'fa'.repeat(32);let signatureReads=0;
+ const f=await fixture({reply:'0xffffffff'+'0'.repeat(56),intercept:(method,params)=>{
+  if(method!=='eth_call')return undefined;
+  signatureReads++;
+  // The wallet's policy accepts on the fork only. Honest EIP-1898 nodes refuse the unknown majority hash.
+  const at=params[1];
+  if(typeof at==='object'&&at.blockHash!==forkHash)throw Object.assign(new Error('PRIVATE unknown canonical block'),{code:-32001});
+  return MAGIC;
+ }});
+ try {
+  const result=await f.verifier.verify(f.input);
+  assert.equal(result.ok,false,'acceptance must not report H when only the fork policy approved the signature');
+  assert.equal(result.error.code,'UNAVAILABLE');assert.doesNotMatch(JSON.stringify(result),/PRIVATE/);
+  assert.equal(signatureReads,1,'no fallback or retry may authorize acceptance');
+ }finally{f.verifier.dispose();}
 });

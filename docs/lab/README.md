@@ -5,7 +5,7 @@ manifest digest (including npm11.17.0), Foundry1.5.1 archive checksum and solc0.
 is `.devcontainer/Dockerfile`. It installs no user dotfiles, production keys or
 signing credentials. The checksums identify downloaded bytes; they are not an
 independent software audit. Other architectures and Solana validators are
-unsupported by this recipe. No Solana interoperability profile is defined yet.
+unsupported by this EVM recipe; the separate Solana workflow has its own qualification scope.
 
 Open a clean checkout with its pinned submodules in a local development-container
 client. Creating a Codespace may consume paid resources and is a separate user
@@ -18,10 +18,14 @@ node --import ./scripts/test-support/register-tsx.mjs scripts/lab/run.mjs founda
 node --import ./scripts/test-support/register-tsx.mjs scripts/lab/run.mjs journey
 ```
 
-`dist-lab/recipe.json` binds the source commit/dirty state, actual runtime/compiler
-versions, recipe, lockfile and synthetic fixture hashes. `run.json` records every
-command outcome and the hash of its local log. A failed check stops the run and
-keeps the evidence. Reports are local development evidence, not release approval.
+Each invocation writes to a new, exclusively created
+`dist-lab/<mode>-<UTC timestamp>-<random>/` directory, printed as `output` on
+success. Its `recipe.json` binds the source commit/dirty state, actual
+runtime/compiler versions, recipe, lockfile and synthetic fixture hashes. Its
+`run.json` records every command outcome and the hash of its local
+`command-N.log`. A failed check stops the run and keeps the evidence. Earlier
+runs, including failed ones, are never overwritten. Reports are local development
+evidence, not release approval.
 The chain harnesses start their own ephemeral loopback chains, conspicuously
 synthetic identities and fake funds, then stop only their owned processes.
 

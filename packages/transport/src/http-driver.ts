@@ -52,8 +52,8 @@ export class BoundedHttpDriver {
         payload = new Uint8Array(length); Uint8Array.prototype.set.call(payload, body);
       }
     } catch { return fail('INVALID_ENDPOINT'); }
-    if (!scope.current() || scope.signal.aborted) return fail('CANCELLED');
-    if (this.#pending >= MAX_HTTP_OPERATIONS) return fail('LIMIT_EXCEEDED');
+    if (!scope.current() || scope.signal.aborted) { payload?.fill(0); return fail('CANCELLED'); }
+    if (this.#pending >= MAX_HTTP_OPERATIONS) { payload?.fill(0); return fail('LIMIT_EXCEEDED'); }
     this.#pending++;
     let invoked = false;
     try {

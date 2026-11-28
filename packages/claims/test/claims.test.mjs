@@ -93,3 +93,29 @@ test('a claim whose evidence is stale is never current even with matching trust 
   assert.equal(shown.status,'proposed');assert.equal(shown.reviewedAt,null);
   assert.equal(claimFor([tested],tested.capability,scope,trust,[]).status,'tested-scoped');
 });
+
+test('claim arrays use a bounded own-data length without evaluating dynamic proxy getters',()=>{
+  let reads=0;
+  const guarded=values=>new Proxy(values,{get(target,key,receiver){
+    if(key==='length'){reads++;throw Error('dynamic length must not execute');}
+    return Reflect.get(target,key,receiver);
+  }});
+  assert.deepEqual(parsePrivacyClaim({...claim,preconditions:guarded(['bounded fixture'])}).preconditions,['bounded fixture']);
+  assert.equal(claimFor(guarded([claim]),claim.capability,scope).id,claim.id);
+  assert.equal(reads,0);
+  // A changing get trap formerly admitted forty entries despite the declared thirty-two limit.
+  let dynamicReads=0;
+  const injected=new Proxy([],{
+    get(target,key,receiver){if(key==='length')return ++dynamicReads<=2?0:40;return Reflect.get(target,key,receiver);},
+    getOwnPropertyDescriptor(target,key){
+      if(/^\d+$/.test(String(key)))return{value:`precondition-${key}`,configurable:true,enumerable:true,writable:true};
+      return Reflect.getOwnPropertyDescriptor(target,key);
+    },
+  });
+  assert.deepEqual(parsePrivacyClaim({...claim,preconditions:injected}).preconditions,[]);
+  assert.equal(dynamicReads,0);
+  assert.throws(()=>parsePrivacyClaim({...claim,preconditions:Array.from({length:33},(_,i)=>`condition-${i}`)}));
+  const throwing=new Proxy([],{getOwnPropertyDescriptor(){throw Error('descriptor unavailable');}});
+  assert.throws(()=>parsePrivacyClaim({...claim,preconditions:throwing}),/CLAIM_UNSUPPORTED/);
+  assert.equal(claimFor(throwing,claim.capability,scope),null);
+});

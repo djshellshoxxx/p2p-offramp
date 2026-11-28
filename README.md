@@ -3,14 +3,15 @@
 New research: [reusable upstream code for unfinished features](docs/research/reuse-2026-11-03/README.md)
 (2026-11-03; current gaps, exact source/license evidence and intended integration points).
 
-Current source: [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
-[whole-source audit](docs/execution/CONTINUATION-AUDIT-2026-10-31.md),
-[remaining-work inventory](docs/execution/INCOMPLETE-WORK-2026-10-31.md),
-[autonomous execution prompt](docs/execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md)
-and [task ledger](tasks/todo.md). The prior [consolidation audit](docs/execution/CONSOLIDATED-AUDIT-2026-10-30.md)
-records merged compatible work; the [PR #20 report](docs/execution/AUTONOMOUS-RESULT-2026-10-31.md)
-records T1–T9. Historical local-only reports below are superseded.
-
+Current engineering checkpoint: [continuous consolidation handoff](docs/engineering/CONSOLIDATION_HANDOFF.md),
+[machine-readable state](docs/engineering/consolidation-state.json), and
+[source-backed feature matrix](docs/engineering/FEATURE_MATRIX.md). The inventory covers 192 branches at
+`main@5c5a84e`; seven retained source branches are combined on `codex/max-consolidation-20261119`.
+The handoff distinguishes verified source, staging integration, hosted qualification and remaining release work.
+Start with the **[User Guide](docs/wiki-source/User-Guide.md)** or **[Developer Guide](docs/wiki-source/Developer-Guide.md)**.
+The [November 18 reconciliation](docs/consolidation/2026-11-18-documentation-reconciliation.md),
+[earlier consolidation report](docs/execution/CONSOLIDATION-RESULT-2026-11-18.md) and
+[task ledger](tasks/todo.md) preserve historical checkpoints. Their older draft/merge statements are not current status.
 
 Experimental **software artwork** exploring client-side, noncustodial peer-to-peer exchange. The functional descriptions, development status, risks, licensing and acceptance gates below remain applicable.
 
@@ -21,11 +22,28 @@ confirmation; the application cannot guarantee that fiat is received or irrevers
 
 ## Current state
 
-The catalog contains 173 documents: 171 expanded technical design baselines, a navigation catalog
-and supplemental plan. Provider/artifact pins, implementations and security/interoperability evidence
-are tracked separately. Optional proof, location, courier and arbitration capabilities remain gated.
+The baseline `main@5c5a84ef6300330700c8b0ca54d074ac113f08be` already includes encrypted profiles and
+fresh-key recovery, signed EVM terms and bilateral peer acceptance, native/ERC-20 escrow, isolated localnet
+buyer/seller browser workflows, exact-token approval and settlement recovery, same-terms resumption,
+independent native Nostr relay interoperability tests, and the Solana native client with durable recovery.
+These are source capabilities with explicit acceptance scopes, not proof of production release readiness.
 
-Implemented foundations include bounded encrypted IndexedDB/CAS persistence, fresh-key backup recovery, local messaging-identity lifecycle, authority/error/retry policies, a conservative encrypted intent journal and discovery-only wallet boundary. A static React/Vite shell now exposes locked startup, known-profile unlock/lock/status and explicit unchecked ciphertext export through a native Worker. No mandatory app-owned backend exists; the [client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) is normative. Create/restore/inventory UI is implemented. The Offers page can check a local G16 EVM trade-terms file offline against a loaded registry and open a read-only review (exact amounts, full addresses, deadlines, settlement risk); the default build has no approved registry, so this works only in the explicitly labelled synthetic `demo` build. Offline signed registry/release verification, test-only wallet execution, both native escrow profiles and the canonical encrypted relay-to-escrow local acceptance loop are implemented. Approved live trust/bootstrap, qualified deployments and a funds-enabled app remain incomplete. ReleaseEnabled stays zero. No real-funds readiness is claimed.
+The current staging source also combines bounded file review, relay-readiness publication, QR grouping/parser
+repairs, public QR image/camera review, funded Solana browser exits, and documentation/lab tooling.
+QR and Solana form labels have been corrected, and the combined build checks preserve separate public-decoder,
+EVM and Solana runtime boundaries. Exact source parents, test results and unresolved hosted checks are recorded
+in the [consolidation handoff](docs/engineering/CONSOLIDATION_HANDOFF.md).
+
+The ordinary static application provides encrypted local workspace and offline review. Native EVM and Solana
+trading compositions remain explicit isolated localnet profiles. Approved live trust/bootstrap, production
+wallet/device qualification and an authorized deployment remain separate. `ReleaseEnabled=0`; no real-funds
+readiness is claimed. No mandatory application-owned backend exists; the
+[client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) remains normative.
+
+Solana's staged browser feature recovers already funded native-SOL escrows; it does not complete Solana offer,
+negotiation or funding UI parity. QR decoding and fingerprint equality do not authenticate an invite or establish
+backup recoverability. Arbitration, proof, location, courier and advanced privacy references remain separate
+experimental work. The basic escrow has seller release and timeout refund, without an arbitration authority.
 
 ## Future features
 
@@ -33,7 +51,7 @@ The proposed privacy enhancement backlog is documented in [Future privacy archit
 
 ## Screenshots
 
-Captured from the synthetic, test-only demo build (`npm run build:demo`); trading and funds are disabled in every build.
+Captured from the synthetic, test-only demo build (`npm run build:demo`), which has no signing or send capability. The separate localnet test profile uses disposable development assets only.
 
 ![Home: locked local workspace with funds disabled and the SYNTHETIC DEMO badge](docs/screenshots/startup.png)
 

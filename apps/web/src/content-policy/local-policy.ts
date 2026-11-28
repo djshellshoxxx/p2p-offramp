@@ -78,7 +78,7 @@ export class ProfileAttemptAdmission {
     if (attempts) attempts.push(time); else this.#offers.set(profileId, [time]);
   }
 }
-/** Pure candidate arithmetic only. No camera/QR codec or production scan consumer is activated here. */
+/** Pure candidate arithmetic; the public QR review controller owns its document-scoped admission instance. */
 export class CandidateAttemptAdmission {
   readonly #now: () => number;
   #attempts: number[] = [];

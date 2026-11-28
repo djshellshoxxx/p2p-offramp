@@ -1,0 +1,1 @@
+PASS: 186 production source files; core entry graph visited 112 module(s). Static boundary checks do not prove runtime isolation or complete the bundler graph.

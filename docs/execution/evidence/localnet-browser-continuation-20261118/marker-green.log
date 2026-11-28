@@ -1,0 +1,18 @@
+✔ durable-send evidence accepts the complete native and token approval requests without changing them (1.780834ms)
+✔ durable-send evidence rejects a substituted from even when every other field matches (0.754083ms)
+✔ durable-send evidence rejects a substituted to even when every other field matches (0.196174ms)
+✔ durable-send evidence rejects a substituted data even when every other field matches (0.147661ms)
+✔ durable-send evidence rejects a substituted value even when every other field matches (0.128033ms)
+✔ durable-send evidence rejects a substituted nonce even when every other field matches (0.113621ms)
+✔ durable-send evidence rejects a substituted chainId even when every other field matches (0.107141ms)
+✔ durable-send evidence rejects an omitted field or an extra wallet field (0.378088ms)
+✔ durable-send evidence refuses ambiguous markers and markers belonging to an older profile (0.420972ms)
+✔ durable-send evidence requires persisted pre-send provenance and matching account and nonce metadata (1.149776ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 79.507034
