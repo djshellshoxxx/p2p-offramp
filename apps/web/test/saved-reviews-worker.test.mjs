@@ -60,6 +60,41 @@ test('save, list and delete round-trip exact bytes in the selected encrypted pro
   s.service.dispose();
 });
 
+test('restoring an older backup brings a deleted saved review back only in the new profile', async () => {
+  const s = await setup();
+  const profileId = s.profileId;
+  const destinationPassphrase = 'restored saved review fixture passphrase';
+  const reviewBytes = terms(1);
+  await s.send('unlock', { profileId, passphrase: pass });
+  s.value();
+  await s.send('saveTermsReview', { profileId, source: 'file', bytes: reviewBytes });
+  const { recordId } = s.value();
+  await s.send('exportEncrypted', { profileId });
+  const backup = s.value().bytes;
+  const originalBackup = backup.slice();
+
+  await s.send('deleteTermsReview', { profileId, recordId });
+  assert.deepEqual(s.value(), { recordId });
+  const sourceAfterDeletion = await s.store.get(profileId);
+  await s.send('restore', { bytes: backup, sourcePassphrase: pass, destinationPassphrase });
+  const { newProfileId, records } = s.value();
+  assert.notEqual(newProfileId, profileId);
+  assert.equal(records, 1);
+  await s.send('listTermsReviews', { profileId });
+  assert.deepEqual(s.value(), { items: [], skipped: 0 });
+
+  await s.send('unlock', { profileId: newProfileId, passphrase: destinationPassphrase });
+  s.value();
+  await s.send('listTermsReviews', { profileId: newProfileId });
+  assert.deepEqual(s.value(), { items: [{ recordId, source: 'file', bytes: reviewBytes }], skipped: 0 });
+  await s.send('unlock', { profileId, passphrase: pass });
+  s.value();
+  await s.send('listTermsReviews', { profileId });
+  assert.deepEqual(s.value(), { items: [], skipped: 0 });
+  assert.deepEqual(await s.store.get(profileId), sourceAfterDeletion);
+  assert.deepEqual(backup, originalBackup);
+});
+
 test('saving is idempotent per source and bytes, and the ninth distinct save is refused without eviction', async () => {
   const s = await setup();
   await s.send('unlock', { profileId: s.profileId, passphrase: pass });
