@@ -129,3 +129,63 @@ test('locking during a resumption read prevents a late restored session or priva
     assert.equal(w.chain.counts.sends, 0);
   } finally { release(); w.chain.hold = null; }
 });
+
+test('fresh-key restore retires a pending release review and never restores its consent', async t => {
+  const w = await world(t), id = await negotiate(w), { seller, chain } = w;
+  const original = seller.snapshot.trades[0], sourceId = seller.snapshot.profileId;
+  const word = value => BigInt(value).toString(16).padStart(64, '0');
+  chain.escrows.set(id, `0x${[original.seller, original.escrowExpirySeconds, 1, original.buyer, 0, original.amountBaseUnits].map(word).join('')}`);
+  await seller.command({ type: 'refresh' });
+  assert.equal(seller.snapshot.trades[0].chainState, 'funded');
+  assert.equal(seller.snapshot.trades[0].canRelease, true);
+
+  const before = { ...chain.counts };
+  await seller.command({ type: 'review.prepare', action: 'release', tradeId: id, fiatReceiptConfirmed: true });
+  const pending = seller.snapshot.review;
+  assert.ok(pending);
+  assert.equal(pending.action, 'release');
+  assert.deepEqual(chain.counts, before, 'preparation must not sign, connect or send');
+
+  const backup = (await seller.command({ type: 'backup.export' })).backupBytes;
+  assert.equal(seller.snapshot.review?.id, pending.id, 'the source must still hold the pending review at export');
+  const retained = backup.slice(), sourceRow = structuredClone(seller.store.rows.get(sourceId));
+  assert.ok(sourceRow);
+  const restored = await seller.command({ type: 'backup.restore', bytes: backup,
+    sourcePassphrase: PASS, destinationPassphrase: RESTORED_PASS });
+  const destinationId = restored.snapshot.profileId;
+  assert.ok(destinationId);
+  assert.notEqual(destinationId, sourceId);
+  assert.equal(restored.restoredProfileId, destinationId);
+  assert.equal(restored.snapshot.review, null);
+  assert.equal(restored.snapshot.wallet, null);
+  assert.equal(seller.store.rows.size, 2);
+  assert.deepEqual(seller.store.rows.get(sourceId), sourceRow);
+  assert.deepEqual(backup, retained);
+  assert.deepEqual(chain.counts, before, 'restore must not sign, connect or send');
+
+  // Use the controller boundary directly: the fixture helper requires a current
+  // review to grant the synthetic bridge permission before issuing confirmation.
+  const refuseRetiredReview = async () => {
+    // Restore/reconnect can leave signed relay history draining. Wait for the
+    // normal ready phase, just as the fixture command helper does, so BUSY
+    // cannot mask the exact retired-review refusal being tested.
+    await until(() => seller.snapshot.phase === 'ready', 'restored controller ready for stale-review refusal');
+    assert.equal(seller.snapshot.profileId, destinationId);
+    assert.equal(seller.snapshot.review, null);
+    const count = seller.external.calls.length, effects = { ...chain.counts };
+    const refused = await seller.controller.dispatch({ type: 'review.confirm', reviewId: pending.id });
+    assert.equal(refused.ok, false);
+    assert.equal(refused.code, 'REVIEW_EXPIRED');
+    assert.equal(refused.snapshot.review, null);
+    assert.equal(seller.external.calls.length, count, 'stale consent must not reach the provider');
+    assert.deepEqual(chain.counts, effects);
+  };
+  await refuseRetiredReview();
+  await seller.command({ type: 'wallet.connect' });
+  assert.equal(seller.snapshot.profileId, destinationId);
+  await refuseRetiredReview();
+  assert.equal(chain.counts.signatures, before.signatures);
+  assert.equal(chain.counts.sends, before.sends);
+  assert.deepEqual(seller.store.rows.get(sourceId), sourceRow);
+  assert.deepEqual(backup, retained);
+});
