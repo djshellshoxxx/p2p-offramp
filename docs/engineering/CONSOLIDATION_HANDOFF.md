@@ -1,3 +1,22 @@
+## 2026-11-28 — retention native validation readback and startup compatibility reconciliation
+
+- Live main remains `a8dec242a647f33bd4d64be03d38fb1e147d0dcc` (identical compare). Fresh branch-name census 100/100/100/4/0 = 304 distinct. No exhaustive current patch-equivalence count established. #251 merged; #288 remains merged into #155 only at `39119ae41446ca299dd00165e9496d1084c75718`. #155 draft `33f6559a45723e3aa5ebfd13fd298f58ae881253` still has exactly 20 additions, 9 ahead/0 behind main, no removed or modified paths. Archive ref comparison remains identical to `ba81f6b47d819387553a3836466dfffff165dfe6`; no archival reactivation or intake main merge.
+- #281 has been marked ready by its separate owner, exact head `209f8d18fc4c7f391352b3c981fd4e66a15aa3b8`, actual proposed checkout `894930ca9e642d9624d56412dcd51c20fbf7d0c2` on current main. Five reported workflows successful: 46141384272, 46141384300, 46141384330, 46141384299, 46141384304. [Native program job](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/46141384304/job/140967873658) log confirms exact merge checkout; parsed successful validator receipt contains 98 checks, 13 local sends, 1859 real refund-wait seconds, 1915s duration, native v2 migration and bounded cancellation retirement at 32 records; actual module Worker/encrypted IndexedDB browser receipt has six checks, 2052s duration, seven app sends, eight wallet prompts, zero fixture errors, actual genesis/Clock, no clock warp, ReleaseEnabled=0, public network/fresh negotiation qualification false. Browser receipt does not establish new application migration control acceptance; native package and application wiring remain distinct. The PR body reports owner-approved design choices and author-local 2555/2555 Node 24 tests, not independently executed here; written D8 Tier C merge approval remains required. Submitted review lists empty for #281/#290/#291/#237/#280. This coordinator does not implement or merge retention or migration, and leaves original approved design revision intact. #290/#291 heads unchanged, prior successful CI on older target does not qualify current main.
+- Historical compatibility cohort: six exact-ref path comparisons between `94554ecf9854e4604f9f56afe5bebedeee931994`, current main and #239 head `708a3a2bc167cbbc15eaa3d3c168e058499c7f8e`. Five exact and one semantically equivalent revision: model replaces default string sort with explicit UTF-16 code-unit comparator, preserving the same canonical order and all other source behavior. Retain current implementation; no historical file recovery required for this six-path cohort. This does not establish startup route wiring, device acceptance or whole-branch equivalence; #239 remains separately gated.
+
+| Path relative to apps/web/ | Historical blob | Current main and #239 blob |
+| --- | --- | --- |
+| src/compatibility/model.ts | c42031fc1c92a91dab00858c3983a3ed4abbecc4 | e927d9da1d2e829660ba41e2b9bb09d8ed97327a |
+| src/compatibility/probe.ts | 6da9f0c5686dc6aeb89250ff78ba2509e28b04c7 | same |
+| src/compatibility/startup.ts | 68df68dd9f901025790db84c037765d4ff75f81c | same |
+| test/compatibility-model.test.mjs | 9e78ea75c389f2af3153b6e95e29f8adbaf596ba | same |
+| test/compatibility-probe.test.mjs | dc81e9a68ca665c5d5bcd7527878b04cf47cc229 | same |
+| test/compatibility-startup.test.mjs | 76735aa03ef8c64ca6572e23c73b75f5cf9cd201 | same |
+
+No fresh local runtime or independent executing-worker test, production edit, main merge, deployment, real funds, policy change or optional activation in this run. Preserve D2/D5/D8, named-review, exact-target and physical-device gates. Continue unowned feature/branch reconciliation; avoid repeating the compatibility cohort or transferring CI to changed trees.
+
+---
+
 ## 2026-11-28 — native funding and Settings hosted completion; expanded retention overlap
 
 - Main remains `a8dec242a647f33bd4d64be03d38fb1e147d0dcc` (identical compare). Full branch-name pagination 100/100/100/4/0, 304 distinct; PR counts 98 open / 132 merged / 58 closed unmerged, 288 total, search incomplete_results=false. Semantic reconciliation count still unknown. #288 remains merged only into #155 intake; #155 remains draft; do not restore archived Semaphore or merge intake into main.
