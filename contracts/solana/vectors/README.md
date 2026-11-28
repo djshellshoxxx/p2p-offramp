@@ -30,9 +30,9 @@ expected outcome with its own strict decoder, verifier and replay-ledger model b
 
 - `acceptance.py` - generator and independent implementation (`--write`, `--check [FIXTURE]`, `--agave-cli PATH`)
 - `peer-acceptance-v1.json` - frozen fixture (`p2p-offramp/solana/peer-acceptance-vectors/v1`): 4 positive,
-  4 variant, 47 negative, 33 decoding vectors and 10 ledger scenarios
+  4 variant, 51 negative, 33 decoding vectors and 10 ledger scenarios
 - Generator: CPython 3.12 with `cryptography` 50.0.0 (hash-pinned in `scripts/tests/requirements-crypto.txt`)
-- Fixture SHA-256: `4ecfe5131e5d0999178177a01143324ebd853b9f08acd54b092f0c8cf66eaf5c`
+- Fixture SHA-256: `8b776c4db27cce657111aa625450da6f7112474d180627f4eec3321d248d1742`
 
 Every wallet and messaging key is derived from a public label: **TEST-ONLY synthetic data, never for funds.**
 Genesis, program and mint are the synthetic `localnet` values; `otherv1`/`other` variants are synthetic too.

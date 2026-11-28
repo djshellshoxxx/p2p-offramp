@@ -666,6 +666,9 @@ def build():
     neg("role-swapped-statement", "The seller wallet signs a statement claiming the buyer role.", "UNAUTHORIZED",
         ctx=context("buyer", own=keys["seller"], counterparty=keys["buyer"]),
         proof_value=proof("native", swapped_role, seller))
+    # Only the role field differs: the wallet, both messaging keys and the signatures all match the seller context.
+    neg("role-field-only-mismatch", "The seller wallet signs its own statement with role buyer for a seller context.",
+        "UNAUTHORIZED", proof_value=proof("native", {**statement("native", "seller"), "role": "buyer"}, seller))
     neg("wrong-signer-mallory", "A third wallet signs the seller's statement.", "UNAUTHORIZED",
         proof_value=proof("native", seller_stmt, mallory))
     neg("wrong-signer-buyer", "The buyer wallet signs the seller's statement.", "UNAUTHORIZED",
@@ -674,6 +677,10 @@ def build():
         "UNAUTHORIZED", proof_value=proof("native", statement("native", "seller", wallet=b58["mallory"]), mallory))
     neg("other-trade-terms-hash", "A valid spl acceptance replayed against the native trade.", "UNAUTHORIZED",
         proof_value=positive[2]["proof"])
+    # Only the terms hash differs: the terms signature is the genuine one for this trade.
+    other_hash = consent_of(trades["spl"])["termsHash"]
+    neg("terms-hash-field-only-mismatch", "The seller signs its statement for another trade's terms hash.",
+        "UNAUTHORIZED", proof_value=proof("native", statement("native", "seller", termsHash=other_hash), seller))
     neg("expired-not-after", "Local time equals notAfterSeconds.", "EXPIRED", ctx=context("seller", now=NOW + 300))
     late = statement("native", "seller", notAfterSeconds=str(NOW + 900))
     neg("expired-accept-before", "notAfter is later, but local time equals acceptBeforeSeconds.", "EXPIRED",
@@ -682,6 +689,10 @@ def build():
         ctx=context("seller", now=NOW + 100, envelope=NOW + 100))
     neg("wrong-own-messaging-key", "The session's sender key differs from the signed own key.", "UNAUTHORIZED",
         ctx=context("seller", own=keys["other"]))
+    # Only the counterparty key differs: the signed statement names a third key, the session expects the buyer's.
+    neg("wrong-counterparty-messaging-key", "The signed counterparty key differs from the session's counterparty key.",
+        "UNAUTHORIZED",
+        proof_value=proof("native", statement("native", "seller", counterpartyMessagingKey=keys["other"]), seller))
     neg("swapped-messaging-keys", "Own and counterparty keys are swapped in the session.", "UNAUTHORIZED",
         ctx=context("seller", own=keys["buyer"], counterparty=keys["seller"]))
     neg("invalid-messaging-key", "The statement's own key is not an x-only secp256k1 point.", "INVALID_INPUT",
@@ -747,6 +758,19 @@ def build():
     assert cofactored_verify(mixed_r, accept_bytes, seller.public) and not strict_verify(mixed_r, accept_bytes, seller.public)
     neg("mixed-order-r", "The seller's own key signs with R = rB + T: cofactored-valid, cofactorless-invalid.",
         "UNAUTHORIZED", proof_value={**base["proof"], "acceptanceSignatureHex": mixed_r.hex()}, cofactoredValid=True)
+
+    # The seller's own key with R = identity and S = k * a: the cofactored and cofactorless equations hold and OpenSSL
+    # accepts it, so only the rule that R is not of small order refuses it.
+    r_identity = encode_point(IDENTITY)
+    k = int.from_bytes(hashlib.sha512(r_identity + seller.public + accept_bytes).digest(), "little") % L
+    identity_r = r_identity + ((k * seller.scalar) % L).to_bytes(32, "little")
+    Ed25519PublicKey.from_public_bytes(seller.public).verify(identity_r, accept_bytes)  # raises if OpenSSL refuses
+    assert cofactored_verify(identity_r, accept_bytes, seller.public)
+    assert not strict_verify(identity_r, accept_bytes, seller.public)
+    neg("identity-r", "The seller's own key signs with R = identity: every equation holds and OpenSSL accepts it; only "
+        "the small-order R rule refuses it.", "UNAUTHORIZED",
+        proof_value={**base["proof"], "acceptanceSignatureHex": identity_r.hex()},
+        cofactoredValid=True, opensslValid=True)
 
     # Same kind of key, ground until k = 0 mod 8 for both messages: every equation holds (OpenSSL accepts too), and
     # only the prime-order-subgroup rule refuses it. Deterministic: the first matching label and notAfter are used.

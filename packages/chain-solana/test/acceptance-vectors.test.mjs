@@ -117,7 +117,7 @@ test('negative vectors: same refusal code as the independent verifier', () => {
 test('mixed-order keys and R: the library accepts the signatures, the strict policy refuses them', () => {
   const items = vectors.negative.filter(row => row.cofactoredValid);
   assert.deepEqual(items.map(row => row.id),
-    ['mixed-order-wallet-key', 'mixed-order-r', 'mixed-order-wallet-key-all-equations-hold']);
+    ['mixed-order-wallet-key', 'mixed-order-r', 'identity-r', 'mixed-order-wallet-key-all-equations-hold']);
   for (const item of items) {
     const trade = trades[item.trade], wallet = fromHex(hexOfKey(trade.terms.seller)), statement = item.proof.statement;
     const message = ok(solanaPeerAcceptanceRequest(trade, { role: 'seller', ownMessagingKey: statement.ownMessagingKey,

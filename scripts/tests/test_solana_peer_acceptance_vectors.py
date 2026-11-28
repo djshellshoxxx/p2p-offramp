@@ -44,7 +44,10 @@ class SolanaPeerAcceptanceVectors(unittest.TestCase):
         for required in ("acceptance-signed-v2-domain", "wrong-cluster-signed", "wrong-program-signed",
                          "flipped-bit-acceptance-s", "wrong-role-context", "expired-not-after",
                          "evm-peer-acceptance-digest", "legacy-transaction-message", "raw-g16-terms-signature",
-                         "offchain-v0-agave-cli", "mixed-order-wallet-key", "bare-terms-signature"):
+                         "offchain-v0-agave-cli", "mixed-order-wallet-key", "bare-terms-signature",
+                         # Each differs from a valid seller acceptance in one field, so it alone reaches one check.
+                         "role-field-only-mismatch", "wrong-counterparty-messaging-key",
+                         "terms-hash-field-only-mismatch", "identity-r"):
             self.assertIn(required, negative)
         steps = [step for scenario in data["ledger"] for step in scenario["steps"]]
         self.assertTrue(any(step["op"] == "tombstone" for step in steps))
