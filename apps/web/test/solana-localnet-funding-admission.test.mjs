@@ -188,6 +188,27 @@ test('unknown or non-trade data occupying a prospective proposal record ID is ne
     assert.deepEqual((await f.read()).records[0], foreign);
   }
 });
+test('a concurrent writer keeps its record when proposal admission observes an empty slot', async t => {
+  const f = await fixture(t), input = f.proposal();
+  const { record } = await createSolanaFundingProposalRecord(json(input), f.config, f.id);
+  const occupant = { id: record.id, kind: 'preference', schemaVersion: 1, payload: encodeBase64url(json({ retained: true })) };
+  const original = EncryptedVaultService.prototype.read;
+  let inserted = false;
+  EncryptedVaultService.prototype.read = async function(...args) {
+    const result = await Reflect.apply(original, this, args);
+    if (!inserted && args[1] === record.id && result.ok && result.value === null) {
+      inserted = true;
+      value(await this.commit(args[0], f.data.rows.get(f.id).revision, [{ op: 'put', record: occupant }]));
+    }
+    return result;
+  };
+  try {
+    assert.equal((await f.save(input)).code, 'CONFLICT');
+  } finally { EncryptedVaultService.prototype.read = original; }
+  assert.equal(inserted, true);
+  assert.deepEqual((await f.read()).records, [occupant]);
+  assert.equal(f.env.cluster.calls.length, 0);
+});
 for (const interruption of ['lock', 'wallet change', 'idle']) test(`held proposal hashing cannot admit after ${interruption}`, async t => {
   const f = await fixture(t), gate = deferred(), entered = deferred(), original = crypto.subtle.digest;
   let held = false;

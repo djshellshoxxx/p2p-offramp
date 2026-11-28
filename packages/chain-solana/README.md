@@ -15,7 +15,7 @@ No optional capability mapping, contract/ABI, program, trust, margin policy or b
 This repairs a client policy omission that predates prepared funding. Controlled regressions and existing vectors
 do not establish native execution, browser acceptance, release readiness or Tier C merge approval.
 
-## Native funding display prerequisite (generation 33)
+## Native funding review display
 
 The internal `src/funding-review.ts` helper, `projectNativeFundingReview(trade, prepared)`, produces frozen native-SOL
 display data from a locally bound trade and supplied prepared-funding fields. It checks exact binding, seller,
@@ -33,9 +33,9 @@ Only the native client's original private handle can be confirmed, with its exis
 The display result and its serialization have no confirmation authority. The helper does not invent a review ID,
 wallet grant or deadline, and does not claim that arbitrary caller Proxy traps are inert.
 
-This inactive prerequisite has no application command, UI or facade consumer. The funded recovery browser, its
-import/restore contract and its exit-only commands remain unchanged. SPL display and actual unfunded browser
-admission are separate work. No registry trust, release activation, native acceptance or Tier C merge approval follows.
+The local-validator browser calls this projection for an imported native SOL seller proposal.
+The Worker retains the prepared handle and the browser presents its fields for explicit confirmation.
+Browser funding of SPL assets remains outside this profile.
 
 ## Explicit prepared funding (generation 32)
 
@@ -48,10 +48,10 @@ broadcasts. A host can display the bound trade terms and this exact review, then
 call `confirm(review, sellerSession)` only after explicit confirmation.
 
 The existing `prepare` method and `PreparedSolanaActionKind` remain exit-only:
-`prepare(trade, session, 'fund')` still returns `INVALID_INPUT`. The new entry
-does not add a funding command to the existing recovery browser protocol or
-relax its requirement for an already funded escrow. Direct `fund()` behavior is
-unchanged. The ordinary offline build still excludes this native package.
+`prepare(trade, session, 'fund')` still returns `INVALID_INPUT`. The local browser uses the distinct
+`funding.prepare` command for a saved native SOL proposal. Importing a recovery
+document still requires an already funded escrow. The ordinary offline build
+excludes this native package.
 
 Funding options are captured synchronously as plain own data properties before
 any queued or asynchronous work. Only `sellerTokenAccount` and `rebuildOf` are
@@ -79,8 +79,8 @@ The existing native SOL/original-SPL, freeze-authority, deployment, deadline,
 journal and send policies remain unchanged. No mint, endpoint, production trust
 or release approval is added. Controlled client/journal/provider tests establish
 local composition behavior; previous direct-funding validator runs do not
-establish native execution of this new preparation path. Native acceptance,
-browser funding composition and the Tier C merge gates remain separate work.
+establish native execution of this new preparation path. The native validator and browser
+acceptance commands exercise preparation and finalized recovery on a disposable ledger.
 
 ## Reader-layer reference
 

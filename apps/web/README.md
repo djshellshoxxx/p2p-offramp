@@ -34,8 +34,13 @@ Keep the encrypted backup for the private profile and transaction journal; the
 public JSON can be used with the existing
 [portable Solana recovery tooling](../../contracts/solana/RECOVERY.md). It fixes
 which deployment and terms to inspect and does not establish current chain state.
-The localnet profile remains limited to funded native-SOL exits, with
-`ReleaseEnabled=0`; discovery, negotiation and new funding are not added.
+The separate local-validator build also supports seller-directed native SOL funding.
+Open an encrypted profile and paste the fixed proposal into **Funding proposal JSON**.
+Choose **Save seller funding proposal**, then **Connect seller wallet** on the saved card.
+Choose **Review funding**, check the seller, buyer, lamports, deadlines, escrow address and
+fee information, then choose **Confirm and sign in wallet**. Use **Refresh finalized state**
+to check the outcome. The recovery card appears once the validator reports the finalized escrow.
+The [local-validator guide](../../docs/consolidation/SOLANA_BROWSER_RECOVERY.md) describes the proposal input.
 
 ## Developer guide
 

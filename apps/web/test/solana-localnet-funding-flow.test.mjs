@@ -61,6 +61,64 @@ test('cancel and expired funding reviews never sign or create recovery', async t
   const next = success(await f.prepare()).snapshot.review; f.advanceNow(30001); assert.equal((await f.confirm(next)).code, 'REVIEW_EXPIRED');
   assert.equal(f.env.cluster.sent.length, 0); assert.equal((await records(f)).documents.length, 0);
 });
+test('declining funding displays the durable cancellation and immediately permits a fresh review', async t => {
+  const f = await ready(t, { wallet: { rejectSign: true } });
+  const review = success(await f.prepare()).snapshot.review;
+  const result = await f.confirm(review);
+  assert.equal(result.code, 'USER_REJECTED');
+  assert.equal(result.snapshot.review, null);
+  assert.equal(result.snapshot.proposals[0].intents[0].state, 'cancelled');
+  assert.equal((await records(f)).intents[0].state, 'cancelled');
+  assert.equal(result.snapshot.proposals[0].walletConnected, true);
+  assert.equal(result.snapshot.proposals[0].state, 'absent');
+  assert.notEqual(success(await f.prepare()).snapshot.review.id, review.id);
+  assert.equal(f.env.walletFake.calls.sign.length, 1);
+  assert.equal(f.env.cluster.sent.length, 0);
+});
+test('a stale confirmation preserves the active review and expiry cancels only its own preparation', async t => {
+  const f = await ready(t), first = success(await f.prepare()).snapshot.review;
+  success(await f.controller.dispatch({ type: 'review.cancel' }));
+  const second = success(await f.prepare()).snapshot.review;
+  const stale = await f.confirm(first);
+  assert.equal(stale.code, 'REVIEW_EXPIRED');
+  assert.equal(stale.snapshot.review.id, second.id);
+  f.advanceNow(30001);
+  const expired = await f.confirm(second);
+  assert.equal(expired.code, 'REVIEW_EXPIRED');
+  assert.equal(expired.snapshot.review, null);
+  assert.deepEqual(expired.snapshot.proposals[0].intents.map(i => i.state), ['cancelled', 'cancelled']);
+  assert.ok((await records(f)).intents.every(i => i.state === 'cancelled'));
+  assert.notEqual(success(await f.prepare()).snapshot.review.id, second.id);
+  assert.equal(f.env.walletFake.calls.sign.length, 0);
+  assert.equal(f.env.cluster.sent.length, 0);
+});
+test('the funding review timer cancels its intent without disconnecting the seller or touching a newer review', async t => {
+  const f = await ready(t), original = globalThis.setTimeout;
+  let fire;
+  t.mock.method(globalThis, 'setTimeout', (fn, delay, ...args) => {
+    if (delay === 30000) fire = fn;
+    return original(fn, delay, ...args);
+  });
+  const review = success(await f.prepare()).snapshot.review;
+  assert.equal(typeof fire, 'function');
+  const settled = deferred(), dispatch = f.controller.dispatch.bind(f.controller);
+  t.mock.method(f.controller, 'dispatch', async input => {
+    const result = await dispatch(input);
+    if (input.type === 'funding.review.expire') settled.resolve(result);
+    return result;
+  });
+  f.advanceNow(30000);
+  fire();
+  const result = await settled.promise;
+  assert.equal(result.code, 'REVIEW_EXPIRED');
+  assert.equal(result.snapshot.proposals[0].walletConnected, true);
+  assert.equal((await records(f)).intents[0].state, 'cancelled');
+  const fresh = success(await f.prepare()).snapshot.review;
+  const stale = await f.controller.dispatch({ type: 'funding.review.expire', reviewId: review.id });
+  assert.equal(stale.snapshot.review.id, fresh.id);
+  assert.equal(f.env.walletFake.calls.sign.length, 0);
+  assert.equal(f.env.cluster.sent.length, 0);
+});
 for (const interrupt of ['lock', 'wallet']) test('held physical funding prompt is revoked by ' + interrupt, async t => {
   const f = await ready(t), entered = deferred(), held = deferred(), feature = f.env.walletFake.wallet.features['solana:signTransaction'], original = feature.signTransaction;
   feature.signTransaction = async (...args) => { entered.resolve(); await held.promise; return original(...args); };

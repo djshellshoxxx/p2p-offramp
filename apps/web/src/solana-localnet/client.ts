@@ -69,7 +69,11 @@ export function createSolanaRecoveryClient(config: SolanaLocalnetConfig, wallet:
         if (command.type === 'wallet.connect' || command.type === 'funding.wallet.connect') end = bridge.beginConnect();
         if (command.type === 'review.confirm') {
           if (!snapshot?.review || snapshot.review.id !== command.reviewId || reviewBlocked) throw Error();
-          end = bridge.beginReview(snapshot.review);
+          try { end = bridge.beginReview(snapshot.review); }
+          catch (error) {
+            if (snapshot.review.action !== 'fund' || snapshot.review.expiresAtMs > Date.now()) throw error;
+            command = { type: 'funding.review.expire', reviewId: snapshot.review.id };
+          }
         }
       } catch { return Promise.resolve({ ok: false, code: 'UNAUTHORIZED', snapshot: snapshot ?? blank() }); }
       if (jobs.size >= 8) { end(); return Promise.resolve({ ok: false, code: 'BUSY', snapshot: snapshot ?? blank() }); }

@@ -264,9 +264,10 @@ export class SolanaRecoveryController {
     const occupied = reservations(bound.terms, bound.escrow.address);
     if (this.#inventory().some(item => item.identity !== identity && item.reservations.some(key => occupied.includes(key)))) fail('CONFLICT');
     this.#capacity(bound.binding);
+    const revision = this.#lease!.current()!.revision;
     const existing = value(await this.#vault.read(session.sessionId, candidate.record.id)); this.#guard(epoch);
     if (existing !== null) fail('CONFLICT');
-    value(await this.#vault.commit(session.sessionId, this.#lease!.current()!.revision, [{ op: 'put', record: candidate.record }],
+    value(await this.#vault.commit(session.sessionId, revision, [{ op: 'put', record: candidate.record }],
       signal, () => this.#guard(epoch))); this.#guard(epoch);
     this.#proposals.set(candidate.record.id, Object.freeze({ ...candidate, bound, bindingStatus: 'available',
       observation: { snapshot: null, observedAt: 0, intents: [] } }));
@@ -366,11 +367,19 @@ export class SolanaRecoveryController {
           transaction: encodeBase64(unsignedTransaction(decodeBase64(prepared.message, 1644))) } };
       proposal.observation.intents = value(await owner.client.intents(owner.bound)); this.#guard(epoch);
       this.#review = { kind: 'funding', public: publicReview, prepared, owner, client: owner.client, wallet: owner.wallet, epoch };
-      this.#reviewTimer = setTimeout(() => { if (this.#review?.public.id === publicReview.id) this.walletChanged(); }, REVIEW_MS);
+      this.#reviewTimer = setTimeout(() => this.#expireFundingWhenIdle(publicReview.id), REVIEW_MS);
     } catch (error) {
       if (this.#ownsFunding(owner)) value(await owner.client.cancel(prepared));
       throw error;
     }
+  }
+  #expireFundingWhenIdle(reviewId: string): void {
+    if (this.#review?.public.id !== reviewId) return;
+    if (this.#busy) {
+      this.#reviewTimer = setTimeout(() => this.#expireFundingWhenIdle(reviewId), 100);
+      return;
+    }
+    void this.dispatch({ type: 'funding.review.expire', reviewId });
   }
   async #cancel(): Promise<void> {
     const review = this.#review; this.#clearReview();
@@ -406,15 +415,26 @@ export class SolanaRecoveryController {
     this.#reviewTimer = setTimeout(() => { if (this.#review?.public.id === publicReview.id) { this.walletChanged(); } }, REVIEW_MS);
   }
   async #confirm(id: string): Promise<void> {
-    const review = this.#review; this.#clearReview();
-    if (!review || review.public.id !== id || review.public.expiresAtMs <= this.#now() || review.wallet !== this.#wallet) fail('REVIEW_EXPIRED');
+    const review = this.#review;
+    if (!review || review.public.id !== id || review.wallet !== this.#wallet || this.#client !== review.client) fail('REVIEW_EXPIRED');
     this.#guard(review.epoch);
     if (review.kind === 'funding') {
       if (!this.#ownsFunding(review.owner)) fail('REVIEW_EXPIRED');
       this.#fundingProposal(review.owner.proposalId);
     }
-    if (this.#client !== review.client) fail('REVIEW_EXPIRED');
-    value(await review.client.confirm(review.prepared, review.wallet)); this.#guard(review.epoch);
+    if (review.public.expiresAtMs <= this.#now()) {
+      await this.#cancel();
+      fail('REVIEW_EXPIRED');
+    }
+    this.#clearReview();
+    const result = await review.client.confirm(review.prepared, review.wallet);
+    this.#guard(review.epoch);
+    if (!result.ok && review.kind === 'funding' && this.#ownsFunding(review.owner)) {
+      // A wallet refusal can cancel an intent before broadcasting. Read only the local journal.
+      const intents = await review.client.intents(review.owner.bound);
+      if (intents.ok && this.#ownsFunding(review.owner)) review.owner.proposal.observation.intents = intents.value;
+    }
+    value(result);
     await this.#refresh();
     if (review.kind === 'funding') await this.#observeProposal(review.owner.proposal);
   }
@@ -446,7 +466,7 @@ export class SolanaRecoveryController {
       } else {
         this.#guard(); const epoch = this.#epoch;
         value(await this.#vault.assertFresh(this.#session!.sessionId, this.#abort.signal)); this.#guard(epoch);
-        if (command.type !== 'refresh') this.#touch();
+        if (command.type !== 'refresh' && command.type !== 'funding.review.expire') this.#touch();
         if (command.type === 'funding.proposal.import') await this.#importProposal(command.text);
         else if (command.type === 'funding.wallet.connect') await this.#connectFunding(command.proposalId);
         else if (command.type === 'funding.prepare') await this.#prepareFunding(command);
@@ -463,6 +483,10 @@ export class SolanaRecoveryController {
           this.#wallet = value(await this.#native().connect(trade.bound, trade.role)); this.#guard(epoch); await this.#refresh(true);
         } else if (command.type === 'refresh') { await this.#refresh(); await this.#refreshProposals(); }
         else if (command.type === 'review.prepare') await this.#prepare(command);
+        else if (command.type === 'funding.review.expire') {
+          if (this.#review?.kind === 'funding' && this.#review.public.id === command.reviewId) await this.#cancel();
+          fail('REVIEW_EXPIRED');
+        }
         else if (command.type === 'review.confirm') await this.#confirm(command.reviewId);
         else if (command.type === 'review.cancel') { await this.#cancel(); await this.#refresh(); }
         else if (command.type === 'backup.export') extra.backupBytes = (await this.#backup.exportWithStatus(this.#session!.profileId, this.#abort.signal)).bytes;

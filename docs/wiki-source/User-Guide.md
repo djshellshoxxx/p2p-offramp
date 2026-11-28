@@ -4,7 +4,7 @@
 
 **Status: development/test-only.** Real-funds trading is disabled: `ReleaseEnabled=0`. A source merge, demonstration or successful test does not approve a live exchange service.
 
-This guide describes merged `main@388526a474aea0e08f9c04178c2b7f9e1d4bee3f` on November 20, 2026 UTC. The [source-consolidation record](../engineering/CONTINUATION_GENERATION17_20261120.md) identifies the merged implementation and its scoped hosted checks. The [November 18 reconciliation](../consolidation/2026-11-18-documentation-reconciliation.md) and dated [development status](../DEVELOPMENT_STATUS.md) retain their historical source scope; their descriptions of then-unmerged localnet work are not the current capability list.
+The original November 20 sections describe merged `main@388526a474aea0e08f9c04178c2b7f9e1d4bee3f` on November 20, 2026 UTC. The [source-consolidation record](../engineering/CONTINUATION_GENERATION17_20261120.md) identifies the merged implementation and its scoped hosted checks. The [November 18 reconciliation](../consolidation/2026-11-18-documentation-reconciliation.md) and dated [development status](../DEVELOPMENT_STATUS.md) retain their historical source scope; their descriptions of then-unmerged localnet work are not the current capability list.
 
 ## Choose the appropriate build
 
@@ -15,7 +15,7 @@ The same repository contains several isolated clients. A feature in a localnet f
 | Default static client | Local encrypted profiles, encrypted export, explicit backup authentication, fresh-key restore and local inspection tools | No approved live registry, wallet connection or funds movement |
 | Synthetic demo | The local profile workflows plus offline example offers and read-only EVM terms review | Synthetic examples; an unlocked profile can save up to eight original terms files and revalidate them on load |
 | EVM localnet fixture | Isolated buyer/seller, wallet, journal and recovery exercises | Explicit loopback test configuration; not a public exchange endpoint |
-| Solana localnet fixture | Recovery of an already funded escrow, private encrypted backup and selected public recovery-document export | Explicit local-validator configuration; full Solana negotiation and new funding remain unfinished |
+| Solana localnet fixture | Import fixed native SOL terms, review and confirm seller funding, recover finalized escrows, export an encrypted backup or a public recovery document | Explicit local-validator configuration. The seller supplies the terms. Bilateral negotiation and browser SPL funding remain outside this workflow. |
 
 The [Developer Guide](Developer-Guide.md) describes build and source boundaries. The existing [qualification record](../engineering/CONTINUATION_GENERATION17_20261120.md) covers its named browser and native fixtures. Physical-wallet/device acceptance, production trust configuration, independent security approval and real-funds release remain separate work.
 
@@ -56,7 +56,9 @@ acceptances and does not itself send a transaction. Any subsequent transaction
 still requires its own fresh wallet review. An older backup cannot reveal a peer
 withdrawal that happened afterward. Source: [localnet resumption UI](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/apps/web/src/localnet/LocalnetRoot.tsx).
 
-## Solana public recovery documents
+## Solana seller funding and public recovery documents
+
+For an unfunded local proposal, follow the [seller funding and review steps](../consolidation/SOLANA_BROWSER_RECOVERY.md).
 
 This workflow belongs only to the isolated **Solana localnet** client. For an already retained escrow, **Export public recovery JSON** downloads that escrow's canonical public recovery document. The file contains original trade terms, public wallet addresses and deployment identities, including the agreement hash. It can link public activity to the selected trade.
 

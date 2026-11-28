@@ -14,7 +14,7 @@ export type SolanaCommand =
   | { readonly type: 'wallet.connect'; readonly tradeId: string }
   | { readonly type: 'review.prepare'; readonly tradeId: string; readonly action: RecoveryAction;
       readonly fiatReceiptConfirmed?: boolean; readonly maxRentTopUpLamports?: string; readonly rebuildOf?: string }
-  | { readonly type: 'review.confirm'; readonly reviewId: string };
+  | { readonly type: 'review.confirm' | 'funding.review.expire'; readonly reviewId: string };
 export type SolanaWalletRequest = { readonly method: 'connect' } | {
   readonly method: 'signTransaction'; readonly account: string; readonly chain: 'solana:localnet'; readonly transaction: string;
 };

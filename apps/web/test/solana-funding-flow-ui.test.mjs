@@ -93,6 +93,21 @@ test('document client grants proposal-specific connect and review while initiall
   assert.equal((await f.client.request({ type: 'review.confirm', reviewId: f.review.id })).code, 'UNAUTHORIZED');
   f.settle(); await turn(); assert.equal(f.worker.posted.at(-1).ok, true); f.answer(id, { review: null }); await confirmed;
 });
+test('confirming an expired funding review posts only the matching cancellation and grants no signature', async t => {
+  const f = documentFixture(t);
+  await f.open(); await f.connect();
+  f.review.expiresAtMs = Date.now() - 1;
+  await f.prepare();
+  const result = f.client.request({ type: 'review.confirm', reviewId: f.review.id });
+  const message = f.worker.posted.at(-1);
+  assert.deepEqual(message.command, { type: 'funding.review.expire', reviewId: f.review.id });
+  f.worker.emit({ kind: 'wallet.request', id: 201, request: f.walletRequest });
+  await turn();
+  assert.equal(f.worker.posted.at(-1).ok, false);
+  assert.equal(f.signs, 0);
+  f.answer(message.id, { review: null });
+  await result;
+});
 for (const interruption of ['cancel', 'lock', 'wallet']) test('document funding grants retain the physical prompt slot after ' + interruption, async t => {
   const f = documentFixture(t); await f.open(); await f.connect(); await f.prepare();
   const confirming = f.client.request({ type: 'review.confirm', reviewId: f.review.id }), id = f.worker.posted.at(-1).id;
