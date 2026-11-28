@@ -99,6 +99,32 @@ async function assertPrivateSurfaces(page, expectedHref) {
   assert.equal(result.observed.prompts, 0); assert.equal(result.observed.secretReplies, 0);
   return result.observed;
 }
+
+async function checkLocalScreenCounts(page) {
+  const nav = page.getByRole('navigation');
+  const settings = nav.getByRole('link', { name: 'Settings', exact: true });
+  const panel = page.locator('section[aria-labelledby="local-screen-counts-title"]');
+  await settings.click();
+  await panel.locator('#local-screen-counts-opt-in').waitFor();
+  const before = await page.evaluate(() => [...window.__observed.operations]);
+  assert.deepEqual(await panel.locator('tbody td').allTextContents(), ['0', '0', '0', '0', '0']);
+  await panel.locator('#local-screen-counts-opt-in').click();
+  await nav.getByRole('link', { name: 'Offers', exact: true }).click();
+  await page.getByRole('heading', { name: 'Offers', level: 1, exact: true }).waitFor();
+  await settings.click();
+  await panel.locator('#local-screen-counts-review').click();
+  const preview = JSON.parse(await panel.locator('#local-screen-counts-export').inputValue());
+  assert.deepEqual(preview, { format: 'p2p-offramp/local-screen-counts/v1', counts: {
+    home: 0, offers: 1, trade: 0, recovery: 0, settings: 2,
+  } });
+  await panel.locator('#local-screen-counts-opt-out').click();
+  await panel.locator('#local-screen-counts-opt-in').waitFor();
+  assert.deepEqual(await panel.locator('tbody td').allTextContents(), ['0', '0', '0', '0', '0']);
+  assert.equal(await panel.locator('#local-screen-counts-export').count(), 0);
+  assert.deepEqual(await page.evaluate(() => window.__observed.operations), before, 'screen counts use no Worker IPC');
+  await nav.getByRole('link', { name: 'Home', exact: true }).click();
+}
+
 async function seed(page) {
   await page.evaluate(envelope => new Promise((done, fail) => {
     const request = indexedDB.open('p2p-offramp-vault', 1);
@@ -230,6 +256,7 @@ try {
     assert.equal(observed.workers[0].type, 'module'); assert.equal(new URL(observed.workers[0].url, href).origin, origin);
     assert.match(observed.workers[0].url, /vault\.worker-[A-Za-z0-9_-]+\.js$/);
     if (delivery === 'meta' && base === '/') {
+      await checkLocalScreenCounts(page);
       await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
       await page.getByLabel('Profile ID', { exact: true }).fill('f'.repeat(32));
       await page.getByLabel('Passphrase', { exact: true }).fill('nonexistent profile fixture');

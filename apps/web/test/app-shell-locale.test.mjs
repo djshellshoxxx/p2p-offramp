@@ -5,10 +5,15 @@ import { fileURLToPath } from 'node:url';
 import { runInNewContext } from 'node:vm';
 import { setImmediate as turn } from 'node:timers/promises';
 import { build, transformWithOxc } from 'vite';
+import { createScreenCounts } from '../src/analytics/screen-counts.ts';
+import { LocalScreenAnalytics } from '../src/ui/LocalScreenAnalytics.tsx';
 
 const source = await readFile(new URL('../src/ui/App.tsx', import.meta.url), 'utf8');
 const body = source.slice(source.indexOf('const locked =')).replace(/^export /gm, '');
 const emitted = (await transformWithOxc(body, 'App.tsx', { lang: 'tsx', jsx: { runtime: 'classic', pragma: 'jsx' } })).code;
+const hookSource = await readFile(new URL('../src/ui/use-screen-counts.ts', import.meta.url), 'utf8');
+const hookBody = hookSource.slice(hookSource.indexOf('export function useScreenCounts')).replace('export function', 'function');
+const hook = (await transformWithOxc(hookBody, 'use-screen-counts.ts', { lang: 'ts' })).code;
 const localPath = path => fileURLToPath(new URL(path, import.meta.url));
 const entry = localPath('./app-shell-locale-fixture.ts');
 // Exercise the actual locale runtime, live message views and fixed error mapping.
@@ -20,7 +25,7 @@ const bundle = await build({ configFile: false, logLevel: 'silent', plugins: [{
     if (id === '\0app-shell-locale-fixture') return `
       export { messages as m } from ${JSON.stringify(localPath('../src/ui/messages.ts'))};
       export { errorMessage, isProfileId, parseRoute } from ${JSON.stringify(localPath('../src/ui/routes.ts'))};
-      export { localeStore } from ${JSON.stringify(localPath('../src/ui/locale/runtime.ts'))};`;
+      export { localeStore, messageGroup, mergeMessageViews } from ${JSON.stringify(localPath('../src/ui/locale/runtime.ts'))};`;
     if (id === localPath('../src/ui/locale/bundled.ts')) return `
       import { sourceCatalog } from ${JSON.stringify(localPath('../src/ui/locale/en.ts'))};
       export const bundledLocaleConfiguration = { developmentFixtures: true, fixtures: [{
@@ -50,8 +55,9 @@ function mounted(t) {
   const window = { location: { hash: '#/home' },
     addEventListener(name, listener) { listeners.set(name, listener); },
     removeEventListener(name, listener) { if (listeners.get(name) === listener) listeners.delete(name); } };
-  const document = { documentElement: { lang: '', dir: '' }, title: '' };
-  const services = { subscribe: () => () => {}, getSnapshot: () => snapshot, selectionScope: () => 1,
+  const document = Object.assign(new EventTarget(), { documentElement: { lang: '', dir: '' }, title: '', visibilityState: 'visible' });
+  let scope = 1;
+  const services = { subscribe: () => () => {}, getSnapshot: () => snapshot, selectionScope: () => scope,
     async status() { calls.push('status'); return held.status.promise; },
     async lock() { calls.push('lock'); return held.lock.promise; } };
   function effect(callback, dependencies) {
@@ -60,7 +66,7 @@ function mounted(t) {
       effects[at] = { callback, dependencies, pending: true, stop: previous?.stop };
   }
   const context = {
-    ...copy, window, document, navigator: { onLine: true },
+    ...copy, createScreenCounts, LocalScreenAnalytics, window, document, navigator: { onLine: true },
     Home: () => null, Recovery: () => null, Settings: () => null, UnavailablePage: () => null,
     OffersPage: () => null, TradePage: () => null, QrPanel: () => null,
     pageTitle: { home: 'Home fixture', offers: 'Offers fixture', recovery: 'Recovery fixture', settings: 'Settings fixture' },
@@ -76,7 +82,7 @@ function mounted(t) {
       return { type, props: { ...props, children } };
     },
   };
-  runInNewContext(`${emitted}\nglobalThis.Shell = App;`, context);
+  runInNewContext(`${hook}\n${emitted}\nglobalThis.Shell = App;`, context);
   function view() {
     for (let attempt = 0; dirty && attempt < 10; attempt++) {
       dirty = false; stateAt = refAt = effectAt = 0; root = context.Shell({ services });
@@ -89,6 +95,7 @@ function mounted(t) {
   t.after(() => { unmount(); localeStore.select('en'); });
   const button = kind => nodes(view(), node => node.type === 'button' && words(node) === (kind === 'lock' ? m.lock : m.refresh))[0];
   return { calls, held, document, window, view, button, unmount,
+    changeSelection() { scope++; dirty = true; return view(); },
     get writes() { return writes; }, get headingFocus() { return headingFocus; },
     click(kind) { const target = button(kind); assert.ok(target); assert.equal(target.props.disabled, false); target.props.onClick(); view(); },
     select(id) { localeStore.select(id); return view(); },
@@ -99,6 +106,40 @@ function mounted(t) {
       .map(node => ({ href: node.props.href, label: words(node), current: node.props['aria-current'] })); },
   };
 }
+
+test('ordinary Settings counts foreground categories only after opt-in and erases them on selection change', t => {
+  const ui = mounted(t);
+  const panel = () => nodes(ui.view(), node => node.type === LocalScreenAnalytics)[0];
+  assert.equal(panel(), undefined);
+  ui.navigate('#/settings');
+  assert.ok(panel(), 'Settings exposes the local screen-count controls');
+  const { controller } = panel().props;
+  const empty = { home: 0, offers: 0, trade: 0, recovery: 0, settings: 0 };
+  assert.equal(controller.getSnapshot().enabled, false);
+  assert.deepEqual(controller.getSnapshot().counts, empty);
+  controller.optIn();
+  ui.navigate('#/trade/' + 'a'.repeat(32));
+  assert.equal(panel(), undefined);
+  ui.navigate('#/trade/' + 'b'.repeat(32));
+  ui.navigate('#/unknown-route');
+  ui.navigate('#/settings');
+  assert.equal(panel().props.controller, controller);
+  assert.deepEqual(JSON.parse(controller.reviewExport().text), {
+    format: 'p2p-offramp/local-screen-counts/v1',
+    counts: { ...empty, trade: 1, settings: 2 },
+  });
+  ui.document.visibilityState = 'hidden';
+  ui.document.dispatchEvent(new Event('visibilitychange'));
+  ui.navigate('#/offers');
+  assert.equal(controller.reviewExport(), null);
+  ui.navigate('#/settings');
+  assert.equal(controller.getSnapshot().counts.offers, 0);
+  ui.changeSelection();
+  assert.equal(controller.getSnapshot().retired, true);
+  assert.equal(panel().props.controller.getSnapshot().enabled, false);
+  assert.deepEqual(panel().props.controller.getSnapshot().counts, empty);
+  assert.deepEqual(ui.calls, []);
+});
 
 test('live locale selection updates navigation labels without changing routes or issuing commands', t => {
   const ui = mounted(t), pages = ['home', 'offers', 'recovery', 'settings'];

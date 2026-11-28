@@ -173,13 +173,25 @@ try {
     };
     window.clearTimeout = id => { timers.delete(id); clear(id); };
   });
-  await privacyPage.goto(origin + '/#/settings');
+  await privacyPage.goto(origin + '/#/home');
+  await privacyPage.getByRole('button', { name: 'Unlock existing profile', exact: true }).waitFor();
+  // Keep callback identities across route changes so another owner's removal cannot hide a Settings leak.
+  const homeListeners = await privacyPage.evaluateHandle(() =>
+    Object.values(window.__privacyResumeListeners).map(listeners => [...listeners]));
+  const assertSettingsListeners = async (count, message) => {
+    const observed = await privacyPage.evaluate(home => Object.values(window.__privacyResumeListeners).map((current, index) => ({
+      keptHome: home[index].every(callback => current.has(callback)),
+      added: current.size - home[index].length,
+    })), homeListeners);
+    assert.deepEqual(observed, [{ keptHome: true, added: count }, { keptHome: true, added: count }], message);
+  };
+  await privacyPage.getByRole('link', { name: 'Settings', exact: true }).click();
   const vaultObservation = privacyPage.locator('#privacy-observations-title').locator('..').locator('li').filter({ has: privacyPage.getByRole('heading', { name: 'Local vault', exact: true }) });
   await vaultObservation.getByText('Local vault service inspection', { exact: true }).waitFor();
   const inspectionTime = async () => Number((await vaultObservation.innerText()).match(/Inspected at (\d+) milliseconds/)[1]);
   const firstInspection = await inspectionTime();
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 1, 'one bounded local expiry timer is active');
-  assert.deepEqual(await privacyPage.evaluate(() => Object.values(window.__privacyResumeListeners).map(set => set.size)), [1, 1], 'one resume listener per event');
+  await assertSettingsListeners(1, 'Settings adds one resume listener per event');
   await privacyPage.clock.runFor(30_001);
   await privacyPage.waitForFunction(before => {
     const row = [...document.querySelectorAll('#privacy-observations-title ~ ul li')].find(node => node.querySelector('h3')?.textContent === 'Local vault');
@@ -189,6 +201,7 @@ try {
   assert.ok(renewedInspection >= firstInspection + 30_000, 'expiry renews actual monotonic inspection without vault events');
   assert.ok((await vaultObservation.innerText()).includes('Locked'), 'expiry does not manufacture an unlocked state');
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 1, 'renewed view owns only one deadline');
+  await assertSettingsListeners(1, 'renewal keeps one Settings resume listener per event');
   await privacyPage.clock.runFor(1000);
   await privacyPage.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
   await privacyPage.waitForFunction(before => {
@@ -205,7 +218,8 @@ try {
   await privacyPage.getByRole('link', { name: 'Home', exact: true }).click();
   await privacyPage.getByRole('heading', { name: 'Your local workspace', exact: true }).waitFor();
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 0, 'leaving Settings clears its local deadline');
-  assert.deepEqual(await privacyPage.evaluate(() => Object.values(window.__privacyResumeListeners).map(set => set.size)), [0, 0], 'unmount removes both resume listeners');
+  await assertSettingsListeners(0, 'unmount restores the Home listeners');
+  await homeListeners.dispose();
   await privacyPage.clock.runFor(60_001);
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 0, 'unmounted Settings does not reschedule');
   await privacyPage.getByRole('button', { name: 'Create new profile', exact: true }).click();

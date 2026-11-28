@@ -1,7 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { AppServices, RuntimeErrorCode } from '../app-services.ts';
 import { messages as m } from './messages.ts';
-import { localeStore } from './locale/runtime.ts';
+import { localeStore, mergeMessageViews, messageGroup } from './locale/runtime.ts';
+import { LocalScreenAnalytics } from './LocalScreenAnalytics.tsx';
+import { useScreenCounts } from './use-screen-counts.ts';
 import { errorMessage, isProfileId, parseRoute } from './routes.ts';
 import { Home, Recovery, Settings, UnavailablePage, pageTitle } from './Pages.tsx';
 import { createTradeDraftController, type TradeDraftController } from '../trade/draft-controller.ts';
@@ -16,6 +18,7 @@ const noSubscription = () => () => {};
 const lockedSnapshot = () => locked;
 const noScope = () => 0;
 const links = ['home', 'offers', 'recovery', 'settings'] as const;
+const screenCountMessages = mergeMessageViews(messageGroup('analytics'), { categoryLabels: messageGroup('analyticsCategories') });
 type Command = 'lock' | 'status';
 
 export interface AppProps {
@@ -49,6 +52,7 @@ export function App({ services, starting = false, startupError, trade = null, di
   const [restoredProfileId, setRestoredProfileId] = useState('');
   const current = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.getSnapshot ?? lockedSnapshot, lockedSnapshot);
   const scope = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.selectionScope ?? noScope, noScope);
+  const screenCounts = useScreenCounts(services, scope, route.page === 'unknown' ? null : route.page);
   // Reviews loaded from a profile belong to that selection only: any lock, unlock or switch clears them.
   // Layout effect: a locked or switched profile's loaded reviews are dropped before the browser paints, not one frame later.
   useLayoutEffect(() => { trade?.forgetSaved(); }, [trade, scope]);
@@ -127,6 +131,7 @@ export function App({ services, starting = false, startupError, trade = null, di
           }} /><QrPanel services={services} trade={trade} scope={scope} /></> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} updates={updates} /> :
           route.page === 'offers' ? <OffersPage trade={trade} store={store} drafts={drafts} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
           <UnavailablePage page={route.page} />}
+        {route.page === 'settings' ? <LocalScreenAnalytics controller={screenCounts} messages={screenCountMessages} /> : null}
       </main>
       <footer>{m.footer}</footer>
     </div>
