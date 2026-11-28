@@ -509,17 +509,36 @@ try {
     reports.push({ delivery, localFraming: delivery === 'header' ? 'blocked' : 'permitted-as-disclosed', deployedAttestation: false });
     await page.close();
   }
-  for (const mode of ['missing-entry', 'missing-worker', 'unsupported-document-crypto', 'unsupported-worker-storage']) {
+  for (const mode of ['missing-entry', 'missing-app-chunk', 'missing-worker', 'unsupported-document-crypto', 'unsupported-worker-storage']) {
     const page = await context.newPage();
-    if (mode === 'missing-entry') await page.route('**/assets/index-*.js', route => route.abort('failed'));
+    const missingAsset = mode === 'missing-entry' ? '**/assets/index-*.js' :
+      mode === 'missing-app-chunk' ? '**/assets/OfflineRoot-*.js' : null;
+    if (missingAsset) await page.route(missingAsset, route => route.abort('failed'));
     if (mode === 'missing-worker') await page.route('**/assets/vault.worker-*.js', route => route.abort('failed'));
     if (mode === 'unsupported-document-crypto') await page.addInitScript(() => Object.defineProperty(window, 'crypto', { value: undefined }));
     if (mode === 'unsupported-worker-storage') await page.route('**/assets/vault.worker-*.js', async route => {
       const response = await route.fetch(); await route.fulfill({ response, body: "Object.defineProperty(globalThis, 'indexedDB', {value:undefined});\n" + await response.text() });
     });
-    await page.goto(origin + '/#/recovery');
-    if (mode === 'missing-entry') assert.match(await page.locator('#root').innerText(), /encrypted local data is not reset/);
-    else {
+    const recoveryUrl = origin + '/#/recovery';
+    if (missingAsset) {
+      const filenamePrefix = mode === 'missing-entry' ? '/assets/index-' : '/assets/OfflineRoot-';
+      await Promise.all([
+        page.waitForEvent('requestfailed', request => new URL(request.url()).pathname.startsWith(filenamePrefix)),
+        page.goto(recoveryUrl),
+      ]);
+      if (mode === 'missing-app-chunk') await page.locator('#root:empty').waitFor({ state: 'attached' });
+      const guidance = page.locator('.shell-loading');
+      await guidance.waitFor({ state: 'visible' });
+      assert.match(await guidance.innerText(), /reload this same address/);
+      assert.equal(await page.getByRole('heading', { level: 1 }).count(), 0);
+      await page.unroute(missingAsset);
+      await page.reload();
+      await page.getByRole('heading', { name: 'Recovery', level: 1, exact: true }).waitFor();
+      assert.equal(page.url(), recoveryUrl);
+      assert.equal(await guidance.isVisible(), false);
+      await assertSeedPreserved(page);
+    } else {
+      await page.goto(recoveryUrl);
       await page.getByRole('heading', { name: 'Recovery', level: 1, exact: true }).waitFor();
       await page.getByRole('alert').waitFor({ timeout: 35_000 }).catch(() => { throw new Error(`RECOVERY_ALERT_MISSING: ${mode}`); });
       assert.equal(await page.getByRole('button', { name: 'Download unchecked encrypted backup', exact: true }).count(), 0);
