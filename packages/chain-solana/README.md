@@ -114,8 +114,9 @@ A dishonest RPC can lie consistently, because there is no light client and no co
 the tip, so an open window is necessary but not sufficient. The committed fixture hash (`eed3a490…`, unpadded, L =
 45 + len(so)) belongs to a localnet capture with a synthetic program id, so it is a test vector, not a pin. A
 registry pin must still come from `programDataSha256FromElf(verifiable .so, deployed length from the runbook)`.
-Transaction lifecycle (G12: signatures, blockhash expiry, durable nonce), Token-2022 and ATA creation are not
-implemented. The `@noble/hashes` 2.4.0 inventory review is still pending.
+These read-only modules do not provide signing or submission; the native lifecycle
+and recovery client is described below. Durable nonce and Token-2022 transactions
+remain unsupported. The `@noble/hashes` 2.4.0 inventory review is still pending.
 
 ## Acceptance
 
@@ -182,3 +183,11 @@ before physical RPC dispatch. A pure schema parser lets the ordinary offline rec
 unverified hint per native trade journal, preserving the full history in the encrypted backup. It imports no
 Solana RPC or wallet implementation and grants no transaction authority. See the encrypted vault composition
 section in [docs/lifecycle.md](docs/lifecycle.md) for selection rules, bounds and tested recovery behavior.
+
+The native client also supports an explicitly confirmed v2 journal migration and
+bounded retirement of eligible local cancellations. Existing v1 journals keep
+their current behavior until migration. `journalState`, `prepareJournalMigration`
+and `confirmJournalMigration` provide the host integration boundary; they do not
+silently migrate on unlock, restore or transaction preparation. See
+[journal migration and retention](docs/retention.md) for compatibility, backup,
+full-identity rebuilds and the remaining application-control boundary.

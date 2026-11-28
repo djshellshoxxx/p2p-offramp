@@ -33,7 +33,9 @@ import {
   parseSolanaIntent, SOLANA_INTENT_FORMAT, transitionIntent, verifyIntentForTrade, type SolanaIntentRecord,
 } from './intent.ts';
 import {
-  admitIntent, checkedProfileId, loadIntents, storeIntent, UncertainWrite, type SolanaJournalPort,
+  admitIntent, checkedProfileId, chooseRetirementCandidate, identityForRecord, loadIntents,
+  parseReservationIdentity, reservationRef, reserveIntentV2, sameReservationIdentity, storeIntent,
+  storeIntentV2, UncertainWrite, type SolanaJournalPort, type SolanaReservationIdentity,
 } from './journal.ts';
 import { encodeBase64, MAX_TRANSACTION_BYTES } from './message.ts';
 import { compilePlan, type SolanaMessagePlan } from './plan.ts';
@@ -56,7 +58,39 @@ export type SolanaObservation =
   | { readonly kind: 'open' }
   | { readonly kind: 'landed'; readonly slot: string; readonly err: string | null }
   | { readonly kind: 'dropped' };
-export interface Stored { readonly record: SolanaIntentRecord; readonly revision: number }
+export interface Stored {
+  readonly record: SolanaIntentRecord; readonly revision: number;
+  /** Captured at allocation/read time. A null v1 identity must never be upgraded by an update. */
+  readonly identity: SolanaReservationIdentity | null;
+}
+
+/** Updates retain the caller's original identity; the v1 write port refuses a migrated journal. */
+async function updateStored(
+  context: SolanaSubmitContext, trade: BoundSolanaTrade, stored: Stored, next: SolanaIntentRecord,
+): Promise<Stored> {
+  const identity = stored.identity ?? null;
+  const revision = identity === null
+    ? await storeIntent(context.journal, trade, stored.revision, next)
+    : await storeIntentV2(context.journal, trade, stored.revision, identity, next);
+  return { record: next, revision, identity };
+}
+
+/** A fresh revision cannot promote an old reservation into a newer allocation or journal format. */
+async function assertStoredCurrent(
+  context: SolanaSubmitContext, trade: BoundSolanaTrade, stored: Stored,
+): Promise<void> {
+  context.assertActive?.();
+  const loaded = await loadIntents(context.journal, trade);
+  context.assertActive?.();
+  const current = loaded.records.find(record => record.intentId === stored.record.intentId);
+  if (!current || loaded.revision !== stored.revision || JSON.stringify(current) !== JSON.stringify(stored.record)) {
+    return fail('CONFLICT');
+  }
+  const original = stored.identity ?? null, identity = identityForRecord(loaded, current);
+  if (original === null || identity === null) {
+    if (original !== identity) return fail('CONFLICT');
+  } else if (!sameReservationIdentity(original, identity)) return fail('CONFLICT');
+}
 
 interface Boxed { readonly value: unknown }
 type Raced = { readonly boxed: Boxed } | { readonly stop: CoreErrorCode };
@@ -190,11 +224,22 @@ export async function anchorBlockhash(
 
 /** Journals a `prepared` intent for a plan after the admission rule; nothing is signed yet. */
 export async function prepareIntent(
-  context: SolanaSubmitContext, trade: BoundSolanaTrade, plan: SolanaMessagePlan, replacementOf: string | null,
+  context: SolanaSubmitContext, trade: BoundSolanaTrade, plan: SolanaMessagePlan,
+  replacement: string | SolanaReservationIdentity | null,
   signal?: AbortSignal,
 ): Promise<Stored> {
   const profile = checkedProfileId(context.journal);
   const loaded = await loadIntents(context.journal, trade, signal);
+  const replacementIdentity = replacement !== null && typeof replacement !== 'string'
+    ? parseReservationIdentity(replacement) : null;
+  const replacementOf = replacementIdentity?.intentId ?? (replacement as string | null);
+  if (loaded.version === 1 && replacementIdentity !== null ||
+      loaded.version === 2 && replacement !== null && replacementIdentity === null) return fail('INVALID_INPUT');
+  if (replacementIdentity !== null) {
+    const predecessor = loaded.records.find(record => record.intentId === replacementIdentity.intentId);
+    const actual = predecessor ? identityForRecord(loaded, predecessor) : null;
+    if (actual === null || !sameReservationIdentity(actual, replacementIdentity)) return fail('CONFLICT');
+  }
   const anchor = await anchorBlockhash(context, trade, plan, signal);
   const message = compilePlan(plan, anchor.blockhash), now = clockNow(context);
   const runtime = trade.deployment.runtime;
@@ -209,10 +254,16 @@ export async function prepareIntent(
     sendMarkedAt: null, outcome: null, replacementOf, originProfileId: profile, createdAt: now, updatedAt: now,
   });
   verifyIntentForTrade(record, trade);
-  admitIntent(loaded.records, record);
   context.assertActive?.();
   if (checkedProfileId(context.journal) !== profile) return fail('LOCKED');
-  return { record, revision: await storeIntent(context.journal, trade, loaded.revision, record, signal) };
+  if (loaded.version === 2) {
+    return reserveIntentV2(context.journal, trade, loaded.revision, record,
+      replacementIdentity === null ? null : reservationRef(replacementIdentity),
+      chooseRetirementCandidate(loaded, profile), signal);
+  }
+  admitIntent(loaded.records, record);
+  return { record, revision: await storeIntent(context.journal, trade, loaded.revision, record, signal),
+    identity: null };
 }
 
 /**
@@ -256,14 +307,15 @@ export async function signIntent(
   const { record } = stored;
   if (record.state !== 'prepared' || session.address !== record.feePayer || session.role !== record.role ||
       session.tradeId !== trade.binding.tradeId) return fail('UNAUTHORIZED');
+  await assertStoredCurrent(context, trade, stored);
   const result = await signWithWallet(session, messageOf(record), context.assertActive);
   if (!result.ok) return fail(result.error.code);
   // Cancellation/lock can win while the physical prompt is open. Do not persist a late signature as authority.
   context.assertActive?.();
   // transitionIntent re-parses the record, which verifies the signature over the journaled message again.
   const next = transitionIntent(record, 'signed', clockNow(context), { signature: result.value.signature });
-  const revision = await storeIntent(context.journal, trade, stored.revision, next);
-  return { record: next, revision, signed: result.value };
+  const updated = await updateStored(context, trade, stored, next);
+  return { ...updated, signed: result.value };
 }
 
 /**
@@ -278,13 +330,14 @@ export async function markAndSend(
   if (record.state !== 'signed' || record.signature !== signed.signature) return fail('CONFLICT');
   context.assertActive?.();
   const marked = transitionIntent(record, 'sendMarked', clockNow(context));
-  let revision: number;
-  try { revision = await storeIntent(context.journal, trade, stored.revision, marked); } catch (error) {
+  let markedStored: Stored;
+  try { markedStored = await updateStored(context, trade, stored, marked); } catch (error) {
     if (error instanceof UncertainWrite) return fail('UNAVAILABLE');
     throw error;
   }
   // Disposal during the marker write prevents broadcast. The durable marker stays for reconciliation.
   context.assertActive?.();
+  await assertStoredCurrent(context, trade, markedStored);
   // The marker is durable: from here on nothing may be retried, and the external abort signal is not passed on.
   let state: 'sent' | 'unknown' = 'unknown';
   try {
@@ -294,10 +347,10 @@ export async function markAndSend(
   let after: SolanaIntentRecord;
   try {
     after = transitionIntent(marked, state, clockNow(context));
-    return { record: after, revision: await storeIntent(context.journal, trade, revision, after) };
+    return await updateStored(context, trade, markedStored, after);
   } catch {
     // The marker already records "possibly sent"; reconciliation reads the chain.
-    return { record: marked, revision };
+    return markedStored;
   }
 }
 
@@ -394,7 +447,7 @@ export async function applyObservation(
   const next = observation.kind === 'dropped' ? transitionIntent(stored.record, 'dropped', now)
     : transitionIntent(stored.record, observation.err === null ? 'finalized' : 'failed', now,
       { outcome: { slot: observation.slot, err: observation.err } });
-  return { record: next, revision: await storeIntent(context.journal, trade, stored.revision, next) };
+  return updateStored(context, trade, stored, next);
 }
 
 /** Local cancel of a never-marked intent this profile wrote. */
@@ -405,7 +458,7 @@ export async function cancelIntent(
   if ((record.state !== 'prepared' && record.state !== 'signed') || record.sendMarkedAt !== null ||
       record.originProfileId !== checkedProfileId(context.journal)) return fail('CONFLICT');
   const next = transitionIntent(record, 'cancelled', clockNow(context));
-  return { record: next, revision: await storeIntent(context.journal, trade, stored.revision, next) };
+  return updateStored(context, trade, stored, next);
 }
 
 export const isUncertainWrite = (error: unknown) => error instanceof UncertainWrite;

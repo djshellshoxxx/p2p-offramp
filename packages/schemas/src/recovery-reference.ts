@@ -98,16 +98,20 @@ export function projectRecoveryReferences(records: readonly PrivateRecordV1[], o
   const selected = journal.slice(start, start + RECOVERY_REFERENCE_PAGE_SIZE), items: RuntimeRecoveryReference[] = []; let unsupported = 0;
   for (const record of selected) {
     try {
-      if (record.schemaVersion !== 1) throw Error();
       let reference: unknown;
-      try {
-        const intent = decodeIntentPayload(record.payload);
-        reference = { recordId: record.id, intentId: intent.intentId, binding: intent.binding, account: intent.account,
-          action: intent.action, storedState: intent.state,
-          chainReference: intent.submission.chain === 'evm' ? intent.submission.hash : intent.submission.signature,
-          nonce: intent.submission.chain === 'evm' ? intent.submission.nonce : null };
-      } catch {
-        reference = { recordId: record.id, ...decodeSolanaJournalRecoveryHint(record.payload) };
+      if (record.schemaVersion === 2) {
+        reference = { recordId: record.id, ...decodeSolanaJournalRecoveryHint(record.payload, 2) };
+      } else {
+        if (record.schemaVersion !== 1) throw Error();
+        try {
+          const intent = decodeIntentPayload(record.payload);
+          reference = { recordId: record.id, intentId: intent.intentId, binding: intent.binding, account: intent.account,
+            action: intent.action, storedState: intent.state,
+            chainReference: intent.submission.chain === 'evm' ? intent.submission.hash : intent.submission.signature,
+            nonce: intent.submission.chain === 'evm' ? intent.submission.nonce : null };
+        } catch {
+          reference = { recordId: record.id, ...decodeSolanaJournalRecoveryHint(record.payload, 1) };
+        }
       }
       items.push(parseReference(reference));
     } catch { unsupported++; }
