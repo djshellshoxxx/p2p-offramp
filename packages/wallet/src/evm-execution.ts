@@ -43,6 +43,16 @@ function errorCode(error: unknown): number | undefined {
   try { const descriptor = Object.getOwnPropertyDescriptor(error,'code'); return descriptor && 'value' in descriptor && typeof descriptor.value === 'number' ? descriptor.value : undefined; }
   catch { return undefined; }
 }
+/** Reject foreign account accessors instead of evaluating them during admission. */
+function selectedAccount(value: unknown): string | null {
+  try {
+    if (!Array.isArray(value)) return null;
+    const index = Object.getOwnPropertyDescriptor(value, '0');
+    if (!index || !('value' in index) || typeof index.value !== 'string') return null;
+    const account = index.value.toLowerCase();
+    return ADDRESS.test(account) ? account : null;
+  } catch { return null; }
+}
 /** The physical slot is held until the provider settles, even when it ignores cancellation. */
 export function createEvmExecution(options: EvmExecutionOptions) {
   let active = false, disposed = false;
@@ -56,7 +66,12 @@ export function createEvmExecution(options: EvmExecutionOptions) {
     session = Object.freeze({account:raw.account,chainId:raw.chainId,generation:raw.generation});
   } catch { throw Error('INVALID_INPUT'); }
   const current = () => {
-    try { return !disposed && options.isCurrent(originalSession); } catch { return false; }
+    if (disposed) return false;
+    try {
+      // A callback can synchronously retire this execution, even if it returns true.
+      const allowed = options.isCurrent(originalSession);
+      return !disposed && allowed === true;
+    } catch { return false; }
   };
   return Object.freeze({
     async submit(input: Intent, expectedRevision: number, signal?: AbortSignal): Promise<CoreResult<{readonly hash:string}>> {
@@ -78,10 +93,11 @@ export function createEvmExecution(options: EvmExecutionOptions) {
         const stopped=guard();if(stopped)return stopped;
         const raw=intentData(valid,['ok',Object.getOwnPropertyDescriptor(valid,'ok')?.value===true?'value':'error']);
         if(raw.ok!==true || raw.value!==undefined)return fail('INTEGRITY_FAILURE');
-        const accounts=await options.provider.request({method:'eth_accounts'});
+        const account=selectedAccount(await options.provider.request({method:'eth_accounts'}));
+        const afterAccounts=guard();if(afterAccounts)return afterAccounts;
+        if(account!==session.account)return fail('UNAUTHORIZED');
         const chain=await options.provider.request({method:'eth_chainId'});
         const changed=guard();if(changed)return changed;
-        if (!Array.isArray(accounts) || accounts.length===0 || typeof accounts[0]!=='string' || accounts[0].toLowerCase()!==session.account) return fail('UNAUTHORIZED');
         if(typeof chain!=='string' || !/^0x[0-9a-f]+$/.test(chain) || BigInt(chain).toString()!==session.chainId)return fail('WRONG_CHAIN');
         const reserved=await options.journal.reserve(intent,expectedRevision,signal);if(!reserved.ok)return reserved;
         const afterReserve=guard();if(afterReserve)return afterReserve;
@@ -91,13 +107,16 @@ export function createEvmExecution(options: EvmExecutionOptions) {
         const marked=await options.journal.markSending(intent.intentId,signal);if(!marked.ok)return fail('BROADCAST_UNKNOWN');
         const afterMarker=guard();if(afterMarker)return fail('BROADCAST_UNKNOWN');
         // A wallet may omit change events while durable preparation waits on storage.
-        const finalAccounts=await options.provider.request({method:'eth_accounts'});
+        const finalAccount=selectedAccount(await options.provider.request({method:'eth_accounts'}));
+        if(guard() || finalAccount!==session.account)return fail('BROADCAST_UNKNOWN');
         const finalChain=await options.provider.request({method:'eth_chainId'});
-        if(guard() || !Array.isArray(finalAccounts) || typeof finalAccounts[0]!=='string' || finalAccounts[0].toLowerCase()!==session.account ||
-           typeof finalChain!=='string' || !/^0x[0-9a-f]+$/.test(finalChain) || BigInt(finalChain).toString()!==session.chainId)return fail('BROADCAST_UNKNOWN');
+        if(guard() || typeof finalChain!=='string' || !/^0x[0-9a-f]+$/.test(finalChain) || BigInt(finalChain).toString()!==session.chainId)return fail('BROADCAST_UNKNOWN');
+        // The final capability lookup may retire the session via an injected property getter.
+        const provider=options.provider,sendRequest=provider.request;
+        if(typeof sendRequest!=='function' || guard())return fail('BROADCAST_UNKNOWN');
         // A persisted marker consumes this explicit attempt even if the following wallet call rejects.
         sent=true;
-        const result=await options.provider.request({method:'eth_sendTransaction',params:[{from:request.from,to:request.to,value:quantity(request.value),data:request.data,nonce:quantity(request.nonce),chainId:quantity(request.chainId)}]});
+        const result=await Reflect.apply(sendRequest,provider,[{method:'eth_sendTransaction',params:[{from:request.from,to:request.to,value:quantity(request.value),data:request.data,nonce:quantity(request.nonce),chainId:quantity(request.chainId)}]}]);
         if(typeof result!=='string' || !HASH.test(result))return fail('BROADCAST_UNKNOWN');
         const late=guard();if(late)return fail('BROADCAST_UNKNOWN');
         const canonicalHash=result.toLowerCase();
