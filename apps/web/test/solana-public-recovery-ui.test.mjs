@@ -19,7 +19,7 @@ const words = node => Array.isArray(node) ? node.map(words).join('') : typeof no
 async function mounted(t) {
   const states = [], refs = [], effects = [], calls = [], downloads = [], blobs = [];
   let stateAt = 0, refAt = 0, effectAt = 0, live = true, listener, held;
-  let snapshot = { version: 1, phase: 'ready', profileIds: [PROFILE], profileId: PROFILE, wallet: null, review: null, error: null,
+  let snapshot = { version: 1, phase: 'ready', profileIds: [PROFILE], profileId: PROFILE, wallet: null, review: null, error: null, proposals: [], tradeCapacity: { used: 1, limit: 8 },
     trades: [{ id: TRADE, role: 'seller', seller: 'public-seller', buyer: 'public-buyer', amountBaseUnits: '100',
       deadlineSeconds: '2000', escrow: 'public-escrow', state: 'funded', paidOut: false, chainTimeSeconds: '1000',
       restored: false, intents: [], payoutBlockedBy: [], rentTopUpLamports: null, canRelease: false, canRefund: false, canPayout: false }] };

@@ -1,4 +1,88 @@
-# Read-only Solana adapter for the D5 basic escrow (local qualification)
+# Solana adapter and native escrow client for the D5 basic escrow
+
+## Core-only funding policy (generation 34)
+
+Accepted D4 Option C applies at `planFund`: new native SOL and original-SPL funding must carry the SHA-256 of the
+maintained count-zero capability encoding. It is derived from `encodeCapabilities([])`, rather than an all-zero
+hash or a new commitment format. Other commitments return `UNSUPPORTED_PROVIDER` before intent preparation,
+wallet signing or sending. Both direct `fund()` and `prepareFunding()`, including confirmation's replanning,
+use this same boundary. Existing role, branded-input and occupied-escrow checks retain their prior ordering.
+
+Binding, unsigned instruction codecs, exact-message verification, historical journal decoding and existing
+release/refund/payout paths still represent historical commitments. They do not grant new funding permission.
+Recovery retains cancellation, foreign-profile uncertainty, original send markers and no automatic resend.
+No optional capability mapping, contract/ABI, program, trust, margin policy or browser admission changes here.
+This repairs a client policy omission that predates prepared funding. Controlled regressions and existing vectors
+do not establish native execution, browser acceptance, release readiness or Tier C merge approval.
+
+## Native funding review display
+
+The internal `src/funding-review.ts` helper, `projectNativeFundingReview(trade, prepared)`, produces frozen native-SOL
+display data from a locally bound trade and supplied prepared-funding fields. It checks exact binding, seller,
+escrow and message consistency with the maintained message verifier. It includes the full fixed terms, principal,
+both deadlines, deployment pins, seller funding source, exact message, exact supplied blockhash and height.
+Fees, escrow rent and total debit remain unknown; no estimates, reads, writes, clock calls or prompts are performed.
+Malformed fields and own accessors produce a fixed `INVALID_INPUT` without evaluating those field getters.
+
+This projection proves **data consistency only**. ProgramData/artifact pins are explicitly metadata from the
+supplied bound trade; the prepared view does not carry the original pin snapshot. Last-valid height is supplied
+metadata, not a field authenticated by the message. Consistent copies, including consistently rebound bytes, may
+display. A cancelled handle can still be display data. Neither result establishes the original active capability,
+current chain state, unexpired eligibility, counterparty acceptance, successful funding or settlement.
+Only the native client's original private handle can be confirmed, with its existing freshness and ownership checks.
+The display result and its serialization have no confirmation authority. The helper does not invent a review ID,
+wallet grant or deadline, and does not claim that arbitrary caller Proxy traps are inert.
+
+The local-validator browser calls this projection for an imported native SOL seller proposal.
+The Worker retains the prepared handle and the browser presents its fields for explicit confirmation.
+Browser funding of SPL assets remains outside this profile.
+
+## Explicit prepared funding (generation 32)
+
+The native client in `src/compose.ts` adds a separate
+`prepareFunding(trade, sellerSession, options?)` entry. It returns an immutable
+`PreparedSolanaFunding` capability with `action: 'fund'`, seller role, absent
+escrow expectation, the exact message and original blockhash, and the funding
+shape. Preparation persists the intent before returning and never signs or
+broadcasts. A host can display the bound trade terms and this exact review, then
+call `confirm(review, sellerSession)` only after explicit confirmation.
+
+The existing `prepare` method and `PreparedSolanaActionKind` remain exit-only:
+`prepare(trade, session, 'fund')` still returns `INVALID_INPUT`. The local browser uses the distinct
+`funding.prepare` command for a saved native SOL proposal. Importing a recovery
+document still requires an already funded escrow. The ordinary offline build
+excludes this native package.
+
+Funding options are captured synchronously as plain own data properties before
+any queued or asynchronous work. Only `sellerTokenAccount` and `rebuildOf` are
+accepted. A supplied SPL source address must be a canonical 32-byte base58 key;
+an explicit replacement must be an existing-format intent ID. Unknown, symbol,
+accessor and non-plain fields are refused without evaluating field getters.
+Later caller mutation cannot alter the retained planner or reviewed bytes.
+The existing planner chooses the default SPL source ATA when no override is
+given; source-account ownership and execution remain program checks, not a
+new claim made by preparation.
+
+Funding reviews share the existing private per-client capability map,
+confirmation and cancellation path. Copies and serialized views have no
+authority. The original seller session, deployment binding and profile must
+remain current. Confirmation consumes the capability before asynchronous work,
+checks fresh finalized funding eligibility and the original blockhash before
+signing and after a delayed wallet response, and compares the exact message.
+Cancellation never releases a pending physical wallet slot early or retracts a
+marked/submitted intent. Uncertain outcomes remain journaled and are reconciled
+without resending. A definitively dropped intent requires an explicit
+replacement before another funding preparation; the existing rules for other
+terminal outcomes remain unchanged.
+
+The existing native SOL/original-SPL, freeze-authority, deployment, deadline,
+journal and send policies remain unchanged. No mint, endpoint, production trust
+or release approval is added. Controlled client/journal/provider tests establish
+local composition behavior; previous direct-funding validator runs do not
+establish native execution of this new preparation path. The native validator and browser
+acceptance commands exercise preparation and finalized recovery on a disposable ledger.
+
+## Reader-layer reference
 
 Finalized-only reader and unsigned instruction builders for `contracts/solana/programs/basic-escrow`. It has no
 endpoint, connection, wallet, key, signer, sender or simulator. The caller injects `rpc.request` (it resolves to the

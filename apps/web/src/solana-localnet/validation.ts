@@ -40,13 +40,19 @@ export function parseSolanaCommand(input: unknown): SolanaCommand {
     const bytes = backupBytes(raw.bytes);
     return { type, bytes, sourcePassphrase: text(raw.sourcePassphrase, 1024), destinationPassphrase: text(raw.destinationPassphrase, 1024) };
   }
+  if (type === 'funding.proposal.import') return { type, text: text(fields(input, ['type', 'text']).text, 4096) };
+  if (type === 'funding.wallet.connect' || type === 'funding.prepare') {
+    const raw = fields(input, ['type', 'proposalId'], type === 'funding.prepare' ? ['rebuildOf'] : []);
+    return { type, proposalId: text(raw.proposalId, 32, /^[0-9a-f]{32}$/),
+      ...(raw.rebuildOf === undefined ? {} : { rebuildOf: text(raw.rebuildOf, 64, /^[A-Za-z0-9_-]+$/) }) };
+  }
   if (type === 'recovery.import') {
     const raw = fields(input, ['type', 'text', 'role']);
     if (raw.role !== 'seller' && raw.role !== 'buyer') return fail();
     return { type, text: text(raw.text, 16384), role: raw.role };
   }
   if (type === 'wallet.connect' || type === 'recovery.export') return { type, tradeId: id(fields(input, ['type', 'tradeId']).tradeId) };
-  if (type === 'review.confirm') return { type, reviewId: text(fields(input, ['type', 'reviewId']).reviewId, 32, /^[0-9a-f]{32}$/) };
+  if (type === 'review.confirm' || type === 'funding.review.expire') return { type, reviewId: text(fields(input, ['type', 'reviewId']).reviewId, 32, /^[0-9a-f]{32}$/) };
   if (type === 'review.prepare') {
     const raw = fields(input, ['type', 'tradeId', 'action'], ['fiatReceiptConfirmed', 'maxRentTopUpLamports', 'rebuildOf']);
     if (!['release', 'refund', 'payout'].includes(raw.action as string)) return fail('UNSUPPORTED_COMMAND');

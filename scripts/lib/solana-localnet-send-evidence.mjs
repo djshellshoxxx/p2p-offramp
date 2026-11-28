@@ -2,9 +2,12 @@
 import assert from 'node:assert/strict';
 import { createHash, createPublicKey, verify } from 'node:crypto';
 import { decodeBase64url, parseStrictJsonBytes, sameBinding } from '../../packages/schemas/index.ts';
-import { parseSolanaIntent } from '../../packages/chain-solana/src/intent.ts';
+import { parseSolanaIntent, verifyIntentForTrade } from '../../packages/chain-solana/src/intent.ts';
+import { bindTrade } from '../../packages/chain-solana/src/bind.ts';
 import { parseRecoveryDocument } from '../../packages/chain-solana/src/recovery.ts';
 import { base58Encode, decodeKey } from '../../contracts/solana/vectors/derive.mjs';
+import { decodeSolanaFundingProposalRecord, SOLANA_FUNDING_PROPOSAL_RECORD_FORMAT }
+  from '../../apps/web/src/solana-localnet/funding-proposal.ts';
 
 export function readSolanaVaultRecords(snapshot) {
   const intents = [], documents = [];
@@ -33,6 +36,23 @@ export function readSolanaVaultRecords(snapshot) {
   return { intents, documents };
 }
 
+/** Only fully validated proposal records leave the unchanged strict legacy oracle's input. */
+export async function readSolanaBrowserVaultRecords(snapshot) {
+  const records = [], proposals = [];
+  for (const record of snapshot.records) {
+    if (record.kind === 'trade') {
+      const raw = parseStrictJsonBytes(decodeBase64url(record.payload, 1, 262144), 262144);
+      if (raw?.format === SOLANA_FUNDING_PROPOSAL_RECORD_FORMAT) {
+        const retained = Object.freeze({ ...record });
+        const value = await decodeSolanaFundingProposalRecord(retained);
+        proposals.push({ record: retained, value }); continue;
+      }
+    }
+    records.push(record);
+  }
+  return { ...readSolanaVaultRecords({ records }), proposals };
+}
+
 export function assertSolanaSendMarked(intents, base64Wire, profileId, pins, seenSignatures) {
   assert.equal(typeof base64Wire, 'string'); assert.ok(base64Wire.length <= 1644);
   const wire = Buffer.from(base64Wire, 'base64'); assert.equal(wire.toString('base64'), base64Wire);
@@ -55,4 +75,50 @@ export function assertSolanaSendMarked(intents, base64Wire, profileId, pins, see
   return { intentId: marker.intentId, tradeId: marker.binding.tradeId, action: marker.action, signature,
     profileId, originProfileId: marker.originProfileId, durableState: marker.state, sendMarkedAt: marker.sendMarkedAt,
     messageSha256: createHash('sha256').update(message).digest('hex'), replacementOf: marker.replacementOf };
+}
+
+/** Separate fixed funding proof. A retained proposal is required; an exit marker never enters this path. */
+export async function assertSolanaFundingSendMarked(intents, proposals, base64Wire, profileId, pins, config, seenSignatures) {
+  assert.equal(typeof base64Wire, 'string'); assert.ok(base64Wire.length <= 1644);
+  const wire = Buffer.from(base64Wire, 'base64'); assert.equal(wire.toString('base64'), base64Wire);
+  assert.ok(wire.length <= 1232 && wire.length > 100); assert.equal(wire[0], 1, 'one legacy signature');
+  const signatureBytes = wire.subarray(1, 65), message = wire.subarray(65), signature = base58Encode(signatureBytes);
+  const matching = intents.filter(record => record.state === 'sendMarked' && record.signature === signature &&
+    record.message === message.toString('base64'));
+  assert.equal(matching.length, 1, 'exactly one durable marker precedes these exact signed bytes');
+  const marker = parseSolanaIntent(matching[0]);
+  assert.match(profileId, /^[0-9a-f]{32}$/); assert.notEqual(profileId, '0'.repeat(32));
+  assert.equal(marker.originProfileId, profileId, 'the current profile owns the new physical broadcast');
+  assert.equal(marker.genesisHash, pins.genesisHash); assert.equal(marker.programId, pins.programId);
+  assert.equal(marker.programDataSha256, pins.programDataSha256);
+  assert.equal(marker.action, 'fund'); assert.equal(marker.role, 'seller'); assert.equal(marker.expectedEscrowState, 'absent');
+  assert.equal(marker.outcome, null);
+  assert.ok(Number.isSafeInteger(marker.sendMarkedAt) && marker.sendMarkedAt >= marker.createdAt && marker.sendMarkedAt <= marker.updatedAt);
+  // Re-decode the retained bytes, rather than accepting a caller's cached display projection as evidence.
+  const decoded = await Promise.all(proposals.map(async ({ record }) => ({ record, value: await decodeSolanaFundingProposalRecord(record) })));
+  const retained = decoded.filter(proposal => sameBinding(proposal.value.binding, marker.binding));
+  assert.equal(retained.length, 1, 'one saved proposal matches the complete physical-send binding');
+  const proposal = retained[0], network = config.network, deployment = network.deployments[0], asset = network.assets[0];
+  assert.equal(config.ReleaseEnabled, 0); assert.equal(network.environment, 'local'); assert.equal(network.chain, 'solana');
+  assert.equal(network.genesisHash, pins.genesisHash); assert.equal(deployment.address, pins.programId);
+  assert.equal(deployment.runtime.kind, 'solana-program'); assert.equal(deployment.runtime.programDataSha256, pins.programDataSha256);
+  assert.equal(deployment.runtime.upgradeAuthority, null);
+  assert.equal(proposal.value.binding.networkId, network.id); assert.equal(proposal.value.binding.deploymentId, deployment.id);
+  assert.deepEqual(proposal.value.configuration, { registrySha256: config.registrySha256,
+    programDataSha256: pins.programDataSha256, artifactSha256: deployment.artifactSha256,
+    assetId: asset.id, rpcUrl: config.rpcUrl, margins: config.margins });
+  assert.equal(proposal.value.role, 'seller'); assert.equal(proposal.value.proposal.terms.assetKind, 'native');
+  assert.equal(asset.kind, 'native'); assert.equal(asset.address, null); assert.equal(asset.decimals, 9);
+  const trade = bindTrade(config.registry, proposal.value.binding, proposal.value.proposal.terms);
+  assert.equal(marker.feePayer, trade.terms.seller); assert.equal(marker.escrow, trade.escrow.address);
+  verifyIntentForTrade(marker, trade); // Maintained recipe checks every fixed term and account in the exact message.
+  // Node/OpenSSL independently verifies the physical wire after maintained parsing and recipe validation.
+  const publicKey = createPublicKey({ key: Buffer.concat([Buffer.from('302a300506032b6570032100', 'hex'), Buffer.from(decodeKey(marker.feePayer))]), type: 'spki', format: 'der' });
+  assert.equal(verify(null, message, publicKey, signatureBytes), true, 'physical funding transaction has the recorded seller signature');
+  assert.equal(seenSignatures.has(signature), false, 'one physical attempt per signed transaction; no retries or resends');
+  seenSignatures.add(signature); // A refused proposal, recipe, pin or signature proof never consumes this slot.
+  return { intentId: marker.intentId, tradeId: marker.binding.tradeId, action: marker.action, signature,
+    profileId, originProfileId: marker.originProfileId, durableState: marker.state, sendMarkedAt: marker.sendMarkedAt,
+    messageSha256: createHash('sha256').update(message).digest('hex'), replacementOf: marker.replacementOf,
+    proposalId: proposal.record.id, proposalOriginProfileId: proposal.value.originProfileId };
 }

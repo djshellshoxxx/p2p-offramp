@@ -1,14 +1,29 @@
-# Native SOL funded recovery browser slice
+# Native SOL seller funding and recovery in the local browser
 
-This source adds an explicit local-validator browser profile for an **already funded, original native SOL escrow**.
-It imports and encrypts the complete canonical recovery document; verifies the actual finalized program, immutable
-ProgramData hash, genesis, escrow PDA/account and custody; connects an explicitly selected Wallet Standard role;
-and reviews **release, refund and a separate payout** before each signature. `ReleaseEnabled` remains `0`.
+The local-validator build supports two starting points. A seller can import fixed native SOL
+terms and fund the proposed escrow, or either party can import an existing funded escrow's
+public recovery document. Release, refund and payout each require their own review.
+The default app has no Solana wallet or RPC connection. `ReleaseEnabled` remains `0`.
 
-Fresh Solana offers, bilateral economic acceptance, funding from this browser, SPL assets and public-network
-deployment are outside this slice. The existing candidate-only Solana acceptance verifier remains candidate-only.
-Accepted D1 wire/composition work is still required before a new browser negotiation can authorize economic work.
-This is neither a public release nor permission to use real funds.
+## Start with fixed terms
+
+Use the complete `terms` object produced for the intended local validator and immutable program.
+For a disposable test ledger the maintained browser fixture uses `chain.documents.absent.terms`
+in `scripts/test-solana-localnet-browser.mjs`. Wrap those original terms as follows.
+
+```js
+JSON.stringify({ format: 'p2p-offramp/solana-local-funding-proposal/v1', terms })
+```
+
+Paste that JSON (up to 4,096 UTF-8 bytes) into **Funding proposal JSON** in an open profile.
+**Save seller funding proposal** records the terms in the encrypted vault. On that proposal,
+choose **Connect seller wallet**, then **Review funding**. Check the parties, principal in
+lamports, escrow and deadlines. Fees, rent and total debit are shown as unknown.
+**Confirm and sign in wallet** requests one signature for the reviewed message.
+An uncertain send stays in the journal. Use **Refresh finalized state** to reconcile it.
+A finalized escrow adds a recovery card. A definitively dropped funding attempt requires an
+explicit replacement review. This flow covers seller-directed funding. Negotiating terms,
+bilateral acceptance, browser SPL funding and public networks remain outside its scope.
 
 ## Authority and recovery
 
@@ -20,7 +35,7 @@ provider prompt remains occupied until its original promise settles, even after 
 
 The actual module Worker owns the vault session, canonical recovery documents, native client and sole RPC transport.
 The document is checked against the separately embedded registry pin; it cannot install a new deployment or endpoint.
-An absent escrow is refused. Backup restore creates a fresh profile/key while preserving original document and intent
+Importing a recovery document requires an existing escrow. Funding preparation requires an absent escrow. Backup restore creates a fresh profile/key while preserving original document and intent
 provenance, signatures, uncertain markers and terminal history. Startup reconciles; it never automatically resends.
 
 The native `prepare` handle is immutable, client/session branded and one-shot. The review shows the original roles,

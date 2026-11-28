@@ -1,5 +1,6 @@
 import test, { beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { once } from 'node:events';
 import { EncryptedVaultService, EncryptedBackupService } from '../../../packages/storage/index.ts';
 import { parseRuntimeCommand } from '../../../packages/schemas/index.ts';
 import { createVaultWorkerEndpoint } from '../src/runtime/worker-endpoint.ts';
@@ -8,7 +9,7 @@ import { capturePendingMetadata } from '../src/runtime/pending-metadata.ts';
 const passphrase = 'local template runtime synthetic passphrase';
 const defaults = { networkId: 'local-evm', deploymentId: 'escrow-local-v1', assetId: 'native', amountBaseUnits: '123456789', fiatCurrency: 'USD', fiatMinorUnits: '100', fiatScale: 2 };
 const change = { kind: 'put-template', slot: 0, defaults }, consent = { reviewed: true, logicalOnly: true, backupAndRemoteLimitsAcknowledged: true };
-const live = [], clone = value => structuredClone(value), flush = () => new Promise(done => setImmediate(done));
+const live = [], clone = value => structuredClone(value);
 let previousSecure;
 beforeEach(() => { previousSecure = Object.getOwnPropertyDescriptor(globalThis, 'isSecureContext'); Object.defineProperty(globalThis, 'isSecureContext', { configurable: true, value: true }); });
 afterEach(async () => { for (const item of live.splice(0).reverse()) await item.dispose(); if (previousSecure) Object.defineProperty(globalThis, 'isSecureContext', previousSecure); else delete globalThis.isSecureContext; });
@@ -27,7 +28,14 @@ class Port extends EventTarget {
   commands = []; held = []; hold = null; terminated = false;
   constructor(storage) {
     super(); this.vault = new EncryptedVaultService(storage, crypto, { lifecycle: false }); this.backup = new EncryptedBackupService(storage);
-    this.endpoint = createVaultWorkerEndpoint(message => { if (message.operation === this.hold) this.held.push(message); else this.reply(message); }, { createServices: () => ({ vault: this.vault, backup: this.backup }) });
+    this.endpoint = createVaultWorkerEndpoint(message => {
+      if (message.operation === this.hold) {
+        this.held.push(message);
+        this.dispatchEvent(new Event('acknowledgement-held'));
+      } else {
+        this.reply(message);
+      }
+    }, { createServices: () => ({ vault: this.vault, backup: this.backup }) });
   }
   reply(message) { this.dispatchEvent(new MessageEvent('message', { data: clone(message) })); }
   postMessage(command) { this.commands.push(clone(command)); void this.endpoint.dispatch(clone(command)); }
@@ -57,14 +65,16 @@ test('pending template metadata retains no defaults, preview identity, consent o
     assert.deepEqual(capturePendingMetadata(command), { operation, generation: 2, profileId: 'a'.repeat(32) }); assert.ok(Object.isFrozen(capturePendingMetadata(command)));
   }
 });
-test('lock retires held load, preview and durable commit acknowledgements; explicit reopen reconciles the committed case', async () => {
+test('lock retires held load, preview and durable commit acknowledgements; explicit reopen reconciles the committed case', { timeout: 30000 }, async () => {
   for (const operation of ['loadTradeTemplates', 'previewTradeTemplateChange', 'commitTradeTemplateChange']) {
     const s = await setup(); let preview;
     if (operation === 'commitTradeTemplateChange') preview = good(await s.services.previewTradeTemplateChange(0, change));
     s.port.hold = operation;
+    const held = once(s.port, 'acknowledgement-held');
     const pending = operation === 'loadTradeTemplates' ? s.services.loadTradeTemplates() : operation === 'previewTradeTemplateChange'
       ? s.services.previewTradeTemplateChange(0, change) : s.services.commitTradeTemplateChange(preview.previewId, 0, consent);
-    for (let turns = 0; turns < 1000 && s.port.held.length === 0; turns++) await flush();
+    await held;
+    assert.equal(s.port.held[0].operation, operation);
     assert.equal(s.port.held.length, 1); good(await s.services.lock()); s.port.release(); const stale = await pending;
     assert.equal(stale.ok, false); assert.equal(stale.error.code, 'LOCKED'); assert.equal(s.services.current.state, 'locked');
     good(await s.services.unlock(s.profileId, passphrase)); const actual = good(await s.services.loadTradeTemplates());
