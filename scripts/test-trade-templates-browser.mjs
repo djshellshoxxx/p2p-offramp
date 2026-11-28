@@ -153,6 +153,8 @@ try {
   const termsField = label => page.evaluate(wanted => [...document.querySelectorAll('dl.terms dt')].find(node => node.textContent === wanted)?.nextElementSibling?.textContent?.trim() ?? null, label);
   const completeAndReview = async () => {
     await fill(TRANSIENT);
+    assert.match(await form().locator('#draft-acceptBeforeSeconds-preview').innerText(), /remaining/);
+    assert.match(await form().locator('#draft-escrowExpirySeconds-preview').innerText(), /remaining/);
     await form().getByLabel('I rechecked the exact crypto and fiat amounts for this draft.', { exact: true }).check();
     await form().getByLabel('I checked the current chain, escrow, asset and full party addresses.', { exact: true }).check();
     await reviewButton().click(); await page.waitForURL(/#\/trade\//);
@@ -194,8 +196,22 @@ try {
   assert.equal(await reviewButton().isEnabled(), false, 'applying defaults clears prior review consent');
   for (const label of ['I rechecked the exact crypto and fiat amounts for this draft.', 'I checked the current chain, escrow, asset and full party addresses.', 'I intentionally leave draft payment instructions empty.'])
     await form().getByLabel(label, { exact: true }).check();
-  await reviewButton().click(); await panel().getByRole('alert').waitFor();
+  assert.equal(await reviewButton().isEnabled(), false, 'canonical input preflight prevents review before fresh parties and deadlines');
+  await panel().getByRole('alert').filter({ hasText: 'Enter complete canonical values.' }).waitFor();
+  // Exercise form submission as well: a disabled control alone must not admit an incomplete draft.
+  await form().evaluate(node => node.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })));
   assert.ok(page.url().endsWith('#/offers'), 'missing fresh parties and deadlines cannot produce a review');
+  assert.equal(await reviewButton().isEnabled(), false);
+  assert.equal(await form().locator('#draft-amountBaseUnits-preview').innerText(), '0.25 native');
+  assert.equal(await form().locator('#draft-fiatMinorUnits-preview').innerText(), '123.45 EUR');
+  assert.equal(await form().locator('#draft-amountBaseUnits').getAttribute('inputmode'), 'numeric');
+  assert.equal(await form().locator('#draft-amountBaseUnits').getAttribute('maxlength'), '78');
+  assert.equal(await form().locator('#draft-fiatCurrency').getAttribute('maxlength'), '3');
+  await fill({ paymentInstructions: 'é'.repeat(2049) });
+  assert.match(await form().locator('#draft-paymentInstructions-preview').innerText(), /4098\/4096/);
+  assert.equal(await reviewButton().isEnabled(), false);
+  await fill({ paymentInstructions: '' });
+  assert.match(await form().locator('#draft-paymentInstructions-preview').innerText(), /0\/4096/);
   const firstIdentity = await completeAndReview(); const firstRoute = page.url(); await noWallet();
 
   await page.reload(); await page.getByText('Vault locked', { exact: true }).waitFor();
