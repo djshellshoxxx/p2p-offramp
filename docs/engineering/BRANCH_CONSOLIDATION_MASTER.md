@@ -1,3 +1,19 @@
+## 2026-11-27 — hosted Solana qualification of #285 and #286
+
+Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701`. Fresh paginated REST inventory: 299 distinct branches, 284 distinct PRs (98 open, 128 merged, 58 closed unmerged), no count change; #251 confirmed merged. Full remaining semantic equivalence count still unknown.
+
+| Candidate | Exact source | Actual hosted checkout / tree | Current evidence and gate |
+| --- | --- | --- | --- |
+| #285 native payout rent guard | `4d789523d3bc3efec08e23c3d42486b36b086014` | `3685d83783f5b615085f44e88ceea6ff3b2cc5b4` / `bf90e4647d71d2a13b4431c31583c94c0b9a6cf2` | Five returned workflows success, [program job 140792003916](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/46084877248/job/140792003916); D8 Tier C written owner approval and review remain outstanding. |
+| #286 RPC accessor test oracle | `c1f2e3ac95ccabb29a548ffb60755e2975da96d4` | `22e7dfa5bcb310014015c55b52c364574f0afe96` / `92c762a3426013ee299cba1f519a57c74cd06093` | Five returned workflows success, [program job 140792661390](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/46085084225/job/140792661390); coordinator [COMMENT review 6095207332](https://github.com/djshellshoxxx/p2p-offramp/pull/286#pullrequestreview-6095207332) records bounded static review, not independent executing-worker or named-bot approval. |
+| #287 stacked test repair | `ba81f6b47d819387553a3836466dfffff165dfe6` | Targets #155 head `9f03e0e014bd999c266eee944e46e9be002bdcfc` | Three returned workflows success; all five jobs in vault foundation success. No transfer to main or evaluator authorization. |
+
+Both native merge objects have ordered parents [pinned main, respective source]; both source-to-proposal comparisons are one ahead, zero behind, zero changed files. Decoded actual logs show each checkout and two successful JSON receipts: 62 validator checks, 13 sends, disclosed synthetic-genesis shim in client; six actual module Worker/encrypted IndexedDB browser journeys with actual genesis and real Clock, zero fixture errors, no clock warp/genesis rewrite, ReleaseEnabled=0, no public-network or fresh-negotiation qualification. Total validator/browser durations #285 1905/2045s and #286 1908/2053s are not refund-wait measurements. No rerun requested. No physical device qualification inferred. #286 external getter invocation counter is checked after error mapping; original sent-state/single-send assertions preserved. Author mutation evidence not independently executed in this run. No open High/Medium found in this bounded two-file static inspection; fixture-delivery assertion is a possible future test strengthening, not a reproduced defect.
+
+#283 remains failed on its own Solana run 46084043880; passing #285 and #286 current-target receipts do not transfer to #283 or establish its disabled-payout root cause. #282 and #284 four returned workflows successful. #237/#280/#285 submitted-review lists empty at read. No production edits or merges; preserve named reviews, D8 written owner approvals, D2 public trust, D5 policy and device acceptance, #43 and #228 ownership, optional default isolation. No local qualification or new independent worker execution in this pass. Continue unresolved source work rather than rerun these unchanged jobs. ReleaseEnabled=0 required.
+
+---
+
 ## 2026-11-27 — autonomous native-retention source disposition and new repair candidates
 
 Pinned main `fdf346ab8e6aacc60b501007ec10ec7ee840a701` (tree `65c413d28fadc3a1ee44446281f6e3c59e2dea3f`), historical `autonomous/completion-20261102` = live open #26 `94554ecf9854e4604f9f56afe5bebedeee931994`; 68 ahead / 653 behind; merge base `e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa`. Four remaining native-retention paths examined against the live split #43 `bc549f477f86e27516f554c7f1923a7147b82ea4`, current main and #237; recursive trees returned untruncated.
