@@ -164,7 +164,9 @@ function solanaKey(input: unknown): Uint8Array {
   return concat([new Uint8Array(leading), body]);
 }
 
-/** G16 Solana raw canonical terms message (signed directly by both Ed25519 keys; termsHash = SHA-256 of it). */
+/** G16 canonical Solana terms bytes; termsHash (trade id) is their SHA-256.
+ * Peer acceptance signs off-chain v1 messages binding termsHash, not these raw bytes.
+ * See packages/chain-solana/docs/acceptance.md. */
 export function encodeSolanaTerms(input: SolanaTermsInput): Uint8Array<ArrayBuffer> {
   const terms = exactDataObject(input, ['acceptBeforeSeconds', 'amountBaseUnits', 'assetKind', 'buyer', 'capabilitiesHash', 'escrowExpirySeconds',
     'genesisHash', 'mint', 'orderId', 'privateAgreementHash', 'programId', 'revision', 'seller', 'sellerNonce', 'tokenProgram']) as unknown as SolanaTermsInput;
