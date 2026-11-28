@@ -16,7 +16,12 @@ export interface SolanaJournalRecoveryHint {
   readonly action: 'fund' | 'release' | 'refund' | 'payout'; readonly storedState: SolanaRecoveryStoredState;
   readonly chainReference: string | null; readonly nonce: null;
 }
-interface Inspected { readonly hint: SolanaJournalRecoveryHint; readonly updatedAt: number; readonly open: boolean }
+interface Inspected {
+  readonly hint: SolanaJournalRecoveryHint; readonly updatedAt: number; readonly open: boolean;
+  readonly originProfileId: string; readonly replacementOf: string | null;
+}
+interface ReservationRef { readonly generation: number; readonly originProfileId: string; readonly intentId: string }
+interface InspectedEntry { readonly generation: number; readonly intent: Inspected; readonly replaces: ReservationRef | null }
 const FIELDS = ['format', 'intentId', 'binding', 'genesisHash', 'programId', 'programDataSha256', 'escrow', 'action',
   'role', 'feePayer', 'expectedEscrowState', 'message', 'blockhash', 'blockhashSlot', 'lastValidBlockHeight', 'signature',
   'state', 'sendMarkedAt', 'outcome', 'replacementOf', 'originProfileId', 'createdAt', 'updatedAt'];
@@ -112,7 +117,8 @@ function inspect(input: unknown, binding: TradeBinding): Inspected {
   if (typeof raw.programDataSha256 !== 'string' || !/^[0-9a-f]{64}$/.test(raw.programDataSha256) ||
       typeof raw.originProfileId !== 'string' || !/^[0-9a-f]{32}$/.test(raw.originProfileId)) return invalid();
   decimal(raw.blockhashSlot); decimal(raw.lastValidBlockHeight);
-  if (raw.replacementOf !== null && parseIntentId(raw.replacementOf) === intentId) return invalid();
+  const replacementOf = raw.replacementOf === null ? null : parseIntentId(raw.replacementOf);
+  if (replacementOf === intentId) return invalid();
   const action = raw.action;
   if (action !== 'fund' && action !== 'release' && action !== 'refund' && action !== 'payout') return invalid();
   if (raw.role !== 'seller' && !(action === 'payout' && raw.role === 'buyer')) return invalid();
@@ -145,20 +151,71 @@ function inspect(input: unknown, binding: TradeBinding): Inspected {
   if (!valid) return invalid();
   checkMessage(raw.message, account, blockhash);
   return { hint: Object.freeze({ intentId, binding, account, action, storedState: state,
-    chainReference: signature, nonce: null }), updatedAt,
+    chainReference: signature, nonce: null }), updatedAt, originProfileId: raw.originProfileId, replacementOf,
   open: !['finalized', 'failed', 'dropped', 'cancelled'].includes(state) };
 }
 
+function generation(input: unknown, revision: number): number {
+  const value = counter(input);
+  return value > 0 && value <= revision ? value : invalid();
+}
+function reservationRef(input: unknown, revision: number): ReservationRef {
+  const raw = intentData(input, ['originProfileId', 'intentId', 'generation']);
+  if (typeof raw.originProfileId !== 'string' || !/^[0-9a-f]{32}$/.test(raw.originProfileId)) return invalid();
+  return { originProfileId: raw.originProfileId, intentId: parseIntentId(raw.intentId),
+    generation: generation(raw.generation, revision) };
+}
+/** Structural identity/graph consistency only. These values never leave the scalar discovery projection. */
+function inspectEntries(input: unknown, binding: TradeBinding, revision: number): Inspected[] {
+  // An empty migrated aggregate is valid storage, but has no recovery hint to project.
+  if (!Array.isArray(input) || input.length < 1 || input.length > 32 || revision < 1) return invalid();
+  const generations = new Set<number>();
+  const entries: InspectedEntry[] = input.map(item => {
+    const raw = intentData(item, ['generation', 'intent', 'replaces']);
+    const value = generation(raw.generation, revision), intent = inspect(raw.intent, binding);
+    const replaces = raw.replaces === null ? null : reservationRef(raw.replaces, revision);
+    if (generations.has(value) || (intent.replacementOf === null) !== (replaces === null) ||
+        replaces !== null && replaces.intentId !== intent.replacementOf) return invalid();
+    generations.add(value);
+    return { generation: value, intent, replaces };
+  });
+  const predecessors = new Map<number, number>(), successors = new Set<number>();
+  for (const entry of entries) {
+    if (entry.replaces === null) continue;
+    const reference = entry.replaces;
+    const original = entries.find(candidate => candidate.generation === reference.generation &&
+      candidate.intent.hint.intentId === reference.intentId && candidate.intent.originProfileId === reference.originProfileId);
+    if (!original || original.intent.hint.storedState !== 'dropped' ||
+        original.intent.hint.action !== entry.intent.hint.action || successors.has(original.generation)) return invalid();
+    predecessors.set(entry.generation, original.generation); successors.add(original.generation);
+  }
+  for (const entry of entries) {
+    const visited = new Set<number>(); let current: number | undefined = entry.generation;
+    while (current !== undefined) {
+      if (visited.has(current)) return invalid();
+      visited.add(current); current = predecessors.get(current);
+    }
+  }
+  return entries.map(entry => entry.intent);
+}
+
 /** The sole open intent wins over all stored terminal labels; otherwise latest update, then greatest intent id. */
-export function decodeSolanaJournalRecoveryHint(payload: unknown): SolanaJournalRecoveryHint {
+export function decodeSolanaJournalRecoveryHint(payload: unknown, schemaVersion: number = 1): SolanaJournalRecoveryHint {
   let bytes: Uint8Array | undefined;
   try {
+    if (schemaVersion !== 1 && schemaVersion !== 2) return invalid();
     bytes = decodeBase64url(payload, 1, MAX_PAYLOAD_BYTES);
-    const raw = intentData(parseStrictJsonBytes(bytes, MAX_PAYLOAD_BYTES), ['format', 'binding', 'revision', 'records']);
-    if (raw.format !== 'p2p-offramp/solana/vault-journal/v1') return invalid();
-    const binding = bindingOf(raw.binding), revision = counter(raw.revision), list = raw.records;
-    if (!Array.isArray(list) || list.length < 1 || list.length > 32 || revision < list.length) return invalid();
-    const records = list.map(item => inspect(item, binding));
+    const raw = intentData(parseStrictJsonBytes(bytes, MAX_PAYLOAD_BYTES),
+      ['format', 'binding', 'revision', schemaVersion === 1 ? 'records' : 'entries']);
+    if (raw.format !== `p2p-offramp/solana/vault-journal/v${schemaVersion}`) return invalid();
+    const binding = bindingOf(raw.binding), revision = counter(raw.revision);
+    let records: Inspected[];
+    if (schemaVersion === 2) records = inspectEntries(raw.entries, binding, revision);
+    else {
+      const list = raw.records;
+      if (!Array.isArray(list) || list.length < 1 || list.length > 32 || revision < list.length) return invalid();
+      records = list.map(item => inspect(item, binding));
+    }
     if (records.some((record, index) => index > 0 && records[index - 1]!.hint.intentId >= record.hint.intentId)) {
       return invalid();
     }

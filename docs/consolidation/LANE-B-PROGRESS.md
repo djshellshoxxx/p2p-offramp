@@ -20,6 +20,35 @@ and full-identity rebuild options when that source reaches main. Application
 migration controls are a Lane A integration boundary; no application files are
 claimed here. #278/#279 remain separate. No public deployment or real funds.
 
+Native v2 persistence, explicit migration, immutable reservation identities,
+bounded local retirement and the pure recovery-summary reader are implemented
+on the #281 branch. Focused encrypted-vault, client-lifecycle and summary-reader
+tests pass. Independent source review found no open High, Medium or Low after
+repairing migration capability detection for partial journal ports. Final
+exact-commit review and repository/hosted qualification remain pending; this
+entry does not promote focused tests into application or validator evidence.
+
+### Needs Lane A — #281 application integration
+
+The exact file/function handoff is in
+[`packages/chain-solana/docs/retention.md`](../../packages/chain-solana/docs/retention.md#application-integration-handoff).
+Proposed protocol additions are separate `journal.migration.prepare`,
+`journal.migration.confirm` and `journal.migration.cancel` commands. The Worker
+retains the opaque native review; the document receives only its bounded display
+and one-shot ID. No migration command creates a wallet grant or automatic RPC
+refresh. `controller.ts` clears authority on lifecycle changes; `validation.ts`
+admits exact command/display fields; `client.ts` fences stale replies;
+`SolanaLocalnetRoot.tsx` supplies explicit warning and confirmation controls while
+retaining encrypted-backup export. The private rebuild path must preserve a full
+v2 identity instead of collapsing it to the random intent ID.
+
+The existing browser journal oracle accepts v1 only and must be extended with
+strict version-specific validation when those controls are integrated. Existing
+browser passes therefore remain v1 regression evidence. A frozen pre-upgrade
+reader binary has not been executed; its refusal follows from the prior source's
+schema-version check at the unchanged locator. Neither limitation is recorded as
+a passing v2 integration test.
+
 ## Semaphore archival decision — November 28, 2026
 
 The owner accepted archival-only retention. Exact #287 `ba81f6b47d819387553a3836466dfffff165dfe6`
@@ -190,7 +219,7 @@ test('B1b F1: wallet rejections fill the per-trade journal and lock the funded t
 - Freeze-authority permits per allowlisted SPL mint, and their signed source: RegistryV2 or a G15-signed permit sidecar (Needs Lane A #2).
 - D1 open item: whether a separate Solana terms consent is wanted in addition to the peer acceptance.
 - Solana acceptance ledger bounds (64 entries per space, 7-day horizon).
-- B1b journal retention and the shared-schema terminal states (F1/F2 above).
+- B1b journal retention policy: accepted for #281 on 2026-11-28; native implementation and qualification are in progress. Shared-schema terminal states (F2 above) remain a separate decision.
 - #155 Semaphore evaluator: **settled 2026-11-28 — archival-only**. Preserve #287 at `ba81f6b4`; #288 separates the evaluator from active intake. See the [accepted disposition](../reputation/SEMAPHORE-V4-ARCHIVAL-DECISION-20261128.md).
 - External materials, none of which an agent can supply:
   - physical and browser Solana wallets for signing and interoperability tests;
@@ -209,8 +238,9 @@ check each before starting so you do not duplicate it. Do not reimplement anythi
    at the exact head, answer reviews, and wait for the owner's approval; do not merge them yourself. GOV-1 (#276)
    and governance F2 (#277) are merged. A small B4 tooling follow-up: the short-name origin/main lookup in
    scripts/docs/generate.py (its --allow-local check). It only runs locally, so no CI gate depends on it.
-2. Reproduce each other "Open findings" row against current main before changing anything. B1b F1 is reproduced
-   (32 wallet rejections lock release/refund); write the bounded-retention design for owner approval (Tier C). F3 is done in
+2. Check the current source and ownership for each other "Open findings" row before changing anything. B1b F1's
+   bounded-retention design is owner-approved and implemented on #281; finish its current-head qualification,
+   exact-commit review and the Needs Lane A handoff above. Final Tier C integration remains gated. F3 is done in
    #278 and B1c F1 in #279 (both awaiting owner approval). M1 is blocked on
    Needs Lane A #4: do not build a carrier in packages/exchange; until #4 lands, only re-confirm the replay.ts refusal.
 3. Optional: an extra review of the B3 fix commits 05b9d22..59d091f (scripts/formal/evm.mjs). #137's description already
@@ -218,8 +248,8 @@ check each before starting so you do not duplicate it. Do not reimplement anythi
    scripts/formal/README.md ("Deviation from the extracted source"); check for no new fail-open path.
 4. For #155: the owner accepted archival-only Semaphore retention on 2026-11-28. Preserve exact #287
    `ba81f6b47d819387553a3836466dfffff165dfe6` in `archive/semaphore-v4-research-20261128`; #288 refreshes
-   current main and excludes the seven research files and npm hook. Complete #288's D8 gates before merging it
-   into #155. Review the four remaining intake packets separately; keep their existing execution restrictions.
+   current main and excludes the seven research files and npm hook. #288 completed its D8 gates and merged into
+   #155 at `39119ae41446ca299dd00165e9496d1084c75718`. #155 remains draft. Review the four remaining intake packets separately; keep their existing execution restrictions.
    Preserve the accepted archival disposition during historical consolidation. No assurance-manifest refresh
    is needed solely for this disposition. Governance F2 is merged (#277).
 5. Post one review comment per B2 finding on the matching codex integration PR (#224-#232) if it is still open there.

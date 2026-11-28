@@ -17,11 +17,15 @@
  * A pending physical wallet prompt keeps its serial slot until it settles, even after cancellation/disposal.
  */
 import { createCoreError, createOperationId, type SolanaTermsInput } from '../../domain/index.ts';
-import type { CoreErrorCode, CoreResult, TradeBinding } from '../../schemas/index.ts';
+import { parseIntentId, type CoreErrorCode, type CoreResult, type TradeBinding } from '../../schemas/index.ts';
 import { bindSolanaTrade, isBoundSolanaTrade, type BoundSolanaTrade, type SolanaRegistryView } from './bind.ts';
 import { decimalU64, fail, SolanaFailure } from './codec.ts';
 import { exactData, isTerminal, type SolanaIntentRecord } from './intent.ts';
-import { checkedProfileId, loadIntents, UncertainWrite, type SolanaJournalPort } from './journal.ts';
+import {
+  checkedProfileId, identityForRecord, loadIntents, migrateIntents, parseReservationIdentity,
+  sameReservationIdentity, supportsJournalMigration, UncertainWrite, type LoadedIntents, type SolanaJournalPort,
+  type SolanaReservationIdentity,
+} from './journal.ts';
 import { encodeBase64 } from './message.ts';
 import {
   compilePlan, parseMargins, planFund, planPayout, planRefund, planRelease, readTrustedSnapshot, type FundOptions,
@@ -48,8 +52,8 @@ export interface SolanaEscrowClientOptions {
   readonly timeoutMs?: number;
 }
 export interface RebuildOption {
-  /** Explicit user rebuild after a definitive drop: the dropped intent this one replaces. */
-  readonly rebuildOf?: string;
+  /** v1 accepts a legacy id; v2 requires the complete identity from a fresh journalState view. */
+  readonly rebuildOf?: string | SolanaReservationIdentity;
 }
 export interface SolanaSubmission {
   readonly intentId: string; readonly signature: string; readonly state: SolanaIntentRecord['state'];
@@ -67,6 +71,18 @@ export interface PreparedSolanaAction {
   readonly escrow: string; readonly expectedEscrowState: SolanaIntentRecord['expectedEscrowState'];
   readonly message: string; readonly blockhash: string; readonly lastValidBlockHeight: string;
   readonly shape: Readonly<PlanShape>;
+}
+export interface SolanaJournalState {
+  readonly version: 1 | 2; readonly revision: number; readonly migrationSupported: boolean;
+  readonly entries: readonly Readonly<{ readonly record: SolanaIntentRecord;
+    readonly identity: SolanaReservationIdentity | null }>[];
+}
+declare const PREPARED_SOLANA_JOURNAL_MIGRATION: unique symbol;
+/** Local, one-shot upgrade review. Copies and serialized data have no migration authority. */
+export interface PreparedSolanaJournalMigration {
+  readonly [PREPARED_SOLANA_JOURNAL_MIGRATION]: true;
+  readonly binding: Readonly<TradeBinding>; readonly revision: number; readonly recordCount: number;
+  readonly fromVersion: 1; readonly toVersion: 2; readonly requiresUpgradedReader: true;
 }
 export interface SolanaEscrowClient {
   bind(binding: TradeBinding, terms: SolanaTermsInput): CoreResult<BoundSolanaTrade>;
@@ -92,6 +108,12 @@ export interface SolanaEscrowClient {
   /** Startup: cancels this profile's never-marked preparations, then reconciles. */
   recover(trade: BoundSolanaTrade): Promise<CoreResult<readonly SolanaIntentRecord[]>>;
   intents(trade: BoundSolanaTrade): Promise<CoreResult<readonly SolanaIntentRecord[]>>;
+  /** Fresh private journal state, including full v2 references; no RPC or wallet operation. */
+  journalState(trade: BoundSolanaTrade): Promise<CoreResult<SolanaJournalState>>;
+  /** Explicit compatibility review only. Migration is never performed during an action or recovery. */
+  prepareJournalMigration(trade: BoundSolanaTrade): Promise<CoreResult<PreparedSolanaJournalMigration>>;
+  /** Consumes the exact review and migrates without retirement, wallet access or network requests. */
+  confirmJournalMigration(review: PreparedSolanaJournalMigration): Promise<CoreResult<SolanaJournalState>>;
   dispose(): void;
 }
 
@@ -107,8 +129,28 @@ const isLocalPreMarker = (record: SolanaIntentRecord, profile: string) =>
 type Planner = (snapshot: SolanaEscrowSnapshot) => CoreResult<SolanaMessagePlan>;
 interface Preparation {
   readonly trade: BoundSolanaTrade; readonly session: SolanaWalletSession; readonly stored: Stored;
-  readonly plan: Planner; readonly context: SolanaSubmitContext;
+  readonly plan: Planner; readonly context: SolanaSubmitContext; readonly epoch: number;
   status: 'prepared' | 'confirming' | 'consumed'; revoked: boolean;
+}
+interface MigrationPreparation {
+  readonly trade: BoundSolanaTrade; readonly revision: number; readonly profileId: string;
+  readonly epoch: number; consumed: boolean;
+}
+
+function captureRebuild(input: unknown): string | SolanaReservationIdentity {
+  if (typeof input === 'string') {
+    try { return parseIntentId(input); } catch { return fail('INVALID_INPUT'); }
+  }
+  return parseReservationIdentity(input);
+}
+
+function captureRebuildOption(input: RebuildOption): string | SolanaReservationIdentity | undefined {
+  try {
+    const descriptor = Object.getOwnPropertyDescriptor(input, 'rebuildOf');
+    if (!descriptor) return undefined;
+    if (!('value' in descriptor)) return fail('INVALID_INPUT');
+    return descriptor.value === undefined ? undefined : captureRebuild(descriptor.value);
+  } catch { return fail('INVALID_INPUT'); }
 }
 
 /** Capture user review options before the first await; no provider getter or later mutation can change them. */
@@ -120,7 +162,8 @@ function reviewOptions(input: PayoutOptions & RebuildOption): Readonly<PayoutOpt
         !['createAta', 'maxRentTopUpLamports', 'rebuildOf'].includes(key))) return fail('INVALID_INPUT');
     raw = exactData(input, keys as string[]);
   } catch { return fail('INVALID_INPUT'); }
-  const copy: { createAta?: boolean; maxRentTopUpLamports?: string; rebuildOf?: string } = {};
+  const copy: { createAta?: boolean; maxRentTopUpLamports?: string;
+    rebuildOf?: string | SolanaReservationIdentity } = {};
   if (raw.createAta !== undefined) {
     if (typeof raw.createAta !== 'boolean') return fail('INVALID_INPUT');
     copy.createAta = raw.createAta;
@@ -130,8 +173,7 @@ function reviewOptions(input: PayoutOptions & RebuildOption): Readonly<PayoutOpt
     copy.maxRentTopUpLamports = raw.maxRentTopUpLamports as string;
   }
   if (raw.rebuildOf !== undefined) {
-    if (typeof raw.rebuildOf !== 'string') return fail('INVALID_INPUT');
-    copy.rebuildOf = raw.rebuildOf;
+    copy.rebuildOf = captureRebuild(raw.rebuildOf);
   }
   return Object.freeze(copy);
 }
@@ -171,12 +213,18 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
   const locks = new Map<string, Promise<unknown>>();
   const sessions = new WeakMap<object, { readonly binding: TradeBinding; readonly profileId: string }>();
   const preparations = new WeakMap<object, Preparation>();
+  const migrations = new WeakMap<object, MigrationPreparation>();
+  const authorityEpochs = new Map<string, number>();
+  const tradeKey = (trade: BoundSolanaTrade) =>
+    `${trade.binding.networkId}:${trade.binding.deploymentId}:${trade.binding.tradeId}`;
+  const authorityEpoch = (trade: BoundSolanaTrade) => authorityEpochs.get(tradeKey(trade)) ?? 0;
+  const revokeTradeReviews = (trade: BoundSolanaTrade) => authorityEpochs.set(tradeKey(trade), authorityEpoch(trade) + 1);
 
   /** One operation per trade at a time in this instance; other tabs are fenced by the journal CAS. */
   function serialized<T>(trade: BoundSolanaTrade, work: () => Promise<T>): Promise<CoreResult<T>> {
     if (disposed) return Promise.resolve(failure('CANCELLED'));
     if (!isBoundSolanaTrade(trade)) return Promise.resolve(failure('INVALID_INPUT'));
-    const key = `${trade.binding.networkId}:${trade.binding.deploymentId}:${trade.binding.tradeId}`;
+    const key = tradeKey(trade);
     const run = (locks.get(key) ?? Promise.resolve()).then(async (): Promise<CoreResult<T>> => {
       if (disposed) return failure('CANCELLED');
       try { return { ok: true, value: await work() }; } catch (error) { return failure(codeOf(error)); }
@@ -187,13 +235,28 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
   const request = () => ({ generation: 0, requestSequence: ++sequence, signal: new AbortController().signal });
   const read = async (trade: BoundSolanaTrade) => value(await readTrustedSnapshot(reader, trade, request()));
 
-  async function cancelLocal(trade: BoundSolanaTrade, original: SolanaIntentRecord): Promise<void> {
+  function storedFrom(loaded: LoadedIntents, record: SolanaIntentRecord, revision = loaded.revision): Stored {
+    return { record, revision, identity: identityForRecord(loaded, record) };
+  }
+  function sameStoredIdentity(first: Stored, second: Stored): boolean {
+    if (first.identity === null || second.identity === null) return first.identity === second.identity;
+    return sameReservationIdentity(first.identity, second.identity);
+  }
+  function journalView(loaded: LoadedIntents): SolanaJournalState {
+    return Object.freeze({ version: loaded.version, revision: loaded.revision,
+      migrationSupported: loaded.version === 1 && supportsJournalMigration(journal),
+      entries: Object.freeze(loaded.records.map(record => Object.freeze({ record,
+        identity: identityForRecord(loaded, record) }))) });
+  }
+
+  async function cancelLocal(trade: BoundSolanaTrade, original: Stored): Promise<void> {
     try {
-      if (checkedProfileId(journal) !== original.originProfileId) return;
+      if (checkedProfileId(journal) !== original.record.originProfileId) return;
       const loaded = await loadIntents(journal, trade);
-      const record = loaded.records.find(entry => entry.intentId === original.intentId);
-      if (record && samePreparation(record, original) && isLocalPreMarker(record, checkedProfileId(journal))) {
-        await cancelIntent(context, trade, { record, revision: loaded.revision });
+      const record = loaded.records.find(entry => entry.intentId === original.record.intentId);
+      if (record && sameStoredIdentity(storedFrom(loaded, record), original) &&
+          samePreparation(record, original.record) && isLocalPreMarker(record, checkedProfileId(journal))) {
+        await cancelIntent(context, trade, { record, revision: loaded.revision, identity: original.identity });
       }
     } catch { /* recover() cancels it later; nothing was sent. */ }
   }
@@ -226,7 +289,7 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
       if (revalidate) stored = await revalidate(stored);
       active.assertActive?.();
     } catch (error) {
-      await cancelLocal(trade, original.record);
+      await cancelLocal(trade, original);
       throw error;
     }
     stored = await markAndSend(active, trade, stored, signed);
@@ -234,17 +297,29 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
   }
 
   async function act(
-    trade: BoundSolanaTrade, session: SolanaWalletSession, rebuildOf: string | undefined, plan: Planner,
+    trade: BoundSolanaTrade, session: SolanaWalletSession,
+    rebuildOf: string | SolanaReservationIdentity | undefined, plan: Planner,
   ): Promise<SolanaSubmission> {
     checkSession(trade, session);
+    const replacement = rebuildOf === undefined ? null : captureRebuild(rebuildOf), epoch = authorityEpoch(trade);
     const planned = value(plan(await read(trade)));
     if (planned.role !== session.role || planned.feePayer !== session.address) return fail('UNAUTHORIZED');
-    const stored = await prepareIntent(context, trade, planned, rebuildOf ?? null);
+    const stored = await prepareIntent(context, trade, planned, replacement);
     const active = { ...context, assertActive: () => {
       assertActive();
+      if (authorityEpoch(trade) !== epoch) fail('CANCELLED');
       if (checkedProfileId(journal) !== stored.record.originProfileId) fail('LOCKED');
     } };
     return submitPrepared(trade, session, stored, active);
+  }
+
+  function directAction(
+    trade: BoundSolanaTrade, session: SolanaWalletSession, extra: RebuildOption, plan: Planner,
+  ): Promise<CoreResult<SolanaSubmission>> {
+    try {
+      const replacement = captureRebuildOption(extra);
+      return serialized(trade, () => act(trade, session, replacement, plan));
+    } catch (error) { return Promise.resolve(failure(codeOf(error))); }
   }
 
   async function prepareReview(
@@ -252,10 +327,11 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
     extra: Readonly<PayoutOptions & RebuildOption>,
   ): Promise<PreparedSolanaAction> {
     assertActive(); checkSession(trade, session, true);
-    const profile = checkedProfileId(journal);
+    const profile = checkedProfileId(journal), epoch = authorityEpoch(trade);
     let preparation: Preparation | undefined;
     const active: SolanaSubmitContext = { ...context, assertActive: () => {
       assertActive();
+      if (authorityEpoch(trade) !== epoch) fail('CANCELLED');
       if (checkedProfileId(journal) !== profile) fail('LOCKED');
       if (preparation?.revoked) fail('CANCELLED');
       checkSession(trade, session, true);
@@ -267,8 +343,8 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
     active.assertActive?.();
     if (planned.role !== session.role || planned.feePayer !== session.address) return fail('UNAUTHORIZED');
     const stored = await prepareIntent(active, trade, planned, extra.rebuildOf ?? null);
-    try { active.assertActive?.(); } catch (error) { await cancelLocal(trade, stored.record); throw error; }
-    preparation = { trade, session, stored, plan, context: active, status: 'prepared', revoked: false };
+    try { active.assertActive?.(); } catch (error) { await cancelLocal(trade, stored); throw error; }
+    preparation = { trade, session, stored, plan, context: active, epoch, status: 'prepared', revoked: false };
     const record = stored.record;
     const view = Object.freeze({ intentId: record.intentId, action, role: record.role, feePayer: record.feePayer,
       binding: Object.freeze({ ...record.binding }), programId: record.programId, escrow: record.escrow,
@@ -285,7 +361,8 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
     const loaded = await loadIntents(journal, trade);
     active.assertActive?.();
     const record = loaded.records.find(entry => entry.intentId === stored.record.intentId);
-    if (!record || !samePreparation(record, preparation.stored.record)) return fail('INTEGRITY_FAILURE');
+    if (!record || !sameStoredIdentity(storedFrom(loaded, record), preparation.stored) ||
+        !samePreparation(record, preparation.stored.record)) return fail('INTEGRITY_FAILURE');
     if (record.state !== stored.record.state || record.signature !== stored.record.signature ||
         !isLocalPreMarker(record, preparation.stored.record.originProfileId)) return fail('CONFLICT');
     const planned = value(preparation.plan(await read(trade)));
@@ -295,7 +372,7 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
         encodeBase64(compilePlan(planned, record.blockhash)) !== record.message) return fail('CONFLICT');
     await recheckPreparedBlockhash(active, trade, record, planned);
     active.assertActive?.();
-    return { record, revision: loaded.revision };
+    return { record, revision: loaded.revision, identity: preparation.stored.identity };
   }
 
   function confirm(
@@ -326,15 +403,18 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
     return serialized(preparation.trade, async () => {
       try {
         assertActive();
+        if (authorityEpoch(preparation.trade) !== preparation.epoch) return fail('CANCELLED');
         const original = preparation.stored.record;
         if (checkedProfileId(journal) !== original.originProfileId) return fail('LOCKED');
         const loaded = await loadIntents(journal, preparation.trade);
         const record = loaded.records.find(entry => entry.intentId === original.intentId);
-        if (!record || !samePreparation(record, original)) return fail('INTEGRITY_FAILURE');
+        if (!record || !sameStoredIdentity(storedFrom(loaded, record), preparation.stored) ||
+            !samePreparation(record, original)) return fail('INTEGRITY_FAILURE');
         if (checkedProfileId(journal) !== original.originProfileId) return fail('LOCKED');
         if (record.state === 'cancelled') return;
         if (!isLocalPreMarker(record, original.originProfileId)) return fail('CONFLICT');
-        await cancelIntent(context, preparation.trade, { record, revision: loaded.revision });
+        await cancelIntent(context, preparation.trade, { record, revision: loaded.revision,
+          identity: preparation.stored.identity });
       } finally { preparation.status = 'consumed'; }
     });
   }
@@ -351,10 +431,52 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
         if (BigInt(snapshot.live.height) < BigInt(observation.slot)) continue;
         if (!effectVisible(record, snapshot)) return fail('INTEGRITY_FAILURE');
       }
-      revision = (await applyObservation(context, trade, { record, revision }, observation)).revision;
+      revision = (await applyObservation(context, trade, storedFrom(loaded, record, revision), observation)).revision;
     }
     loaded = await loadIntents(journal, trade);
     return loaded.records;
+  }
+
+  async function prepareJournalMigration(trade: BoundSolanaTrade): Promise<PreparedSolanaJournalMigration> {
+    assertActive();
+    if (!supportsJournalMigration(journal)) return fail('UNSUPPORTED_VERSION');
+    const profileId = checkedProfileId(journal), epoch = authorityEpoch(trade);
+    const loaded = await loadIntents(journal, trade);
+    assertActive();
+    if (checkedProfileId(journal) !== profileId) return fail('LOCKED');
+    if (!supportsJournalMigration(journal)) return fail('UNSUPPORTED_VERSION');
+    if (loaded.version !== 1) return fail('CONFLICT');
+    if (loaded.revision > Number.MAX_SAFE_INTEGER - (loaded.records.length + 1)) return fail('LIMIT_EXCEEDED');
+    const view = Object.freeze({ binding: Object.freeze({ ...trade.binding }), revision: loaded.revision,
+      recordCount: loaded.records.length, fromVersion: 1, toVersion: 2, requiresUpgradedReader: true,
+    }) as PreparedSolanaJournalMigration;
+    migrations.set(view, { trade, revision: loaded.revision, profileId, epoch, consumed: false });
+    return view;
+  }
+
+  function confirmJournalMigration(review: PreparedSolanaJournalMigration): Promise<CoreResult<SolanaJournalState>> {
+    const migration = migrations.get(review);
+    if (!migration) return Promise.resolve(failure('UNAUTHORIZED'));
+    if (migration.consumed) return Promise.resolve(failure('CONFLICT'));
+    migration.consumed = true;
+    return serialized(migration.trade, async () => {
+      assertActive();
+      if (!supportsJournalMigration(journal)) return fail('UNSUPPORTED_VERSION');
+      if (checkedProfileId(journal) !== migration.profileId) return fail('LOCKED');
+      if (authorityEpoch(migration.trade) !== migration.epoch) return fail('CONFLICT');
+      let loaded: LoadedIntents;
+      try { loaded = await migrateIntents(journal, migration.trade, migration.revision); }
+      catch (error) {
+        if (error instanceof UncertainWrite || ['UNAVAILABLE', 'TIMEOUT', 'CANCELLED', 'BROADCAST_UNKNOWN'].includes(codeOf(error))) {
+          revokeTradeReviews(migration.trade);
+        }
+        throw error;
+      }
+      revokeTradeReviews(migration.trade);
+      assertActive();
+      if (checkedProfileId(journal) !== migration.profileId) return fail('LOCKED');
+      return journalView(loaded);
+    });
   }
 
   return Object.freeze({
@@ -383,29 +505,30 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
     },
     confirm, cancel,
     fund: (trade: BoundSolanaTrade, session: SolanaWalletSession, extra: FundOptions & RebuildOption = {}) =>
-      serialized(trade, () => act(trade, session, extra.rebuildOf,
-        snapshot => planFund(trade, snapshot, session.role, margins, extra))),
+      directAction(trade, session, extra, snapshot => planFund(trade, snapshot, session.role, margins, extra)),
     release: (trade: BoundSolanaTrade, session: SolanaWalletSession, extra: RebuildOption = {}) =>
-      serialized(trade, () => act(trade, session, extra.rebuildOf,
-        snapshot => planRelease(trade, snapshot, session.role, margins))),
+      directAction(trade, session, extra, snapshot => planRelease(trade, snapshot, session.role, margins)),
     refund: (trade: BoundSolanaTrade, session: SolanaWalletSession, extra: RebuildOption = {}) =>
-      serialized(trade, () => act(trade, session, extra.rebuildOf,
-        snapshot => planRefund(trade, snapshot, session.role, margins))),
+      directAction(trade, session, extra, snapshot => planRefund(trade, snapshot, session.role, margins)),
     payout: (trade: BoundSolanaTrade, session: SolanaWalletSession, extra: PayoutOptions & RebuildOption = {}) =>
-      serialized(trade, () => act(trade, session, extra.rebuildOf,
-        snapshot => planPayout(trade, snapshot, session.role, extra))),
+      directAction(trade, session, extra, snapshot => planPayout(trade, snapshot, session.role, extra)),
     reconcile: (trade: BoundSolanaTrade) => serialized(trade, () => reconcileAll(trade)),
     recover: (trade: BoundSolanaTrade) => serialized(trade, async () => {
       const profile = checkedProfileId(journal), loaded = await loadIntents(journal, trade);
       let revision = loaded.revision;
       for (const record of loaded.records) {
         if (!isLocalPreMarker(record, profile)) continue;
-        revision = (await cancelIntent(context, trade, { record, revision })).revision;
+        revision = (await cancelIntent(context, trade, storedFrom(loaded, record, revision))).revision;
       }
       return reconcileAll(trade);
     }),
     intents: (trade: BoundSolanaTrade) => serialized(trade, async () => (await loadIntents(journal, trade))
       .records),
+    journalState: (trade: BoundSolanaTrade) => serialized(trade, async () => {
+      assertActive(); const loaded = await loadIntents(journal, trade); assertActive(); return journalView(loaded);
+    }),
+    prepareJournalMigration: (trade: BoundSolanaTrade) => serialized(trade, () => prepareJournalMigration(trade)),
+    confirmJournalMigration,
     dispose: () => { if (!disposed) { disposed = true; reader.dispose(); } },
   });
 }
