@@ -552,14 +552,17 @@ test('D9 writes a permanent v2 marker in the same durable transition before wall
 });
 
 test('D9 cancelled local approvals remain skippable after later funding and a restart beyond the scan window',async()=>{
- for(const differentNonce of [false,true]){
+ for(const [differentNonce,differentCalldata] of [[false,false],[false,true],[true,false],[true,true]]){
   const env=await setup();
   try{
    const approval=fund({action:'approve',call:{to:ESCROW,data:NOOP,value:'0'}});
    const cancelled=val(await env.life.prepare(approval));
    await start(env);assert.deepEqual(val(await env.life.recover()),[]);
    if(differentNonce)env.chain.nonces.set(ACCOUNT,3);
-   const fresh=val(await env.life.prepare({...approval,call:{...approval.call,data:'0x01'}}));
+   const fresh=val(await env.life.prepare({...approval,call:{...approval.call,data:differentCalldata?'0x01':NOOP}}));
+   assert.notEqual(fresh.intentId,cancelled.intentId,'fresh approval has a distinct durable identity');
+   assert.equal(fresh.request.nonce===cancelled.request.nonce,!differentNonce,'nonce variant is actually exercised');
+   assert.equal(fresh.request.data===cancelled.request.data,!differentCalldata,'calldata variant is actually exercised');
    val(await env.life.submit(fresh));env.chain.mine(2);env.chain.finalized=env.chain.latest().number;
    assert.equal((await outcome(env,fresh.intentId)).outcome,'finalized');
    const funding=val(await env.life.prepare(fund()));val(await env.life.submit(funding));
@@ -569,6 +572,8 @@ test('D9 cancelled local approvals remain skippable after later funding and a re
    assert.equal(recovered.some(record=>record.intentId===cancelled.intentId),false);
    const skipped=await outcome(env,cancelled.intentId);assert.equal(skipped.evidence,'none');
    assert.equal(skipped.intent.sendMarkedAt,null);
+   assert.equal(skipped.intent.state,'failed');
+   assert.equal(skipped.intent.submission.hash,null);
    assert.equal((await outcome(env,funding.intentId)).escrowState,'funded');
    assert.equal(env.wallet.sends,2,'restart never resends either transaction');
   }finally{close(env);}
