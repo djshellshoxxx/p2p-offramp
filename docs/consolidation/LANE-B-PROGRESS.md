@@ -3,6 +3,23 @@
 Owner of this file: the Lane B session. Lane A folds it into `LEDGER.md`. Brief: `docs/consolidation/LANE-B-PROMPT.md`
 (the original note placed it on Lane A's branch until #135; #135 is now merged).
 
+## Cancellation retention implementation — November 28, 2026
+
+The owner accepted the two tradeoffs in [#281](https://github.com/djshellshoxxx/p2p-offramp/pull/281):
+narrowly eligible local cancellation-history retirement and upgraded native
+readers after explicit v2 migration. The reply "go wit recommendations" followed
+the recommendation describing both consequences. The existing #281 branch now
+owns the native journal, reservation identity and client-lifecycle implementation.
+Migration stays explicit; unlock, restore and ordinary preparation do not
+silently migrate. Independent review, acceptance evidence and D8 integration
+remain required. See the [design and acceptance gates](../engineering/SOLANA_CANCELLATION_RETENTION_PROPOSAL_20261127.md).
+
+The #290 seller-funding implementation and #291 Settings integration remain
+separately owned. Native composition changes must preserve #290's funding review
+and full-identity rebuild options when that source reaches main. Application
+migration controls are a Lane A integration boundary; no application files are
+claimed here. #278/#279 remain separate. No public deployment or real funds.
+
 ## Semaphore archival decision — November 28, 2026
 
 The owner accepted archival-only retention. Exact #287 `ba81f6b47d819387553a3836466dfffff165dfe6`
@@ -11,6 +28,12 @@ is preserved in `archive/semaphore-v4-research-20261128`, including the correcte
 from #155's remaining intake. The historical isolation issue remains unresolved in the archive;
 the optional reputation roadmap remains intact. See the
 [decision and preserved blob inventory](../reputation/SEMAPHORE-V4-ARCHIVAL-DECISION-20261128.md).
+
+Completed on November 28: #288 merged into the intake branch at
+`39119ae41446ca299dd00165e9496d1084c75718` after all five workflows passed. Its
+tree exactly matches reviewed `01c8344775b47a33fc219341cf562f910a70b2e9`.
+#155 remains draft; this does not qualify its other intake work or authorize a
+main merge. The archive remains pinned to the original research head above.
 
 ## Reconciled track status — November 18, 2026
 

@@ -1,6 +1,13 @@
 # Proposed bounded retention of local Solana cancellations
 
-Status: **PROPOSED — owner decision required; no behavior change or implementation approval.**
+Status: **OWNER-APPROVED DESIGN DIRECTION — implementation in progress; qualification and Tier C integration remain gated.**
+
+On 2026-11-28, after the recommendation explicitly identified both narrow
+cancellation-history retirement and the requirement for upgraded native readers
+after migration, the owner replied: "go wit recommendations". This accepts those
+two policy tradeoffs and authorizes preparing the bounded implementation. It
+does not waive the acceptance evidence or the D8 integration gate. Migration
+remains an explicit action; opening or restoring a profile does not authorize it.
 
 Source baseline for the 2026-11-28 design addendum: [`main@f4dc63569b906de9a7832f78f46b2368533e6241`](https://github.com/djshellshoxxx/p2p-offramp/commit/f4dc63569b906de9a7832f78f46b2368533e6241).
 The initial proposal used `main@fdf346ab8e6aacc60b501007ec10ec7ee840a701`.
@@ -19,7 +26,7 @@ Recommend a narrow, pressure-triggered operation: while an explicit new action
 reserves its preparation, atomically retire **one eligible local cancelled
 record** if the journal is full. Preserve the existing bound and ordinary
 write semantics. This deliberately gives up a limited class of cancellation
-history; that policy requires the owner's choice before implementation.
+history under the owner-approved direction recorded above.
 
 Sources: [journal admission](../../packages/chain-solana/src/journal.ts),
 [encrypted journal](../../packages/chain-solana/src/vaultjournal.ts),
@@ -100,7 +107,8 @@ and uncertain persistence allow no signing or sending.
 This addresses the [independent review of the original proposal](https://github.com/djshellshoxxx/p2p-offramp/pull/281#issuecomment-7217172048).
 It is a prospective retirement design, not a claim that a new defect has been
 reproduced on main. It supersedes the original assumption that the unchanged
-v1 payload shape would suffice. It does **not** approve a compatibility change.
+v1 payload shape would suffice. The owner subsequently approved the compatibility
+tradeoff recorded above; runtime qualification remains required.
 
 ### Identity and durable allocation
 
@@ -299,7 +307,8 @@ through the appropriate supported reader.
 
 ## Acceptance required before a Tier C patch can qualify
 
-These are future implementation gates, not tests executed by this design PR.
+These are implementation acceptance gates. Completion evidence must identify the
+exact tested implementation; the earlier documentation review did not execute them.
 Use the real encrypted-journal boundary; the lifecycle fake's revision checks
 and map replacement are insufficient. Deterministically control IDs, clocks
 and concurrency instead of relying on the current fixtures' advancing defaults.
@@ -347,27 +356,20 @@ and concurrency instead of relying on the current fixtures' advancing defaults.
 Sources for current test scope: [vault regressions](../../packages/chain-solana/test/vaultjournal.test.mjs),
 [lifecycle fixture defaults](../../packages/chain-solana/test/lifecycle-support.mjs).
 
-## Owner decision and limits
+## Owner decision and implementation limits
 
-**Recommendation for review:** pursue the versioned identity design above as
-the concrete path to bounded local cancellation history. Approval has not been
-given for either history loss or the native-reader compatibility change.
+**Accepted direction:** implement the versioned identity design above, preserving
+all eligibility and acceptance requirements. The owner accepted both the narrow
+history-loss policy and the native-reader compatibility amendment on 2026-11-28.
+Existing native v1 clients must refuse migrated journals; upgraded readers must
+support both versions. Until a trade is explicitly migrated, existing v1 history
+and capacity behavior remain unchanged.
 
-| Choice | History and compatibility consequence |
-| --- | --- |
-| Retain the current policy | Preserve all cancellation history and v1 native-reader compatibility; keep the existing capacity refusal. This remains the runtime behavior. |
-| Approve the proposed policy direction | Permit only the narrowly eligible history loss after qualified v2 migration, and require upgraded native readers for migrated journals. This requires an explicit compatibility amendment as well as the retention decision. |
-
-The owner must decide **both** whether this limited history loss is acceptable
-and whether older native clients may refuse migrated journals. If either is
-unacceptable, retain the current refusal. A sidecar counter or a new-client
-naming convention alone does not prove that permitted old writers preserve
-reservation identity.
-
-Identity fencing, stable lookup, atomicity, protected-history preservation and
-the acceptance criteria are engineering requirements, not optional policy
-choices. A policy decision does not itself qualify or authorize a Tier C
-implementation. This PR changes documentation only.
+A sidecar counter or a new-client naming convention alone does not prove that
+permitted old writers preserve reservation identity. Identity fencing, stable
+lookup, atomicity and protected-history preservation remain engineering
+requirements. The accepted policy authorizes preparation of the implementation;
+it does not substitute for tested evidence or final D8 integration approval.
 
 This proposal addresses cancellation-driven saturation only. It does not solve
 saturation by signed, marked, restored or successor-linked history, nor promise
