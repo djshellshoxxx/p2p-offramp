@@ -1,3 +1,9 @@
+## 2026-11-28 — archival and cancellation-retention disposition
+
+Semaphore evaluator archival separation is complete: #288 merged into draft #155 only, exact retained intake tree `fe39f60850be310f293914f6ec7c5ac1f167bf52`. Optional reputation roadmap remains; evaluator isolation defect remains unfixed in archived research. Reactivation requires fresh owner decision and qualification. Other intake probes remain separately held. #281 documentation design and hosted checks complete at `4e495ebd4838bc2b14c62a1fb25662ec320b5099`; two owner policy choices remain open, no runtime migration/retirement. #285 native rent safety and #286 RPC regression test merged; #290 local SOL seller funding and #291 Settings endpoint details remain separately owned, unmerged and unqualified. See [handoff](CONSOLIDATION_HANDOFF.md). ReleaseEnabled=0.
+
+---
+
 ## 2026-11-27 — corrected S10 optional-package scope disposition
 
 All 23 revised historical package paths now have scoped source/documentary dispositions (see [master ledger](BRANCH_CONSOLIDATION_MASTER.md)). The individual intakes preserve the historical files, with strengthened diagnostic admission and tests. This is not product completion or activation. **#228 remains incomplete for its historical concurrent backup authentication acceptance**: its browser test and README explicitly retain only a nonempty backup download during active proof Worker execution. The supported core Recovery verification form already exists; restore the stronger combined test on #228's owned current-target requalification, update the README, and retain physical Worker exit, CSP and no-network checks. [Existing corrective coordination](https://github.com/djshellshoxxx/p2p-offramp/pull/228#issuecomment-7227646589). All nine optional packages still need #280 integration, separate current-source/target checks and named review; no production or release enablement. No new runtime execution in this comparison.
